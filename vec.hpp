@@ -20,28 +20,35 @@ class Nvector {
     protected:
         T vals[N];
     public:
+        typedef T* iterator;
         Nvector();
         Nvector(const Nvector &rhs);
         template <class U> Nvector(const Nvector<U, N> &rhs);
         Nvector(const T locs[N]);
         const T& get(const unsigned int n) const {return vals[n];}
-        //~ void set(const unsigned int n, const T a){vals[n]=a;}
+        void set(const unsigned int n, const T a){vals[n]=a;}
+        unsigned int len() const {return N;};
         
         Nvector& operator+=(const Nvector &rhs);
         Nvector& operator-=(const Nvector &rhs);
-        template <class U> Nvector& operator*=(const U &rhs);
-        template <class U> Nvector& operator/=(const U &rhs);
+        template <class U> Nvector& operator*=(const U rhs);
+        template <class U> Nvector& operator/=(const U rhs);
         Nvector operator-() const;
         Nvector operator+(const Nvector &rhs) const {return Nvector(*this) += rhs;}
         Nvector operator-(const Nvector &rhs) const {return Nvector(*this) -= rhs;}
         T& operator[](const unsigned int i){return vals[i];};
-        template <class U> Nvector operator*(const U &rhs) const {return Nvector(*this) *= rhs;}
-        template <class U> Nvector operator/(const U &rhs) const {return Nvector(*this) /= rhs;}
+        template <class U> Nvector operator*(const U rhs) const {return Nvector(*this) *= rhs;}
+        template <class U> Nvector operator/(const U rhs) const {return Nvector(*this) /= rhs;}
+        T* begin(){return vals;};
+        T* end(){return vals + N;};
         ~Nvector(){};
         
         template <class U, unsigned int M>
         friend ostream& operator<<(ostream& out, const Nvector<U, M> v);
 };
+
+//~ typedef typename std::iterator_traits<>::value_type cont;
+//~ typedef typename cont::const_iterator const_iterator;
 
 template <class T, unsigned int N>
 class Numvector : public Nvector<T, N> {
@@ -52,9 +59,9 @@ class Numvector : public Nvector<T, N> {
         Numvector(const T rhs[N]) {
                     for(unsigned int i=0; i<N; i++) this->vals[i]=rhs[i];}
         T dot (const Numvector &other) const;
-        T sq() const {return dot(*this);};
-        T mag() const {return sqrt(sq());};
-        T distance(const Numvector &rhs) const;
+        inline T sq() const {return dot(*this);};
+        inline T mag() const {return sqrt(sq());};
+        inline T distance(const Numvector &rhs) const;
         Numvector perp(const Numvector &other) const;
         //returns the component of this perpendicular to other
         
@@ -73,24 +80,26 @@ class Vector : public Numvector<T, 3> {
         Vector(const T a, const T b, const T c) {setx(a); sety(b); setz(c);}
         Vector(const Numvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
         Vector(const Nvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
-        const T getx() const {return this->get(0);}
-        const T getz() const {return this->get(2);}
-        const T gety() const {return this->get(1);}
-        void setx(const T a){this->vals[0]=a;}
-        void sety(const T b){this->vals[1]=b;}
-        void setz(const T c){this->vals[2]=c;}
-        Vector operator-() const{
+        inline const T getx() const {return this->get(0);}
+        inline const T gety() const {return this->get(1);}
+        inline const T getz() const {return this->get(2);}
+        inline void setx(const T a){this->vals[0]=a;}
+        inline void sety(const T b){this->vals[1]=b;}
+        inline void setz(const T c){this->vals[2]=c;}
+        inline Vector operator-() const{
             return Vector(-getx(),-gety(),-getz());}
-        Vector operator+(const Vector &rhs) const {
+        inline Vector operator+(const Vector &rhs) const {
             return Vector(getx()+rhs.getx(),gety()+rhs.gety(),getz()+rhs.getz());}
-        Vector operator-(const Vector &rhs) const {
+        inline Vector operator-(const Vector &rhs) const {
             return Vector(getx()-rhs.getx(),gety()-rhs.gety(),getz()-rhs.getz());}
-        template <class U> Vector operator*(const U &rhs) const {
+        template <class U> inline Vector operator*(const U rhs) const {
             return Vector(getx()*rhs,gety()*rhs,getz()*rhs);}
-        template <class U> Vector operator/(const U &rhs) const {
+        template <class U> inline Vector operator/(const U rhs) const {
             return Vector(getx()/rhs,gety()/rhs,getz()/rhs);}
         Vector cross (const Vector &rhs) const;
-        Vector norm() const {return Vector(Numvector<T,3>::norm());};
+        inline Vector norm() const {return Vector(Numvector<T,3>::norm());};
+        template <class U> Vector& operator*=(const U rhs);
+        template <class U> Vector& operator/=(const U rhs);
         ~Vector(){};
         
         template <class U>
@@ -144,7 +153,7 @@ Nvector<T, N>& Nvector<T, N>::operator+=(const Nvector<T,N> &rhs) {
 }
 
 template <class T, unsigned int N> template <class U>
-Nvector<T,N>& Nvector<T,N>::operator*=(const U &rhs) {
+Nvector<T,N>& Nvector<T,N>::operator*=(const U rhs) {
     for(unsigned int i=0; i<N; i++){
         this->vals[i] = this->vals[i] * rhs;
         //set(i, T(this->get(i) * rhs));
@@ -153,7 +162,7 @@ Nvector<T,N>& Nvector<T,N>::operator*=(const U &rhs) {
 }
 
 template <class T, unsigned int N> template <class U>
-Nvector<T,N>& Nvector<T,N>::operator/=(const U &rhs) {
+Nvector<T,N>& Nvector<T,N>::operator/=(const U rhs) {
     for(unsigned int i=0; i<N; i++){
         vals[i] = T(this->vals[i] / rhs);
     }
@@ -221,6 +230,22 @@ Vector<T> Vector<T>::cross(const Vector<T> &rhs) const {
     T newy = getz()*rhs.getx() - rhs.getz()*getx();
     T newz = getx()*rhs.gety() - rhs.getx()*gety();
     return Vector<T>(newx, newy, newz);
+}
+
+template <class T> template <class U>
+Vector<T>& Vector<T>::operator*=(const U rhs){
+    this->vals[0] *= rhs;
+    this->vals[1] *= rhs;
+    this->vals[2] *= rhs;
+    return *this;
+}
+
+template <class T> template <class U>
+Vector<T>& Vector<T>::operator/=(const U rhs){
+    this->vals[0] /= rhs;
+    this->vals[1] /= rhs;
+    this->vals[2] /= rhs;
+    return *this;
 }
 
 template <class U>

@@ -11,6 +11,8 @@
 #include "vec.hpp"
 
 typedef Vector<double> Vec;
+typedef Numvector<double, 2> Pair;
+typedef Nvector<Vec, 2> VecPair;
 using namespace std;
 
 typedef boost::mt19937 engine;
@@ -28,8 +30,27 @@ class gaussVec {
         distribution distro;
         generator gauss;
     public:
-        gaussVec(double sigma) : distro(0,sigma/sqrt(3)), gauss(e,distro){};
+        gaussVec(double sigma) : distro(0,sigma), gauss(e,distro){};
         Vec generate(){return Vec(gauss(),gauss(),gauss());};
+        void seed(unsigned int n){e.seed(n);};
+        void seed(){e.seed(static_cast<unsigned int>(time(0)));};
+};
+
+class bivariateGauss {
+    protected:
+        engine e;
+        distribution distro;
+        generator gauss;
+        double x11;
+        double x21;
+        double x22;
+        
+    public:
+        bivariateGauss(const double s1, const double s2, const double corr)
+                : distro(0,1), gauss(e,distro){set(s1, s2, corr);};
+        void set(const double s1, const double s2, const double corr);
+        Pair generate();
+        VecPair genVecs();
         void seed(unsigned int n){e.seed(n);};
         void seed(){e.seed(static_cast<unsigned int>(time(0)));};
 };

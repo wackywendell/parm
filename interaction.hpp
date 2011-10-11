@@ -48,56 +48,71 @@ typedef const unsigned int cuint;
 typedef Vector<flt> Vec;
 
 struct atom {
-    Vec x;
-    Vec v;
-    Vec a;
-    Vec f;
+    Vec x; // location
+    Vec v; // velocity
+    Vec a; // acceleration
+    Vec f; // forces
 };
 
 class atomgroup {
+    // a group of atoms, such as a molecule, sidebranch, etc.
     public:
+        // access individual atoms
         virtual atom& operator[](cuint n)=0;
         virtual atom& operator[](cuint n) const=0;
+        atom* get(cuint n){if(n>=N()) return NULL; return &((*this)[n]);};
         virtual uint N() const=0;
+        virtual flt getmass(const unsigned int n) const = 0;
+        
+        
         Vec com() const; //center of mass
         Vec comvel() const; //center of mass velocity
-        virtual flt getmass(const unsigned int n) const = 0;
-        virtual Vec diff(cuint n, cuint m) const = 0;
-        virtual Vec diff(cuint n, const Vec r) const = 0;
-        flt mass() const;
+        virtual Vec diff(cuint n, cuint m) const;
+        virtual Vec diff(cuint n, const Vec r) const;
+        
+        //Stats
+        flt inline mass() const;
         flt kinetic(const Vec &originvelocity=Vec(0,0,0)) const;
         Vec momentum() const;
         Vec angmomentum(const Vec &loc) const;
         flt mominertia(const Vec &loc, const Vec &axis) const;
+        
+        // for timestepping
         void resetForces();
         void setAccel();
-        void vverlet1(const flt dt);
-        void vverlet2(const flt dt);
-        atom* get(cuint n){if(n>=N()) return NULL; return &((*this)[n]);};
-        ~atomgroup(){};
+        virtual ~atomgroup(){};
 };
 
-class atomgroupL : public atomgroup {
+class constL : public virtual atomgroup {
+    // Keeps track of an atomgroup inside a fixed size box of length L
     private:
         const flt L;
     public:
-        atomgroupL(const flt Length) : L(Length){};
+        constL(const flt Length) : L(Length){};
         Vec diff(cuint n, cuint m) const;
         Vec diff(cuint n, const Vec r) const;
 };
 
-class atomvec : public atomgroupL {
+class atomvec : public virtual atomgroup {
+    // this is an atomgroup which actually owns the atoms.
     private:
         atom* atoms;
-        vector<flt> masses;
+        vector<flt> ms;
     public:
-        atomvec(const flt L, vector<flt> masses);
-        atom& operator[](cuint n){return atoms[n];};
-        atom& operator[](cuint n) const {return atoms[n];};
-        flt getmass(cuint n) const{return masses[n];};
-        void setmass(cuint n, flt m){masses[n] = m;};
-        uint N() const {return masses.size();};
+        atomvec(vector<flt> masses) : ms(masses){atoms = new atom[N()];};
+        inline atom& operator[](cuint n){return atoms[n];};
+        inline atom& operator[](cuint n) const {return atoms[n];};
+        inline flt getmass(cuint n) const{return ms[n];};
+        inline void setmass(cuint n, flt m){ms[n] = m;};
+        inline uint N() const {return ms.size();};
         ~atomvec(){ delete [] atoms;};
+};
+
+class atomvecL : public constL, public atomvec {
+    public:
+        atomvecL(vector<flt> masses, const flt Length) :
+                constL(Length), atomvec(masses){};
+        ~atomvecL(){};
 };
 
 class interactpair {
@@ -216,6 +231,17 @@ class intraMolNNPair : public interaction {
         void setForces();
 };
 
+class intraMolPairs : public interaction {
+    private:
+        vector<atomgroup*> groups;
+        interactpair* pair;
+        cuint skip;
+    public:
+        intraMolPairs(vector<atomgroup*> groupvec, interactpair* pair, cuint skip);
+        flt energy();
+        void setForces();
+};
+
 class intraMolNNTriple : public interaction {
     private:
         vector<atomgroup*> groups;
@@ -229,9 +255,9 @@ class intraMolNNTriple : public interaction {
 class intraMolNNQuad : public interaction {
     private:
         vector<atomgroup*> groups;
-        interactquad* trip;
+        interactquad* quad;
     public:
-        intraMolNNQuad(vector<atomgroup*> groupvec, interactquad* trip);
+        intraMolNNQuad(vector<atomgroup*> groupvec, interactquad* quad);
         flt energy();
         void setForces();
 };

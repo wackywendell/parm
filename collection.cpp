@@ -26,6 +26,70 @@ flt collection::Energy(){
     return E;
 };
 
+flt collection::Temp(){
+    flt totatoms = 0;
+    flt totkinetic = 0;
+    Vec v = comv();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        totkinetic += group.kinetic(v);
+        totatoms += group.N();
+    }
+    return totkinetic * 2 / (3*totatoms-3);
+}
+
+Vec collection::com(){
+    vector<atomgroup*>::iterator git;
+    flt mass = 0;
+    Vec totcom = Vec(0,0,0);
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.N(); i++){
+            flt curmass = g.getmass(i);
+            mass += curmass;
+            totcom += g[i].x * curmass;
+        }
+    }
+    return totcom / mass;
+}
+
+Vec collection::comv(){
+    vector<atomgroup*>::iterator git;
+    flt mass = 0;
+    Vec totcom = Vec(0,0,0);
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.N(); i++){
+            flt curmass = g.getmass(i);
+            mass += curmass;
+            totcom += g[i].v * curmass;
+        }
+    }
+    return totcom / mass;
+}
+
+flt collection::gyradius(){
+    vector<atomgroup*>::iterator git;
+    Vec avgr = Vec(0,0,0);
+    flt N = 0;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.N(); i++){
+            avgr += g[i].x;
+            N++;
+        }
+    }
+    avgr /= N; // now avgr is the average location, akin to c.o.m.
+    flt Rgsq = 0;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.N(); i++) Rgsq += (g[i].x - avgr).sq();
+    }
+    
+    return sqrt(Rgsq/N);
+}
+
 void collection::setForces(){
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
@@ -40,27 +104,6 @@ void collection::setForces(){
     }
 }
 
-void collection::timestep(const flt dt){
-    vector<atomgroup*>::iterator git;
-    
-    // this will slow it down a bit, but it would be nice to have AUAlocs
-    // always correct
-    for(git = groups.begin(); git<groups.end(); git++)
-        (**git).vverlet1(dt);
-    // clear old forces
-    // just check all
-    setForces();
-    
-    for(git = groups.begin(); git<groups.end(); git++)
-        (**git).setAccel();
-    
-    // use force info to update velocities
-    // [v(t+dt/2) -> v(t+dt) with f(t+dt)]
-    for(git = groups.begin(); git<groups.end(); git++)
-        (**git).vverlet2(dt);
-    
-}
-
 collectionSol::collectionSol(flt damp, flt sigma, 
         vector<atomgroup*> groups,vector<interaction*> interactions) :
         collection(groups, interactions), gauss(sigma), damping(damp){
@@ -70,6 +113,7 @@ collectionSol::collectionSol(flt damp, flt sigma,
 };
 
 void collectionSol::timestep(const flt dt){
+    //~ cout << "damping " << damping << "\n";
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
@@ -95,7 +139,9 @@ void collectionSol::timestep(const flt dt){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.N(); i++){
-            m[i].a = m[i].f / m.getmass(i) + gauss.generate();
+            Vec g = gauss.generate();
+            //~ cout << "g " << g << "\n";
+            m[i].a = (m[i].f + g) / m.getmass(i);
             
             // step 5: finish v and a
             m[i].v += m[i].a * (dt/2);

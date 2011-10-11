@@ -1,6 +1,14 @@
 #include "interaction.hpp"
 
-Vec atomgroupL::diff(cuint n, cuint m) const{
+Vec atomgroup::diff(cuint n, cuint m) const{
+    return (*this)[n].x - (*this)[m].x;
+}
+
+Vec atomgroup::diff(cuint n, const Vec origin) const{
+    return (*this)[n].x - origin;
+}
+
+Vec constL::diff(cuint n, cuint m) const{
     Vec r = (*this)[n].x - (*this)[m].x;
     r[0] = r[0] - rint(r.get(0)/L) * L;
     r[1] = r[1] - rint(r.get(1)/L) * L;
@@ -8,7 +16,7 @@ Vec atomgroupL::diff(cuint n, cuint m) const{
     return r;
 }
 
-Vec atomgroupL::diff(cuint n, const Vec origin) const{
+Vec constL::diff(cuint n, const Vec origin) const{
     Vec r = (*this)[n].x - origin;
     r[0] = r[0] - rint(r.get(0)/L) * L;
     r[1] = r[1] - rint(r.get(1)/L) * L;
@@ -67,7 +75,7 @@ flt atomgroup::mominertia(const Vec &loc, const Vec &axis) const{
     Vec newloc;
     for(uint i=0; i<N(); i++){
         curmass = this->getmass(i);
-        newloc = Vec((*this)[i].x - loc).perp(axis);
+        newloc = diff(i, loc).perp(axis);
         tot += newloc.dot(newloc) * curmass;
     }
     return tot;
@@ -91,12 +99,12 @@ void atomgroup::resetForces(){
     }
 };
 
-void atomgroup::vverlet1(const flt dt){
-    for(uint i=0; i<N(); i++){
-        (*this)[i].x += (*this)[i].v * dt + (*this)[i].a * (dt*dt/2);
-        (*this)[i].v += (*this)[i].a * (dt/2);
-    }
-};
+//~ void atomgroup::vverlet1(const flt dt){
+    //~ for(uint i=0; i<N(); i++){
+        //~ (*this)[i].x += (*this)[i].v * dt + (*this)[i].a * (dt*dt/2);
+        //~ (*this)[i].v += (*this)[i].a * (dt/2);
+    //~ }
+//~ };
 
 void atomgroup::setAccel(){
     for(uint i=0; i<N(); i++){
@@ -104,16 +112,11 @@ void atomgroup::setAccel(){
     }
 };
 
-void atomgroup::vverlet2(const flt dt){
-    for(uint i=0; i<N(); i++){
-        (*this)[i].v += (*this)[i].a * (dt/2);
-    }
-};
-
-atomvec::atomvec(const flt L, vector<flt> ms):atomgroupL(L){
-    atoms = new atom[ms.size()];
-    masses = ms;
-}
+//~ void atomgroup::vverlet2(const flt dt){
+    //~ for(uint i=0; i<N(); i++){
+        //~ (*this)[i].v += (*this)[i].a * (dt/2);
+    //~ }
+//~ };
 
 LJforce::LJforce(const flt ep, const flt sig) : interactpair(),
         epsilon(ep), sigma(sig) {
@@ -127,7 +130,7 @@ flt LJforce::energy(const Vec& r){
 Vec LJforce::forces(const Vec& r){
     flt m = r.mag();
     flt l = m / sigma;
-    flt fmag = 4*epsilon*(12*pow(l,-13)-6*pow(l,-7));
+    flt fmag = 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
     return r * (fmag / m);
 }
 
@@ -153,7 +156,7 @@ Vec LJcutoff::forces(const Vec& r){
     flt m = r.mag();
     if(m > cutoff) return Vec(0,0,0);
     flt l = m / sigma;
-    flt fmag = 4*epsilon*(12*pow(l,-13)-6*pow(l,-7));
+    flt fmag = 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
     return r * (fmag / m);
 }
 
@@ -250,10 +253,18 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
                             derivs[3] * (c[1][2]/c[1][1]);
     derivs[2] = derivs[0] * (c[0][1]/c[1][1]) -
                             derivs[3] * (1 + c[1][2]/c[1][1]);
-                            
+    
+    //~ flt costheta = p/sqrt(q);
     flt dcostheta = dudcostheta(p/sqrt(q)); // actually -dU/d(costheta)
     
-    return derivs * dcostheta;
+    derivs *= dcostheta;
+    
+    //~ flt mag = sqrt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
+                    //~ derivs[3].sq());
+    //~ 
+    //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
+              //~ << " derivs:" << derivs  << " : " << mag << std::endl;
+    return derivs;
 }
 
 flt dihedral::dudcostheta(const flt costheta) const{
@@ -264,7 +275,6 @@ flt dihedral::dudcostheta(const flt costheta) const{
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     return tot;
 }
-
 
 flt dihedral::energy(const Vec &r1, const Vec &r2, 
                    const Vec &r3) const{
@@ -282,8 +292,12 @@ flt dihedral::energy(const Vec &r1, const Vec &r2,
     flt costheta = -n1.dot(n2) / n1mag / n2mag;
     
     flt tot = 0;
-    for(unsigned int i=0; i<torsions.size(); i++)
+    for(unsigned int i=0; i<torsions.size(); i++){
+        //~ std::cout << "curE: " << torsions[i] * pow(costheta, i) << " E:" << tot << '\n';
         tot += torsions[i] * pow(costheta, i);
+    }
+    //~ std::cout << "costheta (E)" << costheta << " E:" << tot << '\n';
+    
     return tot;
 }
 
@@ -357,6 +371,41 @@ void intraMolNNPair::setForces(){
 };
 
 
+intraMolPairs::intraMolPairs(vector<atomgroup*> groupvec, 
+            interactpair* ipair, cuint s)
+    : groups(groupvec), pair(ipair), skip(s) {};
+
+flt intraMolPairs::energy(){
+    flt E = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git < groups.end(); git++){
+        atomgroup & g = **git;
+        for(uint i = 0; i < g.N()-skip-1; i++)
+        for(uint j = i+skip+1; j < g.N(); j++){
+            Vec r = g.diff(i, j);
+            E += pair->energy(r);
+        }
+    }
+    return E;
+};
+
+void intraMolPairs::setForces(){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git < groups.end(); git++){
+        atomgroup & g = **git;
+        for(uint i = 0; i < g.N()-skip-1; i++)
+        for(uint j = i+skip+1; j < g.N(); j++){
+            atom & a1 = g[i];
+            atom & a2 = g[j];
+            Vec r = g.diff(i, j);
+            Vec force = pair->forces(r);
+            a1.f += force;
+            a2.f -= force;
+        }
+    }
+};
+
+
 intraMolNNTriple::intraMolNNTriple(vector<atomgroup*> groupvec, interacttriple* itrip)
     : groups(groupvec), trip(itrip) {};
 
@@ -389,8 +438,8 @@ void intraMolNNTriple::setForces(){
     }
 };
 
-intraMolNNQuad::intraMolNNQuad(vector<atomgroup*> groupvec, interactquad* itrip)
-    : groups(groupvec), trip(itrip) {};
+intraMolNNQuad::intraMolNNQuad(vector<atomgroup*> groupvec, interactquad* iquad)
+    : groups(groupvec), quad(iquad) {};
 
 flt intraMolNNQuad::energy(){
     flt E = 0;
@@ -398,7 +447,7 @@ flt intraMolNNQuad::energy(){
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup & g = **git;
         for(uint i = 0; i < g.N()-3; i++){
-            E += trip->energy(g.diff(i+1, i), g.diff(i+2, i+1), g.diff(i+3, i+2));
+            E += quad->energy(g.diff(i+1, i), g.diff(i+2, i+1), g.diff(i+3, i+2));
         }
     }
     return E;
@@ -409,10 +458,11 @@ void intraMolNNQuad::setForces(){
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup & g = **git;
         for(uint i = 0; i < g.N()-3; i++){
-            Vec r = g.diff(i, i+1);
-            Nvector<Vec, 4> force = trip->forces(g.diff(i+1, i), 
-                        g.diff(i+2, i+1), g.diff(i+3, i+2));
-            for(uint j=0; i<4; i++) g[i+j].f += force[j];
+            //~ Nvector<Vec, 4> force = trip->forces(g.diff(i+1, i), 
+                        //~ g.diff(i+2, i+1), g.diff(i+3, i+2));
+            Nvector<Vec, 4> force = quad->forces((g[i+1].x) -(g[i].x), 
+                        (g[i+2].x)-(g[i+1].x), (g[i+3].x)-(g[i+2].x));
+            for(uint j=0; j<4; j++) g[i+j].f += force[j];
         }
     }
 };

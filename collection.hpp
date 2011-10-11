@@ -5,6 +5,11 @@
 #include "vecrand.hpp"
 
 class collection {
+    /* A group of atomgroups and interactions, meant to encapsulate an 
+     * entire simulation.
+     * 
+     * Adds general simulation time-stepping as well as statistical tracking.
+     */
     protected:
         vector<atomgroup*> groups;
         vector<interaction*> interactions;
@@ -13,10 +18,17 @@ class collection {
         collection(vector<atomgroup*> groups=vector<atomgroup*>(),
                             vector<interaction*> interactions=vector<interaction*>());
         
+        //Timestepping
         virtual void setForces();
-        virtual void timestep(const flt dt);
+        virtual void timestep(const flt dt)=0;
+        
+        //Stats
         flt Energy();
+        flt Temp();
         flt kinetic();
+        Vec com();
+        Vec comv();
+        flt gyradius(); // Radius of gyration
         ~collection(){};
 };
 
