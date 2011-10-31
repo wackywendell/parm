@@ -1,29 +1,5 @@
 #include "interaction.hpp"
 
-Vec atomgroup::diff(cuint n, cuint m) const{
-    return (*this)[n].x - (*this)[m].x;
-}
-
-Vec atomgroup::diff(cuint n, const Vec origin) const{
-    return (*this)[n].x - origin;
-}
-
-Vec constL::diff(cuint n, cuint m) const{
-    Vec r = (*this)[n].x - (*this)[m].x;
-    r[0] = r[0] - rint(r.get(0)/L) * L;
-    r[1] = r[1] - rint(r.get(1)/L) * L;
-    r[2] = r[2] - rint(r.get(2)/L) * L;
-    return r;
-}
-
-Vec constL::diff(cuint n, const Vec origin) const{
-    Vec r = (*this)[n].x - origin;
-    r[0] = r[0] - rint(r.get(0)/L) * L;
-    r[1] = r[1] - rint(r.get(1)/L) * L;
-    r[2] = r[2] - rint(r.get(2)/L) * L;
-    return r;
-}
-
 Vec atomgroup::com() const{
     flt curmass = 0;
     Vec v = Vec();
@@ -75,7 +51,7 @@ flt atomgroup::mominertia(const Vec &loc, const Vec &axis) const{
     Vec newloc;
     for(uint i=0; i<N(); i++){
         curmass = this->getmass(i);
-        newloc = diff(i, loc).perp(axis);
+        newloc = diff((*this)[i].x, loc).perp(axis);
         tot += newloc.dot(newloc) * curmass;
     }
     return tot;
@@ -270,7 +246,7 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
 flt dihedral::dudcostheta(const flt costheta) const{
     flt tot = 0;
     for(unsigned int i=1; i<torsions.size(); i++){
-        tot -= torsions[i] * i * pow(costheta, i-1);
+        tot -= torsions[i] * i * pow(costheta, flt(i-1));
     }
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     return tot;
@@ -294,7 +270,7 @@ flt dihedral::energy(const Vec &r1, const Vec &r2,
     flt tot = 0;
     for(unsigned int i=0; i<torsions.size(); i++){
         //~ std::cout << "curE: " << torsions[i] * pow(costheta, i) << " E:" << tot << '\n';
-        tot += torsions[i] * pow(costheta, i);
+        tot += torsions[i] * pow(costheta, flt(i));
     }
     //~ std::cout << "costheta (E)" << costheta << " E:" << tot << '\n';
     
@@ -313,7 +289,7 @@ flt interMolPair::energy(){
         for(g2++; g2 < groups.end(); g2++)
         for(uint i1 = 0; i1 < (*g1)->N(); i1++)
         for(uint i2 = 0; i2 < (*g2)->N(); i2++){
-            Vec r = (**g1).diff(i1, (**g2)[i2].x);
+            Vec r = diff((**g1)[i1].x, (**g2)[i2].x);
             E += pair->energy(r);
         }
     }
@@ -330,7 +306,7 @@ void interMolPair::setForces(){
         for(uint i2 = 0; i2 < (*g2)->N(); i2++){
             atom & a1 = (**g1)[i1];
             atom & a2 = (**g2)[i2];
-            Vec r = (**g1).diff(i1, a2.x);
+            Vec r = diff((**g1)[i1].x, (**g2)[i2].x);
             Vec force = pair->forces(r);
             a1.f += force;
             a2.f -= force;
@@ -348,7 +324,7 @@ flt intraMolNNPair::energy(){
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup & g = **git;
         for(uint i = 0; i < g.N()-1; i++){
-            Vec r = g.diff(i, i+1);
+            Vec r = diff(g[i].x, g[i+1].x);
             E += pair->energy(r);
         }
     }
@@ -362,7 +338,7 @@ void intraMolNNPair::setForces(){
         for(uint i = 0; i < g.N()-1; i++){
             atom & a1 = g[i];
             atom & a2 = g[i+1];
-            Vec r = g.diff(i, i+1);
+            Vec r = diff(g[i].x, g[i+1].x);
             Vec force = pair->forces(r);
             a1.f += force;
             a2.f -= force;
@@ -382,7 +358,7 @@ flt intraMolPairs::energy(){
         atomgroup & g = **git;
         for(uint i = 0; i < g.N()-skip-1; i++)
         for(uint j = i+skip+1; j < g.N(); j++){
-            Vec r = g.diff(i, j);
+            Vec r = diff(g[i].x, g[j].x);
             E += pair->energy(r);
         }
     }
@@ -397,7 +373,7 @@ void intraMolPairs::setForces(){
         for(uint j = i+skip+1; j < g.N(); j++){
             atom & a1 = g[i];
             atom & a2 = g[j];
-            Vec r = g.diff(i, j);
+            Vec r = diff(g[i].x, g[j].x);
             Vec force = pair->forces(r);
             a1.f += force;
             a2.f -= force;
@@ -415,7 +391,7 @@ flt intraMolNNTriple::energy(){
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup & g = **git;
         for(uint i = 0; i < g.N()-2; i++){
-            E += trip->energy(g.diff(i+1, i), g.diff(i+1, i+2));
+            E += trip->energy(diff(g[i+1].x, g[i].x), diff(g[i+1].x, g[i+2].x));
         }
     }
     return E;
@@ -429,8 +405,8 @@ void intraMolNNTriple::setForces(){
             atom & a0 = g[i];
             atom & a1 = g[i+1];
             atom & a2 = g[i+2];
-            Vec r = g.diff(i, i+1);
-            Nvector<Vec, 3> force = trip->forces(g.diff(i+1, i), g.diff(i+1, i+2));;
+            Vec r = diff(a0.x, a1.x);
+            Nvector<Vec, 3> force = trip->forces(diff(a1.x, a0.x), diff(a1.x, a2.x));
             a0.f += force[0];
             a1.f += force[1];
             a2.f += force[2];
@@ -447,7 +423,8 @@ flt intraMolNNQuad::energy(){
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup & g = **git;
         for(uint i = 0; i < g.N()-3; i++){
-            E += quad->energy(g.diff(i+1, i), g.diff(i+2, i+1), g.diff(i+3, i+2));
+            E += quad->energy(diff(g[i+1].x, g[i].x), diff(g[i+2].x, g[i+1].x),
+                                                 diff(g[i+3].x, g[i+2].x));
         }
     }
     return E;
@@ -460,9 +437,100 @@ void intraMolNNQuad::setForces(){
         for(uint i = 0; i < g.N()-3; i++){
             //~ Nvector<Vec, 4> force = trip->forces(g.diff(i+1, i), 
                         //~ g.diff(i+2, i+1), g.diff(i+3, i+2));
-            Nvector<Vec, 4> force = quad->forces((g[i+1].x) -(g[i].x), 
-                        (g[i+2].x)-(g[i+1].x), (g[i+3].x)-(g[i+2].x));
+            Nvector<Vec, 4> force = quad->forces(diff(g[i+1].x, g[i].x), 
+                        diff(g[i+2].x, g[i+1].x), diff(g[i+3].x, g[i+2].x));
             for(uint j=0; j<4; j++) g[i+j].f += force[j];
         }
     }
 };
+
+flt singletpairs::energy(){
+    flt E=0;
+    vector<atompair>::iterator it;
+    for(it = atoms.begin(); it < atoms.end(); it++){
+        E += inter->energy(diff(it->first().x, it->last().x));
+    }
+    return E;
+};
+
+void singletpairs::setForces(){
+    vector<atompair>::iterator it;
+    for(it = atoms.begin(); it < atoms.end(); it++){
+            atom & a1 = it->first();
+            atom & a2 = it->last();
+            Vec force = inter->forces(diff(a1.x, a2.x));
+            a1.f += force;
+            a2.f -= force;
+    }
+};
+
+flt interactgroup::energy(){
+    flt E=0;
+    vector<interaction*>::iterator it;
+    for(it = inters.begin(); it < inters.end(); it++){
+        E += (*it)->energy();
+    }
+    return E;
+};
+
+void interactgroup::setForces(){
+    vector<interaction*>::iterator it;
+    for(it = inters.begin(); it < inters.end(); it++){
+        (*it)->setForces();
+    }
+};
+
+bondpairs::bondpairs(vector<bondgrouping> pairs) : pairs(pairs){};
+
+flt bondpairs::energy(){
+    flt E=0;
+    vector<bondgrouping>::iterator it;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        Vec r = diff(it->a1->x, it->a2->x);
+        E += spring(it->k, it->x0).energy(r);
+    }
+    return E;
+}
+
+void bondpairs::setForces(){
+    vector<bondgrouping>::iterator it;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        Vec r = diff(atom1.x, atom2.x);
+        Vec f = spring(it->k, it->x0).forces(r);
+        atom1.f += f;
+        atom2.f -= f;
+    }
+}
+
+angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
+
+flt angletriples::energy(){
+    flt E=0;
+    vector<anglegrouping>::iterator it;
+    for(it = triples.begin(); it < triples.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        atom & atom3 = *it->a3;
+        Vec r1 = diff(atom2.x, atom1.x);
+        Vec r2 = diff(atom2.x, atom3.x);
+        E += bondangle(it->k, it->x0).energy(r1,r2);
+    }
+    return E;
+}
+
+void angletriples::setForces(){
+    vector<anglegrouping>::iterator it;
+    for(it = triples.begin(); it < triples.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        atom & atom3 = *it->a3;
+        Vec r1 = diff(atom2.x, atom1.x);
+        Vec r2 = diff(atom2.x, atom3.x);
+        Nvector<Vec,3> f = bondangle(it->k, it->x0).forces(r1, r2);
+        atom1.f += f[0];
+        atom2.f += f[1];
+        atom3.f += f[2];
+    }
+}

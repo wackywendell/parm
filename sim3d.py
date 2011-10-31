@@ -1,7 +1,3 @@
-#!/usr/bin/python2
-# python2 movie5.py | mencoder /dev/stdin -demuxer rawvideo -rawvideo format='rgba':w=600:h=600:fps=10 -flip -vf pp=al -ovc lavc -o test.avi
-# python2 movie5.py | ffmpeg -f rawvideo -pix_fmt rgb24 -s 500x500 -y -an -vf vflip -r 20 -i /dev/stdin -b 2M -bt 1M -vcodec libx264 test.mp4
-
 from __future__ import print_function
 from sys import stdout, stderr
 import pyglet
@@ -13,6 +9,7 @@ from pyglet.window import key
 from itertools import islice
 import math
 from colorsys import hsv_to_rgb as hsv2rgb
+import subprocess
 
 class KeyStateHandler(dict):
     mods = (key.MOD_SHIFT, key.MOD_CTRL, key.MOD_ALT, key.MOD_CAPSLOCK, 
@@ -51,9 +48,24 @@ def towardcol((r,g,b), weight=10):
     b = (b*weight + b2) / (weight + 1)
 
 class Window:
-    def __init__(self, xsize=300, ysize=0, rot_init=(30,55), 
-                output=False, dAngle=30, fps=20, grid=True, bg=(0,0,0),
+    """Create a new window for 3D videos.
+    
+    A window can then be turned into an application using the run() command.
+    
+    Use the "run" method to create an application with event loop, with 
+    keypresses stored in the 'keys' dict.
+    """
+    def __init__(self, xsize=300, ysize=0, outfile=None, rot_init=(30,55), 
+                dAngle=30, fps=20, grid=True, bg=(0,0,0),
                 rotate=False):
+        """__init__ args:
+        xsize, ysize: size of the window, in pixels
+        outfile: an open file descriptor in which to dump raw video (see Vidwriter)
+        rot_init: initial rotation of the cube
+        dAngle: amount to rotate cube on key press
+        fps: expected frames per second (to get rotation looking right)
+        grid: draw the red box around simulation
+        bg: background color, in rgb floats (e.g. (1,1,1) is white, balck default)"""
         if ysize <= 0: ysize = xsize
         self.sizex = xsize
         self.sizey = ysize
@@ -71,14 +83,14 @@ class Window:
         self.window.push_handlers(self.keys)
         self.on_resize = self.window.event(self.on_resize)
         self.rot = rot_init
-        self.output = output
+        self.outfile = outfile
         self.dAngle = dAngle
         self.fps = fps
         self.grid=grid
         self.bg=bg
         self.rotate = rotate
-        if output:
-            self.buf = ctypes.create_string_buffer(3*(w*h))
+        if outfile is not None:
+            self.buf = ctypes.create_string_buffer(3*(ysize*xsize))
         self.setup()
         
 
@@ -156,6 +168,13 @@ class Window:
             del keys[key.R]
 
     def drawsphere(self,mvec, radius, slices=16,stacks=16):
+        """Draw a sphere at location mvec, with a radius.
+        
+        slices and stacks are GL things; a sphere is drawn as triangles,
+        and the more slices and stacks the smoother the sphere, but
+        the longer to render.
+        
+        Call setcol() before for colors."""
         sphere = gluNewQuadric()
         gluQuadricDrawStyle( sphere, GLU_FILL)
         gluQuadricNormals( sphere, GLU_SMOOTH)
@@ -167,15 +186,9 @@ class Window:
         glTranslatef(*imvec)
         
     def drawline(self, lst,thickness=None):
-        if thickness is not None:
-            glLineWidth(thickness)
-        pts = [tuple(x) for x in lst]
-        N = len(pts)
-        pts = [coord for pt in pts for coord in pt]
-        pyglet.graphics.draw(N, GL_LINE_STRIP,
-            ('v3f', pts))
-    
-    def drawrod(self, lst,thickness):
+        """Draw a line from points in lst.
+        
+        Thickness in pixels."""
         if thickness is not None:
             glLineWidth(thickness)
         pts = [tuple(x) for x in lst]
@@ -200,6 +213,10 @@ class Window:
                      0,0,1)))
     
     def setcol(self,col=0,alpha=1):
+        """Set color for next element. col should be an RGB tuple of floats,
+        e.g. (1,1,1) for white. Alpha is transparency.
+        
+        Use no arguments for a random color."""
         try:
             col = tuple(col) + (alpha,)
         except:
@@ -207,36 +224,64 @@ class Window:
         glColor4f(*col)
     
     def clear(self):
+        """Clear the window."""
         self.window.clear()
         glColor3f(1, 0, 0)
         if self.grid: self.drawgrid()
         
     def caption(self, s):
+        """Set the window title. Note that this will not show up in any
+        output videos."""
         self.window.set_caption(s)
     
-    def output(self, f=stdout):
-        glReadPixels(0,0,w,h, GL_RGB, GL_UNSIGNED_BYTE, buf)
-        f.write(buf.raw)
+    def output(self):
+        glReadPixels(0,0,self.sizex,self.sizey, GL_RGB, GL_UNSIGNED_BYTE, self.buf)
+        self.outfile.write(self.buf.raw)
     
-    def run(self, updatefunc, fps=0):
-        dt = 0
-        if fps>0: dt = 1.0/float(fps)
+    def run(self, updatefunc):
+        """Run as an application.
+        
+        Opens a window and calls updatefunc(timestep), where timestep
+        should be roughly 1/fps. Updatefunc should raise a StopIteration
+        exception when the simulation is over."""
         def update(dt):
             self.clear()
             try:
                 updatefunc(dt)
             except StopIteration:
                 pyglet.app.exit()
+            if self.outfile is not None:
+                self.output()
             self.keyhandler(dt)
-        pyglet.clock.schedule_interval(update, dt)
+        pyglet.clock.schedule_interval(update, 1/float(self.fps))
         pyglet.app.run()
 
-
-#~ w = Window()
-#~ col = randcol()
-#~ 
-#~ def updateb(dt):
-    #~ w.setcol(alpha=1)
-    #~ w.drawsphere((random.random(),random.random(),random.random()),random.random()*.3)
-
-#~ w.run(updateb, 3)
+class Vidwriter:
+    """
+    Run a subprocess in which to dump video.
+    
+    Use a Window instance with this.inputfile as the Window's outfile
+    to get output.
+    
+    Call 'close' when finished to close the inputfile and wait for the
+    video file to finish writing.
+    """
+    
+    args = "/usr/bin/ffmpeg -f rawvideo -pix_fmt rgb24 -s %dx%d -y -an -vf vflip -r %d -i /dev/stdin -b 2M -bt 1M -vcodec libx264 %s"
+    # could also be
+    # args = "mencoder /dev/stdin -demuxer rawvideo -rawvideo format='rgba':w=%d:h=%d:fps=%d -flip -vf pp=al -ovc lavc -o %s"
+    
+    
+    def __init__(self, fname, sz, fps=20):
+        args = self.args % (sz,sz,fps,fname)
+        print("Starting", args)
+        self.proc = proc = subprocess.Popen(args, stdin=subprocess.PIPE, shell=True)
+        self.inputfile = proc.stdin
+    
+    def close(self):
+        """Finish writing video, and wait for subprocess to close."""
+        self.inputfile.close()
+        return self.proc.wait()
+    
+    def __del__(self):
+        self.close()

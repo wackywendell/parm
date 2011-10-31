@@ -46,7 +46,7 @@ class bivariateGauss {
         double x22;
         
     public:
-        bivariateGauss(const double s1, const double s2, const double corr)
+        bivariateGauss(const double s1=1, const double s2=1, const double corr=0)
                 : distro(0,1), gauss(e,distro){set(s1, s2, corr);};
         void set(const double s1, const double s2, const double corr);
         Pair generate();

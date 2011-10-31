@@ -20,7 +20,7 @@ class collection {
         
         //Timestepping
         virtual void setForces();
-        virtual void timestep(const flt dt)=0;
+        virtual void timestep()=0;
         
         //Stats
         flt Energy();
@@ -57,16 +57,21 @@ class collectionSol : public collection {
       
      **/
     protected:
-        gaussVec gauss;
+        bivariateGauss gauss;
+        flt dt;
         flt damping;
+        flt desT; // desired temperature
+        flt sigmar, sigmav, corr; // note that this is sigmar/sqrt(T/m), same for sigmav
+                                  // corr is unitless, and correct
+        flt c0, c1, c2; // from Allen and Tildesley
+        void setCs();
     
     public:
-        collectionSol(flt damping, flt sigma, 
+        collectionSol(const flt dt, const flt damping, const flt desiredT, 
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>());
-        void timestep(const flt dt);
+        void timestep();
         void seed(uint n){gauss.seed(n);};
         void seed(){gauss.seed();};
-                
 };
 #endif

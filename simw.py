@@ -25,10 +25,18 @@ class Stat:
         import matplotlib.pyplot as plt
         ymin = 0
         ymax = 0
+        tmins = []
+        tmaxs = []
         stdcol = '.75'
         labels = []
+        valstart = .1
         for s in stats:
-            l = np.array(s.values)
+            startloc = int(len(s.values)*valstart)
+            l = np.array(s.values[startloc:])
+            ts = np.array(s.ts[startloc:])
+            tmins.append(ts[0])
+            tmaxs.append(ts[-1])
+                
             mean = l.mean(0)
             std = l.std()
             sovm = 0
@@ -39,14 +47,13 @@ class Stat:
             plt.axhline(mean, color=stdcol, linewidth=2)
             pstd=plt.axhline(mean-std, color=stdcol)
             plt.axhline(mean+std, color=stdcol)
-            p=plt.plot(s.ts, l, '.-')
-            ymin = min(ymin, l.min() * 1.1)
-            ymax = max(ymax, 1.5*l.max())
+            (p,)=plt.plot(ts, l, '.-')
+            ymin = min(ymin, l.min())
+            ymax = max(ymax, l.max())
             labels.append((p,label))
             labels.append((pstd,stdlabel))
         
-        
-        plt.axis([s.ts[-1]*.1, s.ts[-1], ymin, ymax ])
+        plt.axis([min(tmins), max(tmaxs), ymin, ymax ])
         plt.title(", ".join([s.name for s in stats]))
         plt.legend(*zip(*labels))
         plt.show()
@@ -68,4 +75,4 @@ class Stat:
         sovm = 0
         if mean != 0:
             sovm = abs(std*100.0/mean)
-        return "{}={:.3f}+-{:.4f}%".format(self.name, mean, sovm)
+        return "{}={:.4g}+-{:.4g}%".format(self.name, mean, sovm)

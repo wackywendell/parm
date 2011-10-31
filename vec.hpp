@@ -16,6 +16,29 @@
 using namespace std;
 
 template <class T, unsigned int N>
+class array {
+    protected:
+        T vals[N];
+    public:
+        array();
+        array(const array &rhs);
+        template <class U> array(const array<U, N> &rhs);
+        array(const T locs[N]);
+        const T& get(const unsigned int n) const {return vals[n];}
+        void set(const unsigned int n, const T a){vals[n]=a;}
+        unsigned int len() const {return N;};
+        
+        T& operator[](const unsigned int i){return vals[i];};
+        T& operator[](const unsigned int i) const {return vals[i];};
+        T* begin(){return vals;};
+        T* end(){return vals + N;};
+        ~array(){};
+        
+        //~ template <class U, unsigned int M>
+        //~ friend ostream& operator<<(ostream& out, const Nvector<U, M> v);
+};
+
+template <class T, unsigned int N>
 class Nvector {
     protected:
         T vals[N];
@@ -106,6 +129,30 @@ class Vector : public Numvector<T, 3> {
         friend ostream& operator<<(ostream& out, const Vector<U> v);
 
 };
+
+
+
+template <class T, unsigned int N>
+array<T, N>::array(const array<T, N> &rhs) {
+    for(unsigned int i=0; i < N; i++){
+        vals[i] = rhs.get(i);
+    }
+}
+
+template <class T, unsigned int N>
+array<T, N>::array() {}
+
+template <class T, unsigned int N>
+array<T, N>::array(const T locs[N]) {
+    for(unsigned int i=0; i < N; i++) vals[i] = locs[i];
+}
+
+template <class T, unsigned int N> template<class U>
+array<T, N>::array(const array<U,N> &rhs) {
+    for(unsigned int i=0; i < N; i++){
+        vals[i] = T(rhs.get(i));
+    }
+}
 
 template <class T, unsigned int N>
 Nvector<T, N>::Nvector(const Nvector<T, N> &rhs) {

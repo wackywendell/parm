@@ -9,8 +9,8 @@ dt = .0003 #dt = float(tot) / steps
 steps = int(tot / dt)
 showsteps = 200
 natoms = 10
-damping = 0.5
-Temp = 10
+damping = 0
+Temp = 0
 #~ damping = .8
 #~ Temp = 10
 
