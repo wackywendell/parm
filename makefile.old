@@ -1,0 +1,65 @@
+CC = gcc
+CC += -c
+CPP = g++ 
+CPP += -Wall -O2 -fPIC -I/opt/local/include
+LD = g++ -Wall -O2
+SO = g++ -Wall -shared -O2
+
+b = ../bin
+ALL = interaction.o collection.o _sim.so
+#simulation.so
+
+UNAME := $(shell uname)
+OTHER := TEST
+INC=-I/usr/include/python2.7
+LIB=-L/usr/lib/python2.7/config
+
+ifeq ("$(UNAME)","Darwin")
+	INC=-I/opt/local/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7 -I/opt/local/include
+	LIB=-L/opt/local/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7 -L/opt/local/lib
+	
+endif
+
+all: printout _sim.so
+
+printout:
+	@echo "{$(UNAME)}"
+
+PYOPT = -O2 -fPIC $(INC) -I/usr/include
+PYSOOPT = -O2 -shared -Wl,--export-dynamic -Wl,-no-undefined -L/usr/lib -lboost_python -L${LIB} -lpython2.7
+
+#FULL = $b/test1 ...
+#full: $(FULL)
+
+clean:
+	rm -f *.o *.so $(ALL) *.gch sim_wrap.cxx
+
+interaction.o: interaction.hpp interaction.cpp vec.hpp
+	$(CPP) $^
+
+collection.o: vec.hpp interaction.hpp collection.hpp collection.cpp vecrand.cpp vecrand.hpp
+	$(CPP) -c $^
+
+simulation.o: vec.hpp interaction.hpp collection.hpp simulation.cpp
+	g++ $(PYOPT) -c simulation.cpp
+
+simulation.so: simulation.o collection.o interaction.o
+	g++ $(PYSOOPT) -o $@ $^
+
+sim_wrap.cxx: vec.hpp interaction.hpp collection.hpp interaction.cpp collection.cpp vecrand.cpp vecrand.hpp sim.i
+	swig -shadow -python -c++ sim.i 
+
+sim_wrap.o: sim_wrap.cxx
+	g++ -fPIC -c sim_wrap.cxx $(INC) $(LIB)
+
+_sim.so: sim_wrap.o
+	g++ -shared sim_wrap.o -o _sim.so -lpython
+
+#$b/vectest: vectest.cpp vec.hpp
+#	$(LD) -o $@ $^
+
+%.o: %.cpp %.hpp
+	$(CPP) $^
+
+#molecule.so: molecule.o heptanemol.o
+#	$(SO) -o $@ $^
