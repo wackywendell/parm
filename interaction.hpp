@@ -1,6 +1,8 @@
 #include "vec.hpp"
 
 #include <vector>
+#include <set>
+#include <map>
 #include <boost/foreach.hpp>
 
 #ifndef INTERACTION_H
@@ -64,26 +66,26 @@ struct atom {
 class atompair : public array<atom*, 2> {
     public:
         atompair(atom* a, atom* b){ vals[0] = a; vals[1] = b;};
-        atom& first() const {return *(vals[0]);};
-        atom& last() const {return *(vals[1]);};
+        inline atom& first() const {return *(vals[0]);};
+        inline atom& last() const {return *(vals[1]);};
 };
 
 class atomtriple : public array<atom*, 3> {
     public:
         atomtriple(atom* a, atom* b, atom* c){vals[0]=a; vals[1]=b; vals[2]=c;};
-        atom& first() const {return *(vals[0]);};
-        atom& mid() const {return *(vals[1]);};
-        atom& last() const {return *(vals[2]);};
+        inline atom& first() const {return *(vals[0]);};
+        inline atom& mid() const {return *(vals[1]);};
+        inline atom& last() const {return *(vals[2]);};
 };
 
 class atomquad : public array<atom*, 4> {
     public:
         atomquad(atom* a, atom* b, atom* c, atom* d){
                     vals[0]=a; vals[1]=b; vals[2]=c; vals[3]=d;};
-        atom& first() const {return *(vals[0]);};
-        atom& mid1() const {return *(vals[1]);};
-        atom& mi2() const {return *(vals[2]);};
-        atom& last() const {return *(vals[3]);};
+        inline atom& first() const {return *(vals[0]);};
+        inline atom& mid1() const {return *(vals[1]);};
+        inline atom& mid2() const {return *(vals[2]);};
+        inline atom& last() const {return *(vals[3]);};
 };
 
 class atomgroup {
@@ -164,8 +166,10 @@ class LJforce : public interactpair {
         flt sigma;
     public:
         LJforce(const flt epsilon, const flt sigma);
-        virtual flt energy(const Vec& diff);
-        virtual Vec forces(const Vec& diff);
+        virtual flt energy(const flt diff);
+        inline flt energy(const Vec& diff){return energy(diff.mag());};
+        virtual flt forces(const flt diff);
+        inline Vec forces(const Vec& diff){flt m=diff.mag(); return diff *(forces(m)/m);};
         ~LJforce(){};
 };
 
@@ -176,8 +180,8 @@ class LJcutoff : public LJforce {
     public:
         LJcutoff(const flt epsilon, const flt sigma, const flt cutoff);
         void setcut(const flt cutoff);
-        flt energy(const Vec& diff);
-        Vec forces(const Vec& diff);
+        flt energy(const flt diff);
+        flt forces(const flt diff);
         ~LJcutoff(){};
 };
 
@@ -337,6 +341,39 @@ class angletriples : public interaction {
                                 add(anglegrouping(k,x0,a1,a2,a3));};
         inline flt energy();
         inline void setForces();
+};
+
+struct LJdata {
+    flt sigma, epsilon;
+    atom *atm;
+    LJdata(flt sigma, flt epsilon, atom* a) : sigma(sigma), epsilon(epsilon),
+        atm(a){};
+};
+
+struct atompaircomp {
+    bool operator() (const atompair& lhs, const atompair& rhs) const{
+        return (lhs[0] == rhs[0] and lhs[1] == rhs[1]);}
+};
+
+class LJgroup : public interaction {
+    protected:
+        LJforce* LJ; 
+        set<atompair, atompaircomp> pairs;
+        vector<LJdata> atoms;
+    public:
+        LJgroup(flt cutoffdist=-1, vector<LJdata> atoms = vector<LJdata>(), 
+                    set<atompair, atompaircomp> pairs = set<atompair, atompaircomp>());
+        inline void add(atom* a, flt sigma, flt epsilon){
+            atoms.push_back(LJdata(sigma, epsilon, a));};
+        inline void add_pair(atom* a1, atom* a2){
+                    if(a1<a2) pairs.insert(atompair(a1,a2));
+                    else pairs.insert(atompair(a2,a1));};
+        inline bool has_pair(atom* a1, atom* a2){
+            if(a1 < a2) return (pairs.count(atompair(a1,a2))>0);
+            else return (pairs.count(atompair(a2,a1))>0);};
+        flt energy();
+        void setForces();
+        ~LJgroup(){delete LJ;};
 };
 
 #endif

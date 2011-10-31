@@ -57,9 +57,10 @@ class Resvec(atomvec):
         self.resname = residue.resname
     
     # dictionaries with means, to be loaded as necessary
-    backbonds = None
     resbonds = None
-    angles = None
+    backbonds = None
+    resangles = None
+    backangles = None
     
     def set_locs(self, residue):
         atoms = self.atoms
@@ -78,7 +79,7 @@ class Resvec(atomvec):
         return sum(Hs) + a.mass
     
     def load_data(self, f=None):
-        if None not in (self.resbonds, self.backbonds, self.angles):
+        if None not in (self.resbonds, self.backbonds, self.resangles, self.backangles):
             return
         if f is None:
             f = self.loadfile
@@ -89,7 +90,38 @@ class Resvec(atomvec):
             f = open(f, 'rb')
         
         import cPickle as pickle
-        self.resbonds, self.backbonds, self.angles = pickle.load(f)
+        self.resbonds, self.backbonds, self.resangles, self.backangles = pickle.load(f)
+    
+    def get_angles(self, lastres=None, nextres=None, f=None):
+        """Yields triplets of (atom1 ptr, atom2 ptr, atom3 ptr, bond angle in radians)"""
+        self.load_data(f)
+        myangles = self.resangles[self.resname]
+        for a1, a2, a3 in myangles:
+            #~ print("bonds:",a1,a2)
+            yield (self[a1], self[a2],self[a3], myangles[a1, a2, a3]['mean'])
+        
+        for trip, val in self.backangles.items():
+            #~ print("backbonds:",*pair)
+            a1, a2, a3 = trip
+            if 'OXT' in trip:
+                try:
+                    a1 = self[a1]
+                    a2 = self[a2]
+                    a3 = self[a3]
+                    #~ print(a1,a2,*pair)
+                    yield (a1, a2, a3, val['mean'])
+                except KeyError:
+                    continue
+            elif a2 == 'C' and 'N' in trip:
+                #this is the neighbor-neighbor peptide bond
+                if nextres:
+                    yield (self[a1], self['C'], nextres[a3], val['mean'])
+            elif a2 == 'N' and 'C' in trip:
+                #this is the neighbor-neighbor peptide bond
+                if lastres:
+                    yield (lastres[a1], self['N'], self[a3], val['mean'])
+            else:
+                yield (self[a1], self[a2], self[a3], val['mean'])
     
     def get_bonds(self, lastres=None, f=None):
         """Yields triplets of (atom1 ptr, atom2 ptr, bond length in angstrom)"""
@@ -147,6 +179,16 @@ class Resvec(atomvec):
         lastvecs = [None] + reslist
         lists_of_bonds = (res.get_bonds(lvec) for res, lvec
                                         in zip(reslist, lastvecs))
+        
+        return itertools.chain.from_iterable(lists_of_bonds)
+    
+    @classmethod
+    def all_angles(cls, reslist):
+        reslist = list(reslist)
+        last_residues = [None] + reslist
+        next_residues = reslist[1:] + [None]
+        lists_of_bonds = (res.get_angles(lres,nres) for res, lres, nres
+                                        in zip(reslist, last_residues, next_residues))
         
         return itertools.chain.from_iterable(lists_of_bonds)
 
@@ -219,8 +261,8 @@ class Residue(_Residue):
                     print(a.name, b.name)
                     yield (avec.get(aindx), avec.get(bindx), a, b)
 
-def make_structure(residue_list, bond_k, loadfile, amu=1, angstrom=1):
-    """Returns a tuple (atomvecs, bondgroup)
+def make_structure(residue_list, loadfile, bond_k, angle_k, sigma=1, epsilon=1, amu=1, angstrom=1):
+    """Returns a tuple (atomvecs, list of interactions)
     
     atomvecs is a list of atomvecs corresponding to residues.
     bondgroup is a bondgrouping interaction corresponding to all the bonds,
@@ -233,8 +275,21 @@ def make_structure(residue_list, bond_k, loadfile, amu=1, angstrom=1):
     avecs = [Resvec(res, amu=amu, loadfile=loadfile) for res in residue_list]
     
     bond_pairs = bondpairs()
+    bond_angles = angletriples()
+    LJ_group = LJgroup()
+    for avec in avecs:
+        for a in avec:
+            LJ_group.add(a, sigma, epsilon)
+    
     for a1,a2,l in Resvec.all_bonds(avecs):
         length = l * angstrom
         bond_pairs.add(bond_k, length, a1, a2)
+        LJ_group.add_pair(a1,a2)
     
-    return avecs, bond_pairs
+    for group in Resvec.all_angles(avecs):
+        a1,a2,a3,angle = group
+        bond_angles.add(angle_k, angle, a1, a2, a3)
+        LJ_group.add_pair(a1,a3)
+    
+    
+    return avecs, [bond_pairs, bond_angles, LJ_group]

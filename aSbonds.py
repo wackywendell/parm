@@ -9,22 +9,25 @@ from simpdb import Resvec, make_structure
 from Bio.PDB import PDBParser
 import numpy as np
 
-tot = 500
+tot = 1000
 dt = .02 #dt = float(tot) / steps
 steps = int(tot / dt)
-showsteps = 1000#steps/1000
+showsteps = 1000
 #~ damping = 0
 #~ Temp = 0
 bondspring = 100
-numres = None
-damping = .3
-Temp = 10
+anglespring = 100
+LJsigma = 1
+LJepsilon = 1
+numres = 20
+damping = 0.3
+Temp = 1
 pdbfile = '/home/wendell/idp/pdb/aS.pdb'
 loadfile='../blengths/stats.pkl'
 #~ moviefile = None
 moviefile = '../test2.mp4'
 size = 600
-fps = 20
+fps = 40
 
 ####################
 print("parsing...")
@@ -35,7 +38,8 @@ chain = list(aS.get_chains())[0]
 print("Making structure...")
 if numres <= 0:
     numres = None
-avecs, bonds = make_structure(chain.child_list[:numres], bondspring, loadfile)
+avecs, interactions = make_structure(chain.child_list[:numres], loadfile,
+            bondspring, anglespring, LJsigma, LJepsilon)
 
 print(sum([len(av) for av in avecs]), "atoms")
 
@@ -43,11 +47,10 @@ if len(avecs) < 20:
     print(", ".join([r.resname for r in avecs]))
 
 atomgroups = avector(avecs)
-intervec = ivector([bonds])
+intervec = ivector(interactions)
 
 t=0
 dt = float(tot) / steps
-sigma = sqrt(4*Temp*damping/dt)
 #collectionSol(const flt dt, const flt damping, const flt desiredT, 
                 #~ vector<atomgroup*> groups=vector<atomgroup*>(),
                 #~ vector<interaction*> interactions=vector<interaction*>());
@@ -87,7 +90,7 @@ else:
     window = Window(size, fps)
 
 def update(actualtimestep):
-    global window,t,L
+    global window,t,L, actualtime
     for i in range(steps/showsteps):
         collec.timestep()
         t+=1
@@ -115,8 +118,8 @@ def update(actualtimestep):
     Tmean = float(np.mean(T))
     Rg.append(collec.gyradius())
     stats = (curE, float(100*np.std(E))/Emean, curT, Tmean, float(100*np.std(T))/Tmean, 
-        int(100.0*t/steps))
-    window.caption("E={0:.3f},{1:.3f}%; T={2:.3}/{3:.3},{4:.3}%; {5}%".format(
+        100.0*t/steps)
+    window.caption("E={0:.3f},{1:.3f}%; T={2:.3}/{3:.3},{4:.3}%; {5:.1f}%".format(
         *stats))
     if t >= steps:
         raise StopIteration
@@ -127,7 +130,13 @@ T = T[begin:]
 E = E[begin:]
 Rg = Rg[begin:]
 
+from datetime import datetime
+starttime = datetime.now()
 window.run(update)
+tottime = datetime.now() - starttime
+
+print("%s, %.3f fps" % (tottime, t / tottime.total_seconds()))
+
 if moviefile:
     vidwriter.close()
 #~ print(xlist[0],xlist[-1])

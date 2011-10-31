@@ -98,16 +98,14 @@ LJforce::LJforce(const flt ep, const flt sig) : interactpair(),
         epsilon(ep), sigma(sig) {
 }
 
-flt LJforce::energy(const Vec& r){
-    flt l = r.mag() / sigma;
+flt LJforce::energy(flt r){
+    flt l = r / sigma;
     return 4*epsilon*(pow(l,-12) - pow(l,-6));
 }
 
-Vec LJforce::forces(const Vec& r){
-    flt m = r.mag();
-    flt l = m / sigma;
-    flt fmag = 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
-    return r * (fmag / m);
+flt LJforce::forces(flt r){
+    flt l = r / sigma;
+    return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
 }
 
 LJcutoff::LJcutoff(const flt ep, const flt sig, const flt cut) : 
@@ -121,19 +119,16 @@ void LJcutoff::setcut(const flt cut){
     cutoffenergy = 4*epsilon*(pow(l,-12) - pow(l,-6));
 }
 
-flt LJcutoff::energy(const Vec& r){
-    flt m = r.mag();
-    if(m > cutoff) return 0;
-    flt l = m / sigma;
+flt LJcutoff::energy(const flt r){
+    if(r > cutoff) return 0;
+    flt l = r / sigma;
     return 4*epsilon*(pow(l,-12) - pow(l,-6)) - cutoffenergy;
 }
 
-Vec LJcutoff::forces(const Vec& r){
-    flt m = r.mag();
-    if(m > cutoff) return Vec(0,0,0);
-    flt l = m / sigma;
-    flt fmag = 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
-    return r * (fmag / m);
+flt LJcutoff::forces(const flt r){
+    if(r > cutoff) return 0;
+    flt l = r / sigma;
+    return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
 }
 
 flt spring::energy(const Vec& r){
@@ -533,4 +528,48 @@ void angletriples::setForces(){
         atom2.f += f[1];
         atom3.f += f[2];
     }
+}
+
+
+LJgroup::LJgroup(flt cutoff, vector<LJdata> atoms, set<atompair, atompaircomp> pairs) : 
+        atoms(atoms), pairs(pairs){
+    if(cutoff > 0) LJ = new LJcutoff(1,1,cutoff);
+    else LJ = new LJforce(1,1);
+};
+
+flt LJgroup::energy(){
+    flt E = 0;
+    vector<LJdata>::iterator it1, it2;
+    for(it1 = atoms.begin(); it1 < atoms.end(); it1++){
+        for(it2 = it1; it2 < atoms.end(); it2++){
+            atom *a1 = it1->atm, *a2 = it2->atm;
+            if (a1 == a2) continue;
+            if (has_pair(a1, a2)) continue;
+            flt sigma = .5 * (it1->sigma + it2->sigma);
+            flt epsilon = sqrt(it1->epsilon + it2->epsilon); //optimize
+            E += epsilon * LJ->energy(diff(a1->x, a2->x).mag() / sigma); //optimize
+        }
+    }
+    return E;
+}
+
+void LJgroup::setForces(){
+    flt E = 0;
+    vector<LJdata>::iterator it1, it2;
+    for(it1 = atoms.begin(); it1 < atoms.end(); it1++){
+        for(it2 = it1; it2 < atoms.end(); it2++){
+            atom *a1 = it1->atm, *a2 = it2->atm;
+            if (a1 == a2) continue;
+            if (has_pair(a1, a2)) continue;
+            flt sigma = .5 * (it1->sigma + it2->sigma);
+            flt epsilon = sqrt(it1->epsilon + it2->epsilon); //optimize
+            Vec r = diff(a1->x, a2->x);
+            flt rmag = r.mag();
+            flt fmag = LJ->forces(rmag / sigma) * epsilon / sigma;
+            Vec f = r * (fmag / rmag);
+            a1->f += f;
+            a2->f -= f;
+        }
+    }
+    return;
 }

@@ -29,7 +29,7 @@ class array {
         unsigned int len() const {return N;};
         
         T& operator[](const unsigned int i){return vals[i];};
-        T& operator[](const unsigned int i) const {return vals[i];};
+        const T& operator[](const unsigned int i) const {return vals[i];};
         T* begin(){return vals;};
         T* end(){return vals + N;};
         ~array(){};

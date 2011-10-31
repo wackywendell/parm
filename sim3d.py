@@ -275,7 +275,8 @@ class Vidwriter:
     def __init__(self, fname, sz, fps=20):
         args = self.args % (sz,sz,fps,fname)
         print("Starting", args)
-        self.proc = proc = subprocess.Popen(args, stdin=subprocess.PIPE, shell=True)
+        self.proc = proc = subprocess.Popen(args, stdin=subprocess.PIPE, 
+                    stderr = open('/dev/null','wb'), shell=True)
         self.inputfile = proc.stdin
     
     def close(self):
