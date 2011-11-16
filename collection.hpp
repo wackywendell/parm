@@ -13,10 +13,13 @@ class collection {
     protected:
         vector<atomgroup*> groups;
         vector<interaction*> interactions;
+        vector<statetracker*> trackers;
+        void update_trackers();
         
     public:
         collection(vector<atomgroup*> groups=vector<atomgroup*>(),
-                            vector<interaction*> interactions=vector<interaction*>());
+            vector<interaction*> interactions=vector<interaction*>(),
+            vector<statetracker*> trackers=vector<statetracker*>());
         
         //Timestepping
         virtual void setForces();
@@ -69,7 +72,8 @@ class collectionSol : public collection {
     public:
         collectionSol(const flt dt, const flt damping, const flt desiredT, 
                 vector<atomgroup*> groups=vector<atomgroup*>(),
-                vector<interaction*> interactions=vector<interaction*>());
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>());
         void timestep();
         void seed(uint n){gauss.seed(n);};
         void seed(){gauss.seed();};

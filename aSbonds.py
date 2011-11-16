@@ -9,23 +9,25 @@ from simpdb import Resvec, make_structure
 from Bio.PDB import PDBParser
 import numpy as np
 
-tot = 1000
+damping = 0
+Temp = 0
+
+tot = 20000
 dt = .02 #dt = float(tot) / steps
+#~ steps = 2
 steps = int(tot / dt)
-showsteps = 1000
-#~ damping = 0
-#~ Temp = 0
-bondspring = 100
-anglespring = 100
-LJsigma = 1
+showsteps = 5000
+bondspring = 1000
+anglespring = 1000
+LJsigma = 1.7
 LJepsilon = 1
-numres = 20
-damping = 0.3
-Temp = 1
+numres = None
+damping = 0.5
+Temp = 2
 pdbfile = '/home/wendell/idp/pdb/aS.pdb'
 loadfile='../blengths/stats.pkl'
 #~ moviefile = None
-moviefile = '../test2.mp4'
+moviefile = '../T2-20k.mp4'
 size = 600
 fps = 40
 
@@ -38,29 +40,27 @@ chain = list(aS.get_chains())[0]
 print("Making structure...")
 if numres <= 0:
     numres = None
-avecs, interactions = make_structure(chain.child_list[:numres], loadfile,
+avecs, interactions, trackers = make_structure(chain.child_list[:numres], loadfile,
             bondspring, anglespring, LJsigma, LJepsilon)
 
-print(sum([len(av) for av in avecs]), "atoms")
+LJ = interactions[-1]
+print(sum([len(av) for av in avecs]), "atoms", len(avecs), "residues")
 
 if len(avecs) < 20:
     print(", ".join([r.resname for r in avecs]))
 
 atomgroups = avector(avecs)
 intervec = ivector(interactions)
+trackvec = tvector(trackers)
 
 t=0
-dt = float(tot) / steps
-#collectionSol(const flt dt, const flt damping, const flt desiredT, 
-                #~ vector<atomgroup*> groups=vector<atomgroup*>(),
-                #~ vector<interaction*> interactions=vector<interaction*>());
-collec = collectionSol(dt, damping, Temp, atomgroups, intervec)
-collec.setForces()
+collec = collectionSol(dt, damping, Temp, atomgroups, intervec, trackvec)
 collec.seed()
-
+collec.setForces()
 
 tlist = []
 E=[]
+LJE=[]
 K=[]
 T=[]
 Rg=[]
@@ -111,6 +111,7 @@ def update(actualtimestep):
     #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
     curE = collec.Energy()
     E.append(curE)#,collec.kinetic()])
+    LJE.append(LJ.energy())
     curT = collec.Temp()
     T.append(curT)
     K.append(collec.kinetic())
@@ -169,7 +170,7 @@ def plot(lst, name):
     plt.legend()
     plt.show()
 
-Pairs = [(E, "E"),(T, "T")]#,(Rg, "Rg"), (K, "K")]
+Pairs = [(E, "E"),(T, "T"),(LJE, "LJ E")]#,(Rg, "Rg"), (K, "K")]
 
 for xs, name in Pairs:
     plot(xs, name)

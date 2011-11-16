@@ -3,6 +3,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <cassert>
 #include <boost/foreach.hpp>
 
 #ifndef INTERACTION_H
@@ -63,6 +64,44 @@ struct atom {
     Vec f; // forces
 };
 
+class atomref {
+    private:
+        atom *ptr;
+    public:
+        inline atomref() : ptr(NULL){};
+        inline atomref(atom *a) : ptr(a){};
+        inline atom& operator *(){return *ptr;};
+        inline atom* pointer(){return ptr;};
+        inline Vec& x(){return ptr->x;};
+        inline Vec& v(){return ptr->v;};
+        inline Vec& f(){return ptr->f;};
+        inline Vec& a(){return ptr->a;};
+        inline bool operator==(const atomref &other) const {return other.ptr == ptr;};
+        inline bool operator==(const atom* other) const {return other == ptr;};
+        inline bool operator!=(const atomref &other) const {return other.ptr != ptr;};
+        inline bool operator<(const atomref &other) const {return ptr < other.ptr;};
+        inline bool operator<=(const atomref &other) const {return ptr <= other.ptr;};
+        inline bool operator>=(const atomref &other) const {return ptr >= other.ptr;};
+        inline bool operator>(const atomref &other) const {return ptr > other.ptr;};
+};
+
+class atomid : public atomref {
+    private:
+        uint num; // note that these are generally only in reference to 
+                  // a specific atomgroup
+    public:
+        inline atomid() : atomref(), num(-1){};
+        inline atomid(atom *a, uint n) : atomref(a), num(n){};
+        inline uint n(){return num;};
+};
+
+class idpair : public array<atomid, 2> {
+    public:
+        idpair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
+        inline atomid first() const {return vals[0];};
+        inline atomid last() const {return vals[1];};
+};
+
 class atompair : public array<atom*, 2> {
     public:
         atompair(atom* a, atom* b){ vals[0] = a; vals[1] = b;};
@@ -88,14 +127,20 @@ class atomquad : public array<atom*, 4> {
         inline atom& last() const {return *(vals[3]);};
 };
 
+class statetracker {
+    public:
+        virtual void update() = 0;
+};
+
 class atomgroup {
     // a group of atoms, such as a molecule, sidebranch, etc.
     public:
         // access individual atoms
         virtual atom& operator[](cuint n)=0;
         virtual atom& operator[](cuint n) const=0;
-        atom* get(cuint n){if(n>=N()) return NULL; return &((*this)[n]);};
-        virtual uint N() const=0;
+        atom* get(cuint n){if(n>=size()) return NULL; return &((*this)[n]);};
+        atomid get_id(cuint n){return atomid(get(n),n);};
+        virtual uint size() const=0;
         virtual flt getmass(const unsigned int n) const = 0;
         
         
@@ -103,7 +148,7 @@ class atomgroup {
         Vec comvel() const; //center of mass velocity
         
         //Stats
-        flt inline mass() const;
+        flt mass() const;
         flt kinetic(const Vec &originvelocity=Vec(0,0,0)) const;
         Vec momentum() const;
         Vec angmomentum(const Vec &loc) const;
@@ -121,13 +166,26 @@ class atomvec : public virtual atomgroup {
         atom* atoms;
         vector<flt> ms;
     public:
-        atomvec(vector<flt> masses) : ms(masses){atoms = new atom[N()];};
+        atomvec(vector<flt> masses) : ms(masses){atoms = new atom[size()];};
         inline atom& operator[](cuint n){return atoms[n];};
         inline atom& operator[](cuint n) const {return atoms[n];};
         inline flt getmass(cuint n) const{return ms[n];};
         inline void setmass(cuint n, flt m){ms[n] = m;};
-        inline uint N() const {return ms.size();};
+        inline uint size() const {return ms.size();};
         ~atomvec(){ delete [] atoms;};
+};
+
+class metagroup : public atomgroup {
+    protected:
+        vector<atom*> atoms;
+        vector<flt> masses;
+    public:
+        metagroup(vector<atomgroup*>);
+        inline atom& operator[](cuint n){return *atoms[n];};
+        inline atom& operator[](cuint n) const{return *atoms[n];};
+        inline atom* get(cuint n){if(n>=size()) return NULL; return (atoms[n]);};
+        inline uint size() const {return atoms.size();};
+        inline flt getmass(const unsigned int n) const{return masses[n];};
 };
 
 class interactpair {
@@ -183,6 +241,18 @@ class LJcutoff : public LJforce {
         flt energy(const flt diff);
         flt forces(const flt diff);
         ~LJcutoff(){};
+};
+
+class LJcutrepulsive : public LJforce {
+    protected:
+        flt cutoff;
+        flt cutoffenergy;
+    public:
+        LJcutrepulsive(const flt epsilon, const flt sigma, const flt cutoff);
+        void setcut(const flt cutoff);
+        flt energy(const flt diff);
+        flt forces(const flt diff);
+        ~LJcutrepulsive(){};
 };
 
 class spring : public interactpair {
@@ -343,37 +413,135 @@ class angletriples : public interaction {
         inline void setForces();
 };
 
-struct LJdata {
-    flt sigma, epsilon;
-    atom *atm;
-    LJdata(flt sigma, flt epsilon, atom* a) : sigma(sigma), epsilon(epsilon),
-        atm(a){};
-};
+//~ class LJgroup : private vector<LJdata>, public atomgroup {
+    //~ public:
+        //~ LJgroup() : vector<LJdata>(){};
+        //~ add(flt sigma, flt epsilon, atom *a){ 
+//~ };
 
 struct atompaircomp {
     bool operator() (const atompair& lhs, const atompair& rhs) const{
         return (lhs[0] == rhs[0] and lhs[1] == rhs[1]);}
 };
 
+class pairlist {
+    protected:
+        map<const atomid, set<atomid> > pairs;
+    public:
+        //~ pairlist(atomgroup *group);
+        pairlist(){};
+        
+        inline void ensure(const atomid a){
+            pairs.insert(std::pair<atomid, set<atomid> >(a, set<atomid>()));
+        }
+        inline void ensure(vector<atomid> ps){
+            typename vector<atomid>::iterator it;
+            for(it=ps.begin(); it != ps.end(); it++) ensure(*it);
+        }
+        inline void ensure(atomgroup &group){
+            for(uint i=0; i<group.size(); i++) ensure(group.get_id(i));
+        }
+        
+        inline bool has_pair(atomid a1, atomid a2){
+            if(a1 > a2) return pairs[a1].count(a2) > 0;
+            else return pairs[a2].count(a1) > 0;
+        }
+        
+        inline void add_pair(atomid a1, atomid a2){
+            //~ cout << "pairlist ignore " << a1.n() << '-' << a2.n() << "\n";
+            if(a1 > a2){pairs[a1].insert(a2);}
+            else{pairs[a2].insert(a1);};
+        }
+        
+        inline void erase_pair(atomid a1, atomid a2){
+            if(a1 > a2){pairs[a1].erase(a2);}
+            else{pairs[a2].erase(a1);};
+        }
+        
+        inline set<atomid> get_pairs(const atomid a){ensure(a); return pairs[a];};
+        
+        // for iterating over neighbors
+        inline set<atomid>::iterator begin(const atomid a){return pairs[a].begin();};
+        inline set<atomid>::iterator end(const atomid a){return pairs[a].end();};
+
+        void clear();
+};
+
+class neighborlist : public statetracker{
+    //maintains a Verlet list of "neighbors": molecules within a 
+    // 'skin radius' of each other.
+    // note that molecules are counted as neighbors if any point within
+    // their molecular radius is within a 'skin radius' of any point
+    // within another molecule's molecular radius.
+    //
+    // update(false) should be called frequently; it checks (O(N)) if
+    // any two molecules might conceivably overlap by more than a critical
+    // distance, and if so, it updates all the neighbor lists.
+    
+    // the <bool areneighbors()> function returns whether two molecules
+    // are neighbors, and the begin(n), end(n) allow for iterating over
+    // the neighbor lists
+    protected:
+        flt critdist, skinradius;
+        vector<atomid> atoms;
+        vector<idpair> curpairs;
+        pairlist ignorepairs;
+        vector<Vec> lastlocs;
+        uint updatenum;
+        atomid get_id(atom* a);
+        //~ bool checkneighbors(const uint n, const uint m) const;
+        // this is a full check
+    public:
+        neighborlist(atomgroup &vec, const flt innerradius, 
+        const flt outerradius, pairlist ignore = pairlist());
+        void update(){update_list(false);};
+        bool update_list(bool force = true);
+        // if force = false, we check if updating necessary first
+        
+        inline uint which(){return updatenum;};
+        inline void ignore(atomid a, atomid b){ignorepairs.add_pair(a,b);};
+        void ignore(atom*, atom*);
+        inline vector<idpair>::iterator begin(){return curpairs.begin();};
+        inline vector<idpair>::iterator end(){return curpairs.end();};
+        
+        ~neighborlist(){};
+};
+
+struct LJatom : public atomid {
+    flt sigma, epsilon;
+    LJatom() : sigma(0), epsilon(0){};
+    LJatom(flt sigma, flt epsilon, atomid a) : sigma(sigma), epsilon(epsilon),
+        atomid(a){};
+};
+
+struct LJpair {
+    flt sigma, epsilon;
+    atomid atom1, atom2;
+    LJpair(LJatom LJ1, LJatom LJ2) : sigma((LJ1.sigma + LJ2.sigma) / 2),
+            epsilon(sqrt(LJ1.epsilon * LJ2.epsilon)),
+            atom1(LJ1), atom2(LJ2){};
+};
+
 class LJgroup : public interaction {
     protected:
-        LJforce* LJ; 
-        set<atompair, atompaircomp> pairs;
-        vector<LJdata> atoms;
+        LJcutrepulsive LJ; 
+        vector<LJatom> atoms;
+        vector<LJpair> pairs;
+        neighborlist *neighbors;
+        uint lastupdate;
     public:
-        LJgroup(flt cutoffdist=-1, vector<LJdata> atoms = vector<LJdata>(), 
-                    set<atompair, atompaircomp> pairs = set<atompair, atompaircomp>());
-        inline void add(atom* a, flt sigma, flt epsilon){
-            atoms.push_back(LJdata(sigma, epsilon, a));};
-        inline void add_pair(atom* a1, atom* a2){
-                    if(a1<a2) pairs.insert(atompair(a1,a2));
-                    else pairs.insert(atompair(a2,a1));};
-        inline bool has_pair(atom* a1, atom* a2){
-            if(a1 < a2) return (pairs.count(atompair(a1,a2))>0);
-            else return (pairs.count(atompair(a2,a1))>0);};
+        LJgroup(neighborlist *neighbors, flt cutoffdist); // cutoffdist in sigma units
+        inline void add(LJatom a){
+            if (a.n() == atoms.size()) {atoms.push_back(a); return;};
+            if (a.n() > atoms.size()) atoms.resize(a.n());
+            atoms[a.n()] = a;};
+        inline void add(atomid a, flt sigma, flt epsilon){
+            add(LJatom(sigma,epsilon,a));};
+        void update_pairs();
         flt energy();
         void setForces();
-        ~LJgroup(){delete LJ;};
+        neighborlist *list(){return neighbors;};
+        ~LJgroup(){};
 };
 
 #endif

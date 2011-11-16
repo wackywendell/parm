@@ -9,17 +9,16 @@ from simpdb import Resvec, make_structure
 from Bio.PDB import PDBParser
 import numpy as np
 
-damping = 0
-Temp = 2
+damping = 0.5
+Temp = 3
 
 tot = 200
-dt = .02 #dt = float(tot) / steps
+dt = .01 #dt = float(tot) / steps
 #~ steps = 2
 steps = int(tot / dt)
-showsteps = 5000
+showsteps = 500
 bondspring = 1000
 anglespring = 1000
-LJsigma = 1.7
 LJepsilon = 1
 numres = 20
 #~ damping = 0.5
@@ -41,7 +40,7 @@ print("Making structure...")
 if numres <= 0:
     numres = None
 avecs, interactions, trackers = make_structure(chain.child_list[:numres], loadfile,
-            bondspring, anglespring, LJsigma, LJepsilon)
+            bondspring, anglespring, LJepsilon)
 
 LJ = interactions[-1]
 print(sum([len(av) for av in avecs]), "atoms", len(avecs), "residues")

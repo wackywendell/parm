@@ -1,4 +1,5 @@
 from __future__ import print_function
+from Bio.PDB import PDBParser
 from Bio.PDB.Residue import Residue as _Residue
 from simw import *
 import itertools
@@ -36,6 +37,12 @@ bonddict = {
              ('CE2', 'CZ2'), ('CE3', 'CZ3'), ('CZ2', 'CH2'), ('CZ3', 'CH2')]
     }
 
+# from richards
+LJdict = {
+    'CH3' : 2.0, 'CH2' : 2.0, 'CH' : 2.0, 'C' : 1.7, 'O' : 1.4,
+    'OH' : 1.6, 'NH3' : 2.0, 'NH2' : 1.75, 'NH' : 1.7, 'S' : 1.8
+    }
+
 # following RasMol
 bonddists = {
     'CC':2,'CN':1.96,'CO':1.96,'PP':2.632,'OP':2.276,'SS':2.6,'OS':2.26,
@@ -47,10 +54,13 @@ class Resvec(atomvec):
         residue.sort()
         if not H:
             self.atoms = [a for a in residue.child_list if a.name[0] != 'H']
+            self.hydrogens = [self._getHs(residue, a) for a in self.atoms]
+            #~ self.hydrogens = None
         else:
             self.atoms = residue.child_list
+            self.hydrogens = None
         self.masses = [self._get_mass(residue, a, H)*amu for a in self.atoms]
-        
+            
         atomvec.__init__(self, self.masses)
         self.set_locs(residue)
         self.loadfile = loadfile
@@ -70,13 +80,29 @@ class Resvec(atomvec):
         for loc, atom in zip(locs, self):
             atom.x = Vec(*loc)
     
-    def _get_mass(self, res, atom, H = True):
-        if not H:
-            return atom.mass
-        name = atom.name[:]
+    def _getHs(self, res, atom):
+        if atom.name == 'C' or atom.name == 'O':
+            return []
+        name = 'H' + atom.name[1:]
         names = (name, name + '1', name + '2', name + '3', name + '4')
-        Hs = [a.mass for a in res.child_list if a.name in names]
-        return sum(Hs) + a.mass
+        return [a for a in res.child_list if a.name in names]
+    
+    def _get_mass(self, res, atom, H = True):
+        """H means treat Hydrogens as separate"""
+        if H:
+            return atom.mass
+        return sum(h.mass for h in self._getHs(res, atom)) + atom.mass
+    
+    def _formula(self, indx):
+        atom = self.atoms[indx]
+        if not self.hydrogens:
+            return atom.element
+        Hs = len(self.hydrogens[indx])
+        if Hs == 0:
+            return atom.element
+        elif Hs == 1:
+            return atom.element + 'H'
+        return atom.element + 'H' + str(Hs)
     
     def load_data(self, f=None):
         if None not in (self.resbonds, self.backbonds, self.resangles, self.backangles):
@@ -160,12 +186,12 @@ class Resvec(atomvec):
         a = atomvec.__getitem__(self, indx)
         a.name = self.atoms[indx].name
         a.mass = self.masses[indx]
+        a.pdbatom = self.atoms[indx]
+        if self.hydrogens:
+            a.hydrogens = self.hydrogens[indx]
+            a.formula = self._formula(indx)
         a.group = self
         return a
-    
-    #~ def __iter__(self):    
-        #~ for i in range(self.N()):
-            #~ yield self[i]
     
     def get_name(self, atom):
         for avec_atom, res_atom in zip(self, self.atoms):
@@ -191,8 +217,24 @@ class Resvec(atomvec):
                                         in zip(reslist, last_residues, next_residues))
         
         return itertools.chain.from_iterable(lists_of_bonds)
-
-
+    
+    @classmethod
+    def to_xyz(cls, reslist, f):
+        reslist = list(reslist)
+        print(sum(len(r) for r in reslist), file=f)
+        for res in reslist:
+            for a in res:
+                print("%s %.3f %.3f %.3f" % tuple(a.name[:1], *(a.x)), file=f)
+    
+    @classmethod
+    def from_pdb(cls, strucname, pdbfilename, loadfile, amu=1):
+        pdbp = PDBParser()
+        aS = pdbp.get_structure(strucname, pdbfilename)
+        chains = list(aS.get_chains())
+        residues = itertools.chain.from_iterable(chain.child_list for chain in chains)
+        rvecs = [Resvec(res, amu=amu, loadfile=loadfile) for res in residues]
+        return rvecs
+    
 class Residue(_Residue):
     def __init__(self, res):
         self.__dict__.update(res.__dict__)
@@ -261,10 +303,10 @@ class Residue(_Residue):
                     print(a.name, b.name)
                     yield (avec.get(aindx), avec.get(bindx), a, b)
 
-def make_structure(residue_list, loadfile, bond_k, angle_k, sigma=1, epsilon=1, amu=1, angstrom=1):
-    """Returns a tuple (atomvecs, list of interactions)
+def make_structure(residue_list, loadfile, bond_k, angle_k, epsilon=1, amu=1, angstrom=1):
+    """Returns a tuple (Resvecs, list of interactions, list of trackers)
     
-    atomvecs is a list of atomvecs corresponding to residues.
+    Resvecs is a list of Resvecs (atomvecs) corresponding to residues.
     bondgroup is a bondgrouping interaction corresponding to all the bonds,
     backbone included."""
     #so that it works on a chain object as well
@@ -273,23 +315,29 @@ def make_structure(residue_list, loadfile, bond_k, angle_k, sigma=1, epsilon=1, 
     lastres = None
     
     avecs = [Resvec(res, amu=amu, loadfile=loadfile) for res in residue_list]
+    fullgroup = metagroup(avecs)
     
     bond_pairs = bondpairs()
     bond_angles = angletriples()
-    LJ_group = LJgroup()
-    for avec in avecs:
-        for a in avec:
-            LJ_group.add(a, sigma, epsilon)
+    maxsigma = max(LJdict.values())
+    neighbors = neighborlist(fullgroup, 2.5*maxsigma, 4*maxsigma)
+    LJ = LJgroup(neighbors, 2.5)
+    for i, atom in zip(range(fullgroup.size()), (atom for r in avecs for atom in r)):
+        assert fullgroup.get_id(i) == atom
+        sigma = LJdict[atom.formula]
+        LJ.add(fullgroup.get_id(i), sigma, epsilon)
     
     for a1,a2,l in Resvec.all_bonds(avecs):
         length = l * angstrom
         bond_pairs.add(bond_k, length, a1, a2)
-        LJ_group.add_pair(a1,a2)
+        neighbors.ignore(a1,a2)
     
     for group in Resvec.all_angles(avecs):
         a1,a2,a3,angle = group
         bond_angles.add(angle_k, angle, a1, a2, a3)
-        LJ_group.add_pair(a1,a3)
+        neighbors.ignore(a1,a3)
     
+    neighbors.update_list(True)
     
-    return avecs, [bond_pairs, bond_angles, LJ_group]
+    #~ return avecs, [bond_pairs, bond_angles], [neighbors]
+    return avecs, [bond_pairs, bond_angles, LJ], [neighbors]

@@ -1,7 +1,18 @@
 #include "collection.hpp"
 
-collection::collection(vector<atomgroup*> gs, vector<interaction*> is)
-        : groups(gs), interactions(is){
+collection::collection(vector<atomgroup*> gs, vector<interaction*> is,
+              vector<statetracker*> ts)
+        : groups(gs), interactions(is), trackers(ts){
+    update_trackers();
+    setForces();
+    update_trackers();
+}
+
+void collection::update_trackers(){
+    vector<statetracker*>::iterator git;
+    for(git = trackers.begin(); git<trackers.end(); git++){
+        (*git)->update();
+    }
 }
 
 flt collection::kinetic(){
@@ -34,7 +45,7 @@ flt collection::Temp(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
         totkinetic += group.kinetic(v);
-        totatoms += group.N();
+        totatoms += group.size();
     }
     return totkinetic * 2 / (3*totatoms-3);
 }
@@ -45,7 +56,7 @@ Vec collection::com(){
     Vec totcom = Vec(0,0,0);
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
-        for(uint i = 0; i<g.N(); i++){
+        for(uint i = 0; i<g.size(); i++){
             flt curmass = g.getmass(i);
             mass += curmass;
             totcom += g[i].x * curmass;
@@ -60,7 +71,7 @@ Vec collection::comv(){
     Vec totcom = Vec(0,0,0);
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
-        for(uint i = 0; i<g.N(); i++){
+        for(uint i = 0; i<g.size(); i++){
             flt curmass = g.getmass(i);
             mass += curmass;
             totcom += g[i].v * curmass;
@@ -75,7 +86,7 @@ flt collection::gyradius(){
     flt N = 0;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
-        for(uint i = 0; i<g.N(); i++){
+        for(uint i = 0; i<g.size(); i++){
             avgr += g[i].x;
             N++;
         }
@@ -84,7 +95,7 @@ flt collection::gyradius(){
     flt Rgsq = 0;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
-        for(uint i = 0; i<g.N(); i++) Rgsq += (g[i].x - avgr).sq();
+        for(uint i = 0; i<g.size(); i++) Rgsq += (g[i].x - avgr).sq();
     }
     
     return sqrt(Rgsq/N);
@@ -105,15 +116,16 @@ void collection::setForces(){
 }
 
 collectionSol::collectionSol(const flt dt, const flt damp,const flt T, 
-        vector<atomgroup*> groups,vector<interaction*> interactions) :
-        collection(groups, interactions), dt(dt), damping(damp), desT(T){
+        vector<atomgroup*> groups,vector<interaction*> interactions,
+        vector<statetracker*> trackers) :
+        collection(groups, interactions, trackers), dt(dt), damping(damp), desT(T){
     setCs();
 };
 
 void collectionSol::setCs(){
     if(damping == 0){
         c0 = 1; c1 = 1; c2 = .5;
-        sigmar = 1; sigmav = 1; corr = 1;
+        sigmar = 0; sigmav = 0; corr = 1;
         gauss.set(sigmar, sigmav, corr);
         return;
     }
@@ -145,19 +157,23 @@ void collectionSol::timestep(){
     //Step 1: set atom.x = r(t+dt) and atom.v = vp(t)
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
-        for(uint i=0; i<m.N(); i++){
+        for(uint i=0; i<m.size(); i++){
             flt Tm = sqrt(desT/m.getmass(i));
             VecPair vecpair = gauss.genVecs() * Tm;
             // vecpair[0] is drG, and vecpair[1] is dvG
             m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0];
             m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1];
+            //~ if(i==0 and git == groups.begin()) cout 
+                //~ << "drG: " << vecpair[0].mag() 
+                //~ << ", dvG: " << vecpair[1].mag()
+                //~ << "\n";
         }
     }
     // Now we set forces and accelerations
     setForces();
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
-        for(uint i=0; i<m.N(); i++){
+        for(uint i=0; i<m.size(); i++){
             m[i].a = m[i].f / m.getmass(i);
         }
     }
@@ -165,17 +181,20 @@ void collectionSol::timestep(){
     // And finish m[i].v
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
-        for(uint i=0; i<m.N(); i++){
+        for(uint i=0; i<m.size(); i++){
             m[i].v += m[i].a * (dt*c2);
         }
     }
+    
+    update_trackers();
+    
     return;
     /* Honeycutt and Thirumalai
     //~ cout << "damping " << damping << "\n";
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
-        for(uint i=0; i<m.N(); i++){
+        for(uint i=0; i<m.size(); i++){
             // step 1: get new x
             m[i].x += (m[i].v * dt) + (m[i].a * (.5 * dt*dt));
             
@@ -196,7 +215,7 @@ void collectionSol::timestep(){
     // step 4: intermediate acceleration
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
-        for(uint i=0; i<m.N(); i++){
+        for(uint i=0; i<m.size(); i++){
             Vec g = gauss.generate();
             //~ cout << "g " << g << "\n";
             m[i].a = (m[i].f + g) / m.getmass(i);
