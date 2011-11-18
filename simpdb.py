@@ -40,7 +40,8 @@ bonddict = {
 # from richards
 LJdict = {
     'CH3' : 2.0, 'CH2' : 2.0, 'CH' : 2.0, 'C' : 1.7, 'O' : 1.4,
-    'OH' : 1.6, 'NH3' : 2.0, 'NH2' : 1.75, 'NH' : 1.7, 'S' : 1.8
+    'OH' : 1.6, 'NH3' : 2.0, 'NH2' : 1.75, 'NH' : 1.7, 'N' : 1.7, # 'N' not in Richards
+     'S' : 1.8
     }
 
 # following RasMol
@@ -187,6 +188,7 @@ class Resvec(atomvec):
         a.name = self.atoms[indx].name
         a.mass = self.masses[indx]
         a.pdbatom = self.atoms[indx]
+        a.element = a.pdbatom.element
         if self.hydrogens:
             a.hydrogens = self.hydrogens[indx]
             a.formula = self._formula(indx)
@@ -227,10 +229,10 @@ class Resvec(atomvec):
                 print("%s %.3f %.3f %.3f" % tuple(a.name[:1], *(a.x)), file=f)
     
     @classmethod
-    def from_pdb(cls, strucname, pdbfilename, loadfile, amu=1):
+    def from_pdb(cls, strucname, pdbfilename, loadfile, numchains=None, amu=1):
         pdbp = PDBParser()
         aS = pdbp.get_structure(strucname, pdbfilename)
-        chains = list(aS.get_chains())
+        chains = list(aS.get_chains())[:numchains]
         residues = itertools.chain.from_iterable(chain.child_list for chain in chains)
         rvecs = [Resvec(res, amu=amu, loadfile=loadfile) for res in residues]
         return rvecs
@@ -303,41 +305,41 @@ class Residue(_Residue):
                     print(a.name, b.name)
                     yield (avec.get(aindx), avec.get(bindx), a, b)
 
-def make_structure(residue_list, loadfile, bond_k, angle_k, epsilon=1, amu=1, angstrom=1):
-    """Returns a tuple (Resvecs, list of interactions, list of trackers)
+def make_structure(resvecs, bond_k, angle_k, epsilon=1, amu=1, angstrom=1):
+    """Returns a tuple (list of interactions, list of trackers)
     
     Resvecs is a list of Resvecs (atomvecs) corresponding to residues.
     bondgroup is a bondgrouping interaction corresponding to all the bonds,
     backbone included."""
     #so that it works on a chain object as well
-    if hasattr(residue_list, 'child_list'):
-        residue_list = residue_list.child_list
-    lastres = None
-    
-    avecs = [Resvec(res, amu=amu, loadfile=loadfile) for res in residue_list]
-    fullgroup = metagroup(avecs)
+    fullgroup = metagroup(resvecs)
     
     bond_pairs = bondpairs()
     bond_angles = angletriples()
     maxsigma = max(LJdict.values())
     neighbors = neighborlist(fullgroup, 2.5*maxsigma, 4*maxsigma)
     LJ = LJgroup(neighbors, 2.5)
-    for i, atom in zip(range(fullgroup.size()), (atom for r in avecs for atom in r)):
+    for i, atom in zip(range(fullgroup.size()), (atom for r in resvecs for atom in r)):
         assert fullgroup.get_id(i) == atom
-        sigma = LJdict[atom.formula]
+        try:
+            sigma = LJdict[atom.formula]
+        except KeyError:
+            print(*((atom.name, atom.hydrogens, atom.formula) for atom in atom.group))
+            raise KeyError('Atom ' + atom.name + ' (' + atom.formula + ') in ' 
+                    + atom.group.resname + ',' + str(resvecs.index(atom.group))
+                    + ' not found in LJdict.')
         LJ.add(fullgroup.get_id(i), sigma, epsilon)
     
-    for a1,a2,l in Resvec.all_bonds(avecs):
+    for a1,a2,l in Resvec.all_bonds(resvecs):
         length = l * angstrom
         bond_pairs.add(bond_k, length, a1, a2)
         neighbors.ignore(a1,a2)
     
-    for group in Resvec.all_angles(avecs):
+    for group in Resvec.all_angles(resvecs):
         a1,a2,a3,angle = group
         bond_angles.add(angle_k, angle, a1, a2, a3)
         neighbors.ignore(a1,a3)
     
     neighbors.update_list(True)
     
-    #~ return avecs, [bond_pairs, bond_angles], [neighbors]
-    return avecs, [bond_pairs, bond_angles, LJ], [neighbors]
+    return [bond_pairs, bond_angles, LJ], [neighbors]

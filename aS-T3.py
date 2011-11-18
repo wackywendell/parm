@@ -10,40 +10,38 @@ from Bio.PDB import PDBParser
 import numpy as np
 
 damping = 0.5
-Temp = 3
+Temp = 10
 
-tot = 200
-dt = .01 #dt = float(tot) / steps
-#~ steps = 2
+tot = 500
+dt = .02 #dt = float(tot) / steps
+#~ tot = steps * dt
 steps = int(tot / dt)
-showsteps = 500
+showsteps = 2000
 bondspring = 1000
 anglespring = 1000
 LJepsilon = 1
-numres = 20
+numres = None
 #~ damping = 0.5
 #~ Temp = 2
 pdbfile = '/home/wendell/idp/pdb/aS.pdb'
 loadfile='../blengths/stats.pkl'
-#~ moviefile = None
-moviefile = '../test.mp4'
+moviefile = '../T%d-%dK.mp4' % (Temp, int(tot / 1000))
+#~ moviefile = '../T10-50K.mp4'
 size = 600
 fps = 40
 
 ####################
 print("parsing...")
-pdbp = PDBParser()
-aS = pdbp.get_structure('AS', pdbfile)
-chain = list(aS.get_chains())[0]
+avecs = Resvec.from_pdb('aS', pdbfile, loadfile, numchains=1)
 
-print("Making structure...")
-if numres <= 0:
-    numres = None
-avecs, interactions, trackers = make_structure(chain.child_list[:numres], loadfile,
+print(str(len(avecs)) + " Residues found, with " + 
+        str(sum(len(r) for r in avecs)) + " atoms. Making structure...")
+if numres > 0:
+    avecs = avecs[:numres]
+interactions, trackers = make_structure(avecs,
             bondspring, anglespring, LJepsilon)
 
 LJ = interactions[-1]
-print(sum([len(av) for av in avecs]), "atoms", len(avecs), "residues")
 
 if len(avecs) < 20:
     print(", ".join([r.resname for r in avecs]))
