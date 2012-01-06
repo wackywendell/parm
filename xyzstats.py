@@ -35,27 +35,16 @@ class statkeeper:
         self.collec = sim.StaticCollec(self.residues)
         if shelfname: 
             self.shelf = shelve.open(shelfname)
-            
-            szkey = '_size'
-            if szkey in self.shelf and self.shelf[szkey] == self.reader.size():
-                logging.info('shelf exists, size matches')
+            mkey = '_md5'
+            if mkey in self.shelf and self.shelf[mkey] == self.reader.md5():
+                logging.info('shelf exists, md5 matches')
             else:
-                if szkey not in self.shelf:
+                if '_md5' not in self.shelf:
                     logging.info('New shelf')
-                else: logging.info('Size does not match')
+                else: logging.info('MD5 does not match')
                 self.shelf.clear()
-                self.shelf[szkey] = self.reader.size()
+                self.shelf[mkey] = self.reader.md5()
                 self.shelf.sync()
-            #~ mkey = '_md5'
-            #~ if mkey in self.shelf and self.shelf[mkey] == self.reader.md5():
-                #~ logging.info('shelf exists, md5 matches')
-            #~ else:
-                #~ if '_md5' not in self.shelf:
-                    #~ logging.info('New shelf')
-                #~ else: logging.info('MD5 does not match')
-                #~ self.shelf.clear()
-                #~ self.shelf[mkey] = self.reader.md5()
-                #~ self.shelf.sync()
         else: self.shelf = None
     
     def close(self):

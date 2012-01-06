@@ -147,3 +147,27 @@ class Stat:
         if mean != 0:
             sovm = abs(std*100.0/mean)
         return "{}={:.4g}+-{:.4g}%".format(self.name, mean, sovm)
+
+class collecStat(Stat):
+    def __init__(self, collec, residues):
+        Stat.__init__(self, self.name, self.func, self.shortname)
+        self.residues = residues
+        self.collec = collec
+
+class Rg(collecStat):
+    name = 'Radius of Gyration'
+    shortname = 'Rg'
+    def func(self):
+        return calc_Rg(self.residues)
+
+class Temperature(collecStat):
+    name = 'Temperature'
+    shortname = 'T'
+    def func(self):
+        return self.collec.temp()
+
+class Energy(collecStat):
+    name = 'Energy'
+    shortname = 'E'
+    def func(self):
+        return self.collec.energy()

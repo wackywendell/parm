@@ -105,9 +105,9 @@ collec = collectionSol(opts.dt, opts.damping, opts.temp, atomgroups, interaction
 collec.seed()
 collec.setForces()
 
-xyz = XYZwriter(open(moviefile, 'a')) if opts.cont else (
-            XYZwriter(open(moviefile, 'w')))
-if not opts.continue: xyz.writeframe(avecs, 'time 0', collec.com())
+mode = 'a' if opts.cont else 'w'
+xyz = XYZwriter(open(moviefile, mode))
+if not opts.cont: xyz.writeframe(avecs, 'time=0', collec.com())
 
 factor=3
 if opts.startsteps > 0:
@@ -159,7 +159,7 @@ try:
                 #~ print('t:', t*opts.dt)
         curlim += showsteps
         c = collec.com()
-        xyz.writeframe(avecs, 'time %d' % int(t * opts.dt+.5), c)
+        xyz.writeframe(avecs, 'time=%d' % int(t * opts.dt+.5), c)
         tlist.append(t*opts.dt)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         print('------', int(t*opts.dt+.5))
@@ -179,17 +179,6 @@ try:
         curE = collec.energy()
         E.append(curE)#,collec.kinetic()])
         printlist(E, 'E')
-        #~ Emean = float(np.mean(E))
-        #~ Tmean = float(np.mean(T))
-        #~ Rg.append(collec.gyradius())
-        print('------', int(t*opts.dt+.5))
-        printlist(E, 'E')
-        printlist(LJE, 'LJE')
-        printlist(bE, 'bond E')
-        printlist(aE, 'angle E')
-        printlist(diE, 'di E')
-        printlist(K, 'K')
-        printlist(T, 'T')
         #~ stats = (curE, float(100*np.std(E))/Emean, curT, Tmean, float(100*np.std(T))/Tmean, 
             #~ 100.0*t/steps)
 except KeyboardInterrupt:

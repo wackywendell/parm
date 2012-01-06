@@ -52,8 +52,11 @@ def status(s):
 for n,f in enumerate(opts.files):
     base, sep, ext = f.rpartition('.')
     statfname = base + sep + 'stats'
-    Tstr = convertfname(f)
-    T = float(Tstr)
+    try:
+        Tstr = convertfname(f)
+        T = float(Tstr)
+    except ValueError:
+        T = -1
     print('Running', f, '(%d / %d)' % (n+1, len(opts.files)))
     with xyzstats.statkeeper(f, statfname) as sk:
         status('getting Rg')

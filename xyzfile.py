@@ -5,13 +5,16 @@ import hashlib, logging
 #~ import pyparsing as parse
 
 class XYZwriter:
-    def __init__(self, f):
+    def __init__(self, f, usevels = True):
         self.file = f
+        self.usevels = usevels
     
     def writeframe(self, reslist, comment='', com=None):
         Natoms = sum(len(r) for r in reslist)
         print(Natoms, file=self.file)
         print(comment, file=self.file)
+        
+        lines = []
         for r in reslist:
             for atom in r:
                 elem = atom.element
@@ -19,7 +22,14 @@ class XYZwriter:
                     x,y,z = tuple(atom.x)
                 else:
                     x,y,z = tuple(atom.x - com)
-                print("%s %.3f %.3f %.3f" % (elem,x,y,z), file=self.file)
+                if not self.usevels:
+                    print("%s %.3f %.3f %.3f" % (elem,x,y,z), file=self.file)
+                else:
+                    vx,vy,vz = tuple(atom.v)
+                    lines.append(("%s" + (" %.3f"*3)+ (" %.3g"*3)) % (elem,x,y,z,vx,vy,vz))
+        
+        # do all the writing at once
+        print('\n'.join(lines), file=self.file)
         self.file.flush()
     
     def size(self):
@@ -65,7 +75,7 @@ def md5_file(f, block_size = None):
 
 class XYZreader:
     firstline = re.compile("([0-9]*)")
-    commentline = re.compile("time ([0-9.]*)")
+    commentline = re.compile("time[= ]([0-9.]*)(.*)")
     regline = re.compile("(\w{1,2})\s+([\-0-9.]+)\s+([\-0-9.]+)\s+([\-0-9.]+)")
     
     def __init__(self, f):
@@ -88,20 +98,22 @@ class XYZreader:
     
     def readframe(self):
         num, = self.__match__(self.firstline, int)
-        t, = self.__match__(self.commentline, float)
-        #~ try:
-            #~ lines = [self.regline.match(self.file.readline()).groups()
-                #~ for i in range(num)
-            #~ ]
-        #~ except AttributeError:
-            #~ raise StopIteration("Frame broken")
+        t, = self.__match__(self.commentline, float, str)
 
         lines = [self.file.readline().strip().split(' ') for i in range(num)]
-        lines = [(e,(float(x),float(y),float(z))) for e,x,y,z in lines]
-        return Frame(lines, t)
+        badlines = [l for l in lines if len(l) != 4 and len(l) != 7]
+        if len(badlines) > 0:
+            raise ValueError, "bad line: %s" % str(badlines[0])
         
-        lines = "".join([self.file.readline() for i in range(num)])
-        return Frame()
+        try:
+            lines = [(e,(float(x),float(y),float(z))) for e,x,y,z in lines]
+            return Frame(lines, t)
+        except ValueError:
+            pass
+        
+        lines = [(e,(float(x),float(y),float(z)),(float(vx),float(vy),float(vz))) 
+                    for e,x,y,z,vx,vy,vz in lines]
+        return Frame(lines, t)
         
     def __iter__(self):
         location = self.file.tell()
@@ -132,34 +144,52 @@ class XYZreader:
             self._size = self.file.tell()
             self.file.seek(location)
         return self._size
-
-class Velreader(xyzreader):
-    def readframe(self):
-        f = xyzreader.readframe(self)
-        return VelFrame(f)
         
 class Frame:
-    def __init__(self, locs, t=None, indx=None):
+    dtype = np.float16
+    
+    def __init__(self, locs, t=None): #, indx=None):
         self.t = t
-        self.indx = None
-        self.elems, self.locs = zip(*locs)
-        self.__locarray = None
+        #~ self.indx = indx
+        resized = zip(*locs)
+        if len(resized) == 2:
+            self.elems, self.locs = resized
+            self.vels = None
+        elif len(resized) == 3:
+            self.elems, self.locs, self.vels = resized
+        else:
+            raise ValueError, "Resized wrong length (%d)" % len(resized)
+        
+        #~ self.__locarray = None
+        #~ self.__velarray = None   
+        if self.vels is not None:
+            self.__velarray = self.vels = np.array(self.vels, dtype=self.dtype)
+        self.__locarray = self.locs = np.array(self.locs, dtype=self.dtype)
     
     def __iter__(self):
         return iter(self.locs)
     
+    def _setx(self, atom, loc):
+        x,y,z = loc
+        atom.x.set(float(x), float(y),float(z))
+    def _setv(self, atom, vel):
+        x,y,z = vel
+        atom.v.set(float(x), float(y),float(z))
+    
     def into(self, atoms, check=True):
-        if not check:
-            for a, loc in zip(atoms, self.locs):
-                #~ print(type(a),a)
-                a.x.set(*loc)
-            return
-        
-        for a, elem, loc in izip(atoms, self.elems, self.locs):
-            if a.element != elem:
-                raise TypeError, ("Element mismatch for atom %d (%s) and line %s" 
-                                    % (num, atom.element, repr(line)))
-            a.x.set(*loc)
+        if self.vels is not None:
+            for a, elem, loc, vel in izip(atoms, self.elems, self.locs, self.vels):
+                if check and a.element != elem:
+                    raise TypeError, ("Element mismatch for atom %d (%s) and line %s" 
+                                        % (num, atom.element, repr(line)))
+                self._setx(a, loc)
+                self._setv(a, vel)
+        else:
+            for a, elem, loc in izip(atoms, self.elems, self.locs):
+                if check and a.element != elem:
+                    raise TypeError, ("Element mismatch for atom %d (%s) and line %s" 
+                                        % (num, atom.element, repr(line)))
+                self._setx(a, loc)
     
     @property
     def time(self):
@@ -170,37 +200,21 @@ class Frame:
         if self.__locarray is None:
             #~ self.__constructed += 1
             #~ print("constructing", self.time, self.__constructed)
-            self.__locarray = np.array(list(self.locs))
+            self.__locarray = np.array(list(self.locs), dtype=self.dtype)
         #~ else:
             #~ print("FOUND")
         return self.__locarray
-
-def VFrame(Frame):
-    def into(self, atoms, check=True):
-        if not check:
-            for a, loc in zip(atoms, self.locs):
-                a.v.set(*loc)
-            return
-        
-        for a, elem, loc in izip(atoms, self.elems, self.locs):
-            if a.element != elem:
-                raise TypeError, ("Element mismatch for atom %d (%s) and line %s" 
-                                    % (num, atom.element, repr(line)))
-            a.v.set(*loc)
+    
+    @property
+    def velarray(self):
+        if self.__velarray is None and self.vels is not None:
+            self.__velarray = np.array(list(self.vels), dtype=self.dtype)
+        return self.__velarray
 
 class Frames(list):
     def into(self, atoms, check=True):
         for f in self:
             f.into(atoms, check)
-            yield f.time
-
-class FramePairs(tuple):
-    """Should be Framepairs(FrameList, VFrameList)"""
-    def into(self, atoms, check=True):
-        for f, vf in zip(*self):
-            assert vf.time = f.time
-            f.into(atoms, check)
-            vf.into(atoms, check)
             yield f.time
 
 import re
