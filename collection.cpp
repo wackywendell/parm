@@ -25,7 +25,7 @@ flt collection::kinetic(){
     return E;
 }
 
-flt collection::Energy(){
+flt collection::energy(){
     flt E=0;
     vector<interaction*>::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
@@ -33,11 +33,13 @@ flt collection::Energy(){
         E += inter.energy();
     }
     
+    assert(not isnan(E));
     E += kinetic();
+    assert(not isnan(E));
     return E;
 };
 
-flt collection::Temp(){
+flt collection::temp(){
     flt totatoms = 0;
     flt totkinetic = 0;
     Vec v = comv();
@@ -141,6 +143,8 @@ void collectionSol::setCs(){
     flt exdpdt = (1-exp(-dampdt));
     corr = exdpdt*exdpdt/damping/sigmar/sigmav;
     gauss.set(sigmar, sigmav, corr);
+    //~ cout << "vals: " << c0 << ',' << c1 << ',' << c2 << "; T=" <<desT 
+         //~ << ", dt=" << dt << ", damping=" << damping << "\n";
 }
 
 void collectionSol::timestep(){

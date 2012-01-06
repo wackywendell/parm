@@ -11,8 +11,7 @@ Vec atomgroup::com() const{
 };
 
 flt atomgroup::mass() const{
-    static flt m = -1;
-    if(m > 0) return m;
+    flt m = 0;
     for(uint i=0; i<size(); i++){
         m += getmass(i);
     }
@@ -103,67 +102,69 @@ metagroup::metagroup(vector<atomgroup*> groups){
             masses.push_back(g.getmass(i));
         }
     }
-}
+};
 
-LJforce::LJforce(const flt ep, const flt sig) : interactpair(),
-        epsilon(ep), sigma(sig) {
-}
+atomid metagroup::get_id(atom* a){
+    uint n=0;
+    for(uint n=0; n<atoms.size(); n++)
+        if(atoms[n] == a) return atomid(a, n);
+    return atomid();
+};
 
-flt LJforce::energy(flt r){
-    flt l = r / sigma;
-    return 4*epsilon*(pow(l,-12) - pow(l,-6));
-}
 
-flt LJforce::forces(flt r){
-    flt l = r / sigma;
-    return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
-}
+//~ flt LJforce::energy(flt r){
+    //~ flt l = r / sigma;
+    //~ return 4*epsilon*(pow(l,-12) - pow(l,-6));
+//~ }
+//~ 
+//~ flt LJforce::forces(flt r){
+    //~ flt l = r / sigma;
+    //~ return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
+//~ }
 
-LJcutoff::LJcutoff(const flt ep, const flt sig, const flt cut) : 
-        LJforce(ep, sig){
-    setcut(cut);
-}
-
-void LJcutoff::setcut(const flt cut){
-    cutoff = cut;
-    flt l = cutoff / sigma;
-    cutoffenergy = 4*epsilon*(pow(l,-12) - pow(l,-6));
-}
-
-flt LJcutoff::energy(const flt r){
-    if(r > cutoff) return 0;
-    flt l = r / sigma;
-    return 4*epsilon*(pow(l,-12) - pow(l,-6)) - cutoffenergy;
-}
-
-flt LJcutoff::forces(const flt r){
-    if(r > cutoff) return 0;
-    flt l = r / sigma;
-    return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
-}
-
-LJcutrepulsive::LJcutrepulsive(const flt ep, const flt sig, const flt cut) : 
-        LJforce(ep, sig){
-    setcut(cut);
-}
-
-void LJcutrepulsive::setcut(const flt cut){
-    cutoff = cut;
-    flt l = cutoff / sigma;
-    cutoffenergy = 4*epsilon*(pow(l,-12));
-}
-
-flt LJcutrepulsive::energy(const flt r){
-    if(r > cutoff) return 0;
-    flt l = r / sigma;
-    return 4*epsilon*(pow(l,-12)) - cutoffenergy;
-}
-
-flt LJcutrepulsive::forces(const flt r){
-    if(r > cutoff) return 0;
-    flt l = r / sigma;
-    return 4*epsilon*(12*pow(l,-13))/sigma;
-}
+//~ LJcutoff::LJcutoff(const flt ep, const flt sig, const flt cut) : 
+        //~ LJforce(ep, sig){
+    //~ setcut(cut);
+//~ }
+//~ 
+//~ void LJcutoff::setcut(const flt cut){
+    //~ cutoff = cut;
+    //~ flt l = cutoff / sigma;
+    //~ cutoffenergy = 4*epsilon*(pow(l,-12) - pow(l,-6));
+//~ }
+//~ 
+//~ flt LJcutoff::energy(const flt r){
+    //~ if(r > cutoff) return 0;
+    //~ flt l = r / sigma;
+    //~ return 4*epsilon*(pow(l,-12) - pow(l,-6)) - cutoffenergy;
+//~ }
+//~ 
+//~ flt LJcutoff::forces(const flt r){
+    //~ if(r > cutoff) return 0;
+    //~ flt l = r / sigma;
+    //~ return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
+//~ }
+//~ 
+//~ LJcutrepulsive::LJcutrepulsive(const flt ep, const flt sig, const flt cut) : 
+        //~ LJforce(ep, sig){
+    //~ setcut(cut);
+//~ }
+//~ 
+//~ void LJcutrepulsive::setcut(const flt cut){
+    //~ cutoff = cut;
+    //~ flt l = cutoff / sigma;
+    //~ cutoffenergy = 4*(pow(l,-12));
+//~ }
+//~ 
+//~ flt LJcutrepulsive::energy(const flt r, const flt eps, const flt cutoff){
+    //~ if(cutoff>0 and r > cutoff) return 0;
+    //~ return 4*eps*(pow(r,-12)) - energy(cutoff,eps,0);
+//~ }
+//~ 
+//~ flt LJcutrepulsive::forces(const flt r, const flt sig, const flt eps, const flt cutoff){
+    //~ if(r > cutoff) return 0;
+    //~ return 4*eps*(12*pow(r,-13))/sig;
+//~ }
 
 flt spring::energy(const Vec& r){
     flt m = r.mag();
@@ -176,6 +177,24 @@ Vec spring::forces(const Vec& r){
     flt fmag = (x0 - m) * springk;
     return r * (fmag / m);
 }
+
+
+electricScreened::electricScreened(const flt screenLength, const flt q1, 
+            const flt q2, const flt cutoff) : screen(screenLength), 
+            q1(q1), q2(q2), cutoff(cutoff){};
+
+flt electricScreened::energy(const flt r, const flt qaqb, const flt screen, const flt cutoff){
+    if(cutoff <= 0) return exp(-r/screen) * qaqb / r;
+    if(r > cutoff) return 0;
+    return exp(-r/screen) * qaqb / r - energy(r, qaqb, screen, 0);
+};
+
+Vec electricScreened::forces(const Vec &r, const flt qaqb, const flt screen, const flt cutoff){
+    flt d = r.mag();
+    if(cutoff > 0 and d > cutoff) return Vec(0,0,0);
+    flt fmag = exp(-d/screen) * (qaqb/d) * (1/d + 1/screen);
+    return r * (fmag/d);
+};
 
 flt bondangle::energy(const Vec& r1, const Vec& r2){
     flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
@@ -259,8 +278,15 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
     derivs[2] = derivs[0] * (c[0][1]/c[1][1]) -
                             derivs[3] * (1 + c[1][2]/c[1][1]);
     
-    //~ flt costheta = p/sqrt(q);
-    flt dcostheta = dudcostheta(p/sqrt(q)); // actually -dU/d(costheta)
+    flt costheta = p/sqrt(q);
+    // costheta=1 corresponds to atoms 1 and 4 on opposite sides of the bond (zigzag)
+    // costheta=-1 corresponds to a C shape
+    
+    
+    flt dcostheta = -dudcostheta(costheta); // F = -dU/d(costheta)
+    //~ if(abs(costheta) < .7)
+        //~ cout << "forces cos: " << costheta << " getcos: " << getcos(r1,r2,r3)
+             //~ << " dcostheta: " << dcostheta << '\n';
     
     derivs *= dcostheta;
     
@@ -275,33 +301,53 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
 flt dihedral::dudcostheta(const flt costheta) const{
     flt tot = 0;
     for(unsigned int i=1; i<torsions.size(); i++){
-        tot -= torsions[i] * i * pow(costheta, flt(i-1));
+        tot += torsions[i] * i * pow(costheta, flt(i-1));
     }
+    //~ cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     return tot;
 }
+
+flt dihedral::getcos(const Vec &r1, const Vec &r2, 
+                   const Vec &r3){
+    
+    // The two normals to the planes
+    Vec n1 = r1.cross(r2);
+    Vec n2 = r2.cross(r3);
+    //~ cout << r1 << ',' << r2  << ',' << r3 << "\n";
+    flt n1mag = n1.mag();
+    flt n2mag = n2.mag();
+    
+    if (n1mag == 0 or n2mag == 0) return -100; 
+    // if one plane is ill-defined, then we have no torsion angle
+
+    return -(n1.dot(n2) / n1mag / n2mag);
+};
 
 flt dihedral::energy(const Vec &r1, const Vec &r2, 
                    const Vec &r3) const{
     
     // The two normals to the planes
-    Vec n1 = r1.cross(r2);
-    Vec n2 = r2.cross(r3);
-    
-    flt n1mag = n1.mag();
-    flt n2mag = n2.mag();
-    
-    if (n1mag == 0 or n2mag == 0) return 1; 
+    //~ Vec n1 = r1.cross(r2);
+    //~ Vec n2 = r2.cross(r3);
+    //~ 
+    //~ flt n1mag = n1.mag();
+    //~ flt n2mag = n2.mag();
+    //~ 
+    //~ if (n1mag == 0 or n2mag == 0) return -100; 
     // if one plane is ill-defined, then we have no torsion angle
 
-    flt costheta = -n1.dot(n2) / n1mag / n2mag;
+    flt costheta = getcos(r1,r2,r3);
     
     flt tot = 0;
     for(unsigned int i=0; i<torsions.size(); i++){
-        //~ std::cout << "curE: " << torsions[i] * pow(costheta, i) << " E:" << tot << '\n';
         tot += torsions[i] * pow(costheta, flt(i));
+        //~ if(abs(costheta) < .75)
+        //~ std::cout << i << " t: " << torsions[i] << " curE: "
+        //~ << torsions[i] * pow(costheta, i) << " E:" << tot << '\n';
     }
-    //~ std::cout << "costheta (E)" << costheta << " E:" << tot << '\n';
+    //~ if(abs(costheta) < .75)
+    //~ std::cout << "costheta: " << costheta << " E:" << tot << '\n';
     
     return tot;
 }
@@ -533,6 +579,31 @@ void bondpairs::setForces(){
     }
 }
 
+flt bondpairs::mean_dists() const{
+    flt dist=0;
+    uint N=0;
+    vector<bondgrouping>::const_iterator it;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        Vec r = diff(it->a1->x, it->a2->x);
+        dist += abs(r.mag() - it->x0);
+        N++;
+    }
+    return dist/N;
+}
+
+flt bondpairs::std_dists() const{
+    flt stds=0;
+    uint N=0;
+    vector<bondgrouping>::const_iterator it;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        Vec r = diff(it->a1->x, it->a2->x);
+        flt curdist = r.mag() - it->x0;
+        stds += curdist*curdist;
+        N++;
+    }
+    return sqrt(stds/N);
+}
+
 angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
 
 flt angletriples::energy(){
@@ -564,8 +635,111 @@ void angletriples::setForces(){
     }
 };
 
+flt angletriples::mean_dists() const{
+    flt dist=0;
+    uint N=0;
+    vector<anglegrouping>::const_iterator it;
+    for(it = triples.begin(); it < triples.end(); it++){
+        Vec r1 = diff(it->a1->x, it->a2->x);
+        Vec r2 = diff(it->a3->x, it->a2->x);
+        flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        dist += abs(theta - it->x0);
+        N++;
+    }
+    return dist/N;
+};
+
+flt angletriples::std_dists() const{
+    flt stds=0;
+    uint N=0;
+    vector<anglegrouping>::const_iterator it;
+    for(it = triples.begin(); it < triples.end(); it++){
+        Vec r1 = diff(it->a1->x, it->a2->x);
+        Vec r2 = diff(it->a3->x, it->a2->x);
+        flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        flt curdist = theta - (it->x0);
+        //~ cout << "angles: " << theta << " x0: " << it->x0
+             //~ << " cur: " << curdist << "\n";
+        stds += curdist*curdist;
+        N++;
+    }
+    return sqrt(stds/N);
+};
+
+dihedrals::dihedrals(vector<dihedralgrouping> ds) : groups(ds){};
+
+flt dihedrals::energy(){
+    flt E=0;
+    vector<dihedralgrouping>::iterator it;
+    for(it = groups.begin(); it < groups.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        atom & atom3 = *it->a3;
+        atom & atom4 = *it->a4;
+        Vec r1 = diff(atom2.x, atom1.x);
+        Vec r2 = diff(atom3.x, atom2.x);
+        Vec r3 = diff(atom4.x, atom3.x);
+        E += dihedral(it->nums).energy(r1,r2,r3);
+    }
+    return E;
+}
+
+void dihedrals::setForces(){
+    vector<dihedralgrouping>::iterator it;
+    for(it = groups.begin(); it < groups.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        atom & atom3 = *it->a3;
+        atom & atom4 = *it->a4;
+        Vec r1 = diff(atom2.x, atom1.x);
+        Vec r2 = diff(atom3.x, atom2.x);
+        Vec r3 = diff(atom4.x, atom3.x);
+        Nvector<Vec,4> f = dihedral(it->nums).forces(r1, r2, r3);
+        atom1.f += f[0];
+        atom2.f += f[1];
+        atom3.f += f[2];
+        atom4.f += f[3];
+    }
+};
+
+flt dihedrals::mean_dists() const{
+    flt dist=0;
+    uint N=0;
+    vector<dihedralgrouping>::const_iterator it;
+    for(it = groups.begin(); it < groups.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        atom & atom3 = *it->a3;
+        atom & atom4 = *it->a4;
+        Vec r1 = diff(atom1.x, atom2.x);
+        Vec r2 = diff(atom2.x, atom3.x);
+        Vec r3 = diff(atom3.x, atom4.x);
+        flt cosine = dihedral(it->nums).getcos(r1, r2, r3);
+        dist += cosine;
+        N++;
+    }
+    return dist/N;
+};
+//~ 
+//~ flt dihedrals::std_dists() const{
+    //~ flt stds=0;
+    //~ uint N=0;
+    //~ vector<anglegrouping>::const_iterator it;
+    //~ for(it = triples.begin(); it < triples.end(); it++){
+        //~ Vec r1 = diff(it->a1->x, it->a2->x);
+        //~ Vec r2 = diff(it->a3->x, it->a2->x);
+        //~ flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        //~ flt curdist = theta - (it->x0);
+        // cout << "angles: " << theta << " x0: " << it->x0
+             // << " cur: " << curdist << "\n";
+        //~ stds += curdist*curdist;
+        //~ N++;
+    //~ }
+    //~ return sqrt(stds/N);
+//~ };
+
 void pairlist::clear(){
-    typename map<const atomid, set<atomid> >::iterator mapiter;
+    map<const atomid, set<atomid> >::iterator mapiter;
     for(mapiter = pairs.begin(); mapiter != pairs.end(); mapiter++){
         mapiter->second.clear();
     }
@@ -574,7 +748,7 @@ void pairlist::clear(){
 neighborlist::neighborlist(atomgroup &group, const flt innerradius,
             const flt outerradius, pairlist ignore) :
                 skinradius(outerradius), critdist(innerradius),
-                ignorepairs(ignore){
+                ignorepairs(ignore), ignorechanged(false){
     atoms.resize(group.size());
     lastlocs.resize(group.size());
     for(uint i=0; i<group.size(); i++){
@@ -607,7 +781,7 @@ bool neighborlist::update_list(bool force){
     
     vector<atomid>::iterator atomit, atomj;
     
-    if(not force){ // check if we need to update
+    if(not force and not ignorechanged){ // check if we need to update
         for(atomit=atoms.begin(); atomit!=atoms.end(); atomit++){
             curdist = (atomit->x() - lastlocs[atomit->n()]).mag();
             if(curdist > biggestdist){
@@ -639,6 +813,7 @@ bool neighborlist::update_list(bool force){
     
     // time to update
     updatenum++;
+    ignorechanged = false;
     curpairs.clear();
     for(atomit=atoms.begin(); atomit!=atoms.end(); atomit++){
         lastlocs[atomit->n()] = atomit->x();
@@ -648,53 +823,89 @@ bool neighborlist::update_list(bool force){
                 curpairs.push_back(idpair(*atomit, *atomj));
         }
     }
+    // print stuff about the current update
     //~ set<atomid> curset = (ignorepairs.get_pairs(atoms.back()));
     //~ cout << "neighborlist | atoms: " << atoms.size() <<  "pairs: " << curpairs.size() << " ignored -1: "
          //~ << curset.size() << "\n";
+    //~ cout << "ignored -1:";
+    //~ for(set<atomid>::iterator it=curset.begin(); it!=curset.end(); it++)
+        //~ cout << " " << it->n();
+    //~ cout << '\n' << "paired:";
+    //~ for(vector<idpair>::iterator it=begin(); it!=end(); it++)
+        //~ if(it->first() == atoms.back()) cout << " " << it->last().n();
+    //~ cout << '\n';
     
     return true;
 }
 
-LJgroup::LJgroup(neighborlist *neighbors, flt d) : LJ(1,1,d), neighbors(neighbors){};
+LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
 
-void LJgroup::update_pairs(){
-    if(lastupdate == neighbors->which()) return; // already updated
-    
-    lastupdate = neighbors->which();
-    pairs.clear();
-    vector<idpair>::iterator pairit;
-    for(pairit = neighbors->begin(); pairit != neighbors->end(); pairit++){
-        LJatom LJ1 = atoms[pairit->first().n()];
-        LJatom LJ2 = atoms[pairit->last().n()];
-        pairs.push_back(LJpair(LJ1, LJ2));
-    }
-}
-
-flt LJgroup::energy(){
-    update_pairs(); // make sure the LJpairs match the neighbor list ones
+flt LJsimple::energy(){
     flt E = 0;
-    vector<LJpair>::iterator it;
-    for(it = pairs.begin(); it != pairs.end(); it++){
-        flt dist = diff(it->atom1.x(), it->atom2.x()).mag();
-        E += it->epsilon * LJ.energy(dist / it->sigma);
-        //~ cout << it->atom1.n() << '-' << it->atom2.n() << " dist: " << dist 
-             //~ << ", Emag: " << it->epsilon * LJ.energy(dist / it->sigma)
-             //~ << it->atom1.x() << it->atom2.x() <<'\n';
+    vector<LJatom>::iterator it;
+    vector<LJatom>::iterator it2;
+    for(it = atoms.begin(); it != atoms.end(); it++)
+    for(it2 = atoms.begin(); it2 != it; it2++){
+        if (ignorepairs.has_pair(*it, *it2)) continue;
+        LJpair pair = LJpair(*it, *it2);
+        Vec dist = diff(pair.atom1.x(), pair.atom2.x());
+        E += LJrepulsive::energy(dist, pair.sigma, pair.epsilon);
     }
     return E;
 };
 
-void LJgroup::setForces(){
-    update_pairs(); // make sure the LJpairs match the neighbor list ones
-    vector<LJpair>::iterator it;
-    for(it = pairs.begin(); it != pairs.end(); it++){
-        Vec r = diff(it->atom1.x(), it->atom2.x());
-        flt dist = r.mag();
-        flt fmag = LJ.forces(dist / it->sigma) * (it->epsilon / it->sigma);
-        //~ cout << it->atom1.n() << '-' << it->atom2.n() << " dist: " << dist << ", fmag: " << fmag
-            //~ << it->atom1.x() << it->atom2.x() <<'\n';
-        Vec f = r * (fmag / dist);
-        it->atom1.f() += f;
-        it->atom2.f() -= f;
+void LJsimple::setForces(){
+    vector<LJatom>::iterator it;
+    vector<LJatom>::iterator it2;
+    for(it = atoms.begin(); it != atoms.end(); it++)
+    for(it2 = atoms.begin(); it2 != it; it2++){
+        if (ignorepairs.has_pair(*it, *it2)) continue;
+        LJpair pair = LJpair(*it, *it2);
+        Vec r = diff(pair.atom1.x(), pair.atom2.x());
+        Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
+        pair.atom1.f() += f;
+        pair.atom2.f() -= f;
+    }
+};
+
+atomid LJsimple::get_id(atom* a){
+    for(vector<LJatom>::iterator it=atoms.begin(); it!=atoms.end(); it++)
+        if((*it) == a) return *it;
+    return atomid();
+};
+
+
+Charges::Charges(flt screen, flt k, vector<Charged> atms) : atoms(atms),
+                screen(screen), k(k){};
+
+atomid Charges::get_id(atom* a){
+    for(vector<Charged>::iterator it=atoms.begin(); it!=atoms.end(); it++)
+        if((*it) == a) return *it;
+    return atomid();
+};
+
+flt Charges::energy(){
+    flt E = 0;
+    vector<Charged>::iterator it;
+    vector<Charged>::iterator it2;
+    for(it = atoms.begin(); it != atoms.end(); it++)
+    for(it2 = atoms.begin(); it2 != it; it2++){
+        if (ignorepairs.has_pair(*it, *it2)) continue;
+        Vec dist = diff(it->x(), it2->x());
+        E += k*electricScreened::energy(dist.mag(), (it->q) * (it2->q), screen);
+    }
+    return E;
+};
+
+void Charges::setForces(){
+    vector<Charged>::iterator it;
+    vector<Charged>::iterator it2;
+    for(it = atoms.begin(); it != atoms.end(); it++)
+    for(it2 = atoms.begin(); it2 != it; it2++){
+        if (ignorepairs.has_pair(*it, *it2)) continue;
+        Vec r = diff(it->x(), it2->x());
+        Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
+        it->f() += f;
+        it2->f() -= f;
     }
 };

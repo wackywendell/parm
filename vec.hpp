@@ -76,11 +76,11 @@ class Nvector {
 template <class T, unsigned int N>
 class Numvector : public Nvector<T, N> {
     public:
-        Numvector() {for(unsigned int i=0; i<N; i++) this->vals[i]=0;}
-        Numvector(const Nvector<T, N> &rhs) {
-                    for(unsigned int i=0; i<N; i++) this->vals[i]=rhs.get(i);}
-        Numvector(const T rhs[N]) {
-                    for(unsigned int i=0; i<N; i++) this->vals[i]=rhs[i];}
+        inline Numvector() {for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=0;}
+        inline Numvector(const Nvector<T, N> &rhs) {
+                    for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=rhs.get(i);}
+        inline Numvector(const T rhs[N]) {
+                    for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=rhs[i];}
         T dot (const Numvector &other) const;
         inline T sq() const {return dot(*this);};
         inline T mag() const {return sqrt(sq());};
@@ -103,12 +103,14 @@ class Vector : public Numvector<T, 3> {
         Vector(const T a, const T b, const T c) {setx(a); sety(b); setz(c);}
         Vector(const Numvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
         Vector(const Nvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
-        inline const T getx() const {return this->get(0);}
-        inline const T gety() const {return this->get(1);}
-        inline const T getz() const {return this->get(2);}
-        inline void setx(const T a){this->vals[0]=a;}
-        inline void sety(const T b){this->vals[1]=b;}
-        inline void setz(const T c){this->vals[2]=c;}
+        inline const T getx() const {return Nvector<T,3>::get(0);}
+        inline const T gety() const {return Nvector<T,3>::get(1);}
+        inline const T getz() const {return Nvector<T,3>::get(2);}
+        inline void setx(const T a){Nvector<T,3>::vals[0]=a;}
+        inline void sety(const T b){Nvector<T,3>::vals[1]=b;}
+        inline void setz(const T c){Nvector<T,3>::vals[2]=c;}
+        inline void set(const T a, const T b, const T c){
+            Nvector<T,3>::vals[0]=a; Nvector<T,3>::vals[1]=b; Nvector<T,3>::vals[2]=c;}
         inline Vector operator-() const{
             return Vector(-getx(),-gety(),-getz());}
         inline Vector operator+(const Vector &rhs) const {
@@ -121,6 +123,8 @@ class Vector : public Numvector<T, 3> {
             return Vector(getx()/rhs,gety()/rhs,getz()/rhs);}
         Vector cross (const Vector &rhs) const;
         inline Vector norm() const {return Vector(Numvector<T,3>::norm());};
+        inline Vector& operator-=(const Vector &rhs){Nvector<T,3>::operator-=(rhs); return *this;};
+        inline Vector& operator+=(const Vector &rhs){Nvector<T,3>::operator+=(rhs); return *this;}; 
         template <class U> Vector& operator*=(const U rhs);
         template <class U> Vector& operator/=(const U rhs);
         ~Vector(){};
@@ -202,7 +206,7 @@ Nvector<T, N>& Nvector<T, N>::operator+=(const Nvector<T,N> &rhs) {
 template <class T, unsigned int N> template <class U>
 Nvector<T,N>& Nvector<T,N>::operator*=(const U rhs) {
     for(unsigned int i=0; i<N; i++){
-        this->vals[i] = this->vals[i] * rhs;
+        vals[i] = vals[i] * rhs;
         //set(i, T(this->get(i) * rhs));
     }
     return *this;
@@ -211,7 +215,7 @@ Nvector<T,N>& Nvector<T,N>::operator*=(const U rhs) {
 template <class T, unsigned int N> template <class U>
 Nvector<T,N>& Nvector<T,N>::operator/=(const U rhs) {
     for(unsigned int i=0; i<N; i++){
-        vals[i] = T(this->vals[i] / rhs);
+        vals[i] = T(vals[i] / rhs);
     }
     return *this;
 }
@@ -228,7 +232,7 @@ template <class T, unsigned int N>
 T Numvector<T,N>::dot(const Numvector<T, N> &other) const{
     T m = 0;
     for(unsigned int i=0; i<N; i++){
-        m += this->get(i) * other.get(i);
+        m += Nvector<T,N>::get(i) * other.get(i);
     }
     return m;
 }
@@ -236,7 +240,7 @@ T Numvector<T,N>::dot(const Numvector<T, N> &other) const{
 template <class T, unsigned int N>
 Numvector<T,N> Numvector<T,N>::perp(const Numvector<T,N>& other) const {
     //~ Numvector<T,N> parallel = other * (this->dot(other)) / other.dot(other);
-    return (*this) - other * ((this->dot(other)) / other.dot(other));
+    return (*this) - other * ((dot(other)) / other.dot(other));
     //~ return other - parallel;
 }
 
@@ -257,7 +261,7 @@ template <class T, unsigned int N>
 T Numvector<T,N>::distance(const Numvector<T,N> &rhs) const{
     T sum = 0;
     for(unsigned int i=0; i<N; i++){
-        sum += pow(this->get(i) - rhs.get(i), 2);
+        sum += pow(Nvector<T,N>::get(i) - rhs.get(i), 2);
     }
     return sqrt(sum);
     // return Numvector<T,N>(*this - rhs).mag();
@@ -281,26 +285,26 @@ Vector<T> Vector<T>::cross(const Vector<T> &rhs) const {
 
 template <class T> template <class U>
 Vector<T>& Vector<T>::operator*=(const U rhs){
-    this->vals[0] *= rhs;
-    this->vals[1] *= rhs;
-    this->vals[2] *= rhs;
+    Nvector<T,3>::vals[0] *= rhs;
+    Nvector<T,3>::vals[1] *= rhs;
+    Nvector<T,3>::vals[2] *= rhs;
     return *this;
 }
 
 template <class T> template <class U>
 Vector<T>& Vector<T>::operator/=(const U rhs){
-    this->vals[0] /= rhs;
-    this->vals[1] /= rhs;
-    this->vals[2] /= rhs;
+    Nvector<T,3>::vals[0] /= rhs;
+    Nvector<T,3>::vals[1] /= rhs;
+    Nvector<T,3>::vals[2] /= rhs;
     return *this;
 }
 
 template <class U>
 ostream& operator<< (ostream& out, const Vector<U> v){
-    out << "(" << v.get(0);
+    out << "{" << v.get(0);
     for(int i = 1; i < 3; i++)
         out << ',' << v.get(i);
-    return out << ')';
+    return out << '}';
 }
 
 #endif

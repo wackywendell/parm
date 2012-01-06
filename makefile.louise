@@ -1,0 +1,23 @@
+UNAME := $(shell uname)
+CC=g++
+SWIG=swig
+CCOPTS=-Wall -O2 -fPIC
+
+BOOSTINC=$(HOME)/boost_1_48_0/
+INC=-I$(BOOSTINC) `python-config --include`
+LIB=`python-config --ldflags`
+
+ALL=_sim.so
+all: printout $(ALL)
+
+printout:
+	@echo Running on \"$(UNAME)\"
+
+clean:
+	rm -f *.o *.so $(ALL) *.gch
+
+sim_wrap.o: sim_wrap.cxx
+	$(CC) -fPIC -c sim_wrap.cxx $(INC)
+
+_sim.so: sim_wrap.o
+	$(CC) -fPIC -shared sim_wrap.o -o _sim.so $(LIB)

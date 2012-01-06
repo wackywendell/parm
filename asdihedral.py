@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # encoding: UTF-8
 from __future__ import print_function
 print("Importing...")
@@ -16,27 +17,47 @@ parser = OptionParser("Runs a simple simulation.")
 parser.add_option('-T', '--temperature', type=float, dest='temp', default=1)
 parser.add_option('-D', '--damping', type=float, dest='damping', default=.5)
 parser.add_option('-t', '--time', type=float, dest='time', default=1)
-parser.add_option('-d', '--dt', type=float, dest='dt', default=.02)
+parser.add_option('-d', '--dt', type=float, dest='dt', default=.01)
 parser.add_option('-S', '--showsteps', type=int, dest='showsteps', default=1000)
 parser.add_option('-N', '--numres', type=int, dest='numres', default=0)
 parser.add_option('-s', '--startfile', dest='startfile', default=None)
 parser.add_option('-x', '--xyzfile', dest='xyzfile', 
-            default=(mydir + 'test-T{T}-{t}K.xyz'))
+            default=(mydir + 'test/T{T}-{t}K.xyz'))
+parser.add_option('-C', '--continue', dest='cont', action='store_true')
+parser.add_option('-K', '--chargek', dest='chargek', type=float, 
+            default=1)
+parser.add_option('--startdt', type=float, default=.000000001)
+parser.add_option('--startsteps', type=int, default=0)
+parser.add_option('--startdamp', type=float, default=20000)
 opts,args = parser.parse_args()
 
 steps = int(opts.time * 1000 / opts.dt + .5)
-bondspring = 1000
-anglespring = 1000
+showtime = opts.time * 1000 / opts.showsteps
+showsteps = int(showtime / opts.dt + .5)
+bondspring = 5000
+anglespring = 200
 LJepsilon = 1
+chargescreen = 9
+
+# comes from using 300K, angstrom, and e_charge as standard units
+# (e_charge^2)/(4pi 80 electric_constant angstrom boltzmann (310.65K))
+#                    ^ 80 comes from relative permittivity of water
+chargek = 6.954 * opts.chargek
+#this also gives 62.22 fs as the base time unit
+# sqrt((u/avogadro)/(boltzmann⋅310.65K))⋅angstrom
+
 pdbfile = mydir + 'pdb/aS.pdb'
 loadfile= mydir + 'blengths/stats.pkl'
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),
                             N=opts.numres)
+if opts.cont:
+    moviefile = opts.startfile
+    
 startxyz = XYZreader(open(opts.startfile,'r')) if opts.startfile else None
-showsteps = int(float(steps) / opts.showsteps+.5)
+#~ showsteps = int(float(steps) / opts.showsteps+.5)
 
-print('steps:', steps, opts.showsteps, showsteps, showsteps*opts.dt)
+#~ print('steps:', steps, opts.showsteps, showsteps, showsteps*opts.dt)
 
 ####################
 print("Importing PDB...")
@@ -46,21 +67,32 @@ if startxyz is not None:
     print("Importing xyz file", opts.startfile)
     frames = startxyz.all()
     frames[-1].into([a for res in avecs for a in res])
+    startedat = frames[-1].time
+    startxyz.close()
+    del startxyz
 
 if opts.numres > 0:
     oldavecs = avecs
     avecs = avecs[:opts.numres]
     print("%d Residues found, %d used, with %d atoms. Making structure..."
                 % (len(oldavecs), len(avecs), sum(len(r) for r in avecs)))
-
-print("%d Residues found with %d atoms. Making structure..."
+else:
+    print("%d Residues found with %d atoms. Making structure..."
                 % (len(avecs), sum(len(r) for r in avecs)))
 
 
 bonds = simpdb.make_bonds(avecs, bondspring)
 angles = simpdb.make_angles(avecs, anglespring)
-LJ,neighbors = simpdb.make_LJ(avecs, 2.5, LJepsilon)
-interactions = ivector([bonds, angles, LJ])
+LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, 2.0)
+dihedrals = simpdb.make_dihedrals(avecs, anglespring)
+if opts.chargek: 
+    print('Charged', opts.chargek)
+    charges = simpdb.make_charges(avecs, chargescreen, k=chargek)
+    interactions = ivector([bonds, angles, LJ, charges, dihedrals])
+else:
+    print('No charges.')
+    interactions = ivector([bonds, angles, LJ, dihedrals])
+
 trackers = tvector([neighbors])
 
 if len(avecs) < 20:
@@ -73,43 +105,91 @@ collec = collectionSol(opts.dt, opts.damping, opts.temp, atomgroups, interaction
 collec.seed()
 collec.setForces()
 
+xyz = XYZwriter(open(moviefile, 'a')) if opts.cont else (
+            XYZwriter(open(moviefile, 'w')))
+if not opts.continue: xyz.writeframe(avecs, 'time 0', collec.com())
+
+factor=3
+if opts.startsteps > 0:
+    print("Running startsteps...")
+    damp, dt = opts.startdamp, opts.startdt
+    while dt < opts.dt:
+        print('factor', opts.dt / dt)
+        collec.changeT(damp, dt)
+        for i in range(opts.startsteps):
+            collec.timestep()
+            if i % (opts.startsteps/5) == 0:
+                print('E:', collec.energy())
+        dt *= factor
+
+    collec.changeT(opts.damping, opts.dt)
+    print("Finished startsteps.")
+    
+
 tlist = []
 E=[]
+diE=[]
+bE=[]
+aE=[]
 LJE=[]
 K=[]
 T=[]
 Rg=[]
 
-print("Running... output to " + str(moviefile))
-xyz = XYZwriter(open(moviefile, 'w'))
-    
-#~ print('Energy:', collec.Energy())
+def printlist(lst, name):
+    mean = float(np.mean(lst,0))
+    std = np.std(lst)
+    sovm = std / mean
+    print("{name}={mean:.2f}, σ={std:.3f} ({sovm:.2g})".format(**locals()))
 
-t = 0
+print("Running... output to " + str(moviefile))
+
+# t is current step num
+t = 0 if not opts.cont else int(startedat / opts.dt +.5)
+curlim = t + showsteps
+print('Starting.', t, curlim)
 from datetime import datetime
 starttime = datetime.now()
 try:
-    for i in range(opts.showsteps):
-        curlim = (i+1) * opts.time * 1000 / opts.showsteps - opts.dt/2
-        while t * opts.dt < curlim:
+    while t < steps:
+        while t < curlim:
             collec.timestep()
             t+=1
             #~ if t % (100) == 0:
                 #~ print('t:', t*opts.dt)
-        
+        curlim += showsteps
         c = collec.com()
         xyz.writeframe(avecs, 'time %d' % int(t * opts.dt+.5), c)
         tlist.append(t*opts.dt)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
-        curE = collec.Energy()
-        E.append(curE)#,collec.kinetic()])
+        print('------', int(t*opts.dt+.5))
         LJE.append(LJ.energy())
-        curT = collec.Temp()
-        T.append(curT)
+        printlist(LJE, 'LJE')
+        bE.append(bonds.energy())
+        printlist(bE, 'bond E')
+        aE.append(angles.energy())
+        printlist(aE, 'angle E')
+        #~ diE.append(dihedrals.energy())
+        #~ printlist(diE, 'di E')
         K.append(collec.kinetic())
-        Emean = float(np.mean(E))
-        Tmean = float(np.mean(T))
-        Rg.append(collec.gyradius())
+        printlist(K, 'K')
+        curT = collec.temp()
+        T.append(curT)
+        printlist(T, 'T')
+        curE = collec.energy()
+        E.append(curE)#,collec.kinetic()])
+        printlist(E, 'E')
+        #~ Emean = float(np.mean(E))
+        #~ Tmean = float(np.mean(T))
+        #~ Rg.append(collec.gyradius())
+        print('------', int(t*opts.dt+.5))
+        printlist(E, 'E')
+        printlist(LJE, 'LJE')
+        printlist(bE, 'bond E')
+        printlist(aE, 'angle E')
+        printlist(diE, 'di E')
+        printlist(K, 'K')
+        printlist(T, 'T')
         #~ stats = (curE, float(100*np.std(E))/Emean, curT, Tmean, float(100*np.std(T))/Tmean, 
             #~ 100.0*t/steps)
 except KeyboardInterrupt:

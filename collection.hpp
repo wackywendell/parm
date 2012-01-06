@@ -26,13 +26,19 @@ class collection {
         virtual void timestep()=0;
         
         //Stats
-        flt Energy();
-        flt Temp();
+        flt energy();
+        flt temp();
         flt kinetic();
         Vec com();
         Vec comv();
         flt gyradius(); // Radius of gyration
         ~collection(){};
+};
+
+class StaticCollec : public collection {
+    public:
+        StaticCollec(vector<atomgroup*> groups) : collection(groups){};
+        virtual void timestep(){};
 };
 
 class collectionSol : public collection {
@@ -74,6 +80,8 @@ class collectionSol : public collection {
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>());
+        void changeT(const flt damp, const flt desiredT){
+            damping = damp; desT = desiredT; setCs();};
         void timestep();
         void seed(uint n){gauss.seed(n);};
         void seed(){gauss.seed();};

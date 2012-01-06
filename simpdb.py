@@ -4,9 +4,14 @@ from Bio.PDB.Residue import Residue as _Residue
 from simw import *
 import itertools
 
-
 # adapted from IUPAC standards, available at
 # http://www.chem.qmul.ac.uk/iupac/misc/ppep4.html#400
+
+from os.path import expanduser
+mydir = expanduser('~/idp/')
+defaultpdbfile  = mydir + 'pdb/aS.pdb'
+defaultloadfile = mydir + 'blengths/stats.pkl'
+
 bonddict = {
     'GLY' : [],
     'ALA' : [('CA','CB')],
@@ -45,9 +50,25 @@ LJdict = {
     }
 
 # following RasMol
-bonddists = {
-    'CC':2,'CN':1.96,'CO':1.96,'PP':2.632,'OP':2.276,'SS':2.6,'OS':2.26,
-    'CaO':2.232,'SZn':3.028
+#~ bonddists = {
+    #~ 'CC':2,'CN':1.96,'CO':1.96,'PP':2.632,'OP':2.276,'SS':2.6,'OS':2.26,
+    #~ 'CaO':2.232,'SZn':3.028
+    #~ }
+
+# Charges at Ph 3, from Abhi
+Charges3 = { ('LYS', 'NZ') : 1,
+    ('ARG', 'NH1') : .39, ('ARG', 'NH2') : .39, ('ARG', 'NE') : .22,
+    ('HIS', 'ND1') : .5, ('HIS', 'NE2') : .5,
+    ('ASP', 'OD1') : -.025, ('ASP', 'OD2') : -.025, 
+    ('GLU', 'OE1') : -.025, ('GLU', 'OE2') : -.025
+    }
+
+# Charges at Ph 7.4, from Abhi
+Charges74 = { ('LYS', 'NZ') : 1,
+    ('ARG', 'NH1') : .39, ('ARG', 'NH2') : .39, ('ARG', 'NE') : .22,
+    ('HIS', 'ND1') : .05, ('HIS', 'NE2') : .05,
+    ('ASP', 'OD1') : -.5, ('ASP', 'OD2') : -.5, 
+    ('GLU', 'OE1') : -.5, ('GLU', 'OE2') : -.5
     }
 
 class Resvec(atomvec):
@@ -105,6 +126,16 @@ class Resvec(atomvec):
             return atom.element + 'H'
         return atom.element + 'H' + str(Hs)
     
+    @classmethod
+    def load_full(cls, f=defaultloadfile):
+        if None not in (cls.resbonds, cls.backbonds, cls.resangles, cls.backangles):
+            return
+        if not (hasattr(f, 'read') and hasattr(f, 'readline')):
+            f = open(f, 'rb')
+        
+        import cPickle as pickle
+        cls.resbonds, cls.backbonds, cls.resangles, cls.backangles = pickle.load(f)
+    
     def load_data(self, f=None):
         if None not in (self.resbonds, self.backbonds, self.resangles, self.backangles):
             return
@@ -112,12 +143,7 @@ class Resvec(atomvec):
             f = self.loadfile
             if self.loadfile is None:
                 raise KeyError("No file or filename provided")
-        
-        if not (hasattr(f, 'read') and hasattr(f, 'readline')):
-            f = open(f, 'rb')
-        
-        import cPickle as pickle
-        self.resbonds, self.backbonds, self.resangles, self.backangles = pickle.load(f)
+        self.load_full(f)
     
     def get_angles(self, lastres=None, nextres=None, f=None):
         """Yields triplets of (atom1 ptr, atom2 ptr, atom3 ptr, bond angle in radians)"""
@@ -174,7 +200,7 @@ class Resvec(atomvec):
                     yield (lastres['C'], self['N'], val['mean'])
             else:
                 yield (self[a1], self[a2], val['mean'])
-        
+    
     def __getitem__(self, obj):
         indx = obj
         if not isinstance(obj, int):
@@ -203,12 +229,22 @@ class Resvec(atomvec):
     
     @classmethod
     def all_bonds(cls, reslist):
+        """For a list of residues, yields (atom1, atom2, bond length) triplets.
+        
+        The bond length comes from the statistics file."""
         reslist = list(reslist)
         lastvecs = [None] + reslist
         lists_of_bonds = (res.get_bonds(lvec) for res, lvec
                                         in zip(reslist, lastvecs))
         
         return itertools.chain.from_iterable(lists_of_bonds)
+        
+    @classmethod
+    def stds(cls, reslist):
+        """returns the standard deviation"""
+        diffs = np.array([(a1.x - a2.x).mag() - blength
+            for a1, a2, blength in cls.all_bonds(reslist)])
+        return diffs.std()
     
     @classmethod
     def all_angles(cls, reslist):
@@ -229,14 +265,15 @@ class Resvec(atomvec):
                 print("%s %.3f %.3f %.3f" % tuple(a.name[:1], *(a.x)), file=f)
     
     @classmethod
-    def from_pdb(cls, strucname, pdbfilename, loadfile, numchains=None, amu=1):
+    def from_pdb(cls, strucname='aS', pdbfilename=defaultpdbfile, 
+                        loadfile=defaultloadfile, numchains=None, amu=1):
         pdbp = PDBParser()
         aS = pdbp.get_structure(strucname, pdbfilename)
         chains = list(aS.get_chains())[:numchains]
         residues = itertools.chain.from_iterable(chain.child_list for chain in chains)
         rvecs = [Resvec(res, amu=amu, loadfile=loadfile) for res in residues]
         return rvecs
-    
+
 class Residue(_Residue):
     def __init__(self, res):
         self.__dict__.update(res.__dict__)
@@ -305,22 +342,84 @@ class Residue(_Residue):
                     print(a.name, b.name)
                     yield (avec.get(aindx), avec.get(bindx), a, b)
 
-def make_structure(resvecs, bond_k, angle_k, epsilon=1, amu=1, angstrom=1):
-    """Returns a tuple (list of interactions, list of trackers)
+def make_bonds(resvecs, bond_k, angstrom=1):
+    bond_pairs = bondpairs()
+    for a1,a2,l in Resvec.all_bonds(resvecs):
+        length = l * angstrom
+        bond_pairs.add(bond_k, length, a1, a2)
+    return bond_pairs
+
+def make_angles(resvecs, angle_k):
+    bond_angles = angletriples()
+    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+        bond_angles.add(angle_k, angle, a1, a2, a3)
+    return bond_angles
+
+def make_dihedrals(resvecs, k):
+    d = dihedrals()
+    k = float(k)
+    piang = fvector([k/2,k,k/2])
+    zeroang = fvector([k/2,-k,k/2])
+    for r1,r2 in zip(resvecs, resvecs[1:]):
+        #~ ang = piang if r1.resname is 'PRO' or r2.resname is 'PRO' else zeroang
+        ang = zeroang # corresponds to planar zigzag, not planar C
+        a1, a2, a3, a4 = r1['CA'],r1['C'],r2['N'],r2['CA']
+        r1,r2,r3 = (a2.x-a1.x), (a3.x-a2.x), (a4.x-a3.x)
+        mags = r1.mag(), r2.mag(), r3.mag()
+        #~ if ang == piang:
+            #~ print('added piang', mags)
+        #~ if ang == zeroang:
+            #~ print('added zeroang', mags)
+        for m in mags:
+            if m >= 2.1: raise RuntimeError, "Found bad angle"
+        
+        cosine = dihedral.getcos(r1,r2,r3)
+        #~ print('cosine:', cosine)
+        #~ if abs(cosine) < 3:
+            #~ raise RuntimeError, "Angle %.2f is near pi" % cosine
+        d.add(ang, a1, a2, a3, a4)
+    return d
+
+def make_LJ(resvecs, epsilon=1, neighborcutoff=1.4):
+    """LJcutoff in sigma units, neighborcutoff relative to LJcutoff.
     
-    Resvecs is a list of Resvecs (atomvecs) corresponding to residues.
-    bondgroup is a bondgrouping interaction corresponding to all the bonds,
-    backbone included."""
-    #so that it works on a chain object as well
+    returns (LJ, neighbors)"""
+    maxsigma = max(LJdict.values())*2
+    fullgroup = metagroup(resvecs)
+    innerradius = maxsigma
+    outerradius = innerradius * neighborcutoff
+    neighbors = neighborlist(fullgroup, innerradius, outerradius)
+    LJ = LJgroup(neighbors)
+    
+    for atom in (atom for r in resvecs for atom in r):
+        aref = fullgroup.get_id(atom)
+        try:
+            sigma = LJdict[atom.formula] * 2
+        except KeyError:
+            print(*((atom.name, atom.hydrogens, atom.formula) for atom in atom.group))
+            raise KeyError('Atom ' + atom.name + ' (' + atom.formula + ') in ' 
+                    + atom.group.resname + ',' + str(resvecs.index(atom.group))
+                    + ' not found in LJdict.')
+        LJ.add(LJatom(sigma, epsilon, aref))
+    
+    for a1,a2,l in Resvec.all_bonds(resvecs):
+        neighbors.ignore(a1,a2)
+    
+    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+        #~ neighbors.ignore(a1,a2)
+        #~ neighbors.ignore(a2,a3)
+        neighbors.ignore(a1,a3)
+    
+    return LJ, neighbors
+
+def make_LJ_simple(resvecs, LJcutoff=2.5, epsilon=1):
+    """LJcutoff in sigma units. Useful only for testing the neighbor list."""
+    LJ = LJsimple(LJcutoff)
+    
     fullgroup = metagroup(resvecs)
     
-    bond_pairs = bondpairs()
-    bond_angles = angletriples()
-    maxsigma = max(LJdict.values())
-    neighbors = neighborlist(fullgroup, 2.5*maxsigma, 4*maxsigma)
-    LJ = LJgroup(neighbors, 2.5)
     for i, atom in zip(range(fullgroup.size()), (atom for r in resvecs for atom in r)):
-        assert fullgroup.get_id(i) == atom
+        assert fullgroup.get(i) == atom
         try:
             sigma = LJdict[atom.formula]
         except KeyError:
@@ -331,15 +430,61 @@ def make_structure(resvecs, bond_k, angle_k, epsilon=1, amu=1, angstrom=1):
         LJ.add(fullgroup.get_id(i), sigma, epsilon)
     
     for a1,a2,l in Resvec.all_bonds(resvecs):
-        length = l * angstrom
-        bond_pairs.add(bond_k, length, a1, a2)
-        neighbors.ignore(a1,a2)
+        LJ.ignore(a1,a2)
     
-    for group in Resvec.all_angles(resvecs):
-        a1,a2,a3,angle = group
-        bond_angles.add(angle_k, angle, a1, a2, a3)
-        neighbors.ignore(a1,a3)
+    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+        #~ LJ.ignore(a1,a2)
+        #~ LJ.ignore(a2,a3)
+        LJ.ignore(a1,a3)
     
-    neighbors.update_list(True)
+    return LJ
+
+def make_charges(resvecs, screen, ph=7.4, k=1):
+    """Screening distance in base units - 0 or less for no screening.
     
-    return [bond_pairs, bond_angles, LJ], [neighbors]
+    Epsilon for an extra charge."""
+    charges = Charges(screen, k)
+    if ph == 7.4:
+        chargedict = Charges74
+    elif ph == 3:
+        chargedict = Charges3
+    else:
+        raise NotImplementedError
+    
+    fullgroup = metagroup(resvecs)
+    atoms = [atom for r in resvecs for atom in r
+                        if (r.resname, atom.name) in chargedict]
+    
+    residues = set(a.group for a in atoms)
+    import collections
+    d = collections.defaultdict(int)
+    for r in residues: d[r.resname] += 1
+    print(len(atoms), "charged atoms")
+    for r, n in sorted(d.items()):
+        print(n, r)
+    
+    for atom in atoms:
+        #~ print('ref for', atom)
+        aref = fullgroup.get_id(atom)
+        charge = chargedict[(atom.group.resname, atom.name)]
+        charges.add(aref, charge)
+    
+    for a1,a2,l in Resvec.all_bonds(resvecs):
+        key1, key2 = (a1.group.resname, a1.name), (a2.group.resname, a2.name)
+        if key1 not in chargedict or key2 not in chargedict:
+            continue
+        #~ print('ignoring', a1.group.resname, a1.name, a2.name)
+        charges.ignore(a1,a2)
+    
+    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+        key1, key2 = (a1.group.resname, a1.name), (a3.group.resname, a3.name)
+        if key1 not in chargedict:
+            continue
+        #~ print("looking at", a1.group.resname, a1.name, a3.name)
+        if key2 not in chargedict:
+            #~ print("not ignoring", a1.group.resname, a1.name, a3.name)
+            continue
+        #~ print('ignoring', a1.group.resname, a1.name, a3.name)
+        charges.ignore(a1,a3)
+    
+    return charges
