@@ -2,7 +2,7 @@
 
 collection::collection(vector<atomgroup*> gs, vector<interaction*> is,
               vector<statetracker*> ts)
-        : groups(gs), interactions(is), trackers(ts){
+        : groups(gs), interactions(is), trackers(ts), atoms(gs){
     update_trackers();
     setForces();
     update_trackers();
@@ -52,35 +52,35 @@ flt collection::temp(){
     return totkinetic * 2 / (3*totatoms-3);
 }
 
-Vec collection::com(){
-    vector<atomgroup*>::iterator git;
-    flt mass = 0;
-    Vec totcom = Vec(0,0,0);
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++){
-            flt curmass = g.getmass(i);
-            mass += curmass;
-            totcom += g[i].x * curmass;
-        }
-    }
-    return totcom / mass;
-}
-
-Vec collection::comv(){
-    vector<atomgroup*>::iterator git;
-    flt mass = 0;
-    Vec totcom = Vec(0,0,0);
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++){
-            flt curmass = g.getmass(i);
-            mass += curmass;
-            totcom += g[i].v * curmass;
-        }
-    }
-    return totcom / mass;
-}
+//~ Vec collection::com(){
+    //~ vector<atomgroup*>::iterator git;
+    //~ flt mass = 0;
+    //~ Vec totcom = Vec(0,0,0);
+    //~ for(git = groups.begin(); git<groups.end(); git++){
+        //~ atomgroup &g = **git;
+        //~ for(uint i = 0; i<g.size(); i++){
+            //~ flt curmass = g.getmass(i);
+            //~ mass += curmass;
+            //~ totcom += g[i].x * curmass;
+        //~ }
+    //~ }
+    //~ return totcom / mass;
+//~ }
+//~ 
+//~ Vec collection::comv(){
+    //~ vector<atomgroup*>::iterator git;
+    //~ flt mass = 0;
+    //~ Vec totcom = Vec(0,0,0);
+    //~ for(git = groups.begin(); git<groups.end(); git++){
+        //~ atomgroup &g = **git;
+        //~ for(uint i = 0; i<g.size(); i++){
+            //~ flt curmass = g.getmass(i);
+            //~ mass += curmass;
+            //~ totcom += g[i].v * curmass;
+        //~ }
+    //~ }
+    //~ return totcom / mass;
+//~ }
 
 flt collection::gyradius(){
     vector<atomgroup*>::iterator git;

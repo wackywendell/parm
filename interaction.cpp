@@ -18,7 +18,7 @@ flt atomgroup::mass() const{
     return m;
 };
 
-Vec atomgroup::comvel() const {
+Vec atomgroup::comv() const {
     return momentum() / mass();
 };
 
@@ -66,6 +66,19 @@ flt atomgroup::kinetic(const Vec &originvelocity) const{
         totE += curmass/2 * curv.dot(curv);
     }
     return totE;
+};
+
+void atomgroup::addv(Vec v){
+    for(uint i=0; i<size(); i++){
+        (*this)[i].v += v;
+    }
+};
+
+void atomgroup::addrot(Vec omega, Vec loc){
+    for(uint i=0; i<size(); i++){
+        Vec r = (*this)[i].x - loc;
+        (*this)[i].v += r.cross(omega);
+    }
 };
 
 void atomgroup::resetForces(){

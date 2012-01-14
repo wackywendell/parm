@@ -145,7 +145,7 @@ class atomgroup {
         
         
         Vec com() const; //center of mass
-        Vec comvel() const; //center of mass velocity
+        Vec comv() const; //center of mass velocity
         
         //Stats
         flt mass() const;
@@ -153,6 +153,17 @@ class atomgroup {
         Vec momentum() const;
         Vec angmomentum(const Vec &loc) const;
         flt mominertia(const Vec &loc, const Vec &axis) const;
+        
+        // for resetting
+        void addv(Vec v);
+        void resetcomv(){addv(-comv());};
+        inline void addrot(Vec omega, Vec around);
+        inline void resetL(){
+            Vec c = com();
+            Vec L = angmomentum(c);
+            flt I = mominertia(c, L);
+            addrot(L / (-I), c);
+        }
         
         // for timestepping
         void resetForces();

@@ -15,9 +15,11 @@ from optparse import OptionParser
 mydir = expanduser('~/idp/')
 parser = OptionParser("Runs a simple simulation.")
 parser.add_option('-T', '--temperature', type=float, dest='temp', default=1)
-parser.add_option('-D', '--damping', type=float, dest='damping', default=.5)
-parser.add_option('-t', '--time', type=float, dest='time', default=1)
-parser.add_option('-d', '--dt', type=float, dest='dt', default=.01)
+parser.add_option('-D', '--damping', type=float, default=.5)
+parser.add_option('-t', '--time', type=float, default=1)
+parser.add_option('-d', '--dt', type=float, default=.01)
+parser.add_option('--rampsteps', type=int, default=0)
+parser.add_option('--rampdamp', type=float, default=.5)
 parser.add_option('-S', '--showsteps', type=int, dest='showsteps', default=1000)
 parser.add_option('-N', '--numres', type=int, dest='numres', default=0)
 parser.add_option('-s', '--startfile', dest='startfile', default=None)
@@ -25,7 +27,7 @@ parser.add_option('-x', '--xyzfile', dest='xyzfile',
             default=(mydir + 'test/T{T}-{t}K.xyz'))
 parser.add_option('-C', '--continue', dest='cont', action='store_true')
 parser.add_option('-K', '--chargek', dest='chargek', type=float, 
-            default=1)
+            default=0)
 parser.add_option('--startdt', type=float, default=.000000001)
 parser.add_option('--startsteps', type=int, default=0)
 parser.add_option('--startdamp', type=float, default=20000)
@@ -38,6 +40,19 @@ bondspring = 5000
 anglespring = 200
 LJepsilon = 1
 chargescreen = 9
+
+# experiments run at 293K
+# sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom -> time units
+t0 = 6.4069e-14
+# then we can get a damping coefficient
+# from Allen and Tildesley, \xi = k_B T / m D
+# those are mass, D of water, right? 18.01528 g/mol, 2.2 e-9 m^2/s 
+# D is from http://hyperphysics.phy-astr.gsu.edu/hbase/tables/liqprop.html
+# then we get \xi = 5.727e13 hz
+# or 3.94 / t0
+# boltzmann⋅293K/((18.01528 g/mol) 2.2e−9 m^2/s)⋅avogadro sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom
+damp0 = 3.94
+if opts.damping < 0: opts.damping = damp0
 
 # comes from using 300K, angstrom, and e_charge as standard units
 # (e_charge^2)/(4pi 80 electric_constant angstrom boltzmann (310.65K))
@@ -105,10 +120,9 @@ collec = collectionSol(opts.dt, opts.damping, opts.temp, atomgroups, interaction
 collec.seed()
 collec.setForces()
 
-mode = 'a' if opts.cont else 'w'
-xyz = XYZwriter(open(moviefile, mode))
-if not opts.cont: xyz.writeframe(avecs, 'time=0', collec.com())
-
+# Stage 1: Run really, really slowly, increasing dt every now and then.
+# Only needed occasionally when parameters have changed and forces might 
+# be very strong.
 factor=3
 if opts.startsteps > 0:
     print("Running startsteps...")
@@ -125,6 +139,18 @@ if opts.startsteps > 0:
     collec.changeT(opts.damping, opts.dt)
     print("Finished startsteps.")
     
+# Stage 2: Run at normal speed for a while to 'ramp up' to the right temperature
+# only needed for low damping.
+if opts.rampsteps > 0:
+    print("Damping for", opts.rampsteps, "steps")
+    collec.changeT(opts.rampdamp, opts.temp)
+    for i in range(opts.rampsteps):
+        collec.timestep()
+    collec.changeT(opts.damping, opts.temp)
+
+mode = 'a' if opts.cont else 'w'
+xyz = XYZwriter(open(moviefile, mode))
+if not opts.cont: xyz.writefull(0, avecs, collec)
 
 tlist = []
 E=[]
@@ -159,7 +185,7 @@ try:
                 #~ print('t:', t*opts.dt)
         curlim += showsteps
         c = collec.com()
-        xyz.writeframe(avecs, 'time=%d' % int(t * opts.dt+.5), c)
+        xyz.writefull(int(t * opts.dt+.5), avecs, collec)
         tlist.append(t*opts.dt)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         print('------', int(t*opts.dt+.5))

@@ -2,6 +2,7 @@ from __future__ import print_function
 import re, math, numpy as np
 from itertools import izip
 import hashlib, logging
+import simw as sim
 #~ import pyparsing as parse
 
 class XYZwriter:
@@ -9,9 +10,10 @@ class XYZwriter:
         self.file = f
         self.usevels = usevels
     
-    def writeframe(self, reslist, comment='', com=None):
+    def writeframe(self, reslist, com=None, **kwargs):
         Natoms = sum(len(r) for r in reslist)
         print(Natoms, file=self.file)
+        comment = " ".join(["=".join((k,str(v))) for k,v in kwargs.items()])
         print(comment, file=self.file)
         
         lines = []
@@ -26,11 +28,25 @@ class XYZwriter:
                     print("%s %.3f %.3f %.3f" % (elem,x,y,z), file=self.file)
                 else:
                     vx,vy,vz = tuple(atom.v)
-                    lines.append(("%s" + (" %.3f"*3)+ (" %.3g"*3)) % (elem,x,y,z,vx,vy,vz))
+                    lines.append(("%s" + (" %.3f"*3)+ (" %.3f"*3)) % (elem,x,y,z,vx,vy,vz))
         
         # do all the writing at once
         print('\n'.join(lines), file=self.file)
         self.file.flush()
+    
+    def writefull(self, t, reslist, collec, com=None):
+        cdict = {
+            'time':t,
+            'E':collec.energy(),
+            'T':collec.temp(),
+            'K':collec.kinetic(),
+            'L':collec.angmomentum().mag(),
+            'v':collec.comv().mag(),
+            'Rg':sim.calc_Rg(reslist)
+            }
+        if com is None: com = collec.com()
+        self.writeframe(reslist, com, **cdict)
+        return cdict
     
     def size(self):
         location = self.file.tell()
@@ -75,7 +91,7 @@ def md5_file(f, block_size = None):
 
 class XYZreader:
     firstline = re.compile("([0-9]*)")
-    commentline = re.compile("time[= ]([0-9.]*)(.*)")
+    commentline = re.compile("time[= ][0-9.]*|\w+=.?( \w+=.?)*")
     regline = re.compile("(\w{1,2})\s+([\-0-9.]+)\s+([\-0-9.]+)\s+([\-0-9.]+)")
     
     def __init__(self, f):
@@ -89,16 +105,19 @@ class XYZreader:
             raise StopIteration, "Reached end of file."
         line = line.strip()
         match = regex.match(line)
-        if match is None and types:
+        if match is None:
             raise XYZError("Failed to parse at line " + repr(line))
         groups = match.groups()
-        if len(groups) != len(types):
+        if len(types) != 0 and len(groups) != len(types):
             raise XYZError("Wrong number of types given.")
+        if len(types) == 0:
+            return line
         return tuple(t(val) for t,val in zip(types,groups))
     
     def readframe(self):
         num, = self.__match__(self.firstline, int)
-        t, = self.__match__(self.commentline, float, str)
+        comment = self.__match__(self.commentline)
+        commentdict = dict([pair.split('=') for pair in comment.split(' ')])
 
         lines = [self.file.readline().strip().split(' ') for i in range(num)]
         badlines = [l for l in lines if len(l) != 4 and len(l) != 7]
@@ -113,7 +132,13 @@ class XYZreader:
         
         lines = [(e,(float(x),float(y),float(z)),(float(vx),float(vy),float(vz))) 
                     for e,x,y,z,vx,vy,vz in lines]
-        return Frame(lines, t)
+        if 'time' not in commentdict:
+            raise AssertionError, 'Comment %s does not include time' % str(commentdict)
+        f = Frame(lines, float(commentdict['time']))
+        del commentdict['time']
+        f.comment = comment
+        f.values = commentdict
+        return f
         
     def __iter__(self):
         location = self.file.tell()
@@ -215,14 +240,13 @@ class Frames(list):
     def into(self, atoms, check=True):
         for f in self:
             f.into(atoms, check)
-            yield f.time
+            yield f.time, f.values
 
 import re
 refirst = '(\d*)\n'
 resecond = 'time (\d*\.?\d+)(.*)\n'
 reline = '(\w+) (\d*\.?\d+) (\d*\.?\d+) (\d*\.?\d+)\n'
 remany = '(?:(\w+) (\d*\.?\d+) (\d*\.?\d+) (\d*\.?\d+)\n)+'
-
 
 if __name__ == '__main__':
     s = open('test/T1-1K.xyz','r').read()

@@ -7,7 +7,7 @@ from Bio.PDB import PDBParser
 import simpdb
 from simw import Vec, autocorr, calc_Rg, geometric, average, average_squared
 import simw as sim
-from xyzfile import XYZreader
+from xyzfile import XYZreader, Frame, Frames
 from functools import wraps
 #~ import numpy as np
 
@@ -28,24 +28,59 @@ def _use_key(key):
         return wrapper
     return decorator
 
+def _key_and_cut(key):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            vals = self._shelf_out(key) or self._shelf_in(key, func(self, *args, **kwargs))
+            return self._cut(vals)
+        return wrapper
+    return decorator
+
 class statkeeper:
-    def __init__(self, xyzfname, shelfname=None, pdbfname = pdbfile, loadfname = loadfile):
-        self.reader = XYZreader(open(xyzfname,'r'))
+    def __init__(self, xyzfname, shelfname=None, pdbfname = pdbfile, 
+                    loadfname = loadfile, cut=0):
+        self.reader = XYZreader(open(xyzfname,'r')) if xyzfname else None
+        self.fname = xyzfname if xyzfname else shelfname
+        self.cut = cut
+        
+        # build on demand
         self._resfunc = lambda: simpdb.Resvec.from_pdb('aS', pdbfname, loadfname, numchains=1)
-        self.collec = sim.StaticCollec(self.residues)
-        if shelfname: 
-            self.shelf = shelve.open(shelfname)
-            mkey = '_md5'
-            if mkey in self.shelf and self.shelf[mkey] == self.reader.md5():
-                logging.info('shelf exists, md5 matches')
+        
+        self.shelf = shelve.open(shelfname) if shelfname else None
+            #~ mkey = '_md5'
+        if shelfname and self.reader: # check that they match
+            mkey = '_size'
+            if mkey in self.shelf and self.shelf[mkey] == self.reader.size(): #.md5():
+                logging.info('shelf exists, size matches')
+                if ((cut and not 'cut' in self.shelf) or 
+                    ('cut' in self.shelf and cut != self.shelf['cut'])):
+                    badks = [k for k in self.shelf if 
+                            ('ISF' in k or 'autocorr' in k or k == 'cut')]
+                    # they use a different cut
+                    for k in badks:
+                        del self.shelf[k]
+                    
             else:
                 if '_md5' not in self.shelf:
                     logging.info('New shelf')
-                else: logging.info('MD5 does not match')
+                else: logging.info('Size does not match')
                 self.shelf.clear()
-                self.shelf[mkey] = self.reader.md5()
+                self.shelf[mkey] = self.reader.size() #.md5()
                 self.shelf.sync()
-        else: self.shelf = None
+    
+    def _cut(self, lst):
+        """Cuts the first portion off a list, based on self.cut."""
+        if 0 < self.cut < 1:
+            numcut = int(len(lst)* self.cut)
+            #~ print(numcut, 'frames cut')
+            return lst[numcut:]
+        elif self.cut >= 1:
+            numcut = len(lst)- len(self.times)
+            #~ print(numcut, 'frames cut.')
+            return lst[numcut:]
+        #~ else:
+            #~ print('cut ignored:', self.cut)
     
     def close(self):
         if self.shelf: self.shelf.close()
@@ -62,8 +97,18 @@ class statkeeper:
         if not hasattr(self, '_residues'):
             logging.info('building residues')
             self._residues = self._resfunc()
+            f0 = self.frames[0]
+            atomn = len(f0.locarray)
+            reslens = list(np.cumsum([len(r) for r in self._residues]))
+            indx = reslens.index(atomn)+1
+            if indx <= len(self._residues):
+                self._residues = self._residues[:indx]
+                #~ print('Only %d residues' % len(self._residues))
+                if hasattr(self, '_atoms'): del self._atoms
+                #~ print(len(self.atoms), sum(len(r) for r in self.residues))
             logging.info('residues built')
         return self._residues
+    
     
     @property
     def atoms(self):
@@ -76,6 +121,16 @@ class statkeeper:
         if not hasattr(self, '_frames'):
             logging.info('importing frames')
             self._frames = self.reader.all()
+            if 0 < self.cut < 1:
+                numcut = int(len(self._frames)* self.cut)
+                self._frames = Frames(self._frames[numcut:])
+                print(numcut, 'frames cut')
+            elif self.cut >= 1:
+                oldlen = len(self._frames)
+                self._frames = Frames([f for f in self._frames if f.time > self.cut])
+                print(oldlen - len(self._frames), 'frames cut.')
+            else:
+                print('cut:', self.cut)
             logging.info('frames imported')
         return self._frames
     
@@ -83,7 +138,34 @@ class statkeeper:
     def times(self):
         if not hasattr(self, '_times'):
             self._times = self._shelf_out('times') or [f.time for f in self.frames]
-        return self._shelf_in('times', self._times)
+            self._shelf_in('times', self._times)
+        if self.cut < 1:
+            return self._cut(self._times)
+        else:
+            return [t for t in self._times if t > self.cut]
+    
+    @property
+    def collec(self):
+        if not hasattr(self, '_collec'):
+            self._collec = sim.StaticCollec(self.residues)
+        return self._collec
+    
+    def add_bonds(self, springk):
+        self._bonds = simpdb.make_bonds(self.residues, springk)
+        self.collec.addInteraction(self._bonds)
+        
+    def add_angles(self, springk):
+        self._angles = simpdb.make_angles(self.residues, springk)
+        self.collec.addInteraction(self._angles)
+        
+    def add_LJ(self, eps, cutoff=2.0):
+        self._LJ, self._neighbors = simpdb.make_LJ(self.residues, LJepsilon, 2.0)
+        self.collec.addInteraction(self._LJ)
+        self.collec.addTracker(self._neighbors)
+    
+    def add_dihedral(self, springk):
+        self._dihedral = simpdb.make_dihedrals(self.residues, springk)
+        self.collec.addInteraction(self._dihedral)
     
     def _shelf_out(self, key):
         if self.shelf is not None and key in self.shelf:
@@ -111,10 +193,39 @@ class statkeeper:
             #~ locsqs = [(loc - center).sq() for loc in locs]
             #~ Rgs.append(math.sqrt(average(locsqs)))
         return self._shelf_in('Rg', Rgs)
+    
+    def endtoend(self):
+        val = self._shelf_out('endtoend')
+        if val: return val
+        a1, a2 = self.residues[0]['CA'], self.residues[-1]['CA']
+        dists = [(a1.x - a2.x).mag() for t in self.frames.into(self.atoms)]
+        return self._shelf_in('endtoend', dists)
             
     def gyradius(self):
         return self._shelf_out('gyradius') or self._shelf_in('gyradius',
             [self.collec.gyradius() for t in self.frames.into(self.atoms)])
+            
+    @staticmethod
+    def getVal(key, frame, atoms, func, *args, **kw):
+        if hasattr(frame, 'vals') and key in frame.vals:
+            return frame.vals[key]
+        frame.into(atoms)
+        return func(*args, **kw)
+    
+    @_key_and_cut('T')
+    def temp(self):
+        return [float(self.getVal('T', f, self.atoms, self.collec.temp))
+                        for f in self.frames]
+    
+    @_key_and_cut('E')
+    def energy(self):
+        return [float(self.getVal('E', f, self.atoms, self.collec.energy))
+                        for f in self.frames]
+    
+    @_key_and_cut('Rg')
+    def Rg(self):
+        return [float(self.getVal('Rg', f, self.atoms, calc_Rg, self.residues))
+                        for f in self.frames]
     
     def ISF(self, scale, maxavg=200, ntimes=200):
         """Calculate the intermediate scattering function.
@@ -153,17 +264,18 @@ class statkeeper:
         return self.ISF(np.mean(Rgs), maxavg, ntimes)
         
     def autocorr(self):
-        key = 'autocorr-Rg'
-        val = self._shelf_out(key)
-        if val: return val
-        print('autocorr')
+        #~ key = 'autocorr-Rg'
+        #~ val = self._shelf_out(key)
+        #~ if val: return val
+        #~ print('autocorr')
         
         Rgs = self.Rg()
         if not self.times:
             return ([],[])
         t0 = self.times[0]
         dts = [t - t0 for t in self.times]
-        return self._shelf_in(key, (dts, autocorr(Rgs)))
+        return (dts, autocorr(Rgs))
+        #~ return self._shelf_in(key, (dts, autocorr(Rgs)))
     
     def relax_acorr(self):
         """Relaxation time, calculated using the autocorrelation function 
@@ -186,10 +298,10 @@ class statkeeper:
             return None
         t0,v0 = min(ts)
         return t0
-        
+    
+    
     def timespan(self):
-        return self._shelf_out('timespan') or self._shelf_in('timespan',
-                                    self.times[-1] - self.times[0])
+        return self.times[-1] - self.times[0]
     
     def sim_Rg(self, relaxt):
         """Returns (average Rg, std, error, Npoints). Error is determined by 
@@ -214,13 +326,13 @@ class statkeeper:
                 #~ Rg,average(self.gyradius()),std,Npoints,std/math.sqrt(Npoints-1))
         return Rg, std, std/math.sqrt(Npoints-1), Npoints
     
-    @_use_key('bondstds')
+    @_key_and_cut('bondstds')
     def bond_stds(self):
         """Return bond distance std. deviations as a list, averaged per frame"""
         bonds = simpdb.make_bonds(self.residues, 0)
         return [bonds.std_dists() for t in self.frames.into(self.atoms)]
     
-    @_use_key('bondmeans')
+    @_key_and_cut('bondmeans')
     def bond_means(self):
         """Return bond distance std. deviations as a list, averaged per frame"""
         bonds = simpdb.make_bonds(self.residues, 0)
@@ -230,13 +342,13 @@ class statkeeper:
         """Return bond distance std. dev. averaged over all atoms and frames"""
         return average_squared(self.bond_stds())
     
-    @_use_key('anglestds')
+    @_key_and_cut('anglestds')
     def angle_stds(self):
         """Return bond distance std. deviations as a list, averaged per frame"""
         angles = simpdb.make_angles(self.residues, 0)
         return [angles.std_dists() for t in self.frames.into(self.atoms)]
     
-    @_use_key('anglemeans')
+    @_key_and_cut('anglemeans')
     def angle_means(self):
         """Return bond distance std. deviations as a list, averaged per frame"""
         angles = simpdb.make_angles(self.residues, 0)

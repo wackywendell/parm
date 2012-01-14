@@ -347,6 +347,7 @@ def make_bonds(resvecs, bond_k, angstrom=1):
     for a1,a2,l in Resvec.all_bonds(resvecs):
         length = l * angstrom
         bond_pairs.add(bond_k, length, a1, a2)
+    #~ print('Made %d bonds from %d residues.' % (bond_pairs.size(), len(resvecs)))
     return bond_pairs
 
 def make_angles(resvecs, angle_k):

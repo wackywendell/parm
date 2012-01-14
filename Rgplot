@@ -68,7 +68,7 @@ for n,f in enumerate(opts.files):
         relaxt = sk.relax_acorr() if not opts.full else sk.relax_ISF()
         status('getting sim_Rg')
         sim_Rg = Rg,std,err,npoints = sk.sim_Rg(relaxt)
-        if npoints is None: npoints = 0
+        if npoints is None: err = npoints = 0
         if np.isnan([Rg,std,err]).any() or std <= 1e-8:
             print('NANS!!!')
             continue
@@ -78,7 +78,7 @@ for n,f in enumerate(opts.files):
         acts = [t/1000.0 for t in acts]
     #~ print('Rg:', Rg_avg)
     #~ print(Rg, std, err)
-    print('Rg: %.2f; std: %.3f; err: %.3f; N: %.2f' % sim_Rg)
+    print('Rg: %.2f; std: %.3f; err: %.3f; N: %.2f' % (Rg,std,err,npoints))
     status('plotting')
     fig=plt.figure('Single File')
     plt.clf()

@@ -14,6 +14,7 @@ class collection {
         vector<atomgroup*> groups;
         vector<interaction*> interactions;
         vector<statetracker*> trackers;
+        metagroup atoms;
         void update_trackers();
         
     public:
@@ -29,16 +30,36 @@ class collection {
         flt energy();
         flt temp();
         flt kinetic();
-        Vec com();
-        Vec comv();
+        inline Vec com(){return atoms.com();};
+        inline Vec comv(){return atoms.comv();};
+        inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc);};
+        inline Vec angmomentum(){return atoms.angmomentum(com());};
         flt gyradius(); // Radius of gyration
         ~collection(){};
+        
+        void resetcomv(){atoms.resetcomv();};
+        void resetL(){atoms.resetL();};
+        
+        void addInteraction(interaction* inter){
+            interactions.push_back(inter);
+            update_trackers();
+        };
+        void addTracker(statetracker* track){
+            trackers.push_back(track);
+            update_trackers();
+        };
+        
+        uint numInteraction(){ return interactions.size();};
 };
 
 class StaticCollec : public collection {
     public:
-        StaticCollec(vector<atomgroup*> groups) : collection(groups){};
+        StaticCollec(vector<atomgroup*> groups,
+            vector<interaction*> interactions=vector<interaction*>(),
+            vector<statetracker*> trackers=vector<statetracker*>())
+                            : collection(groups, interactions, trackers){};
         virtual void timestep(){};
+        void update(){update_trackers();};
 };
 
 class collectionSol : public collection {
