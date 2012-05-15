@@ -35,7 +35,7 @@ class collection {
         inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc);};
         inline Vec angmomentum(){return atoms.angmomentum(com());};
         flt gyradius(); // Radius of gyration
-        ~collection(){};
+        virtual ~collection(){};
         
         void resetcomv(){atoms.resetcomv();};
         void resetL(){atoms.resetL();};
@@ -48,6 +48,8 @@ class collection {
             trackers.push_back(track);
             update_trackers();
         };
+        
+        vector<interaction*> getInteractions(){return interactions;};
         
         uint numInteraction(){ return interactions.size();};
 };
@@ -101,8 +103,8 @@ class collectionSol : public collection {
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>());
-        void changeT(const flt damp, const flt desiredT){
-            damping = damp; desT = desiredT; setCs();};
+        void changeT(const flt newdt, const flt damp, const flt desiredT){
+            dt = newdt; damping = damp; desT = desiredT; setCs();};
         void timestep();
         void seed(uint n){gauss.seed(n);};
         void seed(){gauss.seed();};

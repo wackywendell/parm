@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # encoding: UTF-8
 from __future__ import print_function
-print("Importing...")
 
 from simw import *
 from math import sqrt
@@ -11,11 +10,12 @@ from Bio.PDB import PDBParser
 import numpy as np
 from os.path import expanduser
 from optparse import OptionParser
+from collections import defaultdict
 
 mydir = expanduser('~/idp/')
 parser = OptionParser("Runs a simple simulation.")
 parser.add_option('-T', '--temperature', type=float, dest='temp', default=1)
-parser.add_option('-D', '--damping', type=float, default=.5)
+parser.add_option('-D', '--damping', type=float, default=.001)
 parser.add_option('-t', '--time', type=float, default=1)
 parser.add_option('-d', '--dt', type=float, default=.01)
 parser.add_option('--rampsteps', type=int, default=0)
@@ -31,6 +31,10 @@ parser.add_option('-K', '--chargek', dest='chargek', type=float,
 parser.add_option('--startdt', type=float, default=.000000001)
 parser.add_option('--startsteps', type=int, default=0)
 parser.add_option('--startdamp', type=float, default=20000)
+parser.add_option('-A', '--atomsize', type=float, default=1.0)
+parser.add_option('--nodihedral', dest='dihedral', action='store_false')
+parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true')
+
 opts,args = parser.parse_args()
 
 steps = int(opts.time * 1000 / opts.dt + .5)
@@ -76,7 +80,7 @@ startxyz = XYZreader(open(opts.startfile,'r')) if opts.startfile else None
 
 ####################
 print("Importing PDB...")
-avecs = simpdb.Resvec.from_pdb('aS', pdbfile, loadfile, numchains=1)
+avecs = simpdb.Resvec.from_pdb('aS', pdbfile, loadfile, H=opts.hydrogen, numchains=1)
 
 if startxyz is not None:
     print("Importing xyz file", opts.startfile)
@@ -98,15 +102,14 @@ else:
 
 bonds = simpdb.make_bonds(avecs, bondspring)
 angles = simpdb.make_angles(avecs, anglespring)
-LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, 2.0)
-dihedrals = simpdb.make_dihedrals(avecs, anglespring)
-if opts.chargek: 
-    print('Charged', opts.chargek)
-    charges = simpdb.make_charges(avecs, chargescreen, k=chargek)
-    interactions = ivector([bonds, angles, LJ, charges, dihedrals])
-else:
-    print('No charges.')
-    interactions = ivector([bonds, angles, LJ, dihedrals])
+LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, opts.atomsize, 2.0)
+dihedrals = simpdb.make_dihedrals(avecs, anglespring) if opts.dihedral else None
+charges = simpdb.make_charges(avecs, chargescreen, k=chargek) if opts.chargek else None
+interactions = (bonds, angles, LJ, charges, dihedrals)
+
+interactions = ivector([i for i in interactions if i is not None])
+if opts.chargek: print('Charged', opts.chargek)
+else: print('No charges.')
 
 trackers = tvector([neighbors])
 
@@ -142,31 +145,35 @@ if opts.startsteps > 0:
 # Stage 2: Run at normal speed for a while to 'ramp up' to the right temperature
 # only needed for low damping.
 if opts.rampsteps > 0:
+    oldcomv = collec.comv().mag()
+    collec.resetcomv()
+    oldL = collec.angmomentum().mag()
+    collec.resetL()
+    print('comv:', oldcomv, '->', collec.comv().mag(),
+            'L:', oldL, '->', collec.angmomentum().mag())
     print("Damping for", opts.rampsteps, "steps")
     collec.changeT(opts.rampdamp, opts.temp)
     for i in range(opts.rampsteps):
         collec.timestep()
     collec.changeT(opts.damping, opts.temp)
+    oldcomv = collec.comv().mag()
+    collec.resetcomv()
+    oldL = collec.angmomentum().mag()
+    collec.resetL()
+    print('comv:', oldcomv, '->', collec.comv().mag(),
+            'L:', oldL, '->', collec.angmomentum().mag())
 
 mode = 'a' if opts.cont else 'w'
 xyz = XYZwriter(open(moviefile, mode))
 if not opts.cont: xyz.writefull(0, avecs, collec)
 
-tlist = []
-E=[]
-diE=[]
-bE=[]
-aE=[]
-LJE=[]
-K=[]
-T=[]
-Rg=[]
+valtracker = defaultdict(list)
 
 def printlist(lst, name):
     mean = float(np.mean(lst,0))
     std = np.std(lst)
-    sovm = std / mean
-    print("{name}={mean:.2f}, σ={std:.3f} ({sovm:.2g})".format(**locals()))
+    sovm = 100*std / mean
+    print("{name}={mean:.2f}, σ={std:.3f} ({sovm:.2g}%)".format(**locals()))
 
 print("Running... output to " + str(moviefile))
 
@@ -185,79 +192,17 @@ try:
                 #~ print('t:', t*opts.dt)
         curlim += showsteps
         c = collec.com()
-        xyz.writefull(int(t * opts.dt+.5), avecs, collec)
-        tlist.append(t*opts.dt)
+        values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         print('------', int(t*opts.dt+.5))
-        LJE.append(LJ.energy())
-        printlist(LJE, 'LJE')
-        bE.append(bonds.energy())
-        printlist(bE, 'bond E')
-        aE.append(angles.energy())
-        printlist(aE, 'angle E')
-        #~ diE.append(dihedrals.energy())
-        #~ printlist(diE, 'di E')
-        K.append(collec.kinetic())
-        printlist(K, 'K')
-        curT = collec.temp()
-        T.append(curT)
-        printlist(T, 'T')
-        curE = collec.energy()
-        E.append(curE)#,collec.kinetic()])
-        printlist(E, 'E')
-        #~ stats = (curE, float(100*np.std(E))/Emean, curT, Tmean, float(100*np.std(T))/Tmean, 
-            #~ 100.0*t/steps)
+        for k,v in values.items():
+            valtracker[k].append(v)
+            if k is 'time': continue
+            printlist(valtracker[k], k)
 except KeyboardInterrupt:
     pass
-    
-begin = int(t * .1)
-tlist = tlist[begin:]
-T = T[begin:]
-E = E[begin:]
-Rg = Rg[begin:]
 
 tottime = datetime.now() - starttime
 totsecs = 24*60*60 * tottime.days + tottime.seconds + (tottime.microseconds / 1000000.)
 
 print("%s, %.3f fps" % (tottime, t / totsecs))
-
-#~ print(xlist[0],xlist[-1])
-exit();
-print("importing...")
-import matplotlib.pyplot as plt
-from matplotlib import rc
-rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-## for Palatino and other serif fonts use:
-#rc('font',**{'family':'serif','serif':['Palatino']))
-rc('text', usetex=True)
-import numpy as np
-print("plotting...")
-
-def plotline(ts, num, *args, **kwargs):
-    plt.plot((ts[0], ts[-1]), (num,num), *args, **kwargs)
-
-def plot(lst, name):
-    mean = float(np.mean(lst,0))
-    std = np.std(lst)
-    sovm = std / mean
-    print("{name}={mean:.2f}, σ={std:.3f} ({sovm:.2g})".format(**locals()))
-    plt.plot(tlist, lst, 'b.-')
-    label = u'$\overline {} = {:.3f}$'.format(name,mean)
-    stdlabel = '$\sigma={0:.3f}\;({1:.4f})$'.format(std, sovm)
-    plotline(tlist, mean, 'r-', label=label, linewidth=2)
-    plotline(tlist, mean-std, 'r-', label = stdlabel)
-    plotline(tlist, mean+std, 'r-')
-    plt.title(name)
-    plt.legend()
-    plt.show()
-
-Pairs = [(E, "E"),(T, "T"),(LJE, "LJ E")]#,(Rg, "Rg"), (K, "K")]
-
-for xs, name in Pairs:
-    plot(xs, name)
-
-print("done!")
-
-
-#~ for a in itern(av, av.N()):
-    #~ print(tuple(itern(a.x,3)))

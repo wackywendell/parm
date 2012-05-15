@@ -18,6 +18,10 @@ void seed(){
 
 void bivariateGauss::set(const double s1, const double s2, const double corr){
     // Taken from Allen and Tildesley, 348
+    assert(s1 >= 0);
+    assert(s2 >= 0);
+    assert(corr >= 0);
+    assert(corr <= 1);
     x11 = s1;
     x21 = s2 * corr;
     x22 = s2 * sqrt(1 - corr*corr);

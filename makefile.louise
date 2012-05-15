@@ -1,5 +1,5 @@
 UNAME := $(shell uname)
-CC=g++
+CC=icpc
 SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
 

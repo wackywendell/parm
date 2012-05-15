@@ -66,13 +66,51 @@ def TempTime(fnames, plot, group=False):
         Ts = sk.temp()
         summarize('T',times, Ts)
         if plot:
-            print('plotting...')
+            status('plotting...')
             #~ plt.clf()
             plt.plot(times, Ts)
             if not group: plt.show()
         else:
-            print('Not plotting.')
+            status('Not plotting.')
     if plot and group: plt.show()
+
+@Plotter('TRg', 'Temp. vs. Rg')
+@Plotter('TRgerr', 'Temp. vs. Rg; use Rg autocorr for Rg error bars', err=True)
+@Plotter('TRgerr', 'Temp. vs. Rg; use ISF for Rg error bars', err='ISF')
+def TempTime(fnames, plot, err=False):
+    Allvals = []
+    for sk in runfiles(fnames):
+        times = [t/1000.0 for t in sk.times]
+        Ts = sk.temp()
+        Rgs = sk.Rg()
+        Tmean, Terr = np.mean(Ts), np.std(Ts)
+        summarize('T',times, Ts)
+        
+        if err:
+            status('getting relaxation')
+            relaxt = sk.relax_acorr() if err is not 'ISF' else sk.relax_ISF()
+            status('getting sim_Rg')
+            sim_Rg = Rgmean,Rgstd,Rgerr,npoints = sk.sim_Rg(relaxt)            
+            if not npoints > 0 or not err > 0:
+                summarize('Rg:',times, Rgs)
+                continue
+            else:
+                print('npoints:', npoints, npoints > 0)
+                summarizeErr('Rg:', Rgs, npoints)
+        else:
+            summarize('Rg',times, Rgs)
+            Rgmean, Rgerr = np.mean(Rgs), np.std(Rgs)
+        Allvals.append((Tmean, Terr, Rgmean, Rgerr))
+    if plot:
+        status('plotting...')
+        #~ plt.clf()
+        Trow, Terr, Rgrow, Rgerr = zip(*Allvals)
+        plt.errorbar(Trow, Rgrow, xerr=Terr, yerr=Rgerr, fmt='b.')
+        plt.xlim([0, None])
+        plt.ylim([0, None])
+        plt.show()
+    else:
+        status('Not plotting.')
 
 @Plotter('end', 'end-to-end distance (using alpha carbons) vs. time')
 def EndtoEnd(fnames, plot):

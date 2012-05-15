@@ -30,6 +30,9 @@ class array {
         
         T& operator[](const unsigned int i){return vals[i];};
         const T& operator[](const unsigned int i) const {return vals[i];};
+        //~ template <class U> bool operator==(const array<U,N> a) const{
+            //~ for(uint i=0; i<N; i++) if(a[i] != get[i]) return false;
+            //~ return true;};
         T* begin(){return vals;};
         T* end(){return vals + N;};
         ~array(){};
@@ -60,6 +63,7 @@ class Nvector {
         Nvector operator+(const Nvector &rhs) const {return Nvector(*this) += rhs;}
         Nvector operator-(const Nvector &rhs) const {return Nvector(*this) -= rhs;}
         T& operator[](const unsigned int i){return vals[i];};
+        const T& operator[](const unsigned int i) const{return vals[i];};
         template <class U> Nvector operator*(const U rhs) const {return Nvector(*this) *= rhs;}
         template <class U> Nvector operator/(const U rhs) const {return Nvector(*this) /= rhs;}
         T* begin(){return vals;};
@@ -85,7 +89,7 @@ class Numvector : public Nvector<T, N> {
         inline T sq() const {return dot(*this);};
         inline T mag() const {return sqrt(sq());};
         inline T distance(const Numvector &rhs) const;
-        Numvector perp(const Numvector &other) const;
+        Numvector perpto(const Numvector &other) const;
         //returns the component of this perpendicular to other
         
         void normalize();
@@ -135,6 +139,45 @@ class Vector : public Numvector<T, 3> {
 };
 
 
+//~ typedef float C;
+template<class C>
+class Matrix : public Nvector<Vector<C>,3> {
+    public:
+        Vector<C> dot(Vector<C> v) const;
+        inline Vector<C> operator *(Vector<C> v) const{return dot(v);};
+        Matrix<C> SymmetricInverse() const;
+        C det() const;
+};
+
+template<class C>
+C Matrix<C>::det() const{
+    const Matrix<C> &M = *this;
+    return 2*M[0][1]*M[0][2]*M[1][2] + M[0][0]*M[1][1]*M[2][2]
+              - M[0][2]*M[0][2]*M[1][1] - M[0][0]*M[1][2]*M[1][2]
+               - M[0][1]*M[0][1]*M[2][2];
+};
+
+template<class C>
+Matrix<C> Matrix<C>::SymmetricInverse() const{
+    const Matrix<C> &M = *this;
+    C d = det();
+    Matrix<C> I;
+    I[0][0] = (M[1][1]*M[2][2]-M[1][2]*M[1][2]) / d;
+    I[0][1] = (M[0][2]*M[1][2]-M[0][1]*M[2][2]) / d;
+    I[1][0] = I[0][1];
+    I[0][2] = (M[0][1]*M[1][2]-M[0][2]*M[1][1]) / d;
+    I[2][0] = I[0][2];
+    I[1][1] = (M[0][0]*M[2][2]-M[0][2]*M[0][2]) / d;
+    I[1][2] = (M[0][1]*M[0][2]-M[0][0]*M[1][2]) / d;
+    I[2][1] = I[1][2];
+    I[2][2] = (M[0][0]*M[1][1]-M[0][1]*M[0][1]) / d;
+    return I;
+};
+
+template<class C>
+Vector<C> Matrix<C>::dot(Vector<C> vec) const{
+    return Vector<C>(this->get(0).dot(vec),this->get(1).dot(vec),this->get(2).dot(vec));
+}
 
 template <class T, unsigned int N>
 array<T, N>::array(const array<T, N> &rhs) {
@@ -238,9 +281,9 @@ T Numvector<T,N>::dot(const Numvector<T, N> &other) const{
 }
 
 template <class T, unsigned int N>
-Numvector<T,N> Numvector<T,N>::perp(const Numvector<T,N>& other) const {
+Numvector<T,N> Numvector<T,N>::perpto(const Numvector<T,N>& other) const {
     //~ Numvector<T,N> parallel = other * (this->dot(other)) / other.dot(other);
-    return (*this) - other * ((dot(other)) / other.dot(other));
+    return (*this) - other * ((dot(other)) / other.sq());
     //~ return other - parallel;
 }
 

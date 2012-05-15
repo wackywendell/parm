@@ -38,22 +38,49 @@ Vec atomgroup::angmomentum(const Vec &loc) const{
     Vec newloc;
     for(uint i=0; i<size(); i++){
         curmass = this->getmass(i);
-        newloc = (*this)[i].x - loc;
-        tot += newloc.cross((*this)[i].v) * curmass;
+        newloc = diff((*this)[i].x, loc);
+        tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
     return tot;
 };
 
-flt atomgroup::mominertia(const Vec &loc, const Vec &axis) const{
+flt atomgroup::moment(const Vec &loc, const Vec &axis) const{
+    if (axis.sq() == 0) return 0;
     flt curmass;
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
         curmass = this->getmass(i);
-        newloc = diff((*this)[i].x, loc).perp(axis);
+        newloc = diff((*this)[i].x, loc).perpto(axis);
         tot += newloc.dot(newloc) * curmass;
     }
     return tot;
+};
+
+Matrix<flt> atomgroup::moment(const Vec &loc) const{
+    flt curmass;
+    Matrix<flt> I;
+    Vec r;
+    for(uint i=0; i<size(); i++){
+        curmass = this->getmass(i);
+        r = diff((*this)[i].x, loc);
+        flt x = r.getx(), y = r.gety(), z = r.getz();
+        I[0][0] += curmass * (y*y + z*z);
+        I[1][1] += curmass * (x*x + z*z);
+        I[2][2] += curmass * (x*x + y*y);
+        I[0][1] -= curmass * (x*y);
+        I[0][2] -= curmass * (x*z);
+        I[1][2] -= curmass * (y*z);
+    }
+    I[1][0] = I[0][1];
+    I[2][0] = I[0][2];
+    I[2][1] = I[1][2];
+    return I;
+};
+
+Vec atomgroup::omega(const Vec &loc) const{
+    Matrix<flt> Inv = moment(loc).SymmetricInverse();
+    return Inv * (angmomentum(loc));
 };
 
 flt atomgroup::kinetic(const Vec &originvelocity) const{
@@ -74,10 +101,10 @@ void atomgroup::addv(Vec v){
     }
 };
 
-void atomgroup::addrot(Vec omega, Vec loc){
+void atomgroup::addOmega(Vec w, Vec loc){
     for(uint i=0; i<size(); i++){
-        Vec r = (*this)[i].x - loc;
-        (*this)[i].v += r.cross(omega);
+        Vec r = diff((*this)[i].x, loc);
+        (*this)[i].v -= r.cross(w);
     }
 };
 
@@ -100,6 +127,12 @@ void atomgroup::setAccel(){
     }
 };
 
+atomid atomvec::get_id(atom* a){
+    uint n = a - atoms;
+    if (n >= sz or a < atoms) return atomid();
+    return atomid(atoms + n, n);
+};
+
 //~ void atomgroup::vverlet2(const flt dt){
     //~ for(uint i=0; i<size(); i++){
         //~ (*this)[i].v += (*this)[i].a * (dt/2);
@@ -110,15 +143,11 @@ metagroup::metagroup(vector<atomgroup*> groups){
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup &g = **git;
-        for(uint i = 0; i < g.size(); i++){
-            atoms.push_back(& (g[i]));
-            masses.push_back(g.getmass(i));
-        }
+        for(uint i = 0; i < g.size(); i++) atoms.push_back(& (g[i]));
     }
 };
 
 atomid metagroup::get_id(atom* a){
-    uint n=0;
     for(uint n=0; n<atoms.size(); n++)
         if(atoms[n] == a) return atomid(a, n);
     return atomid();
@@ -230,9 +259,9 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     // Then -f = grad V = \frac{k}{r}(\theta-\theta_{0})\hat{\theta}
     // first we get the direction:
     Nvector<Vec, 3> force;
-    force[0] = r2.perp(r1);
+    force[0] = r2.perpto(r1);
     force[0].normalize();
-    force[2] = r1.perp(r2);
+    force[2] = r1.perpto(r2);
     force[2].normalize();
     
     // now we get magnitude: 
@@ -302,6 +331,11 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
              //~ << " dcostheta: " << dcostheta << '\n';
     
     derivs *= dcostheta;
+    //~ assert(derivs[0].sq() < 1e8);
+    //~ assert(derivs[1].sq() < 1e8);
+    //~ assert(derivs[2].sq() < 1e8);
+    //~ assert(derivs[3].sq() < 1e8);
+        
     
     //~ flt mag = sqrt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
                     //~ derivs[3].sq());
@@ -335,6 +369,12 @@ flt dihedral::getcos(const Vec &r1, const Vec &r2,
     // if one plane is ill-defined, then we have no torsion angle
 
     return -(n1.dot(n2) / n1mag / n2mag);
+};
+
+flt dihedral::getang(const Vec &r1, const Vec &r2, 
+                   const Vec &r3){
+    
+    return atan2(r1.dot(r2.cross(r3))*r2.mag(), (r1.cross(r2).dot(r2.cross(r3))));
 };
 
 flt dihedral::energy(const Vec &r1, const Vec &r2, 
@@ -587,6 +627,7 @@ void bondpairs::setForces(){
         atom & atom2 = *it->a2;
         Vec r = diff(atom1.x, atom2.x);
         Vec f = spring(it->k, it->x0).forces(r);
+        //~ assert(f.sq() < 10000000);
         atom1.f += f;
         atom2.f -= f;
     }
@@ -645,6 +686,9 @@ void angletriples::setForces(){
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
+        //~ assert(f[0].sq() < 1000000);
+        //~ assert(f[1].sq() < 1000000);
+        //~ assert(f[2].sq() < 1000000);
     }
 };
 
@@ -652,13 +696,24 @@ flt angletriples::mean_dists() const{
     flt dist=0;
     uint N=0;
     vector<anglegrouping>::const_iterator it;
+    //~ cout << "angle diffs: ";
+    cout.precision(3);
     for(it = triples.begin(); it < triples.end(); it++){
         Vec r1 = diff(it->a1->x, it->a2->x);
         Vec r2 = diff(it->a3->x, it->a2->x);
         flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        //~ flt curdist = abs(theta - it->x0);
         dist += abs(theta - it->x0);
+        //~ if(curdist > .2){
+            //~ flt E = bondangle(it->k, it->x0).energy(r1,r2);
+            //~ Vec f0 = bondangle(it->k, it->x0).forces(r1,r2)[0];
+            //~ cout << "(" << theta << "," << it->x0 << "," << abs(theta - it->x0)
+                 //~ << ";" << it->k << "," << E
+                 //~ << ",f:" << f0.mag() <<  ")" << ", ";
+         //~ }
         N++;
     }
+    //~ cout << "Total: " << N << '\n';
     return dist/N;
 };
 
@@ -712,6 +767,13 @@ void dihedrals::setForces(){
         atom2.f += f[1];
         atom3.f += f[2];
         atom4.f += f[3];
+        //~ flt maxf = 1000000;
+        //~ if(f[0].sq() > maxf or f[1].sq() > maxf or f[2].sq() > maxf 
+            //~ or f[3].sq() > maxf){
+                //~ cout << "dihedral overload: " << r1 << r2 << r3 << " :: " <<
+                //~ f[0] << f[1] << f[2] << f[3] << "\n";
+                //~ cout << "dihedral overload energy: " << dihedral(it->nums).energy(r1,r2,r3) << "\n";
+            //~ }
     }
 };
 
@@ -758,25 +820,28 @@ void pairlist::clear(){
     }
 };
 
+neighborlist::neighborlist(const flt innerradius, const flt outerradius) :
+                critdist(innerradius), skinradius(outerradius),
+                atoms(){};
+
 neighborlist::neighborlist(atomgroup &group, const flt innerradius,
             const flt outerradius, pairlist ignore) :
-                skinradius(outerradius), critdist(innerradius),
-                ignorepairs(ignore), ignorechanged(false){
-    atoms.resize(group.size());
+                critdist(innerradius), skinradius(outerradius),
+                atoms(), ignorepairs(ignore), ignorechanged(false){
     lastlocs.resize(group.size());
     for(uint i=0; i<group.size(); i++){
         atomid a = group.get_id(i);
         ignorepairs.ensure(a);
-        atoms[a.n()] = a;
-        lastlocs[a.n()] = a.x();
+        atoms.add(a.pointer());
+        lastlocs[i] = a.x();
     }
     update_list(true);
     updatenum = 1;
 };
 
 atomid neighborlist::get_id(atom* a){
-    for(vector<atomid>::iterator it=atoms.begin(); it!=atoms.end(); it++)
-        if ((*it) == a) return *it;
+    for(uint i=0; i < atoms.size(); i++)
+        if (atoms.get(i) == a) return atoms.get_id(i);
     return atomid();
 };
 
@@ -792,11 +857,10 @@ bool neighborlist::update_list(bool force){
     // biggestdist is the distance the furthest-moving atom has gone
     // bigdist is the next furthest
     
-    vector<atomid>::iterator atomit, atomj;
-    
     if(not force and not ignorechanged){ // check if we need to update
-        for(atomit=atoms.begin(); atomit!=atoms.end(); atomit++){
-            curdist = (atomit->x() - lastlocs[atomit->n()]).mag();
+        for(uint i=0; i < atoms.size(); i++){
+            atom &atm = atoms[i];
+            curdist = (atm.x - lastlocs[i]).mag();
             if(curdist > biggestdist){
                 bigdist = biggestdist;
                 biggestdist = curdist;
@@ -828,14 +892,17 @@ bool neighborlist::update_list(bool force){
     updatenum++;
     ignorechanged = false;
     curpairs.clear();
-    for(atomit=atoms.begin(); atomit!=atoms.end(); atomit++){
-        lastlocs[atomit->n()] = atomit->x();
-        for(atomj=atoms.begin(); atomj!=atomit; atomj++){
-            if (ignorepairs.has_pair(*atomit, *atomj)) continue;
-            if(diff(atomit->x(), atomj->x()).mag() < skinradius)
-                curpairs.push_back(idpair(*atomit, *atomj));
+    for(uint i=0; i<atoms.size(); i++){
+        atomid a1=atoms.get_id(i);
+        lastlocs[i] = a1.x();
+        for(uint j=0; j<i; j++){
+            atomid a2=atoms.get_id(j);
+            if (ignorepairs.has_pair(a1, a2)) continue;
+            if(diff(a1.x(), a2.x()).mag() < skinradius)
+                curpairs.push_back(idpair(a1, a2));
         }
     }
+    //~ cout << "neighborlist::update_list:: done.\n";
     // print stuff about the current update
     //~ set<atomid> curset = (ignorepairs.get_pairs(atoms.back()));
     //~ cout << "neighborlist | atoms: " << atoms.size() <<  "pairs: " << curpairs.size() << " ignored -1: "

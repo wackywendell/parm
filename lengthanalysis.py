@@ -74,7 +74,10 @@ for res, atomset in atom_names.items():
                     curset.add((b1,atom,b2))
     angles[res] = curset
 
-pairangles = (('C','N','CA'),('O','C','N'),('CA','C','N'))
+pairangles = (('C','N','CA'), # last this this
+              ('O','C','N'), # this this next
+              ('CA','C','N') # this this next
+              )
 lastangle = ('CA','C','OXT')
 
 def getangle(res, a1, a2, a3):

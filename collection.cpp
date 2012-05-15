@@ -36,6 +36,7 @@ flt collection::energy(){
     assert(not isnan(E));
     E += kinetic();
     assert(not isnan(E));
+    //~ cout << "collection::energy(): " << E  << "\n";
     return E;
 };
 
@@ -47,8 +48,10 @@ flt collection::temp(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
         totkinetic += group.kinetic(v);
+        //~ cout << "group K: " << group.kinetic(v) << ", totatoms: " << group.size() << "\n";
         totatoms += group.size();
     }
+    //~ cout << "K: " << totkinetic << ", totatoms: " << totatoms << "\n";
     return totkinetic * 2 / (3*totatoms-3);
 }
 
@@ -131,20 +134,33 @@ void collectionSol::setCs(){
         gauss.set(sigmar, sigmav, corr);
         return;
     }
+    // from Allen and Tildesley, 262
     flt dampdt = damping * dt;
     c0 = exp(-dampdt);
-    c1 = (1-c0)/dampdt;
+    c1 = (-expm1(-dampdt))/dampdt;
     c2 = (1-c1)/dampdt;
     
-    sigmar = sqrt((dt/damping) * (
-            2-(3-4*exp(-dampdt) + exp(-2*dampdt))/dampdt
+    // note that for sigmar, sigmav, and corr, we have taken the
+    // k_B*T/m out and put it in the timestep place
+    // note that these are unitless sigmas and correlations,
+    // so sigmar has a dt*sqrt(k T/m) removed, and sigmav has a sqrt(k T/m)
+    // removed
+    if(dampdt > 1e-4)
+        sigmar = sqrt((1/dampdt) * (
+            2-(-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
             ));
-    sigmav = sqrt(1-exp(-2*dampdt));
-    flt exdpdt = (1-exp(-dampdt));
-    corr = exdpdt*exdpdt/damping/sigmar/sigmav;
-    gauss.set(sigmar, sigmav, corr);
-    //~ cout << "vals: " << c0 << ',' << c1 << ',' << c2 << "; T=" <<desT 
+    else
+        sigmar = sqrt(2*dampdt/3 - dampdt*dampdt/2 + 7*dampdt*dampdt*dampdt/30);
+    //~ cout << "setCs: " << -4*expm1(-dampdt) << ',' << expm1(-2*dampdt)
+         //~ << ", (...): " << (-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
+         //~ << ", sigmar:" << sigmar << '\n';
+    sigmav = sqrt(-expm1(-2*dampdt));
+    flt exdpdt = (-expm1(-dampdt));
+    corr = exdpdt*exdpdt/dampdt/sigmar/sigmav;
+    //~ cout << "vals: " << c0 << ',' << c1 << ',' << c2 << "; T=" <<desT
+         //~ << ", sigmas: (" << sigmar << ',' << sigmav << ',' << corr << ')'
          //~ << ", dt=" << dt << ", damping=" << damping << "\n";
+    gauss.set(sigmar, sigmav, corr);
 }
 
 void collectionSol::timestep(){
@@ -162,11 +178,12 @@ void collectionSol::timestep(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
-            flt Tm = sqrt(desT/m.getmass(i));
-            VecPair vecpair = gauss.genVecs() * Tm;
+            flt v0 = sqrt(desT/m.getmass(i));
+            flt r0 = dt * v0;
+            VecPair vecpair = gauss.genVecs();
             // vecpair[0] is drG, and vecpair[1] is dvG
-            m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0];
-            m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1];
+            m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0]*r0;
+            m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1]*v0;
             //~ if(i==0 and git == groups.begin()) cout 
                 //~ << "drG: " << vecpair[0].mag() 
                 //~ << ", dvG: " << vecpair[1].mag()

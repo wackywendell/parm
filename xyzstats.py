@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-import sys, os.path, shelve, itertools, collections, math, cmath
+import sys, os.path, shelve, gdbm, itertools, collections, math, cmath
 import numpy as np
 from Bio.PDB import PDBParser
 
@@ -32,37 +32,69 @@ def _key_and_cut(key):
     def decorator(func):
         @wraps(func)
         def wrapper(self, *args, **kwargs):
-            vals = self._shelf_out(key) or self._shelf_in(key, func(self, *args, **kwargs))
+            vals = self._shelf_out(key)
+            if vals is None: vals = self._shelf_in(key, func(self, *args, **kwargs))
             return self._cut(vals)
         return wrapper
     return decorator
 
 class statkeeper:
-    def __init__(self, xyzfname, shelfname=None, pdbfname = pdbfile, 
-                    loadfname = loadfile, cut=0):
-        self.reader = XYZreader(open(xyzfname,'r')) if xyzfname else None
+    def __init__(self, xyzfname, shelfname='auto', pdbfname = pdbfile, 
+                    loadfname = loadfile, H=False, cut=0, ignoreblank=True, open=True):
+        if xyzfname is not None: xyzfname = unicode(xyzfname)
+        self.xyzfname = xyzfname
         self.fname = xyzfname if xyzfname else shelfname
+        if shelfname == 'auto':
+            base, sep, _ = xyzfname.rpartition('.')
+            self.shelfname = base + sep + 'stats'
+        elif shelfname is not None:
+            self.shelfname = unicode(shelfname)
         self.cut = cut
-        
         # build on demand
-        self._resfunc = lambda: simpdb.Resvec.from_pdb('aS', pdbfname, loadfname, numchains=1)
+        self._resfunc = lambda: simpdb.Resvec.from_pdb('aS', pdbfname, loadfname, H=H, numchains=1)
+        if open: self.open()
+        else:
+            self.reader = None
+            self.shelf = None
         
-        self.shelf = shelve.open(shelfname) if shelfname else None
+    def open(self):
+        self.reader = XYZreader(open(self.xyzfname,'r')) if self.xyzfname else None
+        
+        if self.shelfname:
+            try:
+                self.shelf = shelve.Shelf(gdbm.open(self.shelfname, 'c'))
+            except gdbm.error:
+                print('Could not open', self.shelfname, file=sys.stderr)
+                raise
+        else:
+            self.shelf = None
+            
             #~ mkey = '_md5'
-        if shelfname and self.reader: # check that they match
+        if self.shelfname and self.reader: # check that they match
             mkey = '_size'
-            if mkey in self.shelf and self.shelf[mkey] == self.reader.size(): #.md5():
+            rsize = self.reader.size()
+            #~ print("Size:", self.reader.size(), 'Ignoring:', 
+                        #~ self.reader.size() <= 1 and ignoreblank)
+            if rsize <= 1 and ignoreblank:
+                self.reader = None
+                return
+            
+            elif rsize <= 10000:
+                raise NotImplementedError('Fix me')
+            
+            elif mkey in self.shelf and self.shelf[mkey] == rsize: #.md5():
                 logging.info('shelf exists, size matches')
-                if ((cut and not 'cut' in self.shelf) or 
-                    ('cut' in self.shelf and cut != self.shelf['cut'])):
-                    badks = [k for k in self.shelf if 
-                            ('ISF' in k or 'autocorr' in k or k == 'cut')]
-                    # they use a different cut
-                    for k in badks:
-                        del self.shelf[k]
+                # So... ISF and autocorr depend on cut. Ugh.
+                #~ if ((cut and not 'cut' in self.shelf) or 
+                    #~ ('cut' in self.shelf and cut != self.shelf['cut'])):
+                    #~ badks = [k for k in self.shelf if 
+                            #~ ('ISF' in k or 'autocorr' in k or k == 'cut')]
+                    #~ # they use a different cut
+                    #~ for k in badks:
+                        #~ del self.shelf[k]
                     
             else:
-                if '_md5' not in self.shelf:
+                if '_md5' not in self.shelf and mkey not in self.shelf:
                     logging.info('New shelf')
                 else: logging.info('Size does not match')
                 self.shelf.clear()
@@ -73,20 +105,38 @@ class statkeeper:
         """Cuts the first portion off a list, based on self.cut."""
         if 0 < self.cut < 1:
             numcut = int(len(lst)* self.cut)
-            #~ print(numcut, 'frames cut')
+            #~ print(numcut,'/',len(lst), 'frames cut', lst[0], lst[numcut], lst[-1])
             return lst[numcut:]
         elif self.cut >= 1:
             numcut = len(lst)- len(self.times)
             #~ print(numcut, 'frames cut.')
             return lst[numcut:]
-        #~ else:
-            #~ print('cut ignored:', self.cut)
+        return lst
     
+    def sync(self):
+        if hasattr(self, 'shelf') and self.shelf: 
+            self.shelf.sync()
+
     def close(self):
-        if self.shelf: self.shelf.close()
-        if self.reader: self.reader.close()
+        if self.shelf is not None: 
+            self.shelf.close()
+            self.shelf = None
+        if self.reader is not None:
+            self.reader.close()
+            self.reader = None
+        for attr in ['_residues','_atoms','_times','_frames', '_vdicts','_collec']:
+            if hasattr(self, attr):
+                delattr(self, attr)
+    
+    def __del__(self):
+        if hasattr(self, 'shelf') and self.shelf: 
+            self.shelf.close()
+        if hasattr(self, 'reader') and self.reader:
+            self.reader.close()
     
     def __enter__(self):
+        if self.reader is None and self.shelf is None:
+            self.open()
         return self
     
     def __exit__(self, *args, **kwargs):
@@ -97,9 +147,12 @@ class statkeeper:
         if not hasattr(self, '_residues'):
             logging.info('building residues')
             self._residues = self._resfunc()
-            f0 = self.frames[0]
+            f0 = self.frames()[0]
             atomn = len(f0.locarray)
+            #reslens = list(np.cumsum([len(r) for r in self._residues]))
             reslens = list(np.cumsum([len(r) for r in self._residues]))
+            if atomn not in reslens:
+                raise ValueError('Could not find %d in reslens: %s' % (atomn, reslens))
             indx = reslens.index(atomn)+1
             if indx <= len(self._residues):
                 self._residues = self._residues[:indx]
@@ -116,33 +169,45 @@ class statkeeper:
             self._atoms = [a for r in self.residues for a in r]
         return self._atoms
     
+    def frames(self, usecut=True):
+        if hasattr(self, '_frames'):
+            return self._frames
+        logging.info('importing frames')
+        out = self._frames = self.reader.all()
+        if usecut and 0 < self.cut < 1:
+            numcut = int(len(self._frames)* self.cut)
+            out = Frames(self._frames[numcut:])
+            #~ print(numcut, 'frames cut')
+        elif usecut and self.cut >= 1:
+            oldlen = len(self._frames)
+            out = Frames([f for f in self._frames if f.time > self.cut])
+            #~ print(oldlen - len(self._frames), 'frames cut.')
+        #~ else:
+            #~ print('cut:', self.cut)
+        logging.info('frames imported')
+        return out
+    
     @property
-    def frames(self):
-        if not hasattr(self, '_frames'):
-            logging.info('importing frames')
-            self._frames = self.reader.all()
-            if 0 < self.cut < 1:
-                numcut = int(len(self._frames)* self.cut)
-                self._frames = Frames(self._frames[numcut:])
-                print(numcut, 'frames cut')
-            elif self.cut >= 1:
-                oldlen = len(self._frames)
-                self._frames = Frames([f for f in self._frames if f.time > self.cut])
-                print(oldlen - len(self._frames), 'frames cut.')
-            else:
-                print('cut:', self.cut)
-            logging.info('frames imported')
-        return self._frames
+    def vdicts(self):
+        key = '_vdicts'
+        if not hasattr(self, '_vdicts'):
+            logging.info('importing vdicts')
+            self._vdicts = (self._shelf_out(key) or
+                        self._shelf_in(key, self.reader.vdicts()))
+                
+            logging.info('vdicts imported')
+        return self._vdicts
     
     @property
     def times(self):
-        if not hasattr(self, '_times'):
-            self._times = self._shelf_out('times') or [f.time for f in self.frames]
+        if not hasattr(self, '_times') or self._times is None:
+            out = self._shelf_out('times')
+            self._times = np.array(out if out is not None else [int(d['time']) for d in self.vdicts])
             self._shelf_in('times', self._times)
         if self.cut < 1:
-            return self._cut(self._times)
+            return np.array(self._cut(self._times))
         else:
-            return [t for t in self._times if t > self.cut]
+            return np.array([t for t in self._times if t > self.cut])
     
     @property
     def collec(self):
@@ -168,12 +233,14 @@ class statkeeper:
         self.collec.addInteraction(self._dihedral)
     
     def _shelf_out(self, key):
-        if self.shelf is not None and key in self.shelf:
-            logging.debug('found %s', key)
-            return self.shelf[key]
-        else:
-            logging.info('key %s not found in shelf', key)
-            return None
+        o=object()
+        if self.shelf is not None:
+            val = self.shelf.get(key, o)
+            if val is not o:
+                logging.debug('found %s', key)
+                return self.shelf[key]
+        logging.info('key %s not found in shelf', key)
+        return None
     
     def _shelf_in(self, key, val):
         if self.shelf is not None:
@@ -183,27 +250,14 @@ class statkeeper:
             logging.debug('shelf does not exist %r' % self.shelf)
         return val
     
-    def Rg(self):
-        val = self._shelf_out('Rg')
-        if val: return val
-        Rgs = [calc_Rg(self.residues) for t in self.frames.into(self.atoms)]
-            
-            #~ locs = [r['CA'].x for r in self.residues]
-            #~ center = sum(locs, Vec(0,0,0)) / len(locs)
-            #~ locsqs = [(loc - center).sq() for loc in locs]
-            #~ Rgs.append(math.sqrt(average(locsqs)))
-        return self._shelf_in('Rg', Rgs)
-    
+    @_key_and_cut('endtoend')
     def endtoend(self):
-        val = self._shelf_out('endtoend')
-        if val: return val
         a1, a2 = self.residues[0]['CA'], self.residues[-1]['CA']
-        dists = [(a1.x - a2.x).mag() for t in self.frames.into(self.atoms)]
-        return self._shelf_in('endtoend', dists)
+        return [(a1.x - a2.x).mag() for t in self.frames(False).into(self.atoms)]
             
+    @_key_and_cut('gyradius')
     def gyradius(self):
-        return self._shelf_out('gyradius') or self._shelf_in('gyradius',
-            [self.collec.gyradius() for t in self.frames.into(self.atoms)])
+        return [self.collec.gyradius() for t in self.frames(False).into(self.atoms)]
             
     @staticmethod
     def getVal(key, frame, atoms, func, *args, **kw):
@@ -212,20 +266,109 @@ class statkeeper:
         frame.into(atoms)
         return func(*args, **kw)
     
-    @_key_and_cut('T')
-    def temp(self):
-        return [float(self.getVal('T', f, self.atoms, self.collec.temp))
-                        for f in self.frames]
-    
-    @_key_and_cut('E')
-    def energy(self):
-        return [float(self.getVal('E', f, self.atoms, self.collec.energy))
-                        for f in self.frames]
+    def getVals(self, vkey, func, conv=lambda x:x, *args, **kw):
+        o = object()
+        values = [d.get(vkey, o) for d in self.vdicts]
+        values = [(v if v is o else conv(v)) for v in values]
+        if o not in values:
+            #~ print('Found', vkey, '::', values[:20], '...')
+            return np.array(values)
+        
+        #~ print("getVals Couldn't always find", vkey)
+        def getsingle(v, f):
+            if v is not o:
+                return v
+            f.into(self.atoms)
+            return func(*args, **kw)
+        
+        return [getsingle(v,f) for v,f in zip(values, self.frames(False))]
     
     @_key_and_cut('Rg')
     def Rg(self):
-        return [float(self.getVal('Rg', f, self.atoms, calc_Rg, self.residues))
-                        for f in self.frames]
+        def getRg():
+            r = calc_Rg(self.residues)
+            #~ print('Rg:', r)
+        vals = self.getVals('Rg', getRg, float)
+        return np.array(vals, dtype=float)
+        
+        #~ return self.getVals('Rg', lambda: calc_Rg(self.residues), float)
+        #~ val = self._shelf_out('Rg')
+        #~ if val: return val
+        #~ return [calc_Rg(self.residues) for t in self.frames.into(self.atoms)]
+            
+            #~ locs = [r['CA'].x for r in self.residues]
+            #~ center = sum(locs, Vec(0,0,0)) / len(locs)
+            #~ locsqs = [(loc - center).sq() for loc in locs]
+            #~ Rgs.append(math.sqrt(average(locsqs)))
+        #~ return self._shelf_in('Rg', Rgs)
+    
+    @_key_and_cut('T')
+    def temp(self):
+        return self.getVals('T', lambda: self.collec.temp(), float)
+        #~ return [float(self.getVal('T', f, self.atoms, self.collec.temp))
+                        #~ for f in self.frames]
+    
+    @_key_and_cut('E')
+    def energy(self):
+        return self.getVals('E', lambda: self.collec.energy(), float)
+        #~ return [float(self.getVal('E', f, self.atoms, self.collec.energy))
+                        #~ for f in self.frames]
+    
+    def Rij(self, i, j):
+        key = 'Rij%d-%d' % (i,j)
+        func = lambda: self.getVals(key, lambda: sim.Rij(self.residues, i, j), float)
+        vals = self._shelf_out(key)
+        if vals is None: vals = self._shelf_in(key, func())
+        return self._cut(vals)
+    
+    def _calcdihedrals(self, ang):
+        restriplets = zip(self.residues, self.residues[1:], self.residues[2:])
+        return np.array([res.dihedral(ang, p, n) for p,res,n in restriplets])
+    
+    @_key_and_cut('allPhis')
+    def getPhis(self):
+        return np.array([self._calcdihedrals('phi') 
+                        for t in self.frames(False).into(self.atoms)])
+        
+    @_key_and_cut('allPsis')
+    def getPsis(self):
+        return np.array([self._calcdihedrals('psi')
+                        for t in self.frames(False).into(self.atoms)])
+        
+    @_key_and_cut('allOmegas')
+    def getOmegas(self):
+        return np.array([self._calcdihedrals('omega') 
+                        for t in self.frames(False).into(self.atoms)])
+        
+                
+        
+    def getDihedral(self, ang, resnum):
+        key = 'dihedral-%s-%d' % (ang,resnum)
+        def getfunc():
+            def calcfunc():
+                res1, res2, res3 = self.residues[resnum-1:resnum+2]
+                return res2.dihedral(ang, res1, res3)
+            return self.getVals(key, calcfunc, float)
+        vals = self._shelf_out(key) or self._shelf_in(key, getfunc())
+        return self._cut(vals)
+    
+    def getOmega(self, resnum):
+        return self.getDihedral('omega', resnum)
+    
+    def getPhi(self, resnum):
+        return self.getDihedral('phi', resnum)
+    
+    def getPsi(self, resnum):
+        return self.getDihedral('psi', resnum)
+    
+    def ETeff(self, i, j, R0):
+        Rijs = np.array(self.Rij(i, j), dtype=float)
+        return np.mean(1/(1 + (Rijs / R0)**6))
+        
+    #~ @_key_and_cut('Rg')
+    #~ def Rg(self):
+        #~ return [float(self.getVal('Rg', f, self.atoms, lambda: calc_Rg(self.residues)))
+                        #~ for f in self.frames]
     
     def ISF(self, scale, maxavg=200, ntimes=200):
         """Calculate the intermediate scattering function.
@@ -267,26 +410,46 @@ class statkeeper:
         #~ key = 'autocorr-Rg'
         #~ val = self._shelf_out(key)
         #~ if val: return val
-        #~ print('autocorr')
         
-        Rgs = self.Rg()
-        if not self.times:
+        Rgs = np.array(self.Rg(), dtype=float)
+        if self.times is None or len(self.times) == 0:
             return ([],[])
         t0 = self.times[0]
         dts = [t - t0 for t in self.times]
-        return (dts, autocorr(Rgs))
+        return (np.array(dts, dtype=float), np.array(autocorr(Rgs), dtype=float))
         #~ return self._shelf_in(key, (dts, autocorr(Rgs)))
     
-    def relax_acorr(self):
+    def relax_acorr(self, cutfirst = 1.0/math.e, cutlast=1.0):
         """Relaxation time, calculated using the autocorrelation function 
-        of the Rg timeseries."""
-        acorr = self.autocorr()
+        of the Rg timeseries.
+        
+        The relaxation time is calculated as the first time at which the
+        autocorrelation function is below cutfirst and stays below cutlast.
+        """
+        dts, vals = acorr = self.autocorr()
         #~ print('acorr:', acorr)
-        ts = [(t,v) for t,v in zip(*acorr) if v < 1.0/math.e]
-        if not ts:
+        try:
+            tabove = (max((t for t,v in zip(*acorr) if abs(v) > cutlast))
+                    if cutlast < max(abs(vals)) else dts[0])
+            t0 = min((t for t,v in zip(*acorr) if abs(v) < cutfirst and t >= tabove))
+        except ValueError:
+            # It never gets in the acceptable region
+            ts1 = [t for t,v in zip(*acorr) if v > cutlast]
+            #~ print(ts1[:3], ts1[-3:])
+            if ts1:
+                ts2 = [t for t,v in zip(*acorr) if v < cutfirst and t >= max(ts1)]
+                print(max(ts1), ts2[:3], ts2[-3:])
             return None
-        t0,v0 = min(ts)
         return t0
+    
+    def N_acorr(self, cutfirst = 1.0/math.e, cutlast=1.0):
+        key = 'N-%.4f-%.4f' % (cutfirst, cutlast)
+        val = self._shelf_out(key)
+        if val: return val
+        relax = self.relax_acorr(cutfirst, cutlast)
+        if relax is None:
+            return self._shelf_in(key, None)
+        return self._shelf_in(key, float(self.timespan()) / float(relax))
     
     def relax_ISF(self, scale=None, maxavg=200, ntimes=200):
         """Relaxation time, calculated using the intermediate scattering
@@ -476,14 +639,58 @@ class statkeeper:
         corrdict = dict([(dt,(v-mean*mean) / var) for (dt,v) in corrdict.items()])
         
         return self._shelf_in(key, corrdict)
-    
 
-import matplotlib.pyplot as plt
-def dplot(dct, func=plt.plot, *args, **kwargs):
-    ts, vs = zip(*sorted(dct.items()))
-    func(ts, vs, *args, **kwargs)
+
+
+def groupdicts(dlst, key):
+    bigdict = dict()
+    for d in dlst:
+        curval = d[key]
+        keylist = bigdict.get(curval, [])
+        keylist.append(d)
+        bigdict[curval] = keylist
+    return bigdict
+
+def filefinder(dir, *names, **args):
+    import re, fpath
+    from decimal import Decimal
+    from namespace import Namespace
+    cut = args.get('cut', 0)
+    
+    dir = fpath.Dir(dir)
+    xchildren = [(f, f[:-1] + (f[-1].rpartition('.')[0] + '.stats'))
+                    for f in dir.children() if f.extension == 'xyz']
+    schildren = [(f[:-1] + (f[-1].rpartition('.')[0] + '.xyz'), f)
+                    for f in dir.children() if f.extension == 'stats']
+    cpairs = list(set(xchildren + schildren))
+    
+    regexpr = '-'.join([n + '((?:[.0-9]*)|(?:inf))' for n in names]) + r'\.xyz'
+    regex = re.compile(regexpr)
+    matches = [(regex.match(xf[-1]), xf, sf) for xf, sf in cpairs]
+    for m, xf,sf in matches:
+        if m is None:
+            raise ValueError('%s could not match %s' % (regexpr, xf[-1]))
+        elif None in m.groups():
+            print('Groups:', m.groups())
+            raise ValueError('%s could not entirely match %s' % (regexpr, xf[-1]))
+    groups = sorted(      [zip(names, map(Decimal, mtch.groups()))    
+                        + [('xyz',fpath.File(xf)), ('stats',fpath.File(sf))] 
+                        for mtch, xf, sf in matches])
+    pdicts = [dict(lst) for lst in groups]
+    for p in pdicts:
+        if not p['xyz'].exists(): p['xyz'] = None
+        if not p['stats'].exists(): p['stats'] = None
+        p['sk'] = statkeeper(p['xyz'], p['stats'] or 'auto', cut=cut, open=False)
+        p.update(args)
+    return [Namespace(d) for d in pdicts]
+
+#~ import matplotlib.pyplot as plt
+#~ def dplot(dct, func=plt.plot, *args, **kwargs):
+    #~ ts, vs = zip(*sorted(dct.items()))
+    #~ func(ts, vs, *args, **kwargs)
     
 def showcorrs(fnames):
+    import matplotlib.pyplot as plt
     for xyzf, statf, T in fnames:
         print('opening', xyzf, 'shelf:', statf)
         sk = statkeeper(xyzf, statf)
@@ -501,6 +708,21 @@ def showcorrs(fnames):
     plt.show()
 
 if __name__ == '__main__':
+    import sys
+    for fname in sys.argv[1:]:
+        try:
+            with statkeeper(fname) as sk:
+                print(fname, end='')
+                sys.stdout.flush()
+                t0 = sk.times[-1]
+                print(', t =', t0/1e3)
+        except Exception as e:
+            print(e)
+    exit()
+    
+    
+    #OLD
+    
     #~ logging.getLogger().setLevel(logging.DEBUG)
     
     #~ nums = ('0.2','0.5','1','3','5','10','20')

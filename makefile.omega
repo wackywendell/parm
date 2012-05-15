@@ -3,8 +3,8 @@ CC=icpc
 SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
 
-BOOSTINC=/lustre/home/client/apps/fas/Libs/Boost/boost_1_47_0/include
-INC=-I$(BOOSTINC) `python-config --include`
+#~ BOOSTINC=/lustre/home/client/apps/fas/Libs/Boost/boost_1_47_0/include
+INC=`python-config --include`
 LIB=`python-config --ldflags`
 
 ALL=_sim.so

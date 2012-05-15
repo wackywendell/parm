@@ -16,12 +16,14 @@ pdbl = PDBList()
 
 broken = []
 
+count=0
 for i, n in enumerate(names):
     print(i, end=': ')
     try:
         pdbl.retrieve_pdb_file(n, pdir = str(mydir + 'allpdbs'))
+        count += 1
     except URLError:
         broken.append(n)
         print(n, 'BROKEN')
 
-print("Done!", len(broken), 'Broken:', *broken)
+print(count, "Done!", len(broken), 'Broken:', *broken)

@@ -42,8 +42,25 @@ class XYZwriter:
             'K':collec.kinetic(),
             'L':collec.angmomentum().mag(),
             'v':collec.comv().mag(),
-            'Rg':sim.calc_Rg(reslist)
+            'Rg':sim.calc_Rg(reslist),
             }
+        pairs = [(9,130),(33,130),(54,130),(72,130),(92,130),(33,72),
+                 (9,54),(72,92),(54,72), (9,72), (9,33), (54,92)]
+        for i,j in pairs:
+            if i >= len(reslist) or j >= len(reslist): continue
+            key = 'Rij%d-%d' % (i,j)
+            cdict[key] = sim.Rij(reslist, i, j)
+        if hasattr(collec, 'interactions'):
+            for name,interaction in collec.interactions.items():
+                cdict[name + 'E'] = interaction.energy()
+            for i in collec.interactions.values():
+                if isinstance(i, sim.bondpairs):
+                    cdict['bondmean'] = i.mean_dists()
+                    cdict['bondstd'] = i.std_dists()
+                if isinstance(i, sim.angletriples):
+                    cdict['anglemean'] = i.mean_dists()
+                    cdict['anglestd'] = i.std_dists()
+                
         if com is None: com = collec.com()
         self.writeframe(reslist, com, **cdict)
         return cdict
@@ -91,7 +108,7 @@ def md5_file(f, block_size = None):
 
 class XYZreader:
     firstline = re.compile("([0-9]*)")
-    commentline = re.compile("time[= ][0-9.]*|\w+=.?( \w+=.?)*")
+    commentline = re.compile("time[= ][0-9.]*|[\w-]+=.?( [\w-]+=.?)*")
     regline = re.compile("(\w{1,2})\s+([\-0-9.]+)\s+([\-0-9.]+)\s+([\-0-9.]+)")
     
     def __init__(self, f):
@@ -117,20 +134,22 @@ class XYZreader:
     def readframe(self):
         num, = self.__match__(self.firstline, int)
         comment = self.__match__(self.commentline)
-        commentdict = dict([pair.split('=') for pair in comment.split(' ')])
+        if '=' in comment:
+            commentdict = dict([pair.split('=') for pair in comment.split(' ')])
+        else:
+            key,time = comment.split(' ')
+            commentdict = {key:time}
 
         lines = [self.file.readline().strip().split(' ') for i in range(num)]
         badlines = [l for l in lines if len(l) != 4 and len(l) != 7]
         if len(badlines) > 0:
-            raise ValueError, "bad line: %s" % str(badlines[0])
+            raise ValueError, "bad coordinate line: %s" % str(badlines[0])
         
         try:
             lines = [(e,(float(x),float(y),float(z))) for e,x,y,z in lines]
-            return Frame(lines, t)
         except ValueError:
-            pass
-        
-        lines = [(e,(float(x),float(y),float(z)),(float(vx),float(vy),float(vz))) 
+            lines = [(e,(float(x),float(y),float(z)),
+                            (float(vx),float(vy),float(vz))) 
                     for e,x,y,z,vx,vy,vz in lines]
         if 'time' not in commentdict:
             raise AssertionError, 'Comment %s does not include time' % str(commentdict)
@@ -146,13 +165,35 @@ class XYZreader:
             yield self.readframe()
         self.file.seek(location)
     
+    def _convert_time_line(self, line):
+        if '=' not in line:
+            key,time = line.split(' ')
+            return {key:time}
+        try:
+            return dict([pair.split('=') for pair in line.split(' ')])
+        except:
+            print('Line:', line, [pair.split('=') for pair in line.split(' ')])
+            raise
+    
+    def vdicts(self):
+        #~ print('Getting vdicts...')
+        location = self.file.tell()
+        self.file.seek(0)
+        vlines = [l for l in self.file if 'time' in l]
+        vdicts = [self._convert_time_line(l) for l in vlines]
+        self.file.seek(location)
+        #~ print('Got vdicts.')
+        return vdicts
+    
     def close(self):
         self.file.close()
     
     def all(self):
+        #~ print('Getting frames...')
         frames = Frames(iter(self))
         for n,f in enumerate(frames):
             f.indx = n
+        #~ print('Got frames.')
         return frames
     
     def md5(self):
@@ -205,15 +246,15 @@ class Frame:
         if self.vels is not None:
             for a, elem, loc, vel in izip(atoms, self.elems, self.locs, self.vels):
                 if check and a.element != elem:
-                    raise TypeError, ("Element mismatch for atom %d (%s) and line %s" 
-                                        % (num, atom.element, repr(line)))
+                    raise TypeError, ("Element mismatch for atom %s at %s" 
+                                        % (a.name, loc))
                 self._setx(a, loc)
                 self._setv(a, vel)
         else:
             for a, elem, loc in izip(atoms, self.elems, self.locs):
                 if check and a.element != elem:
-                    raise TypeError, ("Element mismatch for atom %d (%s) and line %s" 
-                                        % (num, atom.element, repr(line)))
+                    raise TypeError, ("Element mismatch for atom %s at %s" 
+                                        % (a.name, loc))
                 self._setx(a, loc)
     
     @property

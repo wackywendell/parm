@@ -5,6 +5,8 @@ from sim import *
 import math
 import numpy as np
 
+Matrix = Matr
+
 def geometric(tot, n):
     """Returns n integers less than (with last equal to) tot, such that
     it is as close to a geometric series as possible."""
@@ -27,6 +29,7 @@ def average_squared(lst):
     return np.sqrt(np.mean(l*l))
 
 def avg(lst):
+    if len(lst) == 1: return lst[0]
     return(sum(lst[1:], lst[0]) / float(len(lst)))
 
 for name in list(locals().keys()):
@@ -36,7 +39,7 @@ for name in list(locals().keys()):
 def calc_Rg(residues):
     locs = [r['CA'].x for r in residues]
     center = avg(locs)
-    locsqs = [(loc).sq() for loc in locs]
+    locsqs = [(loc-center).sq() for loc in locs]
     return math.sqrt(average(locsqs))
 
 def samp_std(lst):
@@ -44,6 +47,8 @@ def samp_std(lst):
 
 def autocorr(lst):
     lst = np.array(lst, dtype=float)
+    if len(lst) == 0: return []
+    elif len(lst) == 1: return [1]
     mu = np.mean(lst)
     var = np.var(lst)
     N = len(lst)
@@ -75,6 +80,9 @@ def running_avg(lst):
 
 def rand_walk(n, *dims):
     return np.cumsum(np.random.rand(n, *dims)-.5, 0)
+
+def Rij(reslist, i, j):
+    return Vec(reslist[i]['CA'].x-reslist[j]['CA'].x).mag()
 
 class Stat:
     def __init__(self, name, func, shortname=None):
