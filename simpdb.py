@@ -1,3 +1,4 @@
+# encoding: UTF8
 from __future__ import print_function
 from Bio.PDB import PDBParser, Vector
 from Bio.PDB.Residue import Residue as _Residue
@@ -49,12 +50,22 @@ backbonds = [('N','CA'), ('CA','C'),('C','O')]
 pairbonds = [('C','N')]
 
 #first is ph 2.0, second is ph 7.0
-hydroindex={'CYS': (52, 49), 'ILE': (100, 100), 'GLN': (-18, -10), 
+hydroindex={'CYS': (52, 49), 'ILE': (100, 99), 'GLN': (-18, -10), 
 'VAL': (79, 76), 'LYS': (-37, -23), 'GLY': (0, 0), 'PRO': (-46, -46),
 'ASP': (-18, -55), 'THR': (13, 13), 'PHE': (92, 100), 'ALA': (47, 41),
 'MET': (74, 74), 'HIS': (-42, 8), 'GLU': (8, -31), 'LEU': (100, 97),
 'ARG': (-26, -14), 'TRP': (84, 97), 'ASN': (-41, -28), 'TYR': (49,63),
-'SER': (-7, 5)}
+'SER': (-7, -5)}
+# see Carl's email; I don't know where these came from.
+# Looks like the image from 
+# http://www.sigmaaldrich.com/life-science/metabolomics/learning-center/amino-acid-reference-chart.html
+
+# For Ph 2:
+# Sereda, Terrance J., Colin T. Mant, Frank D. Sönnichsen, and Robert S. Hodges. “Reversed-phase Chromatography of Synthetic Amphipathic Α-helical Peptides as a Model for Ligand/receptor Interactions Effect of Changing Hydrophobic Environment on the Relative Hydrophilicity/hydrophobicity of Amino Acid Side-chains.” Journal of Chromatography A 676, no. 1 (July 29, 1994): 139–153.
+# For Ph 7:
+# Monera, Oscar D., Terrance J. Sereda, Nian E. Zhou, Cyril M. Kay, and Robert S. Hodges. “Relationship of Sidechain Hydrophobicity and Α-helical Propensity on the Stability of the Single-stranded Amphipathic Α-helix.” Journal of Peptide Science 1, no. 5 (1995): 319–329.
+
+
 
 def get_all_angles(bonds):
     bonds = set(bonds + [('N','CA'), ('CA','C')])
@@ -524,9 +535,9 @@ class Resvec(atomvec):
         assert len(atoms) == 4
         locs = [a.x for a in atoms]
         r1,r2,r3 = [x2-x1 for x1,x2 in zip(locs[:-1], locs[1:])]
-        assert r1.mag() < 2.5
-        assert r2.mag() < 2.5
-        assert r3.mag() < 2.5
+        assert r1.mag() < 3, "r1 mag was %.3f for ang %s residues %s,%s,%s" % (r1.mag(), ang, prev.resname, self.resname, nxt.resname)
+        assert r2.mag() < 3, "r2 mag was %.3f for ang %s residues %s,%s,%s" % (r2.mag(), ang, prev.resname, self.resname, nxt.resname)
+        assert r3.mag() < 3, "r3 mag was %.3f for ang %s residues %s,%s,%s" % (r3.mag(), ang, prev.resname, self.resname, nxt.resname)
         return sgn * dihedral.getang(r1,r2,r3)
         #cos = dihedral.getcos(r1,r2,r3)
         #return math.acos(cos)
@@ -834,7 +845,7 @@ def make_charges(resvecs, screen, ph=7.4, k=1, expectOXT=True, subtract=True):
     
     return charges
 
-def make_hydrophobicity(resvecs, epsilons, LJcutoff=2.5, neighborcutoff=1.4, sigma=5.38):
+def make_hydrophobicity_old(resvecs, epsilons, LJcutoff=2.5, neighborcutoff=1.4, sigma=5.38):
     """LJcutoff in sigma units, neighborcutoff relative to LJcutoff.
     Makes a CA hydrophobicity attractive force.
     
@@ -855,6 +866,43 @@ def make_hydrophobicity(resvecs, epsilons, LJcutoff=2.5, neighborcutoff=1.4, sig
         return HydroAtom(epsvec, index, sigma, res.get_id(atom), LJcutoff)
     
     atoms = [makeatom(r) for r in resvecs]
+    for atom in atoms:
+        Hphob.add(atom)
+    for a1, a2 in zip(atoms, atoms[1:]):
+        neighbors.ignore(a1,a2)
+    
+    return Hphob, neighbors
+
+def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4, sigma=5.38):
+    """LJcutoff in sigma units, neighborcutoff relative to LJcutoff.
+    Makes a CA hydrophobicity attractive force.
+    
+    returns (interaction, neighbors)"""
+    
+    # 2 because LJ-sigma is the sum of two radii, (2**(1.0/6.0)) for the shape
+    
+    innerradius = sigma*LJcutoff
+    outerradius = innerradius * neighborcutoff
+    neighbors = neighborlist(innerradius, outerradius)
+    Hphob = Hydrophobicity(neighbors)
+    
+    Hlist = sorted([r for r,v in hydroindex.items()])
+    Hydropathy = [hydroindex[r][1] / 200. + .5 for r in Hlist]
+    #~ print("Hlist:", *Hlist)
+    assert all(0 <= H <= 1 for H in Hydropathy)
+    
+    def makeatom(res):
+        atom = res['CA']
+        #~ if res.resname not in Hlist: return None
+        idx = Hlist.index(res.resname)
+        myH = Hydropathy[idx]
+        epsvec = [epsilon*math.sqrt(H*myH) for H in Hydropathy]
+        #~ print(res.resname, ' '.join([str(int(H/epsilon*100)) for H in epsvec]))
+        return HydroAtom(epsvec, idx, sigma, res.get_id(atom), LJcutoff)
+    
+    atoms = [makeatom(r) for r in resvecs]
+    atoms = [a for a in atoms if a is not None]
+    
     for atom in atoms:
         Hphob.add(atom)
     for a1, a2 in zip(atoms, atoms[1:]):

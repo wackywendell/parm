@@ -7,7 +7,7 @@ from math import sqrt
 import simpdb
 from xyzfile import XYZwriter, XYZreader
 from Bio.PDB import PDBParser
-import sys
+import sys, os, os.path
 import numpy as np
 from os.path import expanduser
 from optparse import OptionParser
@@ -32,8 +32,7 @@ parser.add_option('-K', '--chargek', dest='chargek', type=float,
             default=1.0)
 parser.add_option('-k', '--keepcharged', dest='subtract', 
                                 action='store_false', default=True)
-parser.add_option('-p', '--hydrophobicity', dest='hphob', action='store_true')
-parser.add_option('-P', '--hydrophobk', dest='hphobk', type=float,default=1.0)
+parser.add_option('-P', '--hydrophobk', dest='hphobk', type=float,default=2.5)
 parser.add_option('--seed', dest='seed', action='store_false',
             default=True)
 parser.add_option('--startdt', type=float, default=1e-8)
@@ -50,7 +49,6 @@ opts,args = parser.parse_args()
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showsteps if opts.showsteps else 1000*opts.showsize
 showsteps = int(showtime / opts.dt + .5)
-print('outputting every %d steps (%d time units).' % (showsteps, showtime))
 bondspring = 5000
 anglespring = 20000
 chargescreen = 9
@@ -62,7 +60,7 @@ chargek = 7.1288713 * opts.chargek
 #this also gives 64.07 fs as the base time unit
 # sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom
 
-LJe = .516 * opts.hphobk if opts.hphob else 0 
+LJe = .516 * opts.hphobk if opts.hphobk > 0 else 0
 # .516 comes from Ashbaugh: 0.300kcal/mol / (avogadro⋅boltzmann⋅293K)
 
 if opts.LJESratio is not None:
@@ -77,8 +75,11 @@ if opts.LJESratio is not None:
         LJe = .516 * sqratio
         chargek = 7.1288713 / sqratio
 LJepsilon = 1
-Hphobs = [[0,LJe],[LJe,2.5*LJe]]
+#Hphobs = [[0,LJe],[LJe,2.5*LJe]]
+
 Hphobsigma = 5.2 # monomer distance from random walk (44 A) to CGMD (8.5) comparison
+
+#~ Hphobsigma *= 10  #TODO: Get rid of this!
 
 # experiments run at 293K
 # sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom -> time units
@@ -89,10 +90,12 @@ loadfile= mydir + 'blengths/stats-H.pkl'
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),
                             N=opts.numres)
+
+print('outputting every %d steps (%d time units) to %s.' % (showsteps, showtime, moviefile))
+
 if opts.cont:
     moviefile = opts.startfile
     
-startxyz = XYZreader(open(opts.startfile,'r')) if opts.startfile else None
 #~ showsteps = int(float(steps) / opts.showsteps+.5)
 
 #~ print('steps:', steps, opts.showsteps, showsteps, showsteps*opts.dt)
@@ -103,12 +106,30 @@ numres = opts.numres if opts.numres > 0 else None
 avecs = simpdb.Resvec.from_pdb('aS', pdbfile, loadfile, H=opts.hydrogen, 
                         numchains=1, numres=numres)
 
+# Import startfile
+if not opts.startfile:
+    startxyz = None
+else:
+    lastframe = None
+    try:
+        startxyz = XYZreader(open(opts.startfile,'r'))
+        while True: lastframe = startxyz.readframe()
+    except StopIteration:
+        pass
+    except IOError as e:
+        if e.errno == 2 and opts.cont:
+            print("File does not exist, continuing anyway.")
+            startxyz = None
+            opts.cont = False
+        else: raise
+    if lastframe is None:
+        print("Startfile was empty; using PDB locations.")
+        opts.cont = False
+        startxyz = None
 
+#### Read startfile into atoms
 if startxyz is not None:
     print("Importing xyz file", opts.startfile)
-    try:
-        while True: lastframe = startxyz.readframe()
-    except StopIteration: pass
     lastframe.into([a for res in avecs for a in res])
     startedat = lastframe.time
     print("Last time is", startedat)
@@ -142,7 +163,8 @@ dihedrals = (simpdb.make_dihedrals(avecs, anglespring)
 charges = simpdb.make_charges(avecs, chargescreen, k=chargek, 
                     subtract=opts.subtract) if chargek > 0 else None
 hphob, HPneighbors = (
-    simpdb.make_hydrophobicity(avecs, Hphobs, sigma=Hphobsigma) 
+    simpdb.make_hydrophobicity(avecs, LJe, #Hphobs, #instead of LJe
+                                            sigma=Hphobsigma) 
     if LJe > 0
     else (None,None))
 interactions = dict(bond=bonds, angle=angles, LJ=LJ, electric=charges, 
@@ -155,7 +177,7 @@ print("interactions:", ", ".join(interactions.keys()))
 #~ if opts.chargek: print('Charged', opts.chargek)
 #~ else: print('No charges.')
 
-trackers = tvector([neighbors, HPneighbors]) if opts.hphob else tvector([neighbors]) 
+trackers = tvector([neighbors, HPneighbors]) if HPneighbors is not None else tvector([neighbors]) 
 
 if len(avecs) < 20:
     print(", ".join([r.resname for r in avecs]))
@@ -199,22 +221,22 @@ if opts.rampsteps > 0:
     collec.resetcomv()
     oldL = collec.angmomentum().mag()
     collec.resetL()
-    print('comv:', oldcomv, '->', collec.comv().mag(),
-            'L:', oldL, '->', collec.angmomentum().mag())
+    print('comv: %.3g -> %.3g   L: %.3g -> %.3g' % (oldcomv, collec.comv().mag(),
+            oldL, collec.angmomentum().mag()))
     print("Damping for", opts.rampsteps, "steps")
     collec.changeT(opts.dt, opts.rampdamp, opts.temp)
     for i in range(opts.rampsteps):
         collec.timestep()
-        if i % (opts.rampsteps / 30) == 0:
+        if i % (opts.rampsteps / 5) == 0:
             print("E:", collec.energy())
     collec.changeT(opts.dt, opts.damping, opts.temp)
     oldcomv = collec.comv().mag()
     collec.resetcomv()
     oldL = collec.angmomentum().mag()
     collec.resetL()
-    print('comv:', oldcomv, '->', collec.comv().mag(),
-            'L:', oldL, '->', collec.angmomentum().mag())
-
+    print('comv: %.3g -> %.3g   L: %.3g -> %.3g' % (oldcomv, collec.comv().mag(),
+            oldL, collec.angmomentum().mag()))
+    
 mode = 'a' if opts.cont else 'w'
 xyz = XYZwriter(open(moviefile, mode))
 if not opts.cont: xyz.writefull(0, avecs, collec)

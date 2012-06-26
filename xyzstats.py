@@ -9,6 +9,7 @@ from simw import Vec, autocorr, calc_Rg, geometric, average, average_squared
 import simw as sim
 from xyzfile import XYZreader, Frame, Frames
 from functools import wraps
+from math import acos
 #~ import numpy as np
 
 import logging
@@ -321,23 +322,26 @@ class statkeeper:
         if vals is None: vals = self._shelf_in(key, func())
         return self._cut(vals)
     
-    def _calcdihedrals(self, ang):
+    def _calcdihedrals(self, ang, t=None):
         restriplets = zip(self.residues, self.residues[1:], self.residues[2:])
-        return np.array([res.dihedral(ang, p, n) for p,res,n in restriplets])
+        try:
+            return np.array([res.dihedral(ang, p, n) for p,res,n in restriplets])
+        except AssertionError as e:
+            raise ValueError("Error at time %d: %s" % ((t if t is not None else 0), e.message))
     
     @_key_and_cut('allPhis')
     def getPhis(self):
-        return np.array([self._calcdihedrals('phi') 
+        return np.array([self._calcdihedrals('phi', t) 
                         for t in self.frames(False).into(self.atoms)])
         
     @_key_and_cut('allPsis')
     def getPsis(self):
-        return np.array([self._calcdihedrals('psi')
+        return np.array([self._calcdihedrals('psi', t)
                         for t in self.frames(False).into(self.atoms)])
         
     @_key_and_cut('allOmegas')
     def getOmegas(self):
-        return np.array([self._calcdihedrals('omega') 
+        return np.array([self._calcdihedrals('omega', t) 
                         for t in self.frames(False).into(self.atoms)])
         
                 
@@ -521,6 +525,39 @@ class statkeeper:
         """Return bond distance std. dev. averaged over all atoms and frames"""
         return average_squared(self.angle_stds())
     
+    @_key_and_cut('CAlengths')
+    def CAlengths(self):
+        return np.array([[ Vec(r1['CA'].x - r2['CA'].x).mag()
+                for r1,r2 in zip(self.residues[:-1],self.residues[1:])]
+                for t in self.frames(usecut=False).into(self.atoms)]
+            , dtype=float)
+    
+    @_key_and_cut('CAangles')
+    def CAangles(self):
+        res = self.residues
+        resgroups = zip(res[:-2],res[1:-1],res[2:])
+        CAgroups = [(r1['CA'],r2['CA'],r3['CA']) for r1,r2,r3 in resgroups]
+        def getAngle(a1,a2):
+            return acos(a1.dot(a2) / (a1.mag() * a2.mag()))
+            
+        return np.array([[getAngle(a1.x-a2.x,a3.x-a2.x)
+                for a1,a2,a3 in CAgroups]
+                for t in self.frames(usecut=False).into(self.atoms)]
+            , dtype=float)
+    
+    @_key_and_cut('CAdihedrals')
+    def CAdihedrals(self):
+        res = self.residues
+        resgroups = zip(res[:-3],res[1:-2],res[2:-1],res[3:])
+        CAgroups = [(r1['CA'],r2['CA'],r3['CA'],r4['CA']) for r1,r2,r3,r4 in resgroups]
+        def curDihedrals():
+            return [sim.dihedral.getang(a2.x-a1.x,a3.x-a2.x,a4.x-a3.x) 
+                        for a1,a2,a3,a4 in CAgroups]
+            
+        return np.array([curDihedrals()
+                for t in self.frames(usecut=False).into(self.atoms)]
+            , dtype=float)
+        
     @classmethod
     def runfiles(cls, fnames, func, *args, **kwargs):
         for fname in fnames:
@@ -640,8 +677,6 @@ class statkeeper:
         
         return self._shelf_in(key, corrdict)
 
-
-
 def groupdicts(dlst, key):
     bigdict = dict()
     for d in dlst:
@@ -651,11 +686,24 @@ def groupdicts(dlst, key):
         bigdict[curval] = keylist
     return bigdict
 
-def filefinder(dir, *names, **args):
+def filefinder(dir,  *names, **args):
+    """
+    extra kw:
+    cut
+    regexp
+    matchall=False
+    H=True
+    
+    """
     import re, fpath
     from decimal import Decimal
     from namespace import Namespace
     cut = args.get('cut', 0)
+    matchall = args.get('matchall',True)
+    if 'matchall' in args: del args['matchall']
+    H = args.get('H',False)
+    if 'H' in args: del args['H']
+    
     
     dir = fpath.Dir(dir)
     xchildren = [(f, f[:-1] + (f[-1].rpartition('.')[0] + '.stats'))
@@ -664,23 +712,30 @@ def filefinder(dir, *names, **args):
                     for f in dir.children() if f.extension == 'stats']
     cpairs = list(set(xchildren + schildren))
     
-    regexpr = '-'.join([n + '((?:[.0-9]*)|(?:inf))' for n in names]) + r'\.xyz'
+    regexpr = (args['regexp'] if 'regexp' in args else
+    '-'.join([n + '((?:[.0-9]*)|(?:inf))' for n in names]) + r'\.xyz')
     regex = re.compile(regexpr)
     matches = [(regex.match(xf[-1]), xf, sf) for xf, sf in cpairs]
-    for m, xf,sf in matches:
+    for m, xf,sf in list(matches):
         if m is None:
+            if not matchall:
+                matches.remove((m, xf,sf))
+                continue
             raise ValueError('%s could not match %s' % (regexpr, xf[-1]))
         elif None in m.groups():
             print('Groups:', m.groups())
             raise ValueError('%s could not entirely match %s' % (regexpr, xf[-1]))
-    groups = sorted(      [zip(names, map(Decimal, mtch.groups()))    
+            
+    
+    groups = sorted(      [zip(names, map(Decimal, [m or 'nan' for m in mtch.groups()]))    
                         + [('xyz',fpath.File(xf)), ('stats',fpath.File(sf))] 
                         for mtch, xf, sf in matches])
     pdicts = [dict(lst) for lst in groups]
     for p in pdicts:
         if not p['xyz'].exists(): p['xyz'] = None
         if not p['stats'].exists(): p['stats'] = None
-        p['sk'] = statkeeper(p['xyz'], p['stats'] or 'auto', cut=cut, open=False)
+        p['sk'] = statkeeper(p['xyz'], p['stats'] or 'auto', 
+                    cut=cut, open=False, H=H)
         p.update(args)
     return [Namespace(d) for d in pdicts]
 

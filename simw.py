@@ -59,7 +59,7 @@ def autocorr(lst):
         #~ l1, l2 = l1 - l1.mean(), l2 - l2.mean()
         #~ return l1 * l2 / float(samp_std(l1) * samp_std(l2))
     lsts = [nthpair(n) for n in range(len(lst))]
-    return [np.mean(l) for l in lsts]
+    return np.array([np.mean(l) for l in lsts], dtype=float)
 
 def ISF(arrlst, scale, maxavg=None, ntimes=None):
     newarrs = [np.exp(a*(2j*math.pi/scale)) for a in arrlst]

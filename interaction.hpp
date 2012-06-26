@@ -829,9 +829,19 @@ struct HydroAtom : public atomid {
     flt sigcut; // sigma units
     HydroAtom(vector<flt> epsilons, uint indx, flt sigma, atomid a, flt cut) : 
             atomid(a), epsilons(epsilons), indx(indx), sigma(sigma),
-             sigcut(cut){};
+             sigcut(cut){
+            //~ cout << "Made atom; eps: " << epsilons[0] << ",  " << epsilons[1]
+                 //~ << " sig: " << sigma
+                 //~ << " sigcut: " << sigcut
+                 //~ << endl;
+                 };
     HydroAtom(atomid a, HydroAtom other) : atomid(a), epsilons(other.epsilons),
-        indx(other.indx), sigma(other.sigma), sigcut(other.sigcut){};
+        indx(other.indx), sigma(other.sigma), sigcut(other.sigcut){
+            //~ cout << "Made atom from other; eps: " << epsilons[0] << ",  " << epsilons[1]
+                 //~ << " sig: " << sigma
+                 //~ << " sigcut: " << sigcut
+                 //~ << endl;
+                 };
     flt getEpsilon(HydroAtom &other){
         assert(other.indx < epsilons.size());
         flt myeps = epsilons[other.indx];
@@ -848,7 +858,12 @@ struct HydroPair {
         inter(a1.getEpsilon(a2),
               (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
-        atom1(a1), atom2(a2){};
+        atom1(a1), atom2(a2){
+            //~ cout << "Made pair; eps: " << a1.getEpsilon(a2)
+                 //~ << " sig: " << (a1.sigma + a2.sigma) / 2
+                 //~ << " sigcut: " << max(a1.sigcut, a2.sigcut)
+                 //~ << endl;
+            };
     inline flt energy(){return inter.energy(atom1.x() - atom2.x());};
     inline Vec forces(){return inter.forces(atom1.x() - atom2.x());};
 };
@@ -906,9 +921,9 @@ void NListed<A, P>::update_pairs(){
     pairs.clear();
     vector<idpair>::iterator pairit;
     for(pairit = neighbors->begin(); pairit != neighbors->end(); pairit++){
-        A LJ1 = atoms[pairit->first().n()];
-        A LJ2 = atoms[pairit->last().n()];
-        pairs.push_back(P(LJ1, LJ2));
+        A firstatom = atoms[pairit->first().n()];
+        A secondatom = atoms[pairit->last().n()];
+        pairs.push_back(P(firstatom, secondatom));
     }
 }
 

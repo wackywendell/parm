@@ -165,6 +165,10 @@ class XYZreader:
             yield self.readframe()
         self.file.seek(location)
     
+    def into(self, atoms, check=True):
+        for f in self:
+            yield f.into(atoms, check)
+    
     def _convert_time_line(self, line):
         if '=' not in line:
             key,time = line.split(' ')
@@ -246,15 +250,15 @@ class Frame:
         if self.vels is not None:
             for a, elem, loc, vel in izip(atoms, self.elems, self.locs, self.vels):
                 if check and a.element != elem:
-                    raise TypeError, ("Element mismatch for atom %s at %s" 
-                                        % (a.name, loc))
+                    raise TypeError, ("Element mismatch for atom %s at %s: %s is not %s" 
+                                        % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
                 self._setv(a, vel)
         else:
             for a, elem, loc in izip(atoms, self.elems, self.locs):
                 if check and a.element != elem:
-                    raise TypeError, ("Element mismatch for atom %s at %s" 
-                                        % (a.name, loc))
+                    raise TypeError, ("Element mismatch for atom %s at %s: %s is not %s" 
+                                        % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
     
     @property

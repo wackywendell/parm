@@ -879,8 +879,9 @@ bool neighborlist::update_list(bool force){
         }
         // if we haven't found anything, then we're done; no need to update.
         if(not force){
-            //~ cout << "Not updating:" << bigdist + biggestdist << '-' 
-            //~ << skinradius - critdist << '\n';
+            //~ if(skinradius - critdist > 5)
+                //~ cout << "Not updating:" << bigdist + biggestdist << '-' 
+                //~ << skinradius - critdist << '\n';
             return false;
         }
         
