@@ -47,8 +47,6 @@ parser.add_option('--hmix', type=float, default=0)
 parser.add_option('-3', '--ph3', dest='ph3', action='store_true', default=False)
 
 
-parser.add_option('--LJES', dest='LJESratio', type=float, default=None)
-
 opts,args = parser.parse_args()
 
 steps = int(opts.time * 1000 / opts.dt + .5)
@@ -68,19 +66,7 @@ chargek = 7.1288713 * opts.chargek
 LJe = .516 * opts.hphobk if opts.hphobk > 0 else 0
 # .516 comes from Ashbaugh: 0.300kcal/mol / (avogadro⋅boltzmann⋅293K)
 
-if opts.LJESratio is not None:
-    if opts.LJESratio == float('inf'):
-        LJe = .516  # for attractive 
-        chargek = 0
-    elif opts.LJESratio == 0:
-        LJe = 0
-        chargek = 7.1288713
-    else:
-        sqratio = sqrt(opts.LJESratio)
-        LJe = .516 * sqratio
-        chargek = 7.1288713 / sqratio
 LJepsilon = 1 # for repulsive
-#Hphobs = [[0,LJe],[LJe,2.5*LJe]]
 
 Hphobsigma = opts.hphobsigma # monomer distance from random walk (44 A) to CGMD (8.5) comparison
 hydroindex = simpdb.hydroindex7

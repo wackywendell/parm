@@ -50,12 +50,28 @@ backbonds = [('N','CA'), ('CA','C'),('C','O')]
 pairbonds = [('C','N')]
 
 #first is ph 2.0, second is ph 7.0
-hydroindex={'CYS': (52, 49), 'ILE': (100, 99), 'GLN': (-18, -10), 
-'VAL': (79, 76), 'LYS': (-37, -23), 'GLY': (0, 0), 'PRO': (-46, -46),
-'ASP': (-18, -55), 'THR': (13, 13), 'PHE': (92, 100), 'ALA': (47, 41),
-'MET': (74, 74), 'HIS': (-42, 8), 'GLU': (8, -31), 'LEU': (100, 97),
-'ARG': (-26, -14), 'TRP': (84, 97), 'ASN': (-41, -28), 'TYR': (49,63),
-'SER': (-7, -5)}
+hydroindex2={'ALA': 0.735, 'ARG': 0.37, 'ASN': 0.295, 'ASP': 0.41, 
+                'CYS': 0.76, 'GLN': 0.41, 'GLU': 0.54, 'GLY': 0.5, 
+                'HIS': 0.29, 'ILE': 1, 'LEU': 1, 'LYS': 0.315, 
+                'MET': 0.87, 'PHE': 0.96, 'PRO': 0.27, 'SER': 0.465, 
+                'THR': 0.565, 'TRP': 0.92, 'TYR': 0.745, 'VAL': 0.895}
+hydroindex7={'ALA': 0.705, 'ARG': 0.43, 'ASN': 0.36, 'ASP': 0.225, 
+                'CYS': 0.745, 'GLN': 0.45, 'GLU': 0.345, 'GLY': 0.5, 
+                'HIS': 0.54, 'ILE': 0.995, 'LEU': 0.985, 'LYS': 0.385, 
+                'MET': 0.87, 'PHE': 1, 'PRO': 0.27, 'SER': 0.475, 
+                'THR': 0.565, 'TRP': 0.985, 'TYR': 0.815, 'VAL': 0.88}
+                
+hydroindex3 = {'ALA': 0.729, 'ARG': 0.382, 'ASN': 0.308, 'ASP': 0.373,
+                'CYS': 0.757, 'GLN': 0.418, 'GLU': 0.501, 'GLY': 0.5,
+                'HIS': 0.34,  'ILE': 0.999, 'LEU': 0.997, 'LYS': 0.329,
+                'MET': 0.87, 'PHE': 0.968, 'PRO': 0.27, 'SER': 0.467,
+                'THR': 0.565, 'TRP': 0.933, 'TYR': 0.759, 'VAL': 0.892}
+#~ hydroindex={'CYS': (52, 49), 'ILE': (100, 99), 'GLN': (-18, -10), 
+#~ 'VAL': (79, 76), 'LYS': (-37, -23), 'GLY': (0, 0), 'PRO': (-46, -46),
+#~ 'ASP': (-18, -55), 'THR': (13, 13), 'PHE': (92, 100), 'ALA': (47, 41),
+#~ 'MET': (74, 74), 'HIS': (-42, 8), 'GLU': (8, -31), 'LEU': (100, 97),
+#~ 'ARG': (-26, -14), 'TRP': (84, 97), 'ASN': (-41, -28), 'TYR': (49,63),
+#~ 'SER': (-7, -5)}
 # see Carl's email; I don't know where these came from.
 # Looks like the image from 
 # http://www.sigmaaldrich.com/life-science/metabolomics/learning-center/amino-acid-reference-chart.html
@@ -273,6 +289,14 @@ class Resvec(atomvec):
             if self.loadfile is None:
                 raise KeyError("No file or filename provided")
         self.load_full(f)
+    
+    def getCOM(self):
+        vs,ms = zip(*[(a.x*a.mass, a.mass) for a in self])
+        return sum(vs, Vec(0,0,0)) / sum(ms)
+    
+    def getCORg(self):
+        vs = [a.x for a in self]
+        return sum(vs, Vec(0,0,0)) / len(vs)
     
     def get_orbital(self, atom):
         if atom.element != 'C':
@@ -873,7 +897,8 @@ def make_hydrophobicity_old(resvecs, epsilons, LJcutoff=2.5, neighborcutoff=1.4,
     
     return Hphob, neighbors
 
-def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4, sigma=5.38):
+def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
+                    sigma=5.38, hydroindex=hydroindex7):
     """LJcutoff in sigma units, neighborcutoff relative to LJcutoff.
     Makes a CA hydrophobicity attractive force.
     
@@ -886,17 +911,16 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4, sigm
     neighbors = neighborlist(innerradius, outerradius)
     Hphob = Hydrophobicity(neighbors)
     
-    Hlist = sorted([r for r,v in hydroindex.items()])
-    Hydropathy = [hydroindex[r][1] / 200. + .5 for r in Hlist]
     #~ print("Hlist:", *Hlist)
-    assert all(0 <= H <= 1 for H in Hydropathy)
+    assert all(0 <= H <= 1 for H in hydroindex.values())
+    Rnames, Hlist = zip(*sorted(hydroindex.items()))
     
     def makeatom(res):
         atom = res['CA']
         #~ if res.resname not in Hlist: return None
-        idx = Hlist.index(res.resname)
-        myH = Hydropathy[idx]
-        epsvec = [epsilon*math.sqrt(H*myH) for H in Hydropathy]
+        idx = Rnames.index(res.resname)
+        myH = Hlist[idx]
+        epsvec = [epsilon*math.sqrt(H*myH) for H in Hlist]
         #~ print(res.resname, ' '.join([str(int(H/epsilon*100)) for H in epsvec]))
         return HydroAtom(epsvec, idx, sigma, res.get_id(atom), LJcutoff)
     

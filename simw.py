@@ -7,6 +7,13 @@ import numpy as np
 
 Matrix = Matr
 
+def uniq(lst):
+    """Returns the elements of lst in the same order, with no duplicates."""
+    l = []
+    for n in lst:
+        if n not in l: l.append(n)
+    return l
+
 def geometric(tot, n):
     """Returns n integers less than (with last equal to) tot, such that
     it is as close to a geometric series as possible."""
