@@ -52,7 +52,7 @@ def sprint(*args, **kw):
         #~ sk.getPsis()
         #~ sprint('psi - ')
 
-MAXPTS=10
+MAXPTS=100
 
 def statupdate(stats, f):
     numpts=len(stats.Rg(f))

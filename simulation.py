@@ -4,7 +4,7 @@ from __future__ import print_function
 
 from simw import *
 from math import sqrt
-import simpdb
+import simpdb, statistics
 from xyzfile import XYZwriter, XYZreader
 from Bio.PDB import PDBParser
 import sys, os, os.path
@@ -26,7 +26,9 @@ parser.add_option('-Z', '--showsize', type=float, dest='showsize', default=.25)
 parser.add_option('-N', '--numres', type=int, dest='numres', default=0)
 parser.add_option('-s', '--startfile', dest='startfile', default=None)
 parser.add_option('-x', '--xyzfile', dest='xyzfile', 
-            default=(mydir + 'test/T{T}-{t}K.xyz'))
+            default=(mydir + 'test/T{T}.xyz'))
+parser.add_option('-g', '--statfile', dest='statfile', 
+            default=None)
 parser.add_option('-C', '--continue', dest='cont', action='store_true')
 parser.add_option('-K', '--chargek', dest='chargek', type=float, 
             default=1.0)
@@ -45,7 +47,6 @@ parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true', defau
 parser.add_option('--hphobsigma', type=float, default=5.2)
 parser.add_option('--hmix', type=float, default=0)
 parser.add_option('-3', '--ph3', dest='ph3', action='store_true', default=False)
-
 
 parser.add_option('--LJES', dest='LJESratio', type=float, default=None)
 
@@ -106,10 +107,17 @@ moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'),
                             t=format(opts.time, '.4g'),
                             N=opts.numres)
 
-print('outputting every %d steps (%d time units) to %s.' % (showsteps, showtime, moviefile))
-
 if opts.cont:
     moviefile = opts.startfile
+print('outputting every %d steps (%d time units) to %s.' % (showsteps, showtime, moviefile))
+
+if opts.statfile is None:
+    statfile = str(moviefile).rpartition('.')[0] + '.tsv.gz'
+else:
+    statfile = opts.statfile.format(T=format(opts.temp, '.3g'), 
+                            t=format(opts.time, '.4g'),
+                            N=opts.numres)
+
     
 #~ showsteps = int(float(steps) / opts.showsteps+.5)
 
@@ -256,8 +264,6 @@ mode = 'a' if opts.cont else 'w'
 xyz = XYZwriter(open(moviefile, mode))
 if not opts.cont: xyz.writefull(0, avecs, collec)
 
-valtracker = defaultdict(list)
-
 def printlist(lst, name):
     mean = float(np.mean(lst,0))
     std = np.std(lst)
@@ -267,6 +273,12 @@ def printlist(lst, name):
     print("{name:10s}={mean:8.2f}, σ={std:8.3f} ({sovm:7.3g}%) [{last:8.2f} ({lstd:7.3g}%)]".format(**locals()))
 
 print("Running... output to " + str(moviefile))
+
+print("Data output to " + str(statfile))
+statistics.Rijs([(54, 72), (72, 92), (9, 33), (54, 92), (92, 130), (33, 72),
+            (9, 54), (72, 130), (9, 72), (54, 130), (33, 130), (9, 130)])
+table = statistics.StatWriter(statfile, collec, [avecs], contin=opts.cont)
+valtracker = defaultdict(list)
 
 # t is current step num
 t = 0 if not opts.cont else int(startedat / opts.dt +.5)
@@ -284,6 +296,7 @@ try:
         curlim += showsteps
         c = collec.com()
         values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
+        table.update(int(t * opts.dt+.5))
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         print('------', int(t*opts.dt+.5))
         for k,v in sorted(values.items()):

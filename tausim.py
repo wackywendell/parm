@@ -4,7 +4,8 @@ from __future__ import print_function
 
 from simw import *
 from math import sqrt
-import simpdb
+import simpdb, statistics
+from tauFRET import *
 from xyzfile import XYZwriter, XYZreader
 from Bio.PDB import PDBParser
 import sys, os, os.path
@@ -26,7 +27,9 @@ parser.add_option('-Z', '--showsize', type=float, dest='showsize', default=.25)
 parser.add_option('-N', '--numres', type=int, dest='numres', default=0)
 parser.add_option('-s', '--startfile', dest='startfile', default=None)
 parser.add_option('-x', '--xyzfile', dest='xyzfile', 
-            default=(mydir + 'test/T{T}-{t}K.xyz'))
+            default=(mydir + 'test/tau-T{T}.xyz'))
+parser.add_option('-g', '--statfile', dest='statfile', 
+            default=None)
 parser.add_option('-C', '--continue', dest='cont', action='store_true')
 parser.add_option('-K', '--chargek', dest='chargek', type=float, 
             default=1.0)
@@ -39,13 +42,14 @@ parser.add_option('--startdt', type=float, default=1e-8)
 parser.add_option('--startsteps', type=int, default=0)
 parser.add_option('--startdamp', type=float, default=20000.0)
 parser.add_option('--startfactor', type=float, default=2.0)
-parser.add_option('-A', '--atomsize', type=float, default=1.0)
+parser.add_option('-A', '--atomsize', type=float, default=1.0 / (2**(1.0/6.0)))
 parser.add_option('--nodihedral', dest='dihedral', action='store_false', default=True)
 parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true', default=False)
 parser.add_option('--hphobsigma', type=float, default=5.2)
 parser.add_option('--hmix', type=float, default=0)
 parser.add_option('-3', '--ph3', dest='ph3', action='store_true', default=False)
-parser.add_option('--sep', dest='separation', type=float, default=20)
+
+parser.add_option('--LJES', dest='LJESratio', type=float, default=None)
 
 opts,args = parser.parse_args()
 
@@ -66,7 +70,19 @@ chargek = 7.1288713 * opts.chargek
 LJe = .516 * opts.hphobk if opts.hphobk > 0 else 0
 # .516 comes from Ashbaugh: 0.300kcal/mol / (avogadro⋅boltzmann⋅293K)
 
+if opts.LJESratio is not None:
+    if opts.LJESratio == float('inf'):
+        LJe = .516  # for attractive 
+        chargek = 0
+    elif opts.LJESratio == 0:
+        LJe = 0
+        chargek = 7.1288713
+    else:
+        sqratio = sqrt(opts.LJESratio)
+        LJe = .516 * sqratio
+        chargek = 7.1288713 / sqratio
 LJepsilon = 1 # for repulsive
+#Hphobs = [[0,LJe],[LJe,2.5*LJe]]
 
 Hphobsigma = opts.hphobsigma # monomer distance from random walk (44 A) to CGMD (8.5) comparison
 hydroindex = simpdb.hydroindex7
@@ -86,16 +102,23 @@ print(*['%s: %.3f' % (r,v) for r,v in hydroindex.items()], sep=', ')
 # sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom -> time units
 t0 = 6.4069e-14
 
-pdbfile = mydir + 'pdb/aS.pdb'
+pdbfile = mydir + 'pdb/tau_phyre2.pdb'
 loadfile= mydir + 'blengths/stats-H.pkl'
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),
                             N=opts.numres)
 
-print('outputting every %d steps (%d time units) to %s.' % (showsteps, showtime, moviefile))
-
 if opts.cont:
     moviefile = opts.startfile
+print('outputting every %d steps (%d time units) to %s.' % (showsteps, showtime, moviefile))
+
+if opts.statfile is None:
+    statfile = str(moviefile).rpartition('.')[0] + '.tsv.gz'
+else:
+    statfile = opts.statfile.format(T=format(opts.temp, '.3g'), 
+                            t=format(opts.time, '.4g'),
+                            N=opts.numres)
+
     
 #~ showsteps = int(float(steps) / opts.showsteps+.5)
 
@@ -104,7 +127,7 @@ if opts.cont:
 ####################
 print("Importing PDB...")
 numres = opts.numres if opts.numres > 0 else None
-avecs = simpdb.Resvec.from_pdb('aS', pdbfile, loadfile, H=opts.hydrogen, 
+avecs = simpdb.Resvec.from_pdb('tau', pdbfile, loadfile, H=opts.hydrogen, 
                         numchains=1, numres=numres)
 
 # Import startfile
@@ -150,6 +173,9 @@ print("%d Residues found with %d atoms. Making structure..."
                 #~ % (len(avecs), sum(len(r) for r in avecs)))
 
 
+########################################################################
+# Set up interactions
+
 angles = simpdb.make_angles(avecs, anglespring)
 bonds = simpdb.make_bonds(avecs, bondspring)
 #~ angles = None
@@ -193,6 +219,10 @@ if opts.seed: collec.seed()
 else: collec.seed(1)
 collec.setForces()
 
+mode = 'a' if opts.cont else 'w'
+xyz = XYZwriter(open(moviefile, mode))
+
+########################################################################
 # Stage 1: Run really, really slowly, increasing dt every now and then.
 # Only needed occasionally when parameters have changed and forces might 
 # be very strong.
@@ -207,6 +237,9 @@ if opts.startsteps > 0:
             if i % (opts.startsteps/5) == 0:
                 print('  %.6g' % collec.energy(), end='')
                 sys.stdout.flush()
+                xyz.writeframe(avecs, collec.com(),
+                                stage='relax',
+                                dt="%.2g" % dt)
         print()
         dt *= opts.startfactor
     
@@ -230,6 +263,9 @@ if opts.rampsteps > 0:
         collec.timestep()
         if i % (opts.rampsteps / 5) == 0:
             print("E:", collec.energy())
+            xyz.writeframe(avecs, collec.com(),
+                                stage='ramp',
+                                damp="%.2g" % opts.rampdamp)
     collec.changeT(opts.dt, opts.damping, opts.temp)
     oldcomv = collec.comv().mag()
     collec.resetcomv()
@@ -238,11 +274,7 @@ if opts.rampsteps > 0:
     print('comv: %.3g -> %.3g   L: %.3g -> %.3g' % (oldcomv, collec.comv().mag(),
             oldL, collec.angmomentum().mag()))
     
-mode = 'a' if opts.cont else 'w'
-xyz = XYZwriter(open(moviefile, mode))
 if not opts.cont: xyz.writefull(0, avecs, collec)
-
-valtracker = defaultdict(list)
 
 def printlist(lst, name):
     mean = float(np.mean(lst,0))
@@ -252,7 +284,19 @@ def printlist(lst, name):
     lstd = 100*(last - mean) / std
     print("{name:10s}={mean:8.2f}, σ={std:8.3f} ({sovm:7.3g}%) [{last:8.2f} ({lstd:7.3g}%)]".format(**locals()))
 
+########################################################################
+##
+## Starting Actual Run
+##
+########################################################################
+
 print("Running... output to " + str(moviefile))
+
+print("Data output to " + str(statfile))
+statistics.Rijs(ijs)
+print("Stats:", *statistics.Stat.AllStats.keys())
+table = statistics.StatWriter(statfile, collec, [avecs], contin=opts.cont)
+valtracker = defaultdict(list)
 
 # t is current step num
 t = 0 if not opts.cont else int(startedat / opts.dt +.5)
@@ -270,6 +314,7 @@ try:
         curlim += showsteps
         c = collec.com()
         values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
+        table.update(int(t * opts.dt+.5))
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         print('------', int(t*opts.dt+.5))
         for k,v in sorted(values.items()):

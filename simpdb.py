@@ -540,9 +540,15 @@ class Resvec(atomvec):
                 bs = bonddict[r.resname] + backbonds + hydrodict[r.resname]
                 if r is residues[0]: bs = add_first_bonds(bs)
                 if r is residues[-1]: bs = add_last_bonds(bs)
+                if not H:
+                    bs = [(a1, a2) for (a1, a2) in bs if 'H' not in (a1[0], a2[0])]
                 added, removed = fixResidue(r, bs)
-                #~ if added or removed:
-                    #~ print('Fixed',r.resname, list(added), list(removed))
+                if not H:
+                    removed = [a for a in removed if a[0] != 'H']
+                if added or removed:
+                    print('Fixed',r.resname, 
+                            'added:', ', '.join(added),
+                            'removed:', ', '.join(removed))
         
         rvecs = [Resvec(res, amu=amu, H=H, loadfile=loadfile) for res in residues]
         return rvecs
@@ -641,6 +647,9 @@ def addAtom(residue, attachto, newname, element='H', coord=None, **kwargs):
     rname = residue.resname
     if isinstance(attachto, str): attachto = residue[attachto]
     if coord is None:
+        for a in residue:
+            print(attachto, a)
+            print(attachto - a)
         bonds = [a for a in residue if attachto - a < 4 and a is not attachto]
         #~ def getpaired(bond):
             #~ a1, a2 = bond
