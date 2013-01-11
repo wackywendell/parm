@@ -50,6 +50,7 @@ class bivariateGauss {
                 : distro(0,1), gauss(e,distro){set(s1, s2, corr);};
         void set(const double s1, const double s2, const double corr);
         Pair generate();
+        Vec genVec(){return Vec(gauss(), gauss(), gauss());};
         VecPair genVecs();
         void seed(unsigned int n){e.seed(n);};
         void seed(){e.seed(static_cast<unsigned int>(time(0)));};

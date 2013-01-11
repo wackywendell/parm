@@ -278,13 +278,23 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     return force;
 }
 
-dihedral::dihedral(const vector<flt> vals) : torsions(vals){
+dihedral::dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow) : 
+                    coscoeffs(cvals), sincoeffs(svals), usepow(usepow){
 }
 
 Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2, 
-                   const Vec &r3) const{
+                   const Vec &r3) const {
     // Taken from Rapaport "Art of Molecular Dynamics Simulation" p.279
     // The expressions and notation are very close to that of the book.
+    
+    // Note that Rappaport defines it as such:
+    /*
+     The dihedral angle is defined as the angle between the
+planes formed by atoms 1,2,3 and 2,3,4 measured in the plane normal to the 2–3
+bond; it is zero when all four atoms are coplanar and atoms 1 and 4 are on opposite
+sides of the bond. */
+    
+    // so we need a negative sign.
     
     // ri corresponds to Rapaport's b_i
     
@@ -300,6 +310,7 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
     flt qa = c[0][0]*c[1][1] - c[0][1] * c[0][1];
     flt qb = c[1][1]*c[2][2] - c[1][2] * c[1][2];
     flt q = qa * qb;
+    flt sqq = sqrt(q);
     
     flt t1 = p;
     flt t2 = c[0][0] * c[1][2] - c[0][1] * c[0][2];
@@ -310,9 +321,26 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
     
     Nvector<Vec, 4> derivs;
     
-    flt const0 = c[1][1]/(sqrt(q) * qa);
+    /*
+     Rapaport: The dihedral angle is defined as the angle between the
+     planes formed by atoms 1,2,3 and 2,3,4 measured in the plane 
+     normal to the 2–3 bond; it is zero when all four atoms are 
+     coplanar and atoms 1 and 4 are on opposite sides of the bond. 
+     
+     Note that this is the *opposite* of the chemical definition.
+     
+     flt const0 = c[1][1]/(sqq * qa);
+     flt const3 = c[1][1]/(sqq * qb);
+     
+     We add a negative in at the beginning of those two to give us the 
+     chemical definition.
+     */
+    
+    flt const0 = -c[1][1]/(sqq * qa);
+    flt const3 = -c[1][1]/(sqq * qb);
+    
+    
     derivs[0] = (r1 * t1 + r2 * t2 + r3 * t3) * const0;
-    flt const3 = c[1][1]/(sqrt(q) * qb);
     derivs[3] = (r1 * t4 + r2 * t5 + r3 * t6) * const3;
     
     derivs[1] = derivs[0] * (-1 - c[0][1]/c[1][1]) +
@@ -320,17 +348,27 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
     derivs[2] = derivs[0] * (c[0][1]/c[1][1]) -
                             derivs[3] * (1 + c[1][2]/c[1][1]);
     
-    flt costheta = p/sqrt(q);
-    // costheta=1 corresponds to atoms 1 and 4 on opposite sides of the bond (zigzag)
-    // costheta=-1 corresponds to a C shape
+     /*
+     Rapaport says costheta = p/sqrt(q); we add a negative for the cosine.
+     */
     
+    flt dcostheta;
+    if(sincoeffs.empty() and !usepow){        
+        flt costheta = -p/sqq;
+        // costheta =-1 corresponds to atoms 1 and 4 on opposite sides of the bond (zigzag)
+        // costheta = 1 corresponds to a C shape
+
+        dcostheta = dudcosthetaCOS(costheta); // F = -dU/d(costheta)
+        
     
-    flt dcostheta = -dudcostheta(costheta); // F = -dU/d(costheta)
-    //~ if(abs(costheta) < .7)
-        //~ cout << "forces cos: " << costheta << " getcos: " << getcos(r1,r2,r3)
-             //~ << " dcostheta: " << dcostheta << '\n';
-    
-    derivs *= dcostheta;
+        //~ if(abs(costheta) < .7)
+            //~ cout << "forces cos: " << costheta << " getcos: " << getcos(r1,r2,r3)
+                 //~ << " dcostheta: " << dcostheta << '\n';
+    } else {
+        dcostheta = dudcostheta(getang(r1, r2, r3));
+    }
+        
+    derivs *= -dcostheta;  // F = -dU/d(costheta)
     //~ assert(derivs[0].sq() < 1e8);
     //~ assert(derivs[1].sq() < 1e8);
     //~ assert(derivs[2].sq() < 1e8);
@@ -343,22 +381,55 @@ Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
               //~ << " derivs:" << derivs  << " : " << mag << std::endl;
     return derivs;
+    
+    // pea79, dun92
+    // Pear, M. R. and Weiner, J. H., Brownian dynamics study of a polymer chain of linked rigid bodies, J. Chem. Phys. 71 (1979) 212.
+    // Dunn, J. H., Lambrakos, S. G., Moore, P. G., and Nagumo, M., An algorithm for calculating intramolecular angle-dependent forces on vector computers, J. Comp. Phys. 100 (1992) 17.
+
+
 }
 
-flt dihedral::dudcostheta(const flt costheta) const{
+flt dihedral::dudcosthetaCOS(const flt costheta) const{
+    assert(sincoeffs.empty());
+    assert(!usepow);
     flt tot = 0;
-    for(unsigned int i=1; i<torsions.size(); i++){
-        tot += torsions[i] * i * pow(costheta, flt(i-1));
+    unsigned int cosmx = coscoeffs.size();
+    for(unsigned int i=1; i < cosmx; i++){
+        tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
     }
     //~ cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     return tot;
 }
 
+flt dihedral::dudcostheta(const flt theta) const{
+    flt tot = 0;
+    unsigned int cosmx = coscoeffs.size();
+    unsigned int sinmx = sincoeffs.size();
+    unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
+    if(usepow) {
+        flt costheta = cos(theta), sintheta = sin(theta);
+        flt cottheta = -costheta / sintheta;
+        for(unsigned int i=1; i < mx; i++){
+            if (i < cosmx) tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
+            if (i < sinmx) tot += sincoeffs[i] * i * cottheta
+                                    * pow(sintheta, flt(i-1));
+        }
+    } else {
+        flt csctheta = 1 / sin(theta);
+        for(unsigned int i=1; i < mx; i++){
+            flt cositheta = cos(i*theta), sinitheta = sin(i*theta);
+            if (i < cosmx) tot += coscoeffs[i] * csctheta * i * sinitheta;
+            if (i < sinmx) tot -= sincoeffs[i] * csctheta * i * cositheta;
+        }
+    }
+    //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
+    return tot;
+}
+
 flt dihedral::getcos(const Vec &r1, const Vec &r2, 
                    const Vec &r3){
-    
-    // The two normals to the planes
+   // The two normals to the planes
     Vec n1 = r1.cross(r2);
     Vec n2 = r2.cross(r3);
     //~ cout << r1 << ',' << r2  << ',' << r3 << "\n";
@@ -368,7 +439,7 @@ flt dihedral::getcos(const Vec &r1, const Vec &r2,
     if (n1mag == 0 or n2mag == 0) return -100; 
     // if one plane is ill-defined, then we have no torsion angle
 
-    return -(n1.dot(n2) / n1mag / n2mag);
+    return (n1.dot(n2) / n1mag / n2mag);
 };
 
 flt dihedral::getang(const Vec &r1, const Vec &r2, 
@@ -377,220 +448,28 @@ flt dihedral::getang(const Vec &r1, const Vec &r2,
     return atan2(r1.dot(r2.cross(r3))*r2.mag(), (r1.cross(r2).dot(r2.cross(r3))));
 };
 
-flt dihedral::energy(const Vec &r1, const Vec &r2, 
-                   const Vec &r3) const{
+flt dihedral::energy(const flt ang) const{
     
-    // The two normals to the planes
-    //~ Vec n1 = r1.cross(r2);
-    //~ Vec n2 = r2.cross(r3);
-    //~ 
-    //~ flt n1mag = n1.mag();
-    //~ flt n2mag = n2.mag();
-    //~ 
-    //~ if (n1mag == 0 or n2mag == 0) return -100; 
-    // if one plane is ill-defined, then we have no torsion angle
-
-    flt costheta = getcos(r1,r2,r3);
+    flt costheta = (usepow ? cos(ang) : NAN);
+    flt sintheta = (usepow ? sin(ang) : NAN);
+    
+    unsigned int cosmx = coscoeffs.size();
+    unsigned int sinmx = sincoeffs.size();
+    unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
     
     flt tot = 0;
-    for(unsigned int i=0; i<torsions.size(); i++){
-        tot += torsions[i] * pow(costheta, flt(i));
-        //~ if(abs(costheta) < .75)
-        //~ std::cout << i << " t: " << torsions[i] << " curE: "
-        //~ << torsions[i] * pow(costheta, i) << " E:" << tot << '\n';
+    for(unsigned int i=0; i < mx; i++){
+        if(usepow) {
+            if(i < cosmx) tot += coscoeffs[i] * pow(costheta, flt(i));
+            if(i < sinmx) tot += sincoeffs[i] * pow(sintheta, flt(i));
+        } else {
+            if(i < cosmx) tot += coscoeffs[i] * cos(i * ang);
+            if(i < sinmx) tot += sincoeffs[i] * sin(i * ang);
+        }
     }
-    //~ if(abs(costheta) < .75)
-    //~ std::cout << "costheta: " << costheta << " E:" << tot << '\n';
     
     return tot;
 }
-
-interMolPair::interMolPair(vector<atomgroup*> groupvec, interactpair* ipair)
-    : groups(groupvec), pair(ipair) {};
-
-flt interMolPair::energy(){
-    flt E = 0;
-    vector<atomgroup*>::iterator g1;
-    vector<atomgroup*>::iterator g2;
-    for(g1 = groups.begin(); g1 < groups.end(); g1++){
-        g2 = g1;
-        for(g2++; g2 < groups.end(); g2++)
-        for(uint i1 = 0; i1 < (*g1)->size(); i1++)
-        for(uint i2 = 0; i2 < (*g2)->size(); i2++){
-            Vec r = diff((**g1)[i1].x, (**g2)[i2].x);
-            E += pair->energy(r);
-        }
-    }
-    return E;
-};
-
-void interMolPair::setForces(){
-    vector<atomgroup*>::iterator g1;
-    vector<atomgroup*>::iterator g2;
-    for(g1 = groups.begin(); g1 < groups.end(); g1++){
-        g2 = g1;
-        for(g2++; g2 < groups.end(); g2++)
-        for(uint i1 = 0; i1 < (*g1)->size(); i1++)
-        for(uint i2 = 0; i2 < (*g2)->size(); i2++){
-            atom & a1 = (**g1)[i1];
-            atom & a2 = (**g2)[i2];
-            Vec r = diff((**g1)[i1].x, (**g2)[i2].x);
-            Vec force = pair->forces(r);
-            a1.f += force;
-            a2.f -= force;
-        }
-    }
-};
-
-
-intraMolNNPair::intraMolNNPair(vector<atomgroup*> groupvec, interactpair* ipair)
-    : groups(groupvec), pair(ipair) {};
-
-flt intraMolNNPair::energy(){
-    flt E = 0;
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-1; i++){
-            Vec r = diff(g[i].x, g[i+1].x);
-            E += pair->energy(r);
-        }
-    }
-    return E;
-};
-
-void intraMolNNPair::setForces(){
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-1; i++){
-            atom & a1 = g[i];
-            atom & a2 = g[i+1];
-            Vec r = diff(g[i].x, g[i+1].x);
-            Vec force = pair->forces(r);
-            a1.f += force;
-            a2.f -= force;
-        }
-    }
-};
-
-
-intraMolPairs::intraMolPairs(vector<atomgroup*> groupvec, 
-            interactpair* ipair, cuint s)
-    : groups(groupvec), pair(ipair), skip(s) {};
-
-flt intraMolPairs::energy(){
-    flt E = 0;
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-skip-1; i++)
-        for(uint j = i+skip+1; j < g.size(); j++){
-            Vec r = diff(g[i].x, g[j].x);
-            E += pair->energy(r);
-        }
-    }
-    return E;
-};
-
-void intraMolPairs::setForces(){
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-skip-1; i++)
-        for(uint j = i+skip+1; j < g.size(); j++){
-            atom & a1 = g[i];
-            atom & a2 = g[j];
-            Vec r = diff(g[i].x, g[j].x);
-            Vec force = pair->forces(r);
-            a1.f += force;
-            a2.f -= force;
-        }
-    }
-};
-
-
-intraMolNNTriple::intraMolNNTriple(vector<atomgroup*> groupvec, interacttriple* itrip)
-    : groups(groupvec), trip(itrip) {};
-
-flt intraMolNNTriple::energy(){
-    flt E = 0;
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-2; i++){
-            E += trip->energy(diff(g[i+1].x, g[i].x), diff(g[i+1].x, g[i+2].x));
-        }
-    }
-    return E;
-};
-
-void intraMolNNTriple::setForces(){
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-2; i++){
-            atom & a0 = g[i];
-            atom & a1 = g[i+1];
-            atom & a2 = g[i+2];
-            Vec r = diff(a0.x, a1.x);
-            Nvector<Vec, 3> force = trip->forces(diff(a1.x, a0.x), diff(a1.x, a2.x));
-            a0.f += force[0];
-            a1.f += force[1];
-            a2.f += force[2];
-        }
-    }
-};
-
-intraMolNNQuad::intraMolNNQuad(vector<atomgroup*> groupvec, interactquad* iquad)
-    : groups(groupvec), quad(iquad) {};
-
-flt intraMolNNQuad::energy(){
-    flt E = 0;
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-3; i++){
-            E += quad->energy(diff(g[i+1].x, g[i].x), diff(g[i+2].x, g[i+1].x),
-                                                 diff(g[i+3].x, g[i+2].x));
-        }
-    }
-    return E;
-};
-
-void intraMolNNQuad::setForces(){
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup & g = **git;
-        for(uint i = 0; i < g.size()-3; i++){
-            //~ Nvector<Vec, 4> force = trip->forces(g.diff(i+1, i), 
-                        //~ g.diff(i+2, i+1), g.diff(i+3, i+2));
-            Nvector<Vec, 4> force = quad->forces(diff(g[i+1].x, g[i].x), 
-                        diff(g[i+2].x, g[i+1].x), diff(g[i+3].x, g[i+2].x));
-            for(uint j=0; j<4; j++) g[i+j].f += force[j];
-        }
-    }
-};
-
-flt singletpairs::energy(){
-    flt E=0;
-    vector<atompair>::iterator it;
-    for(it = atoms.begin(); it < atoms.end(); it++){
-        E += inter->energy(diff(it->first().x, it->last().x));
-    }
-    return E;
-};
-
-void singletpairs::setForces(){
-    vector<atompair>::iterator it;
-    for(it = atoms.begin(); it < atoms.end(); it++){
-            atom & a1 = it->first();
-            atom & a2 = it->last();
-            Vec force = inter->forces(diff(a1.x, a2.x));
-            a1.f += force;
-            a2.f -= force;
-    }
-};
 
 flt interactgroup::energy(){
     flt E=0;
@@ -747,7 +626,7 @@ flt dihedrals::energy(){
         Vec r1 = diff(atom2.x, atom1.x);
         Vec r2 = diff(atom3.x, atom2.x);
         Vec r3 = diff(atom4.x, atom3.x);
-        E += dihedral(it->nums).energy(r1,r2,r3);
+        E += it->dih.energy(r1,r2,r3);
     }
     return E;
 }
@@ -762,7 +641,7 @@ void dihedrals::setForces(){
         Vec r1 = diff(atom2.x, atom1.x);
         Vec r2 = diff(atom3.x, atom2.x);
         Vec r3 = diff(atom4.x, atom3.x);
-        Nvector<Vec,4> f = dihedral(it->nums).forces(r1, r2, r3);
+        Nvector<Vec,4> f = it->dih.forces(r1, r2, r3);
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
@@ -789,7 +668,7 @@ flt dihedrals::mean_dists() const{
         Vec r1 = diff(atom1.x, atom2.x);
         Vec r2 = diff(atom2.x, atom3.x);
         Vec r3 = diff(atom3.x, atom4.x);
-        flt cosine = dihedral(it->nums).getcos(r1, r2, r3);
+        flt cosine = dihedral::getcos(r1, r2, r3);
         dist += cosine;
         N++;
     }

@@ -109,4 +109,19 @@ class collectionSol : public collection {
         void seed(uint n){gauss.seed(n);};
         void seed(){gauss.seed();};
 };
+
+class collectionVerlet : public collection {
+    // for use in fixed-E simulations
+    protected:
+        flt dt;
+        
+    public:
+        collectionVerlet(const flt dt, 
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>()) :
+            collection(groups, interactions, trackers), dt(dt){};
+        void timestep();
+};
+
 #endif

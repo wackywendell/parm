@@ -121,6 +121,8 @@ class Vector : public Numvector<T, 3> {
             return Vector(getx()+rhs.getx(),gety()+rhs.gety(),getz()+rhs.getz());}
         inline Vector operator-(const Vector &rhs) const {
             return Vector(getx()-rhs.getx(),gety()-rhs.gety(),getz()-rhs.getz());}
+        inline T operator*(const Vector &rhs) const {
+            return (getx()*rhs.getx() + gety()*rhs.gety() + getz()*rhs.getz());}
         template <class U> inline Vector operator*(const U rhs) const {
             return Vector(getx()*rhs,gety()*rhs,getz()*rhs);}
         template <class U> inline Vector operator/(const U rhs) const {
@@ -131,6 +133,27 @@ class Vector : public Numvector<T, 3> {
         inline Vector& operator+=(const Vector &rhs){Nvector<T,3>::operator+=(rhs); return *this;}; 
         template <class U> Vector& operator*=(const U rhs);
         template <class U> Vector& operator/=(const U rhs);
+        
+        static T angle(const Vector &dx1, const Vector &dx2){
+            return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
+        }
+        
+        static T angle(const Vector &x1, const Vector &x2, const Vector &x3){
+            Vector dx1 = x1 - x2, dx2 = x3 - x2;
+            return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
+        }
+        
+        static T dihedral(const Vector &dx1, const Vector &dx2, const Vector &dx3){
+            return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(), 
+                                (dx1.cross(dx2).dot(dx2.cross(dx3))));
+        }
+        
+        static T dihedral(const Vector &x1, const Vector &x2, 
+                        const Vector &x3, const Vector &x4){
+            Vector dx1 = x2 - x1, dx2 = x3 - x2, dx3 = x4 - x3;
+            return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(), 
+                                (dx1.cross(dx2).dot(dx2.cross(dx3))));
+        }
         ~Vector(){};
         
         template <class U>

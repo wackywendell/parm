@@ -164,7 +164,7 @@ void collectionSol::setCs(){
 }
 
 void collectionSol::timestep(){
-    vector<atomgroup*>::iterator git;
+    /*vector<atomgroup*>::iterator git;
     // From Allen and Tildesley 263, Verlet-like, our equations are
     // r(t+dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + drG
     // v(t+dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t+dt) + dvG
@@ -180,7 +180,9 @@ void collectionSol::timestep(){
         for(uint i=0; i<m.size(); i++){
             flt v0 = sqrt(desT/m.getmass(i));
             flt r0 = dt * v0;
-            VecPair vecpair = gauss.genVecs();
+            VecPair vecpair;
+            if (damping > 0) vecpair = gauss.genVecs();
+            else vecpair[0] = vecpair[1] = Vec(0,0,0);
             // vecpair[0] is drG, and vecpair[1] is dvG
             m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0]*r0;
             m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1]*v0;
@@ -209,8 +211,8 @@ void collectionSol::timestep(){
     
     update_trackers();
     
-    return;
-    /* Honeycutt and Thirumalai
+    return;*/
+    //Honeycutt and Thirumalai
     //~ cout << "damping " << damping << "\n";
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
@@ -237,7 +239,7 @@ void collectionSol::timestep(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
-            Vec g = gauss.generate();
+            Vec g = gauss.genVec();
             //~ cout << "g " << g << "\n";
             m[i].a = (m[i].f + g) / m.getmass(i);
             
@@ -245,5 +247,37 @@ void collectionSol::timestep(){
             m[i].v += m[i].a * (dt/2);
             m[i].a -= m[i].v * damping;
         }
-    }*/
+    }
+    update_trackers();
+}
+
+void collectionVerlet::timestep(){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
+            m[i].v += m[i].a * (dt/2);
+        }
+    }
+    // Now we set forces and accelerations
+    setForces();
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f / m.getmass(i);
+        }
+    }
+    
+    // And finish m[i].v
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v += m[i].a * (dt/2);
+        }
+    }
+    
+    update_trackers();
+    
+    return;
 }

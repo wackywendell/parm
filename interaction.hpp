@@ -5,10 +5,16 @@
 #include <map>
 #include <cassert>
 #include <climits>
-#include <boost/foreach.hpp>
+//#include <boost/foreach.hpp>
 
 #ifndef INTERACTION_H
 #define INTERACTION_H
+
+/***********************************************************************
+ * L-J Note:
+ * The convention here is (σ⁶/r⁶ - 1)², which has its minimum at r = σ.
+ * This is what to use with Alice's parameters.
+ */
 
 /*
  * New plan of attack:
@@ -45,19 +51,34 @@
  * 
  * constants - keeps track of constants; in map, or as properties?
  * perhaps a struct.
- */
+*/
 
 typedef double flt;
 typedef unsigned int uint;
 typedef const unsigned int cuint;
 typedef Vector<flt> Vec;
 
-#define foreach BOOST_FOREACH
+class interaction {
+    public:
+        virtual flt energy()=0;
+        virtual void setForces()=0;
+        virtual ~interaction(){};
+};
+
+class statetracker {
+    public:
+        virtual void update() = 0;
+        virtual ~statetracker(){};
+};
 
 inline Vec diff(const Vec a, const Vec b){
     return a-b;
 }
 
+
+/***********************************************************************
+ * Atoms
+ */
 struct atom {
     Vec x; // location
     Vec v; // velocity
@@ -112,30 +133,6 @@ class atompair : public array<atom*, 2> {
         inline atom& last() const {return *(vals[1]);};
 };
 
-class atomtriple : public array<atom*, 3> {
-    public:
-        atomtriple(atom* a, atom* b, atom* c){vals[0]=a; vals[1]=b; vals[2]=c;};
-        inline atom& first() const {return *(vals[0]);};
-        inline atom& mid() const {return *(vals[1]);};
-        inline atom& last() const {return *(vals[2]);};
-};
-
-class atomquad : public array<atom*, 4> {
-    public:
-        atomquad(atom* a, atom* b, atom* c, atom* d){
-                    vals[0]=a; vals[1]=b; vals[2]=c; vals[3]=d;};
-        inline atom& first() const {return *(vals[0]);};
-        inline atom& mid1() const {return *(vals[1]);};
-        inline atom& mid2() const {return *(vals[2]);};
-        inline atom& last() const {return *(vals[3]);};
-};
-
-class statetracker {
-    public:
-        virtual void update() = 0;
-        virtual ~statetracker(){};
-};
-
 class atomgroup {
     // a group of atoms, such as a molecule, sidebranch, etc.
     public:
@@ -163,7 +160,7 @@ class atomgroup {
         // for resetting
         void addv(Vec v);
         void resetcomv(){addv(-comv());};
-        inline void addOmega(Vec w, Vec origin);
+        void addOmega(Vec w, Vec origin);
         inline void resetL(){
             Vec c = com(), w = omega(c);
             if (w.sq() == 0) return;
@@ -212,6 +209,9 @@ class metagroup : public atomgroup {
         inline uint size() const {return atoms.size();};
 };
 
+/***********************************************************************
+ * Interaction Basics
+ */
 class interactpair {
     public:
         virtual flt energy(const Vec& diff)=0;
@@ -219,28 +219,28 @@ class interactpair {
         virtual ~interactpair(){};
 };
 
-class interacttriple {
-    public:
-        virtual flt energy(const Vec& diff1, const Vec& diff2)=0;
-        virtual Nvector<Vec,3> forces(const Vec& diff1, const Vec& diff2)=0;
-        virtual ~interacttriple(){};
-};
-
-class interactquad {
-    public:
-        virtual flt energy(const Vec& diff1, const Vec& diff2, const Vec& diff3) const=0;
-        virtual Nvector<Vec,4> forces(const Vec& diff1, const Vec& diff2, const Vec& diff3) const=0;
-        virtual ~interactquad(){};
-};
-
-template <uint N>
-class interactN {
-    public:
-        virtual flt energy(const Vec* location[N])=0;
-        virtual Nvector<Vec, N> forces(const Vec* location[N])=0;
-        
-        virtual ~interactN<N>(){};
-};
+//~ class interacttriple {
+    //~ public:
+        //~ virtual flt energy(const Vec& diff1, const Vec& diff2)=0;
+        //~ virtual Nvector<Vec,3> forces(const Vec& diff1, const Vec& diff2)=0;
+        //~ virtual ~interacttriple(){};
+//~ };
+//~ 
+//~ class interactquad {
+    //~ public:
+        //~ virtual flt energy(const Vec& diff1, const Vec& diff2, const Vec& diff3) const=0;
+        //~ virtual Nvector<Vec,4> forces(const Vec& diff1, const Vec& diff2, const Vec& diff3) const=0;
+        //~ virtual ~interactquad(){};
+//~ };
+//~ 
+//~ template <uint N>
+//~ class interactN {
+    //~ public:
+        //~ virtual flt energy(const Vec* location[N])=0;
+        //~ virtual Nvector<Vec, N> forces(const Vec* location[N])=0;
+        //~ 
+        //~ virtual ~interactN<N>(){};
+//~ };
 
 class LJforce : public interactpair {
     protected:
@@ -336,6 +336,7 @@ class LJattract {
             flt rsix = rsq*rsq*rsq;
             flt mid = (1-1/rsix);
             return mid*mid-1;
+            // Minimum of -1 occurs at r = 1
         };
         inline flt energy(const Vec& diff){return energy(diff, epsilon, sigma);};
         inline static Vec forces(const Vec diff, const flt eps, const flt sig){
@@ -402,7 +403,7 @@ class spring : public interactpair {
         ~spring(){};
 };
 
-class bondangle : public interacttriple {
+class bondangle {
     // two vectors for E and F are from the central one to the other 2
     protected:
         flt springk;
@@ -416,18 +417,27 @@ class bondangle : public interacttriple {
         ~bondangle(){};
 };
 
-class dihedral : public interactquad {
+class dihedral {
     // vectors are from 1 to 2, 2 to 3, 3 to 4
     protected:
-        vector<flt> torsions;
+        vector<flt> coscoeffs;
+        vector<flt> sincoeffs;
+        bool usepow;
         Nvector<Vec,4> derivs(const Vec& diff1, const Vec& diff2, const Vec& diff3) const;
-        flt dudcostheta(const flt costheta) const;
+        flt dudcosthetaCOS(const flt costheta) const;
     public:
-        dihedral(const vector<flt> vals);
+        dihedral(const vector<flt> cosvals, 
+                const vector<flt> sinvals = vector<flt>(),
+                bool usepow = true);
         static flt getcos(const Vec& diff1, const Vec& diff2, const Vec& diff3);
         static flt getang(const Vec& diff1, const Vec& diff2, const Vec& diff3);
         
-        flt energy(const Vec& diff1, const Vec& diff2, const Vec& diff3) const;
+        flt dudcostheta(const flt theta) const;
+        
+        inline flt energy(const Vec& diff1, const Vec& diff2, const Vec& diff3) const {
+            return energy(getang(diff1, diff2, diff3));
+        };
+        flt energy(flt ang) const;
         Nvector<Vec,4> forces(const Vec& diff1, const Vec& diff2, const Vec& diff3) const;
 };
 
@@ -446,78 +456,6 @@ class electricScreened : public interactpair {
         static Vec forces(const Vec &r, const flt qaqb, const flt screen, const flt cutoff=0);
 };
 
-class interaction {
-    public:
-        virtual flt energy()=0;
-        virtual void setForces()=0;
-        virtual ~interaction(){};
-};
-
-class interMolPair : public interaction {
-    private:
-        vector<atomgroup*> groups;
-        interactpair* pair;
-    public:
-        interMolPair(vector<atomgroup*> groupvec, interactpair* pair);
-        flt energy();
-        void setForces();
-};
-
-class intraMolNNPair : public interaction {
-    private:
-        vector<atomgroup*> groups;
-        interactpair* pair;
-    public:
-        intraMolNNPair(vector<atomgroup*> groupvec, interactpair* pair);
-        flt energy();
-        void setForces();
-};
-
-class intraMolPairs : public interaction {
-    private:
-        vector<atomgroup*> groups;
-        interactpair* pair;
-        cuint skip;
-    public:
-        intraMolPairs(vector<atomgroup*> groupvec, interactpair* pair, cuint skip);
-        flt energy();
-        void setForces();
-};
-
-class intraMolNNTriple : public interaction {
-    private:
-        vector<atomgroup*> groups;
-        interacttriple* trip;
-    public:
-        intraMolNNTriple(vector<atomgroup*> groupvec, interacttriple* trip);
-        flt energy();
-        void setForces();
-};
-
-class intraMolNNQuad : public interaction {
-    private:
-        vector<atomgroup*> groups;
-        interactquad* quad;
-    public:
-        intraMolNNQuad(vector<atomgroup*> groupvec, interactquad* quad);
-        flt energy();
-        void setForces();
-};
-
-class singletpairs : public interaction {
-    protected:
-        interactpair* inter;
-        vector<atompair> atoms;
-    public:
-        singletpairs(interactpair* inter, vector<atompair> atoms 
-                    = vector<atompair>()) : inter(inter), atoms(atoms){};
-        void add(atompair as){atoms.push_back(as);};
-        void add(atom* a, atom* b){atoms.push_back(atompair(a,b));};
-        flt energy();
-        void setForces();
-        ~singletpairs(){};
-};
-
 class interactgroup : public interaction {
     protected:
         vector<interaction*> inters;
@@ -528,6 +466,35 @@ class interactgroup : public interaction {
         uint size() const{ return inters.size();};
         flt energy();
         void setForces();
+};
+
+struct fixedForceAtom {
+    Vec F;
+    atom *a;
+    fixedForceAtom(Vec F, atom *a) : F(F), a(a) {};
+    flt energy(){return -F.dot(a->x);};
+    void setForce(){a->f += F;};
+};
+
+class fixedForce : public interaction{
+    protected:
+        vector<fixedForceAtom> atoms;
+    public:
+        fixedForce(vector<fixedForceAtom> atoms = vector<fixedForceAtom>()) : atoms(atoms){};
+        void add(fixedForceAtom a){atoms.push_back(a);};
+        void add(Vec F, atom* a){add(fixedForceAtom(F,a));};
+        void add(flt x, flt y, flt z, atom* a){add(fixedForceAtom(Vec(x,y,z),a));};
+        uint size() const{ return atoms.size();};
+        flt energy(){
+            flt E=0;
+            for(vector<fixedForceAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
+                E += it->energy();
+            return E;
+        };
+        void setForces(){
+            for(vector<fixedForceAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
+                it->setForce();
+        };
 };
 
 struct bondgrouping {
@@ -574,10 +541,12 @@ class angletriples : public interaction {
 };
 
 struct dihedralgrouping {
-    vector<flt> nums;
+    dihedral dih;
     atom *a1, *a2, *a3, *a4;
-    dihedralgrouping(vector<flt> nums, atom* a1, atom* a2, atom* a3, atom *a4) : 
-                nums(nums), a1(a1), a2(a2), a3(a3), a4(a4){};
+    dihedralgrouping(vector<flt> coscoeffs, vector<flt> sincoeffs,
+                atom* a1, atom* a2, atom* a3, atom *a4, bool usepow=true) : 
+                dih(coscoeffs, sincoeffs, usepow), a1(a1), 
+                a2(a2), a3(a3), a4(a4){};
 };
 
 class dihedrals : public interaction {
@@ -586,8 +555,11 @@ class dihedrals : public interaction {
     public:
         dihedrals(vector<dihedralgrouping> pairs = vector<dihedralgrouping>());
         void add(dihedralgrouping b){groups.push_back(b);};
-        void add(vector<flt> nums, atom* a1, atom* a2, atom* a3, atom *a4){
-        add(dihedralgrouping(nums,a1,a2,a3,a4));};
+        inline void add(vector<flt> nums, atom* a1, atom* a2, atom* a3, atom *a4){
+            add(dihedralgrouping(nums, vector<flt>(), a1,a2,a3,a4));};
+        inline void add(vector<flt> coscoeffs, vector<flt> sincoeffs, 
+                            atom* a1, atom* a2, atom* a3, atom *a4, bool usepow=true){
+            add(dihedralgrouping(coscoeffs, sincoeffs,a1,a2,a3,a4, usepow));};
         uint size() const{ return groups.size();};
         flt mean_dists() const;
         //~ flt std_dists() const;
@@ -748,7 +720,7 @@ class NListed : public interaction {
         flt energy_pair(P pair); // This needs to be written!
         void setForces();
         Vec forces_pair(P pair);  // This needs to be written!
-        neighborlist *list(){return neighbors;};
+        neighborlist *nlist(){return neighbors;};
         ~NListed(){};
 };
 
