@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from xyzfile import XYZreader
 import gzip, os, os.path
 from numpy import array, mean, loadtxt, genfromtxt, savetxt
@@ -25,7 +25,7 @@ class Statmaker:
         self.memoize = memoize
         self.pdbfile = pdbfname
         self.loadfile = loadfname
-        for k,stat in self._statdict.items():
+        for k,stat in list(self._statdict.items()):
             if hasattr(self, k):
                 raise ValueError("Already filled slot " + str(k))
             setattr(self, k, stat(self))
@@ -253,9 +253,9 @@ def _readtsv_old(f, dtype=None):
     vals = array([array(line, dtype=int) for line in vals if line], dtype=int)
     
     if dtype is not None:
-        return (dict(zip(ks, numpy.array(list(vals),dtype=dtype).T))
+        return (dict(list(zip(ks, numpy.array(list(vals),dtype=dtype).T)))
                     if dtype is not None
-                    else dict(zip(ks, zip(*vals))))
+                    else dict(list(zip(ks, list(zip(*vals))))))
     
 def _readtsv(f, dtype=None):
     d = (
@@ -266,8 +266,8 @@ def _readtsv(f, dtype=None):
 
 def _writetsv(f, d, fmt):
     w = csv.writer(f,delimiter='\t')
-    ks, cols = zip(*sorted(d.items()))
-    w.writerow(map(str, ks))
+    ks, cols = list(zip(*sorted(d.items())))
+    w.writerow(list(map(str, ks)))
     if all(isinstance(c, numpy.ndarray) for c in cols):
         rows = array(cols).T
         delimiter='\t'
@@ -280,7 +280,7 @@ class StatRunner(Statistic):
     """A Running statistics class."""
     def _from_file(self, f, *args, **kw):
         arr = self._cut(array(
-                [map(float, l.strip().split('\t')) for l in f]
+                [list(map(float, l.strip().split('\t'))) for l in f]
             ))
         shape = arr.shape
         if len(shape) == 2 and 1 in shape: return arr.flatten()
@@ -316,7 +316,7 @@ class StatTable(StatRunner):
         arr = loadtxt(f, dtype=self.dtype)
         if len(fkeys) == 1 and arr.ndim == 1:
             return {fkeys[0]:arr}
-        return dict(zip(fkeys,arr.T))
+        return dict(list(zip(fkeys,arr.T)))
         
     def _from_file(self, f, *args, **kw):
         fkeys = f.readline().strip().split('\t')
@@ -326,7 +326,7 @@ class StatTable(StatRunner):
         arr = loadtxt(f, dtype=self.dtype)
         if len(fkeys) == 1 and arr.ndim == 1:
             d = {fkeys[0]:arr}
-        else: d = dict(zip(fkeys,arr.T))
+        else: d = dict(list(zip(fkeys,arr.T)))
         
         cutd = dict([
                     (vkey, self._cut(d[skey]))
@@ -340,12 +340,12 @@ class StatTable(StatRunner):
     def _from_atoms(self, frames, outf, outfdat, *args, **kw):
         vkeys, strkeys = self.keys(*args, **kw)
         valsbyframe = [self._from_frame(f, outfdat, *args, **kw) for f in frames]
-        vals = zip(*valsbyframe)
-        outd = dict(zip(strkeys,vals))
+        vals = list(zip(*valsbyframe))
+        outd = dict(list(zip(strkeys,vals)))
         firstoutd = dict() if outfdat is None else outfdat
         firstoutd.update(outd)
         _writetsv(outf,firstoutd, self.floatformat)
-        return dict(zip(vkeys, self._cut(vals)))
+        return dict(list(zip(vkeys, self._cut(vals))))
 
 class T(StatRunner): pass
 class E(StatRunner): pass
@@ -368,7 +368,7 @@ class relax(Statistic):
         Rgs = self.maker.Rg(xyzf)
         Times = self.maker.Times(xyzf)
         acorrs = numpy.array(sim.autocorr(Rgs))
-        acorr = numpy.array(zip(numpy.arange(len(acorrs)), acorrs))
+        acorr = numpy.array(list(zip(numpy.arange(len(acorrs)), acorrs)))
         try:
             tabove = (max((t for t,v in acorr if abs(v) > cutlast))
                     if cutlast < max(abs(acorrs)) else 0)
@@ -478,7 +478,7 @@ class Dihedral(StatRunner):
     
     def _single_from_residues(self, ang):
         res = self.residues
-        restriplets = zip(res, res[1:], res[2:])
+        restriplets = list(zip(res, res[1:], res[2:]))
         return array([res.dihedral(ang, p, n) for p,res,n in restriplets])
     
     def _from_atoms(self, frames, outf, ang):
@@ -505,8 +505,8 @@ class ETeffsAS(StatRunner):
     
     def _derived(self, xyzf, outf, R0):
         rijd = self.maker.Rijs(xyzf, default_ijs)
-        d = dict([(ij,self.from_Rijs(rijs, R0)) for (ij,rijs) in rijd.items()])
-        for ij,v in d.items():
+        d = dict([(ij,self.from_Rijs(rijs, R0)) for (ij,rijs) in list(rijd.items())])
+        for ij,v in list(d.items()):
             i,j = ij
             print(i, j, v, sep='\t', file=outf)
         return d
@@ -555,8 +555,8 @@ def filefinder(dir,  *names, **args):
             if xyzf not in filetomatches:
                 filetomatches[xyzf] = m
     
-    groups = sorted([zip(names, map(Decimal, [m or 'nan' for m in mtch.groups()]))    
-        + [('xyz',f)] for f,mtch in filetomatches.items()])
+    groups = sorted([list(zip(names, list(map(Decimal, [m or 'nan' for m in mtch.groups()]))))    
+        + [('xyz',f)] for f,mtch in list(filetomatches.items())])
         
     pdicts = [dict(lst) for lst in groups]
     for p in pdicts:

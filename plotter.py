@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-from __future__ import print_function
+
 
 import xyzstats, xyzfile
 import argparse, abc, functools
@@ -104,7 +104,7 @@ def TempTime(fnames, plot, err=False):
     if plot:
         status('plotting...')
         #~ plt.clf()
-        Trow, Terr, Rgrow, Rgerr = zip(*Allvals)
+        Trow, Terr, Rgrow, Rgerr = list(zip(*Allvals))
         plt.errorbar(Trow, Rgrow, xerr=Terr, yerr=Rgerr, fmt='b.')
         plt.xlim([0, None])
         plt.ylim([0, None])
@@ -189,7 +189,7 @@ def pairplot(title, xs1, ys1, xs2, ys2, xlabel, ylabel1,ylabel2, saveto=None):
 if __name__ == '__main__':    
     parser = argparse.ArgumentParser()
     plotchoices = list(Plotters.keys())
-    plothelp = '\n'.join(['Options:'] + [k + ': ' + v[0] for k,v in Plotters.items()])
+    plothelp = '\n'.join(['Options:'] + [k + ': ' + v[0] for k,v in list(Plotters.items())])
     parser.add_argument('choice', type=str, choices = plotchoices,
         help=plothelp)
     parser.add_argument('files', nargs='+', type=str)

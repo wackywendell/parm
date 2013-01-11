@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: UTF-8
-from __future__ import print_function
+
 print("Importing...")
 
 from simw import *
@@ -194,7 +194,7 @@ def plot(lst, name):
     sovm = std / mean
     print("{name}={mean:.2f}, σ={std:.3f} ({sovm:.2g})".format(**locals()))
     plt.plot(tlist, lst, 'b.-')
-    label = u'$\overline {} = {:.3f}$'.format(name,mean)
+    label = '$\overline {} = {:.3f}$'.format(name,mean)
     stdlabel = '$\sigma={0:.3f}\;({1:.4f})$'.format(std, sovm)
     plotline(tlist, mean, 'r-', label=label, linewidth=2)
     plotline(tlist, mean-std, 'r-', label = stdlabel)

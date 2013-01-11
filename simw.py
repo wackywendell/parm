@@ -1,5 +1,5 @@
 # encoding: UTF-8
-from __future__ import print_function
+
 
 from sim import *
 import math
@@ -53,6 +53,17 @@ def samp_std(lst):
     return np.std(lst) * math.sqrt(float(len(lst)) / (len(lst)-1))
 
 def autocorr(lst):
+    """Returns $<x(t)x(t+\tau)>_t$. 
+    tau is the index of the output array, from 0 to len(x)-1, and
+    x(t) is the normalized input: x(t) = (y(t) - \mu) / \sigma, where
+        y(t) is the input to this function, and \mu and \sigma are the 
+        mean and std. dev."""
+    x = np.array(lst, dtype=float)
+    y = (x - x.mean()) / x.std()
+    return np.correlate(y, y, mode='full')[-len(x):] / len(x)
+    
+    # this is fully equivalent to the following:
+    
     lst = np.array(lst, dtype=float)
     if len(lst) == 0: return []
     elif len(lst) == 1: return [1]
@@ -71,7 +82,7 @@ def autocorr(lst):
 def ISF(arrlst, scale, maxavg=None, ntimes=None):
     newarrs = [np.exp(a*(2j*math.pi/scale)) for a in arrlst]
     outlst = []
-    ns = [0] + geometric(len(newarrs), ntimes)[:-1] if ntimes else range(len(newarrs))
+    ns = [0] + geometric(len(newarrs), ntimes)[:-1] if ntimes else list(range(len(newarrs)))
     for n in ns:
         skip = max(1,(len(newarrs)-n) // maxavg) if maxavg is not None else 1
         pairs = zip(newarrs, newarrs[n:])[::skip]
@@ -128,7 +139,7 @@ class Stat:
             sovm = 0
             if mean != 0:
                 sovm = abs(std/mean)
-            label = u'$\overline {{{}}} = {:.3f}$'.format(s.shortname,mean)
+            label = '$\overline {{{}}} = {:.3f}$'.format(s.shortname,mean)
             stdlabel = '$\sigma={0:.3f}\;({1:.4f})$'.format(std, sovm)
             plt.axhline(mean, color=stdcol, linewidth=2)
             pstd=plt.axhline(mean-std, color=stdcol)
@@ -141,7 +152,7 @@ class Stat:
         
         plt.axis([min(tmins), max(tmaxs), ymin, ymax ])
         plt.title(", ".join([s.name for s in stats]))
-        plt.legend(*zip(*labels))
+        plt.legend(*list(zip(*labels)))
         plt.show()
     
     def plot(self):

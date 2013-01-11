@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from sys import stdout, stderr
 import pyglet
 from pyglet.gl import *
@@ -40,7 +40,8 @@ def randcol():
     return hsv2rgb(360*random.random(),random.triangular(0,1,1),
                                                     random.triangular())
 
-def towardcol((r,g,b), weight=10):
+def towardcol(xxx_todo_changeme, weight=10):
+    (r,g,b) = xxx_todo_changeme
     (r2,g2,b2) = hsv2rgb(360*random.random(),random.triangular(0,1,1),
                                                     random.triangular())
     r = (r*weight + r2) / (weight + 1)

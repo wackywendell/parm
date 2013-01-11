@@ -1,7 +1,7 @@
-from __future__ import print_function
+
 from fpath import *
 from Bio.PDB import PDBList
-from urllib2 import URLError
+from urllib.error import URLError
 
 mydir = Dir('~/idp/').norm()
 

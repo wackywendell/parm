@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import sys, xyzstats
 
 fname = sys.argv[1]    
@@ -21,7 +21,7 @@ if relax is not None: print('Times:', (sk.times[-1] - sk.times[0]) / relax)
 from matplotlib import pyplot as plt
 
 acs = acs[:(len(acs)/2)]
-ts, vals = zip(*acs)
+ts, vals = list(zip(*acs))
 
 plt.plot(ts, vals)
 #~ plt.ylim([-3,3])

@@ -1,5 +1,5 @@
 # encoding: UTF-8
-from __future__ import print_function
+
 from simw import *
 from sim3d import randcol, Window, key
 from math import sqrt
@@ -27,7 +27,7 @@ def makeline(av, spacing=1, svec=Vec(0,0,0)):
     yval = .3
     zval = .3
     xspace = sqrt(spacing**2  - (yval)**2 - (zval)**2)
-    for i, vs in zip(range(0,tot), rotate(yval, zval)):
+    for i, vs in zip(list(range(0,tot)), rotate(yval, zval)):
         y,z = vs
         av.get(i).x = startvec + Vec(i*xspace,y,z)
 

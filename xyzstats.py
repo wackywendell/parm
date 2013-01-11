@@ -1,6 +1,6 @@
-from __future__ import print_function
 
-import sys, os.path, shelve, gdbm, itertools, collections, math, cmath
+
+import sys, os.path, shelve, dbm.gnu, itertools, collections, math, cmath
 import numpy as np
 from Bio.PDB import PDBParser
 
@@ -42,14 +42,14 @@ def _key_and_cut(key):
 class statkeeper:
     def __init__(self, xyzfname, shelfname='auto', pdbfname = pdbfile, 
                     loadfname = loadfile, H=False, cut=0, ignoreblank=True, open=True):
-        if xyzfname is not None: xyzfname = unicode(xyzfname)
+        if xyzfname is not None: xyzfname = str(xyzfname)
         self.xyzfname = xyzfname
         self.fname = xyzfname if xyzfname else shelfname
         if shelfname == 'auto':
             base, sep, _ = xyzfname.rpartition('.')
             self.shelfname = base + sep + 'stats'
         elif shelfname is not None:
-            self.shelfname = unicode(shelfname)
+            self.shelfname = str(shelfname)
         self.cut = cut
         # build on demand
         self._resfunc = lambda: simpdb.Resvec.from_pdb('aS', pdbfname, loadfname, H=H, numchains=1)
@@ -63,8 +63,8 @@ class statkeeper:
         
         if self.shelfname:
             try:
-                self.shelf = shelve.Shelf(gdbm.open(self.shelfname, 'c'))
-            except gdbm.error:
+                self.shelf = shelve.Shelf(dbm.gnu.open(self.shelfname, 'c'))
+            except dbm.gnu.error:
                 print('Could not open', self.shelfname, file=sys.stderr)
                 raise
         else:
@@ -323,7 +323,7 @@ class statkeeper:
         return self._cut(vals)
     
     def _calcdihedrals(self, ang, t=None):
-        restriplets = zip(self.residues, self.residues[1:], self.residues[2:])
+        restriplets = list(zip(self.residues, self.residues[1:], self.residues[2:]))
         try:
             return np.array([res.dihedral(ang, p, n) for p,res,n in restriplets])
         except AssertionError as e:
@@ -391,7 +391,7 @@ class statkeeper:
             if mavg >= maxavg and nt >= ntimes:
                 return val[(mavg,nt)]
         if val:
-            logging.info('autocorr ignoring:', '(%d,%d)'%valkey, val.keys())
+            logging.info('autocorr ignoring:', '(%d,%d)'%valkey, list(val.keys()))
 
         if not self.times:
             return ([],[])
@@ -535,7 +535,7 @@ class statkeeper:
     @_key_and_cut('CAangles')
     def CAangles(self):
         res = self.residues
-        resgroups = zip(res[:-2],res[1:-1],res[2:])
+        resgroups = list(zip(res[:-2],res[1:-1],res[2:]))
         CAgroups = [(r1['CA'],r2['CA'],r3['CA']) for r1,r2,r3 in resgroups]
         def getAngle(a1,a2):
             return acos(a1.dot(a2) / (a1.mag() * a2.mag()))
@@ -548,7 +548,7 @@ class statkeeper:
     @_key_and_cut('CAdihedrals')
     def CAdihedrals(self):
         res = self.residues
-        resgroups = zip(res[:-3],res[1:-2],res[2:-1],res[3:])
+        resgroups = list(zip(res[:-3],res[1:-2],res[2:-1],res[3:]))
         CAgroups = [(r1['CA'],r2['CA'],r3['CA'],r4['CA']) for r1,r2,r3,r4 in resgroups]
         def curDihedrals():
             return [sim.dihedral.getang(a2.x-a1.x,a3.x-a2.x,a4.x-a3.x) 
@@ -613,7 +613,7 @@ class statkeeper:
         logging.info('autocorr done')
         
         retdict = dict()
-        for dindx, exp in exponents.items():
+        for dindx, exp in list(exponents.items()):
             dt = self.frames[dindx].time - self.frames[0].time
             retdict[dt] = np.mean(exp)
         
@@ -621,7 +621,7 @@ class statkeeper:
     
     def _autocorr_n(self, n, lengthscale, maxcount=100):
         k = (2j * math.pi / lengthscale)
-        fpairs = zip(self.frames, self.frames[n:])
+        fpairs = list(zip(self.frames, self.frames[n:]))
         f1,f2 = fpairs[0]
         assert f2.indx - f1.indx == n
         if len(fpairs) > maxcount:
@@ -649,7 +649,7 @@ class statkeeper:
         
         Rgs = np.array(self.Rg())
         Rgdtdict = collections.defaultdict(list)
-        Rgts = zip(Rgs, ts, indxs)
+        Rgts = list(zip(Rgs, ts, indxs))
         mean = float(np.mean(Rgs))
         var = float(np.mean(Rgs*Rgs) - mean*mean)
         logging.info('<Rg> = %.3f, var = %.3f, std = %.3f', mean, var, np.std(Rgs))
@@ -670,10 +670,10 @@ class statkeeper:
             Rgdtdict[dindx].append(R1*R2)
             dtdict[dindx] = t2 - t1
         
-        corrdict = dict([(dtdict[dindx],float(np.mean(v))) for (dindx,v) in Rgdtdict.items()])
+        corrdict = dict([(dtdict[dindx],float(np.mean(v))) for (dindx,v) in list(Rgdtdict.items())])
         #~ print("corrdict:", sorted(corrdict.items()))
         
-        corrdict = dict([(dt,(v-mean*mean) / var) for (dt,v) in corrdict.items()])
+        corrdict = dict([(dt,(v-mean*mean) / var) for (dt,v) in list(corrdict.items())])
         
         return self._shelf_in(key, corrdict)
 
@@ -727,7 +727,7 @@ def filefinder(dir,  *names, **args):
             raise ValueError('%s could not entirely match %s' % (regexpr, xf[-1]))
             
     
-    groups = sorted(      [zip(names, map(Decimal, [m or 'nan' for m in mtch.groups()]))    
+    groups = sorted(      [list(zip(names, list(map(Decimal, [m or 'nan' for m in mtch.groups()]))))    
                         + [('xyz',fpath.File(xf)), ('stats',fpath.File(sf))] 
                         for mtch, xf, sf in matches])
     pdicts = [dict(lst) for lst in groups]

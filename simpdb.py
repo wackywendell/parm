@@ -1,5 +1,5 @@
 # encoding: UTF8
-from __future__ import print_function
+
 from Bio.PDB import PDBParser, Vector
 from Bio.PDB.Residue import Residue as _Residue
 from Bio.PDB.Atom import Atom as _Atom
@@ -15,6 +15,13 @@ from os.path import expanduser
 mydir = expanduser('~/idp/')
 defaultpdbfile  = mydir + 'pdb/aS.pdb'
 defaultloadfile = mydir + 'blengths/stats-H.pkl'
+
+res31 = dict(ALA='A', CYS='C', ASP='D', GLU='E', PHE='F', GLY='G',
+    HIS='H', ILE='I', LYS='K', LEU='L', MET='M', ASN='N', PRO='P',
+    GLN='Q', ARG='R', SER='S', THR='T', VAL='V', TRP='W', TYR='Y')
+res13 = {v:k for k,v in res31.items()}
+
+masses = dict(C=12.0107, H=1.00794, N=14.0067, O=15.9994, S=32.065)
 
 bonddict = {
     'GLY' : [],
@@ -60,12 +67,20 @@ hydroindex7={'ALA': 0.705, 'ARG': 0.43, 'ASN': 0.36, 'ASP': 0.225,
                 'HIS': 0.54, 'ILE': 0.995, 'LEU': 0.985, 'LYS': 0.385, 
                 'MET': 0.87, 'PHE': 1, 'PRO': 0.27, 'SER': 0.475, 
                 'THR': 0.565, 'TRP': 0.985, 'TYR': 0.815, 'VAL': 0.88}
+
+monera = hydroindex7
+# Original Monera scale
+moneraneg = {k : (v * 2 - 1) for k,v in hydroindex7.items()}
+monerascale = {k : (v - min(monera.values())) / 2 for k,v in monera.items()}
+moneranorm = {k : v / max(monerascale.values()) for k,v in monerascale.items()}
+                
                 
 hydroindex3 = {'ALA': 0.729, 'ARG': 0.382, 'ASN': 0.308, 'ASP': 0.373,
                 'CYS': 0.757, 'GLN': 0.418, 'GLU': 0.501, 'GLY': 0.5,
                 'HIS': 0.34,  'ILE': 0.999, 'LEU': 0.997, 'LYS': 0.329,
                 'MET': 0.87, 'PHE': 0.968, 'PRO': 0.27, 'SER': 0.467,
                 'THR': 0.565, 'TRP': 0.933, 'TYR': 0.759, 'VAL': 0.892}
+
 #~ hydroindex={'CYS': (52, 49), 'ILE': (100, 99), 'GLN': (-18, -10), 
 #~ 'VAL': (79, 76), 'LYS': (-37, -23), 'GLY': (0, 0), 'PRO': (-46, -46),
 #~ 'ASP': (-18, -55), 'THR': (13, 13), 'PHE': (92, 100), 'ALA': (47, 41),
@@ -76,27 +91,81 @@ hydroindex3 = {'ALA': 0.729, 'ARG': 0.382, 'ASN': 0.308, 'ASP': 0.373,
 # Looks like the image from 
 # http://www.sigmaaldrich.com/life-science/metabolomics/learning-center/amino-acid-reference-chart.html
 
+# Compare to Nozack, and got that on a gly=0, top=100, it should be 
+# shifted to gly=-14, top = 100-14
+
+# K. A. Sharp, A. Nicholls, R. Friedman, and B. Honig, Biochemistry 30, 9686 (1991).
+# from Sharp et al., unnormalized, no proline (Table II, uncorrected c-> w):
+{'ALA': 1.81, 'ARG': -14.92, 'ASN': -6.64, 'ASP': -8.72, 'CYS': 1.28,
+ 'GLN': -5.54, 'GLU': -6.81, 'GLY': 0.94, 'HIS': -4.66, 'ILE': 4.92,
+ 'LEU': 4.92, 'LYS': -5.55, 'MET': 2.35, 'PHE': 2.98, 'SER': -3.4,
+ 'THR': -2.57, 'TRP': 2.33, 'TYR': -0.14, 'VAL': 4.04}
+# fit to Monera: m=0.04163418,  b=0.72607708
+# that gives proline a value of -10.95
+# or without asp, gly, which were clear outliers:
+# m = 0.057, b=0.743
+# gives Proline -8.30
+# gives Asp -9.09
+# gives Gly -4.27
+
+# K. A. Sharp, A. Nicholls, R. Friedman, and B. Honig, Biochemistry 30, 9686 (1991).
+# std. dev. is 1. Pro averaged from Kyte and Doolittle and Monera.
+# from Sharp et al., unnormalized, no proline (Table II, uncorrected c-> w):
+sharpuncorrected={
+ 'ALA': 0.336, 'ARG': -2.77, 'ASN': -1.233, 'ASP': -1.619, 'CYS': 0.238,
+ 'GLN': -1.029, 'GLU': -1.264, 'GLY': 0.175, 'HIS': -0.865, 'ILE': 0.913,
+ 'LEU': 0.913, 'LYS': -1.03, 'MET': 0.436, 'PHE': 0.553, 'PRO': -0.703,
+ 'SER': -0.631, 'THR': -0.477, 'TRP': 0.433, 'TYR': -0.026, 'VAL': 0.75}
+
+# K. A. Sharp, A. Nicholls, R. Friedman, and B. Honig, Biochemistry 30, 9686 (1991).
+# std. dev. is 1. Pro averaged from Kyte and Doolittle and Monera.
+# from Sharp et al., normalized, no proline (Table II, corrected c-> w):
+ 
+sharpcorrected={
+ 'ALA': 0.519, 'ARG': -2.221, 'ASN': -0.898, 'ASP': -1.28,
+ 'CYS': 0.506, 'GLN': -0.601, 'GLU': -0.851, 'GLY': 0.264,
+ 'HIS': -0.443, 'ILE': 1.382, 'LEU': 1.409, 'LYS': -0.506,
+ 'MET': 0.873, 'PHE': 1.065, 'PRO': -0.703, 'SER': -0.409,
+ 'THR': -0.171, 'TRP': 1.029, 'TYR': 0.505, 'VAL': 1.129}
+
+
+KD = {'ALA': 1.8, 'ARG': -4.5, 'ASN': -3.5, 'ASP': -3.5, 'CYS': 2.5,
+ 'GLN': -3.5, 'GLU': -3.5, 'GLY': -0.4, 'HIS': -3.2, 'ILE': 4.5,
+ 'LEU': 3.8, 'LYS': -3.9, 'MET': 1.9, 'PHE': 2.8, 'PRO': -1.6,
+ 'SER': -0.8, 'THR': -0.7, 'TRP': -0.9, 'TYR': -1.3, 'VAL': 4.2}
+
+KD1 = dict([(k, v / max(KD.values())) for k,v in list(KD.items())])
+KDscaled = dict([(k, (v - min(KD.values())) / 2) for k,v in list(KD.items())])
+KDnorm = dict([(k, v / max(KDscaled.values())) for k,v in list(KDscaled.items())])
+
+aWW = {'ALA': 0.67, 'ARG': -0.5, 'ASN': -3.64, 'ASP': -1.81,
+ 'CYS': 1.71, 'GLN': -0.77, 'GLU': -0.85, 'GLY': 1.25,
+ 'HIS': -1.15, 'ILE': 0.46, 'LEU': 0.71, 'LYS': 0.02,
+ 'MET': -0.46, 'PHE': -0.25, 'PRO': -3.63, 'SER': -0.11,
+ 'THR': 1.12, 'TRP': -0.14, 'TYR': -2.8, 'VAL': 2.09}
+
+aWWscaled = dict([(k, (v - min(aWW.values())) / 2) for k,v in list(aWW.items())])
+aWWnorm = dict([(k, v / max(aWWscaled.values())) for k,v in list(aWWscaled.items())])
+
+# averages over several different scales.
+hydroavg = {'ALA': 0.328, 'ARG': -1.601, 'ASN': -0.878,
+             'ASP': -1.335, 'CYS': 0.54, 'GLN': -0.75,
+             'GLU': -1.13, 'GLY': -0.082, 'HIS': -0.436,
+             'ILE': 1.307, 'LEU': 1.213, 'LYS': -1.126,
+             'MET': 0.836, 'PHE': 1.17, 'PRO': -0.46,
+             'SER': -0.385, 'THR': -0.211, 'TRP': 0.851,
+             'TYR': 0.279, 'VAL': 0.989}
+
+hydroavgscale = dict([(k, (v - min(hydroavg.values())) / 2) for k,v in list(hydroavg.items())])
+hydroavgnorm = dict([(k, v / max(hydroavgscale.values())) for k,v in list(hydroavgscale.items())])
+
+
 # For Ph 2:
 # Sereda, Terrance J., Colin T. Mant, Frank D. Sönnichsen, and Robert S. Hodges. “Reversed-phase Chromatography of Synthetic Amphipathic Α-helical Peptides as a Model for Ligand/receptor Interactions Effect of Changing Hydrophobic Environment on the Relative Hydrophilicity/hydrophobicity of Amino Acid Side-chains.” Journal of Chromatography A 676, no. 1 (July 29, 1994): 139–153.
 # For Ph 7:
 # Monera, Oscar D., Terrance J. Sereda, Nian E. Zhou, Cyril M. Kay, and Robert S. Hodges. “Relationship of Sidechain Hydrophobicity and Α-helical Propensity on the Stability of the Single-stranded Amphipathic Α-helix.” Journal of Peptide Science 1, no. 5 (1995): 319–329.
 
 
-
-def get_all_angles(bonds):
-    bonds = set(bonds + [('N','CA'), ('CA','C')])
-    angles = set()
-    for b1 in bonds:
-        a1,a2 = b1
-        for b2 in bonds:
-            a3,a4 = b2
-            atoms = set([a1,a2,a3,a4])
-            if len(atoms) != 3: continue
-            mid, = [a for a in atoms if a in b1 and a in b2]
-            l,r = [a for a in atoms if a != mid]
-            if l > r: r,l = l,r
-            angles.add((l,mid,r))
-    return sorted(angles, key=lambda ang: ang[1][1:])
 
 def add_first_bonds(bonds_so_far, H=True):
     if ('H','N') in bonds_so_far:
@@ -109,29 +178,48 @@ def add_first_bonds(bonds_so_far, H=True):
 def add_last_bonds(bonds_so_far, H=True):
     bonds_so_far.extend([('C','OXT')])
     return bonds_so_far
+    
+def get_bonds(resname, lastres=None, nextres=None, H=True):
+    """Yields quadruplets of (r1 idx, atom1 name, r2 idx, atom2 name).
+    
+    r1 idx = 0 for prev, 1 for this."""
+    bonds = bonddict[resname] + backbonds
+    if H:
+        bonds.extend(hydrodict[self.resname])
+    if lastres is None: bonds = add_first_bonds(bonds, H=H)
+    if nextres is None: bonds = add_last_bonds(bonds, H=H)
+    bondsnamed = [(1, a1, 1, a2) for a1,a2 in bonds]
+    if nextres is not None: bondsnamed = (
+                bondsnamed + [(0, a1, 1, a2) for a1,a2 in bonds])
+    return bondsnamed
 
-def makepairs(**kw):
-    lst = []
-    #~ if 'N' in kw and kw['N'] == 1:
-        #~ lst.append(('H'. 'N'))
-        #~ del kw['N']
-    for a,n in kw.pairs():
-        if iterable(n):
-            lst.extend([(H, a) for H in n])
-            continue
-        postlabel = a[1:]
-        if n == 1:
-            lst.append(('H' + postlabel, a))
-            continue
-        for i in range(1,n+1):
-            lst.append(('H' + postlabel + str(i), a))
-    return lst
-        
-
-#~ hydrodict = {
-    #~ 'GLY' : makepairs(N=1, CA=['HA2','HA3']),
-    #~ 'ALA' : makepairs(N=1, CA=1, CB=3),
-    #~ 'VAL' : makepairs(N=1, CA=1, CB=1, CG1=3, CG2=3),
+def get_angles(resname, lastres=None, nextres=None, H=True):
+    """Yields sextuplets of (r1 idx, atom1 name, r2 idx, atom2 name, r3 idx, atom3 name).
+    
+    r1 idx = 0 for prev, 1 for this."""
+    self.load_data(f)
+    myangles = self.resangles[self.resname]
+    backangles = self.backangles
+    dlist = defaultdict(list)
+    for a1,a2,d,s in self.get_bonds(lastres, nextres, f):
+        dlist[(a1.group, a1.name)].append(a2)
+        dlist[(a2.group, a2.name)].append(a1)
+    for center, pairlist in dlist.items():
+        cgroup, cname = center
+        center = cgroup[cname]
+        #print('get_angles:',self.resname, center.name, pairlist)
+        #print(backangles.keys(), myangles.keys())
+        for l,r in itertools.combinations(pairlist, 2):
+            aname = (l.name, center.name, r.name)
+            aname2 = (r.name, center.name, l.name)
+            if aname in myangles: stats = myangles[aname]
+            elif aname2 in myangles: stats = myangles[aname2]
+            elif aname in backangles: stats = backangles[aname]
+            elif aname2 in backangles: stats = backangles[aname2]
+            else:
+                n1, n2, n3 = aname
+                raise KeyError("Could not find angle %s-%s-%s for residue %s" % (n1, n2, n3, self.resname))
+            yield (l,center,r, stats['mean'], stats['std'])
 
 # other effects:
 # ASP, GLU have extra Hs at some pH values
@@ -159,7 +247,7 @@ hydrodict = {
 'VAL' : [('H', 'N'), ('HA', 'CA'), ('HB', 'CB'), ('HG11', 'CG1'), ('HG12', 'CG1'), ('HG13', 'CG1'), ('HG21', 'CG2'), ('HG22', 'CG2'), ('HG23', 'CG2')]
 }
 
-to_attach = {'GLU':[('H','HE2','OE2')], 'PRO':[('H','H','N')]}
+# to_attach = {'GLU':[('H','HE2','OE2')], 'PRO':[('H','H','N')]}
 
 # from richards
 RichardsSizes = {
@@ -169,7 +257,7 @@ RichardsSizes = {
     }
 
 AliceSizes = {'H':1.05, 'Csp3':1.5, 'Csp2':1.4, 'N':1.4, 'O':1.45,
-                    'S' : 1.8} # Sulfur taken from Richards
+                    'S' : 1.6}
 PorterRoseSizedict = {'H':1.0, 'Csp3':1.64, 'Csp2':1.5, 'N':1.35, 'O':1.35,
                     'S' : 1.8} # Sulfur taken from Richards
 
@@ -194,6 +282,10 @@ Charges74 = { ('LYS', 'NZ') : 1,
     ('ASP', 'OD1') : -.5, ('ASP', 'OD2') : -.5, 
     ('GLU', 'OE1') : -.5, ('GLU', 'OE2') : -.5
     }
+
+# charges per residue
+rescharges74 = dict()
+for r,a in Charges74: rescharges74[r] = rescharges74.get(r,0) + Charges74[(r,a)]
 
 class Resvec(atomvec):
     def __init__(self, residue, H=False, amu=1, loadfile=None):
@@ -277,7 +369,7 @@ class Resvec(atomvec):
             f = open(f, 'rb')
             opened = True
         
-        import cPickle as pickle
+        import pickle
         cls.resbonds, cls.backbonds, cls.resangles, cls.backangles = pickle.load(f)
         if opened: f.close()
     
@@ -291,7 +383,7 @@ class Resvec(atomvec):
         self.load_full(f)
     
     def getCOM(self):
-        vs,ms = zip(*[(a.x*a.mass, a.mass) for a in self])
+        vs,ms = list(zip(*[(a.x*a.mass, a.mass) for a in self]))
         return sum(vs, Vec(0,0,0)) / sum(ms)
     
     def getCORg(self):
@@ -315,12 +407,12 @@ class Resvec(atomvec):
                     atom.name, atom.element, len(mybonds)), mybonds)
     
     def get_angles(self, lastres=None, nextres=None, f=None):
-        """Yields triplets of (atom1 ptr, atom2 ptr, atom3 ptr, bond angle in radians)"""
+        """Yields quintuplets of (atom1 ptr, atom2 ptr, atom3 ptr, bond angle in radians, std in radians)"""
         self.load_data(f)
         myangles = self.resangles[self.resname]
         backangles = self.backangles
         dlist = defaultdict(list)
-        for a1,a2,d in self.get_bonds(lastres, nextres, f):
+        for a1,a2,d,s in self.get_bonds(lastres, nextres, f):
             dlist[(a1.group, a1.name)].append(a2)
             dlist[(a2.group, a2.name)].append(a1)
         for center, pairlist in dlist.items():
@@ -331,13 +423,14 @@ class Resvec(atomvec):
             for l,r in itertools.combinations(pairlist, 2):
                 aname = (l.name, center.name, r.name)
                 aname2 = (r.name, center.name, l.name)
-                if aname in myangles: yield (l,center,r, myangles[aname]['mean'])
-                elif aname2 in myangles: yield (l,center,r, myangles[aname2]['mean'])
-                elif aname in backangles: yield (l,center,r, backangles[aname]['mean'])
-                elif aname2 in backangles: yield (l,center,r, backangles[aname2]['mean'])
+                if aname in myangles: stats = myangles[aname]
+                elif aname2 in myangles: stats = myangles[aname2]
+                elif aname in backangles: stats = backangles[aname]
+                elif aname2 in backangles: stats = backangles[aname2]
                 else:
                     n1, n2, n3 = aname
                     raise KeyError("Could not find angle %s-%s-%s for residue %s" % (n1, n2, n3, self.resname))
+                yield (l,center,r, stats['mean'], stats['std'])
         
     def old_get_angles(self, lastres=None, nextres=None, f=None):
         """Yields triplets of (atom1 ptr, atom2 ptr, atom3 ptr, bond angle in radians)"""
@@ -384,7 +477,7 @@ class Resvec(atomvec):
                 yield (self[a1], self[a2], self[a3], val['mean'])
     
     def get_bonds(self, lastres=None, nextres=None, f=None):
-        """Yields triplets of (atom1 ptr, atom2 ptr, bond length in angstrom)"""
+        """Yields quadruplets of (atom1 ptr, atom2 ptr, dist, std)"""
         self.load_data(f)
         bonds = bonddict[self.resname] + backbonds
         if self.hydrogens is None:
@@ -397,12 +490,14 @@ class Resvec(atomvec):
         mybonds = self.resbonds[self.resname]
         for pair in bonds:
             a1,a2 = pair
-            dist = (mybonds[pair]['mean'] if pair in
-                    mybonds else self.backbonds[pair]['mean'])
+            stats = (mybonds[pair] 
+                    if pair in mybonds else self.backbonds[pair])
+            dist = stats['mean']
+            std = stats['std']
             if pair in pairbonds:
-                yield (lastres[a1], self[a2], dist)
+                yield (lastres[a1], self[a2], dist, std)
                 continue
-            yield (self[a1], self[a2], dist)
+            yield (self[a1], self[a2], dist, std)
         
     def old_get_bonds(self, lastres=None, f=None):
         """Yields triplets of (atom1 ptr, atom2 ptr, bond length in angstrom)"""
@@ -529,7 +624,7 @@ class Resvec(atomvec):
     def from_pdb(cls, strucname='aS', pdbfilename=defaultpdbfile, 
                         loadfile=defaultloadfile, fix=True,
                         numchains=None, numres=None, amu=1, H=False):
-        pdbp = PDBParser()
+        pdbp = PDBParser(QUIET=True)
         aS = pdbp.get_structure(strucname, pdbfilename)
         chains = list(aS.get_chains())[:numchains]
         residues = list(itertools.chain.from_iterable(
@@ -559,18 +654,47 @@ class Resvec(atomvec):
         elif ang=='phi': angs, sgn = (['C'],['N','CA','C'], []), 1
         else: raise ValueError("Angle %r not recognized." % ang)
         
-        atoms = sum([[r[a] for a in ang] for r,ang 
-                                in zip([prev, self, nxt], angs)],
-                    [])
+        atoms = [r[a] 
+                    for r,anames in zip([prev, self, nxt], angs)
+                    for a in anames]
         assert len(atoms) == 4
         locs = [a.x for a in atoms]
         r1,r2,r3 = [x2-x1 for x1,x2 in zip(locs[:-1], locs[1:])]
-        assert r1.mag() < 3, "r1 mag was %.3f for ang %s residues %s,%s,%s" % (r1.mag(), ang, prev.resname, self.resname, nxt.resname)
-        assert r2.mag() < 3, "r2 mag was %.3f for ang %s residues %s,%s,%s" % (r2.mag(), ang, prev.resname, self.resname, nxt.resname)
-        assert r3.mag() < 3, "r3 mag was %.3f for ang %s residues %s,%s,%s" % (r3.mag(), ang, prev.resname, self.resname, nxt.resname)
+        anames = "-".join(["%s%s:%s" % 
+                (r.resname if r else '#', 
+                            str([prev,self,nxt].index(r)) if r else '', a)
+                    for r,anames in zip([prev, self, nxt], angs)
+                    for a in anames])
+        
+        lmin = 3
+        assert r1.mag() < lmin, (
+            "r1 mag was %.3f for angle \'%s\', residues %s,%s,%s" % (
+            r1.mag(), ang, prev.resname if prev else '-', 
+            self.resname if self else '-', nxt.resname if nxt else '-') + " " + anames)
+        assert r2.mag() < lmin, (
+            "r2 mag was %.3f for angle \'%s\', residues %s,%s,%s" % (
+            r2.mag(), ang, prev.resname if prev else '-', 
+            self.resname if self else '-', nxt.resname if nxt else '-') + " " + anames)
+        assert r3.mag() < lmin, (
+            "r3 mag was %.3f for angle \'%s\', residues %s,%s,%s" % (
+            r3.mag(), ang, prev.resname if prev else '-', 
+            self.resname if self else '-', nxt.resname if nxt else '-') + " " + anames)
+    
         return sgn * dihedral.getang(r1,r2,r3)
         #cos = dihedral.getcos(r1,r2,r3)
         #return math.acos(cos)
+    
+    @classmethod
+    def phipsis(cls, rlist):
+        """Note that psis are for 0:N-1, and phis for 1:N. You need
+        to do phis[:-1], psis[1:] to get matching pairs..."""
+        restriplets = list(zip([None] + rlist, rlist, rlist[1:]))
+        psis = [res.dihedral('psi', p, n) for p,res,n in restriplets]
+        restriplets = list(zip(rlist, rlist[1:], rlist[2:] + [None]))
+        phis = [res.dihedral('phi', p, n) for p,res,n in restriplets]
+        assert len(phis) == len(rlist) - 1
+        assert len(psis) == len(rlist) - 1
+        return phis,psis
 
 class Residue(_Residue):
     """I don't think I'm using this anymore."""
@@ -670,9 +794,9 @@ def addAtom(residue, attachto, newname, element='H', coord=None, **kwargs):
     
     # make our atom!
     # these are my 'default' arguments for Bio.PDB.Atom
-    kw = dict(coord = coord, bfactor=None,
-            occupancy=None, altloc = None, fullname=newname,
-            serial_number=None, element=element)
+    kw = dict(coord = coord, bfactor=0,
+            occupancy=0, altloc = 0, fullname=newname,
+            serial_number=0, element=element)
     # update with anything given
     kw.update(kwargs)
     newatom = _Atom(newname, **kw)
@@ -700,20 +824,30 @@ def addAtoms(residues, atomdict):
             for r in allres:
                 addAtom(r, attach, aname, element=element)
 
-def make_bonds(resvecs, bond_k, angstrom=1):
+def make_bonds(resvecs, bond_k, angstrom=1, usestd=False):
     bond_pairs = bondpairs()
-    for a1,a2,l in Resvec.all_bonds(resvecs):
+    allks = []
+    for a1,a2,l,s in Resvec.all_bonds(resvecs):
+        k = bond_k / s /s if usestd else bond_k
+        allks.append(k)
         length = l * angstrom
-        bond_pairs.add(bond_k, length, a1, a2)
-    print('Made %d bonds from %d residues.' % (bond_pairs.size(), len(resvecs)))
+        bond_pairs.add(k, length, a1, a2)
+    print('Made %d bonds from %d residues, with k=%.2f +- %.2f [%.2f - %.2f]' % (
+        bond_pairs.size(), len(resvecs), 
+        np.mean(allks), np.std(allks), np.min(allks), np.max(allks)))
     return bond_pairs
 
-def make_angles(resvecs, angle_k):
+def make_angles(resvecs, angle_k, usestd=False):
     bond_angles = angletriples()
-    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+    allks = []
+    for a1,a2,a3,angle,s in Resvec.all_angles(resvecs):
         #~ print("angle", "-".join(a.name for a in (a1,a2,a3)), angle)
-        bond_angles.add(angle_k, angle, a1, a2, a3)
-    print('Made %d angles from %d residues.' % (bond_angles.size(), len(resvecs)))
+        k = angle_k / s / s if usestd else angle_k
+        allks.append(k)
+        bond_angles.add(k, angle, a1, a2, a3)
+    print('Made %d angles from %d residues, with k=%.2f +- %.2f [%.2f - %.2f]' % (
+            bond_angles.size(), len(resvecs), 
+        np.mean(allks), np.std(allks), np.min(allks), np.max(allks)))
 
     return bond_angles
 
@@ -724,7 +858,8 @@ def make_dihedrals(resvecs, k):
     zeroang = fvector([k/2,-k,k/2])
     for r1,r2 in zip(resvecs, resvecs[1:]):
         #~ ang = piang if r1.resname is 'PRO' or r2.resname is 'PRO' else zeroang
-        ang = zeroang # corresponds to planar zigzag, not planar C
+        # ang = zeroang # corresponds to planar zigzag, not planar C <-- OLD!!
+        ang = piang
         a1, a2, a3, a4 = r1['CA'],r1['C'],r2['N'],r2['CA']
         r1,r2,r3 = (a2.x-a1.x), (a3.x-a2.x), (a4.x-a3.x)
         mags = r1.mag(), r2.mag(), r3.mag()
@@ -733,12 +868,12 @@ def make_dihedrals(resvecs, k):
         #~ if ang == zeroang:
             #~ print('added zeroang', mags)
         for m in mags:
-            if m >= 2.5: raise RuntimeError, "Found bad angle"
+            if m >= 2.5: raise RuntimeError("Found bad angle")
         
-        cosine = dihedral.getcos(r1,r2,r3)
-        #~ print('cosine:', cosine)
-        #~ if abs(cosine) < 3:
-            #~ raise RuntimeError, "Angle %.2f is near pi" % cosine
+        curang = dihedral.getang(r1,r2,r3)
+        #print('angle:', curang)
+        #if abs(curang) < 2.8:
+        #    raise RuntimeError, "Angle %.2f is not near pi" % curang
         d.add(ang, a1, a2, a3, a4)
     return d
 
@@ -772,10 +907,10 @@ def make_LJ(resvecs, epsilon=1, sizefactor=1, neighborcutoff=1.4, LJdict=AliceSi
         sigma = core * factor
         LJ.add(LJatom(epsilon, sigma, aref))
     
-    for a1,a2,l in Resvec.all_bonds(resvecs):
+    for a1,a2,l,bondstd in Resvec.all_bonds(resvecs):
         neighbors.ignore(a1,a2)
     
-    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+    for a1,a2,a3,angle,anglestd in Resvec.all_angles(resvecs):
         #~ neighbors.ignore(a1,a2)
         #~ neighbors.ignore(a2,a3)
         neighbors.ignore(a1,a3)
@@ -809,7 +944,7 @@ def make_LJ_simple(resvecs, LJcutoff=2.5, epsilon=1):
     
     return LJ
 
-def make_charges(resvecs, screen, ph=7.4, k=1, expectOXT=True, subtract=True):
+def make_charges(resvecs, screen, k, ph=7.4, expectOXT=True, subtract=True):
     """Screening distance in base units - 0 or less for no screening.
     
     Epsilon for an extra charge."""
@@ -863,14 +998,14 @@ def make_charges(resvecs, screen, ph=7.4, k=1, expectOXT=True, subtract=True):
         #~ charge = chargedict[(atom.group.resname, atom.name)]
         charges.add(aref, charge)
     
-    for a1,a2,l in Resvec.all_bonds(resvecs):
+    for a1,a2,l,bondstd in Resvec.all_bonds(resvecs):
         key1, key2 = (a1.group.resname, a1.name), (a2.group.resname, a2.name)
         if key1 not in chargedict or key2 not in chargedict:
             continue
         #~ print('ignoring', a1.group.resname, a1.name, a2.name)
         charges.ignore(a1,a2)
     
-    for a1,a2,a3,angle in Resvec.all_angles(resvecs):
+    for a1,a2,a3,angle,anglestd in Resvec.all_angles(resvecs):
         key1, key2 = (a1.group.resname, a1.name), (a3.group.resname, a3.name)
         if key1 not in chargedict: continue
         if key2 not in chargedict: continue
@@ -907,7 +1042,7 @@ def make_hydrophobicity_old(resvecs, epsilons, LJcutoff=2.5, neighborcutoff=1.4,
     return Hphob, neighbors
 
 def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
-                    sigma=5.38, hydroindex=hydroindex7):
+                    sigma=5.38, hydroindex=hydroindex7, method='geometric'):
     """LJcutoff in sigma units, neighborcutoff relative to LJcutoff.
     Makes a CA hydrophobicity attractive force.
     
@@ -921,15 +1056,26 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
     Hphob = Hydrophobicity(neighbors)
     
     #~ print("Hlist:", *Hlist)
-    assert all(0 <= H <= 1 for H in hydroindex.values())
-    Rnames, Hlist = zip(*sorted(hydroindex.items()))
+    Rnames, Hlist = list(zip(*sorted(hydroindex.items())))
+    
+    if method == 'geometric':
+        assert all(0 <= H <= 1 for H in Hlist)
+        def combine(H1, H2): return math.sqrt(H1*H2)
+    elif method == 'geometriczero':
+        def combine(H1, H2): return math.sqrt(H1*H2) if (H1 > 0 and H2 > 0) else 0
+    elif method == 'arithmetic':
+        def combine(H1, H2): return (H1 + H2)/2
+    elif method == 'arithmeticzero':
+        def combine(H1, H2): return (H1 + H2)/2 if (H1 + H2)/2 > 0 else 0
+    else:
+        raise NotImplementedError("Method %s not recognized" % method)
     
     def makeatom(res):
         atom = res['CA']
         #~ if res.resname not in Hlist: return None
         idx = Rnames.index(res.resname)
         myH = Hlist[idx]
-        epsvec = [epsilon*math.sqrt(H*myH) for H in Hlist]
+        epsvec = [epsilon*combine(H,myH) for H in Hlist]
         #~ print(res.resname, ' '.join([str(int(H/epsilon*100)) for H in epsvec]))
         return HydroAtom(epsvec, idx, sigma, res.get_id(atom), LJcutoff)
     
@@ -942,3 +1088,11 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
         neighbors.ignore(a1,a2)
     
     return Hphob, neighbors
+    
+def correct_phi(residues):
+    restrip = [(prev, res, nxt) for prev, res, nxt in 
+            zip(residues[:-2], residues[1:-1], residues[2:]) 
+            if res.resname not in ('PRO', 'GLY')]
+    phis = [ res.dihedral('phi', prev, nxt) for prev, res, nxt in restrip]
+    phiscorrect = [(phi > 2*math.pi/3) or (phi < 0) for phi in phis]
+    return phiscorrect.count(True), len(restrip)

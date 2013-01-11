@@ -19,6 +19,6 @@ smFRETs={
 def plot_reslengths(sk):
     Rijs = [np.array(sk.Rij(i,j), dtype=float) for i,j in sorted(smFRETs.keys())]
     vals = [(Rij.mean(), Rij.std()) for Rij in Rijs]
-    means, stds = zip(*vals)
+    means, stds = list(zip(*vals))
     
         

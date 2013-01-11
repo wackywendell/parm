@@ -1,5 +1,5 @@
 # encoding: UTF-8
-from __future__ import print_function
+
 print("Importing...")
 
 from simw import *

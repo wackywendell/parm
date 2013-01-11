@@ -1,6 +1,6 @@
-from __future__ import print_function
 
-import cPickle as pickle
+
+import pickle as pickle
 import os.path
 import math
 
@@ -9,9 +9,9 @@ loadfile = mydir + 'blengths/stats.pkl'
 
 rbonds, bbonds, rangles, bangles = pickle.load(open(loadfile))
 
-bonds = [bbonds.values()] + [r.values() for r in rbonds.values()]
+bonds = [list(bbonds.values())] + [list(r.values()) for r in list(rbonds.values())]
 bonddicts = [bd for r in bonds for bd in r]
-angles = [bangles.values()] + [r.values() for r in rangles.values()]
+angles = [list(bangles.values())] + [list(r.values()) for r in list(rangles.values())]
 angledicts = [ad for r in angles for ad in r]
 
 bondvariancesums = sum([b['std']**2 * b['N'] for b in bonddicts])

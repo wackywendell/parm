@@ -4,8 +4,8 @@ SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
 
 BOOSTINC=$(HOME)/boost_1_48_0/
-INC=-I$(BOOSTINC) `python-config --include`
-LIB=`python-config --ldflags`
+INC=-I$(BOOSTINC) `python3-config --include`
+LIB=`python3-config --ldflags`
 
 ALL=_sim.so
 all: printout $(ALL)

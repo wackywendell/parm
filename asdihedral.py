@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: UTF-8
-from __future__ import print_function
+
 
 from simw import *
 from math import sqrt
@@ -195,7 +195,7 @@ try:
         values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         print('------', int(t*opts.dt+.5))
-        for k,v in values.items():
+        for k,v in list(values.items()):
             valtracker[k].append(v)
             if k is 'time': continue
             printlist(valtracker[k], k)

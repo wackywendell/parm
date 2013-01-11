@@ -1,10 +1,10 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
-SWIG=swig
+SWIG=swig -Wextra -shadow -python -py3 -c++
 CCOPTS=-Wall -O3 -fPIC
 
 #INC=-I/usr/include/python2.7
-INC=`python2-config --includes`
+INC=`python3-config --includes`
 
 #~ ifeq ("$(UNAME)","Darwin")
 	#~ CC=/opt/local/bin/g++-mp-4.6
@@ -23,7 +23,7 @@ clean:
 	rm -f *.o *.so $(ALL) *.gch sim_wrap.cxx
 
 sim_wrap.cxx: *.hpp *.cpp sim.i
-	$(SWIG) -Wextra -shadow -python -c++ sim.i
+	$(SWIG) sim.i
 
 sim_wrap.o: sim_wrap.cxx
 	$(CXX) $(CCOPTS) -c sim_wrap.cxx $(INC)

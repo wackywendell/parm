@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from __future__ import print_function
+
 import argparse, glob, os, os.path, sys
 
 #~ import xyzstats
@@ -72,19 +72,19 @@ def statupdate(stats, f):
         for n in [0,1,2,3,4,5,6,8]:
             rijs = stats.Rijext(f, default_ijs, n)
             #print(rijs)
-            assert all([len(v) - numpts <= MAXPTS for v in rijs.values()]), (
-                    "Rgs of len %d, Rijexts of len %s" % (numpts, [len(v) for v in rijs.values()]))
+            assert all([len(v) - numpts <= MAXPTS for v in list(rijs.values())]), (
+                    "Rgs of len %d, Rijexts of len %s" % (numpts, [len(v) for v in list(rijs.values())]))
     if opts.get_Rijdistribs:
         rijs = stats.Rijs(f, distribijs)
-        assert all([len(v) - numpts <= MAXPTS for v in rijs.values()]), (
-                    "Rgs of len %d, Rijs of len %s" % (numpts, [len(v) for v in rijs.values()]))
+        assert all([len(v) - numpts <= MAXPTS for v in list(rijs.values())]), (
+                    "Rgs of len %d, Rijs of len %s" % (numpts, [len(v) for v in list(rijs.values())]))
         stats.ETeffsAS(f, 54)
         sprint('Rij - ')
         opts.get_Rijs = False
     if opts.get_Rijs or opts.get_Rijexts:
         rijs = stats.Rijs(f, default_ijs)
-        assert all([len(v) - numpts <= MAXPTS for v in rijs.values()]), (
-                    "Rgs of len %d, Rijs of len %s" % (numpts, [len(v) for v in rijs.values()]))
+        assert all([len(v) - numpts <= MAXPTS for v in list(rijs.values())]), (
+                    "Rgs of len %d, Rijs of len %s" % (numpts, [len(v) for v in list(rijs.values())]))
         stats.ETeffsAS(f, 54)
         sprint('Rij - ')
     if opts.get_angles:

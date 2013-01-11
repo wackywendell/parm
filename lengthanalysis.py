@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from Bio.PDB import *
 from fpath import *
 from collections import defaultdict
@@ -52,7 +52,7 @@ def get_bonds(resname, atom):
 
 # atoms per residue
 atom_names = defaultdict(set)
-for res,bonds in bonddict.items():
+for res,bonds in list(bonddict.items()):
     for a1, a2 in bonds:
         atom_names[res].add(a1)
         atom_names[res].add(a2)
@@ -63,7 +63,7 @@ for res,bonds in bonddict.items():
 
 # all possible bond angles per residue
 angles = dict()
-for res, atomset in atom_names.items():
+for res, atomset in list(atom_names.items()):
     curset = set()
     for atom in atomset:
         bonds = list(get_bonds(res, atom))
@@ -253,15 +253,15 @@ def parsepdb(fname, permissive):
         cur_angles, cur_backangles, angerr = getangles(res, lastres, nextres)
         if permissive or not err:
             this_bonds = res_bonds[res.resname]
-            for k,v in cur_bonds.items():
+            for k,v in list(cur_bonds.items()):
                 this_bonds[k].append(v)
-            for k,v in cur_backbone.items():
+            for k,v in list(cur_backbone.items()):
                 backbone_bonds[k].append(v)
         if permissive or not angerr:
             this_angles = res_angles[res.resname]
-            for k,v in cur_angles.items():
+            for k,v in list(cur_angles.items()):
                 this_angles[k].append(v)
-            for k,v in cur_backangles.items():
+            for k,v in list(cur_backangles.items()):
                 back_angles[k].append(v)
         #~ print(lastres, res, nextres, len(back_angles[('CA','C','N')]), ('CA','C','N') in cur_backangles)
 
@@ -269,12 +269,12 @@ def parsepdb(fname, permissive):
 def applytobonds(func, *args, **kwargs):
     newres = dict()
     newangles = dict()
-    for res, curdict in res_bonds.items():
-        newres[res] = {k:func(v, *args, **kwargs) for k,v in curdict.items()}
-    newbdict = {k:func(v, *args, **kwargs) for k,v in backbone_bonds.items()}
-    for res, curdict in res_angles.items():
-        newangles[res] = {k:func(v, *args, **kwargs) for k,v in curdict.items()}
-    newbackang = {k:func(v, *args, **kwargs) for k,v in back_angles.items()}
+    for res, curdict in list(res_bonds.items()):
+        newres[res] = {k:func(v, *args, **kwargs) for k,v in list(curdict.items())}
+    newbdict = {k:func(v, *args, **kwargs) for k,v in list(backbone_bonds.items())}
+    for res, curdict in list(res_angles.items()):
+        newangles[res] = {k:func(v, *args, **kwargs) for k,v in list(curdict.items())}
+    newbackang = {k:func(v, *args, **kwargs) for k,v in list(back_angles.items())}
     
     return newres, newbdict, newangles, newbackang
 
@@ -302,11 +302,11 @@ def singleplot(res, hist, bins, *args, **kwargs):
     pyplot.plot(xvals, hist, *args, **kwargs)
 
 def load_hists():
-    import cPickle as pickle
+    import pickle as pickle
     return pickle.load(histfile.open('rb'))
 
 def load_stats():
-    import cPickle as pickle
+    import pickle as pickle
     return pickle.load(statfile.open('rb'))
 
 if __name__ == '__main__':
@@ -322,12 +322,12 @@ if __name__ == '__main__':
     print('Calculating statistics...')
 
     resstats, backstats, angstats, backangstats = applytobonds(stats)
-    bondstats = ([(n, d) for n, d in resstats.items()]  + [('backbone',backstats)])
+    bondstats = ([(n, d) for n, d in list(resstats.items())]  + [('backbone',backstats)])
     
     res_hists, back_hists, ang_hists, back_ang_hists = applytobonds(makehist, 200)
 
     for name,d in bondstats:
-        for bond, stat in d.items():
+        for bond, stat in list(d.items()):
             bname = bond[0] + '-' + bond[1]
             if stat['std/mean'] > .02:
                 print(name, bname, 'std/mean', stat['std/mean'])
@@ -336,12 +336,12 @@ if __name__ == '__main__':
     
     if True:
         print('Writing to file...')
-        import cPickle as pickle
+        import pickle as pickle
         with statfile.open('wb') as f:
             pickle.dump((resstats, backstats, angstats, backangstats), f, -1)
             
         with histfile.open('wb') as f:
             pickle.dump((res_hists, back_hists, ang_hists, back_ang_hists), f, -1)
         print('finished.')
-        print('Strange residues:', ", ".join([k+':'+str(v) for k,v in notfound.items()]))
+        print('Strange residues:', ", ".join([k+':'+str(v) for k,v in list(notfound.items())]))
         print(len(broken), 'Missing bonds.')

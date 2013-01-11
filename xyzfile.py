@@ -1,6 +1,6 @@
-from __future__ import print_function
+
 import re, math, numpy as np
-from itertools import izip
+
 import hashlib, logging
 import simw as sim
 #~ import pyparsing as parse
@@ -13,7 +13,7 @@ class XYZwriter:
     def writeframe(self, reslist, com=None, **kwargs):
         Natoms = sum(len(r) for r in reslist)
         print(Natoms, file=self.file)
-        comment = " ".join(["=".join((k,str(v))) for k,v in kwargs.items()])
+        comment = " ".join(["=".join((k,str(v))) for k,v in list(kwargs.items())])
         print(comment, file=self.file)
         
         lines = []
@@ -51,9 +51,9 @@ class XYZwriter:
             key = 'Rij%d-%d' % (i,j)
             cdict[key] = sim.Rij(reslist, i, j)
         if hasattr(collec, 'interactions'):
-            for name,interaction in collec.interactions.items():
+            for name,interaction in list(collec.interactions.items()):
                 cdict[name + 'E'] = interaction.energy()
-            for i in collec.interactions.values():
+            for i in list(collec.interactions.values()):
                 if isinstance(i, sim.bondpairs):
                     cdict['bondmean'] = i.mean_dists()
                     cdict['bondstd'] = i.std_dists()
@@ -119,7 +119,7 @@ class XYZreader:
     def __match__(self, regex, *types):
         line = self.file.readline()
         if line == '':
-            raise StopIteration, "Reached end of file."
+            raise StopIteration("Reached end of file.")
         line = line.strip()
         match = regex.match(line)
         if match is None:
@@ -143,7 +143,7 @@ class XYZreader:
         lines = [self.file.readline().strip().split(' ') for i in range(num)]
         badlines = [l for l in lines if len(l) != 4 and len(l) != 7]
         if len(badlines) > 0:
-            raise ValueError, "bad coordinate line: %s" % str(badlines[0])
+            raise ValueError("bad coordinate line: %s" % str(badlines[0]))
         
         try:
             lines = [(e,(float(x),float(y),float(z))) for e,x,y,z in lines]
@@ -151,10 +151,14 @@ class XYZreader:
             lines = [(e,(float(x),float(y),float(z)),
                             (float(vx),float(vy),float(vz))) 
                     for e,x,y,z,vx,vy,vz in lines]
-        if 'time' not in commentdict:
-            raise AssertionError, 'Comment %s does not include time' % str(commentdict)
-        f = Frame(lines, float(commentdict['time']))
-        del commentdict['time']
+        if 'time' not in commentdict and 'stage' not in commentdict:
+            raise AssertionError('Comment %s does not include time' 
+                                                    % str(commentdict))
+        if 'time' in commentdict:
+            f = Frame(lines, float(commentdict['time']))
+            del commentdict['time']
+        else:
+            f = Frame(lines, float('nan'))
         f.comment = comment
         f.values = commentdict
         return f
@@ -167,7 +171,8 @@ class XYZreader:
     
     def into(self, atoms, check=True):
         for f in self:
-            yield f.into(atoms, check)
+            f.into(atoms, check)
+            yield f.time, f.values
     
     def _convert_time_line(self, line):
         if '=' not in line:
@@ -221,14 +226,14 @@ class Frame:
     def __init__(self, locs, t=None): #, indx=None):
         self.t = t
         #~ self.indx = indx
-        resized = zip(*locs)
+        resized = list(zip(*locs))
         if len(resized) == 2:
             self.elems, self.locs = resized
             self.vels = None
         elif len(resized) == 3:
             self.elems, self.locs, self.vels = resized
         else:
-            raise ValueError, "Resized wrong length (%d)" % len(resized)
+            raise ValueError("Resized wrong length (%d)" % len(resized))
         
         #~ self.__locarray = None
         #~ self.__velarray = None   
@@ -248,16 +253,16 @@ class Frame:
     
     def into(self, atoms, check=True):
         if self.vels is not None:
-            for a, elem, loc, vel in izip(atoms, self.elems, self.locs, self.vels):
+            for a, elem, loc, vel in zip(atoms, self.elems, self.locs, self.vels):
                 if check and a.element != elem:
-                    raise TypeError, ("Element mismatch for atom %s at %s: %s is not %s" 
+                    raise TypeError("Element mismatch for atom %s at %s: %s is not %s" 
                                         % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
                 self._setv(a, vel)
         else:
-            for a, elem, loc in izip(atoms, self.elems, self.locs):
+            for a, elem, loc in zip(atoms, self.elems, self.locs):
                 if check and a.element != elem:
-                    raise TypeError, ("Element mismatch for atom %s at %s: %s is not %s" 
+                    raise TypeError("Element mismatch for atom %s at %s: %s is not %s" 
                                         % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
     

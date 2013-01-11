@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from Bio.PDB import PDBParser
 from simw import *
 from simpdb import Resvec, Residue, make_structure

@@ -13,7 +13,7 @@ def group_plot(hists, stats=None, title=None, show=True, lims=True):
             try:
                 mean = stats[k]['mean']
             except KeyError:
-                print(title, k, stats.keys())
+                print((title, k, list(stats.keys())))
                 raise
             std = stats[k]['std']
             if xmax is None or xmax < mean + 3*std:
@@ -36,7 +36,7 @@ def group_plot(hists, stats=None, title=None, show=True, lims=True):
 
 def plot_each(hists, stats=None, savefname = None, show = False, *args, **kwargs):
     plt.figure(figsize=(15,12))
-    for k,v in hists.items():
+    for k,v in list(hists.items()):
         stat = None
         if stats:
             stat = stats[k]

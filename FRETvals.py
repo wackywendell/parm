@@ -1,4 +1,4 @@
-from numpy import sqrt, mean, std
+from numpy import sqrt, mean, std, array
 
 Forsterdist = 54
 
@@ -19,7 +19,14 @@ ijs = [(54, 72), (72, 92), (9, 33), (54, 92), (92, 130), (33, 72),
 ETs = [ETeffs[ij] for ij in ijs]
 ETerrlst = [ETerrs[ij] for ij in ijs]
 
-revijs = sorted(ijset, key=lambda (i,j): -abs(j-i))
+ETeffs3 = {
+          (9,130) : 0.36, (33,130) : 0.70,(54,130) : 0.67, (72,130) : 0.77, (92,130) : 0.86, (33,72) : 0.67,
+          (9,54) : 0.70, (72,92) : 0.93, (54,72) : 0.91}
+ijs3 = [ij for ij in ijs if ij in ETeffs3]
+ETs3 = [ETeffs3[ij] for ij in ijs3]
+ETerrlst3 = [ETerrs[ij] for ij in ijs3]
+
+revijs = sorted(ijset, key=lambda i_j: -abs(i_j[1]-i_j[0]))
 expETsij = [ETeffs[ij] for ij in revijs]
 expETerrs = [ETerrs[ij] for ij in revijs]
 
@@ -40,8 +47,43 @@ FRETdists={
 #    dists = [(d - ed)**2 for d,ed in zip(ds, expETs)]
 #    return sqrt(mean(dists))
 
-def ETeffrsq(d):
-    dists = [(d[ij] - ETeffs[ij])**2 for ij in ijs]
+def ETeffrsq(d, ph3=False):
+    ETdict = ETeffs if not ph3 else ETeffs3
+    ijset = ijs if not ph3 else ijs3
+    dists = [(d[ij] - ETdict[ij])**2 for ij in ijset]
     return sqrt(mean(dists))
 
+def ETeffrsqerrs(simETs):
+    dxs = array([(simETs[ij] - ETeffs[ij]) for ij in ijs])
+    sigys = array([ETerrs[ij] for ij in ijs])
+    N = len(ETeffs)
+    
+    D = sqrt(mean(dxs**2))
+    
+    dDdxi = dxs/D/N
+    Derr = sqrt(sum((dDdxi * sigys)**2))
+    
+    return D, Derr
+
+def __ETeffrsqerrs_old(simETs):
+    dists = [(simETs[ij] - ETeffs[ij])**2 for ij in ETeffs]
+    D = sqrt(mean(dists))
+    disterrs = [(ETerrs[ij] * abs(simETs[ij] - ETeffs[ij])/D/12.0)**2
+                        for ij in ETerrs]
+    Derr = sqrt(sum(disterrs))
+    return D, Derr
+
 distribijs = [(1, 140), (12, 127), (14, 125), (21, 118), (21, 111), (36, 75), (38, 77), (43, 82), (57, 133), (59, 135), (63, 139), (9, 130), (33, 130), (54, 130), (72, 130), (92, 130), (33, 72), (9, 54), (72, 92), (54, 72), (9, 72), (9, 33), (54, 92)]
+
+SEQ = "\
+MET ASP VAL PHE MET LYS GLY LEU SER LYS ALA LYS GLU \
+GLY VAL VAL ALA ALA ALA GLU LYS THR LYS GLN GLY VAL \
+ALA GLU ALA ALA GLY LYS THR LYS GLU GLY VAL LEU TYR \
+VAL GLY SER LYS THR LYS GLU GLY VAL VAL HIS GLY VAL \
+ALA THR VAL ALA GLU LYS THR LYS GLU GLN VAL THR ASN \
+VAL GLY GLY ALA VAL VAL THR GLY VAL THR ALA VAL ALA \
+GLN LYS THR VAL GLU GLY ALA GLY SER ILE ALA ALA ALA \
+THR GLY PHE VAL LYS LYS ASP GLN LEU GLY LYS ASN GLU \
+GLU GLY ALA PRO GLN GLU GLY ILE LEU GLU ASP MET PRO \
+VAL ASP PRO ASP ASN GLU ALA TYR GLU MET PRO SER GLU \
+GLU GLY TYR GLN ASP TYR GLU PRO GLU ALA".split(' ')

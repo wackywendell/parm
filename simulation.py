@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # encoding: UTF-8
-from __future__ import print_function
+
 
 from simw import *
 from math import sqrt
-import simpdb, statistics
+import simpdb
+import statistics
 from xyzfile import XYZwriter, XYZreader
 from Bio.PDB import PDBParser
 import sys, os, os.path
@@ -12,6 +13,7 @@ import numpy as np
 from os.path import expanduser
 from optparse import OptionParser
 from collections import defaultdict
+from datetime import datetime, timedelta
 
 mydir = expanduser('~/idp/')
 parser = OptionParser("Runs a simple simulation.")
@@ -47,16 +49,20 @@ parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true', defau
 parser.add_option('--hphobsigma', type=float, default=5.2)
 parser.add_option('--hmix', type=float, default=0)
 parser.add_option('-3', '--ph3', dest='ph3', action='store_true', default=False)
-
+parser.add_option( '--pdb', dest='pdb', default=(mydir + 'pdb/aS.pdb'))
+parser.add_option('--norij', dest='rij', action='store_false', default=True)
 parser.add_option('--LJES', dest='LJESratio', type=float, default=None)
+parser.add_option('--bondstd', dest='bondstd', action='store_true')
+parser.add_option('--anglestd', dest='anglestd', action='store_true')
 
 opts,args = parser.parse_args()
 
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showsteps if opts.showsteps else 1000*opts.showsize
 showsteps = int(showtime / opts.dt + .5)
-bondspring = 5000
-anglespring = 20000
+bondspring = 5000 if not opts.bondstd else opts.temp
+anglespring = 20000 if not opts.anglestd else opts.temp
+dihspring  = 20000 if opts.anglestd else anglespring
 chargescreen = 9
 
 # comes from using 293K, angstrom, and e_charge as standard units
@@ -93,7 +99,7 @@ if opts.hmix:
     def newval(v):
         newv = v + ((random.random()-0.5) * 2 * opts.hmix)
         return max([0,min([1,newv])])
-    hydroindex = dict([(k, newval(v)) for k,v in hydroindex.items()])
+    hydroindex = {k : newval(v) for k,v in hydroindex.items()}
 print('New Hydrophobicity indices:')
 print(*['%s: %.3f' % (r,v) for r,v in hydroindex.items()], sep=', ')
 
@@ -101,7 +107,7 @@ print(*['%s: %.3f' % (r,v) for r,v in hydroindex.items()], sep=', ')
 # sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom -> time units
 t0 = 6.4069e-14
 
-pdbfile = mydir + 'pdb/aS.pdb'
+pdbfile = opts.pdb
 loadfile= mydir + 'blengths/stats-H.pkl'
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),
@@ -133,10 +139,15 @@ avecs = simpdb.Resvec.from_pdb('aS', pdbfile, loadfile, H=opts.hydrogen,
 if not opts.startfile:
     startxyz = None
 else:
+    print("Reading xyz file", opts.startfile)
     lastframe = None
     try:
         startxyz = XYZreader(open(opts.startfile,'r'))
-        while True: lastframe = startxyz.readframe()
+        while True:
+            frame = startxyz.readframe()
+            t = float(frame.time)
+            if not math.isnan(t) and not math.isinf(t):
+                lastframe = frame
     except StopIteration:
         pass
     except IOError as e:
@@ -156,6 +167,7 @@ if startxyz is not None:
     lastframe.into([a for res in avecs for a in res])
     startedat = lastframe.time
     print("Last time is", startedat)
+    if float(startedat) >= opts.time: exit
     startxyz.close()
     del startxyz
 
@@ -172,8 +184,11 @@ print("%d Residues found with %d atoms. Making structure..."
                 #~ % (len(avecs), sum(len(r) for r in avecs)))
 
 
-angles = simpdb.make_angles(avecs, anglespring)
-bonds = simpdb.make_bonds(avecs, bondspring)
+########################################################################
+# Set up interactions
+
+angles = simpdb.make_angles(avecs, anglespring, usestd=opts.anglestd)
+bonds = simpdb.make_bonds(avecs, bondspring, usestd=opts.bondstd)
 #~ angles = None
 if opts.hydrogen:
     LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, opts.atomsize,
@@ -181,7 +196,7 @@ if opts.hydrogen:
 else:
     LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, opts.atomsize,
                                             2.0, simpdb.RichardsSizes)
-dihedrals = (simpdb.make_dihedrals(avecs, anglespring) 
+dihedrals = (simpdb.make_dihedrals(avecs, dihspring) 
             if (opts.dihedral and not opts.hydrogen) else None)
 charges = simpdb.make_charges(avecs, chargescreen, k=chargek, 
                     subtract=opts.subtract, ph=(3 if opts.ph3 else 7.4)) if chargek > 0 else None
@@ -192,7 +207,7 @@ hphob, HPneighbors = (
     else (None,None))
 interactions = dict(bond=bonds, angle=angles, LJ=LJ, electric=charges, 
                 dihedral=dihedrals, HPhob=hphob)
-interactions = dict([(k,v) for k,v in interactions.items() if v is not None])
+interactions = {k : v for k,v in interactions.items() if v is not None}
 
 intervec = ivector(list(interactions.values()))
 #print(opts.dihedral, opts.hydrogen, (opts.dihedral and not opts.hydrogen))
@@ -235,8 +250,10 @@ if opts.startsteps > 0:
     collec.timestep()
     #~ print('E:', collec.energy()) #INFO
     print("Finished startsteps")#, opts.dt, opts.damping, opts.temp) #INFO
+    sys.stdout.flush()
     collec.changeT(opts.dt, opts.damping, opts.temp)
 
+########################################################################
 # Stage 2: Run at normal speed for a while to 'ramp up' to the right temperature
 # only needed for low damping.
 if opts.rampsteps > 0:
@@ -267,24 +284,52 @@ if not opts.cont: xyz.writefull(0, avecs, collec)
 def printlist(lst, name):
     mean = float(np.mean(lst,0))
     std = np.std(lst)
-    sovm = 100*std / mean
+    sovm = 100*std / mean if mean > 0 else float('nan')
     last = float(lst[-1])
-    lstd = 100*(last - mean) / std
+    lstd = 100*(last - mean) / std if std > 0 else float('nan')
     print("{name:10s}={mean:8.2f}, σ={std:8.3f} ({sovm:7.3g}%) [{last:8.2f} ({lstd:7.3g}%)]".format(**locals()))
+
+def get_eta(cur, tot, starttime):
+    now = datetime.now()
+    tused = now - starttime
+    
+    # timedeltas cannot be multiplied by floats (?), so we get out the 
+    #seconds, use that, and make it back into a dt
+    usedsecs = 24*60*60 * tused.days + tused.seconds
+    tleft = timedelta(0, (usedsecs) * (float(cur) / tot))
+    
+    endtime = now + tleft
+    days = tleft.days
+    hr, sec = divmod(tleft.seconds, 3600)
+    mn, sec = divmod(sec, 60)
+    return endtime, (days, hr, mn, sec)
+
+
+########################################################################
+##
+## Starting Actual Run
+##
+########################################################################
 
 print("Running... output to " + str(moviefile))
 
 print("Data output to " + str(statfile))
-statistics.Rijs([(54, 72), (72, 92), (9, 33), (54, 92), (92, 130), (33, 72),
-            (9, 54), (72, 130), (9, 72), (54, 130), (33, 130), (9, 130)])
-table = statistics.StatWriter(statfile, collec, [avecs], contin=opts.cont)
+ijs = [(54, 72), (72, 92), (9, 33), (54, 92), (92, 130), (33, 72),
+         (9, 54), (72, 130), (9, 72), (54, 130), (33, 130), (9, 130)]
+if opts.numres > 0:
+    N=len(avecs)
+    ijs = [(i,j) for i,j in ijs if i <= N and j <= N]
+rijs = None if not opts.rij else (statistics.Rijs, ijs)
+table = statistics.StatManager(statfile, collec, [avecs], 
+            groups=(statistics.Dihedrals, statistics.CALocs, rijs), 
+            contin=opts.cont)
 valtracker = defaultdict(list)
 
 # t is current step num
-t = 0 if not opts.cont else int(startedat / opts.dt +.5)
+startt = t = 0 if not opts.cont else int(startedat / opts.dt +.5)
+if not opts.cont: table.update(t, write=True)
 curlim = t + showsteps
 print('Starting.', t, curlim, 'E:', collec.energy())
-from datetime import datetime
 starttime = datetime.now()
 try:
     while t < steps:
@@ -296,22 +341,27 @@ try:
         curlim += showsteps
         c = collec.com()
         values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
-        table.update(int(t * opts.dt+.5))
+        table.update(int(t * opts.dt+.5), write=True)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
-        print('------', int(t*opts.dt+.5))
+        
+        endtime, interval = get_eta(steps-t, t-startt, starttime)
+        days, hr, mn, sec = interval
+        
+        print('------ ', int(t*opts.dt+.5), 
+            ' Ends in (', (('%dd ' % days) if days else ''),
+                        '%d:%02d:%02d)'% (hr, mn, sec), ' on ', 
+                                endtime.strftime('(%a %b %d, %H:%M:%S)'),
+            sep = '')
         for k,v in sorted(values.items()):
             #~ print('k:', k)
             valtracker[k].append(v)
             if k is 'time': continue
             printlist(valtracker[k], k)
-        #~ for res in avecs:
-            #~ if res.resname != 'GLU': continue
-            #~ a1,a2 = res['HE2'], res['OE2']
-            #~ print(a1.name, a2.name, (a1.x - a2.x).mag())
+        sys.stdout.flush()
 except KeyboardInterrupt:
     pass
 
 tottime = datetime.now() - starttime
 totsecs = 24*60*60 * tottime.days + tottime.seconds + (tottime.microseconds / 1000000.)
 
-print("%s, %.3f fps" % (tottime, t / totsecs))
+print("%s, %.3f fps" % (tottime, (t-startt) / totsecs))

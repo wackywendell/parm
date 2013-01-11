@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 import numpy as np
 from random import random
 from matplotlib import pylab as plt
