@@ -79,6 +79,33 @@ def autocorr(lst):
     lsts = [nthpair(n) for n in range(len(lst))]
     return np.array([np.mean(l) for l in lsts], dtype=float)
 
+def autocorrs(xs, ns=1000, times=None):
+    if not np.iterable(ns):
+        ns = np.logspace(0,np.log10(len(xs)-1), int(ns))
+    ns = np.unique(np.array(ns, dtype=int))
+    acs = np.array([np.corrcoef(xs[:-i], xs[i:])[0,1] for i in ns])
+    ts = ns if times is None else np.array(times)[ns]
+    return ts, acs
+
+def relax(ns, times=None, acorrs=None, cutfirst = 1.0/math.e, cutlast=1.0):
+    t=0
+    if times is None:
+        times = np.arange(len(ns))
+    elif not np.iterable(times):
+        times = np.arange(len(ns)) * times
+    if acorrs is None:
+        acorrs = np.array(autocorr(ns))
+    acorr = np.array(list(zip(np.arange(len(acorrs)), acorrs)))
+    try:
+        tabove = (max((t for t,v in acorr if abs(v) > cutlast))
+                if cutlast < max(abs(acorrs)) else 0)
+        t0 = min((t for t,v in acorr if abs(v) < cutfirst and t >= tabove))
+    except ValueError:
+        # It never gets in the acceptable region
+        return None
+    t = max([times[t0] - times[0], t])
+    return t
+
 def ISF(arrlst, scale, maxavg=None, ntimes=None):
     newarrs = [np.exp(a*(2j*math.pi/scale)) for a in arrlst]
     outlst = []
@@ -197,3 +224,38 @@ class Energy(collecStat):
     shortname = 'E'
     def func(self):
         return self.collec.energy()
+
+
+class Res:
+    def __init__(self, anames, masses):
+        self.atomvec = atomvec(masses)
+        self.names = anames
+    
+    def __getitem__(self, name):
+        if isinstance(name, int):
+            idx = name
+            name = self.names[idx]
+        elif name not in self.names:
+            raise KeyError(name)
+        else:
+            idx = self.names.index(name)
+        a = self.atomvec[idx]
+        a.name = name
+        a.element = name[0]
+        return a
+    
+    def __iter__(self):
+        for n, a in zip(self.names, self.atomvec):
+            a.name = n
+            a.element = n[0]
+            yield a
+    
+    def __len__(self): return len(self.names)
+    
+    def __contains__(self, name):
+        if isinstance(name, str):
+            return name in self.names
+        return name in self.atomvec
+    
+    def get_id(self, *args):
+        return self.atomvec.get_id(*args)

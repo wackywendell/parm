@@ -1,4 +1,4 @@
-#include "vecrand2.hpp"
+#include "vecrand.hpp"
 
 Pair gauss2() {
     // Taken from Allen and Tildesley, 347
@@ -50,9 +50,10 @@ void bivariateGauss::set(const double s1, const double s2, const double corr){
 
 Pair bivariateGauss::generate(){
     // Taken from Allen and Tildesley, 348
-    Pair p, p0 = gauss2();
-    p[0] = x11*p0[0];
-    p[1] = x21*p0[0] + x22*p0[1];
+    Pair p = gauss2();
+    p[1] = x21*p[0] + x22*p[1];
+    p[0] = x11*p[0];
+    
     return p;
 }
 

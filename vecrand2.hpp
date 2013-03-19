@@ -24,7 +24,7 @@ class bivariateGauss {
         
     public:
         bivariateGauss(const double s1=1, const double s2=1, const double corr=0)
-                {set(s1, s2, corr);};
+                {set(s1, s2, corr); cout << "Using vecrand2.\n";};
         void set(const double s1, const double s2, const double corr);
         Pair generate();
         VecPair genVecs();

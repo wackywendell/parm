@@ -5,10 +5,15 @@ import hashlib, logging
 import simw as sim
 #~ import pyparsing as parse
 
+defaultpairs = [(9,130),(33,130),(54,130),(72,130),(92,130),(33,72),
+                 (9,54),(72,92),(54,72), (9,72), (9,33), (54,92)]
+
 class XYZwriter:
-    def __init__(self, f, usevels = True):
+    def __init__(self, f, usevels = True, printnames=False, rijpairs = defaultpairs):
         self.file = f
         self.usevels = usevels
+        self.printnames = printnames
+        self.rijpairs = rijpairs
     
     def writeframe(self, reslist, com=None, **kwargs):
         Natoms = sum(len(r) for r in reslist)
@@ -24,14 +29,19 @@ class XYZwriter:
                     x,y,z = tuple(atom.x)
                 else:
                     x,y,z = tuple(atom.x - com)
-                if not self.usevels:
-                    print("%s %.3f %.3f %.3f" % (elem,x,y,z), file=self.file)
-                else:
+                
+                line = [elem] + ['%.3f' % coord for coord in (x,y,z)]
+                if self.usevels:
                     vx,vy,vz = tuple(atom.v)
-                    lines.append(("%s" + (" %.3f"*3)+ (" %.3f"*3)) % (elem,x,y,z,vx,vy,vz))
+                    line.extend(['%.3f' % coord for coord in (vx,vy,vz)])
+                if self.printnames:
+                    line.append(atom.name)
+                
+                print(' '.join(line), file=self.file)
+                
         
         # do all the writing at once
-        print('\n'.join(lines), file=self.file)
+        #print('\n'.join(lines), file=self.file)
         self.file.flush()
     
     def writefull(self, t, reslist, collec, com=None):
@@ -44,9 +54,8 @@ class XYZwriter:
             'v':collec.comv().mag(),
             'Rg':sim.calc_Rg(reslist),
             }
-        pairs = [(9,130),(33,130),(54,130),(72,130),(92,130),(33,72),
-                 (9,54),(72,92),(54,72), (9,72), (9,33), (54,92)]
-        for i,j in pairs:
+        
+        for i,j in self.rijpairs:
             if i >= len(reslist) or j >= len(reslist): continue
             key = 'Rij%d-%d' % (i,j)
             cdict[key] = sim.Rij(reslist, i, j)
@@ -55,11 +64,11 @@ class XYZwriter:
                 cdict[name + 'E'] = interaction.energy()
             for i in list(collec.interactions.values()):
                 if isinstance(i, sim.bondpairs):
-                    cdict['bondmean'] = i.mean_dists()
-                    cdict['bondstd'] = i.std_dists()
+                    cdict[name + 'mean'] = i.mean_dists()
+                    cdict[name + 'std'] = i.std_dists()
                 if isinstance(i, sim.angletriples):
-                    cdict['anglemean'] = i.mean_dists()
-                    cdict['anglestd'] = i.std_dists()
+                    cdict[name + 'mean'] = i.mean_dists()
+                    cdict[name + 'std'] = i.std_dists()
                 
         if com is None: com = collec.com()
         self.writeframe(reslist, com, **cdict)
@@ -141,16 +150,28 @@ class XYZreader:
             commentdict = {key:time}
 
         lines = [self.file.readline().strip().split(' ') for i in range(num)]
-        badlines = [l for l in lines if len(l) != 4 and len(l) != 7]
+        
+        
+        len0 = len(lines[0])
+        badlines = [l for l in lines if len(l) not in (4,5,7,8) or len(l) != len0]
         if len(badlines) > 0:
             raise ValueError("bad coordinate line: %s" % str(badlines[0]))
         
-        try:
+        if len0 == 4:
             lines = [(e,(float(x),float(y),float(z))) for e,x,y,z in lines]
-        except ValueError:
+        elif len0 == 5:
+            lines = [(e,(float(x),float(y),float(z))) for e,x,y,z,name in lines]
+        elif len0 == 7:
             lines = [(e,(float(x),float(y),float(z)),
                             (float(vx),float(vy),float(vz))) 
                     for e,x,y,z,vx,vy,vz in lines]
+        elif len0 == 8:
+            lines = [(e,(float(x),float(y),float(z)),
+                            (float(vx),float(vy),float(vz))) 
+                    for e,x,y,z,vx,vy,vz, name in lines]
+        else:
+            raise ValueError
+            
         if 'time' not in commentdict and 'stage' not in commentdict:
             raise AssertionError('Comment %s does not include time' 
                                                     % str(commentdict))

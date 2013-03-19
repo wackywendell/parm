@@ -156,6 +156,12 @@ hydroavg = {'ALA': 0.328, 'ARG': -1.601, 'ASN': -0.878,
              'SER': -0.385, 'THR': -0.211, 'TRP': 0.851,
              'TYR': 0.279, 'VAL': 0.989}
 
+hydroavgstd = dict(
+ARG=0.952,ASP=0.471,GLU=0.552,LYS=0.500,ASN=0.278,
+GLN=0.342,PRO=0.444,HIS=0.425,SER=0.244,THR=0.274,
+GLY=0.437,TYR=0.511,ALA=0.422,CYS=0.390,MET=0.442,
+TRP=0.673,VAL=0.400,PHE=0.429,LEU=0.352,ILE=0.388)
+
 hydroavgscale = dict([(k, (v - min(hydroavg.values())) / 2) for k,v in list(hydroavg.items())])
 hydroavgnorm = dict([(k, v / max(hydroavgscale.values())) for k,v in list(hydroavgscale.items())])
 
@@ -1070,6 +1076,7 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
     else:
         raise NotImplementedError("Method %s not recognized" % method)
     
+    printedres = set()
     def makeatom(res):
         atom = res['CA']
         #~ if res.resname not in Hlist: return None
@@ -1077,6 +1084,9 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
         myH = Hlist[idx]
         epsvec = [epsilon*combine(H,myH) for H in Hlist]
         #~ print(res.resname, ' '.join([str(int(H/epsilon*100)) for H in epsvec]))
+        #~ if res.resname not in printedres:
+            #~ print(res.resname, epsilon, '%.3f' % epsvec[idx])
+            #~ printedres.add(res.resname)
         return HydroAtom(epsvec, idx, sigma, res.get_id(atom), LJcutoff)
     
     atoms = [makeatom(r) for r in resvecs]
@@ -1096,3 +1106,35 @@ def correct_phi(residues):
     phis = [ res.dihedral('phi', prev, nxt) for prev, res, nxt in restrip]
     phiscorrect = [(phi > 2*math.pi/3) or (phi < 0) for phi in phis]
     return phiscorrect.count(True), len(restrip)
+
+########################################################################
+def printlist(lst, name, **kw):
+    mean = float(np.mean(lst,0))
+    std = np.std(lst)
+    stdstr = '%8.3f' % std if std < 10000 else '%8.5g' % std
+    sovm = 100*std / mean if mean > 0 else float('nan')
+    last = float(lst[-1])
+    lstd = 100*(last - mean) / std if std > 0 else float('nan')
+    print("{name:10s}={mean:10.5g}, σ={std:10.4g} ({sovm:9.3g}%) [{last:9.2f} ({lstd:7.3g}%)]".format(**locals()), **kw)
+
+def to_dhms(tdelta):
+    days = tdelta.days
+    hr, sec = divmod(tdelta.seconds, 3600)
+    mn, sec = divmod(sec, 60)
+    return (days, hr, mn, sec)
+
+def get_eta(cur, tot, starttime):
+    from datetime import datetime, timedelta
+    now = datetime.now()
+    tused = now - starttime
+    
+    # timedeltas cannot be multiplied by floats (?), so we get out the 
+    #seconds, use that, and make it back into a dt
+    usedsecs = 24*60*60 * tused.days + tused.seconds
+    tleft = timedelta(0, (usedsecs) * ((tot - cur) / cur))
+    
+    endtime = now + tleft
+    return endtime, to_dhms(tleft)
+
+def interval_str(days, hr, mn, sec):
+    return (('%dd ' % days) if days else '') + ('%d:%02d:%02d'% (hr, mn, sec))

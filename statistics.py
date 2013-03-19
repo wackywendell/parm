@@ -656,42 +656,42 @@ def Rgdist(d, read=True, write=True):
         
     assert len(cols) == len(arr)
     
-    with gzip.open(fname, 'w') as f:
-        f.write('\t'.join(cols) + '\n')
+    with gzip.open(fname, 'wb') as f:
+        f.write(('\t'.join(cols) + '\n').encode('utf8'))
         numpy.savetxt(f, arr.T, fmt='%.4f', delimiter='\t')
     return arr[0], arr[1:]
 
 
 ########################################################################
-def filefinder(dir,  *names, **args):
+def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'tsv.gz', **args):
     """
-    extra kw:
-    regexp          : Define the regular expression for groups
-    matchall=False  : Match the entire expression
+    dir             : Directory to look in
+    names           : keywords to look for / store into
+    regexp          : Define the regular expression for groups (default: #NAME##VALUE#-#NAME##VALUE#....ext)
+    matchall        : Match the entire expression
     types           : What types to apply (default: all Decimal)
+    ext             : File extension (ignores everything else) (default: 'tsv.gz')
+    args            : Like names, but add some constants (such as T=1) for all fs
     """
     import re, fpath
-    matchall = args.get('matchall',True)
-    if 'matchall' in args: del args['matchall']
-    types = args.get('types', [Decimal] * len(names))
-    if 'types' in args: del args['types']
+    try:
+        iter(types)
+    except TypeError:
+        types = [types] * len(names)
     
     dir = fpath.Dir(dir)
-    children = [f for f in dir.children() if f[-1][-7:] == '.tsv.gz']
+    children = [f for f in dir.children() if f[-1][(-len(ext)-1):] == '.' + ext]
     
-    if 'regexp' in args:
-        args['regexp'].replace(r'\F', r'((?:[0-9]*\.?[0-9]*)|(?:inf))')
-    regexpr = (args['regexp'] if 'regexp' in args else
-    '-'.join([n + r'((?:[0-9]*\.?[0-9]*)|(?:inf))' for n in names]))
-    if 'regexp' in args: del args['regexp']
-    regex = re.compile(regexpr)
+    if regexp is None:
+        regexp='-'.join([n + r'(\F)' for n in names])
+    regexp = regexp.replace(r'\F', r'(?:[0-9]*\.?[0-9]*)|(?:inf)')
+    
+    regex = re.compile(regexp)
     matches = [(list(regex.finditer(f[-1])), f) for f in children]
     badmatches = [f for ms,f in matches if len(ms) == 0]
     if badmatches and matchall:
-        raise ValueError('%s could not match %s' % (regexpr, badmatches[0][-1]))
+        raise ValueError('%s could not match %s' % (regexp, badmatches[0][-1]))
     matches = [(ms[0],f) for ms,f in matches if len(ms) > 0]
-    
-    
     
     groups = sorted([list(zip(names, [t(m or 'nan') for t,m in zip(types,mtch.groups())]))    
         + [('f',f)] for mtch,f in matches])
@@ -709,6 +709,13 @@ def groupdicts(dlst, key):
         keylist.append(d)
         bigdict[curval] = keylist
     return bigdict
+
+def groupby(dlst, groupkey, sortby=None):
+    if sortby is None: return sorted(groupdicts(dlst, groupkey).items())
+    if isinstance(sortby, str):
+        k = sortby
+        sortby = lambda x: x[k]
+    if not sortby: return sorted(groupdicts(dlst, groupkey).items(), key=sortby)
 
 class StatGroup(Namespace):
     def __init__(self, ns, cut=0):
@@ -848,9 +855,11 @@ class StatGroup(Namespace):
         myijs = sorted(rijs.keys())
         ETeff_momentary = [1.0/(1.0+(rijs[ij]/float(R0))**6) for ij in myijs]
         myETeffs = [numpy.mean(ET) for ET in ETeff_momentary]
-        myETerrs = [numpy.std(ET) / numpy.sqrt(N) for ET in ETeff_momentary]
+        myETstd = [numpy.std(ET) for ET in ETeff_momentary]
+        myETerrs = [ETstd / numpy.sqrt(N) for ETstd in myETstd]
         
         self['_FRETerr'] = (dict(zip(myijs, myETeffs)), dict(zip(myijs, myETerrs)))
+        self['_FRETstd'] = (dict(zip(myijs, myETstd)))
         
         cols = ['%d_%d' % ij for ij in myijs]
         effstrs = ['%.8f' % v for v in myETeffs]

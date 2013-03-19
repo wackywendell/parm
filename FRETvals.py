@@ -52,16 +52,20 @@ def ETeffrsq(d, ph3=False):
     ijset = ijs if not ph3 else ijs3
     dists = [(d[ij] - ETdict[ij])**2 for ij in ijset]
     return sqrt(mean(dists))
-
-def ETeffrsqerrs(simETs):
+    
+def ETeffrsqerrs(simETs, simETerrs=None):
+    # \Delta=\sqrt{\left\langle \left(x_i-y_i\right)^2\right\rangle}
+    # \sigma_{\Delta}^2=\sum_{i=1}^{N}\left(\frac{\partial\Delta}{\partial x_i}\sigma_{x_i}\right)^2+\left(\frac{\partial\Delta}{\partial y_i\sigma_{y_i}\right)^2
+    # \frac{\partial\Delta}{\partial x_i} = \frac{x_i-y_i}{N\Delta}
     dxs = array([(simETs[ij] - ETeffs[ij]) for ij in ijs])
+    sigxs = array([simETerrs[ij] for ij in ijs]) if simETerrs else array([0.0 for ij in ijs])
     sigys = array([ETerrs[ij] for ij in ijs])
     N = len(ETeffs)
     
     D = sqrt(mean(dxs**2))
     
     dDdxi = dxs/D/N
-    Derr = sqrt(sum((dDdxi * sigys)**2))
+    Derr = sqrt(sum((dDdxi * sigys)**2 + (dDdxi * sigxs)**2))
     
     return D, Derr
 

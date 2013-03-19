@@ -20,7 +20,6 @@ parser.add_option('-T', '--temperature', type=float, dest='T', default=1.0)
 parser.add_option('-D', '--damping', type=float, default=.001)
 parser.add_option('-t', '--time', type=float, default=1.0)
 parser.add_option('-d', '--dt', type=float, default=.01)
-parser.add_option('--LJcutoff', type=float, default=2.5, help='Ratio to σ')
 
 parser.add_option('-s', '--spacing', type=float, default=20.0,
                 help='Initial space between residues')
@@ -41,8 +40,6 @@ parser.add_option('-g', '--statfile', dest='statfile',
             default=None)
 parser.add_option('-x', '--xyzfile', dest='xyzfile', 
             default=None)
-parser.add_option('--fixedrepulsion', action='store_true')
-parser.add_option('--eisenbergmclachlan', action='store_true')
 
 errprint(" ".join(sys.argv))
 opts, args = parser.parse_args()
@@ -79,42 +76,13 @@ sigmas = [s for rp in parameters
          ]
 maxsigma = max(sigmas)
 
-innerradius = (maxsigma * opts.LJcutoff
-                    if not opts.eisenbergmclachlan 
-                    else maxsigma*2 + 2.8) # two diameters + 1 water diameter
+innerradius = maxsigma
 outerradius = innerradius * 2.5
-#~ neighbors = neighborlist(innerradius, outerradius)
 neighbors = neighborlist(innerradius, outerradius)
 trackers.append(neighbors)
 
-if 'hydrophobicities' in parameters[0] and not opts.fixedrepulsion:
-    interactions['LJ'] = LJ = LJAttractRepulse(neighbors)
-    htable = parameters[0]['hydrophobicities']
-    def hadd(hindex, sigma, atom, cutoff):
-        LJ.add(LJAttractRepulseAtom(
-                htable[hindex], sigma, hindex, atom, cutoff
-            ))
+interactions['LJ'] = LJ = LJgroup(neighbors)
 
-elif opts.eisenbergmclachlan:
-    interactions['LJ'] = LJ = LJgroup(neighbors)
-    interactions['Eis'] = Eis = EisMclachlan(neighbors)
-    def hadd(H, sigma, atom, cutoff=0):
-        LJ.add(LJatom(1, sigma, atom))
-        Eis.add(EisMclachlanAtom(sigma + 1.4, H, atom))
-    
-elif opts.fixedrepulsion:
-    interactions['LJ'] = LJ = LJAttractFixedRepulse(neighbors)
-    htable = parameters[0]['hydrophobicities']
-    def hadd(hindex, sigma, atom, cutoff):
-        LJ.add(LJAttractFixedRepulseAtom(
-            htable[hindex], 1, sigma, hindex, atom, cutoff
-        ))
-else:
-    interactions['LJ'] = LJ = LJDouble(neighbors)
-    def hadd(hindex, sigma, atom, cutoff):
-        LJ.add(LJDoubleAtom(
-            hindex, 1, sigma, atom, cutoff
-        ))
 
 rvecs = []
 startvec = Vec(0,0,0)
@@ -129,7 +97,7 @@ for n,rp in enumerate(parameters):
         m, sigma, hindex = resdict['sizes'][atom.name]
         x,y,z = resdict['xyz'][atom.name]
         atom.x = Vec(x,y,z) + (nvec * n)
-        hadd(hindex, sigma, atom, opts.LJcutoff)
+        LJ.add(LJatom(1, sigma, atom))
         #~ errprint("Adding", name, "mass %.2f" % m, "width %.2f" % sigma);
     
     rvecs.append(res)
@@ -159,16 +127,15 @@ errprint(sum([len(rp['angles']) for rp in parameters]), "angles,", end=' ')
 
 #-----------------------------------------------------------------------
 ## Make basic spring
-interactions['spring'] = resspring = bondpairs()
-a1,a2 = rvecs[0]['CA'], rvecs[1]['CA']
-CAx0 = opts.springdist if opts.springdist >= 0 else opts.spacing
-resspring.add(opts.springconstant, CAx0, a1,a2)
+g1,g2 = rvecs
+x0 = opts.springdist if opts.springdist >= 0 else opts.spacing
+interactions['spring'] = resspring = COMSpring(g1.atomvec, g2.atomvec, opts.springconstant, x0)
 
 #-----------------------------------------------------------------------
 ## Make constraints
 constraints = [
-    coordConstraint(rvecs[0]['CA'], False, True, True, Vec(0,0,0)),
-    coordConstraint(rvecs[1]['CA'], False, True, True, Vec(0,0,0)),
+    coordCOMConstraint(g1.atomvec, False, True, True, Vec(0,0,0)),
+    coordCOMConstraint(g2.atomvec, False, True, True, Vec(0,0,0)),
     relativeConstraint(rvecs[0]['C'], rvecs[0]['N'], True, False, False, Vec(0,0,0)),
     relativeConstraint(rvecs[1]['C'], rvecs[1]['N'], True, False, False, Vec(0,0,0))
     ]
@@ -192,7 +159,8 @@ def statistics(t, c=collec):
         E=collec.energy(),
         KE=collec.kinetic(),
         T=collec.temp(),
-        Distance=(rvecs[0]['CA'].x - rvecs[1]['CA'].x).mag() - CAx0
+        #Distance=(rvecs[0]['CA'].x - rvecs[1]['CA'].x).mag() - x0
+        Distance=(rvecs[0].atomvec.com() - rvecs[1].atomvec.com()).mag() - x0
         )
     for name, i in interactions.items():
         d[name + 'E'] = i.energy()
@@ -256,12 +224,14 @@ try:
         statprintline(stats)
         #~ table.update(int(t * opts.dt+.5), write=True)
         
-        endtime, interval = simpdb.get_eta(steps-t, t-startt, starttime)
-        days, hr, mn, sec = interval
+        endtime, interval = simpdb.get_eta(t, steps, starttime)
+        totinterval = simpdb.to_dhms(endtime - starttime)
+        
+        #days, hr, mn, sec = interval
         
         errprint('------ ', int(t*opts.dt+.5), 
-            ' Ends in (', (('%dd ' % days) if days else ''),
-                        '%d:%02d:%02d)'% (hr, mn, sec), ' on ', 
+            ' Ends in (', simpdb.interval_str(*interval), ' / ', 
+                simpdb.interval_str(*totinterval), ') on ', 
                                 endtime.strftime('(%a %b %d, %H:%M:%S)'),
             sep = '')
         for k,v in sorted(stats.items()):

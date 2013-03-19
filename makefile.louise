@@ -1,6 +1,7 @@
 UNAME := $(shell uname)
 CC=icpc
-SWIG=swig
+#CC=g++
+#SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
 
 BOOSTINC=$(HOME)/boost_1_48_0/

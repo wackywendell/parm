@@ -4,8 +4,8 @@ SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
 
 #~ BOOSTINC=/lustre/home/client/apps/fas/Libs/Boost/boost_1_47_0/include
-INC=`python-config --include`
-LIB=`python-config --ldflags`
+INC=`python3-config --include`
+LIB=`python3-config --ldflags`
 
 ALL=_sim.so
 all: printout $(ALL)
