@@ -410,8 +410,8 @@ class Dihedrals(SimpleStat, TableWriter):
     def readFile(cls, fname):
         """Note that psis are for 0:N-1, and phis for 1:N. You need
         to do phis[:-1], psis[1:] to get matching pairs..."""
-        with gzip.open(fname, 'r') as f:
-            cols = f.readline().strip().split('\t')
+        with gzip.open(fname, 'rb') as f:
+            cols = f.readline().decode('ascii').strip().split('\t')
             table = numpy.genfromtxt(f, dtype=float)
         ts = table[:,0]
         if '_' not in cols[1]:
@@ -763,7 +763,9 @@ class StatGroup(Namespace):
     
     def dhl(self):
         """Note that psis are for 0:N-1, and phis for 1:N. You need
-        to do phis[:-1], psis[1:] to get matching pairs..."""
+        to do phis[:-1], psis[1:] to get matching pairs...
+        
+        returns ts, phis, psis"""
         fname = self.dir + (self.basename + Dihedrals.ext)
         return Dihedrals.readFile(str(fname))
     
@@ -871,6 +873,10 @@ class StatGroup(Namespace):
             print(*errstrs, sep='\t', file=f)
         
         return self['_FRETerr']
+    
+    def FRETstd(self, R0=54):
+        frets, freterr = self.FRETerr(R0)
+        return frets, self['_FRETstd']
     
     def _old_FRETerr(self, R0=54):
         cuts = 1.0/math.e, 1.0/math.e

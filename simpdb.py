@@ -68,10 +68,10 @@ hydroindex7={'ALA': 0.705, 'ARG': 0.43, 'ASN': 0.36, 'ASP': 0.225,
                 'MET': 0.87, 'PHE': 1, 'PRO': 0.27, 'SER': 0.475, 
                 'THR': 0.565, 'TRP': 0.985, 'TYR': 0.815, 'VAL': 0.88}
 
-monera = hydroindex7
+
 # Original Monera scale
-moneraneg = {k : (v * 2 - 1) for k,v in hydroindex7.items()}
-monerascale = {k : (v - min(monera.values())) / 2 for k,v in monera.items()}
+monera = moneraneg = {k : (v * 2 - 1) for k,v in hydroindex7.items()}
+monerascale = {k : (v - min(monera.values())) / 2 for k,v in hydroindex7.items()}
 moneranorm = {k : v / max(monerascale.values()) for k,v in monerascale.items()}
                 
                 
@@ -262,8 +262,12 @@ RichardsSizes = {
      'S' : 1.8
     }
 
-AliceSizes = {'H':1.05, 'Csp3':1.5, 'Csp2':1.4, 'N':1.4, 'O':1.45,
+# the double-bonded oxygen (Od) needed to be redone; 
+# Diego thinks 1.35, Alice 1.4, jury is still out
+AliceSizes = {'H':1.05, 'Csp3':1.5, 'Csp2':1.4, 'N':1.4, 'O2':1.45, 'O1':1.35,
                     'S' : 1.6}
+
+
 PorterRoseSizedict = {'H':1.0, 'Csp3':1.64, 'Csp2':1.5, 'N':1.35, 'O':1.35,
                     'S' : 1.8} # Sulfur taken from Richards
 
@@ -295,7 +299,7 @@ for r,a in Charges74: rescharges74[r] = rescharges74.get(r,0) + Charges74[(r,a)]
 
 class Resvec(atomvec):
     def __init__(self, residue, H=False, amu=1, loadfile=None):
-        residue.sort()
+        #residue.sort()
         if not H:
             self.atoms = [a for a in residue.child_list if a.name[0] != 'H']
             self.hydrogens = [self._getHs(residue, a) for a in self.atoms]
@@ -396,6 +400,13 @@ class Resvec(atomvec):
         vs = [a.x for a in self]
         return sum(vs, Vec(0,0,0)) / len(vs)
     
+    def get_n_bonds(self, atom):
+        self.load_data()
+        rbonds = self.resbonds[self.resname]
+        mybonds = ([b for b in rbonds if atom.name in b] +
+                    [b for b in self.backbonds if atom.name in b])
+        return len(mybonds)
+        
     def get_orbital(self, atom):
         if atom.element != 'C':
             raise NotImplementedError
@@ -794,7 +805,13 @@ def addAtom(residue, attachto, newname, element='H', coord=None, **kwargs):
         # average them to get a new location for the next atom
         # this will hopefully put it as far away from the atoms attached to the
         # 'attachto' atom as possible
-        coordoffset =  avg(dvecs)
+        
+        #coordoffset =  avg(dvecs) # can't divide vector by float? what?
+        dvecsum = dvecs[0]
+        for v in dvecs[1:]:
+            dvecsum += v
+        coordoffset = dvecsum.__div__(len(dvecs)) # __div__ doesn't work for '/' in py3?
+        
         # make sure our newloc has length 2. 2 angstroms sounds good; the simulation can handle that.
         coord = attachloc + (coordoffset.normalized() ** 2)
     
@@ -883,7 +900,7 @@ def make_dihedrals(resvecs, k):
         d.add(ang, a1, a2, a3, a4)
     return d
 
-def make_LJ(resvecs, epsilon=1, sizefactor=1, neighborcutoff=1.4, LJdict=AliceSizes):
+def make_LJ(box, resvecs, epsilon=1, sizefactor=1, neighborcutoff=1.4, LJdict=AliceSizes):
     """Neighborcutoff relative to sigma.
     
     returns (LJ, neighbors)"""
@@ -893,10 +910,11 @@ def make_LJ(resvecs, epsilon=1, sizefactor=1, neighborcutoff=1.4, LJdict=AliceSi
     maxsigma = max(LJdict.values()) * factor
     innerradius = maxsigma
     outerradius = innerradius * neighborcutoff
-    neighbors = neighborlist(innerradius, outerradius)
+    neighbors = neighborlist(box, innerradius, outerradius)
     LJ = LJgroup(neighbors)
     
     keygens = (lambda a,r: a.formula, lambda a,r: atom.element, 
+                lambda a,r: atom.element + str(r.get_n_bonds(atom)),
                 lambda a,r: a.element + r.get_orbital(atom))
     def getsize(atom, res):
         for keyfunc in keygens:
@@ -908,10 +926,9 @@ def make_LJ(resvecs, epsilon=1, sizefactor=1, neighborcutoff=1.4, LJdict=AliceSi
                 + ' not found in LJdict.')
     
     for atom,res in ((atom,r) for r in resvecs for atom in r):
-        aref = res.get_id(atom)
         core = getsize(atom, res)
         sigma = core * factor
-        LJ.add(LJatom(epsilon, sigma, aref))
+        LJ.add(LJatom(epsilon, sigma, atom))
     
     for a1,a2,l,bondstd in Resvec.all_bonds(resvecs):
         neighbors.ignore(a1,a2)
@@ -1000,9 +1017,8 @@ def make_charges(resvecs, screen, k, ph=7.4, expectOXT=True, subtract=True):
     
     for atom,charge in atoms:
         #~ print('ref for', atom)
-        aref = fullgroup.get_id(atom)
         #~ charge = chargedict[(atom.group.resname, atom.name)]
-        charges.add(aref, charge)
+        charges.add(atom, charge)
     
     for a1,a2,l,bondstd in Resvec.all_bonds(resvecs):
         key1, key2 = (a1.group.resname, a1.name), (a2.group.resname, a2.name)
@@ -1047,8 +1063,8 @@ def make_hydrophobicity_old(resvecs, epsilons, LJcutoff=2.5, neighborcutoff=1.4,
     
     return Hphob, neighbors
 
-def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
-                    sigma=5.38, hydroindex=hydroindex7, method='geometric'):
+def make_hydrophobicity(box, resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
+                    sigma=5.38, hydroindex=hydroindex7, method='geometric', scale='max'):
     """LJcutoff in sigma units, neighborcutoff relative to LJcutoff.
     Makes a CA hydrophobicity attractive force.
     
@@ -1058,11 +1074,24 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
     
     innerradius = sigma*LJcutoff
     outerradius = innerradius * neighborcutoff
-    neighbors = neighborlist(innerradius, outerradius)
+    neighbors = neighborlist(box, innerradius, outerradius)
     Hphob = Hydrophobicity(neighbors)
     
     #~ print("Hlist:", *Hlist)
     Rnames, Hlist = list(zip(*sorted(hydroindex.items())))
+    
+    if scale.lower() == 'none':
+        pass
+    elif scale.lower() == 'max':
+        mx = max([abs(h) for h in Hlist])
+        Hlist = [h / mx for h in Hlist]
+    elif scale.lower() == 'minmax':
+        mn, mx = min(Hlist), max(Hlist)
+        Hlist = [(h - mn) / (mx - mn) for h in Hlist]
+    elif scale.lower() == 'zeroone':
+        mx = max([abs(h) for h in Hlist])
+        Hlist = [((h/mx) + 1) / 2 for h in Hlist]
+        assert min(Hlist) >= 0
     
     if method == 'geometric':
         assert all(0 <= H <= 1 for H in Hlist)
@@ -1076,6 +1105,10 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
     else:
         raise NotImplementedError("Method %s not recognized" % method)
     
+    allHs = [combine(H1, H2) for H1 in Hlist for H2 in Hlist]
+    print("Hydrophobicity made with %s-%s: %.2f - %.2f (x %.2f)" % 
+            (scale, method, min(allHs), max(allHs), epsilon))
+    
     printedres = set()
     def makeatom(res):
         atom = res['CA']
@@ -1087,7 +1120,7 @@ def make_hydrophobicity(resvecs, epsilon, LJcutoff=2.5, neighborcutoff=1.4,
         #~ if res.resname not in printedres:
             #~ print(res.resname, epsilon, '%.3f' % epsvec[idx])
             #~ printedres.add(res.resname)
-        return HydroAtom(epsvec, idx, sigma, res.get_id(atom), LJcutoff)
+        return HydroAtom(epsvec, idx, sigma, atom, LJcutoff)
     
     atoms = [makeatom(r) for r in resvecs]
     atoms = [a for a in atoms if a is not None]

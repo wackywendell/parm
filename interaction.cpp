@@ -32,38 +32,38 @@ Vec atomgroup::momentum() const{
     return tot;
 };
 
-Vec atomgroup::angmomentum(const Vec &loc) const{
+Vec atomgroup::angmomentum(const Vec &loc, Box *box) const{
     flt curmass;
     Vec tot = Vec();
     Vec newloc;
     for(uint i=0; i<size(); i++){
         curmass = this->getmass(i);
-        newloc = diff((*this)[i].x, loc);
+        newloc = box->diff((*this)[i].x, loc);
         tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
     return tot;
 };
 
-flt atomgroup::moment(const Vec &loc, const Vec &axis) const{
+flt atomgroup::moment(const Vec &loc, const Vec &axis, Box *box) const{
     if (axis.sq() == 0) return 0;
     flt curmass;
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
         curmass = this->getmass(i);
-        newloc = diff((*this)[i].x, loc).perpto(axis);
+        newloc = box->diff((*this)[i].x, loc).perpto(axis);
         tot += newloc.dot(newloc) * curmass;
     }
     return tot;
 };
 
-Matrix<flt> atomgroup::moment(const Vec &loc) const{
+Matrix<flt> atomgroup::moment(const Vec &loc, Box *box) const{
     flt curmass;
     Matrix<flt> I;
     Vec r;
     for(uint i=0; i<size(); i++){
         curmass = this->getmass(i);
-        r = diff((*this)[i].x, loc);
+        r = box->diff((*this)[i].x, loc);
         flt x = r.getx(), y = r.gety(), z = r.getz();
         I[0][0] += curmass * (y*y + z*z);
         I[1][1] += curmass * (x*x + z*z);
@@ -78,9 +78,9 @@ Matrix<flt> atomgroup::moment(const Vec &loc) const{
     return I;
 };
 
-Vec atomgroup::omega(const Vec &loc) const{
-    Matrix<flt> Inv = moment(loc).SymmetricInverse();
-    return Inv * (angmomentum(loc));
+Vec atomgroup::omega(const Vec &loc, Box *box) const{
+    Matrix<flt> Inv = moment(loc, box).SymmetricInverse();
+    return Inv * (angmomentum(loc, box));
 };
 
 flt atomgroup::kinetic(const Vec &originvelocity) const{
@@ -101,9 +101,9 @@ void atomgroup::addv(Vec v){
     }
 };
 
-void atomgroup::addOmega(Vec w, Vec loc){
+void atomgroup::addOmega(Vec w, Vec loc, Box *box){
     for(uint i=0; i<size(); i++){
-        Vec r = diff((*this)[i].x, loc);
+        Vec r = box->diff((*this)[i].x, loc);
         (*this)[i].v -= r.cross(w);
     }
 };
@@ -208,13 +208,13 @@ atomid metagroup::get_id(atom* a){
     //~ return 4*eps*(12*pow(r,-13))/sig;
 //~ }
 
-flt spring::energy(const Vec& r){
+flt spring::energy(const Vec r){
     flt m = r.mag();
     flt l = m - x0;
     return .5 * springk * l*l;
 }
 
-Vec spring::forces(const Vec& r){
+Vec spring::forces(const Vec r){
     flt m = r.mag();
     flt fmag = (x0 - m) * springk;
     return r * (fmag / m);
@@ -231,7 +231,7 @@ flt electricScreened::energy(const flt r, const flt qaqb, const flt screen, cons
     return exp(-r/screen) * qaqb / r - energy(r, qaqb, screen, 0);
 };
 
-Vec electricScreened::forces(const Vec &r, const flt qaqb, const flt screen, const flt cutoff){
+Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, const flt cutoff){
     flt d = r.mag();
     if(cutoff > 0 and d > cutoff) return Vec(0,0,0);
     flt fmag = exp(-d/screen) * (qaqb/d) * (1/d + 1/screen);
@@ -471,25 +471,25 @@ flt dihedral::energy(const flt ang) const{
     return tot;
 }
 
-flt interactgroup::energy(){
-    flt E=0;
-    vector<interaction*>::iterator it;
-    for(it = inters.begin(); it < inters.end(); it++){
-        E += (*it)->energy();
-    }
-    return E;
-};
+//~ flt interactgroup::energy(Box *box){
+    //~ flt E=0;
+    //~ vector<interaction*>::iterator it;
+    //~ for(it = inters.begin(); it < inters.end(); it++){
+        //~ E += (*it)->energy(box);
+    //~ }
+    //~ return E;
+//~ };
 
-void interactgroup::setForces(){
-    vector<interaction*>::iterator it;
-    for(it = inters.begin(); it < inters.end(); it++){
-        (*it)->setForces();
-    }
-};
+//~ void interactgroup::setForces(Box *box){
+    //~ vector<interaction*>::iterator it;
+    //~ for(it = inters.begin(); it < inters.end(); it++){
+        //~ (*it)->setForces(box);
+    //~ }
+//~ };
 
 bondpairs::bondpairs(vector<bondgrouping> pairs) : pairs(pairs){};
 
-flt bondpairs::energy(){
+flt bondpairs::energy(Box *box){
     flt E=0;
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); it++){
@@ -499,7 +499,7 @@ flt bondpairs::energy(){
     return E;
 }
 
-void bondpairs::setForces(){
+void bondpairs::setForces(Box *box){
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); it++){
         atom & atom1 = *it->a1;
@@ -510,6 +510,20 @@ void bondpairs::setForces(){
         atom1.f += f;
         atom2.f -= f;
     }
+}
+
+flt bondpairs::pressure(Box *box){
+    return 0;
+    vector<bondgrouping>::iterator it;
+    flt P=0;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        Vec r = diff(atom1.x, atom2.x);
+        Vec f = spring(it->k, it->x0).forces(r);
+        P += f.dot(r);
+    }
+    return P;
 }
 
 flt bondpairs::mean_dists() const{
@@ -539,7 +553,7 @@ flt bondpairs::std_dists() const{
 
 angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
 
-flt angletriples::energy(){
+flt angletriples::energy(Box *box){
     flt E=0;
     vector<anglegrouping>::iterator it;
     for(it = triples.begin(); it < triples.end(); it++){
@@ -553,7 +567,7 @@ flt angletriples::energy(){
     return E;
 }
 
-void angletriples::setForces(){
+void angletriples::setForces(Box *box){
     vector<anglegrouping>::iterator it;
     for(it = triples.begin(); it < triples.end(); it++){
         atom & atom1 = *it->a1;
@@ -615,7 +629,7 @@ flt angletriples::std_dists() const{
 
 dihedrals::dihedrals(vector<dihedralgrouping> ds) : groups(ds){};
 
-flt dihedrals::energy(){
+flt dihedrals::energy(Box *box){
     flt E=0;
     vector<dihedralgrouping>::iterator it;
     for(it = groups.begin(); it < groups.end(); it++){
@@ -623,24 +637,24 @@ flt dihedrals::energy(){
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
         atom & atom4 = *it->a4;
-        Vec r1 = diff(atom2.x, atom1.x);
-        Vec r2 = diff(atom3.x, atom2.x);
-        Vec r3 = diff(atom4.x, atom3.x);
+        Vec r1 = dihedralgrouping::diff(atom2.x, atom1.x);
+        Vec r2 = dihedralgrouping::diff(atom3.x, atom2.x);
+        Vec r3 = dihedralgrouping::diff(atom4.x, atom3.x);
         E += it->dih.energy(r1,r2,r3);
     }
     return E;
 }
 
-void dihedrals::setForces(){
+void dihedrals::setForces(Box *box){
     vector<dihedralgrouping>::iterator it;
     for(it = groups.begin(); it < groups.end(); it++){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
         atom & atom4 = *it->a4;
-        Vec r1 = diff(atom2.x, atom1.x);
-        Vec r2 = diff(atom3.x, atom2.x);
-        Vec r3 = diff(atom4.x, atom3.x);
+        Vec r1 = dihedralgrouping::diff(atom2.x, atom1.x);
+        Vec r2 = dihedralgrouping::diff(atom3.x, atom2.x);
+        Vec r3 = dihedralgrouping::diff(atom4.x, atom3.x);
         Nvector<Vec,4> f = it->dih.forces(r1, r2, r3);
         atom1.f += f[0];
         atom2.f += f[1];
@@ -665,9 +679,9 @@ flt dihedrals::mean_dists() const{
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
         atom & atom4 = *it->a4;
-        Vec r1 = diff(atom1.x, atom2.x);
-        Vec r2 = diff(atom2.x, atom3.x);
-        Vec r3 = diff(atom3.x, atom4.x);
+        Vec r1 = dihedralgrouping::diff(atom1.x, atom2.x);
+        Vec r2 = dihedralgrouping::diff(atom2.x, atom3.x);
+        Vec r3 = dihedralgrouping::diff(atom3.x, atom4.x);
         flt cosine = dihedral::getcos(r1, r2, r3);
         dist += cosine;
         N++;
@@ -699,13 +713,13 @@ void pairlist::clear(){
     }
 };
 
-neighborlist::neighborlist(const flt innerradius, const flt outerradius) :
-                critdist(innerradius), skinradius(outerradius),
+neighborlist::neighborlist(Box *box, const flt innerradius, const flt outerradius) :
+                box(box), critdist(innerradius), skinradius(outerradius),
                 atoms(){};
 
-neighborlist::neighborlist(atomgroup &group, const flt innerradius,
+neighborlist::neighborlist(Box *box, atomgroup &group, const flt innerradius,
             const flt outerradius, pairlist ignore) :
-                critdist(innerradius), skinradius(outerradius),
+                box(box), critdist(innerradius), skinradius(outerradius),
                 atoms(), ignorepairs(ignore), ignorechanged(false){
     lastlocs.resize(group.size());
     for(uint i=0; i<group.size(); i++){
@@ -778,7 +792,7 @@ bool neighborlist::update_list(bool force){
         for(uint j=0; j<i; j++){
             atomid a2=atoms.get_id(j);
             if (ignorepairs.has_pair(a1, a2)) continue;
-            if(diff(a1.x(), a2.x()).mag() < skinradius)
+            if(box->diff(a1.x(), a2.x()).mag() < skinradius)
                 curpairs.push_back(idpair(a1, a2));
         }
     }
@@ -800,7 +814,7 @@ bool neighborlist::update_list(bool force){
 
 LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
 
-flt LJsimple::energy(){
+flt LJsimple::energy(Box *box){
     flt E = 0;
     vector<LJatom>::iterator it;
     vector<LJatom>::iterator it2;
@@ -808,24 +822,39 @@ flt LJsimple::energy(){
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
-        Vec dist = diff(pair.atom1.x(), pair.atom2.x());
+        Vec dist = box->diff(pair.atom1.x(), pair.atom2.x());
         E += LJrepulsive::energy(dist, pair.sigma, pair.epsilon);
     }
     return E;
 };
 
-void LJsimple::setForces(){
+void LJsimple::setForces(Box *box){
     vector<LJatom>::iterator it;
     vector<LJatom>::iterator it2;
     for(it = atoms.begin(); it != atoms.end(); it++)
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
-        Vec r = diff(pair.atom1.x(), pair.atom2.x());
+        Vec r = box->diff(pair.atom1.x(), pair.atom2.x());
         Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
         pair.atom1.f() += f;
         pair.atom2.f() -= f;
     }
+};
+
+flt LJsimple::pressure(Box *box){
+    flt P=0;
+    vector<LJatom>::iterator it;
+    vector<LJatom>::iterator it2;
+    for(it = atoms.begin(); it != atoms.end(); it++)
+    for(it2 = atoms.begin(); it2 != it; it2++){
+        if (ignorepairs.has_pair(*it, *it2)) continue;
+        LJpair pair = LJpair(*it, *it2);
+        Vec r = box->diff(pair.atom1.x(), pair.atom2.x());
+        Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
+        P += r.dot(f);
+    }
+    return P;
 };
 
 atomid LJsimple::get_id(atom* a){
@@ -844,28 +873,42 @@ atomid Charges::get_id(atom* a){
     return atomid();
 };
 
-flt Charges::energy(){
+flt Charges::energy(Box *box){
     flt E = 0;
     vector<Charged>::iterator it;
     vector<Charged>::iterator it2;
     for(it = atoms.begin(); it != atoms.end(); it++)
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
-        Vec dist = diff(it->x(), it2->x());
+        Vec dist = box->diff(it->x(), it2->x());
         E += k*electricScreened::energy(dist.mag(), (it->q) * (it2->q), screen);
     }
     return E;
 };
 
-void Charges::setForces(){
+void Charges::setForces(Box *box){
     vector<Charged>::iterator it;
     vector<Charged>::iterator it2;
     for(it = atoms.begin(); it != atoms.end(); it++)
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
-        Vec r = diff(it->x(), it2->x());
+        Vec r = box->diff(it->x(), it2->x());
         Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
         it->f() += f;
         it2->f() -= f;
     }
+};
+
+flt Charges::pressure(Box *box){
+    flt P=0;
+    vector<Charged>::iterator it;
+    vector<Charged>::iterator it2;
+    for(it = atoms.begin(); it != atoms.end(); it++)
+    for(it2 = atoms.begin(); it2 != it; it2++){
+        if (ignorepairs.has_pair(*it, *it2)) continue;
+        Vec r = box->diff(it->x(), it2->x());
+        Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
+        P += r.dot(f);
+    }
+    return P;
 };

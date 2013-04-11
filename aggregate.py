@@ -48,6 +48,7 @@ parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true', defau
 parser.add_option('--hphobsigma', type=float, default=5.2)
 parser.add_option('--hmix', type=float, default=0)
 parser.add_option('-3', '--ph3', dest='ph3', action='store_true', default=False)
+parser.add_option('--usestd', action='store_true')
 parser.add_option('--sep', dest='separation', type=float, default=20)
 
 opts,args = parser.parse_args()
@@ -55,8 +56,9 @@ opts,args = parser.parse_args()
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showsteps if opts.showsteps else 1000*opts.showsize
 showsteps = int(showtime / opts.dt + .5)
-bondspring = 5000
-anglespring = 20000
+bondspring = 5000 if not opts.usestd else opts.temp
+anglespring = 20000 if not opts.usestd else opts.temp
+dihspring = 215.0
 chargescreen = 9
 
 # comes from using 293K, angstrom, and e_charge as standard units
@@ -121,7 +123,7 @@ avecs2 = simpdb.Resvec.from_pdb('aS2', pdbfile, loadfile, H=opts.hydrogen,
 
 for r1,r2 in zip(avecs1,avecs2):
     for a1,a2 in zip(r1,r2):
-        a2.x.set(a1.x.X+ opts.separation, a1.x.Y, a1.x.Z)
+        a2.x.set(a1.x.X + opts.separation, a1.x.Y, a1.x.Z)
         
 avecs = avecs1 + avecs2
 
@@ -176,26 +178,26 @@ print("%d Residues found with %d atoms. Making structure..."
 
 ########################################################################
 # Set up interactions
-
-angles1 = simpdb.make_angles(avecs1, anglespring)
-bonds1 = simpdb.make_bonds(avecs1, bondspring)
-angles2 = simpdb.make_angles(avecs2, anglespring)
-bonds2 = simpdb.make_bonds(avecs2, bondspring)
+box = InfiniteBox()
+angles1 = simpdb.make_angles(avecs1, anglespring, usestd=opts.usestd)
+bonds1 = simpdb.make_bonds(avecs1, bondspring, usestd=opts.usestd)
+angles2 = simpdb.make_angles(avecs2, anglespring, usestd=opts.usestd)
+bonds2 = simpdb.make_bonds(avecs2, bondspring, usestd=opts.usestd)
 #~ angles = None
 if opts.hydrogen:
-    LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, opts.atomsize,
+    LJ,neighbors = simpdb.make_LJ(box, avecs, LJepsilon, opts.atomsize,
                                             2.0, simpdb.AliceSizes)
 else:
-    LJ,neighbors = simpdb.make_LJ(avecs, LJepsilon, opts.atomsize,
+    LJ,neighbors = simpdb.make_LJ(box, avecs, LJepsilon, opts.atomsize,
                                             2.0, simpdb.RichardsSizes)
-dihedrals1 = (simpdb.make_dihedrals(avecs1, anglespring) 
+dihedrals1 = (simpdb.make_dihedrals(avecs1, dihspring) 
             if (opts.dihedral and not opts.hydrogen) else None)
-dihedrals2 = (simpdb.make_dihedrals(avecs2, anglespring) 
+dihedrals2 = (simpdb.make_dihedrals(avecs2, dihspring) 
             if (opts.dihedral and not opts.hydrogen) else None)
 charges = simpdb.make_charges(avecs, chargescreen, k=chargek, 
                     subtract=opts.subtract, ph=(3 if opts.ph3 else 7.4)) if chargek > 0 else None
 hphob, HPneighbors = (
-    simpdb.make_hydrophobicity(avecs, LJe, #Hphobs, #instead of LJe
+    simpdb.make_hydrophobicity(box, avecs, LJe, #Hphobs, #instead of LJe
                         sigma=Hphobsigma, hydroindex=hydroindex) 
     if LJe > 0
     else (None,None))
@@ -220,7 +222,7 @@ atomgroups = avector(avecs)
 
 t=0
 #print(opts.dt, opts.damping, opts.temp) #INFO
-collec = collectionSol(opts.dt, opts.damping, opts.temp, atomgroups, intervec, trackers)
+collec = collectionSol(box, opts.dt, opts.damping, opts.temp, atomgroups, intervec, trackers)
 collec.interactions = interactions
 if opts.seed: collec.seed()
 else: collec.seed(1)
@@ -318,15 +320,15 @@ def printlist(lst, name):
 print("Running... output to " + str(moviefile))
 
 print("Data output to " + str(statfile))
-statistics.Rijs(ijs)
+#statistics.Rijs(ijs)
 print("Stats:", *list(statistics.Stat.AllStats.keys()))
 table = statistics.StatManager(statfile, collec, [avecs1, avecs2], 
-            groups=(statistics.Dihedrals, statistics.CALocs), contin=opts.cont)
-table.update(0, write=True)
+            groups=(statistics.Dihedrals, statistics.CALocs, (statistics.Rijs, ijs)), contin=opts.cont)
 valtracker = defaultdict(list)
 
 # t is current step num
 startt = t = 0 if not opts.cont else int(startedat / opts.dt +.5)
+if not opts.cont: table.update(t, write=True)
 curlim = t + showsteps
 print('Starting.', t, curlim, 'E:', collec.energy())
 from datetime import datetime
@@ -343,16 +345,23 @@ try:
         values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
         table.update(int(t * opts.dt+.5), write=True)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
-        print('------', int(t*opts.dt+.5))
+        
+        now = datetime.now()
+        tused = now - starttime
+        tleft = tused * (steps - t) / (t - startt)
+        endtime = now + tleft
+        hr, sec = divmod(tleft.total_seconds(), 3600)
+        mn, sec = divmod(sec, 60)
+        
+        print('------', int(t*opts.dt+.5), 
+            'Ends in %d:%02d:%02d on %s' % (hr, mn, sec, 
+                                endtime.strftime('%b %d, %H:%M:%S')))
         for k,v in sorted(values.items()):
             #~ print('k:', k)
             valtracker[k].append(v)
             if k is 'time': continue
             printlist(valtracker[k], k)
-        #~ for res in avecs:
-            #~ if res.resname != 'GLU': continue
-            #~ a1,a2 = res['HE2'], res['OE2']
-            #~ print(a1.name, a2.name, (a1.x - a2.x).mag())
+        sys.stdout.flush()
 except KeyboardInterrupt:
     pass
 

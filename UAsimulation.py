@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # encoding: UTF-8
 
+
 from simw import *
 from math import sqrt
-import simpdb
-import statistics
+import simpdb, statistics
+import FRETs
 from xyzfile import XYZwriter, XYZreader
-from Bio.PDB import PDBParser
 import sys, os, os.path
+from datetime import datetime
 import numpy as np
 from os.path import expanduser
 from optparse import OptionParser
 from collections import defaultdict
-from datetime import datetime, timedelta
+from sys import stdout, stderr
 
 mydir = expanduser('~/idp/')
 parser = OptionParser("Runs a simple simulation.")
@@ -22,12 +23,13 @@ parser.add_option('-t', '--time', type=float, default=1.0)
 parser.add_option('-d', '--dt', type=float, default=.01)
 parser.add_option('--rampsteps', type=int, default=0)
 parser.add_option('--rampdamp', type=float, default=.5)
+parser.add_option('--rampdt', type=float, default=None)
 parser.add_option('-S', '--showsteps', type=int, dest='showsteps', default=0)
 parser.add_option('-Z', '--showsize', type=float, dest='showsize', default=.25)
 parser.add_option('-N', '--numres', type=int, dest='numres', default=0)
 parser.add_option('-s', '--startfile', dest='startfile', default=None)
 parser.add_option('-x', '--xyzfile', dest='xyzfile', 
-            default=(mydir + 'test/T{T}.xyz'))
+            default=(mydir + 'test/{i}-a{a}-T{T}.xyz'))
 parser.add_option('-g', '--statfile', dest='statfile', 
             default=None)
 parser.add_option('-C', '--continue', dest='cont', action='store_true')
@@ -35,33 +37,34 @@ parser.add_option('-K', '--chargek', dest='chargek', type=float,
             default=1.0)
 parser.add_option('-k', '--keepcharged', dest='subtract', 
                                 action='store_false', default=True)
-parser.add_option('-P', '--hydrophobk', dest='hphobk', type=float,default=2.5)
+parser.add_option('-a', '--alpha', type=float,default=1.2)
 parser.add_option('--seed', dest='seed', action='store_false',
             default=True)
-parser.add_option('--startdt', type=float, default=1e-8)
-parser.add_option('--startsteps', type=int, default=0)
-parser.add_option('--startdamp', type=float, default=20000.0)
-parser.add_option('--startfactor', type=float, default=2.0)
-parser.add_option('-A', '--atomsize', type=float, default=1.0)
+parser.add_option('--relaxdt', type=int, default=12)
+parser.add_option('--relaxsteps', type=int, default=0)
+parser.add_option('--relaxdamp', type=float, default=200.0)
+parser.add_option('-A', '--atomsize', type=float, default=1.0 / (2**(1.0/6.0)))
+parser.add_option('--nodihedral', dest='dihedral', action='store_false', default=True)
 parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true', default=False)
-parser.add_option('--hphobsigma', type=float, default=4.8)
+parser.add_option('--dihk', type=float, default=215.0)
+parser.add_option('--hphobsigma', type=float, default=4.8) # monomer distance from random walk (44 A) to CGMD (8.5) comparison is 5.2
 parser.add_option('--hmix', type=float, default=0)
-parser.add_option('-3', '--ph3', dest='ph3', action='store_true', default=False)
-parser.add_option( '--pdb', dest='pdb', default=(mydir + 'pdb/aS.pdb'))
 parser.add_option('--norij', dest='rij', action='store_false', default=True)
-parser.add_option('--LJES', dest='LJESratio', type=float, default=None)
-parser.add_option('--bondstd', dest='bondstd', action='store_true')
-parser.add_option('--anglestd', dest='anglestd', action='store_true')
-parser.add_option('--dihk', type=float, default=-1)
+parser.add_option('--hset', type='choice', default='KD',
+        choices = ['monera', 'sharpcorrected','KD','aWW','hydroavg'])
+parser.add_option('--hscale', type='choice', default='zeroone',
+        choices=['None', 'max', 'minmax', 'zeroone'])
+parser.add_option('--hjoin', type='choice', default='arithmetic',
+        choices=['arithmetic', 'arithmeticzero','geometriczero','max','maxzero'])
+parser.add_option( '-i', dest='protein', default='aS', type='choice',
+                    choices=['aS','bS','gS','tau'])
 
+print(" ".join(sys.argv))
 opts,args = parser.parse_args()
 
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showsteps if opts.showsteps else 1000*opts.showsize
 showsteps = int(showtime / opts.dt + .5)
-bondspring = 5000 if not opts.bondstd else opts.temp
-anglespring = 20000 if not opts.anglestd else opts.temp
-dihspring  = 215.0 if opts.dihk < 0 else opts.dihk # used to be 20000, that's too large
 chargescreen = 9
 
 # comes from using 293K, angstrom, and e_charge as standard units
@@ -71,45 +74,33 @@ chargek = 7.1288713 * opts.chargek
 #this also gives 64.07 fs as the base time unit
 # sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom
 
-LJe = .516 * opts.hphobk if opts.hphobk > 0 else 0
-# .516 comes from Ashbaugh: 0.300kcal/mol / (avogadro⋅boltzmann⋅293K)
+LJe = chargek / opts.hphobsigma * opts.alpha if opts.alpha > 0 else 0
+# LJe = .516 comes from Ashbaugh: 0.300kcal/mol / (avogadro⋅boltzmann⋅293K)
 
-if opts.LJESratio is not None:
-    if opts.LJESratio == float('inf'):
-        LJe = .516  # for attractive 
-        chargek = 0
-    elif opts.LJESratio == 0:
-        LJe = 0
-        chargek = 7.1288713
-    else:
-        sqratio = sqrt(opts.LJESratio)
-        LJe = .516 * sqratio
-        chargek = 7.1288713 / sqratio
 LJepsilon = 1 # for repulsive
-#Hphobs = [[0,LJe],[LJe,2.5*LJe]]
 
-Hphobsigma = opts.hphobsigma # monomer distance from random walk (44 A) to CGMD (8.5) comparison was 5.2
-hydroindex = simpdb.hydroindex7
-if opts.ph3:
-    print("Using pH 3")
-    hydroindex = simpdb.hydroindex3
-if opts.hmix:
-    import random
-    def newval(v):
-        newv = v + ((random.random()-0.5) * 2 * opts.hmix)
-        return max([0,min([1,newv])])
-    hydroindex = {k : newval(v) for k,v in hydroindex.items()}
-print('New Hydrophobicity indices:')
-print(*['%s: %.3f' % (r,v) for r,v in hydroindex.items()], sep=', ')
+if not hasattr(simpdb, opts.hset):
+    print("Hydrophobicity scale %s not found" % opts.hset, file=sys.stderr)
+    exit(1)
+
 
 # experiments run at 293K
 # sqrt((u/avogadro)/(boltzmann⋅293K))⋅angstrom -> time units
 t0 = 6.4069e-14
 
-pdbfile = opts.pdb
+
+# Make hydrophobicity coeffs
+hset = dict(getattr(simpdb, opts.hset))
+
+#-----------------------------------------------------------------------
+# Load PDB
+pdbfile = getattr(FRETs, opts.protein + 'pdb')
+ijs, _, _ = getattr(FRETs, opts.protein)
 loadfile= mydir + 'blengths/stats-H.pkl'
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),
+                            i=opts.protein,
+                            a=format(opts.alpha, '.4g'),
                             N=opts.numres)
 
 if opts.cont:
@@ -131,7 +122,7 @@ else:
 ####################
 print("Importing PDB...")
 numres = opts.numres if opts.numres > 0 else None
-avecs = simpdb.Resvec.from_pdb('aS', pdbfile, loadfile, H=opts.hydrogen, 
+avecs = simpdb.Resvec.from_pdb('protein', pdbfile, loadfile, H=opts.hydrogen, 
                         numchains=1, numres=numres)
 
 # Import startfile
@@ -173,22 +164,13 @@ if startxyz is not None:
 print("%d Residues found with %d atoms. Making structure..."
                 % (len(avecs), sum(len(r) for r in avecs)))
 
-#~ if opts.numres > 0:
-    #~ oldavecs = avecs
-    #~ avecs = avecs[:opts.numres]
-    #~ print("%d Residues found, %d used, with %d atoms. Making structure..."
-                #~ % (len(oldavecs), len(avecs), sum(len(r) for r in avecs)))
-#~ else:
-    #~ print("%d Residues found with %d atoms. Making structure..."
-                #~ % (len(avecs), sum(len(r) for r in avecs)))
-
 
 ########################################################################
 # Set up interactions
 box = InfiniteBox()
 
-angles = simpdb.make_angles(avecs, anglespring, usestd=opts.anglestd)
-bonds = simpdb.make_bonds(avecs, bondspring, usestd=opts.bondstd)
+angles = simpdb.make_angles(avecs, opts.temp, usestd=True)
+bonds = simpdb.make_bonds(avecs, opts.temp, usestd=True)
 #~ angles = None
 if opts.hydrogen:
     LJ,neighbors = simpdb.make_LJ(box, avecs, LJepsilon, opts.atomsize,
@@ -196,24 +178,24 @@ if opts.hydrogen:
 else:
     LJ,neighbors = simpdb.make_LJ(box, avecs, LJepsilon, opts.atomsize,
                                             2.0, simpdb.RichardsSizes)
-dihedrals = (simpdb.make_dihedrals(avecs, dihspring) 
-            if (opts.dihk > 0) else None)
-if dihedrals is not None:
-    print("made dihedrals, k=%.2f" % dihspring)
+dihedrals = (simpdb.make_dihedrals(avecs, opts.dihk) 
+            if (opts.dihk > 0 and not opts.hydrogen) else None)
 charges = simpdb.make_charges(avecs, chargescreen, k=chargek, 
-                    subtract=opts.subtract, ph=(3 if opts.ph3 else 7.4)) if chargek > 0 else None
+                    subtract=opts.subtract, ph=7.4) if chargek > 0 else None
 hphob, HPneighbors = (
-    simpdb.make_hydrophobicity(box, avecs, LJe, #Hphobs, #instead of LJe
-                        sigma=Hphobsigma, hydroindex=hydroindex) 
+    simpdb.make_hydrophobicity(box, avecs, LJe,
+                        hydroindex=hset, scale=opts.hscale, method=opts.hjoin,
+                        sigma=opts.hphobsigma)
     if LJe > 0
     else (None,None))
+
 interactions = dict(bond=bonds, angle=angles, LJ=LJ, electric=charges, 
                 dihedral=dihedrals, HPhob=hphob)
-interactions = {k : v for k,v in interactions.items() if v is not None}
+interactions = dict([(k,v) for k,v in list(interactions.items()) if v is not None])
 
 intervec = ivector(list(interactions.values()))
 #print(opts.dihedral, opts.hydrogen, (opts.dihedral and not opts.hydrogen))
-print("interactions:", ", ".join(interactions.keys()))
+print("interactions:", ", ".join(list(interactions.keys())))
 #~ if opts.chargek: print('Charged', opts.chargek)
 #~ else: print('No charges.')
 
@@ -232,22 +214,28 @@ if opts.seed: collec.seed()
 else: collec.seed(1)
 collec.setForces()
 
+mode = 'a' if opts.cont else 'w'
+xyz = XYZwriter(open(moviefile, mode), rijpairs = ijs)
+
+########################################################################
 # Stage 1: Run really, really slowly, increasing dt every now and then.
 # Only needed occasionally when parameters have changed and forces might 
 # be very strong.
-if opts.startsteps > 0:
+if opts.relaxsteps > 0 and not opts.cont:
     print("Running startsteps...", 'E:', collec.energy())
-    damp, dt = opts.startdamp, opts.startdt
-    while dt < opts.dt:
-        print('factor: %.2f; E: ' % (opts.dt / dt), end='')
-        collec.changeT(dt, damp, opts.temp)
-        for i in range(opts.startsteps):
+    for dtfac in range(opts.relaxdt, -1, -1):
+        dt = opts.dt / (2**dtfac)
+        print('factor: %d; E: ' % (opts.dt / dt), end='')
+        collec.changeT(dt, opts.relaxdamp, opts.temp)
+        for i in range(opts.relaxsteps):
             collec.timestep()
-            if i % (opts.startsteps/5) == 0:
+            if i % (opts.relaxsteps/5) == 0:
                 print('  %.6g' % collec.energy(), end='')
                 sys.stdout.flush()
+                xyz.writeframe(avecs, collec.com(),
+                                stage='relax',
+                                dt="%.2g" % dt)
         print()
-        dt *= opts.startfactor
     
     collec.timestep()
     #~ print('E:', collec.energy()) #INFO
@@ -258,29 +246,47 @@ if opts.startsteps > 0:
 ########################################################################
 # Stage 2: Run at normal speed for a while to 'ramp up' to the right temperature
 # only needed for low damping.
-if opts.rampsteps > 0:
+K, E, T = collec.kinetic(), collec.energy(), collec.temp()
+lastE = float('inf')
+frac = K / E
+i = 0
+if opts.rampsteps > 0 and not opts.cont:
     oldcomv = collec.comv().mag()
     collec.resetcomv()
     oldL = collec.angmomentum().mag()
     collec.resetL()
     print('comv: %.3g -> %.3g   L: %.3g -> %.3g' % (oldcomv, collec.comv().mag(),
             oldL, collec.angmomentum().mag()))
-    print("Damping for", opts.rampsteps, "steps")
-    collec.changeT(opts.dt, opts.rampdamp, opts.temp)
-    for i in range(opts.rampsteps):
-        collec.timestep()
-        if i % (opts.rampsteps / 5) == 0:
-            print("E:", collec.energy())
+    print("Damping for", opts.rampsteps, "step increments")
+    collec.changeT((opts.rampdt if opts.rampdt else opts.dt), opts.rampdamp, opts.temp)
+    while (i < 5 
+            or not .95 < (float(T) / float(opts.temp)) < 1.05
+            or lastE > E):
+        i+=1
+        for j in range(opts.rampsteps):
+            collec.timestep()
+        lastE = E
+        K, E, T = collec.kinetic(), collec.energy(), collec.temp()
+        frac = K / E
+        print(  "E:", '%10d' % collec.energy(), 
+                "K:", '%10d' % collec.kinetic(), 
+                'T:', '%10.2f' % collec.temp(),
+                'K/E:', '%5.2f' % frac)
+        sys.stdout.flush()
+        xyz.writeframe(avecs, collec.com(),
+                            stage='ramp',
+                            damp="%.2g" % opts.rampdamp)
     collec.changeT(opts.dt, opts.damping, opts.temp)
     oldcomv = collec.comv().mag()
     collec.resetcomv()
     oldL = collec.angmomentum().mag()
     collec.resetL()
-    print('comv: %.3g -> %.3g   L: %.3g -> %.3g' % (oldcomv, collec.comv().mag(),
-            oldL, collec.angmomentum().mag()))
+    print('Ramp finished!', 
+            'comv: %.3g -> %.3g   L: %.3g -> %.3g' % (oldcomv,
+            collec.comv().mag(), oldL, collec.angmomentum().mag()))
+    print("E:", '%.2f' % collec.energy(), 'T:', '%.2f' % collec.temp())
+    sys.stdout.flush()
     
-mode = 'a' if opts.cont else 'w'
-xyz = XYZwriter(open(moviefile, mode))
 if not opts.cont: xyz.writefull(0, avecs, collec)
 
 def printlist(lst, name):
@@ -291,22 +297,6 @@ def printlist(lst, name):
     lstd = 100*(last - mean) / std if std > 0 else float('nan')
     print("{name:10s}={mean:8.2f}, σ={std:8.3f} ({sovm:7.3g}%) [{last:8.2f} ({lstd:7.3g}%)]".format(**locals()))
 
-def get_eta(cur, tot, starttime):
-    now = datetime.now()
-    tused = now - starttime
-    
-    # timedeltas cannot be multiplied by floats (?), so we get out the 
-    #seconds, use that, and make it back into a dt
-    usedsecs = 24*60*60 * tused.days + tused.seconds
-    tleft = timedelta(0, (usedsecs) * (float(cur) / tot))
-    
-    endtime = now + tleft
-    days = tleft.days
-    hr, sec = divmod(tleft.seconds, 3600)
-    mn, sec = divmod(sec, 60)
-    return endtime, (days, hr, mn, sec)
-
-
 ########################################################################
 ##
 ## Starting Actual Run
@@ -316,22 +306,22 @@ def get_eta(cur, tot, starttime):
 print("Running... output to " + str(moviefile))
 
 print("Data output to " + str(statfile))
-ijs = [(54, 72), (72, 92), (9, 33), (54, 92), (92, 130), (33, 72),
-         (9, 54), (72, 130), (9, 72), (54, 130), (33, 130), (9, 130)]
-if opts.numres > 0:
-    N=len(avecs)
-    ijs = [(i,j) for i,j in ijs if i <= N and j <= N]
 rijs = None if not opts.rij else (statistics.Rijs, ijs)
-table = statistics.StatManager(statfile, collec, [avecs], 
+if rijs is not None:
+    pairstr = ', '.join([str(i) + '-' + str(j) for i,j in ijs])
+    print("Writing rijs", pairstr)
+table = statistics.StatManager(statfile, collec, [avecs],
+            stats=(statistics.COMV, statistics.E, statistics.Kinetic,
+                    statistics.L, statistics.Rg, statistics.T),
             groups=(statistics.Dihedrals, statistics.CALocs, rijs), 
             contin=opts.cont)
 valtracker = defaultdict(list)
 
 # t is current step num
-startt = t = 0 if not opts.cont else int(startedat / opts.dt +.5)
+startt = t = 0 if not opts.cont else round(startedat / opts.dt)
 if not opts.cont: table.update(t, write=True)
 curlim = t + showsteps
-print('Starting.', t, curlim, 'E:', collec.energy())
+print('Starting.', t, curlim, 'E: %.2f' % collec.energy())
 starttime = datetime.now()
 try:
     while t < steps:
@@ -346,16 +336,16 @@ try:
         table.update(int(t * opts.dt+.5), write=True)
         #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
         
-        endtime, interval = get_eta(steps-t, t-startt, starttime)
-        days, hr, mn, sec = interval
+        endtime, interval = simpdb.get_eta(t-startt, steps-startt, starttime)
+        totinterval = simpdb.to_dhms(endtime - starttime)
         
         print('------ ', int(t*opts.dt+.5), 
-            ' Ends in (', (('%dd ' % days) if days else ''),
-                        '%d:%02d:%02d)'% (hr, mn, sec), ' on ', 
+            ' Ends in (', simpdb.interval_str(*interval), ' / ', 
+                simpdb.interval_str(*totinterval), ') on ', 
                                 endtime.strftime('(%a %b %d, %H:%M:%S)'),
             sep = '')
+        
         for k,v in sorted(values.items()):
-            #~ print('k:', k)
             valtracker[k].append(v)
             if k is 'time': continue
             printlist(valtracker[k], k)

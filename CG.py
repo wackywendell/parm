@@ -34,20 +34,19 @@ parser.add_option('-g', '--statfile', dest='statfile',
 parser.add_option('-x', '--xyzfile', dest='xyzfile', 
             default=None)
 parser.add_option('-a', '--alpha', dest='alpha', type=float, default=1.0)
-parser.add_option('-R', '--Rijs', type='choice', choices=['none','aS','tau'])
+parser.add_option('-K', '--chargek', dest='chargek', type=float, default=1.0)
+parser.add_option('-R', '--Rijs', type='choice', choices=['none','aS','bS','gS','tau'])
 
 errprint(" ".join(sys.argv))
 opts, args = parser.parse_args()
 
-if opts.Rijs == 'aS':
-    from FRETvals import ijs as FRETijs
-elif opts.Rijs == 'tau':
-    from tauFRET import ijs as FRETijs
+if opts.Rijs != 'none':
+    import FRETs
+    FRETijs = getattr(FRETs, opts.Rijs + 'ijs')
+    ijstr = ', '.join(['%d-%d' % ij for ij in FRETijs])
+    errprint("Tracking ijs", ijstr)
 else:
     FRETijs = []
-if FRETijs:
-    ijstr = ', '.join(['%d-%d' % ij for ij in FRETijs])
-    print("Tracking ijs", ijstr)
 
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showcount if opts.showcount else 1000*opts.showsteps
@@ -66,6 +65,7 @@ constraints = []
 ########################################################################
 ## Prep long-range interactions and make atoms
 rvecs = []
+box = InfiniteBox()
 
 #--------------------
 # CA-CA LJ
@@ -76,18 +76,23 @@ sigmas = [atomdict['LJAttractFixedRepulse']['sigma'] * atomdict['LJAttractFixedR
 if sigmas:
     innerradius = maxsigmacut = max(sigmas)
     outerradius = innerradius * 2.5
-    neighbors = neighborlist(innerradius, outerradius)
+    neighbors = neighborlist(box, innerradius, outerradius)
     trackers.append(neighbors)
     interactions['LJ'] = LJ = LJAttractFixedRepulse(neighbors)
 
 #--------------------
 # Charges
-if 'basics' in parameters and 'Charges' in parameters['basics']:
+if (opts.chargek > 0 and 'basics' in parameters 
+                        and 'Charges' in parameters['basics']):
     esparams = parameters['basics']['Charges']
-    interactions['Charges'] = charges = Charges(esparams['screeninglength'], esparams['epsilon'])
+    interactions['Charges'] = charges = (
+            Charges(esparams['screeninglength'], esparams['epsilon']))
+else: charges = None
 
 #-----------------------------------------------------------------------
 # Make Atoms
+LJattractions = []
+chargeset = []
 for n,resdict in enumerate(parameters['structure']):
     name = resdict['type']
     atoms = resdict['atoms']
@@ -108,8 +113,12 @@ for n,resdict in enumerate(parameters['structure']):
             LJat = LJAttractFixedRepulseAtom(atom, *args)
             #~ print('LJishAtom sigma:', LJat.sigma)
             LJ.add(LJat)
-        if 'Charge' in adict.keys():
+            assert abs(LJat.sig - params['sigma']) < .0001
+            LJattractions.append(LJat.epsilons[LJat.indx])
+            #~ LJattractions.append(params['epsilons'][params['indx']])
+        if charges is not None and 'Charge' in adict.keys():
             charges.add(atom, adict['Charge'])
+            chargeset.append(adict['Charge'])
     
     rvecs.append(res)
 
@@ -117,6 +126,9 @@ for n,resdict in enumerate(parameters['structure']):
 ## print out
 
 errprint('Added:', ', '.join(["%d to %s" % (i.size(),n) for n,i in interactions.items()]))
+errprint('Hydrophobicity ranging from %.2f - %.2f' % (min(LJattractions), max(LJattractions)))
+if charges is not None:
+    errprint('Made %d charges, sum %.2f' % (len(chargeset), sum(chargeset)))
 
 #-----------------------------------------------------------------------
 ## Make bonds and angles
@@ -139,7 +151,7 @@ interactions['angles'] = angles = angletriples()
 for n1,aname1,n2,aname2,n3,aname3,q0,k in parameters['angles']:
     a1,a2,a3 = rvecs[n1][aname1], rvecs[n2][aname2], rvecs[n3][aname3]
     angles.add(k,q0,a1,a2,a3)
-    neighbors.ignore(a1,a3)
+    #neighbors.ignore(a1,a3)
     totignored += 1
     
 errprint(len(parameters['angles']), "angles,", end=' ')
@@ -151,7 +163,7 @@ for n1,aname1,n2,aname2,n3,aname3,n4,aname4,coscoeff,sincoeff,usepow in paramete
     coscoeff = [opts.T*n for n in coscoeff]
     sincoeff = [opts.T*n for n in sincoeff]
     dihedral.add(coscoeff,sincoeff,a1,a2,a3,a4,usepow)
-    neighbors.ignore(a1,a4) # CAᵢ - CAᵢ₊₃
+    #neighbors.ignore(a1,a4) # CAᵢ - CAᵢ₊₃
     totignored += 1
 
 errprint(len(parameters['dihedrals']), "dihedrals,", end=' ')
@@ -161,10 +173,11 @@ errprint(len(parameters['dihedrals']), "dihedrals,", end=' ')
 ## Create simulator
 errprint("Ignoring", neighbors.ignore_size(), "CA-CA pairs.")
 atomgroups = [r.atomvec for r in rvecs]
-collec = collectionSol(opts.dt, opts.damping, opts.T,
+collec = collectionSol(box, opts.dt, opts.damping, opts.T,
                             atomgroups, list(interactions.values()),
                             trackers, constraints)
 collec.seed()
+neighbors.update_list(True)
 collec.setForces()
 
 ########################################################################
@@ -180,7 +193,7 @@ def statistics(t, c=collec):
         RG=collec.gyradius()
         )
     for name, i in interactions.items():
-        d['V' + name] = i.energy()
+        d['V' + name] = i.energy(box)
     return d
 
 #-----------------------------------------------------------------------
@@ -256,7 +269,7 @@ try:
         
         #days, hr, mn, sec = interval
         
-        errprint('------ ', int(t*opts.dt+.5), 
+        errprint('------ ', int(t*opts.dt / 1000 +.5), 
             ' Ends in (', simpdb.interval_str(*interval), ' / ', 
                 simpdb.interval_str(*totinterval), ') on ', 
                                 endtime.strftime('(%a %b %d, %H:%M:%S)'),

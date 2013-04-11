@@ -1,8 +1,8 @@
 #include "collection.hpp"
 
-collection::collection(vector<atomgroup*> gs, vector<interaction*> is,
+collection::collection(Box *box, vector<atomgroup*> gs, vector<interaction*> is,
               vector<statetracker*> ts, vector<constraint*> cs)
-        : groups(gs), interactions(is), trackers(ts), constraints(cs),
+        : box(box), groups(gs), interactions(is), trackers(ts), constraints(cs),
                 atoms(gs){
     update_trackers();
     setForces();
@@ -10,9 +10,7 @@ collection::collection(vector<atomgroup*> gs, vector<interaction*> is,
     update_trackers();
 }
 
-void collection::scaleVelocities(flt T){
-    flt t = temp();
-    flt scaleby = sqrt(T/t);
+void collection::scaleVs(flt scaleby){
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
@@ -22,17 +20,31 @@ void collection::scaleVelocities(flt T){
     }
 }
 
+void collection::scaleVelocitiesT(flt T){
+    flt t = temp();
+    flt scaleby = sqrt(T/t);
+    scaleVs(scaleby);
+}
+
+void collection::scaleVelocitiesE(flt E){
+    flt E0 = energy();
+    flt k0 = kinetic();
+    flt goalkinetic = k0 + (E - E0);
+    flt scaleby = sqrt(goalkinetic/k0);
+    scaleVs(scaleby);
+}
+
 void collection::update_trackers(){
     vector<statetracker*>::iterator git;
     for(git = trackers.begin(); git<trackers.end(); git++){
-        (*git)->update();
+        (*git)->update(box);
     }
 }
 
 void collection::update_constraints(){
     vector<constraint*>::iterator git;
     for(git = constraints.begin(); git<constraints.end(); git++){
-        (*git)->apply();
+        (*git)->apply(box);
     }
 }
 
@@ -46,12 +58,38 @@ flt collection::kinetic(){
     return E;
 }
 
+flt collection::pressure(){
+    flt V = box->V();
+    if(isnan(V) or isinf(V)) return NAN;
+    int ndof = 0, nc = 0;
+    vector<constraint*>::iterator cit;
+    for(cit = constraints.begin(); cit<constraints.end(); cit++){
+        nc += (*cit)->ndof();
+    }
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        ndof += 3*(group.size());
+    }
+    
+    
+    flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;
+    //flt E = (ndof - nc) * temp();
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        E += (*it)->pressure(box);
+    }
+    return E / V / 3.0;
+}
+
 flt collection::potentialenergy(){
     flt E=0;
     vector<interaction*>::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         interaction &inter = **it;
-        E += inter.energy();
+        E += inter.energy(box);
+        //~ cout << "potential energy: " << E << endl;
+        assert(not isnan(E));
     }
     assert(not isnan(E));
     return E;
@@ -156,14 +194,14 @@ void collection::setForces(){
     vector<interaction*>::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         interaction &inter = **it;
-        inter.setForces();
+        inter.setForces(box);
     }
 }
 
-collectionSol::collectionSol(const flt dt, const flt damp,const flt T, 
+collectionSol::collectionSol(Box *box, const flt dt, const flt damp,const flt T,
         vector<atomgroup*> groups,vector<interaction*> interactions,
         vector<statetracker*> trackers, vector<constraint*> constraints) :
-            collection(groups, interactions, trackers, constraints), 
+            collection(box, groups, interactions, trackers, constraints), 
             dt(dt), damping(damp), desT(T){
     setCs();
     update_trackers();
@@ -481,6 +519,459 @@ void collectionGaussianT::timestep(){
     //~ printf("Temperature (%6.3f) %7.3g -> %7.3g, xi (%6.3f) %7.3g -> %7.3g\n",
             //~ T/oldT, oldT, T, xi/oldxi,oldxi,xi);
     
+    update_trackers();
+    return;
+}
+
+
+void collectionGear3A::timestep(){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
+            m[i].v += m[i].a * dt;
+        }
+    }
+    // Now we set forces and accelerations
+    setForces();
+    update_constraints();
+    
+    // Make correction
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            Vec a = m[i].f / m.getmass(i);
+            Vec correction = a - m[i].a;
+            m[i].v += correction * (dt/2);
+            m[i].a = a;
+        }
+    }
+    
+    update_trackers();
+    
+    return;
+}
+
+void collectionGear4A::timestep(){
+    uint n=0;
+    //~ cout << "Gear 4A timestep, ncorrec = " << ncorrec << "\n";
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        //~ cout << "Gear 4A timestep loop 1, g.size() = " << g.size() << "\n";
+        for(uint i=0; i<g.size(); i++){
+            //~ cout << "Gear 4A timestep loop 2, i = " << i << "\n";
+            g[i].x += g[i].v * dt + g[i].a * (dt*dt/2) + bs[n] * (dt*dt*dt/6);
+            g[i].v += g[i].a * dt + bs[n] * (dt*dt/2);
+            g[i].a += bs[n] * dt;
+            n++;
+        }
+    }
+    
+    //~ cout << "Gear 4A timestep 2, ncorrec = " << ncorrec << "\n";
+    // Now we set forces and accelerations
+    for(uint m=0; m<ncorrec; m++){
+        //~ cout << "Gear 4A setting forces, m = " << m << ", ncorrec = " << ncorrec << "\n";
+        setForces();
+        update_constraints();
+    
+        // Make correction
+        n=0;
+        for(git = groups.begin(); git<groups.end(); git++){
+            atomgroup &g = **git;
+            for(uint i=0; i<g.size(); i++){
+                Vec a = g[i].f / g.getmass(i);
+                Vec correction = a - g[i].a;
+                g[i].x += correction * (dt*dt/12);
+                g[i].v += correction * (5*dt/12);
+                g[i].a = a;
+                bs[n] += correction / dt;
+                n++;
+            }
+        }
+    }
+    update_trackers();
+    return;
+}
+
+void collectionGear5A::timestep(){
+    uint n=0;
+    flt dt2 = dt*dt/2;
+    flt dt3 = dt*dt2/3;
+    flt dt4 = dt*dt3/4;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            g[i].x += g[i].v * dt + g[i].a * dt2 + bs[n] * dt3 + cs[n] * dt4;
+            g[i].v += g[i].a * dt + bs[n] * dt2 + cs[n] * dt3;
+            g[i].a += bs[n] * dt + cs[n] * dt2;
+            bs[n] += cs[n] * dt;
+            n++;
+        }
+    }
+    flt c0 = 19*dt*dt/240, c1 = 3*dt/8;
+    //flt c2 = 1
+    flt c3 = 3 / (2 * dt), c4 = 1/(dt*dt);
+    
+    for(uint m=0; m<ncorrec; m++){
+        // Now we set forces and accelerations
+        setForces();
+        update_constraints();
+        
+        // Make correction
+        n=0;
+        for(git = groups.begin(); git<groups.end(); git++){
+            atomgroup &g = **git;
+            for(uint i=0; i<g.size(); i++){
+                Vec a = g[i].f / g.getmass(i);
+                Vec correction = a - g[i].a;
+                g[i].x += correction * c0;
+                g[i].v += correction * c1;
+                g[i].a = a;
+                bs[n] += correction * c3;
+                cs[n] += correction * c4;
+                n++;
+            }
+        }
+    }
+    
+    update_trackers();
+    return;
+}
+
+void collectionGear6A::timestep(){
+    //~ cout << "Timestep\n";
+    flt dt2 = dt*dt/2;
+    flt dt3 = dt*dt2/3;
+    flt dt4 = dt*dt3/4;
+    flt dt5 = dt*dt4/5;
+    
+    uint n=0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            //~ assert(n < bs.size());
+            //~ assert(n < cs.size());
+            //~ assert(n < ds.size());
+            g[i].x += g[i].v * dt + g[i].a * dt2 + bs[n] * dt3 + cs[n] * dt4 + ds[n] * dt5;
+            g[i].v += g[i].a * dt + bs[n] * dt2 + cs[n] * dt3 + ds[n] * dt4;
+            g[i].a += bs[n] * dt + cs[n] * dt2 + ds[n] * dt3;
+            bs[n] += cs[n] * dt + ds[n] * dt2;
+            cs[n] += ds[n] * dt;
+            n++;
+        }
+    }
+    
+    //~ atomgroup &gbegin = **(groups.begin());
+    //~ printf("predic = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
+        //~ gbegin[0].x[0], gbegin[0].v[0], gbegin[0].a[0],
+            //~ bs[0][0], cs[0][0], ds[0][0]);
+    //~ printf("predicscaled = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
+        //~ gbegin[0].x[0], gbegin[0].v[0]*dt, gbegin[0].a[0]*dt2,
+            //~ bs[0][0]*dt3, cs[0][0]*dt4, ds[0][0]*dt5);
+    //~ cout << "Prediction: " 
+         //~ << gbegin[0].x[0] << ", "
+         //~ << gbegin[0].v[0] << ", "
+         //~ << gbegin[0].a[0] << ", "
+         //~ << bs[0][0] << ", "
+         //~ << cs[0][0] << ", "
+         //~ << ds[0][0] << "\n";
+    
+    
+    flt c0 = 3*dt*dt/40, c1 = 251*dt/720;
+    //flt c2 = 1
+    flt c3 = 11 / (6*dt), c4 = 2/(dt*dt), c5 = 1/(dt*dt*dt);
+    
+    for(uint m=0; m<ncorrec; m++){
+        // Now we set forces and accelerations
+        setForces();
+        update_constraints();
+        
+        //~ flt correctax = (gbegin[0].f / gbegin.getmass(0))[0];
+        //~ printf("correcta = %.15f\n", correctax);
+        //~ printf("correctascaled = %.15f\n", correctax*dt2);
+    
+        // Make correction
+        n=0;
+        for(git = groups.begin(); git<groups.end(); git++){
+            atomgroup &g = **git;
+            for(uint i=0; i<g.size(); i++){
+                //~ assert(n < bs.size());
+                //~ assert(n < cs.size());
+                //~ assert(n < ds.size());                
+                Vec a = g[i].f / g.getmass(i);
+                Vec correction = a - g[i].a;
+                g[i].x += correction * c0;
+                g[i].v += correction * c1;
+                g[i].a = a;
+                bs[n] += correction * c3;
+                cs[n] += correction * c4;
+                ds[n] += correction * c5;
+                //~ if(correction.mag()*dt2 > .05) cout << "|c[" << i << "]| = " << correction.mag()*dt2 << '\n';
+                //~ if(a.mag()*dt2 > .1) cout << "|a[" << i << "]| = " << a.mag()*dt2 << '\n';
+                //~ if(bs[n].mag()*dt3 > .1) cout << "|bs[" << n << "]| = " << bs[n].mag()*dt3 << '\n';
+                //~ if(cs[n].mag()*dt4 > .1) cout << "|cs[" << n << "]| = " << cs[n].mag()*dt4 << '\n';
+                //~ if(ds[n].mag()*dt5 > .1) cout << "|ds[" << n << "]| = " << ds[n].mag()*dt5 << '\n';
+                //~ assert(correction.mag()*dt2 < 1);
+                //~ assert(a.mag()*dt2 < 3);
+                //~ assert(bs[n].mag()*dt3 < 3);
+                //~ assert(cs[n].mag()*dt4 < 3);
+                //~ assert(ds[n].mag()*dt5 < 3);
+                n++;
+            }
+        }
+        //~ printf("final = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
+        //~ gbegin[0].x[0], gbegin[0].v[0], gbegin[0].a[0],
+            //~ bs[0][0], cs[0][0], ds[0][0]);
+        //~ printf("finalscaled = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
+        //~ gbegin[0].x[0], gbegin[0].v[0]*dt, gbegin[0].a[0]*dt2,
+            //~ bs[0][0]*dt3, cs[0][0]*dt4, ds[0][0]*dt5);
+    
+        //~ cout << "Final:      " 
+         //~ << gbegin[0].x[0] << ", "
+         //~ << gbegin[0].v[0] << ", "
+         //~ << gbegin[0].a[0] << ", "
+         //~ << bs[0][0] << ", "
+         //~ << cs[0][0] << ", "
+         //~ << ds[0][0] << "\n";
+    
+    }
+    
+    update_trackers();
+    return;
+}
+
+atomid atomvecRK4::get_id(atom* atm){
+    atomRK4* a = (atomRK4*) atm;
+    uint n = a - atoms;
+    if (n >= sz or a < atoms) return atomid();
+    return atomid(atoms + n, n);
+};
+
+void collectionRK4::timestep(){
+    //~ atom &atm0 = *((*(groups.begin()))->get(0));
+    //~ atomRK4 &a0 = (atomRK4 &) atm0;
+    //~ Vec xold = a0.x, vold = a0.v;
+    
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        //atomgroup *agroup = *git;
+        //atomvecRK4 &m = *aRK;
+        //atomvecRK4 &m = *((atomvecRK4*) *git);
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            atomRK4 &a = *((atomRK4 *) m.get(i));
+            a.Kxa = a.v * dt;
+            a.Kva = a.f * (dt / m.getmass(i));
+            a.x += a.Kxa / 2;
+            a.v += a.Kva / 2;
+            //~ if(i == 0) cout << "f " << a.f;
+        }
+    }
+    //~ cout << (xold + (a0.Kxa / 2) - a0.x) << "    "
+         //~ << (vold + (a0.Kva / 2) - a0.v) << '\n';
+    
+    // x = x0 + Kxa/2
+    // v = v0 + Kva/2
+    
+    setForces();
+    update_constraints();
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            atomRK4 &a = *((atomRK4 *) m.get(i));
+            a.Kxb = a.v * dt;
+            a.Kvb = a.f * (dt / m.getmass(i));
+            a.x += a.Kxb / 2 - a.Kxa / 2;
+            a.v += a.Kvb / 2 - a.Kva / 2;
+            //~ if(i == 0) cout << " " << a.f;
+        }
+    }
+    
+    //~ cout << (xold + (a0.Kxb / 2) - a0.x) << "    "
+         //~ << (vold + (a0.Kvb / 2) - a0.v) << '\n';
+    
+    // x = x0 + Kxb/2
+    // v = v0 + Kvb/2
+    
+    setForces();
+    update_constraints();
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            atomRK4 &a = *((atomRK4 *) m.get(i));
+            a.Kxc = a.v * dt;
+            a.Kvc = a.f * (dt / m.getmass(i));
+            a.x += a.Kxc - a.Kxb / 2;
+            a.v += a.Kvc - a.Kvb / 2;
+            //~ if(i == 0) cout << " " << a.f;
+        }
+    }
+    // x = x0 + Kxc
+    // v = v0 + Kvc
+    //~ cout << (xold + (a0.Kxc) - a0.x) << "    "
+         //~ << (vold + (a0.Kvc) - a0.v) << '\n';
+    
+    setForces();
+    update_constraints();
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            atomRK4 &a = *((atomRK4 *) m.get(i));
+            a.a = a.f / m.getmass(i);
+            a.Kxd = a.v * dt;
+            a.Kvd = a.a * dt;
+            a.x += (a.Kxa + a.Kxd)/6 + (a.Kxb)/3 - (a.Kxc * (2.0/3.0));
+            a.v += (a.Kva + a.Kvd)/6 + (a.Kvb)/3 - (a.Kvc * (2.0/3.0));
+            //~ if(i == 0){
+                
+                //~ cout << " " << a.f << '\n';
+                //~ cout << "x " << a.x << a.Kxa << a.Kxb << a.Kxc << a.Kxd << '\n' 
+                     //~ << "v " << a.v << a.Kva << a.Kvb << a.Kvc << a.Kvd << '\n';
+                 //~ }
+        }
+    }
+    //~ Vec x1 = xold + (a0.Kxa/6) + (a0.Kxb/3) + (a0.Kxc/3) + (a0.Kxd/6);
+    //~ Vec v1 = xold + (a0.Kxa/6) + (a0.Kxb/3) + (a0.Kxc/3) + (a0.Kxd/6);
+    //~ cout << x1 << a0.x << (a0.x - x1) << "\n"
+         //~ << v1 << a0.v << (a0.v - v1) << '\n';
+    
+    setForces();
+    update_constraints();
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f / m.getmass(i);
+        }
+    }
+    
+    update_trackers();
+    
+    return;
+}
+
+flt collectionGear4NPH::setForcesGetPressure(){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        group.resetForces();
+    }
+    
+    flt p=0;
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        interaction &inter = **it;
+        p += inter.setForcesGetPressure(box);
+    }
+    return p;
+}
+
+flt collectionGear4NPH::kinetic(){
+    flt E=0;
+    flt Vfac = dV/box->V()/3.0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            Vec v = g[i].v - (g[i].x * Vfac);
+            E += v.sq() * g.getmass(i);
+        }
+    }
+    return E/2.0;
+}
+
+flt collectionGear4NPH::temp(){
+    flt totatoms = 0;
+    flt totkinetic2 = 0; // kinetic * 2
+    Vec cv = comv();
+    flt Vfac = dV/box->V()/3.0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;for(uint i=0; i<g.size(); i++){
+            Vec v = g[i].v - cv - (g[i].x * Vfac);
+            totkinetic2 += v.sq() * g.getmass(i);
+        }
+        totatoms += g.size();
+    }
+    
+    int ndof = dof();
+    return totkinetic2 / (ndof-3);
+}
+
+void collectionGear4NPH::timestep(){
+    uint n=0;
+    OriginBox* obox = (OriginBox*) box;
+    
+    /// Prediction
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            g[i].x += g[i].v * dt + g[i].a * (dt*dt/2) + bs[n] * (dt*dt*dt/6);
+            g[i].v += g[i].a * dt + bs[n] * (dt*dt/2);
+            g[i].a += bs[n] * dt;
+            n++;
+        }
+    }
+    flt V = obox->V();
+    flt newV = V + dV * dt + ddV * (dt*dt/2) + dddV * (dt*dt*dt/6);
+    dV += ddV * dt + dddV * (dt*dt/2);
+    ddV += dddV * dt;
+    V = obox->resizeV(newV);
+    if (abs(V-newV)/abs(newV) > 1e-8){
+        printf("V: %.4g; newV: %.4g\n", V, newV);
+        assert(abs(V-newV)/abs(newV) < 1e-8);
+    }
+    
+    // Now we set forces and accelerations
+    for(uint m=0; m<ncorrec; m++){
+        flt interacP = setForcesGetPressure();
+        flt newP = (interacP + (kinetic()*2.0))/3.0/V;
+        //~ for(git = groups.begin(); git<groups.end(); git++){
+            //~ atomgroup &g = **git;
+            //~ for(uint i=0; i<g.size(); i++){
+                //~ Vec a = g[i].f / g.getmass(i);
+            //~ }
+        //~ }
+        //~ newP = pressure();
+        update_constraints();
+        
+        /// Correction
+        flt Vfac = (-(2.0/9.0)*(dV/V)*(dV/V)) + (ddV/V/3.0);
+        flt newddV = (newP - P) / Q;
+        flt correctionV = newddV - ddV;
+        newV = V + correctionV * (dt*dt/12);
+        dV += correctionV * (5*dt/12);
+        ddV = newddV;
+        dddV += correctionV / dt;
+        
+        V = obox->resizeV(newV);
+        assert(abs(V-newV) < 1e-8);
+        
+        
+        n=0;
+        for(git = groups.begin(); git<groups.end(); git++){
+            atomgroup &g = **git;
+            for(uint i=0; i<g.size(); i++){
+                Vec a = g[i].f / g.getmass(i) + g[i].x * Vfac;
+                Vec correction = a - g[i].a;
+                g[i].x += correction * (dt*dt/12);
+                g[i].v += correction * (5*dt/12);
+                g[i].a = a;
+                bs[n] += correction / dt;
+                n++;
+            }
+        }
+    }
     update_trackers();
     return;
 }

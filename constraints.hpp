@@ -11,7 +11,7 @@
 
 class constraint {
     public:
-        virtual void apply() = 0;
+        virtual void apply(Box *box) = 0;
         virtual int ndof() = 0;
         virtual ~constraint(){};
 };
@@ -29,7 +29,7 @@ class coordConstraint : public constraint {
         coordConstraint(atom* atm) :
             a(atm), loc(a->x) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(){
+        void apply(Box *box){
             for(uint i=0; i<3; i++){
                 if(not fixed[i]) continue;
                 a->f[i] = 0;
@@ -52,7 +52,7 @@ class coordCOMConstraint : public constraint {
         coordCOMConstraint(atomgroup* atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(){
+        void apply(Box *box){
             Vec com = a->com() - loc;
             Vec comv = a->comv();
             Vec totf = Vec(0,0,0);
@@ -90,7 +90,7 @@ class relativeConstraint : public constraint {
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(){
+        void apply(Box *box){
             flt mratio1 = a1->m / (a1->m + a2->m);
             flt mratio2 = a2->m / (a1->m + a2->m);
             Vec totf = a2->f + a1->f;
@@ -108,6 +108,28 @@ class relativeConstraint : public constraint {
                 assert(abs(a2->x[i] - a1->x[i]) < 1e-5);
             }
         }
+};
+
+class NPHGaussianConstraint : public constraint {
+    private:
+        OriginBox *box;
+        flt ddV, dV; // that's dV²/dt², dV/dt
+        vector<atomgroup*> groups;
+    public:
+        NPHGaussianConstraint(OriginBox *box, vector<atomgroup*> groups) : 
+                box(box), ddV(0), dV(0), groups(groups){};
+        int ndof(){return 0;};
+        void apply(Box *box2){
+            //~ flt V = box->V();
+            assert((Box*) box == box2);
+            //~ vector<atomgroup*>::iterator git;
+            //~ for(git = groups.begin(); git<groups.end(); git++){
+                //~ atomgroup &m = **git;
+                //~ for(uint i=0; i<m.size(); i++){
+                    //~ m[i].v += 
+                //~ }
+            //~ }
+        };
 };
 #endif
 

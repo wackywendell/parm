@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
-CCOPTS=-Wall -O3 -fPIC
+CCOPTS=-Wall -O2 -fPIC
 
 #INC=-I/usr/include/python2.7
 INC=`python3-config --includes`

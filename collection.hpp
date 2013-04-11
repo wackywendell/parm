@@ -16,6 +16,7 @@ class collection {
      * Adds general simulation time-stepping as well as statistical tracking.
      */
     protected:
+        Box *box;
         vector<atomgroup*> groups;
         vector<interaction*> interactions;
         vector<statetracker*> trackers;
@@ -25,7 +26,8 @@ class collection {
         void update_constraints();
         
     public:
-        collection(vector<atomgroup*> groups=vector<atomgroup*>(),
+        collection(Box *box, 
+            vector<atomgroup*> groups=vector<atomgroup*>(),
             vector<interaction*> interactions=vector<interaction*>(),
             vector<statetracker*> trackers=vector<statetracker*>(),
             vector<constraint*> constraints=vector<constraint*>());
@@ -38,18 +40,22 @@ class collection {
         //Stats
         flt potentialenergy();
         flt energy();
-        flt temp();
-        flt kinetic();
+        virtual flt temp();
+        virtual flt kinetic();
+        virtual flt pressure();
+        Box *getbox(){return box;};
         inline Vec com(){return atoms.com();};
         inline Vec comv(){return atoms.comv();};
-        inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc);};
-        inline Vec angmomentum(){return atoms.angmomentum(com());};
+        inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc, box);};
+        inline Vec angmomentum(){return atoms.angmomentum(com(), box);};
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
         
         void resetcomv(){atoms.resetcomv();};
-        void resetL(){atoms.resetL();};
-        void scaleVelocities(flt T);
+        void resetL(){atoms.resetL(box);};
+        void scaleVs(flt scaleby);
+        void scaleVelocitiesT(flt T);
+        void scaleVelocitiesE(flt E);
         
         void addInteraction(interaction* inter){
             interactions.push_back(inter);
@@ -67,11 +73,11 @@ class collection {
 
 class StaticCollec : public collection {
     public:
-        StaticCollec(vector<atomgroup*> groups,
+        StaticCollec(Box *box, vector<atomgroup*> groups,
             vector<interaction*> interactions=vector<interaction*>(),
             vector<statetracker*> trackers=vector<statetracker*>(),
             vector<constraint*> constraints=vector<constraint*>())
-                            : collection(groups, interactions, trackers, constraints){};
+                            : collection(box, groups, interactions, trackers, constraints){};
         virtual void timestep(){};
         void update(){update_trackers(); update_constraints();};
 };
@@ -111,7 +117,7 @@ class collectionSol : public collection {
         void setCs();
     
     public:
-        collectionSol(const flt dt, const flt damping, const flt desiredT, 
+        collectionSol(Box *box, const flt dt, const flt damping, const flt desiredT, 
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>(),
@@ -129,13 +135,14 @@ class collectionVerlet : public collection {
         flt dt;
         
     public:
-        collectionVerlet(const flt dt, 
+        collectionVerlet(Box *box, const flt dt, 
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>(),
                 vector<constraint*> constraints=vector<constraint*>()) :
-            collection(groups, interactions, trackers, constraints), dt(dt){};
+            collection(box, groups, interactions, trackers, constraints), dt(dt){};
         void timestep();
+        void setdt(flt newdt){dt=newdt;};
 };
 
 flt solveCubic1(flt b, flt c, flt d){
@@ -204,21 +211,25 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
 }
 
 class collectionNoseHoover : public collection {
-    // for use in fixed-E simulations
+    // NVT
     protected:
         flt dt, Q, T;
         flt xi, lns;
         
     public:
-        collectionNoseHoover(const flt dt, const flt Q, const flt T, 
+        collectionNoseHoover(Box *box, const flt dt, const flt Q, const flt T, 
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>(),
                 vector<constraint*> constraints=vector<constraint*>()) :
-            collection(groups, interactions, trackers, constraints), 
+            collection(box, groups, interactions, trackers, constraints), 
             dt(dt), Q(Q), T(T){
                 xi = 0; lns = 0; 
             };
+        void setdt(flt newdt){dt=newdt;};
+        void setQ(flt newQ){Q=newQ;};
+        void resetBath(){xi=0;lns=0;};
+        
         void timestep();
         flt Hamiltonian();
         flt getxi(){return xi;};
@@ -226,23 +237,273 @@ class collectionNoseHoover : public collection {
 };
 
 class collectionGaussianT : public collection {
-    // for use in fixed-E simulations
+    // Gaussian Constraint thermostat
+    // NVT
     protected:
         flt dt, Q;
         flt xi;
         flt setxi();
         
     public:
-        collectionGaussianT(const flt dt, const flt Q, 
+        collectionGaussianT(Box *box, const flt dt, const flt Q, 
                 vector<atomgroup*> groups=vector<atomgroup*>(),
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>(),
                 vector<constraint*> constraints=vector<constraint*>()) :
-            collection(groups, interactions, trackers, constraints), 
+            collection(box, groups, interactions, trackers, constraints), 
             dt(dt), Q(Q){};
+        void setdt(flt newdt){dt=newdt;};
+        void setQ(flt newQ){Q=newQ;};
         void setForces(){setForces(true);};
         void setForces(bool setxi);
         void timestep();
+};
+
+class collectionGear3A : public collection {
+    // for use in fixed-E simulations
+    protected:
+        flt dt;
+        
+    public:
+        collectionGear3A(Box *box, const flt dt, 
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints), dt(dt){};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+class collectionGear4A : public collection {
+    // for use in fixed-E simulations
+    protected:
+        flt dt;
+        uint ncorrec;
+        vector<Vec> bs;
+        void resetbs(){
+            uint Natoms = 0;
+            vector<atomgroup*>::iterator git;
+            for(git = groups.begin(); git<groups.end(); git++){
+                Natoms += (*git)->size();
+            };
+            bs.resize(Natoms, Vec(0,0,0));
+        }
+        
+    public:
+        collectionGear4A(Box *box, const flt dt, uint ncorrectionsteps,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, 
+                        constraints), dt(dt), ncorrec(ncorrectionsteps){
+                resetbs();
+            };
+        collectionGear4A(Box *box, const flt dt,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+                collection(box, groups, interactions, trackers, constraints),
+                        dt(dt), ncorrec(1) {resetbs();};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+class collectionGear5A : public collection {
+    // for use in fixed-E simulations
+    protected:
+        flt dt;
+        uint ncorrec;
+        vector<Vec> bs, cs;
+        void resetbcs(){
+            uint Natoms = 0;
+            vector<atomgroup*>::iterator git;
+            for(git = groups.begin(); git<groups.end(); git++){
+                Natoms += (*git)->size();
+            };
+            bs.resize(Natoms, Vec(0,0,0));
+            cs.resize(Natoms, Vec(0,0,0));
+        }
+        
+    public:
+        collectionGear5A(Box *box, const flt dt, uint ncorrectionsteps,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints), 
+                        dt(dt), ncorrec(ncorrectionsteps){resetbcs();};
+        collectionGear5A(Box *box, const flt dt,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+                collection(box, groups, interactions, trackers, constraints),
+                        dt(dt), ncorrec(1) {resetbcs();};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+class collectionGear6A : public collection {
+    // for use in fixed-E simulations
+    protected:
+        flt dt;
+        uint ncorrec;
+        vector<Vec> bs, cs, ds;
+        void resetbcds(){
+            uint Natoms = 0;
+            vector<atomgroup*>::iterator git;
+            for(git = groups.begin(); git<groups.end(); git++){
+                Natoms += (*git)->size();
+            };
+            bs.clear(); cs.clear(); ds.clear();
+            bs.resize(Natoms, Vec(0,0,0));
+            cs.resize(Natoms, Vec(0,0,0));
+            ds.resize(Natoms, Vec(0,0,0));
+        }
+        
+    public:
+        collectionGear6A(Box *box, const flt dt, uint ncorrectionsteps,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints), 
+                        dt(dt), ncorrec(ncorrectionsteps){resetbcds();};
+        collectionGear6A(Box *box, const flt dt,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+                collection(box, groups, interactions, trackers, constraints),
+                        dt(dt), ncorrec(1) {resetbcds();};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+struct atomRK4 : atom {
+    Vec Kxa, Kxb, Kxc, Kxd, Kva, Kvb, Kvc, Kvd;
+};
+
+class atomvecRK4 : public virtual atomgroup {
+    // this is an atomgroup which actually owns the atoms.
+    private:
+        atomRK4* atoms;
+        uint sz;
+    public:
+        atomvecRK4(vector<flt> masses) : sz(masses.size()){
+            atoms = new atomRK4[sz];
+            for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
+        };
+        atomvecRK4(atomgroup &g) : sz(g.size()){
+            atoms = new atomRK4[sz];
+            for(uint i=0; i < sz; i++){
+                (atom &) atoms[i] = g[i];
+                //~ if(i > 1) cout << i-1 << ' ' << atoms[i-1].x << ' ' << atoms[i-1].Kvd << '\n';
+                //~ cout << i << ' ' << atoms[i].x << ' ' << atoms[i].Kvd << '\n';
+            }
+        };
+        atom& operator[](cuint n){return atoms[n];};
+        atom& operator[](cuint n) const {return atoms[n];};
+        //~ inline atomRK4& operator[](cuint n){return atoms[n];};
+        //~ inline atomRK4& operator[](cuint n) const {return atoms[n];};
+        atom* get(cuint n){if(n>=sz) return NULL; return &(atoms[n]);};
+        atomRK4* getRK4(cuint n){if(n>=sz) return NULL; return &(atoms[n]);};
+        atomid get_id(atom *a);
+        inline atomid get_id(uint n) {
+            if (n > sz) return atomid(); return atomid(atoms + n,n);};
+        //~ inline flt getmass(cuint n) const{return atoms[n].m;};
+        //~ inline void setmass(cuint n, flt m){atoms[n].m = m;};
+        inline uint size() const {return sz;};
+        ~atomvecRK4(){ delete [] atoms;};
+};
+
+class collectionRK4 : public collection {
+    // for use in fixed-E simulations
+    protected:
+        flt dt;
+        vector<atomgroup*> convertRK4vec(vector<atomvecRK4*> rgroups){
+            vector<atomgroup*> v;
+            vector<atomvecRK4*>::iterator git;
+            for(git = rgroups.begin(); git<rgroups.end(); git++){
+                v.push_back((atomgroup*) *git);
+            }
+            return v;
+        };
+        
+    public:
+        collectionRK4(Box *box, const flt dt, 
+                vector<atomvecRK4*> rgroups=vector<atomvecRK4*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, convertRK4vec(rgroups), interactions, 
+                        trackers, constraints), dt(dt){
+                setForces();
+                update_constraints();
+                vector<atomgroup*>::iterator git;
+                for(git = groups.begin(); git<groups.end(); git++){
+                    atomgroup &m = **git;
+                    for(uint i=0; i<m.size(); i++){
+                        atomRK4 & a = (atomRK4 &) m[i];
+                        a.a = a.f / m.getmass(i);
+                    };
+                };
+            };
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+
+
+class collectionGear4NPH : public collection {
+    // for use in fixed-E, fixed-NPH simulations
+    protected:
+        flt dt;
+        flt P, Q; // goal pressure, damping
+        flt dV, ddV, dddV; // that's dV²/dt², dV/dt
+        uint ncorrec;
+        vector<Vec> bs;
+        void resetbs(){
+            uint Natoms = 0;
+            vector<atomgroup*>::iterator git;
+            for(git = groups.begin(); git<groups.end(); git++){
+                Natoms += (*git)->size();
+            };
+            bs.resize(Natoms, Vec(0,0,0));
+        }
+        
+    public:
+        collectionGear4NPH(OriginBox *box, const flt dt, const flt P,
+                const flt Q, uint ncorrectionsteps,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, 
+                        constraints), dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), 
+                        ncorrec(ncorrectionsteps){
+                resetbs();
+            };
+        collectionGear4NPH(OriginBox *box, const flt dt, const flt P, const flt Q, 
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+                collection(box, groups, interactions, trackers, constraints),
+                        dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), ncorrec(1) {resetbs();};
+        flt setForcesGetPressure();
+        void timestep();
+        flt kinetic();
+        flt temp();
+        flt Hamiltonian(){
+            return kinetic() + (Q/2*dV*dV) + potentialenergy() + P*(((OriginBox*)box)->V());
+        }
+        flt getdV(){return dV;};
+        flt getddV(){return ddV;};
+        void setdt(flt newdt){dt=newdt;};
 };
 
 #endif
