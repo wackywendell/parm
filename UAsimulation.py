@@ -10,12 +10,12 @@ from xyzfile import XYZwriter, XYZreader
 import sys, os, os.path
 from datetime import datetime
 import numpy as np
-from os.path import expanduser
+import os.path
 from optparse import OptionParser
 from collections import defaultdict
 from sys import stdout, stderr
 
-mydir = expanduser('~/idp/')
+mydir = os.path.expanduser('~/idp/')
 parser = OptionParser("Runs a simple simulation.")
 parser.add_option('-T', '--temperature', type=float, dest='temp', default=1.0)
 parser.add_option('-D', '--damping', type=float, default=.001)
@@ -56,8 +56,8 @@ parser.add_option('--hscale', type='choice', default='zeroone',
         choices=['None', 'max', 'minmax', 'zeroone'])
 parser.add_option('--hjoin', type='choice', default='arithmetic',
         choices=['arithmetic', 'arithmeticzero','geometriczero','max','maxzero'])
-parser.add_option( '-i', dest='protein', default='aS', type='choice',
-                    choices=['aS','bS','gS','tau'])
+parser.add_option( '-i', dest='protein', type=str)#, default='aS', type='choice',
+                    #choices=['aS','bS','gS','tau'])
 
 print(" ".join(sys.argv))
 opts,args = parser.parse_args()
@@ -94,12 +94,17 @@ hset = dict(getattr(simpdb, opts.hset))
 
 #-----------------------------------------------------------------------
 # Load PDB
-pdbfile = getattr(FRETs, opts.protein + 'pdb')
-ijs, _, _ = getattr(FRETs, opts.protein)
+if hasattr(FRETs, opts.protein + 'pdb'):
+    pdbfile = getattr(FRETs, opts.protein + 'pdb')
+    ijs, _, _ = getattr(FRETs, opts.protein)
+else:
+    pdbfile = opts.protein
+    ijs = []
 loadfile= mydir + 'blengths/stats-H.pkl'
+protname, _ = os.path.splitext(os.path.basename(opts.protein))
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),
-                            i=opts.protein,
+                            i=protname,
                             a=format(opts.alpha, '.4g'),
                             N=opts.numres)
 
@@ -306,8 +311,12 @@ def printlist(lst, name):
 print("Running... output to " + str(moviefile))
 
 print("Data output to " + str(statfile))
-rijs = None if not opts.rij else (statistics.Rijs, ijs)
-if rijs is not None:
+if (not ijs or not opts.rij):
+    print('Rijs are none', not ijs, not opts.rij)
+    rijs = None
+else:
+    print('Rijs are not none', ijs, not ijs, not opts.rij)
+    rijs = (statistics.Rijs, ijs)
     pairstr = ', '.join([str(i) + '-' + str(j) for i,j in ijs])
     print("Writing rijs", pairstr)
 table = statistics.StatManager(statfile, collec, [avecs],

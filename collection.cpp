@@ -5,7 +5,7 @@ collection::collection(Box *box, vector<atomgroup*> gs, vector<interaction*> is,
         : box(box), groups(gs), interactions(is), trackers(ts), constraints(cs),
                 atoms(gs){
     update_trackers();
-    setForces();
+    setForces(true);
     update_constraints();
     update_trackers();
 }
@@ -58,19 +58,28 @@ flt collection::kinetic(){
     return E;
 }
 
+flt collection::virial(){
+    flt E = 0;
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        E += (*it)->pressure(box);
+    }
+    return E;
+}
+
 flt collection::pressure(){
     flt V = box->V();
-    if(isnan(V) or isinf(V)) return NAN;
-    int ndof = 0, nc = 0;
-    vector<constraint*>::iterator cit;
-    for(cit = constraints.begin(); cit<constraints.end(); cit++){
-        nc += (*cit)->ndof();
-    }
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        ndof += 3*(group.size());
-    }
+    //~ if(isnan(V) or isinf(V)) return NAN;
+    //~ int ndof = 0, nc = 0;
+    //~ vector<constraint*>::iterator cit;
+    //~ for(cit = constraints.begin(); cit<constraints.end(); cit++){
+        //~ nc += (*cit)->ndof();
+    //~ }
+    //~ vector<atomgroup*>::iterator git;
+    //~ for(git = groups.begin(); git<groups.end(); git++){
+        //~ atomgroup &group = **git;
+        //~ ndof += 3*(group.size());
+    //~ }
     
     
     flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;
@@ -78,6 +87,7 @@ flt collection::pressure(){
     vector<interaction*>::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         E += (*it)->pressure(box);
+        assert(not isnan(E));
     }
     return E / V / 3.0;
 }
@@ -91,7 +101,6 @@ flt collection::potentialenergy(){
         //~ cout << "potential energy: " << E << endl;
         assert(not isnan(E));
     }
-    assert(not isnan(E));
     return E;
 }
 
@@ -184,7 +193,7 @@ flt collection::gyradius(){
     return sqrt(Rgsq/N);
 }
 
-void collection::setForces(){
+void collection::setForces(bool seta){
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
@@ -196,6 +205,14 @@ void collection::setForces(){
         interaction &inter = **it;
         inter.setForces(box);
     }
+    if(!seta) return;
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f / m.getmass(i);
+        }
+    }
 }
 
 collectionSol::collectionSol(Box *box, const flt dt, const flt damp,const flt T,
@@ -205,7 +222,7 @@ collectionSol::collectionSol(Box *box, const flt dt, const flt damp,const flt T,
             dt(dt), damping(damp), desT(T){
     setCs();
     update_trackers();
-    setForces();
+    setForces(true);
     update_constraints();
     update_trackers();
 };
@@ -276,7 +293,7 @@ void collectionSol::timestep(){
         }
     }
     // Now we set forces and accelerations
-    setForces();
+    setForces(false);
     update_constraints();
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
@@ -347,7 +364,7 @@ void collectionVerlet::timestep(){
         }
     }
     // Now we set forces and accelerations
-    setForces();
+    setForces(false);
     update_constraints();
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
@@ -405,7 +422,7 @@ void collectionNoseHoover::timestep(){
     
     
     // Now we set forces and accelerations
-    setForces();
+    setForces(false);
     update_constraints();
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
@@ -466,8 +483,8 @@ flt collectionGaussianT::setxi(){
     return xi;
 }
 
-void collectionGaussianT::setForces(bool shouldwesetxi){
-    collection::setForces();
+void collectionGaussianT::setForces(bool seta, bool shouldwesetxi){
+    collection::setForces(seta);
     if(shouldwesetxi) setxi();
 }
 
@@ -482,7 +499,7 @@ void collectionGaussianT::timestep(){
         }
     }
     // Now we set forces and accelerations
-    setForces(false);
+    setForces(false, false);
     update_constraints();
     
     for(git = groups.begin(); git<groups.end(); git++){
@@ -534,7 +551,7 @@ void collectionGear3A::timestep(){
         }
     }
     // Now we set forces and accelerations
-    setForces();
+    setForces(false);
     update_constraints();
     
     // Make correction
@@ -574,7 +591,7 @@ void collectionGear4A::timestep(){
     // Now we set forces and accelerations
     for(uint m=0; m<ncorrec; m++){
         //~ cout << "Gear 4A setting forces, m = " << m << ", ncorrec = " << ncorrec << "\n";
-        setForces();
+        setForces(false);
         update_constraints();
     
         // Make correction
@@ -618,7 +635,7 @@ void collectionGear5A::timestep(){
     
     for(uint m=0; m<ncorrec; m++){
         // Now we set forces and accelerations
-        setForces();
+        setForces(false);
         update_constraints();
         
         // Make correction
@@ -688,7 +705,7 @@ void collectionGear6A::timestep(){
     
     for(uint m=0; m<ncorrec; m++){
         // Now we set forces and accelerations
-        setForces();
+        setForces(false);
         update_constraints();
         
         //~ flt correctax = (gbegin[0].f / gbegin.getmass(0))[0];
@@ -779,7 +796,7 @@ void collectionRK4::timestep(){
     // x = x0 + Kxa/2
     // v = v0 + Kva/2
     
-    setForces();
+    setForces(false);
     update_constraints();
     
     for(git = groups.begin(); git<groups.end(); git++){
@@ -800,7 +817,7 @@ void collectionRK4::timestep(){
     // x = x0 + Kxb/2
     // v = v0 + Kvb/2
     
-    setForces();
+    setForces(false);
     update_constraints();
     
     for(git = groups.begin(); git<groups.end(); git++){
@@ -819,7 +836,7 @@ void collectionRK4::timestep(){
     //~ cout << (xold + (a0.Kxc) - a0.x) << "    "
          //~ << (vold + (a0.Kvc) - a0.v) << '\n';
     
-    setForces();
+    setForces(false);
     update_constraints();
     
     for(git = groups.begin(); git<groups.end(); git++){
@@ -844,7 +861,7 @@ void collectionRK4::timestep(){
     //~ cout << x1 << a0.x << (a0.x - x1) << "\n"
          //~ << v1 << a0.v << (a0.v - v1) << '\n';
     
-    setForces();
+    setForces(false);
     update_constraints();
     
     for(git = groups.begin(); git<groups.end(); git++){
@@ -927,10 +944,10 @@ void collectionGear4NPH::timestep(){
     dV += ddV * dt + dddV * (dt*dt/2);
     ddV += dddV * dt;
     V = obox->resizeV(newV);
-    if (abs(V-newV)/abs(newV) > 1e-8){
-        printf("V: %.4g; newV: %.4g\n", V, newV);
-        assert(abs(V-newV)/abs(newV) < 1e-8);
-    }
+    //~ if (abs(V-newV)/abs(newV) > 1e-8){
+        //~ printf("V: %.4g; newV: %.4g\n", V, newV);
+        //~ assert(abs(V-newV)/abs(newV) < 1e-8);
+    //~ }
     
     // Now we set forces and accelerations
     for(uint m=0; m<ncorrec; m++){
@@ -955,7 +972,10 @@ void collectionGear4NPH::timestep(){
         dddV += correctionV / dt;
         
         V = obox->resizeV(newV);
-        assert(abs(V-newV) < 1e-8);
+        //~ if (abs(V-newV)/abs(newV) > 1e-8){
+            //~ printf("V: %.4g; newV: %.4g\n", V, newV);
+            //~ assert(abs(V-newV)/abs(newV) < 1e-8);
+        //~ }
         
         
         n=0;
@@ -973,5 +993,216 @@ void collectionGear4NPH::timestep(){
         }
     }
     update_trackers();
+    return;
+}
+
+vector<interaction*> collectionGear4NPT::tointerpair(vector<interactionpairsx*> &v){
+    vector<interaction*> newv = vector<interaction*>();
+    vector<interactionpairsx*>::iterator it;
+    for(it = v.begin(); it<v.end(); it++){
+        newv.push_back((interaction*) *it);
+    }
+    return newv;
+}
+
+void xrpsummer::run(forcepairx *fpairx){
+    Vec rij = box->diff(fpairx->a1->x, fpairx->a2->x);
+    Vec vij = fpairx->a1->v - fpairx->a2->v;
+    rpxsum += rij.dot(vij) * fpairx->xij / rij.sq();
+    xsum += fpairx->xij;
+    vfsum += vij.dot(fpairx->fij);
+    rfsum += rij.dot(fpairx->fij);
+}
+
+void collectionGear4NPT::setForces(bool seta){
+    xrpsums.reset();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        group.resetForces();
+    }
+    
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        interactionpairsx* inter = (interactionpairsx*) *it;
+        inter->setForces(box, &xrpsums);
+    }
+    if(!seta) return;
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f / m.getmass(i);
+        }
+    }
+}
+
+void collectionGear4NPT::timestep(){
+    uint n=0;
+    OriginBox* obox = (OriginBox*) box;
+    
+    const flt c1 = dt, c2 = dt*dt/2, c3 = dt*dt*dt/6;
+    
+    /// Prediction
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            g[i].x += xs1[n]*c1 + xs2[n]*c2 + xs3[n]*c3;
+            xs1[n] += xs2[n]*c1 + xs3[n]*c2;
+            xs2[n] += xs3[n]*c1;
+            
+            g[i].v += g[i].a*c1 + vs2[n]*c2 + vs3[n]*c3;
+            g[i].a += vs2[n]*c1 + vs3[n]*c2;
+            vs2[n] += vs3[n]*c1;
+            n++;
+        }
+    }
+    
+    flt V = obox->V();
+    flt newV = V + V1*c1 + V2*c2 + V3*c3;
+    V1 += V2*c1 + V3*c2;
+    V2 += V3*c1;
+    V = obox->resizeV(newV);
+    //~ if (abs(V-newV)/abs(newV) > 1e-8){
+        //~ printf("V: %.4g; newV: %.4g\n", V, newV);
+        //~ assert(abs(V-newV)/abs(newV) < 1e-8);
+    //~ }
+    
+    // Now we set forces and accelerations
+    
+    const flt d0 = 3.0*dt/8.0, d2 = 3.0/2.0/dt, d3 = 1.0/dt/dt;
+    
+    for(uint m=0; m<ncorrec; m++){
+        setForces(false);
+        update_constraints();
+        
+        /// Correction
+        flt K2 = 2.0 * kinetic();
+        flt PV = (xrpsums.rfsum + K2)/3.0;
+        flt rpx = xrpsums.rpxsum;
+        flt xx = xrpsums.xsum;
+        chi = (-rpx) / (9*PV + xx);
+        chixi = (xrpsums.vfsum) / K2;
+        
+        flt Vcorr = 3*V*chi - V1;
+        V = obox->resizeV(V + Vcorr*d0);
+        V1 += Vcorr;
+        V2 += Vcorr*d2;
+        V3 += Vcorr*d3;
+        
+        
+        n=0;
+        for(git = groups.begin(); git<groups.end(); git++){
+            atomgroup &g = **git;
+            for(uint i=0; i<g.size(); i++){
+                Vec newx1 = g[i].v + (g[i].x * chi);
+                Vec xcorr = newx1 - xs1[n];
+                g[i].x += xcorr*d0;
+                xs1[n] = newx1;
+                xs2[n] += xcorr*d2;
+                xs3[n] += xcorr*d3;
+                
+                Vec newa = g[i].f / g.getmass(i) - g[i].v*chixi;
+                Vec vcorr = newa - g[i].a;
+                g[i].v += vcorr*d0;
+                g[i].a = newa;
+                vs2[n] += vcorr*d2;
+                vs3[n] += vcorr*d3;
+                n++;
+            }
+        }
+    }
+    update_trackers();
+    return;
+}
+
+void collectionVerletNPT::resetvhalf(){
+    uint Natoms = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        Natoms += (*git)->size();
+    };
+    vhalf.resize(Natoms, Vec(0,0,0));
+    uint n=0;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            vhalf[n] = g[i].v;
+            n++;
+        }
+    }
+}
+
+void collectionVerletNPT::timestep(){
+    OriginBox* obox = (OriginBox*) box;
+    setForces(false);
+    update_constraints();
+    
+    //~ vector<Vec> lastvhalf = vhalf; // This does copy, right?
+    uint ndof = dof();
+    flt xieta = (xidot + eta) * dt/2.0;
+    flt Ktot2 = 0, lastKtot2 = 0;
+    
+    uint n=0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            flt mi = m.getmass(i);
+            m[i].a = m[i].f / mi;
+            lastKtot2 += vhalf[n].sq() / mi;
+            Vec lastvhalf = vhalf[n];
+            vhalf[n] = (vhalf[n]*(1-xieta) + m[i].a*dt)/(1+xieta);
+            //~ if(n == 0){
+                //~ cout << "v: " << lastvhalf << " -> " << vhalf[n]
+                     //~ << ", xieta: " << xieta << ", a: " << m[i].a
+                     //~ << "\n";
+                //~ }
+            //~ 
+            //~ if(vhalf[n].mag() > 0.6){
+                //~ cout << "n: " << n
+                     //~ << ", v: " << lastvhalf << " -> " << vhalf[n]
+                     //~ << ", xieta: " << xieta << ", a: " << m[i].a
+                     //~ << "\n";
+                //~ }
+            m[i].v = (lastvhalf + vhalf[n])/2.0;
+            Ktot2 += vhalf[n].sq() / mi;
+            n++;
+        }
+    }
+    
+    eta += dt*(Ktot2 - ndof*T)/QT;
+    
+    flt V = box->V();
+    flt newV = obox->resizeV(lastV + (dt*xidot*V));
+    flt Verr = newV / (lastV + (dt*xidot*V));
+    
+    lastV = V;
+    curP = ((Ktot2 + lastKtot2)/2 + virial()) / 3.0 / V;
+    flt xidott = xidot;
+    xidot = lastxidot + (2*dt*(curP - P)*V)/QP;
+    lastxidot = xidott;
+    
+    if((not (Verr < 1.001)) or (not (Verr > 0.999))){
+        cout << "lastV: " << V << ", Set to: " <<  newV / Verr 
+             << ", got: " << newV << ", Verr: " << Verr << '\n';
+    }
+    
+    assert(Verr < 1.001);
+    assert(Verr > 0.999);
+    
+    n=0;
+    flt Vfac1=pow(newV/V, 1.0/3.0), Vfac2 = pow(2*newV/(newV+V), 1.0/3.0);
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x = m[i].x*Vfac1 + vhalf[n]*dt*Vfac2;
+            n++;
+        }
+    }
+    
+    update_trackers();
+    
     return;
 }

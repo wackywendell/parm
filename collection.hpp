@@ -33,7 +33,7 @@ class collection {
             vector<constraint*> constraints=vector<constraint*>());
         
         //Timestepping
-        virtual void setForces();
+        virtual void setForces(bool seta=true);
         virtual void timestep()=0;
         flt dof();
         
@@ -42,6 +42,7 @@ class collection {
         flt energy();
         virtual flt temp();
         virtual flt kinetic();
+        virtual flt virial();
         virtual flt pressure();
         Box *getbox(){return box;};
         inline Vec com(){return atoms.com();};
@@ -254,8 +255,8 @@ class collectionGaussianT : public collection {
             dt(dt), Q(Q){};
         void setdt(flt newdt){dt=newdt;};
         void setQ(flt newQ){Q=newQ;};
-        void setForces(){setForces(true);};
-        void setForces(bool setxi);
+        void setForces(bool seta=true){setForces(true,true);};
+        void setForces(bool seta, bool setxi);
         void timestep();
 };
 
@@ -456,8 +457,6 @@ class collectionRK4 : public collection {
         void setdt(flt newdt){dt=newdt;};
 };
 
-
-
 class collectionGear4NPH : public collection {
     // for use in fixed-E, fixed-NPH simulations
     protected:
@@ -504,6 +503,103 @@ class collectionGear4NPH : public collection {
         flt getdV(){return dV;};
         flt getddV(){return ddV;};
         void setdt(flt newdt){dt=newdt;};
+};
+
+class xrpsummer : public fpairxFunct {
+    private:
+        Box *box;
+    public:
+        flt xsum, rpxsum, vfsum, rfsum;
+        xrpsummer(Box *box) : box(box), xsum(0), rpxsum(0), vfsum(0), rfsum(0){};
+        virtual void run (forcepairx*);
+        inline void reset(){xsum = 0; rpxsum=0; vfsum=0; rfsum=0;};
+};
+
+class collectionGear4NPT : public collection {
+    // for use in fixed-NPT simulations
+    // Gaussian constraint formulation
+    public:
+        flt dt;
+        xrpsummer xrpsums;
+        uint ncorrec;
+        flt V1, V2, V3, chi, chixi;
+        vector<Vec> xs1, xs2, xs3;
+        vector<Vec> vs2, vs3;
+        void resetbs(){
+            uint Natoms = 0;
+            vector<atomgroup*>::iterator git;
+            for(git = groups.begin(); git<groups.end(); git++){
+                Natoms += (*git)->size();
+            };
+            xs1.resize(Natoms, Vec(0,0,0));
+            xs2.resize(Natoms, Vec(0,0,0));
+            xs3.resize(Natoms, Vec(0,0,0));
+            vs2.resize(Natoms, Vec(0,0,0));
+            vs3.resize(Natoms, Vec(0,0,0));
+            V1 = V2 = V3 = 0;
+        }
+        static vector<interaction*> tointerpair(vector<interactionpairsx*>&);
+        
+    public:
+        collectionGear4NPT(OriginBox *box, const flt dt, uint ncorrectionsteps,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interactionpairsx*> interactions=vector<interactionpairsx*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, tointerpair(interactions), trackers, 
+                        constraints), dt(dt), xrpsums(box),
+                        ncorrec(ncorrectionsteps){
+                resetbs();
+            };
+        collectionGear4NPT(OriginBox *box, const flt dt, 
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interactionpairsx*> interactions=vector<interactionpairsx*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, tointerpair(interactions),
+                            trackers, constraints),
+                    dt(dt), xrpsums(box), ncorrec(1) {
+                resetbs();
+            };
+        void setForces(bool seta=true);
+        void timestep();
+};
+
+
+
+class collectionVerletNPT : public collection {
+    // From Toxvaerd 1993, PRE Vol. 47, No. 1
+    protected:
+        flt dt;
+        flt eta, xidot, lastxidot, lastV;
+        vector<Vec> vhalf;
+        flt P, QP, T, QT, curP;
+        void resetvhalf();
+        
+    public:
+        collectionVerletNPT(OriginBox *box, const flt dt, const flt P,
+                const flt QP, const flt T, const flt QT, 
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints), 
+            dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), P(P), 
+            QP(QP), T(T), QT(QT), curP(0){resetvhalf();};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+        
+        
+        void resetcomv(){collection::resetcomv(); resetvhalf();};
+        void resetL(){collection::resetL(); resetvhalf();};
+        void scaleVs(flt scaleby){collection::scaleVs(scaleby); resetvhalf();};
+        void scaleVelocitiesT(flt T){collection::scaleVelocitiesT(T); resetvhalf();};
+        void scaleVelocitiesE(flt E){collection::scaleVelocitiesE(E); resetvhalf();};
+        
+        flt geteta(){return eta;};
+        flt getxidot(){return xidot;};
+        flt getP(){return curP;};
+        Vec getvhalf(uint n){return vhalf[n];};
 };
 
 #endif

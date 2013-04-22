@@ -52,6 +52,7 @@ parser.add_option('-j', '--hjoin', type='choice', default='arithmetic',
 
 opts, args = parser.parse_args()
 
+
 def round5(n):
     try:
         return 0. if n == 0 else round(n, int(4 - math.log10(abs(n))))
@@ -66,6 +67,9 @@ residues = list(chain.from_iterable(
                 rchain.child_list for rchain in chains))#[:opts.numres]
 
 atoms, bonds, angles, dihedrals = [], [], [], []
+chargek = 7.1288713
+radius = 4.8
+
 
 ########################################################################
 # Get hydrophobicity values
@@ -76,7 +80,6 @@ for r in res31: assert r in hset
 Hnames, Hcoeffs = zip(*sorted(hset.items()))
 # uses σ=radius for the definition of α to work; assumes α=1, 
 # lets CGbb.py figure that out
-Hcoeffs = [h * chargek/radius for h in Hcoeffs]
 
 #-----------------------------------------------------------------------
 # Rescale
@@ -93,6 +96,10 @@ elif opts.hrescale.lower() == 'zeroone':
     Hcoefflist = [(h + mx) / (2*mx) for h in Hcoeffs]
 else:
     raise NotImplementedError("Unknown scaling format %r" % opts.hrescale)
+
+# uses σ=radius for the definition of α to work; assumes α=1, 
+# lets CGbb.py figure that out
+Hcoefflist = [h * chargek/radius for h in Hcoefflist]
 
 #-----------------------------------------------------------------------
 # Join into a table

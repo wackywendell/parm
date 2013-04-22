@@ -7,13 +7,8 @@ import sys, datetime, collections
 import yaml
 
 from simw import *
-import simpdb, xyzfile
-
-def errprint(*args, **kw):
-    kwargs = {'file':sys.stderr}
-    kwargs.update(kw)
-    print(*args, **kwargs)
-    kwargs['file'].flush()
+import util, xyzfile
+from util import errprint
 
 parser = OptionParser("Runs a simple simulation.")
 parser.add_option('-T', '--temperature', type=float, dest='T', default=1.0)
@@ -35,7 +30,7 @@ parser.add_option('-x', '--xyzfile', dest='xyzfile',
             default=None)
 parser.add_option('-a', '--alpha', dest='alpha', type=float, default=1.0)
 parser.add_option('-K', '--chargek', dest='chargek', type=float, default=1.0)
-parser.add_option('-R', '--Rijs', type='choice', choices=['none','aS','bS','gS','tau'])
+parser.add_option('-R', '--Rijs', type='choice', choices=['none','aS','bS','gS','tau'], default='none')
 
 errprint(" ".join(sys.argv))
 opts, args = parser.parse_args()
@@ -264,20 +259,20 @@ try:
         statprintline(stats)
         #~ table.update(int(t * opts.dt+.5), write=True)
         
-        endtime, interval = simpdb.get_eta(t, steps, starttime)
-        totinterval = simpdb.to_dhms(endtime - starttime)
+        endtime, interval = util.get_eta(t, steps, starttime)
+        totinterval = util.to_dhms(endtime - starttime)
         
         #days, hr, mn, sec = interval
         
         errprint('------ ', int(t*opts.dt / 1000 +.5), 
-            ' Ends in (', simpdb.interval_str(*interval), ' / ', 
-                simpdb.interval_str(*totinterval), ') on ', 
+            ' Ends in (', util.interval_str(*interval), ' / ', 
+                util.interval_str(*totinterval), ') on ', 
                                 endtime.strftime('(%a %b %d, %H:%M:%S)'),
             sep = '')
         for k,v in sorted(stats.items()):
             valtracker[k].append(v)
             if k is 'time': continue
-            simpdb.printlist(valtracker[k], k, file=sys.stderr)
+            util.printlist(valtracker[k], k, file=sys.stderr)
         sys.stderr.flush()
 except KeyboardInterrupt:
     errprint('Keyboard Interrupt, stopped.')

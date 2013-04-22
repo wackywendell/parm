@@ -704,6 +704,41 @@ class dihedrals : public interaction {
         //~ add(flt sigma, flt epsilon, atom *a){ 
 //~ };
 
+
+
+////////////////////////////////////////////////////////////////////////
+struct forcepair {
+    atom *a1, *a2;
+    Vec fij;
+};
+
+class interactionpairs : public interaction {
+    public:
+        virtual void setForces(Box *box, void callback(forcepair*))=0;
+        virtual ~interactionpairs(){};
+};
+
+struct forcepairx {
+    atom *a1, *a2;
+    flt xij;
+    Vec fij;
+}; 
+
+//
+class fpairxFunct {
+    public:
+        virtual void run(forcepairx*) = 0;
+        virtual ~fpairxFunct() = 0;
+};
+
+inline fpairxFunct::~fpairxFunct() { }  // defined even though it's pure virtual; it's faster this way; trust me
+
+class interactionpairsx : public interaction {
+    public:
+        virtual void setForces(Box *box, fpairxFunct*)=0;
+        virtual ~interactionpairsx(){};
+};
+
 struct atompaircomp {
     bool operator() (const atompair& lhs, const atompair& rhs) const{
         return (lhs[0] == rhs[0] and lhs[1] == rhs[1]);}
@@ -821,7 +856,7 @@ class neighborlist : public statetracker{
 };
 
 template <class A, class P>
-class NListed : public interaction {
+class NListed : public interactionpairs {
     // neighborlist keeps track of atom* pairs within a particular distance.
     // NListed keeps track of atoms with additional properties
     // that interact through a particular interaction.
@@ -852,19 +887,25 @@ class NListed : public interaction {
         void update_pairs();
         flt energy(Box *box);
         flt pressure(Box *box);
-        flt setForcesGetPressure(Box *box);
         uint size(){return atoms.size();};
         inline flt energy_pair(P pair, Box *box){return pair.energy(box);}; // This may need to be written!
         void setForces(Box *box);
+        flt setForcesGetPressure(Box *box);
+        void setForces(Box *box, void callback(forcepair*));
         inline Vec forces_pair(P pair, Box *box){return pair.forces(box);}; // This may need to be written!
         neighborlist *nlist(){return neighbors;};
         ~NListed(){};
 };
 
 template <class A, class P>
-class NListedVirial : public NListed<A,P> {
+class NListedVirial : public interactionpairsx, public NListed<A,P> {
     public:
-        flt x(Box *box);
+        NListedVirial(neighborlist *neighbors) : NListed<A,P>(neighbors){};
+        void setForces(Box *box){NListed<A,P>::setForces(box);};
+        void setForces(Box *box, fpairxFunct*);
+        virtual inline flt setForcesGetPressure(Box *box){return NListed<A,P>::setForcesGetPressure(box);};
+        virtual inline flt energy(Box *box){return NListed<A,P>::energy(box);};
+        virtual inline flt pressure(Box *box){return NListed<A,P>::pressure(box);};
 };
 
 struct Charged : public atomid {
@@ -1329,7 +1370,7 @@ struct EisMclachlanPair {
 
 ////////////////////////////////////////////////////////////////////////
 // Hertzian potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
-// Potential is V(r) = ε (1 - r/σ)^n, with n = 5/2 usually
+// Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
 // cutoff at r = σ
 
 struct HertzianAtom : public atomid {
@@ -1351,25 +1392,38 @@ struct HertzianPair {
         flt dsq = rij.sq();
         if(dsq > sig*sig) return 0.0;
         flt R = sqrt(dsq);
-        return eps * pow(1.0 - (R/sig), exponent);
+        return eps * pow(1.0 - (R/sig), exponent) / exponent;
     }
     inline Vec forces(Box *box){
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig) return Vec(0,0,0);
         flt R = sqrt(dsq);
-        return rij * (pow(1.0 - (R/sig), exponent-1) * (exponent/sig)/R);
+        return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
     }
-    inline flt xrij(Box *box){
+    //~ inline flt xrij(Box *box){
+        //~ Vec rij = box->diff(atom1.x(), atom2.x());
+        //~ flt dsq = rij.sq();
+        //~ if(dsq > sig*sig) return 0.0;
+        //~ flt R = sqrt(dsq);
+        //~ return (R*eps*(exponent-1)/sig/sig) * pow(1.0 - (R/sig), exponent-2);
+    //~ }
+    inline void fill(Box *box, forcepairx &fpair){
+        fpair.a1 = atom1.pointer();
+        fpair.a2 = atom2.pointer();
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
-        if(dsq > sig*sig) return 0.0;
+        if(dsq > sig*sig){
+            fpair.fij = Vec(0,0,0);
+            fpair.xij = 0.0;
+            return;
+        }
         flt R = sqrt(dsq);
-        return (R*exponent*(exponent-1)/sig/sig) * pow(1.0 - (R/sig), exponent-2);
+        fpair.fij = rij * (eps*pow(1.0 - (R/sig), exponent-1) /sig/R);
+        flt Rs = R / sig;
+        fpair.xij = -Rs*eps*pow(1.0 - (R/sig), exponent-2)*(1-exponent*Rs);
     }
 };
-
-
 
 ////////////////////////////////////////////////////////////////////////
 class LJsimple : public interaction {
@@ -1438,6 +1492,37 @@ void NListed<A, P>::setForces(Box *box){
 };
 
 template <class A, class P>
+void NListed<A, P>::setForces(Box *box, void callback(forcepair*)){
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    forcepair myfpair;
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); it++){
+        myfpair.a1 = it->atom1.pointer();
+        myfpair.a2 = it->atom2.pointer();
+        myfpair.fij = forces_pair(*it, box);
+        callback(&myfpair);
+        it->atom1.f() += myfpair.fij;
+        it->atom2.f() -= myfpair.fij;
+        //~ assert(f.sq() < 1000000);
+    }
+};
+
+template <class A, class P>
+void NListedVirial<A, P>::setForces(Box *box, fpairxFunct* funct){
+    NListed<A, P>::update_pairs(); // make sure the LJpairs match the neighbor list ones
+    forcepairx myfpair;
+    typename vector<P>::iterator it;
+    for(it = NListed<A, P>::pairs.begin(); it != NListed<A, P>::pairs.end(); it++){
+        it->fill(box, myfpair);
+        //~ assert(!isnan(myfpair.fij[0]));
+        funct->run(&myfpair);
+        it->atom1.f() += myfpair.fij;
+        it->atom2.f() -= myfpair.fij;
+        //~ assert(f.sq() < 1000000);
+    }
+};
+
+template <class A, class P>
 flt NListed<A, P>::setForcesGetPressure(Box *box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt p=0;
@@ -1457,12 +1542,14 @@ template <class A, class P>
 flt NListed<A, P>::pressure(Box *box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt p=0;
+    //~ printf("Updating pressure...\n");
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); it++){
         Vec f = forces_pair(*it, box);
         Vec r = box->diff(it->atom1.x(), it->atom2.x());
         //Vec r = it->atom1.x() - it->atom2.x();
         p += r.dot(f);
+        //~ assert(!isnan(p));
     }
     return p;
 };
