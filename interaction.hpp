@@ -55,7 +55,6 @@
 typedef double flt;
 typedef unsigned int uint;
 typedef const unsigned int cuint;
-typedef Vector<flt> Vec;
 
 class Box {
     public:

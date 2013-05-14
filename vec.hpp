@@ -161,6 +161,52 @@ class Vector : public Numvector<T, 3> {
 
 };
 
+template <class T>
+class Vector2 : public Numvector<T, 2> {
+    public:
+        Vector2() {setx(0); sety(0);}
+        Vector2(const T a, const T b) {setx(a); sety(b);}
+        Vector2(const Numvector<T, 2> rhs) {setx(rhs.get(0)); sety(rhs.get(1));}
+        Vector2(const Nvector<T, 2> rhs) {setx(rhs.get(0)); sety(rhs.get(1));}
+        inline const T getx() const {return Nvector<T,2>::get(0);}
+        inline const T gety() const {return Nvector<T,2>::get(1);}
+        inline void setx(const T a){Nvector<T,2>::vals[0]=a;}
+        inline void sety(const T b){Nvector<T,2>::vals[1]=b;}
+        inline void set(const T a, const T b){
+            Nvector<T,2>::vals[0]=a; Nvector<T,2>::vals[1]=b;}
+        inline Vector2 operator-() const{
+            return Vector2(-getx(),-gety());}
+        inline Vector2 operator+(const Vector2 &rhs) const {
+            return Vector2(getx()+rhs.getx(),gety()+rhs.gety());}
+        inline Vector2 operator-(const Vector2 &rhs) const {
+            return Vector2(getx()-rhs.getx(),gety()-rhs.gety());}
+        inline T operator*(const Vector2 &rhs) const {
+            return (getx()*rhs.getx() + gety()*rhs.gety());}
+        template <class U> inline Vector2 operator*(const U rhs) const {
+            return Vector2(getx()*rhs,gety()*rhs);}
+        template <class U> inline Vector2 operator/(const U rhs) const {
+            return Vector2(getx()/rhs,gety()/rhs);}
+        inline Vector2 norm() const {return Vector2(Numvector<T,2>::norm());};
+        inline Vector2& operator-=(const Vector2 &rhs){Nvector<T,2>::operator-=(rhs); return *this;};
+        inline Vector2& operator+=(const Vector2 &rhs){Nvector<T,2>::operator+=(rhs); return *this;}; 
+        template <class U> Vector2& operator*=(const U rhs);
+        template <class U> Vector2& operator/=(const U rhs);
+        
+        static T angle(const Vector2 &dx1, const Vector2 &dx2){
+            return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
+        }
+        
+        static T angle(const Vector2 &x1, const Vector2 &x2, const Vector2 &x3){
+            Vector2 dx1 = x1 - x2, dx2 = x3 - x2;
+            return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
+        }
+        ~Vector2(){};
+        
+        template <class U>
+        friend ostream& operator<<(ostream& out, const Vector2<U> v);
+
+};
+
 
 //~ typedef float C;
 template<class C>
