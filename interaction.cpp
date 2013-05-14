@@ -31,10 +31,10 @@ Vec atomgroup::momentum() const{
     }
     return tot;
 };
-
+#ifdef VEC3D
 Vec atomgroup::angmomentum(const Vec &loc, Box *box) const{
-    flt curmass;
     Vec tot = Vec();
+    flt curmass;
     Vec newloc;
     for(uint i=0; i<size(); i++){
         curmass = this->getmass(i);
@@ -43,7 +43,21 @@ Vec atomgroup::angmomentum(const Vec &loc, Box *box) const{
     }
     return tot;
 };
+#elif defined VEC2D
+flt atomgroup::angmomentum(const Vec &loc, Box *box) const{
+    flt tot = 0;
+    flt curmass;
+    Vec newloc;
+    for(uint i=0; i<size(); i++){
+        curmass = this->getmass(i);
+        newloc = box->diff((*this)[i].x, loc);
+        tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
+    }
+    return tot;
+};
+#endif
 
+#ifdef VEC3D
 flt atomgroup::moment(const Vec &loc, const Vec &axis, Box *box) const{
     if (axis.sq() == 0) return 0;
     flt curmass;
@@ -83,6 +97,33 @@ Vec atomgroup::omega(const Vec &loc, Box *box) const{
     return Inv * (angmomentum(loc, box));
 };
 
+void atomgroup::addOmega(Vec w, Vec loc, Box *box){
+    for(uint i=0; i<size(); i++){
+        Vec r = box->diff((*this)[i].x, loc);
+        (*this)[i].v -= r.cross(w);
+    }
+};
+#elif defined VEC2D
+flt atomgroup::moment(const Vec &loc, Box *box) const{
+    flt curmass;
+    flt tot = 0;
+    Vec newloc;
+    for(uint i=0; i<size(); i++){
+        curmass = this->getmass(i);
+        newloc = box->diff((*this)[i].x, loc);
+        tot += newloc.dot(newloc) * curmass;
+    }
+    return tot;
+};
+
+void atomgroup::addOmega(flt w, Vec loc, Box *box){
+    for(uint i=0; i<size(); i++){
+        Vec r = box->diff((*this)[i].x, loc);
+        (*this)[i].v -= r.perp().norm()*w;
+    }
+};
+#endif
+
 flt atomgroup::kinetic(const Vec &originvelocity) const{
     flt curmass;
     flt totE = 0;
@@ -101,16 +142,9 @@ void atomgroup::addv(Vec v){
     }
 };
 
-void atomgroup::addOmega(Vec w, Vec loc, Box *box){
-    for(uint i=0; i<size(); i++){
-        Vec r = box->diff((*this)[i].x, loc);
-        (*this)[i].v -= r.cross(w);
-    }
-};
-
 void atomgroup::resetForces(){
     for(uint i=0; i<size(); i++){
-        (*this)[i].f = Vec(0,0,0);
+        (*this)[i].f = Vec();
     }
 };
 
@@ -233,7 +267,7 @@ flt electricScreened::energy(const flt r, const flt qaqb, const flt screen, cons
 
 Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, const flt cutoff){
     flt d = r.mag();
-    if(cutoff > 0 and d > cutoff) return Vec(0,0,0);
+    if(cutoff > 0 and d > cutoff) return Vec();
     flt fmag = exp(-d/screen) * (qaqb/d) * (1/d + 1/screen);
     return r * (fmag/d);
 };
@@ -278,6 +312,7 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     return force;
 }
 
+#ifdef VEC3D
 dihedral::dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow) : 
                     coscoeffs(cvals), sincoeffs(svals), usepow(usepow){
 }
@@ -470,7 +505,7 @@ flt dihedral::energy(const flt ang) const{
     
     return tot;
 }
-
+#endif
 //~ flt interactgroup::energy(Box *box){
     //~ flt E=0;
     //~ vector<interaction*>::iterator it;
@@ -627,6 +662,7 @@ flt angletriples::std_dists() const{
     return sqrt(stds/N);
 };
 
+#ifdef VEC3D
 dihedrals::dihedrals(vector<dihedralgrouping> ds) : groups(ds){};
 
 flt dihedrals::energy(Box *box){
@@ -705,6 +741,7 @@ flt dihedrals::mean_dists() const{
     //~ }
     //~ return sqrt(stds/N);
 //~ };
+#endif
 
 void pairlist::clear(){
     map<const atomid, set<atomid> >::iterator mapiter;

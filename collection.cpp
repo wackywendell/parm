@@ -145,7 +145,7 @@ flt collection::temp(){
 //~ Vec collection::com(){
     //~ vector<atomgroup*>::iterator git;
     //~ flt mass = 0;
-    //~ Vec totcom = Vec(0,0,0);
+    //~ Vec totcom = Vec();
     //~ for(git = groups.begin(); git<groups.end(); git++){
         //~ atomgroup &g = **git;
         //~ for(uint i = 0; i<g.size(); i++){
@@ -160,7 +160,7 @@ flt collection::temp(){
 //~ Vec collection::comv(){
     //~ vector<atomgroup*>::iterator git;
     //~ flt mass = 0;
-    //~ Vec totcom = Vec(0,0,0);
+    //~ Vec totcom = Vec();
     //~ for(git = groups.begin(); git<groups.end(); git++){
         //~ atomgroup &g = **git;
         //~ for(uint i = 0; i<g.size(); i++){
@@ -174,7 +174,7 @@ flt collection::temp(){
 
 flt collection::gyradius(){
     vector<atomgroup*>::iterator git;
-    Vec avgr = Vec(0,0,0);
+    Vec avgr = Vec();
     flt N = 0;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
@@ -282,7 +282,7 @@ void collectionSol::timestep(){
             flt r0 = dt * v0;
             VecPair vecpair;
             if (damping > 0) vecpair = gauss.genVecs();
-            else vecpair[0] = vecpair[1] = Vec(0,0,0);
+            else vecpair[0] = vecpair[1] = Vec();
             // vecpair[0] is drG, and vecpair[1] is dvG
             m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0]*r0;
             m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1]*v0;
@@ -1137,7 +1137,7 @@ void collectionVerletNPT::resetvhalf(){
     for(git = groups.begin(); git<groups.end(); git++){
         Natoms += (*git)->size();
     };
-    vhalf.resize(Natoms, Vec(0,0,0));
+    vhalf.resize(Natoms, Vec());
     uint n=0;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;

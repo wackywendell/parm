@@ -186,6 +186,8 @@ class Vector2 : public Numvector<T, 2> {
             return Vector2(getx()*rhs,gety()*rhs);}
         template <class U> inline Vector2 operator/(const U rhs) const {
             return Vector2(getx()/rhs,gety()/rhs);}
+        T cross (const Vector2 &rhs) const{return getx()*rhs.gety() - rhs.getx()*gety();};
+        Vector2 perp() const{return Vector2(-gety(),getx());};
         inline Vector2 norm() const {return Vector2(Numvector<T,2>::norm());};
         inline Vector2& operator-=(const Vector2 &rhs){Nvector<T,2>::operator-=(rhs); return *this;};
         inline Vector2& operator+=(const Vector2 &rhs){Nvector<T,2>::operator+=(rhs); return *this;}; 

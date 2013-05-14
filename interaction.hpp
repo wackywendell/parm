@@ -82,9 +82,17 @@ class statetracker {
  * Boxes
  */
 
+#ifdef VEC3D
 inline Vec vecmod(Vec r1, Vec r2){
     return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]), remainder(r1[2], r2[2]));
 };
+#endif
+#ifdef VEC2D
+inline Vec vecmod(Vec r1, Vec r2){
+    return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]));
+};
+#endif
+
 
 class InfiniteBox : public Box {
     public:
@@ -102,7 +110,12 @@ class OriginBox : public Box {
         Vec diff(Vec r1, Vec r2){
             return vecmod((r1-r2), boxsize);
         }
+        #ifdef VEC3D
         flt V(){return boxsize[0] * boxsize[1] * boxsize[2];};
+        #endif
+        #ifdef VEC2D
+        flt V(){return boxsize[0] * boxsize[1];};
+        #endif
         flt resize(flt factor){boxsize *= factor; return V();}
         flt resizeV(flt newV){flt curV = V(); boxsize *= pow(newV/curV, 1.0/3.0); return V();}
 };
@@ -182,22 +195,37 @@ class atomgroup {
         
         //Stats
         flt mass() const;
-        flt kinetic(const Vec &originvelocity=Vec(0,0,0)) const;
+        flt kinetic(const Vec &originvelocity=Vec()) const;
         Vec momentum() const;
-        Vec angmomentum(const Vec &loc, Box *box) const;
+        #ifdef VEC3D
         flt moment(const Vec &loc, const Vec &axis, Box *box) const;
+        Vec angmomentum(const Vec &loc, Box *box) const;
         Matrix<flt> moment(const Vec &loc, Box *box) const;
         Vec omega(const Vec &loc, Box *box) const;
-        
-        // for resetting
-        void addv(Vec v);
-        void resetcomv(){addv(-comv());};
         void addOmega(Vec w, Vec origin, Box *box);
         inline void resetL(Box *box){
             Vec c = com(), w = omega(c, box);
             if (w.sq() == 0) return;
             addOmega(-w, c, box);
         }
+        #elif defined VEC2D
+        flt moment(const Vec &loc, Box *box) const;
+        flt angmomentum(const Vec &loc, Box *box) const;
+        flt omega(const Vec &loc, Box *box) const{return angmomentum(loc, box) / moment(loc, box);};
+        void addOmega(flt w, Vec origin, Box *box);
+        inline void resetL(Box *box){
+            Vec c = com();
+            flt w = omega(c, box);
+            if (w == 0) return;
+            addOmega(-w, c, box);
+        }
+        #endif
+        
+        
+        // for resetting
+        void addv(Vec v);
+        void resetcomv(){addv(-comv());};
+        
         
         // for timestepping
         void resetForces();
@@ -273,7 +301,7 @@ class LJrepulsive {
         inline static Vec forces(const Vec diff, const flt eps, const flt sig){
             flt dsq = diff.sq();
             flt rsq = dsq/(sig*sig);
-            if(rsq > 1) return Vec(0,0,0);
+            if(rsq > 1) return Vec();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             //~ flt fmagTimesR = eps*(4*(12/(rsix*rsix) - 6/rsix));
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
@@ -314,7 +342,7 @@ class LJattract {
         inline static Vec forces(const Vec diff, const flt eps, const flt sig){
             flt dsq = diff.sq();
             flt rsq = dsq/(sig*sig);
-            if(rsq < 1) return Vec(0,0,0);
+            if(rsq < 1) return Vec();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
             return diff * (fmagTimesR / dsq);
@@ -353,10 +381,10 @@ class LJattractCut {
         };
         inline static Vec forces(const Vec diff, const flt eps, 
                                     const flt sig, const flt cutsig){
-            if(eps == 0) return Vec(0,0,0);
+            if(eps == 0) return Vec();
             flt dsq = diff.sq();
             flt rsq = dsq/(sig*sig);
-            if(rsq < 1 or rsq > (cutsig*cutsig)) return Vec(0,0,0);
+            if(rsq < 1 or rsq > (cutsig*cutsig)) return Vec();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
             return diff * (fmagTimesR / dsq);
@@ -397,7 +425,7 @@ class LJFullCut {
         inline static Vec forces(const Vec diff, const flt eps, const flt sig, const flt cutsig){
             flt dsq = diff.sq();
             flt rsq = dsq/(sig*sig);
-            if(rsq > (cutsig*cutsig)) return Vec(0,0,0);
+            if(rsq > (cutsig*cutsig)) return Vec();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
             return diff * (fmagTimesR / dsq);
@@ -437,6 +465,7 @@ class bondangle {
         ~bondangle(){};
 };
 
+#ifdef VEC3D
 class dihedral {
     // vectors are from 1 to 2, 2 to 3, 3 to 4
     protected:
@@ -460,6 +489,7 @@ class dihedral {
         flt energy(flt ang) const;
         Nvector<Vec,4> forces(const Vec& diff1, const Vec& diff2, const Vec& diff3) const;
 };
+#endif
 
 class electricScreened : public interactpair {
     protected:
@@ -503,7 +533,11 @@ class fixedForce : public interaction{
         fixedForce(vector<fixedForceAtom> atoms = vector<fixedForceAtom>()) : atoms(atoms){};
         void add(fixedForceAtom a){atoms.push_back(a);};
         void add(Vec F, atom* a){add(fixedForceAtom(F,a));};
+        #ifdef VEC3D
         void add(flt x, flt y, flt z, atom* a){add(fixedForceAtom(Vec(x,y,z),a));};
+        #elif defined VEC2D
+        void add(flt x, flt y, atom* a){add(fixedForceAtom(Vec(x,y),a));};
+        #endif
         uint size() const{ return atoms.size();};
         flt energy(Box *box){
             flt E=0;
@@ -669,6 +703,7 @@ class angletriples : public interaction {
         flt std_dists() const;
 };
 
+#ifdef VEC3D
 struct dihedralgrouping {
     inline static Vec diff(Vec r1, Vec r2){return r1-r2;};
     dihedral dih;
@@ -702,7 +737,7 @@ class dihedrals : public interaction {
         //~ LJgroup() : vector<LJdata>(){};
         //~ add(flt sigma, flt epsilon, atom *a){ 
 //~ };
-
+#endif
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -1128,7 +1163,7 @@ struct LJishPair {
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         flt rsq = dsq/(sigma*sigma);
-        if(rsq > cutR * cutR) return Vec(0,0,0);
+        if(rsq > cutR * cutR) return Vec();
         flt rmid = pow(rsq,-n/2); // σ^n/r^n
         flt fmagTimesR = 2*n*rmid*(rmid - 1); // 2 n r^-n(r^-n - 1)
         if (rsq < 1) return rij * (repeps * fmagTimesR / dsq);
@@ -1196,11 +1231,11 @@ struct LJAttractRepulsePair {
         return eps*(mid*mid) - cutE;
     };
     inline Vec forces(Box *box){
-        if(eps == 0) return Vec(0,0,0);
+        if(eps == 0) return Vec();
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         flt rsq = dsq/(sig*sig);
-        if(rsq > (cutR*cutR)) return Vec(0,0,0);
+        if(rsq > (cutR*cutR)) return Vec();
         flt rsix = pow(rsq,-3); // σ⁶/r⁶
         flt fmagTimesR = 12*eps*rsix*(rsix - 1);
         return rij * (fmagTimesR / dsq);
@@ -1285,7 +1320,7 @@ struct LJAttractFixedRepulsePair {
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         flt rsq = dsq/(sig*sig);
-        if(rsq > (cutR*cutR)) return Vec(0,0,0);
+        if(rsq > (cutR*cutR)) return Vec();
         flt rsix = pow(rsq,-3); // σ⁶/r⁶
         flt fmagTimesR = 12*rsix*(rsix - 1);
         if (rsq < 1) return rij * (repeps * fmagTimesR / dsq);
@@ -1365,7 +1400,7 @@ struct EisMclachlanPair {
     inline Vec forces(Box *box){
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
-        if(dsq > (cutoff*cutoff)) return Vec(0,0,0);
+        if(dsq > (cutoff*cutoff)) return Vec();
         flt R = sqrt(dsq);
         return rij * ((c0/dsq-c2)/R);
     }
@@ -1400,7 +1435,7 @@ struct HertzianPair {
     inline Vec forces(Box *box){
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
-        if(dsq > sig*sig) return Vec(0,0,0);
+        if(dsq > sig*sig) return Vec();
         flt R = sqrt(dsq);
         return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
     }
@@ -1417,7 +1452,7 @@ struct HertzianPair {
         Vec rij = box->diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig){
-            fpair.fij = Vec(0,0,0);
+            fpair.fij = Vec();
             fpair.xij = 0.0;
             return;
         }

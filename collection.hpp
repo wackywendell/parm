@@ -47,8 +47,13 @@ class collection {
         Box *getbox(){return box;};
         inline Vec com(){return atoms.com();};
         inline Vec comv(){return atoms.comv();};
+        #ifdef VEC3D
         inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc, box);};
         inline Vec angmomentum(){return atoms.angmomentum(com(), box);};
+        #elif defined VEC2D
+        inline flt angmomentum(const Vec &loc){return atoms.angmomentum(loc, box);};
+        inline flt angmomentum(){return atoms.angmomentum(com(), box);};
+        #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
         
@@ -311,7 +316,7 @@ class collectionGear4A : public collection {
             for(git = groups.begin(); git<groups.end(); git++){
                 Natoms += (*git)->size();
             };
-            bs.resize(Natoms, Vec(0,0,0));
+            bs.resize(Natoms, Vec());
         }
         
     public:
@@ -347,8 +352,8 @@ class collectionGear5A : public collection {
             for(git = groups.begin(); git<groups.end(); git++){
                 Natoms += (*git)->size();
             };
-            bs.resize(Natoms, Vec(0,0,0));
-            cs.resize(Natoms, Vec(0,0,0));
+            bs.resize(Natoms, Vec());
+            cs.resize(Natoms, Vec());
         }
         
     public:
@@ -383,9 +388,9 @@ class collectionGear6A : public collection {
                 Natoms += (*git)->size();
             };
             bs.clear(); cs.clear(); ds.clear();
-            bs.resize(Natoms, Vec(0,0,0));
-            cs.resize(Natoms, Vec(0,0,0));
-            ds.resize(Natoms, Vec(0,0,0));
+            bs.resize(Natoms, Vec());
+            cs.resize(Natoms, Vec());
+            ds.resize(Natoms, Vec());
         }
         
     public:
@@ -494,7 +499,7 @@ class collectionGear4NPH : public collection {
             for(git = groups.begin(); git<groups.end(); git++){
                 Natoms += (*git)->size();
             };
-            bs.resize(Natoms, Vec(0,0,0));
+            bs.resize(Natoms, Vec());
         }
         
     public:
@@ -554,11 +559,11 @@ class collectionGear4NPT : public collection {
             for(git = groups.begin(); git<groups.end(); git++){
                 Natoms += (*git)->size();
             };
-            xs1.resize(Natoms, Vec(0,0,0));
-            xs2.resize(Natoms, Vec(0,0,0));
-            xs3.resize(Natoms, Vec(0,0,0));
-            vs2.resize(Natoms, Vec(0,0,0));
-            vs3.resize(Natoms, Vec(0,0,0));
+            xs1.resize(Natoms, Vec());
+            xs2.resize(Natoms, Vec());
+            xs3.resize(Natoms, Vec());
+            vs2.resize(Natoms, Vec());
+            vs3.resize(Natoms, Vec());
             V1 = V2 = V3 = 0;
         }
         static vector<interaction*> tointerpair(vector<interactionpairsx*>&);

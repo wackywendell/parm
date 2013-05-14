@@ -55,7 +55,7 @@ class coordCOMConstraint : public constraint {
         void apply(Box *box){
             Vec com = a->com() - loc;
             Vec comv = a->comv();
-            Vec totf = Vec(0,0,0);
+            Vec totf = Vec();
             for(uint i=0; i< a->size(); i++){
                 totf += (*a)[i].f;
             }
