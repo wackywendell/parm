@@ -1,6 +1,7 @@
 #ifndef VECRAND_H
 #define VECRAND_H
 #define VEC3D
+#define NDIM 2
 
 #include <iostream>
 #include <ctime>

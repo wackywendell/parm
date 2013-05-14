@@ -89,7 +89,7 @@ flt collection::pressure(){
         E += (*it)->pressure(box);
         assert(not isnan(E));
     }
-    return E / V / 3.0;
+    return E / V / flt(NDIM);
 }
 
 flt collection::potentialenergy(){
@@ -119,7 +119,7 @@ flt collection::dof(){
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
-        ndof += 3*(group.size());
+        ndof += NDIM*(group.size());
     }
     
     return ndof;
@@ -139,7 +139,7 @@ flt collection::temp(){
     
     int ndof = dof();
     //~ cout << "K: " << totkinetic << ", totatoms: " << totatoms << "\n";
-    return totkinetic * 2 / (ndof-3);
+    return totkinetic * 2 / (ndof-NDIM);
 }
 
 //~ Vec collection::com(){
@@ -539,17 +539,6 @@ void collectionGaussianT::timestep(){
         }
     }
     
-    //~ flt midxi = xi;
-    //~ setxi();
-    //~ if(abs(midxi-xi) > 1e-9){
-        //~ printf("xi change of %7.3g (%7.3f -> %7.3f)\n", 
-            //~ abs(midxi-xi), midxi, xi);
-    //~ }
-    
-    //~ flt T = temp();
-    //~ printf("Temperature (%6.3f) %7.3g -> %7.3g, xi (%6.3f) %7.3g -> %7.3g\n",
-            //~ T/oldT, oldT, T, xi/oldxi,oldxi,xi);
-    
     update_trackers();
     return;
 }
@@ -908,7 +897,7 @@ flt collectionGear4NPH::setForcesGetPressure(){
 
 flt collectionGear4NPH::kinetic(){
     flt E=0;
-    flt Vfac = dV/box->V()/3.0;
+    flt Vfac = dV/box->V()/flt(NDIM);
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
@@ -924,7 +913,7 @@ flt collectionGear4NPH::temp(){
     flt totatoms = 0;
     flt totkinetic2 = 0; // kinetic * 2
     Vec cv = comv();
-    flt Vfac = dV/box->V()/3.0;
+    flt Vfac = dV/box->V()/flt(NDIM);
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;for(uint i=0; i<g.size(); i++){
@@ -935,7 +924,7 @@ flt collectionGear4NPH::temp(){
     }
     
     int ndof = dof();
-    return totkinetic2 / (ndof-3);
+    return totkinetic2 / (ndof-NDIM);
 }
 
 void collectionGear4NPH::timestep(){
@@ -966,7 +955,7 @@ void collectionGear4NPH::timestep(){
     // Now we set forces and accelerations
     for(uint m=0; m<ncorrec; m++){
         flt interacP = setForcesGetPressure();
-        flt newP = (interacP + (kinetic()*2.0))/3.0/V;
+        flt newP = (interacP + (kinetic()*2.0))/NDIM/V;
         //~ for(git = groups.begin(); git<groups.end(); git++){
             //~ atomgroup &g = **git;
             //~ for(uint i=0; i<g.size(); i++){
@@ -977,7 +966,7 @@ void collectionGear4NPH::timestep(){
         update_constraints();
         
         /// Correction
-        flt Vfac = (-(2.0/9.0)*(dV/V)*(dV/V)) + (ddV/V/3.0);
+        flt Vfac = (-(2.0/NDIM/NDIM)*(dV/V)*(dV/V)) + (ddV/V/NDIM);
         flt newddV = (newP - P) / Q;
         flt correctionV = newddV - ddV;
         newV = V + correctionV * (dt*dt/12);
@@ -1193,7 +1182,7 @@ void collectionVerletNPT::timestep(){
     flt Verr = newV / (lastV + (dt*xidot*V));
     
     lastV = V;
-    curP = ((Ktot2 + lastKtot2)/2 + virial()) / 3.0 / V;
+    curP = ((Ktot2 + lastKtot2)/2 + virial()) / NDIM / V;
     flt xidott = xidot;
     xidot = lastxidot + (2*dt*(curP - P)*V)/QP;
     lastxidot = xidott;
@@ -1207,7 +1196,7 @@ void collectionVerletNPT::timestep(){
     assert(Verr > 0.999);
     
     n=0;
-    flt Vfac1=pow(newV/V, 1.0/3.0), Vfac2 = pow(2*newV/(newV+V), 1.0/3.0);
+    flt Vfac1=pow(newV/V, 1.0/NDIM), Vfac2 = pow(2*newV/(newV+V), 1.0/NDIM);
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){

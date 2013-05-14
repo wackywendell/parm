@@ -421,4 +421,26 @@ ostream& operator<< (ostream& out, const Vector<U> v){
     return out << '}';
 }
 
+template <class T> template <class U>
+Vector2<T>& Vector2<T>::operator*=(const U rhs){
+    Nvector<T,2>::vals[0] *= rhs;
+    Nvector<T,2>::vals[1] *= rhs;
+    return *this;
+}
+
+template <class T> template <class U>
+Vector2<T>& Vector2<T>::operator/=(const U rhs){
+    Nvector<T,2>::vals[0] /= rhs;
+    Nvector<T,2>::vals[1] /= rhs;
+    return *this;
+}
+
+template <class U>
+ostream& operator<< (ostream& out, const Vector2<U> v){
+    out << "{" << v.get(0);
+    for(int i = 1; i < 2; i++)
+        out << ',' << v.get(i);
+    return out << '}';
+}
+
 #endif
