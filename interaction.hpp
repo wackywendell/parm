@@ -851,7 +851,8 @@ class neighborlist : public statetracker{
         inline uint size() const{return atoms.size();};
         inline vector<idpair>::iterator begin(){return curpairs.begin();};
         inline vector<idpair>::iterator end(){return curpairs.end();};
-        
+        inline idpair get(uint i){return curpairs[i];};
+        //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
         ~neighborlist(){};
 };
 
@@ -885,6 +886,9 @@ class NListed : public interactionpairs {
             if (a.n() == atoms.size()) {atoms.push_back(a); return;};
             atoms[a.n()] = a;};
         void update_pairs();
+        P getpair(idpair &pair){
+        return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
+        flt energy(Box *box, idpair &pair);
         flt energy(Box *box);
         flt pressure(Box *box);
         uint size(){return atoms.size();};
@@ -1468,12 +1472,20 @@ void NListed<A, P>::update_pairs(){
 }
 
 template <class A, class P>
+flt NListed<A, P>::energy(Box *box, idpair &pair){
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    P Epair = P(atoms[pair.first().n()],atoms[pair.last().n()]);
+    //~ Vec dist = box->diff(Epair.atom1.x(), Epair.atom2.x());
+    return energy_pair(Epair, box);
+};
+
+template <class A, class P>
 flt NListed<A, P>::energy(Box *box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt E = 0;
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); it++){
-        Vec dist = box->diff(it->atom1.x(), it->atom2.x());
+        //~ Vec dist = box->diff(it->atom1.x(), it->atom2.x());
         E += energy_pair(*it, box);
     }
     return E;

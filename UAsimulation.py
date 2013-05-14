@@ -4,7 +4,7 @@
 
 from simw import *
 from math import sqrt
-import simpdb, statistics
+import simpdb, statistics, util
 import FRETs
 from xyzfile import XYZwriter, XYZreader
 import sys, os, os.path
@@ -43,7 +43,7 @@ parser.add_option('--seed', dest='seed', action='store_false',
 parser.add_option('--relaxdt', type=int, default=12)
 parser.add_option('--relaxsteps', type=int, default=0)
 parser.add_option('--relaxdamp', type=float, default=200.0)
-parser.add_option('-A', '--atomsize', type=float, default=1.0 / (2**(1.0/6.0)))
+parser.add_option('-A', '--atomsize', type=float, default=None)
 parser.add_option('--nodihedral', dest='dihedral', action='store_false', default=True)
 parser.add_option('-H','--hydrogen', dest='hydrogen', action='store_true', default=False)
 parser.add_option('--dihk', type=float, default=215.0)
@@ -61,6 +61,8 @@ parser.add_option( '-i', dest='protein', type=str)#, default='aS', type='choice'
 
 print(" ".join(sys.argv))
 opts,args = parser.parse_args()
+if opts.atomsize is None:
+    opts.atomsize = 1 if opts.hydrogen else 1.0 / (2**(1.0/6.0))
 
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showsteps if opts.showsteps else 1000*opts.showsize
@@ -180,9 +182,12 @@ bonds = simpdb.make_bonds(avecs, opts.temp, usestd=True)
 if opts.hydrogen:
     LJ,neighbors = simpdb.make_LJ(box, avecs, LJepsilon, opts.atomsize,
                                             2.0, simpdb.AliceSizes)
+    print("made LJ with Alice's atom sizes x %.2f" % opts.atomsize)
 else:
     LJ,neighbors = simpdb.make_LJ(box, avecs, LJepsilon, opts.atomsize,
                                             2.0, simpdb.RichardsSizes)
+neighbors.update_list()
+print("Made LJ, energy", LJ.energy(box))
 dihedrals = (simpdb.make_dihedrals(avecs, opts.dihk) 
             if (opts.dihk > 0 and not opts.hydrogen) else None)
 charges = simpdb.make_charges(avecs, chargescreen, k=chargek, 
@@ -326,12 +331,33 @@ table = statistics.StatManager(statfile, collec, [avecs],
             contin=opts.cont)
 valtracker = defaultdict(list)
 
+def writestats(t):
+    values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
+    table.update(int(t * opts.dt+.5), write=True)
+    #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
+    
+    endtime, interval = util.get_eta(t-startt, steps-startt, starttime)
+    totinterval = util.to_dhms(endtime - starttime)
+    
+    print('------ ', int(t*opts.dt+.5), 
+        ' Ends in (', util.interval_str(*interval), ' / ', 
+            util.interval_str(*totinterval), ') on ', 
+                            endtime.strftime('(%a %b %d, %H:%M:%S)'),
+        sep = '')
+        
+    for k,v in sorted(values.items()):
+        valtracker[k].append(v)
+        if k is 'time': continue
+        printlist(valtracker[k], k)
+    sys.stdout.flush()
+
 # t is current step num
 startt = t = 0 if not opts.cont else round(startedat / opts.dt)
 if not opts.cont: table.update(t, write=True)
 curlim = t + showsteps
 print('Starting.', t, curlim, 'E: %.2f' % collec.energy())
 starttime = datetime.now()
+writestats(t)
 try:
     while t < steps:
         while t < curlim:
@@ -340,25 +366,8 @@ try:
             #~ if t % (100) == 0:
             #~ print('t:', t*opts.dt, collec.energy())
         curlim += showsteps
-        c = collec.com()
-        values = xyz.writefull(int(t * opts.dt+.5), avecs, collec)
-        table.update(int(t * opts.dt+.5), write=True)
-        #~ ylist.append([a.x.gety() for a in itern(av,av.N())])
+        writestats(t)
         
-        endtime, interval = simpdb.get_eta(t-startt, steps-startt, starttime)
-        totinterval = simpdb.to_dhms(endtime - starttime)
-        
-        print('------ ', int(t*opts.dt+.5), 
-            ' Ends in (', simpdb.interval_str(*interval), ' / ', 
-                simpdb.interval_str(*totinterval), ') on ', 
-                                endtime.strftime('(%a %b %d, %H:%M:%S)'),
-            sep = '')
-        
-        for k,v in sorted(values.items()):
-            valtracker[k].append(v)
-            if k is 'time': continue
-            printlist(valtracker[k], k)
-        sys.stdout.flush()
 except KeyboardInterrupt:
     pass
 

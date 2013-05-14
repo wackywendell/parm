@@ -311,26 +311,42 @@ void collectionSol::timestep(){
     }
     
     update_trackers();
-    
-    return;
+};
+
+collectionSolHT::collectionSolHT(Box *box, const flt dt, const flt damp,const flt T,
+        vector<atomgroup*> groups,vector<interaction*> interactions,
+        vector<statetracker*> trackers, vector<constraint*> constraints) :
+            collection(box, groups, interactions, trackers, constraints), 
+            dt(dt), damping(damp), desT(T), gauss(sqrt(2.0*desT*damping/dt)){
+    setGauss();
+    update_trackers();
+    setForces(true);
+    update_constraints();
+    update_trackers();
+};
+
+void collectionSolHT::setGauss(){
+    gauss.set(sqrt(2.0*desT*damping/dt)); // TODO: Is that correct?
+}
+
+void collectionSolHT::timestep(){
     //Honeycutt and Thirumalai
-    /*
-    cout << "damping " << damping << "\n";
+    // note atom.a is the second derivative of position, d²r/dt², and
+    // includes the random term / damping term.
+    // atom.f includes only the forces from other particles.
+    
     vector<atomgroup*>::iterator git;
+    flt keepv = 1-(damping*dt);
+    flt xpartfromv = dt - (dt*dt*damping/2);
+    
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
             // step 1: get new x
-            m[i].x += (m[i].v * dt) + (m[i].a * (.5 * dt*dt));
-            
-            //(useful values)
-            flt mass = m.getmass(i);
-            flt curdamp = damping / mass;
-            flt curdamp2 = dt * curdamp / 2;
+            m[i].x += (m[i].v * xpartfromv) + (m[i].a * (.5 * dt*dt));
             
             // step 2: make v1 (intermediate v)
-            m[i].v += m[i].v * (-curdamp2 + curdamp2*curdamp2)
-                        + m[i].f * (dt / 2 / mass);
+            m[i].v = m[i].v*keepv + m[i].a*(dt/2);
         }
     }
     
@@ -341,17 +357,15 @@ void collectionSol::timestep(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
-            Vec g = gauss.genVec();
-            // cout << "g " << g << "\n";
+            Vec g = gauss.generate();
+            //~ cout << "g " << g << "\n";
             m[i].a = (m[i].f + g) / m.getmass(i);
             
-            // step 5: finish v and a
+            // step 5: finish v
             m[i].v += m[i].a * (dt/2);
-            m[i].a -= m[i].v * damping;
         }
     }
     update_trackers();
-    */
 }
 
 void collectionVerlet::timestep(){

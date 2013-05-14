@@ -445,6 +445,50 @@ class Dihedrals(SimpleStat, TableWriter):
         
         return ts, phiv, psiv
 
+class Taus(SimpleStat, TableWriter):
+    ext = '.taus.gz'
+    def __init__(self, fname, collec, reslists, gzip=True,
+                    contin=False):
+        headers = self.get_headers(reslists)
+        TableWriter.__init__(self, fname, headers, gzip)
+        self.collec = collec
+        self.reslists = reslists
+        if contin: self.headers_written=True
+    
+    @staticmethod
+    def get_headers(reslists):
+        if len(reslists) == 1:
+            return ['time'] + ['%d' % (m+1)
+                    for n,rl in enumerate(reslists)
+                    for m,r in enumerate(rl)
+                ]
+                    
+        return ['time'] + ['%d_%d' % (m+1,n+1) 
+                    for n,rl in enumerate(reslists)
+                    for m,r in enumerate(rl)
+                ]
+    
+    def update(self, t, write=True):
+        vals = [simpdb.Resvec.tauangs(rl) for rl in self.reslists]
+        statstrs = ['%.2f' % t] + [format(v, '.5f')
+                    for rlvals in vals
+                    for v in rlvals]
+        
+        assert len(statstrs) == len(self.headers), (
+                    "%d vs. %d" % (len(statstrs), len(self.headers)))
+        self.write_row(statstrs)
+    
+    def write(self):
+        pass
+    
+    @classmethod
+    def readFile(cls, fname):
+        """Returns ts, taus"""
+        with gzip.open(fname, 'rb') as f:
+            cols = f.readline().decode('ascii').strip().split('\t')
+            table = numpy.genfromtxt(f, dtype=float)
+        return table[:,0], table[:,1:]
+
 class CALocs(SimpleStat, TableWriter):
     ext = '.cax.gz'
     def __init__(self, fname, collec, reslists, gzip=True,
@@ -689,6 +733,8 @@ def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'ts
     regex = re.compile(regexp)
     matches = [(list(regex.finditer(f[-1])), f) for f in children]
     badmatches = [f for ms,f in matches if len(ms) == 0]
+    names = [(n + '0' if n in 'f' else n) for n in names]
+    
     if badmatches and matchall:
         raise ValueError('%s could not match %s' % (regexp, badmatches[0][-1]))
     matches = [(ms[0],f) for ms,f in matches if len(ms) > 0]
@@ -712,10 +758,7 @@ def groupdicts(dlst, key):
 
 def groupby(dlst, groupkey, sortby=None):
     if sortby is None: return sorted(groupdicts(dlst, groupkey).items())
-    if isinstance(sortby, str):
-        k = sortby
-        sortby = lambda x: x[k]
-    if not sortby: return sorted(groupdicts(dlst, groupkey).items(), key=sortby)
+    return sorted(groupdicts(dlst, groupkey).items(), key=sortby)
 
 class StatGroup(Namespace):
     def __init__(self, ns, cut=0):
@@ -768,6 +811,11 @@ class StatGroup(Namespace):
         returns ts, phis, psis"""
         fname = self.dir + (self.basename + Dihedrals.ext)
         return Dihedrals.readFile(str(fname))
+    
+    def taus(self):
+        """returns ts, taus"""
+        fname = self.dir + (self.basename + Taus.ext)
+        return Taus.readFile(str(fname))
     
     def cax(self):
         fname = self.dir + (self.basename + CALocs.ext)
@@ -916,7 +964,11 @@ def loadAll(fs, cut=0, strfunc=_default_str, func=None):
 mydir = os.path.expanduser('~/idp/')
 loadfile= mydir + 'blengths/stats.pkl'
 aSfile = mydir + 'pdb/aS.pdb'
+bSfile = mydir + 'pdb/beta-synuclein-phyre2.pdb'
+gSfile = mydir + 'pdb/gamma-synuclein-phyre2.pdb'
 taufile = mydir + 'pdb/tau_phyre2.pdb'
+protGfile = mydir + 'pdb/proteinG.pdb'
+
 aSijs = [(54, 72), (72, 92), (9, 33), (54, 92), (92, 130), (33, 72),
             (9, 54), (72, 130), (9, 72), (54, 130), (33, 130), (9, 130)]
 aSijs += [(1, 140), (12, 127), (14, 125), (21, 118), 
@@ -932,12 +984,16 @@ class Updater(object):
     _n_to_res = {1013: ([(aSfile, aSijs, False)]), 
                  2026: ([(aSfile, aSijs, False), (aSfile, aSijs, False)]), 
                  2016: ([(aSfile, aSijs, True)]),
+                 933: ([(gSfile, [], True)]),
+                 1002: ([(bSfile, [], True)]),
                  3217: ([(taufile, tauijs, False)]),
+                 855: ([(protGfile, [], True)]),
                  } 
     
     def __init__(self):
         self._residues = {}
         self._collecs = {}
+        self._box = sim.InfiniteBox()
     
     def residues(self, n):
         if n in self._residues: return self._residues[n]
@@ -951,7 +1007,7 @@ class Updater(object):
     def collec(self, n):
         if n in self._collecs: return self._collecs[n]
         avecs = sim.avector([r for rlist in self.residues(n) for r in rlist])
-        return sim.StaticCollec(avecs)
+        return sim.StaticCollec(self._box, avecs)
     
     def run(self, xyzfname, stattypes, stats=None):
         print('%16s : %s' % (xyzfname, "Reading xyz..."))
@@ -1019,8 +1075,9 @@ if __name__ == '__main__':
     parser.add_argument('-d',dest='get_dihedrals', action='store_true')
     parser.add_argument('-p',dest='get_pairs', action='store_true')
     parser.add_argument('-c',dest='get_CA_locs', action='store_true')
-    parser.add_argument('-s',dest='get_stats', action='store_true')
+    parser.add_argument('-s',dest='get_stats', action='store_true', help = 'Actually write out values')
     parser.add_argument('-R', dest='Rgdist', action='store_true')
+    parser.add_argument('--tau', dest='get_taus', action='store_true')
     parser.add_argument('files', nargs='+', type=str)
     opts = parser.parse_args()
     
@@ -1029,6 +1086,7 @@ if __name__ == '__main__':
     if opts.get_pairs: statgs.append(PairDists)
     if opts.get_CA_locs: statgs.append(CALocs)
     if opts.get_rijs: statgs.append(Rijs)
+    if opts.get_taus: statgs.append(Taus)
     for f in opts.files:
         if statgs or opts.get_stats:
             update(f, (None if opts.get_stats else False), *statgs)

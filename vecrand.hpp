@@ -31,6 +31,7 @@ class gaussVec {
         generator gauss;
     public:
         gaussVec(double sigma) : distro(0,sigma), gauss(e,distro){};
+        void set(double sigma){distro = distribution(0,sigma);};
         Vec generate(){return Vec(gauss(),gauss(),gauss());};
         void seed(unsigned int n){e.seed(n);};
         void seed(){e.seed(static_cast<unsigned int>(time(0)));};

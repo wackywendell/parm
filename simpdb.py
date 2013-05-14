@@ -440,6 +440,17 @@ class Resvec(atomvec):
         rvecs = [Resvec(res, amu=amu, H=H, loadfile=loadfile) for res in residues]
         return rvecs
     
+    
+    @classmethod
+    def tauangs(cls, rlist):
+        taus = []
+        for r in rlist:
+            a1,a2,a3 = r['N'], r['CA'], r['C']
+            dx1, dx2 = a2.x - a1.x, a2.x - a3.x
+            angcos = dx1.dot(dx2) / dx1.mag() / dx2.mag()
+            taus.append(math.acos(angcos))
+        return taus
+    
     def dihedral(self, ang, prev, nxt):
         if ang=='omega': angs, sgn = ([], ['CA', 'C'],['N','CA']), -1
         elif ang=='psi': angs, sgn = ([], ['N','CA','C'],['N']), 1
