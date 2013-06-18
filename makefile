@@ -29,29 +29,19 @@ printout:
 clean:
 	rm -f *.o *.so *.gch sim_wrap*.cxx
 
-sim_wrap2d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand2d.hpp collection.cpp constraints.cpp interaction.cpp vecrand2d.cpp vec.hpp
-	ln -sf vecrand2d.hpp vecrand.hpp
-	ln -sf vecrand2d.cpp vecrand.cpp
-	$(SWIG) -D2D sim.i
-	#mv sim.py sim2d.py
-	#[[ -e sim3d.py ]] && cp sim3d.py sim.py || true
+sim_wrap2d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+	$(SWIG) -DVEC2D sim.i
 	mv sim_wrap.cxx sim_wrap2d.cxx
 
-sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand3d.hpp collection.cpp constraints.cpp interaction.cpp vecrand3d.cpp vec.hpp
-	ln -sf vecrand3d.hpp vecrand.hpp
-	ln -sf vecrand3d.cpp vecrand.cpp
-	$(SWIG) sim.i
+sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+	$(SWIG) -DVEC3D sim.i
 	mv sim_wrap.cxx sim_wrap3d.cxx
 
 sim_wrap3d.o: sim_wrap3d.cxx
-	ln -sf vecrand3d.hpp vecrand.hpp
-	ln -sf vecrand3d.cpp vecrand.cpp
-	$(CXX) $(CCOPTS) -c sim_wrap3d.cxx $(INC)
+	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap3d.cxx $(INC)
 
 sim_wrap2d.o: sim_wrap2d.cxx
-	ln -sf vecrand2d.hpp vecrand.hpp
-	ln -sf vecrand2d.cpp vecrand.cpp
-	$(CXX) $(CCOPTS) -c sim_wrap2d.cxx $(INC)
+	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap2d.cxx $(INC)
 
 _sim2d.so: sim_wrap2d.o
 	$(CXX) $(CCOPTS) -shared sim_wrap2d.o -o _sim2d.so $(LIB)
