@@ -3,7 +3,9 @@
 #ifdef VEC2D
 #define NDIM 2
 #else
+#ifndef VEC3D
 #define VEC3D
+#endif
 #define NDIM 3
 #endif
 #include <iostream>
@@ -38,24 +40,20 @@ void seed();
 
 class gaussVec {
     protected:
-        engine e;
         normdistribution distro;
         normgenerator gauss;
     public:
-        gaussVec(double sigma) : distro(0,sigma), gauss(e,distro){};
+        gaussVec(double sigma);
         void set(double sigma){distro = normdistribution(0,sigma);};
 #ifdef VEC2D
         Vec generate(){return Vec(gauss(),gauss());};
 #else
         Vec generate(){return Vec(gauss(),gauss(),gauss());};
 #endif
-        void seed(unsigned int n){e.seed(n);};
-        void seed(){e.seed(static_cast<unsigned int>(time(0)));};
 };
 
 class bivariateGauss {
     protected:
-        engine e;
         normdistribution distro;
         normgenerator gauss;
         double x11;
@@ -63,8 +61,7 @@ class bivariateGauss {
         double x22;
         
     public:
-        bivariateGauss(const double s1=1, const double s2=1, const double corr=0)
-                : distro(0,1), gauss(e,distro){set(s1, s2, corr);};
+        bivariateGauss(const double s1=1, const double s2=1, const double corr=0);
         void set(const double s1, const double s2, const double corr);
         Pair generate();
 #ifdef VEC2D
@@ -73,8 +70,6 @@ class bivariateGauss {
         Vec genVec(){return Vec(gauss(), gauss(), gauss());};
 #endif
         VecPair genVecs();
-        void seed(unsigned int n){e.seed(n);};
-        void seed(){e.seed(static_cast<unsigned int>(time(0)));};
 };
 
 #endif

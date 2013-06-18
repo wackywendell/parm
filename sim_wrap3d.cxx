@@ -27505,12 +27505,12 @@ SWIGINTERN PyObject *aRK4vector_swigregister(PyObject *SWIGUNUSEDPARM(self), PyO
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *_wrap_rand3d(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_randVec(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Vec result;
   
-  if (!PyArg_ParseTuple(args,(char *)":rand3d")) SWIG_fail;
-  result = rand3d();
+  if (!PyArg_ParseTuple(args,(char *)":randVec")) SWIG_fail;
+  result = randVec();
   resultobj = SWIG_NewPointerObj((new Vec(static_cast< const Vec& >(result))), SWIGTYPE_p_VectorT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -27668,101 +27668,6 @@ SWIGINTERN PyObject *_wrap_gaussVec_generate(PyObject *SWIGUNUSEDPARM(self), PyO
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_gaussVec_seed__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  gaussVec *arg1 = (gaussVec *) 0 ;
-  unsigned int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:gaussVec_seed",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_gaussVec, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "gaussVec_seed" "', argument " "1"" of type '" "gaussVec *""'"); 
-  }
-  arg1 = reinterpret_cast< gaussVec * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "gaussVec_seed" "', argument " "2"" of type '" "unsigned int""'");
-  } 
-  arg2 = static_cast< unsigned int >(val2);
-  (arg1)->seed(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_gaussVec_seed__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  gaussVec *arg1 = (gaussVec *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:gaussVec_seed",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_gaussVec, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "gaussVec_seed" "', argument " "1"" of type '" "gaussVec *""'"); 
-  }
-  arg1 = reinterpret_cast< gaussVec * >(argp1);
-  (arg1)->seed();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_gaussVec_seed(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_gaussVec, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_gaussVec_seed__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_gaussVec, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_unsigned_SS_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_gaussVec_seed__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'gaussVec_seed'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    gaussVec::seed(unsigned int)\n"
-    "    gaussVec::seed()\n");
-  return 0;
 }
 
 
@@ -28084,101 +27989,6 @@ SWIGINTERN PyObject *_wrap_bivariateGauss_genVecs(PyObject *SWIGUNUSEDPARM(self)
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_bivariateGauss_seed__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  bivariateGauss *arg1 = (bivariateGauss *) 0 ;
-  unsigned int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:bivariateGauss_seed",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_bivariateGauss, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "bivariateGauss_seed" "', argument " "1"" of type '" "bivariateGauss *""'"); 
-  }
-  arg1 = reinterpret_cast< bivariateGauss * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "bivariateGauss_seed" "', argument " "2"" of type '" "unsigned int""'");
-  } 
-  arg2 = static_cast< unsigned int >(val2);
-  (arg1)->seed(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_bivariateGauss_seed__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  bivariateGauss *arg1 = (bivariateGauss *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:bivariateGauss_seed",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_bivariateGauss, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "bivariateGauss_seed" "', argument " "1"" of type '" "bivariateGauss *""'"); 
-  }
-  arg1 = reinterpret_cast< bivariateGauss * >(argp1);
-  (arg1)->seed();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_bivariateGauss_seed(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_bivariateGauss, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_bivariateGauss_seed__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_bivariateGauss, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_unsigned_SS_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_bivariateGauss_seed__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'bivariateGauss_seed'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    bivariateGauss::seed(unsigned int)\n"
-    "    bivariateGauss::seed()\n");
-  return 0;
 }
 
 
@@ -60857,101 +60667,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_collectionSol_seed__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  collectionSol *arg1 = (collectionSol *) 0 ;
-  uint arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:collectionSol_seed",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionSol, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionSol_seed" "', argument " "1"" of type '" "collectionSol *""'"); 
-  }
-  arg1 = reinterpret_cast< collectionSol * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "collectionSol_seed" "', argument " "2"" of type '" "uint""'");
-  } 
-  arg2 = static_cast< uint >(val2);
-  (arg1)->seed(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_collectionSol_seed__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  collectionSol *arg1 = (collectionSol *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:collectionSol_seed",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionSol, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionSol_seed" "', argument " "1"" of type '" "collectionSol *""'"); 
-  }
-  arg1 = reinterpret_cast< collectionSol * >(argp1);
-  (arg1)->seed();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_collectionSol_seed(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_collectionSol, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_collectionSol_seed__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_collectionSol, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_unsigned_SS_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_collectionSol_seed__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'collectionSol_seed'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    collectionSol::seed(uint)\n"
-    "    collectionSol::seed()\n");
-  return 0;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_collectionSol(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   collectionSol *arg1 = (collectionSol *) 0 ;
@@ -61599,101 +61314,6 @@ SWIGINTERN PyObject *_wrap_collectionSolHT_timestep(PyObject *SWIGUNUSEDPARM(sel
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_collectionSolHT_seed__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  collectionSolHT *arg1 = (collectionSolHT *) 0 ;
-  uint arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  unsigned int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:collectionSolHT_seed",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionSolHT, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionSolHT_seed" "', argument " "1"" of type '" "collectionSolHT *""'"); 
-  }
-  arg1 = reinterpret_cast< collectionSolHT * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "collectionSolHT_seed" "', argument " "2"" of type '" "uint""'");
-  } 
-  arg2 = static_cast< uint >(val2);
-  (arg1)->seed(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_collectionSolHT_seed__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  collectionSolHT *arg1 = (collectionSolHT *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject * obj0 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:collectionSolHT_seed",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionSolHT, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionSolHT_seed" "', argument " "1"" of type '" "collectionSolHT *""'"); 
-  }
-  arg1 = reinterpret_cast< collectionSolHT * >(argp1);
-  (arg1)->seed();
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_collectionSolHT_seed(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  int ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? (int)PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 2) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 1) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_collectionSolHT, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_collectionSolHT_seed__SWIG_1(self, args);
-    }
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_collectionSolHT, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      {
-        int res = SWIG_AsVal_unsigned_SS_int(argv[1], NULL);
-        _v = SWIG_CheckState(res);
-      }
-      if (_v) {
-        return _wrap_collectionSolHT_seed__SWIG_0(self, args);
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'collectionSolHT_seed'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    collectionSolHT::seed(uint)\n"
-    "    collectionSolHT::seed()\n");
-  return 0;
 }
 
 
@@ -74191,7 +73811,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"aRK4vector_capacity", _wrap_aRK4vector_capacity, METH_VARARGS, (char *)"aRK4vector_capacity(aRK4vector self) -> vector< atomvecRK4 * >::size_type"},
 	 { (char *)"delete_aRK4vector", _wrap_delete_aRK4vector, METH_VARARGS, (char *)"delete_aRK4vector(aRK4vector self)"},
 	 { (char *)"aRK4vector_swigregister", aRK4vector_swigregister, METH_VARARGS, NULL},
-	 { (char *)"rand3d", _wrap_rand3d, METH_VARARGS, (char *)"rand3d() -> Vec"},
+	 { (char *)"randVec", _wrap_randVec, METH_VARARGS, (char *)"randVec() -> Vec"},
 	 { (char *)"randVecBoxed", _wrap_randVecBoxed, METH_VARARGS, (char *)"randVecBoxed() -> Vec"},
 	 { (char *)"seed", _wrap_seed, METH_VARARGS, (char *)"\n"
 		"seed(unsigned int n)\n"
@@ -74200,10 +73820,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_gaussVec", _wrap_new_gaussVec, METH_VARARGS, (char *)"new_gaussVec(double sigma) -> gaussVec"},
 	 { (char *)"gaussVec_set", _wrap_gaussVec_set, METH_VARARGS, (char *)"gaussVec_set(gaussVec self, double sigma)"},
 	 { (char *)"gaussVec_generate", _wrap_gaussVec_generate, METH_VARARGS, (char *)"gaussVec_generate(gaussVec self) -> Vec"},
-	 { (char *)"gaussVec_seed", _wrap_gaussVec_seed, METH_VARARGS, (char *)"\n"
-		"seed(unsigned int n)\n"
-		"gaussVec_seed(gaussVec self)\n"
-		""},
 	 { (char *)"delete_gaussVec", _wrap_delete_gaussVec, METH_VARARGS, (char *)"delete_gaussVec(gaussVec self)"},
 	 { (char *)"gaussVec_swigregister", gaussVec_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_bivariateGauss", _wrap_new_bivariateGauss, METH_VARARGS, (char *)"\n"
@@ -74216,10 +73832,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"bivariateGauss_generate", _wrap_bivariateGauss_generate, METH_VARARGS, (char *)"bivariateGauss_generate(bivariateGauss self) -> _Numvector2"},
 	 { (char *)"bivariateGauss_genVec", _wrap_bivariateGauss_genVec, METH_VARARGS, (char *)"bivariateGauss_genVec(bivariateGauss self) -> Vec"},
 	 { (char *)"bivariateGauss_genVecs", _wrap_bivariateGauss_genVecs, METH_VARARGS, (char *)"bivariateGauss_genVecs(bivariateGauss self) -> VecPair"},
-	 { (char *)"bivariateGauss_seed", _wrap_bivariateGauss_seed, METH_VARARGS, (char *)"\n"
-		"seed(unsigned int n)\n"
-		"bivariateGauss_seed(bivariateGauss self)\n"
-		""},
 	 { (char *)"delete_bivariateGauss", _wrap_delete_bivariateGauss, METH_VARARGS, (char *)"delete_bivariateGauss(bivariateGauss self)"},
 	 { (char *)"bivariateGauss_swigregister", bivariateGauss_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Box_diff", _wrap_Box_diff, METH_VARARGS, (char *)"Box_diff(Box self, Vec r1, Vec r2) -> Vec"},
@@ -75344,10 +74956,6 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"collectionSol_changeT", _wrap_collectionSol_changeT, METH_VARARGS, (char *)"collectionSol_changeT(collectionSol self, flt const newdt, flt const damp, flt const desiredT)"},
 	 { (char *)"collectionSol_timestep", _wrap_collectionSol_timestep, METH_VARARGS, (char *)"collectionSol_timestep(collectionSol self)"},
-	 { (char *)"collectionSol_seed", _wrap_collectionSol_seed, METH_VARARGS, (char *)"\n"
-		"seed(uint n)\n"
-		"collectionSol_seed(collectionSol self)\n"
-		""},
 	 { (char *)"delete_collectionSol", _wrap_delete_collectionSol, METH_VARARGS, (char *)"delete_collectionSol(collectionSol self)"},
 	 { (char *)"collectionSol_swigregister", collectionSol_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_collectionSolHT", _wrap_new_collectionSolHT, METH_VARARGS, (char *)"\n"
@@ -75363,10 +74971,6 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"collectionSolHT_changeT", _wrap_collectionSolHT_changeT, METH_VARARGS, (char *)"collectionSolHT_changeT(collectionSolHT self, flt const newdt, flt const damp, flt const desiredT)"},
 	 { (char *)"collectionSolHT_timestep", _wrap_collectionSolHT_timestep, METH_VARARGS, (char *)"collectionSolHT_timestep(collectionSolHT self)"},
-	 { (char *)"collectionSolHT_seed", _wrap_collectionSolHT_seed, METH_VARARGS, (char *)"\n"
-		"seed(uint n)\n"
-		"collectionSolHT_seed(collectionSolHT self)\n"
-		""},
 	 { (char *)"delete_collectionSolHT", _wrap_delete_collectionSolHT, METH_VARARGS, (char *)"delete_collectionSolHT(collectionSolHT self)"},
 	 { (char *)"collectionSolHT_swigregister", collectionSolHT_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_collectionVerlet", _wrap_new_collectionVerlet, METH_VARARGS, (char *)"\n"

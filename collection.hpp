@@ -108,8 +108,8 @@ class collectionSol : public collection {
         void changeT(const flt newdt, const flt damp, const flt desiredT){
             dt = newdt; damping = damp; desT = desiredT; setCs();};
         void timestep();
-        void seed(uint n){gauss.seed(n);};
-        void seed(){gauss.seed();};
+        //void seed(uint n){gauss.seed(n);};
+        //void seed(){gauss.seed();};
 };
 
 class collectionSolHT : public collection {
@@ -153,8 +153,8 @@ class collectionSolHT : public collection {
         void changeT(const flt newdt, const flt damp, const flt desiredT){
             dt = newdt; damping = damp; desT = desiredT; setGauss();};
         void timestep();
-        void seed(uint n){gauss.seed(n);};
-        void seed(){gauss.seed();};
+        //void seed(uint n){gauss.seed(n);};
+        //void seed(){gauss.seed();};
 };
 
 class collectionVerlet : public collection {

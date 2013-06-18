@@ -34,6 +34,14 @@ void seed(){
     randengine.seed(static_cast<unsigned int>(time(0)));
 }
 
+gaussVec::gaussVec(double sigma) : distro(0,sigma), gauss(randengine,distro){};
+
+
+bivariateGauss::bivariateGauss(const double s1, const double s2,
+        const double corr) : distro(0,1), gauss(randengine,distro){
+            set(s1, s2, corr);
+};
+
 void bivariateGauss::set(const double s1, const double s2, const double corr){
     // Taken from Allen and Tildesley, 348
     assert(s1 >= 0);
@@ -56,8 +64,13 @@ Pair bivariateGauss::generate(){
 }
 
 VecPair bivariateGauss::genVecs(){
-    Vec x1 = randVec();
-    Vec x2 = randVec();
+#ifdef VEC2D
+    Vec x1 = Vec(gauss(), gauss());
+    Vec x2 = Vec(gauss(), gauss());
+#else
+    Vec x1 = Vec(gauss(), gauss(), gauss());
+    Vec x2 = Vec(gauss(), gauss(), gauss());
+#endif
     // Taken from Allen and Tildesley, 348
     VecPair p;
     p[0] = x1*x11;

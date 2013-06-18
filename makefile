@@ -37,11 +37,11 @@ sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp
 	$(SWIG) -DVEC3D sim.i
 	mv sim_wrap.cxx sim_wrap3d.cxx
 
+sim_wrap2d.o: sim_wrap2d.cxx
+	$(CXX) $(CCOPTS) -DVEC2D -c sim_wrap2d.cxx $(INC)
+
 sim_wrap3d.o: sim_wrap3d.cxx
 	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap3d.cxx $(INC)
-
-sim_wrap2d.o: sim_wrap2d.cxx
-	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap2d.cxx $(INC)
 
 _sim2d.so: sim_wrap2d.o
 	$(CXX) $(CCOPTS) -shared sim_wrap2d.o -o _sim2d.so $(LIB)
