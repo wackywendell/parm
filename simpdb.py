@@ -151,11 +151,16 @@ class Resvec(atomvec):
             return
         opened = False
         if not (hasattr(f, 'read') and hasattr(f, 'readline')):
-            f = open(f, 'rb')
+            fname = f
+            f = open(fname, 'rb')
             opened = True
         
-        import pickle
-        cls.resbonds, cls.backbonds, cls.resangles, cls.backangles = pickle.load(f)
+        if opened and fname.endswith('yml') or fname.endswith('yaml'):
+            import yaml2 as yaml
+            cls.resbonds, cls.backbonds, cls.resangles, cls.backangles = yaml.safe_load(f)
+        else:
+            import pickle
+            cls.resbonds, cls.backbonds, cls.resangles, cls.backangles = pickle.load(f)
         if opened: f.close()
     
     def load_data(self, f=None):

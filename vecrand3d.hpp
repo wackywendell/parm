@@ -1,8 +1,7 @@
 #ifndef VECRAND_H
 #define VECRAND_H
 #define VEC3D
-#define NDIM 2
-
+#define NDIM 3
 #include <iostream>
 #include <ctime>
 
@@ -18,10 +17,13 @@ typedef Nvector<Vec, 2> VecPair;
 using namespace std;
 
 typedef boost::mt19937 engine;
-typedef boost::normal_distribution<> distribution;
-typedef boost::variate_generator<engine&, distribution > generator;
+typedef boost::normal_distribution<> normdistribution;
+typedef boost::uniform_01<> lindistribution;
+typedef boost::variate_generator<engine&, normdistribution > normgenerator;
+typedef boost::variate_generator<engine&, lindistribution > lingenerator;
 
 Vec rand3d();
+Vec randVecBoxed();
 
 void seed(unsigned int n);
 void seed();
@@ -29,11 +31,11 @@ void seed();
 class gaussVec {
     protected:
         engine e;
-        distribution distro;
-        generator gauss;
+        normdistribution distro;
+        normgenerator gauss;
     public:
         gaussVec(double sigma) : distro(0,sigma), gauss(e,distro){};
-        void set(double sigma){distro = distribution(0,sigma);};
+        void set(double sigma){distro = normdistribution(0,sigma);};
         Vec generate(){return Vec(gauss(),gauss(),gauss());};
         void seed(unsigned int n){e.seed(n);};
         void seed(){e.seed(static_cast<unsigned int>(time(0)));};
@@ -42,8 +44,8 @@ class gaussVec {
 class bivariateGauss {
     protected:
         engine e;
-        distribution distro;
-        generator gauss;
+        normdistribution distro;
+        normgenerator gauss;
         double x11;
         double x21;
         double x22;

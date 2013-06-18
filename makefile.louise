@@ -1,5 +1,5 @@
 UNAME := $(shell uname)
-CC=icpc
+CXX=icpc
 #CC=g++
 #SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
@@ -9,16 +9,35 @@ INC=-I$(BOOSTINC) `python3-config --include`
 LIB=`python3-config --ldflags`
 
 ALL=_sim.so
-all: printout $(ALL)
 
+.PHONY: all 2d 3d printout clean
+
+all: printout 2d 3d
+	@echo "making all."
+
+2d: _sim2d.so
+
+3d: _sim.so
+
+	
 printout:
-	@echo Running on \"$(UNAME)\"
+	@echo Running \"$(CXX)\" on \"$(UNAME)\"
 
 clean:
-	rm -f *.o *.so $(ALL) *.gch
+	rm -f *.o *.so *.gch
 
-sim_wrap.o: sim_wrap.cxx
-	$(CC) -fPIC -c sim_wrap.cxx $(INC)
+sim_wrap3d.o: sim_wrap3d.cxx
+	ln -sf vecrand3d.hpp vecrand.hpp
+	ln -sf vecrand3d.cpp vecrand.cpp
+	$(CXX) $(CCOPTS) -c sim_wrap3d.cxx $(INC)
 
-_sim.so: sim_wrap.o
-	$(CC) -fPIC -shared sim_wrap.o -o _sim.so $(LIB)
+sim_wrap2d.o: sim_wrap2d.cxx
+	ln -sf vecrand2d.hpp vecrand.hpp
+	ln -sf vecrand2d.cpp vecrand.cpp
+	$(CXX) $(CCOPTS) -c sim_wrap2d.cxx $(INC)
+
+_sim2d.so: sim_wrap2d.o
+	$(CXX) $(CCOPTS) -shared sim_wrap2d.o -o _sim2d.so $(LIB)
+	
+_sim.so: sim_wrap3d.o
+	$(CXX) $(CCOPTS) -shared sim_wrap3d.o -o _sim.so $(LIB)

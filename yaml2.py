@@ -50,4 +50,5 @@ found unacceptable key (unhashable type: 'list')
  
 def construct_tuple(loader, node):
     return tuple(yaml.SafeLoader.construct_sequence(loader, node))
+
 yaml.SafeLoader.add_constructor(u'tag:yaml.org,2002:seq', construct_tuple)

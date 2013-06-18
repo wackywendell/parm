@@ -125,10 +125,11 @@ flt collection::dof(){
     return ndof;
 }
 
-flt collection::temp(){
+flt collection::temp(bool minuscomv){
     flt totatoms = 0;
     flt totkinetic = 0;
-    Vec v = comv();
+    Vec v = Vec();
+    if(minuscomv) v = comv();
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
@@ -138,8 +139,10 @@ flt collection::temp(){
     }
     
     int ndof = dof();
+    if (minuscomv) ndof = dof() - NDIM;
+    //~ cout << minuscomv << " " << ndof << " " << NDIM << endl;
     //~ cout << "K: " << totkinetic << ", totatoms: " << totatoms << "\n";
-    return totkinetic * 2 / (ndof-NDIM);
+    return totkinetic * 2 / ndof;
 }
 
 //~ Vec collection::com(){
@@ -386,6 +389,24 @@ void collectionVerlet::timestep(){
             m[i].a = m[i].f / m.getmass(i);
             // And finish m[i].v
             m[i].v += m[i].a * (dt/2);
+        }
+    }
+    
+    update_trackers();
+    
+    return;
+}
+
+void collectionOverdamped::timestep(){
+    setForces(false);
+    update_constraints();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f / m.getmass(i);
+            m[i].v = m[i].a * gamma;
+            m[i].x += m[i].v * dt;
         }
     }
     

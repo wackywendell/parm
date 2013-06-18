@@ -14,6 +14,7 @@ import os.path
 from optparse import OptionParser
 from collections import defaultdict
 from sys import stdout, stderr
+import yaml2 as yaml
 
 mydir = os.path.expanduser('~/idp/')
 parser = OptionParser("Runs a simple simulation.")
@@ -102,7 +103,7 @@ if hasattr(FRETs, opts.protein + 'pdb'):
 else:
     pdbfile = opts.protein
     ijs = []
-loadfile= mydir + 'blengths/stats-H.pkl'
+loadfile= mydir + 'blengths/stats-H2.yaml'
 protname, _ = os.path.splitext(os.path.basename(opts.protein))
 moviefile = opts.xyzfile.format(T=format(opts.temp, '.3g'), 
                             t=format(opts.time, '.4g'),

@@ -7,7 +7,7 @@ import numpy
 #~ from scipy.spatial.distance import cdist
 from decimal import Decimal, Context
 def D(arg): return Context(prec=15).create_decimal(arg)
-    
+from util import filefinder, filefinder2, groupdicts, groupby
 from namespace import Namespace
 import simw as sim
 from simw import autocorr
@@ -707,58 +707,6 @@ def Rgdist(d, read=True, write=True):
 
 
 ########################################################################
-def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'tsv.gz', **args):
-    """
-    dir             : Directory to look in
-    names           : keywords to look for / store into
-    regexp          : Define the regular expression for groups (default: #NAME##VALUE#-#NAME##VALUE#....ext)
-    matchall        : Match the entire expression
-    types           : What types to apply (default: all Decimal)
-    ext             : File extension (ignores everything else) (default: 'tsv.gz')
-    args            : Like names, but add some constants (such as T=1) for all fs
-    """
-    import re, fpath
-    try:
-        iter(types)
-    except TypeError:
-        types = [types] * len(names)
-    
-    dir = fpath.Dir(dir)
-    children = [f for f in dir.children() if f[-1][(-len(ext)-1):] == '.' + ext]
-    
-    if regexp is None:
-        regexp='-'.join([n + r'(\F)' for n in names])
-    regexp = regexp.replace(r'\F', r'(?:[0-9]*\.?[0-9]*)|(?:inf)')
-    
-    regex = re.compile(regexp)
-    matches = [(list(regex.finditer(f[-1])), f) for f in children]
-    badmatches = [f for ms,f in matches if len(ms) == 0]
-    names = [(n + '0' if n in 'f' else n) for n in names]
-    
-    if badmatches and matchall:
-        raise ValueError('%s could not match %s' % (regexp, badmatches[0][-1]))
-    matches = [(ms[0],f) for ms,f in matches if len(ms) > 0]
-    
-    groups = sorted([list(zip(names, [t(m or 'nan') for t,m in zip(types,mtch.groups())]))    
-        + [('f',f)] for mtch,f in matches])
-    
-    pdicts = [dict(lst) for lst in groups]
-    for p in pdicts:
-        p.update(args)
-    return [Namespace(d) for d in pdicts]
-
-def groupdicts(dlst, key):
-    bigdict = dict()
-    for d in dlst:
-        curval = d[key]
-        keylist = bigdict.get(curval, [])
-        keylist.append(d)
-        bigdict[curval] = keylist
-    return bigdict
-
-def groupby(dlst, groupkey, sortby=None):
-    if sortby is None: return sorted(groupdicts(dlst, groupkey).items())
-    return sorted(groupdicts(dlst, groupkey).items(), key=sortby)
 
 class StatGroup(Namespace):
     def __init__(self, ns, cut=0):

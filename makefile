@@ -13,42 +13,48 @@ INC=`python3-config --includes`
 	#~ LIB=/opt/local/lib/libpython2.7.dylib
 #~ endif
 
-ALL=_sim.so
-2D=
+.PHONY: all 2d 3d printout clean
 
-all: printout $(ALL)
+all: printout 2d 3d
 	@echo "making all."
 
-
 2d: _sim2d.so
+
+3d: _sim.so
+
 	
 printout:
 	@echo Running on \"$(UNAME)\"
 
 clean:
-	rm -f *.o *.so $(ALL) *.gch sim_wrap.cxx
+	rm -f *.o *.so *.gch sim_wrap*.cxx
 
-sim_wrap.cxx: *.hpp *.cpp sim.i
-	$(SWIG) $(2D) sim.i
-
-sim_wrap.o: sim_wrap.cxx
-	$(CXX) $(CCOPTS) -c sim_wrap.cxx $(INC)
-
-2dln: vecrand2d.hpp vecrand2d.cpp
-	[[ -e sim_wrap.cxx ]] && mv sim_wrap.cxx sim_wrap3d.cxx || true
-	[[ -e sim_wrap.o ]] && mv sim_wrap.o sim_wrap3d.o || true
-	[[ -e sim_wrap2d.cxx ]] && mv sim_wrap2d.cxx sim_wrap.cxx || true
-	[[ -e sim_wrap2d.o ]] && mv sim_wrap2d.o sim_wrap.o || true
+sim_wrap2d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand2d.hpp collection.cpp constraints.cpp interaction.cpp vecrand2d.cpp vec.hpp
 	ln -sf vecrand2d.hpp vecrand.hpp
 	ln -sf vecrand2d.cpp vecrand.cpp
-	$(eval 2D=-D2D)
+	$(SWIG) -D2D sim.i
+	#mv sim.py sim2d.py
+	#[[ -e sim3d.py ]] && cp sim3d.py sim.py || true
+	mv sim_wrap.cxx sim_wrap2d.cxx
 
-_sim2d.so: 2dln sim_wrap.o
-	$(CXX) $(CCOPTS) -shared sim_wrap.o -o _sim2d.so $(LIB)
+sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand3d.hpp collection.cpp constraints.cpp interaction.cpp vecrand3d.cpp vec.hpp
 	ln -sf vecrand3d.hpp vecrand.hpp
 	ln -sf vecrand3d.cpp vecrand.cpp
-	mv sim_wrap.cxx sim_wrap2d.cxx
-	mv sim_wrap.o sim_wrap2d.o
+	$(SWIG) sim.i
+	mv sim_wrap.cxx sim_wrap3d.cxx
 
-_sim.so: sim_wrap.o
-	$(CXX) $(CCOPTS) -shared sim_wrap.o -o _sim.so $(LIB)
+sim_wrap3d.o: sim_wrap3d.cxx
+	ln -sf vecrand3d.hpp vecrand.hpp
+	ln -sf vecrand3d.cpp vecrand.cpp
+	$(CXX) $(CCOPTS) -c sim_wrap3d.cxx $(INC)
+
+sim_wrap2d.o: sim_wrap2d.cxx
+	ln -sf vecrand2d.hpp vecrand.hpp
+	ln -sf vecrand2d.cpp vecrand.cpp
+	$(CXX) $(CCOPTS) -c sim_wrap2d.cxx $(INC)
+
+_sim2d.so: sim_wrap2d.o
+	$(CXX) $(CCOPTS) -shared sim_wrap2d.o -o _sim2d.so $(LIB)
+	
+_sim.so: sim_wrap3d.o
+	$(CXX) $(CCOPTS) -shared sim_wrap3d.o -o _sim.so $(LIB)

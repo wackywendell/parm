@@ -40,7 +40,7 @@ class collection {
         //Stats
         flt potentialenergy();
         flt energy();
-        virtual flt temp();
+        virtual flt temp(bool minuscomv=true);
         virtual flt kinetic();
         virtual flt virial();
         virtual flt pressure();
@@ -134,7 +134,6 @@ class collectionSolHT : public collection {
       *         set acceleration given the forces, adding in random pieces, no damping
       * 5) Finish v and a: (v1, f, a1) -> (v, f, a)
       *         v = v1 + dt/2 a1
-      *         a = a1 - damping * v
       *     
       
      **/
@@ -170,6 +169,23 @@ class collectionVerlet : public collection {
                 vector<statetracker*> trackers=vector<statetracker*>(),
                 vector<constraint*> constraints=vector<constraint*>()) :
             collection(box, groups, interactions, trackers, constraints), dt(dt){};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+class collectionOverdamped : public collection {
+    // over-damped simulation, v = gamma * f
+    protected:
+        flt dt, gamma;
+        
+    public:
+        collectionOverdamped(Box *box, const flt dt, const float gamma,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints),
+                dt(dt), gamma(gamma){};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
 };

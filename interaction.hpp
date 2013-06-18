@@ -117,7 +117,14 @@ class OriginBox : public Box {
         flt V(){return boxsize[0] * boxsize[1];};
         #endif
         flt resize(flt factor){boxsize *= factor; return V();}
-        flt resizeV(flt newV){flt curV = V(); boxsize *= pow(newV/curV, 1.0/3.0); return V();}
+        flt resizeV(flt newV){flt curV = V(); boxsize *= pow(newV/curV, 1.0/NDIM); return V();}
+        Vec randLoc(){
+            Vec v = randVecBoxed();
+            for(uint i=0; i<NDIM; i++){
+                v[i] *= boxsize[i];
+            }
+            return diff(v, Vec());
+        };
 };
 
 /***********************************************************************
@@ -921,7 +928,7 @@ class NListed : public interactionpairs {
             atoms[a.n()] = a;};
         void update_pairs();
         P getpair(idpair &pair){
-        return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
+            return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
         flt energy(Box *box, idpair &pair);
         flt energy(Box *box);
         flt pressure(Box *box);
@@ -931,6 +938,7 @@ class NListed : public interactionpairs {
         flt setForcesGetPressure(Box *box);
         void setForces(Box *box, void callback(forcepair*));
         inline Vec forces_pair(P pair, Box *box){return pair.forces(box);}; // This may need to be written!
+        inline vector<A> &atom_list(){return atoms;};
         neighborlist *nlist(){return neighbors;};
         ~NListed(){};
 };
@@ -1303,7 +1311,7 @@ struct LJAttractFixedRepulsePair {
                     //~ sqrt(rij.sq()), 0.0, eps, sig, cutR, cutE);
             return 0;
         }
-        flt mid = (1-pow(rsq,-3));
+        flt mid = (1-pow(rsq,-3)); // # 1 - σ⁶/r⁶
         //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
                     //~ sqrt(rij.sq()), eps*(mid*mid) - cutE, eps, sig, cutR, cutE);
         if (rsq > 1) return eps*(mid*mid) - cutE;
@@ -1623,6 +1631,17 @@ class Charges : public interaction {
         flt pressure(Box *box);
         void setForces(Box *box);
         //~ ~LJsimple(){};
+};
+
+
+bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
+    if(sizet < NDIM * arr.size()){return false;};
+    for(uint i=0; i < arr.size(); i++)
+    for(uint j=0; j < NDIM; j++)
+    {
+        buffer[i*NDIM + j] = (*arr[i])[j];
+    }
+    return true;
 };
 
 #endif

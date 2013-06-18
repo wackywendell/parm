@@ -46,6 +46,10 @@ import yaml2 as yaml
 
 mydir = os.path.expanduser('~/idp/')
 parser = OptionParser()
+parser.add_option('-A', dest='newangles', action='store_true')
+parser.add_option('-B', dest='newbonds', action='store_true')
+parser.add_option('-D', dest='newdihedrals', action='store_true')
+parser.add_option('-R', dest='LJradius', type=float, default=4.8)
 parser.add_option('-s', '--hset', type='choice', default='hydroavg',
         choices = ['monera', 'sharpcorrected','KD','aWW','hydroavg'])
 parser.add_option('-r', '--hrescale', type='choice', default='None',
@@ -79,6 +83,10 @@ def linetotypes(l, *types, stripout='\n', delim='\t'):
 
 dihedralcoeffs = [2.1701+0.0000j, 0.7294+0.0152j, -0.4723-0.7341j,
     -0.0022+0.0097j, 0.0272+0.1575j, -0.0295+0.0063j, -0.0298-0.0243j]
+if opts.newdihedrals:
+    dihedralcoeffs = [0.0+0.0j, -0.3824-0.0880j, 0.1178-0.0099j, -0.0304-0.0148j]
+#dihedralcoeffs = [0,0, 0.0 + 0.2j]
+
 # Where that corresponds to a potential of the form 
 # V(theta) = (sum over n from 0 to 6) Re(A_n) * cos(n theta) + Im(A_n) * sin(n theta).
 dihedralcos = [n.real for n in dihedralcoeffs]
@@ -102,18 +110,22 @@ masses = {'ALA': 71.0779, 'ARG': 157.19362, 'ASN': 114.10264,
 
 #from pairsCOM:
 #radius, n, epsilon = 4.21771939946, 1.27173585374, 1.88531484851
-radius, epsilon = 4.8, 1.
+radius, epsilon = opts.LJradius, 1.
 sigcut = 2.5
 
 bondlen, bondstd = 3.988, 0.024
 angmean, angstd = 2.058, 0.189
+if opts.newbonds:
+    bondlen, bondstd = 3.61174679048, 0.242683178422
+if opts.newangles:
+    angmean, angstd = 2.2820824993, 0.425869565975
 
 # ε_ES
 # comes from using 293K, angstrom, and e_charge as standard units
 # (e_charge^2)/(4pi 80 electric_constant angstrom boltzmann (293K))
 #                    ^ 80 comes from relative permittivity of water
 chargek = 7.1288713
-charges = dict(ARG=1.0, LYS=1.0, HIS=.1, ASP=-1, GLU=-1.0)
+charges = dict(ARG=1.0, LYS=1.0, HIS=.1, ASP=-1.0, GLU=-1.0)
 
 ########################################################################
 # Get hydrophobicity values
@@ -144,7 +156,7 @@ else:
 
 # uses σ=radius for the definition of α to work; assumes α=1, 
 # lets CGbb.py figure that out
-Hcoefflist = [h * chargek/radius for h in Hcoefflist]
+Hcoefflist = [h for h in Hcoefflist]
 
 #-----------------------------------------------------------------------
 # Join into a table

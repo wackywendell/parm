@@ -1,11 +1,20 @@
 #include "vecrand.hpp"
 
 engine randengine;
-distribution normaldist(0,1);
-generator gauss(randengine, normaldist);
+normdistribution mynormaldistribution(0,1);
+normgenerator gauss(randengine, mynormaldistribution);
+lindistribution mylineardistribution;
+lingenerator uniformrand(randengine, mylineardistribution);
+// Note: there also exists the 'uniform_on_sphere' distribution
+// See http://www.boost.org/doc/libs/1_53_0/doc/html/boost_random/reference.html
+
 
 Vec rand3d(){
     return Vec(gauss(), gauss(), gauss());
+}
+
+Vec randVecBoxed(){
+    return Vec(uniformrand(), uniformrand(), uniformrand());
 }
 
 void seed(unsigned int n){

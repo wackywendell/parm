@@ -209,7 +209,6 @@ class Vector2 : public Numvector<T, 2> {
 
 };
 
-
 //~ typedef float C;
 template<class C>
 class Matrix : public Nvector<Vector<C>,3> {
