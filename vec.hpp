@@ -194,6 +194,13 @@ class Vector2 : public Numvector<T, 2> {
         template <class U> Vector2& operator*=(const U rhs);
         template <class U> Vector2& operator/=(const U rhs);
         
+        Vector2 rotate(uint i);
+        inline Vector2 flip(){return Vector2(gety(), getx());};
+        inline Vector2 rotateflip(uint i){
+            if((i / 4) % 2 == 1) return flip().rotate(i-4);
+            return rotate(i-4);
+        };
+        
         static T angle(const Vector2 &dx1, const Vector2 &dx2){
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
@@ -432,6 +439,14 @@ Vector2<T>& Vector2<T>::operator/=(const U rhs){
     Nvector<T,2>::vals[0] /= rhs;
     Nvector<T,2>::vals[1] /= rhs;
     return *this;
+}
+
+template <class T>
+Vector2<T> Vector2<T>::rotate(uint i){
+    if(i % 4 == 0) return (*this);
+    else if(i % 4 == 1) return Vector2(gety(), -getx());
+    else if(i % 4 == 2) return Vector2(-getx(), -gety());
+    else return Vector2(-gety(), getx());
 }
 
 template <class U>

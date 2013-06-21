@@ -3,6 +3,8 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <list>
+#include <algorithm>
 #include <cassert>
 #include <climits>
 
@@ -753,12 +755,6 @@ struct forcepair {
     Vec fij;
 };
 
-class interactionpairs : public interaction {
-    public:
-        virtual void setForces(Box *box, void callback(forcepair*))=0;
-        virtual ~interactionpairs(){};
-};
-
 struct forcepairx {
     atom *a1, *a2;
     flt xij;
@@ -776,6 +772,7 @@ inline fpairxFunct::~fpairxFunct() { }  // defined even though it's pure virtual
 
 class interactionpairsx : public interaction {
     public:
+        using interaction::setForces;
         virtual void setForces(Box *box, fpairxFunct*)=0;
         virtual ~interactionpairsx(){};
 };
@@ -898,7 +895,7 @@ class neighborlist : public statetracker{
 };
 
 template <class A, class P>
-class NListed : public interactionpairs {
+class NListed : public interaction {
     // neighborlist keeps track of atom* pairs within a particular distance.
     // NListed keeps track of atoms with additional properties
     // that interact through a particular interaction.
@@ -936,7 +933,6 @@ class NListed : public interactionpairs {
         inline flt energy_pair(P pair, Box *box){return pair.energy(box);}; // This may need to be written!
         void setForces(Box *box);
         flt setForcesGetPressure(Box *box);
-        void setForces(Box *box, void callback(forcepair*));
         inline Vec forces_pair(P pair, Box *box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         neighborlist *nlist(){return neighbors;};
@@ -1545,21 +1541,21 @@ void NListed<A, P>::setForces(Box *box){
     }
 };
 
-template <class A, class P>
-void NListed<A, P>::setForces(Box *box, void callback(forcepair*)){
-    update_pairs(); // make sure the LJpairs match the neighbor list ones
-    forcepair myfpair;
-    typename vector<P>::iterator it;
-    for(it = pairs.begin(); it != pairs.end(); it++){
-        myfpair.a1 = it->atom1.pointer();
-        myfpair.a2 = it->atom2.pointer();
-        myfpair.fij = forces_pair(*it, box);
-        callback(&myfpair);
-        it->atom1.f() += myfpair.fij;
-        it->atom2.f() -= myfpair.fij;
-        //~ assert(f.sq() < 1000000);
-    }
-};
+//~ template <class A, class P>
+//~ void NListed<A, P>::setForces(Box *box, void callback(forcepair*)){
+    //~ update_pairs(); // make sure the LJpairs match the neighbor list ones
+    //~ forcepair myfpair;
+    //~ typename vector<P>::iterator it;
+    //~ for(it = pairs.begin(); it != pairs.end(); it++){
+        //~ myfpair.a1 = it->atom1.pointer();
+        //~ myfpair.a2 = it->atom2.pointer();
+        //~ myfpair.fij = forces_pair(*it, box);
+        //~ callback(&myfpair);
+        //~ it->atom1.f() += myfpair.fij;
+        //~ it->atom2.f() -= myfpair.fij;
+        //~ // assert(f.sq() < 1000000);
+    //~ }
+//~ };
 
 template <class A, class P>
 void NListedVirial<A, P>::setForces(Box *box, fpairxFunct* funct){
@@ -1643,5 +1639,160 @@ bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
     }
     return true;
 };
+
+////////////////////////////////////////////////////////////////////////
+// For comparing two jammed structures
+
+/* We have two packings, A and B, and want to know the sequence {A1, A2, A3...}
+ * such that particle A1 of packing 1 matches particle 1 of packing B.
+ * A jamminglist is a partial list; it has a list {A1 .. An}, with n / N
+ * particles assigned, with a total distance² of distsq.
+*/ 
+class jamminglist {
+    public:
+        vector<uint> assigned;
+        flt distsq;
+        
+        jamminglist() : assigned(), distsq(0){};
+        jamminglist(const jamminglist& other) 
+            : assigned(other.assigned), distsq(other.distsq){};
+        jamminglist(const jamminglist& other, uint expand, flt addeddist)
+            : assigned(other.size() + 1, 0), distsq(other.distsq + addeddist){
+            for(uint i=0; i < other.size(); i++){
+                assigned[i] = other.assigned[i];
+            }
+            assigned[assigned.size()-1] = expand;
+        }
+        inline uint size() const {return assigned.size();};
+        
+        inline bool operator<(const jamminglist& other ){
+            return distsq < other.distsq;
+        }
+};
+
+class jammingtree {
+    private:
+        Box *box;
+        list<jamminglist> jlists;
+        vector<Vec> A;
+        vector<Vec> B;
+    public:
+        jammingtree(Box *box, vector<Vec>& A, vector<Vec>& B)
+            : box(box), jlists(), A(A), B(B) {
+            jlists.push_back(jamminglist());
+            assert(A.size() <= B.size());
+        };
+
+        bool expand(){
+            jamminglist curjlist = jlists.front();
+            vector<uint>& curlist = curjlist.assigned;
+            if(curlist.size() >= A.size()){
+                //~ cout << "List already too big\n";
+                return false;
+            }
+            
+            list<jamminglist> newlists = list<jamminglist>();
+            for(uint i=0; i < B.size(); i++){
+                vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
+                //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
+                if (found != curlist.end()){
+                    //~ cout << "Found " << i << "\n";
+                    //cout << found << '\n';
+                    continue;
+                }
+                flt newdist = box->diff(A[curlist.size()], B[i]).sq();
+                jamminglist newjlist = jamminglist(curjlist, i, newdist);
+                newlists.push_back(newjlist);
+                //~ cout << "Made " << i << "\n";
+            }
+            
+            if(newlists.size() <= 0){
+                //~ cout << "No lists made\n";
+                return false;
+            }
+            //~ cout << "Have " << newlists.size() << "\n";
+            newlists.sort();
+            //~ cout << "Sorted.\n";
+            jlists.pop_front();
+            //~ cout << "Popped.\n";
+            jlists.merge(newlists);
+            //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
+            return true;
+        }
+        bool expand(uint n){
+            bool retval=false;
+            for(uint i=0; i<n; i++){
+                retval = expand();
+            }
+            return retval;
+        }
+        list<jamminglist> &mylist(){return jlists;};
+        list<jamminglist> copylist(){return jlists;};
+        
+        jamminglist curbest(){
+            jamminglist j = jamminglist(jlists.front());
+            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
+            //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
+            //~ cout << '\n';
+            return j;
+            //return jamminglist(jlists.front());
+            };
+        uint size(){return jlists.size();};
+};
+
+#ifdef VEC2D
+
+class jamminglistrot : public jamminglist {
+    public:
+        uint rotation;
+        
+        jamminglistrot() : jamminglist(), rotation(0){};
+        jamminglistrot(uint rot) : jamminglist(), rotation(rot){};
+        jamminglistrot(const jamminglistrot& other) 
+            : jamminglist(other), rotation(other.rotation){};
+        jamminglistrot(const jamminglistrot& other, uint expand, flt addeddist)
+            : jamminglist(other, expand, addeddist), rotation(other.rotation){};
+};
+
+// Includes rotations, flips, and translations.
+class jammingtree2 {
+    private:
+        Box *box;
+        list<jamminglistrot> jlists;
+        vector<Vec> A;
+        vector<vector<Vec> > Bs;
+    public:
+        // make all 8 possible rotations / flips
+        // then subtract off all possible COMVs
+        jammingtree2(Box *box, vector<Vec>& A, vector<Vec>& B);
+        flt distance(jamminglistrot& jlist);
+        list<jamminglistrot> expand(jamminglistrot curjlist);
+        
+        bool expand();
+        
+        bool expand(uint n){
+            bool retval=false;
+            for(uint i=0; i<n; i++){
+                retval = expand();
+            }
+            return retval;
+        }
+        list<jamminglistrot> &mylist(){return jlists;};
+        list<jamminglistrot> copylist(){return jlists;};
+        
+        jamminglist curbest(){
+            jamminglist j = jamminglist(jlists.front());
+            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
+            //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
+            //~ cout << '\n';
+            return j;
+            //return jamminglist(jlists.front());
+            };
+        uint size(){return jlists.size();};
+};
+
+    
+
+#endif
 
 #endif

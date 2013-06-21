@@ -447,20 +447,20 @@ class _Numvector2(_Nvector2):
 _Numvector2_swigregister = _sim2d._Numvector2_swigregister
 _Numvector2_swigregister(_Numvector2)
 
-class Vec(_Numvector3):
-    """Proxy of C++ Vector<(double)> class"""
+class Vec(_Numvector2):
+    """Proxy of C++ Vector2<(double)> class"""
     __swig_setmethods__ = {}
-    for _s in [_Numvector3]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [_Numvector2]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Vec, name, value)
     __swig_getmethods__ = {}
-    for _s in [_Numvector3]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [_Numvector2]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, Vec, name)
     def __init__(self, *args): 
         """
-        __init__(Vector<(double)> self) -> Vec
-        __init__(Vector<(double)> self, double const a, double const b, double const c) -> Vec
-        __init__(Vector<(double)> self, _Numvector3 rhs) -> Vec
-        __init__(Vector<(double)> self, _Nvector3 rhs) -> Vec
+        __init__(Vector2<(double)> self) -> Vec
+        __init__(Vector2<(double)> self, double const a, double const b) -> Vec
+        __init__(Vector2<(double)> self, _Numvector2 rhs) -> Vec
+        __init__(Vector2<(double)> self, _Nvector2 rhs) -> Vec
         """
         this = _sim2d.new_Vec(*args)
         try: self.this.append(this)
@@ -473,10 +473,6 @@ class Vec(_Numvector3):
         """gety(Vec self) -> double const"""
         return _sim2d.Vec_gety(self)
 
-    def getz(self) -> "double const" :
-        """getz(Vec self) -> double const"""
-        return _sim2d.Vec_getz(self)
-
     def setx(self, *args) -> "void" :
         """setx(Vec self, double const a)"""
         return _sim2d.Vec_setx(self, *args)
@@ -485,41 +481,53 @@ class Vec(_Numvector3):
         """sety(Vec self, double const b)"""
         return _sim2d.Vec_sety(self, *args)
 
-    def setz(self, *args) -> "void" :
-        """setz(Vec self, double const c)"""
-        return _sim2d.Vec_setz(self, *args)
-
     def set(self, *args) -> "void" :
-        """set(Vec self, double const a, double const b, double const c)"""
+        """set(Vec self, double const a, double const b)"""
         return _sim2d.Vec_set(self, *args)
 
-    def __neg__(self) -> "Vector< double >" :
+    def __neg__(self) -> "Vector2< double >" :
         """__neg__(Vec self) -> Vec"""
         return _sim2d.Vec___neg__(self)
 
-    def __add__(self, *args) -> "Vector< double >" :
+    def __add__(self, *args) -> "Vector2< double >" :
         """__add__(Vec self, Vec rhs) -> Vec"""
         return _sim2d.Vec___add__(self, *args)
 
-    def __sub__(self, *args) -> "Vector< double >" :
+    def __sub__(self, *args) -> "Vector2< double >" :
         """__sub__(Vec self, Vec rhs) -> Vec"""
         return _sim2d.Vec___sub__(self, *args)
 
-    def cross(self, *args) -> "Vector< double >" :
-        """cross(Vec self, Vec rhs) -> Vec"""
+    def cross(self, *args) -> "double" :
+        """cross(Vec self, Vec rhs) -> double"""
         return _sim2d.Vec_cross(self, *args)
 
-    def norm(self) -> "Vector< double >" :
+    def perp(self) -> "Vector2< double >" :
+        """perp(Vec self) -> Vec"""
+        return _sim2d.Vec_perp(self)
+
+    def norm(self) -> "Vector2< double >" :
         """norm(Vec self) -> Vec"""
         return _sim2d.Vec_norm(self)
 
-    def __isub__(self, *args) -> "Vector< double > &" :
+    def __isub__(self, *args) -> "Vector2< double > &" :
         """__isub__(Vec self, Vec rhs) -> Vec"""
         return _sim2d.Vec___isub__(self, *args)
 
-    def __iadd__(self, *args) -> "Vector< double > &" :
+    def __iadd__(self, *args) -> "Vector2< double > &" :
         """__iadd__(Vec self, Vec rhs) -> Vec"""
         return _sim2d.Vec___iadd__(self, *args)
+
+    def rotate(self, *args) -> "Vector2< double >" :
+        """rotate(Vec self, uint i) -> Vec"""
+        return _sim2d.Vec_rotate(self, *args)
+
+    def flip(self) -> "Vector2< double >" :
+        """flip(Vec self) -> Vec"""
+        return _sim2d.Vec_flip(self)
+
+    def rotateflip(self, *args) -> "Vector2< double >" :
+        """rotateflip(Vec self, uint i) -> Vec"""
+        return _sim2d.Vec_rotateflip(self, *args)
 
     def angle(*args) -> "double" :
         """
@@ -530,15 +538,6 @@ class Vec(_Numvector3):
 
     if _newclass:angle = staticmethod(angle)
     __swig_getmethods__["angle"] = lambda x: angle
-    def dihedral(*args) -> "double" :
-        """
-        dihedral(Vec dx1, Vec dx2, Vec dx3) -> double
-        dihedral(Vec x1, Vec x2, Vec x3, Vec x4) -> double
-        """
-        return _sim2d.Vec_dihedral(*args)
-
-    if _newclass:dihedral = staticmethod(dihedral)
-    __swig_getmethods__["dihedral"] = lambda x: dihedral
     __swig_destroy__ = _sim2d.delete_Vec
     __del__ = lambda self : None;
     def __str__(self) -> "char *" :
@@ -549,11 +548,11 @@ class Vec(_Numvector3):
         """__repr__(Vec self) -> char *"""
         return _sim2d.Vec___repr__(self)
 
-    def __truediv__(self, *args) -> "Vector< double >" :
+    def __truediv__(self, *args) -> "Vector2< double >" :
         """__truediv__(Vec self, double const n) -> Vec"""
         return _sim2d.Vec___truediv__(self, *args)
 
-    def __mul__(self, *args) -> "Vector< double >" :
+    def __mul__(self, *args) -> "Vector2< double >" :
         """
         __mul__(Vec self, Vec rhs) -> double
         __mul__(Vec self, double const n) -> Vec
@@ -568,10 +567,6 @@ class Vec(_Numvector3):
     def Y(self):
         return self.gety()
 
-    @property
-    def Z(self):
-        return self.getz()
-
 Vec_swigregister = _sim2d.Vec_swigregister
 Vec_swigregister(Vec)
 
@@ -582,110 +577,8 @@ def Vec_angle(*args) -> "double" :
     """
   return _sim2d.Vec_angle(*args)
 
-def Vec_dihedral(*args) -> "double" :
-  """
-    dihedral(Vec dx1, Vec dx2, Vec dx3) -> double
-    Vec_dihedral(Vec x1, Vec x2, Vec x3, Vec x4) -> double
-    """
-  return _sim2d.Vec_dihedral(*args)
-
-class _MatrixBase(_object):
-    """Proxy of C++ Nvector<(Vector<(double)>,3)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _MatrixBase, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, _MatrixBase, name)
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        """
-        __init__(Nvector<(Vector<(double)>,3)> self) -> _MatrixBase
-        __init__(Nvector<(Vector<(double)>,3)> self, _MatrixBase rhs) -> _MatrixBase
-        __init__(Nvector<(Vector<(double)>,3)> self, Vec locs) -> _MatrixBase
-        """
-        this = _sim2d.new__MatrixBase(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def get(self, *args) -> "Vector< double > const &" :
-        """get(_MatrixBase self, unsigned int const n) -> Vec"""
-        return _sim2d._MatrixBase_get(self, *args)
-
-    def set(self, *args) -> "void" :
-        """set(_MatrixBase self, unsigned int const n, Vec a)"""
-        return _sim2d._MatrixBase_set(self, *args)
-
-    def len(self) -> "unsigned int" :
-        """len(_MatrixBase self) -> unsigned int"""
-        return _sim2d._MatrixBase_len(self)
-
-    def __iadd__(self, *args) -> "Nvector< Vector< double >,3 > &" :
-        """__iadd__(_MatrixBase self, _MatrixBase rhs) -> _MatrixBase"""
-        return _sim2d._MatrixBase___iadd__(self, *args)
-
-    def __isub__(self, *args) -> "Nvector< Vector< double >,3 > &" :
-        """__isub__(_MatrixBase self, _MatrixBase rhs) -> _MatrixBase"""
-        return _sim2d._MatrixBase___isub__(self, *args)
-
-    def __neg__(self) -> "Nvector< Vector< double >,3 >" :
-        """__neg__(_MatrixBase self) -> _MatrixBase"""
-        return _sim2d._MatrixBase___neg__(self)
-
-    def __add__(self, *args) -> "Nvector< Vector< double >,3 >" :
-        """__add__(_MatrixBase self, _MatrixBase rhs) -> _MatrixBase"""
-        return _sim2d._MatrixBase___add__(self, *args)
-
-    def __sub__(self, *args) -> "Nvector< Vector< double >,3 >" :
-        """__sub__(_MatrixBase self, _MatrixBase rhs) -> _MatrixBase"""
-        return _sim2d._MatrixBase___sub__(self, *args)
-
-    def begin(self) -> "Vector< double > *" :
-        """begin(_MatrixBase self) -> Vec"""
-        return _sim2d._MatrixBase_begin(self)
-
-    def end(self) -> "Vector< double > *" :
-        """end(_MatrixBase self) -> Vec"""
-        return _sim2d._MatrixBase_end(self)
-
-    __swig_destroy__ = _sim2d.delete__MatrixBase
-    __del__ = lambda self : None;
-    def __mul__(self, *args) -> "Nvector< Vector< double >,3 >" :
-        """__mul__(_MatrixBase self, double const rhs) -> _MatrixBase"""
-        return _sim2d._MatrixBase___mul__(self, *args)
-
-    def __div__(self, *args) -> "Nvector< Vector< double >,3 >" :
-        """__div__(_MatrixBase self, double const rhs) -> _MatrixBase"""
-        return _sim2d._MatrixBase___div__(self, *args)
-
-    def __truediv__(self, *args) -> "Nvector< Vector< double >,3 >" :
-        """__truediv__(_MatrixBase self, double const n) -> _MatrixBase"""
-        return _sim2d._MatrixBase___truediv__(self, *args)
-
-    def __getitem__(self, *args) -> "Vector< double >" :
-        """__getitem__(_MatrixBase self, unsigned int const n) -> Vec"""
-        return _sim2d._MatrixBase___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """__setitem__(_MatrixBase self, unsigned int const n, Vec val)"""
-        return _sim2d._MatrixBase___setitem__(self, *args)
-
-    def __len__(self) -> "unsigned int" :
-        """__len__(_MatrixBase self) -> unsigned int"""
-        return _sim2d._MatrixBase___len__(self)
-
-    #~ def __setitem__(self, n, val):
-        #~ return self.set(n, val)
-
-    def __iter__(self):
-        for i in range(len(self)):
-            yield self.get(i)
-
-    #~ def __len__(self):
-        #~ return self.len()
-
-_MatrixBase_swigregister = _sim2d._MatrixBase_swigregister
-_MatrixBase_swigregister(_MatrixBase)
-
 class vecptrvector(_object):
-    """Proxy of C++ vector<(p.Vector<(double)>)> class"""
+    """Proxy of C++ vector<(p.Vector2<(double)>)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, vecptrvector, name, value)
     __swig_getmethods__ = {}
@@ -704,49 +597,49 @@ class vecptrvector(_object):
         """__bool__(vecptrvector self) -> bool"""
         return _sim2d.vecptrvector___bool__(self)
 
-    def __len__(self) -> "vector< Vector< double > * >::size_type" :
-        """__len__(vecptrvector self) -> vector< Vector< double > * >::size_type"""
+    def __len__(self) -> "vector< Vector2< double > * >::size_type" :
+        """__len__(vecptrvector self) -> vector< Vector2< double > * >::size_type"""
         return _sim2d.vecptrvector___len__(self)
 
-    def pop(self) -> "vector< Vector< double > * >::value_type" :
+    def pop(self) -> "vector< Vector2< double > * >::value_type" :
         """pop(vecptrvector self) -> Vec"""
         return _sim2d.vecptrvector_pop(self)
 
-    def __getslice__(self, *args) -> "std::vector< Vector< double > *,std::allocator< Vector< double > * > > *" :
-        """__getslice__(vecptrvector self, vector< Vector< double > * >::difference_type i, vector< Vector< double > * >::difference_type j) -> std::vector< Vector< double > *,std::allocator< Vector< double > * > > *"""
+    def __getslice__(self, *args) -> "std::vector< Vector2< double > *,std::allocator< Vector2< double > * > > *" :
+        """__getslice__(vecptrvector self, vector< Vector2< double > * >::difference_type i, vector< Vector2< double > * >::difference_type j) -> std::vector< Vector2< double > *,std::allocator< Vector2< double > * > > *"""
         return _sim2d.vecptrvector___getslice__(self, *args)
 
     def __setslice__(self, *args) -> "void" :
         """
-        __setslice__(vecptrvector self, vector< Vector< double > * >::difference_type i, vector< Vector< double > * >::difference_type j, 
-            std::vector< Vector< double > *,std::allocator< Vector< double > * > > const & v=std::vector< Vector< double > *,std::allocator< Vector< double > * > >())
-        __setslice__(vecptrvector self, vector< Vector< double > * >::difference_type i, vector< Vector< double > * >::difference_type j)
+        __setslice__(vecptrvector self, vector< Vector2< double > * >::difference_type i, vector< Vector2< double > * >::difference_type j, 
+            std::vector< Vector2< double > *,std::allocator< Vector2< double > * > > const & v=std::vector< Vector2< double > *,std::allocator< Vector2< double > * > >())
+        __setslice__(vecptrvector self, vector< Vector2< double > * >::difference_type i, vector< Vector2< double > * >::difference_type j)
         """
         return _sim2d.vecptrvector___setslice__(self, *args)
 
     def __delslice__(self, *args) -> "void" :
-        """__delslice__(vecptrvector self, vector< Vector< double > * >::difference_type i, vector< Vector< double > * >::difference_type j)"""
+        """__delslice__(vecptrvector self, vector< Vector2< double > * >::difference_type i, vector< Vector2< double > * >::difference_type j)"""
         return _sim2d.vecptrvector___delslice__(self, *args)
 
     def __delitem__(self, *args) -> "void" :
         """
-        __delitem__(vecptrvector self, vector< Vector< double > * >::difference_type i)
+        __delitem__(vecptrvector self, vector< Vector2< double > * >::difference_type i)
         __delitem__(vecptrvector self, PySliceObject * slice)
         """
         return _sim2d.vecptrvector___delitem__(self, *args)
 
-    def __getitem__(self, *args) -> "vector< Vector< double > * >::value_type" :
+    def __getitem__(self, *args) -> "vector< Vector2< double > * >::value_type" :
         """
-        __getitem__(vecptrvector self, PySliceObject * slice) -> std::vector< Vector< double > *,std::allocator< Vector< double > * > >
-        __getitem__(vecptrvector self, vector< Vector< double > * >::difference_type i) -> Vec
+        __getitem__(vecptrvector self, PySliceObject * slice) -> std::vector< Vector2< double > *,std::allocator< Vector2< double > * > >
+        __getitem__(vecptrvector self, vector< Vector2< double > * >::difference_type i) -> Vec
         """
         return _sim2d.vecptrvector___getitem__(self, *args)
 
     def __setitem__(self, *args) -> "void" :
         """
-        __setitem__(vecptrvector self, PySliceObject * slice, std::vector< Vector< double > *,std::allocator< Vector< double > * > > const & v)
+        __setitem__(vecptrvector self, PySliceObject * slice, std::vector< Vector2< double > *,std::allocator< Vector2< double > * > > const & v)
         __setitem__(vecptrvector self, PySliceObject * slice)
-        __setitem__(vecptrvector self, vector< Vector< double > * >::difference_type i, Vec x)
+        __setitem__(vecptrvector self, vector< Vector2< double > * >::difference_type i, Vec x)
         """
         return _sim2d.vecptrvector___setitem__(self, *args)
 
@@ -758,8 +651,8 @@ class vecptrvector(_object):
         """empty(vecptrvector self) -> bool"""
         return _sim2d.vecptrvector_empty(self)
 
-    def size(self) -> "vector< Vector< double > * >::size_type" :
-        """size(vecptrvector self) -> vector< Vector< double > * >::size_type"""
+    def size(self) -> "vector< Vector2< double > * >::size_type" :
+        """size(vecptrvector self) -> vector< Vector2< double > * >::size_type"""
         return _sim2d.vecptrvector_size(self)
 
     def clear(self) -> "void" :
@@ -770,43 +663,43 @@ class vecptrvector(_object):
         """swap(vecptrvector self, vecptrvector v)"""
         return _sim2d.vecptrvector_swap(self, *args)
 
-    def get_allocator(self) -> "vector< Vector< double > * >::allocator_type" :
-        """get_allocator(vecptrvector self) -> vector< Vector< double > * >::allocator_type"""
+    def get_allocator(self) -> "vector< Vector2< double > * >::allocator_type" :
+        """get_allocator(vecptrvector self) -> vector< Vector2< double > * >::allocator_type"""
         return _sim2d.vecptrvector_get_allocator(self)
 
-    def begin(self) -> "vector< Vector< double > * >::iterator" :
-        """begin(vecptrvector self) -> vector< Vector< double > * >::iterator"""
+    def begin(self) -> "vector< Vector2< double > * >::iterator" :
+        """begin(vecptrvector self) -> vector< Vector2< double > * >::iterator"""
         return _sim2d.vecptrvector_begin(self)
 
-    def end(self) -> "vector< Vector< double > * >::iterator" :
-        """end(vecptrvector self) -> vector< Vector< double > * >::iterator"""
+    def end(self) -> "vector< Vector2< double > * >::iterator" :
+        """end(vecptrvector self) -> vector< Vector2< double > * >::iterator"""
         return _sim2d.vecptrvector_end(self)
 
-    def rbegin(self) -> "vector< Vector< double > * >::reverse_iterator" :
-        """rbegin(vecptrvector self) -> vector< Vector< double > * >::reverse_iterator"""
+    def rbegin(self) -> "vector< Vector2< double > * >::reverse_iterator" :
+        """rbegin(vecptrvector self) -> vector< Vector2< double > * >::reverse_iterator"""
         return _sim2d.vecptrvector_rbegin(self)
 
-    def rend(self) -> "vector< Vector< double > * >::reverse_iterator" :
-        """rend(vecptrvector self) -> vector< Vector< double > * >::reverse_iterator"""
+    def rend(self) -> "vector< Vector2< double > * >::reverse_iterator" :
+        """rend(vecptrvector self) -> vector< Vector2< double > * >::reverse_iterator"""
         return _sim2d.vecptrvector_rend(self)
 
     def pop_back(self) -> "void" :
         """pop_back(vecptrvector self)"""
         return _sim2d.vecptrvector_pop_back(self)
 
-    def erase(self, *args) -> "vector< Vector< double > * >::iterator" :
+    def erase(self, *args) -> "vector< Vector2< double > * >::iterator" :
         """
-        erase(vecptrvector self, vector< Vector< double > * >::iterator pos) -> vector< Vector< double > * >::iterator
-        erase(vecptrvector self, vector< Vector< double > * >::iterator first, vector< Vector< double > * >::iterator last) -> vector< Vector< double > * >::iterator
+        erase(vecptrvector self, vector< Vector2< double > * >::iterator pos) -> vector< Vector2< double > * >::iterator
+        erase(vecptrvector self, vector< Vector2< double > * >::iterator first, vector< Vector2< double > * >::iterator last) -> vector< Vector2< double > * >::iterator
         """
         return _sim2d.vecptrvector_erase(self, *args)
 
     def __init__(self, *args): 
         """
-        __init__(vector<(p.Vector<(double)>)> self) -> vecptrvector
-        __init__(vector<(p.Vector<(double)>)> self, vecptrvector arg2) -> vecptrvector
-        __init__(vector<(p.Vector<(double)>)> self, vector< Vector< double > * >::size_type size) -> vecptrvector
-        __init__(vector<(p.Vector<(double)>)> self, vector< Vector< double > * >::size_type size, Vec value) -> vecptrvector
+        __init__(vector<(p.Vector2<(double)>)> self) -> vecptrvector
+        __init__(vector<(p.Vector2<(double)>)> self, vecptrvector arg2) -> vecptrvector
+        __init__(vector<(p.Vector2<(double)>)> self, vector< Vector2< double > * >::size_type size) -> vecptrvector
+        __init__(vector<(p.Vector2<(double)>)> self, vector< Vector2< double > * >::size_type size, Vec value) -> vecptrvector
         """
         this = _sim2d.new_vecptrvector(*args)
         try: self.this.append(this)
@@ -815,39 +708,39 @@ class vecptrvector(_object):
         """push_back(vecptrvector self, Vec x)"""
         return _sim2d.vecptrvector_push_back(self, *args)
 
-    def front(self) -> "vector< Vector< double > * >::value_type" :
+    def front(self) -> "vector< Vector2< double > * >::value_type" :
         """front(vecptrvector self) -> Vec"""
         return _sim2d.vecptrvector_front(self)
 
-    def back(self) -> "vector< Vector< double > * >::value_type" :
+    def back(self) -> "vector< Vector2< double > * >::value_type" :
         """back(vecptrvector self) -> Vec"""
         return _sim2d.vecptrvector_back(self)
 
     def assign(self, *args) -> "void" :
-        """assign(vecptrvector self, vector< Vector< double > * >::size_type n, Vec x)"""
+        """assign(vecptrvector self, vector< Vector2< double > * >::size_type n, Vec x)"""
         return _sim2d.vecptrvector_assign(self, *args)
 
     def resize(self, *args) -> "void" :
         """
-        resize(vecptrvector self, vector< Vector< double > * >::size_type new_size)
-        resize(vecptrvector self, vector< Vector< double > * >::size_type new_size, Vec x)
+        resize(vecptrvector self, vector< Vector2< double > * >::size_type new_size)
+        resize(vecptrvector self, vector< Vector2< double > * >::size_type new_size, Vec x)
         """
         return _sim2d.vecptrvector_resize(self, *args)
 
     def insert(self, *args) -> "void" :
         """
-        insert(vecptrvector self, vector< Vector< double > * >::iterator pos, Vec x) -> vector< Vector< double > * >::iterator
-        insert(vecptrvector self, vector< Vector< double > * >::iterator pos, vector< Vector< double > * >::size_type n, 
+        insert(vecptrvector self, vector< Vector2< double > * >::iterator pos, Vec x) -> vector< Vector2< double > * >::iterator
+        insert(vecptrvector self, vector< Vector2< double > * >::iterator pos, vector< Vector2< double > * >::size_type n, 
             Vec x)
         """
         return _sim2d.vecptrvector_insert(self, *args)
 
     def reserve(self, *args) -> "void" :
-        """reserve(vecptrvector self, vector< Vector< double > * >::size_type n)"""
+        """reserve(vecptrvector self, vector< Vector2< double > * >::size_type n)"""
         return _sim2d.vecptrvector_reserve(self, *args)
 
-    def capacity(self) -> "vector< Vector< double > * >::size_type" :
-        """capacity(vecptrvector self) -> vector< Vector< double > * >::size_type"""
+    def capacity(self) -> "vector< Vector2< double > * >::size_type" :
+        """capacity(vecptrvector self) -> vector< Vector2< double > * >::size_type"""
         return _sim2d.vecptrvector_capacity(self)
 
     __swig_destroy__ = _sim2d.delete_vecptrvector
@@ -855,40 +748,178 @@ class vecptrvector(_object):
 vecptrvector_swigregister = _sim2d.vecptrvector_swigregister
 vecptrvector_swigregister(vecptrvector)
 
-class Matr(_MatrixBase):
-    """Proxy of C++ Matrix<(double)> class"""
+class vecvector(collections.MutableSequence):
+    """Proxy of C++ vector<(Vector2<(double)>)> class"""
     __swig_setmethods__ = {}
-    for _s in [_MatrixBase]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Matr, name, value)
+    for _s in [collections.MutableSequence]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, vecvector, name, value)
     __swig_getmethods__ = {}
-    for _s in [_MatrixBase]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Matr, name)
+    for _s in [collections.MutableSequence]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, vecvector, name)
     __repr__ = _swig_repr
-    def dot(self, *args) -> "Vector< double >" :
-        """dot(Matr self, Vec v) -> Vec"""
-        return _sim2d.Matr_dot(self, *args)
+    def iterator(self) -> "swig::SwigPyIterator *" :
+        """iterator(vecvector self) -> SwigPyIterator"""
+        return _sim2d.vecvector_iterator(self)
 
-    def __mul__(self, *args) -> "Vector< double >" :
-        """__mul__(Matr self, Vec v) -> Vec"""
-        return _sim2d.Matr___mul__(self, *args)
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" :
+        """__nonzero__(vecvector self) -> bool"""
+        return _sim2d.vecvector___nonzero__(self)
 
-    def SymmetricInverse(self) -> "Matrix< double >" :
-        """SymmetricInverse(Matr self) -> Matr"""
-        return _sim2d.Matr_SymmetricInverse(self)
+    def __bool__(self) -> "bool" :
+        """__bool__(vecvector self) -> bool"""
+        return _sim2d.vecvector___bool__(self)
 
-    def det(self) -> "double" :
-        """det(Matr self) -> double"""
-        return _sim2d.Matr_det(self)
+    def __len__(self) -> "vector< Vector2< double > >::size_type" :
+        """__len__(vecvector self) -> vector< Vector2< double > >::size_type"""
+        return _sim2d.vecvector___len__(self)
 
-    def __init__(self): 
-        """__init__(Matrix<(double)> self) -> Matr"""
-        this = _sim2d.new_Matr()
+    def pop(self) -> "vector< Vector2< double > >::value_type" :
+        """pop(vecvector self) -> Vec"""
+        return _sim2d.vecvector_pop(self)
+
+    def __getslice__(self, *args) -> "std::vector< Vector2< double >,std::allocator< Vector2< double > > > *" :
+        """__getslice__(vecvector self, vector< Vector2< double > >::difference_type i, vector< Vector2< double > >::difference_type j) -> std::vector< Vector2< double >,std::allocator< Vector2< double > > > *"""
+        return _sim2d.vecvector___getslice__(self, *args)
+
+    def __setslice__(self, *args) -> "void" :
+        """
+        __setslice__(vecvector self, vector< Vector2< double > >::difference_type i, vector< Vector2< double > >::difference_type j, 
+            std::vector< Vector2< double >,std::allocator< Vector2< double > > > const & v=std::vector< Vector2< double >,std::allocator< Vector2< double > > >())
+        __setslice__(vecvector self, vector< Vector2< double > >::difference_type i, vector< Vector2< double > >::difference_type j)
+        """
+        return _sim2d.vecvector___setslice__(self, *args)
+
+    def __delslice__(self, *args) -> "void" :
+        """__delslice__(vecvector self, vector< Vector2< double > >::difference_type i, vector< Vector2< double > >::difference_type j)"""
+        return _sim2d.vecvector___delslice__(self, *args)
+
+    def __delitem__(self, *args) -> "void" :
+        """
+        __delitem__(vecvector self, vector< Vector2< double > >::difference_type i)
+        __delitem__(vecvector self, PySliceObject * slice)
+        """
+        return _sim2d.vecvector___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "vector< Vector2< double > >::value_type const &" :
+        """
+        __getitem__(vecvector self, PySliceObject * slice) -> std::vector< Vector2< double >,std::allocator< Vector2< double > > >
+        __getitem__(vecvector self, vector< Vector2< double > >::difference_type i) -> Vec
+        """
+        return _sim2d.vecvector___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void" :
+        """
+        __setitem__(vecvector self, PySliceObject * slice, std::vector< Vector2< double >,std::allocator< Vector2< double > > > const & v)
+        __setitem__(vecvector self, PySliceObject * slice)
+        __setitem__(vecvector self, vector< Vector2< double > >::difference_type i, Vec x)
+        """
+        return _sim2d.vecvector___setitem__(self, *args)
+
+    def append(self, *args) -> "void" :
+        """append(vecvector self, Vec x)"""
+        return _sim2d.vecvector_append(self, *args)
+
+    def empty(self) -> "bool" :
+        """empty(vecvector self) -> bool"""
+        return _sim2d.vecvector_empty(self)
+
+    def size(self) -> "vector< Vector2< double > >::size_type" :
+        """size(vecvector self) -> vector< Vector2< double > >::size_type"""
+        return _sim2d.vecvector_size(self)
+
+    def clear(self) -> "void" :
+        """clear(vecvector self)"""
+        return _sim2d.vecvector_clear(self)
+
+    def swap(self, *args) -> "void" :
+        """swap(vecvector self, vecvector v)"""
+        return _sim2d.vecvector_swap(self, *args)
+
+    def get_allocator(self) -> "vector< Vector2< double > >::allocator_type" :
+        """get_allocator(vecvector self) -> vector< Vector2< double > >::allocator_type"""
+        return _sim2d.vecvector_get_allocator(self)
+
+    def begin(self) -> "vector< Vector2< double > >::iterator" :
+        """begin(vecvector self) -> vector< Vector2< double > >::iterator"""
+        return _sim2d.vecvector_begin(self)
+
+    def end(self) -> "vector< Vector2< double > >::iterator" :
+        """end(vecvector self) -> vector< Vector2< double > >::iterator"""
+        return _sim2d.vecvector_end(self)
+
+    def rbegin(self) -> "vector< Vector2< double > >::reverse_iterator" :
+        """rbegin(vecvector self) -> vector< Vector2< double > >::reverse_iterator"""
+        return _sim2d.vecvector_rbegin(self)
+
+    def rend(self) -> "vector< Vector2< double > >::reverse_iterator" :
+        """rend(vecvector self) -> vector< Vector2< double > >::reverse_iterator"""
+        return _sim2d.vecvector_rend(self)
+
+    def pop_back(self) -> "void" :
+        """pop_back(vecvector self)"""
+        return _sim2d.vecvector_pop_back(self)
+
+    def erase(self, *args) -> "vector< Vector2< double > >::iterator" :
+        """
+        erase(vecvector self, vector< Vector2< double > >::iterator pos) -> vector< Vector2< double > >::iterator
+        erase(vecvector self, vector< Vector2< double > >::iterator first, vector< Vector2< double > >::iterator last) -> vector< Vector2< double > >::iterator
+        """
+        return _sim2d.vecvector_erase(self, *args)
+
+    def __init__(self, *args): 
+        """
+        __init__(vector<(Vector2<(double)>)> self) -> vecvector
+        __init__(vector<(Vector2<(double)>)> self, vecvector arg2) -> vecvector
+        __init__(vector<(Vector2<(double)>)> self, vector< Vector2< double > >::size_type size) -> vecvector
+        __init__(vector<(Vector2<(double)>)> self, vector< Vector2< double > >::size_type size, Vec value) -> vecvector
+        """
+        this = _sim2d.new_vecvector(*args)
         try: self.this.append(this)
         except: self.this = this
-    __swig_destroy__ = _sim2d.delete_Matr
+    def push_back(self, *args) -> "void" :
+        """push_back(vecvector self, Vec x)"""
+        return _sim2d.vecvector_push_back(self, *args)
+
+    def front(self) -> "vector< Vector2< double > >::value_type const &" :
+        """front(vecvector self) -> Vec"""
+        return _sim2d.vecvector_front(self)
+
+    def back(self) -> "vector< Vector2< double > >::value_type const &" :
+        """back(vecvector self) -> Vec"""
+        return _sim2d.vecvector_back(self)
+
+    def assign(self, *args) -> "void" :
+        """assign(vecvector self, vector< Vector2< double > >::size_type n, Vec x)"""
+        return _sim2d.vecvector_assign(self, *args)
+
+    def resize(self, *args) -> "void" :
+        """
+        resize(vecvector self, vector< Vector2< double > >::size_type new_size)
+        resize(vecvector self, vector< Vector2< double > >::size_type new_size, Vec x)
+        """
+        return _sim2d.vecvector_resize(self, *args)
+
+    def insert(self, *args) -> "void" :
+        """
+        insert(vecvector self, vector< Vector2< double > >::iterator pos, Vec x) -> vector< Vector2< double > >::iterator
+        insert(vecvector self, vector< Vector2< double > >::iterator pos, vector< Vector2< double > >::size_type n, 
+            Vec x)
+        """
+        return _sim2d.vecvector_insert(self, *args)
+
+    def reserve(self, *args) -> "void" :
+        """reserve(vecvector self, vector< Vector2< double > >::size_type n)"""
+        return _sim2d.vecvector_reserve(self, *args)
+
+    def capacity(self) -> "vector< Vector2< double > >::size_type" :
+        """capacity(vecvector self) -> vector< Vector2< double > >::size_type"""
+        return _sim2d.vecvector_capacity(self)
+
+    __swig_destroy__ = _sim2d.delete_vecvector
     __del__ = lambda self : None;
-Matr_swigregister = _sim2d.Matr_swigregister
-Matr_swigregister(Matr)
+vecvector_swigregister = _sim2d.vecvector_swigregister
+vecvector_swigregister(vecvector)
 
 class Pair(_Nvector2):
     """Proxy of C++ Numvector<(double,2)> class"""
@@ -952,17 +983,17 @@ class VecPair(_object):
         """
         __init__(Nvector<(Vec,2)> self) -> VecPair
         __init__(Nvector<(Vec,2)> self, VecPair rhs) -> VecPair
-        __init__(Nvector<(Vec,2)> self, Vec const [2] locs) -> VecPair
+        __init__(Nvector<(Vec,2)> self, Vec locs) -> VecPair
         """
         this = _sim2d.new_VecPair(*args)
         try: self.this.append(this)
         except: self.this = this
     def get(self, *args) -> "Vec const &" :
-        """get(VecPair self, unsigned int const n) -> Vec const &"""
+        """get(VecPair self, unsigned int const n) -> Vec"""
         return _sim2d.VecPair_get(self, *args)
 
     def set(self, *args) -> "void" :
-        """set(VecPair self, unsigned int const n, Vec const a)"""
+        """set(VecPair self, unsigned int const n, Vec a)"""
         return _sim2d.VecPair_set(self, *args)
 
     def len(self) -> "unsigned int" :
@@ -990,11 +1021,11 @@ class VecPair(_object):
         return _sim2d.VecPair___sub__(self, *args)
 
     def begin(self) -> "Vec *" :
-        """begin(VecPair self) -> Vec *"""
+        """begin(VecPair self) -> Vec"""
         return _sim2d.VecPair_begin(self)
 
     def end(self) -> "Vec *" :
-        """end(VecPair self) -> Vec *"""
+        """end(VecPair self) -> Vec"""
         return _sim2d.VecPair_end(self)
 
     __swig_destroy__ = _sim2d.delete_VecPair
@@ -1016,7 +1047,7 @@ class VecPair(_object):
         return _sim2d.VecPair___getitem__(self, *args)
 
     def __setitem__(self, *args) -> "void" :
-        """__setitem__(VecPair self, unsigned int const n, Vec const val)"""
+        """__setitem__(VecPair self, unsigned int const n, Vec val)"""
         return _sim2d.VecPair___setitem__(self, *args)
 
     def __len__(self) -> "unsigned int" :
@@ -1199,6 +1230,181 @@ class _atomarray4(_object):
     __del__ = lambda self : None;
 _atomarray4_swigregister = _sim2d._atomarray4_swigregister
 _atomarray4_swigregister(_atomarray4)
+
+class _jlist(collections.MutableSequence):
+    """Proxy of C++ list<(jamminglist)> class"""
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _jlist, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _jlist, name)
+    __repr__ = _swig_repr
+    def iterator(self) -> "swig::SwigPyIterator *" :
+        """iterator(_jlist self) -> SwigPyIterator"""
+        return _sim2d._jlist_iterator(self)
+
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" :
+        """__nonzero__(_jlist self) -> bool"""
+        return _sim2d._jlist___nonzero__(self)
+
+    def __bool__(self) -> "bool" :
+        """__bool__(_jlist self) -> bool"""
+        return _sim2d._jlist___bool__(self)
+
+    def __len__(self) -> "list< jamminglist >::size_type" :
+        """__len__(_jlist self) -> list< jamminglist >::size_type"""
+        return _sim2d._jlist___len__(self)
+
+    def pop(self) -> "list< jamminglist >::value_type" :
+        """pop(_jlist self) -> jamminglist"""
+        return _sim2d._jlist_pop(self)
+
+    def __getslice__(self, *args) -> "std::list< jamminglist,std::allocator< jamminglist > > *" :
+        """__getslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j) -> std::list< jamminglist,std::allocator< jamminglist > > *"""
+        return _sim2d._jlist___getslice__(self, *args)
+
+    def __setslice__(self, *args) -> "void" :
+        """
+        __setslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j, std::list< jamminglist,std::allocator< jamminglist > > const & v=std::list< jamminglist,std::allocator< jamminglist > >())
+        __setslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j)
+        """
+        return _sim2d._jlist___setslice__(self, *args)
+
+    def __delslice__(self, *args) -> "void" :
+        """__delslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j)"""
+        return _sim2d._jlist___delslice__(self, *args)
+
+    def __delitem__(self, *args) -> "void" :
+        """
+        __delitem__(_jlist self, list< jamminglist >::difference_type i)
+        __delitem__(_jlist self, PySliceObject * slice)
+        """
+        return _sim2d._jlist___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "list< jamminglist >::value_type const &" :
+        """
+        __getitem__(_jlist self, PySliceObject * slice) -> std::list< jamminglist,std::allocator< jamminglist > >
+        __getitem__(_jlist self, list< jamminglist >::difference_type i) -> jamminglist
+        """
+        return _sim2d._jlist___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void" :
+        """
+        __setitem__(_jlist self, PySliceObject * slice, std::list< jamminglist,std::allocator< jamminglist > > const & v)
+        __setitem__(_jlist self, PySliceObject * slice)
+        __setitem__(_jlist self, list< jamminglist >::difference_type i, jamminglist x)
+        """
+        return _sim2d._jlist___setitem__(self, *args)
+
+    def append(self, *args) -> "void" :
+        """append(_jlist self, jamminglist x)"""
+        return _sim2d._jlist_append(self, *args)
+
+    def empty(self) -> "bool" :
+        """empty(_jlist self) -> bool"""
+        return _sim2d._jlist_empty(self)
+
+    def size(self) -> "list< jamminglist >::size_type" :
+        """size(_jlist self) -> list< jamminglist >::size_type"""
+        return _sim2d._jlist_size(self)
+
+    def clear(self) -> "void" :
+        """clear(_jlist self)"""
+        return _sim2d._jlist_clear(self)
+
+    def swap(self, *args) -> "void" :
+        """swap(_jlist self, _jlist v)"""
+        return _sim2d._jlist_swap(self, *args)
+
+    def get_allocator(self) -> "list< jamminglist >::allocator_type" :
+        """get_allocator(_jlist self) -> list< jamminglist >::allocator_type"""
+        return _sim2d._jlist_get_allocator(self)
+
+    def begin(self) -> "list< jamminglist >::iterator" :
+        """begin(_jlist self) -> list< jamminglist >::iterator"""
+        return _sim2d._jlist_begin(self)
+
+    def end(self) -> "list< jamminglist >::iterator" :
+        """end(_jlist self) -> list< jamminglist >::iterator"""
+        return _sim2d._jlist_end(self)
+
+    def rbegin(self) -> "list< jamminglist >::reverse_iterator" :
+        """rbegin(_jlist self) -> list< jamminglist >::reverse_iterator"""
+        return _sim2d._jlist_rbegin(self)
+
+    def rend(self) -> "list< jamminglist >::reverse_iterator" :
+        """rend(_jlist self) -> list< jamminglist >::reverse_iterator"""
+        return _sim2d._jlist_rend(self)
+
+    def pop_back(self) -> "void" :
+        """pop_back(_jlist self)"""
+        return _sim2d._jlist_pop_back(self)
+
+    def erase(self, *args) -> "list< jamminglist >::iterator" :
+        """
+        erase(_jlist self, list< jamminglist >::iterator pos) -> list< jamminglist >::iterator
+        erase(_jlist self, list< jamminglist >::iterator first, list< jamminglist >::iterator last) -> list< jamminglist >::iterator
+        """
+        return _sim2d._jlist_erase(self, *args)
+
+    def __init__(self, *args): 
+        """
+        __init__(list<(jamminglist)> self) -> _jlist
+        __init__(list<(jamminglist)> self, _jlist arg2) -> _jlist
+        __init__(list<(jamminglist)> self, list< jamminglist >::size_type size) -> _jlist
+        __init__(list<(jamminglist)> self, list< jamminglist >::size_type size, jamminglist value) -> _jlist
+        """
+        this = _sim2d.new__jlist(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def push_back(self, *args) -> "void" :
+        """push_back(_jlist self, jamminglist x)"""
+        return _sim2d._jlist_push_back(self, *args)
+
+    def front(self) -> "list< jamminglist >::value_type const &" :
+        """front(_jlist self) -> jamminglist"""
+        return _sim2d._jlist_front(self)
+
+    def back(self) -> "list< jamminglist >::value_type const &" :
+        """back(_jlist self) -> jamminglist"""
+        return _sim2d._jlist_back(self)
+
+    def assign(self, *args) -> "void" :
+        """assign(_jlist self, list< jamminglist >::size_type n, jamminglist x)"""
+        return _sim2d._jlist_assign(self, *args)
+
+    def resize(self, *args) -> "void" :
+        """
+        resize(_jlist self, list< jamminglist >::size_type new_size)
+        resize(_jlist self, list< jamminglist >::size_type new_size, jamminglist x)
+        """
+        return _sim2d._jlist_resize(self, *args)
+
+    def insert(self, *args) -> "void" :
+        """
+        insert(_jlist self, list< jamminglist >::iterator pos, jamminglist x) -> list< jamminglist >::iterator
+        insert(_jlist self, list< jamminglist >::iterator pos, list< jamminglist >::size_type n, jamminglist x)
+        """
+        return _sim2d._jlist_insert(self, *args)
+
+    def pop_front(self) -> "void" :
+        """pop_front(_jlist self)"""
+        return _sim2d._jlist_pop_front(self)
+
+    def push_front(self, *args) -> "void" :
+        """push_front(_jlist self, jamminglist x)"""
+        return _sim2d._jlist_push_front(self, *args)
+
+    def reverse(self) -> "void" :
+        """reverse(_jlist self)"""
+        return _sim2d._jlist_reverse(self)
+
+    __swig_destroy__ = _sim2d.delete__jlist
+    __del__ = lambda self : None;
+_jlist_swigregister = _sim2d._jlist_swigregister
+_jlist_swigregister(_jlist)
 
 class fvector(collections.MutableSequence):
     """Proxy of C++ vector<(double)> class"""
@@ -2392,6 +2598,178 @@ class aRK4vector(_object):
 aRK4vector_swigregister = _sim2d.aRK4vector_swigregister
 aRK4vector_swigregister(aRK4vector)
 
+class _uintvector(collections.MutableSequence):
+    """Proxy of C++ vector<(unsigned int)> class"""
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _uintvector, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _uintvector, name)
+    __repr__ = _swig_repr
+    def iterator(self) -> "swig::SwigPyIterator *" :
+        """iterator(_uintvector self) -> SwigPyIterator"""
+        return _sim2d._uintvector_iterator(self)
+
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" :
+        """__nonzero__(_uintvector self) -> bool"""
+        return _sim2d._uintvector___nonzero__(self)
+
+    def __bool__(self) -> "bool" :
+        """__bool__(_uintvector self) -> bool"""
+        return _sim2d._uintvector___bool__(self)
+
+    def __len__(self) -> "vector< unsigned int >::size_type" :
+        """__len__(_uintvector self) -> vector< unsigned int >::size_type"""
+        return _sim2d._uintvector___len__(self)
+
+    def pop(self) -> "vector< unsigned int >::value_type" :
+        """pop(_uintvector self) -> vector< unsigned int >::value_type"""
+        return _sim2d._uintvector_pop(self)
+
+    def __getslice__(self, *args) -> "std::vector< unsigned int,std::allocator< unsigned int > > *" :
+        """__getslice__(_uintvector self, vector< unsigned int >::difference_type i, vector< unsigned int >::difference_type j) -> std::vector< unsigned int,std::allocator< unsigned int > > *"""
+        return _sim2d._uintvector___getslice__(self, *args)
+
+    def __setslice__(self, *args) -> "void" :
+        """
+        __setslice__(_uintvector self, vector< unsigned int >::difference_type i, vector< unsigned int >::difference_type j, 
+            std::vector< unsigned int,std::allocator< unsigned int > > const & v=std::vector< unsigned int,std::allocator< unsigned int > >())
+        __setslice__(_uintvector self, vector< unsigned int >::difference_type i, vector< unsigned int >::difference_type j)
+        """
+        return _sim2d._uintvector___setslice__(self, *args)
+
+    def __delslice__(self, *args) -> "void" :
+        """__delslice__(_uintvector self, vector< unsigned int >::difference_type i, vector< unsigned int >::difference_type j)"""
+        return _sim2d._uintvector___delslice__(self, *args)
+
+    def __delitem__(self, *args) -> "void" :
+        """
+        __delitem__(_uintvector self, vector< unsigned int >::difference_type i)
+        __delitem__(_uintvector self, PySliceObject * slice)
+        """
+        return _sim2d._uintvector___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "vector< unsigned int >::value_type const &" :
+        """
+        __getitem__(_uintvector self, PySliceObject * slice) -> std::vector< unsigned int,std::allocator< unsigned int > >
+        __getitem__(_uintvector self, vector< unsigned int >::difference_type i) -> vector< unsigned int >::value_type const &
+        """
+        return _sim2d._uintvector___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void" :
+        """
+        __setitem__(_uintvector self, PySliceObject * slice, std::vector< unsigned int,std::allocator< unsigned int > > const & v)
+        __setitem__(_uintvector self, PySliceObject * slice)
+        __setitem__(_uintvector self, vector< unsigned int >::difference_type i, vector< unsigned int >::value_type const & x)
+        """
+        return _sim2d._uintvector___setitem__(self, *args)
+
+    def append(self, *args) -> "void" :
+        """append(_uintvector self, vector< unsigned int >::value_type const & x)"""
+        return _sim2d._uintvector_append(self, *args)
+
+    def empty(self) -> "bool" :
+        """empty(_uintvector self) -> bool"""
+        return _sim2d._uintvector_empty(self)
+
+    def size(self) -> "vector< unsigned int >::size_type" :
+        """size(_uintvector self) -> vector< unsigned int >::size_type"""
+        return _sim2d._uintvector_size(self)
+
+    def clear(self) -> "void" :
+        """clear(_uintvector self)"""
+        return _sim2d._uintvector_clear(self)
+
+    def swap(self, *args) -> "void" :
+        """swap(_uintvector self, _uintvector v)"""
+        return _sim2d._uintvector_swap(self, *args)
+
+    def get_allocator(self) -> "vector< unsigned int >::allocator_type" :
+        """get_allocator(_uintvector self) -> vector< unsigned int >::allocator_type"""
+        return _sim2d._uintvector_get_allocator(self)
+
+    def begin(self) -> "vector< unsigned int >::iterator" :
+        """begin(_uintvector self) -> vector< unsigned int >::iterator"""
+        return _sim2d._uintvector_begin(self)
+
+    def end(self) -> "vector< unsigned int >::iterator" :
+        """end(_uintvector self) -> vector< unsigned int >::iterator"""
+        return _sim2d._uintvector_end(self)
+
+    def rbegin(self) -> "vector< unsigned int >::reverse_iterator" :
+        """rbegin(_uintvector self) -> vector< unsigned int >::reverse_iterator"""
+        return _sim2d._uintvector_rbegin(self)
+
+    def rend(self) -> "vector< unsigned int >::reverse_iterator" :
+        """rend(_uintvector self) -> vector< unsigned int >::reverse_iterator"""
+        return _sim2d._uintvector_rend(self)
+
+    def pop_back(self) -> "void" :
+        """pop_back(_uintvector self)"""
+        return _sim2d._uintvector_pop_back(self)
+
+    def erase(self, *args) -> "vector< unsigned int >::iterator" :
+        """
+        erase(_uintvector self, vector< unsigned int >::iterator pos) -> vector< unsigned int >::iterator
+        erase(_uintvector self, vector< unsigned int >::iterator first, vector< unsigned int >::iterator last) -> vector< unsigned int >::iterator
+        """
+        return _sim2d._uintvector_erase(self, *args)
+
+    def __init__(self, *args): 
+        """
+        __init__(vector<(unsigned int)> self) -> _uintvector
+        __init__(vector<(unsigned int)> self, _uintvector arg2) -> _uintvector
+        __init__(vector<(unsigned int)> self, vector< unsigned int >::size_type size) -> _uintvector
+        __init__(vector<(unsigned int)> self, vector< unsigned int >::size_type size, vector< unsigned int >::value_type const & value) -> _uintvector
+        """
+        this = _sim2d.new__uintvector(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def push_back(self, *args) -> "void" :
+        """push_back(_uintvector self, vector< unsigned int >::value_type const & x)"""
+        return _sim2d._uintvector_push_back(self, *args)
+
+    def front(self) -> "vector< unsigned int >::value_type const &" :
+        """front(_uintvector self) -> vector< unsigned int >::value_type const &"""
+        return _sim2d._uintvector_front(self)
+
+    def back(self) -> "vector< unsigned int >::value_type const &" :
+        """back(_uintvector self) -> vector< unsigned int >::value_type const &"""
+        return _sim2d._uintvector_back(self)
+
+    def assign(self, *args) -> "void" :
+        """assign(_uintvector self, vector< unsigned int >::size_type n, vector< unsigned int >::value_type const & x)"""
+        return _sim2d._uintvector_assign(self, *args)
+
+    def resize(self, *args) -> "void" :
+        """
+        resize(_uintvector self, vector< unsigned int >::size_type new_size)
+        resize(_uintvector self, vector< unsigned int >::size_type new_size, vector< unsigned int >::value_type const & x)
+        """
+        return _sim2d._uintvector_resize(self, *args)
+
+    def insert(self, *args) -> "void" :
+        """
+        insert(_uintvector self, vector< unsigned int >::iterator pos, vector< unsigned int >::value_type const & x) -> vector< unsigned int >::iterator
+        insert(_uintvector self, vector< unsigned int >::iterator pos, vector< unsigned int >::size_type n, vector< unsigned int >::value_type const & x)
+        """
+        return _sim2d._uintvector_insert(self, *args)
+
+    def reserve(self, *args) -> "void" :
+        """reserve(_uintvector self, vector< unsigned int >::size_type n)"""
+        return _sim2d._uintvector_reserve(self, *args)
+
+    def capacity(self) -> "vector< unsigned int >::size_type" :
+        """capacity(_uintvector self) -> vector< unsigned int >::size_type"""
+        return _sim2d._uintvector_capacity(self)
+
+    __swig_destroy__ = _sim2d.delete__uintvector
+    __del__ = lambda self : None;
+_uintvector_swigregister = _sim2d._uintvector_swigregister
+_uintvector_swigregister(_uintvector)
+
 NDIM = _sim2d.NDIM
 
 def randVec() -> "Vec" :
@@ -2643,7 +3021,7 @@ class atom(_object):
         return "<atom>"
 
     def __repr__(self):
-        #ifdef 2D
+        #ifdef VEC2D
         x,y = tuple(self.x)
         if hasattr(self, 'name'):
             return "<atom %s at (%.2f,%.2f)>" % (self.name,x,y)
@@ -2689,19 +3067,19 @@ class atomref(_object):
         return _sim2d.atomref_pointer(self)
 
     def x(self) -> "Vec &" :
-        """x(atomref self) -> Vec &"""
+        """x(atomref self) -> Vec"""
         return _sim2d.atomref_x(self)
 
     def v(self) -> "Vec &" :
-        """v(atomref self) -> Vec &"""
+        """v(atomref self) -> Vec"""
         return _sim2d.atomref_v(self)
 
     def f(self) -> "Vec &" :
-        """f(atomref self) -> Vec &"""
+        """f(atomref self) -> Vec"""
         return _sim2d.atomref_f(self)
 
     def a(self) -> "Vec &" :
-        """a(atomref self) -> Vec &"""
+        """a(atomref self) -> Vec"""
         return _sim2d.atomref_a(self)
 
     def m(self) -> "flt &" :
@@ -2859,7 +3237,7 @@ class atomgroup(_object):
 
     def kinetic(self, *args) -> "flt" :
         """
-        kinetic(atomgroup self, Vec const & originvelocity=Vec()) -> flt
+        kinetic(atomgroup self, Vec originvelocity=Vec()) -> flt
         kinetic(atomgroup self) -> flt
         """
         return _sim2d.atomgroup_kinetic(self, *args)
@@ -2869,15 +3247,15 @@ class atomgroup(_object):
         return _sim2d.atomgroup_momentum(self)
 
     def moment(self, *args) -> "flt" :
-        """moment(atomgroup self, Vec const & loc, Box box) -> flt"""
+        """moment(atomgroup self, Vec loc, Box box) -> flt"""
         return _sim2d.atomgroup_moment(self, *args)
 
     def angmomentum(self, *args) -> "flt" :
-        """angmomentum(atomgroup self, Vec const & loc, Box box) -> flt"""
+        """angmomentum(atomgroup self, Vec loc, Box box) -> flt"""
         return _sim2d.atomgroup_angmomentum(self, *args)
 
     def omega(self, *args) -> "flt" :
-        """omega(atomgroup self, Vec const & loc, Box box) -> flt"""
+        """omega(atomgroup self, Vec loc, Box box) -> flt"""
         return _sim2d.atomgroup_omega(self, *args)
 
     def addOmega(self, *args) -> "void" :
@@ -3018,11 +3396,11 @@ class interactpair(_object):
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
     def energy(self, *args) -> "flt" :
-        """energy(interactpair self, Vec const diff) -> flt"""
+        """energy(interactpair self, Vec diff) -> flt"""
         return _sim2d.interactpair_energy(self, *args)
 
     def forces(self, *args) -> "Vec" :
-        """forces(interactpair self, Vec const diff) -> Vec"""
+        """forces(interactpair self, Vec diff) -> Vec"""
         return _sim2d.interactpair_forces(self, *args)
 
     __swig_destroy__ = _sim2d.delete_interactpair
@@ -3044,15 +3422,15 @@ class LJrepulsive(_object):
         except: self.this = this
     def energy(self, *args) -> "flt" :
         """
-        energy(LJrepulsive self, Vec const diff, flt const eps, flt const sig) -> flt
-        energy(LJrepulsive self, Vec const & diff) -> flt
+        energy(LJrepulsive self, Vec diff, flt const eps, flt const sig) -> flt
+        energy(LJrepulsive self, Vec diff) -> flt
         """
         return _sim2d.LJrepulsive_energy(self, *args)
 
     def forces(self, *args) -> "Vec" :
         """
-        forces(LJrepulsive self, Vec const diff, flt const eps, flt const sig) -> Vec
-        forces(LJrepulsive self, Vec const & diff) -> Vec
+        forces(LJrepulsive self, Vec diff, flt const eps, flt const sig) -> Vec
+        forces(LJrepulsive self, Vec diff) -> Vec
         """
         return _sim2d.LJrepulsive_forces(self, *args)
 
@@ -3077,17 +3455,17 @@ class LJattract(_object):
         except: self.this = this
     def energy(self, *args) -> "flt" :
         """
-        energy(LJattract self, Vec const diff, flt const eps, flt const sig) -> flt
+        energy(LJattract self, Vec diff, flt const eps, flt const sig) -> flt
         energy(LJattract self, flt const rsig) -> flt
-        energy(LJattract self, Vec const & diff) -> flt
+        energy(LJattract self, Vec diff) -> flt
         """
         return _sim2d.LJattract_energy(self, *args)
 
     def forces(self, *args) -> "Vec" :
         """
-        forces(LJattract self, Vec const diff, flt const eps, flt const sig) -> Vec
+        forces(LJattract self, Vec diff, flt const eps, flt const sig) -> Vec
         forces(LJattract self, flt const rsig) -> flt
-        forces(LJattract self, Vec const & diff) -> Vec
+        forces(LJattract self, Vec diff) -> Vec
         """
         return _sim2d.LJattract_forces(self, *args)
 
@@ -3110,15 +3488,15 @@ class LJattractCut(_object):
         except: self.this = this
     def energy(self, *args) -> "flt" :
         """
-        energy(LJattractCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> flt
-        energy(LJattractCut self, Vec const & diff) -> flt
+        energy(LJattractCut self, Vec diff, flt const eps, flt const sig, flt const cutsig) -> flt
+        energy(LJattractCut self, Vec diff) -> flt
         """
         return _sim2d.LJattractCut_energy(self, *args)
 
     def forces(self, *args) -> "Vec" :
         """
-        forces(LJattractCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> Vec
-        forces(LJattractCut self, Vec const & diff) -> Vec
+        forces(LJattractCut self, Vec diff, flt const eps, flt const sig, flt const cutsig) -> Vec
+        forces(LJattractCut self, Vec diff) -> Vec
         """
         return _sim2d.LJattractCut_forces(self, *args)
 
@@ -3141,17 +3519,17 @@ class LJFullCut(_object):
         except: self.this = this
     def energy(self, *args) -> "flt" :
         """
-        energy(LJFullCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> flt
+        energy(LJFullCut self, Vec diff, flt const eps, flt const sig, flt const cutsig) -> flt
         energy(LJFullCut self, flt const rsig, flt const cutsig) -> flt
-        energy(LJFullCut self, Vec const & diff) -> flt
+        energy(LJFullCut self, Vec diff) -> flt
         """
         return _sim2d.LJFullCut_energy(self, *args)
 
     def forces(self, *args) -> "Vec" :
         """
-        forces(LJFullCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> Vec
+        forces(LJFullCut self, Vec diff, flt const eps, flt const sig, flt const cutsig) -> Vec
         forces(LJFullCut self, flt const rsig, flt const cutsig) -> flt
-        forces(LJFullCut self, Vec const & diff) -> Vec
+        forces(LJFullCut self, Vec diff) -> Vec
         """
         return _sim2d.LJFullCut_forces(self, *args)
 
@@ -3175,11 +3553,11 @@ class spring(interactpair):
         try: self.this.append(this)
         except: self.this = this
     def energy(self, *args) -> "flt" :
-        """energy(spring self, Vec const diff) -> flt"""
+        """energy(spring self, Vec diff) -> flt"""
         return _sim2d.spring_energy(self, *args)
 
     def forces(self, *args) -> "Vec" :
-        """forces(spring self, Vec const diff) -> Vec"""
+        """forces(spring self, Vec diff) -> Vec"""
         return _sim2d.spring_forces(self, *args)
 
     __swig_destroy__ = _sim2d.delete_spring
@@ -3203,11 +3581,11 @@ class bondangle(_object):
         try: self.this.append(this)
         except: self.this = this
     def energy(self, *args) -> "flt" :
-        """energy(bondangle self, Vec const & diff1, Vec const & diff2) -> flt"""
+        """energy(bondangle self, Vec diff1, Vec diff2) -> flt"""
         return _sim2d.bondangle_energy(self, *args)
 
     def forces(self, *args) -> "Nvector< Vec,3 >" :
-        """forces(bondangle self, Vec const & diff1, Vec const & diff2) -> Nvector< Vec,3 >"""
+        """forces(bondangle self, Vec diff1, Vec diff2) -> Nvector< Vec,3 >"""
         return _sim2d.bondangle_forces(self, *args)
 
     __swig_destroy__ = _sim2d.delete_bondangle
@@ -3231,7 +3609,7 @@ class electricScreened(interactpair):
         except: self.this = this
     def energy(*args) -> "flt" :
         """
-        energy(Vec const r) -> flt
+        energy(Vec r) -> flt
         energy(flt const r, flt const qaqb, flt const screen, flt const cutoff=0) -> flt
         energy(flt const r, flt const qaqb, flt const screen) -> flt
         """
@@ -3241,9 +3619,9 @@ class electricScreened(interactpair):
     __swig_getmethods__["energy"] = lambda x: energy
     def forces(*args) -> "Vec" :
         """
-        forces(Vec const r) -> Vec
-        forces(Vec const r, flt const qaqb, flt const screen, flt const cutoff=0) -> Vec
-        forces(Vec const r, flt const qaqb, flt const screen) -> Vec
+        forces(Vec r) -> Vec
+        forces(Vec r, flt const qaqb, flt const screen, flt const cutoff=0) -> Vec
+        forces(Vec r, flt const qaqb, flt const screen) -> Vec
         """
         return _sim2d.electricScreened_forces(*args)
 
@@ -3256,7 +3634,7 @@ electricScreened_swigregister(electricScreened)
 
 def electricScreened_energy(*args) -> "flt" :
   """
-    energy(Vec const r) -> flt
+    energy(Vec r) -> flt
     energy(flt const r, flt const qaqb, flt const screen, flt const cutoff=0) -> flt
     electricScreened_energy(flt const r, flt const qaqb, flt const screen) -> flt
     """
@@ -3264,9 +3642,9 @@ def electricScreened_energy(*args) -> "flt" :
 
 def electricScreened_forces(*args) -> "Vec" :
   """
-    forces(Vec const r) -> Vec
-    forces(Vec const r, flt const qaqb, flt const screen, flt const cutoff=0) -> Vec
-    electricScreened_forces(Vec const r, flt const qaqb, flt const screen) -> Vec
+    forces(Vec r) -> Vec
+    forces(Vec r, flt const qaqb, flt const screen, flt const cutoff=0) -> Vec
+    electricScreened_forces(Vec r, flt const qaqb, flt const screen) -> Vec
     """
   return _sim2d.electricScreened_forces(*args)
 
@@ -3664,25 +4042,6 @@ class forcepair(_object):
 forcepair_swigregister = _sim2d.forcepair_swigregister
 forcepair_swigregister(forcepair)
 
-class interactionpairs(interaction):
-    """Proxy of C++ interactionpairs class"""
-    __swig_setmethods__ = {}
-    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, interactionpairs, name, value)
-    __swig_getmethods__ = {}
-    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
-    __getattr__ = lambda self, name: _swig_getattr(self, interactionpairs, name)
-    def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
-    __repr__ = _swig_repr
-    def setForces(self, *args) -> "void" :
-        """setForces(interactionpairs self, Box box, void (*)(forcepair *) callback)"""
-        return _sim2d.interactionpairs_setForces(self, *args)
-
-    __swig_destroy__ = _sim2d.delete_interactionpairs
-    __del__ = lambda self : None;
-interactionpairs_swigregister = _sim2d.interactionpairs_swigregister
-interactionpairs_swigregister(interactionpairs)
-
 class forcepairx(_object):
     """Proxy of C++ forcepairx class"""
     __swig_setmethods__ = {}
@@ -3740,7 +4099,10 @@ class interactionpairsx(interaction):
     def __init__(self, *args, **kwargs): raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
     def setForces(self, *args) -> "void" :
-        """setForces(interactionpairsx self, Box box, fpairxFunct arg3)"""
+        """
+        setForces(interactionpairsx self, Box box)
+        setForces(interactionpairsx self, Box box, fpairxFunct arg3)
+        """
         return _sim2d.interactionpairsx_setForces(self, *args)
 
     __swig_destroy__ = _sim2d.delete_interactionpairsx
@@ -4843,6 +5205,153 @@ Charges_swigregister(Charges)
 def toBuffer(*args) -> "bool" :
   """toBuffer(std::vector< Vec *,std::allocator< Vec * > > arr, double * buffer) -> bool"""
   return _sim2d.toBuffer(*args)
+class jamminglist(_object):
+    """Proxy of C++ jamminglist class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, jamminglist, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, jamminglist, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["assigned"] = _sim2d.jamminglist_assigned_set
+    __swig_getmethods__["assigned"] = _sim2d.jamminglist_assigned_get
+    if _newclass:assigned = _swig_property(_sim2d.jamminglist_assigned_get, _sim2d.jamminglist_assigned_set)
+    __swig_setmethods__["distsq"] = _sim2d.jamminglist_distsq_set
+    __swig_getmethods__["distsq"] = _sim2d.jamminglist_distsq_get
+    if _newclass:distsq = _swig_property(_sim2d.jamminglist_distsq_get, _sim2d.jamminglist_distsq_set)
+    def __init__(self, *args): 
+        """
+        __init__(jamminglist self) -> jamminglist
+        __init__(jamminglist self, jamminglist other) -> jamminglist
+        __init__(jamminglist self, jamminglist other, uint expand, flt addeddist) -> jamminglist
+        """
+        this = _sim2d.new_jamminglist(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def size(self) -> "uint" :
+        """size(jamminglist self) -> uint"""
+        return _sim2d.jamminglist_size(self)
+
+    def __lt__(self, *args) -> "bool" :
+        """__lt__(jamminglist self, jamminglist other) -> bool"""
+        return _sim2d.jamminglist___lt__(self, *args)
+
+    __swig_destroy__ = _sim2d.delete_jamminglist
+    __del__ = lambda self : None;
+jamminglist_swigregister = _sim2d.jamminglist_swigregister
+jamminglist_swigregister(jamminglist)
+
+class jammingtree(_object):
+    """Proxy of C++ jammingtree class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, jammingtree, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, jammingtree, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """__init__(jammingtree self, Box box, vecvector A, vecvector B) -> jammingtree"""
+        this = _sim2d.new_jammingtree(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def expand(self, *args) -> "bool" :
+        """
+        expand(jammingtree self) -> bool
+        expand(jammingtree self, uint n) -> bool
+        """
+        return _sim2d.jammingtree_expand(self, *args)
+
+    def mylist(self) -> "std::list< jamminglist > &" :
+        """mylist(jammingtree self) -> _jlist"""
+        return _sim2d.jammingtree_mylist(self)
+
+    def copylist(self) -> "std::list< jamminglist >" :
+        """copylist(jammingtree self) -> _jlist"""
+        return _sim2d.jammingtree_copylist(self)
+
+    def curbest(self) -> "jamminglist" :
+        """curbest(jammingtree self) -> jamminglist"""
+        return _sim2d.jammingtree_curbest(self)
+
+    def size(self) -> "uint" :
+        """size(jammingtree self) -> uint"""
+        return _sim2d.jammingtree_size(self)
+
+    __swig_destroy__ = _sim2d.delete_jammingtree
+    __del__ = lambda self : None;
+jammingtree_swigregister = _sim2d.jammingtree_swigregister
+jammingtree_swigregister(jammingtree)
+
+class jamminglistrot(jamminglist):
+    """Proxy of C++ jamminglistrot class"""
+    __swig_setmethods__ = {}
+    for _s in [jamminglist]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, jamminglistrot, name, value)
+    __swig_getmethods__ = {}
+    for _s in [jamminglist]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, jamminglistrot, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["rotation"] = _sim2d.jamminglistrot_rotation_set
+    __swig_getmethods__["rotation"] = _sim2d.jamminglistrot_rotation_get
+    if _newclass:rotation = _swig_property(_sim2d.jamminglistrot_rotation_get, _sim2d.jamminglistrot_rotation_set)
+    def __init__(self, *args): 
+        """
+        __init__(jamminglistrot self) -> jamminglistrot
+        __init__(jamminglistrot self, uint rot) -> jamminglistrot
+        __init__(jamminglistrot self, jamminglistrot other) -> jamminglistrot
+        __init__(jamminglistrot self, jamminglistrot other, uint expand, flt addeddist) -> jamminglistrot
+        """
+        this = _sim2d.new_jamminglistrot(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _sim2d.delete_jamminglistrot
+    __del__ = lambda self : None;
+jamminglistrot_swigregister = _sim2d.jamminglistrot_swigregister
+jamminglistrot_swigregister(jamminglistrot)
+
+class jammingtree2(_object):
+    """Proxy of C++ jammingtree2 class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, jammingtree2, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, jammingtree2, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """__init__(jammingtree2 self, Box box, vecvector A, vecvector B) -> jammingtree2"""
+        this = _sim2d.new_jammingtree2(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def distance(self, *args) -> "flt" :
+        """distance(jammingtree2 self, jamminglistrot jlist) -> flt"""
+        return _sim2d.jammingtree2_distance(self, *args)
+
+    def expand(self, *args) -> "bool" :
+        """
+        expand(jammingtree2 self, jamminglistrot curjlist) -> std::list< jamminglistrot >
+        expand(jammingtree2 self) -> bool
+        expand(jammingtree2 self, uint n) -> bool
+        """
+        return _sim2d.jammingtree2_expand(self, *args)
+
+    def mylist(self) -> "std::list< jamminglistrot > &" :
+        """mylist(jammingtree2 self) -> std::list< jamminglistrot > &"""
+        return _sim2d.jammingtree2_mylist(self)
+
+    def copylist(self) -> "std::list< jamminglistrot >" :
+        """copylist(jammingtree2 self) -> std::list< jamminglistrot >"""
+        return _sim2d.jammingtree2_copylist(self)
+
+    def curbest(self) -> "jamminglist" :
+        """curbest(jammingtree2 self) -> jamminglist"""
+        return _sim2d.jammingtree2_curbest(self)
+
+    def size(self) -> "uint" :
+        """size(jammingtree2 self) -> uint"""
+        return _sim2d.jammingtree2_size(self)
+
+    __swig_destroy__ = _sim2d.delete_jammingtree2
+    __del__ = lambda self : None;
+jammingtree2_swigregister = _sim2d.jammingtree2_swigregister
+jammingtree2_swigregister(jammingtree2)
+
 class constraint(_object):
     """Proxy of C++ constraint class"""
     __swig_setmethods__ = {}
@@ -4984,13 +5493,13 @@ class NPHGaussianConstraint(constraint):
 NPHGaussianConstraint_swigregister = _sim2d.NPHGaussianConstraint_swigregister
 NPHGaussianConstraint_swigregister(NPHGaussianConstraint)
 
-class LJgroup(interactionpairs):
+class LJgroup(interaction):
     """Proxy of C++ NListed<(LJatom,LJpair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJgroup, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJgroup, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5029,16 +5538,13 @@ class LJgroup(interactionpairs):
         """energy_pair(LJgroup self, LJpair pair, Box box) -> flt"""
         return _sim2d.LJgroup_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJgroup self, Box box)"""
+        return _sim2d.LJgroup_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJgroup self, Box box) -> flt"""
         return _sim2d.LJgroup_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJgroup self, Box box)
-        setForces(LJgroup self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJgroup_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJgroup self, LJpair pair, Box box) -> Vec"""
@@ -5060,13 +5566,13 @@ class LJgroup(interactionpairs):
 LJgroup_swigregister = _sim2d.LJgroup_swigregister
 LJgroup_swigregister(LJgroup)
 
-class LJfull(interactionpairs):
+class LJfull(interaction):
     """Proxy of C++ NListed<(LJatomcut,LJAttractPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJfull, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJfull, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5105,16 +5611,13 @@ class LJfull(interactionpairs):
         """energy_pair(LJfull self, LJAttractPair pair, Box box) -> flt"""
         return _sim2d.LJfull_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJfull self, Box box)"""
+        return _sim2d.LJfull_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJfull self, Box box) -> flt"""
         return _sim2d.LJfull_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJfull self, Box box)
-        setForces(LJfull self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJfull_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJfull self, LJAttractPair pair, Box box) -> Vec"""
@@ -5136,13 +5639,13 @@ class LJfull(interactionpairs):
 LJfull_swigregister = _sim2d.LJfull_swigregister
 LJfull_swigregister(LJfull)
 
-class Hydrophobicity(interactionpairs):
+class Hydrophobicity(interaction):
     """Proxy of C++ NListed<(HydroAtom,HydroPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Hydrophobicity, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, Hydrophobicity, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5181,16 +5684,13 @@ class Hydrophobicity(interactionpairs):
         """energy_pair(Hydrophobicity self, HydroPair pair, Box box) -> flt"""
         return _sim2d.Hydrophobicity_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(Hydrophobicity self, Box box)"""
+        return _sim2d.Hydrophobicity_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(Hydrophobicity self, Box box) -> flt"""
         return _sim2d.Hydrophobicity_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(Hydrophobicity self, Box box)
-        setForces(Hydrophobicity self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.Hydrophobicity_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(Hydrophobicity self, HydroPair pair, Box box) -> Vec"""
@@ -5209,13 +5709,13 @@ class Hydrophobicity(interactionpairs):
 Hydrophobicity_swigregister = _sim2d.Hydrophobicity_swigregister
 Hydrophobicity_swigregister(Hydrophobicity)
 
-class LJdetailed(interactionpairs):
+class LJdetailed(interaction):
     """Proxy of C++ NListed<(LJAtomIndexed,LJFullPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJdetailed, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJdetailed, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5254,16 +5754,13 @@ class LJdetailed(interactionpairs):
         """energy_pair(LJdetailed self, LJFullPair pair, Box box) -> flt"""
         return _sim2d.LJdetailed_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJdetailed self, Box box)"""
+        return _sim2d.LJdetailed_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJdetailed self, Box box) -> flt"""
         return _sim2d.LJdetailed_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJdetailed self, Box box)
-        setForces(LJdetailed self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJdetailed_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJdetailed self, LJFullPair pair, Box box) -> Vec"""
@@ -5282,13 +5779,13 @@ class LJdetailed(interactionpairs):
 LJdetailed_swigregister = _sim2d.LJdetailed_swigregister
 LJdetailed_swigregister(LJdetailed)
 
-class LJAttractRepulse(interactionpairs):
+class LJAttractRepulse(interaction):
     """Proxy of C++ NListed<(LJAttractRepulseAtom,LJAttractRepulsePair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractRepulse, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJAttractRepulse, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5327,16 +5824,13 @@ class LJAttractRepulse(interactionpairs):
         """energy_pair(LJAttractRepulse self, LJAttractRepulsePair pair, Box box) -> flt"""
         return _sim2d.LJAttractRepulse_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJAttractRepulse self, Box box)"""
+        return _sim2d.LJAttractRepulse_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJAttractRepulse self, Box box) -> flt"""
         return _sim2d.LJAttractRepulse_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJAttractRepulse self, Box box)
-        setForces(LJAttractRepulse self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJAttractRepulse_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJAttractRepulse self, LJAttractRepulsePair pair, Box box) -> Vec"""
@@ -5355,13 +5849,13 @@ class LJAttractRepulse(interactionpairs):
 LJAttractRepulse_swigregister = _sim2d.LJAttractRepulse_swigregister
 LJAttractRepulse_swigregister(LJAttractRepulse)
 
-class LJAttractFixedRepulse(interactionpairs):
+class LJAttractFixedRepulse(interaction):
     """Proxy of C++ NListed<(LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractFixedRepulse, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJAttractFixedRepulse, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5400,16 +5894,13 @@ class LJAttractFixedRepulse(interactionpairs):
         """energy_pair(LJAttractFixedRepulse self, LJAttractFixedRepulsePair pair, Box box) -> flt"""
         return _sim2d.LJAttractFixedRepulse_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJAttractFixedRepulse self, Box box)"""
+        return _sim2d.LJAttractFixedRepulse_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJAttractFixedRepulse self, Box box) -> flt"""
         return _sim2d.LJAttractFixedRepulse_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJAttractFixedRepulse self, Box box)
-        setForces(LJAttractFixedRepulse self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJAttractFixedRepulse_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJAttractFixedRepulse self, LJAttractFixedRepulsePair pair, Box box) -> Vec"""
@@ -5428,13 +5919,13 @@ class LJAttractFixedRepulse(interactionpairs):
 LJAttractFixedRepulse_swigregister = _sim2d.LJAttractFixedRepulse_swigregister
 LJAttractFixedRepulse_swigregister(LJAttractFixedRepulse)
 
-class LJDouble(interactionpairs):
+class LJDouble(interaction):
     """Proxy of C++ NListed<(LJDoubleAtom,LJDoublePair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJDouble, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJDouble, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5473,16 +5964,13 @@ class LJDouble(interactionpairs):
         """energy_pair(LJDouble self, LJDoublePair pair, Box box) -> flt"""
         return _sim2d.LJDouble_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJDouble self, Box box)"""
+        return _sim2d.LJDouble_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJDouble self, Box box) -> flt"""
         return _sim2d.LJDouble_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJDouble self, Box box)
-        setForces(LJDouble self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJDouble_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJDouble self, LJDoublePair pair, Box box) -> Vec"""
@@ -5501,13 +5989,13 @@ class LJDouble(interactionpairs):
 LJDouble_swigregister = _sim2d.LJDouble_swigregister
 LJDouble_swigregister(LJDouble)
 
-class EisMclachlan(interactionpairs):
+class EisMclachlan(interaction):
     """Proxy of C++ NListed<(EisMclachlanAtom,EisMclachlanPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, EisMclachlan, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, EisMclachlan, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5546,16 +6034,13 @@ class EisMclachlan(interactionpairs):
         """energy_pair(EisMclachlan self, EisMclachlanPair pair, Box box) -> flt"""
         return _sim2d.EisMclachlan_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(EisMclachlan self, Box box)"""
+        return _sim2d.EisMclachlan_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(EisMclachlan self, Box box) -> flt"""
         return _sim2d.EisMclachlan_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(EisMclachlan self, Box box)
-        setForces(EisMclachlan self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.EisMclachlan_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(EisMclachlan self, EisMclachlanPair pair, Box box) -> Vec"""
@@ -5574,13 +6059,13 @@ class EisMclachlan(interactionpairs):
 EisMclachlan_swigregister = _sim2d.EisMclachlan_swigregister
 EisMclachlan_swigregister(EisMclachlan)
 
-class LJish(interactionpairs):
+class LJish(interaction):
     """Proxy of C++ NListed<(LJishAtom,LJishPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJish, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJish, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5619,16 +6104,13 @@ class LJish(interactionpairs):
         """energy_pair(LJish self, LJishPair pair, Box box) -> flt"""
         return _sim2d.LJish_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(LJish self, Box box)"""
+        return _sim2d.LJish_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(LJish self, Box box) -> flt"""
         return _sim2d.LJish_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(LJish self, Box box)
-        setForces(LJish self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.LJish_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(LJish self, LJishPair pair, Box box) -> Vec"""
@@ -5647,13 +6129,13 @@ class LJish(interactionpairs):
 LJish_swigregister = _sim2d.LJish_swigregister
 LJish_swigregister(LJish)
 
-class HertzianPlain(interactionpairs):
+class HertzianPlain(interaction):
     """Proxy of C++ NListed<(HertzianAtom,HertzianPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairs]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianPlain, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairs]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, HertzianPlain, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -5692,16 +6174,13 @@ class HertzianPlain(interactionpairs):
         """energy_pair(HertzianPlain self, HertzianPair pair, Box box) -> flt"""
         return _sim2d.HertzianPlain_energy_pair(self, *args)
 
+    def setForces(self, *args) -> "void" :
+        """setForces(HertzianPlain self, Box box)"""
+        return _sim2d.HertzianPlain_setForces(self, *args)
+
     def setForcesGetPressure(self, *args) -> "flt" :
         """setForcesGetPressure(HertzianPlain self, Box box) -> flt"""
         return _sim2d.HertzianPlain_setForcesGetPressure(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(HertzianPlain self, Box box)
-        setForces(HertzianPlain self, Box box, void (*)(forcepair *) callback)
-        """
-        return _sim2d.HertzianPlain_setForces(self, *args)
 
     def forces_pair(self, *args) -> "Vec" :
         """forces_pair(HertzianPlain self, HertzianPair pair, Box box) -> Vec"""
@@ -5822,7 +6301,7 @@ class collection(_object):
 
     def angmomentum(self, *args) -> "flt" :
         """
-        angmomentum(collection self, Vec const & loc) -> flt
+        angmomentum(collection self, Vec loc) -> flt
         angmomentum(collection self) -> flt
         """
         return _sim2d.collection_angmomentum(self, *args)
@@ -6505,9 +6984,12 @@ class collectionGear4NPH(collection):
         """kinetic(collectionGear4NPH self) -> flt"""
         return _sim2d.collectionGear4NPH_kinetic(self)
 
-    def temp(self) -> "flt" :
-        """temp(collectionGear4NPH self) -> flt"""
-        return _sim2d.collectionGear4NPH_temp(self)
+    def temp(self, minuscomv : 'bool'=True) -> "flt" :
+        """
+        temp(collectionGear4NPH self, bool minuscomv=True) -> flt
+        temp(collectionGear4NPH self) -> flt
+        """
+        return _sim2d.collectionGear4NPH_temp(self, minuscomv)
 
     def Hamiltonian(self) -> "flt" :
         """Hamiltonian(collectionGear4NPH self) -> flt"""

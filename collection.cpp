@@ -139,7 +139,7 @@ flt collection::temp(bool minuscomv){
     }
     
     int ndof = dof();
-    if (minuscomv) ndof = dof() - NDIM;
+    if (minuscomv) ndof -= NDIM;
     //~ cout << minuscomv << " " << ndof << " " << NDIM << endl;
     //~ cout << "K: " << totkinetic << ", totatoms: " << totatoms << "\n";
     return totkinetic * 2 / ndof;
@@ -930,10 +930,11 @@ flt collectionGear4NPH::kinetic(){
     return E/2.0;
 }
 
-flt collectionGear4NPH::temp(){
+flt collectionGear4NPH::temp(bool minuscomv){
     flt totatoms = 0;
     flt totkinetic2 = 0; // kinetic * 2
-    Vec cv = comv();
+    Vec cv = Vec();
+    if(minuscomv) cv = comv();
     flt Vfac = dV/box->V()/flt(NDIM);
     vector<atomgroup*>::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
@@ -945,7 +946,8 @@ flt collectionGear4NPH::temp(){
     }
     
     int ndof = dof();
-    return totkinetic2 / (ndof-NDIM);
+    if (minuscomv) ndof -= NDIM;
+    return totkinetic2 / ndof;
 }
 
 void collectionGear4NPH::timestep(){

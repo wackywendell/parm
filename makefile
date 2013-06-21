@@ -44,7 +44,7 @@ sim_wrap3d.o: sim_wrap3d.cxx
 	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap3d.cxx $(INC)
 
 _sim2d.so: sim_wrap2d.o
-	$(CXX) $(CCOPTS) -shared sim_wrap2d.o -o _sim2d.so $(LIB)
+	$(CXX) $(CCOPTS) -DVEC2D -shared sim_wrap2d.o -o _sim2d.so $(LIB)
 	
 _sim.so: sim_wrap3d.o
-	$(CXX) $(CCOPTS) -shared sim_wrap3d.o -o _sim.so $(LIB)
+	$(CXX) $(CCOPTS) -DVEC3D -shared sim_wrap3d.o -o _sim.so $(LIB)

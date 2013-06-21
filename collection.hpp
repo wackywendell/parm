@@ -540,7 +540,7 @@ class collectionGear4NPH : public collection {
         flt setForcesGetPressure();
         void timestep();
         flt kinetic();
-        flt temp();
+        flt temp(bool minuscomv=true);
         flt Hamiltonian(){
             return kinetic() + (Q/2*dV*dV) + potentialenergy() + P*(((OriginBox*)box)->V());
         }
