@@ -39,6 +39,27 @@ yaml.SafeDumper.add_representer(OrderedDict,
     lambda dumper, value: represent_odict(dumper, u'tag:yaml.org,2002:map', value))
 
 
+# see http://hooke.googlecode.com/svn-history/r291/branches/wtk/hooke/util/yaml.py
+import numpy
+
+def int_representer(dumper, data):
+    return dumper.represent_int(data)
+yaml.SafeDumper.add_representer(numpy.int32, int_representer)
+yaml.SafeDumper.add_representer(numpy.dtype(numpy.int32), int_representer)
+
+def float_representer(dumper, data):
+    return dumper.represent_float(float(data))
+yaml.SafeDumper.add_representer(numpy.float32, float_representer)
+yaml.SafeDumper.add_representer(numpy.float64, float_representer)
+
+
+def array_representer(dumper, data, flow_style=None):
+    return dumper.represent_sequence(u'tag:yaml.org,2002:seq', list(data), flow_style=flow_style)
+yaml.SafeDumper.add_representer(numpy.ndarray, array_representer)
+
+#~ def represent_np_float(dump, tag, item, flow_style=None):
+    #~ return dump.represent_data(float(item))
+
 """Make PyYAML load a file that uses lists as mapping keys.
  
 You would otherwise get an error like:

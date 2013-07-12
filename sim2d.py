@@ -525,9 +525,13 @@ class Vec(_Numvector2):
         """flip(Vec self) -> Vec"""
         return _sim2d.Vec_flip(self)
 
-    def rotateflip(self, *args) -> "Vector2< double >" :
-        """rotateflip(Vec self, uint i) -> Vec"""
-        return _sim2d.Vec_rotateflip(self, *args)
+    def rotate_flip(self, *args) -> "Vector2< double >" :
+        """rotate_flip(Vec self, uint i) -> Vec"""
+        return _sim2d.Vec_rotate_flip(self, *args)
+
+    def rotate_flip_inv(self, *args) -> "Vector2< double >" :
+        """rotate_flip_inv(Vec self, uint i) -> Vec"""
+        return _sim2d.Vec_rotate_flip_inv(self, *args)
 
     def angle(*args) -> "double" :
         """
@@ -921,6 +925,357 @@ class vecvector(collections.MutableSequence):
 vecvector_swigregister = _sim2d.vecvector_swigregister
 vecvector_swigregister(vecvector)
 
+class _jamminglist(collections.MutableSequence):
+    """Proxy of C++ list<(jamminglist)> class"""
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _jamminglist, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _jamminglist, name)
+    __repr__ = _swig_repr
+    def iterator(self) -> "swig::SwigPyIterator *" :
+        """iterator(_jamminglist self) -> SwigPyIterator"""
+        return _sim2d._jamminglist_iterator(self)
+
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" :
+        """__nonzero__(_jamminglist self) -> bool"""
+        return _sim2d._jamminglist___nonzero__(self)
+
+    def __bool__(self) -> "bool" :
+        """__bool__(_jamminglist self) -> bool"""
+        return _sim2d._jamminglist___bool__(self)
+
+    def __len__(self) -> "list< jamminglist >::size_type" :
+        """__len__(_jamminglist self) -> list< jamminglist >::size_type"""
+        return _sim2d._jamminglist___len__(self)
+
+    def pop(self) -> "list< jamminglist >::value_type" :
+        """pop(_jamminglist self) -> jamminglist"""
+        return _sim2d._jamminglist_pop(self)
+
+    def __getslice__(self, *args) -> "std::list< jamminglist,std::allocator< jamminglist > > *" :
+        """__getslice__(_jamminglist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j) -> std::list< jamminglist,std::allocator< jamminglist > > *"""
+        return _sim2d._jamminglist___getslice__(self, *args)
+
+    def __setslice__(self, *args) -> "void" :
+        """
+        __setslice__(_jamminglist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j, std::list< jamminglist,std::allocator< jamminglist > > const & v=std::list< jamminglist,std::allocator< jamminglist > >())
+        __setslice__(_jamminglist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j)
+        """
+        return _sim2d._jamminglist___setslice__(self, *args)
+
+    def __delslice__(self, *args) -> "void" :
+        """__delslice__(_jamminglist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j)"""
+        return _sim2d._jamminglist___delslice__(self, *args)
+
+    def __delitem__(self, *args) -> "void" :
+        """
+        __delitem__(_jamminglist self, list< jamminglist >::difference_type i)
+        __delitem__(_jamminglist self, PySliceObject * slice)
+        """
+        return _sim2d._jamminglist___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "list< jamminglist >::value_type const &" :
+        """
+        __getitem__(_jamminglist self, PySliceObject * slice) -> std::list< jamminglist,std::allocator< jamminglist > >
+        __getitem__(_jamminglist self, list< jamminglist >::difference_type i) -> jamminglist
+        """
+        return _sim2d._jamminglist___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void" :
+        """
+        __setitem__(_jamminglist self, PySliceObject * slice, std::list< jamminglist,std::allocator< jamminglist > > const & v)
+        __setitem__(_jamminglist self, PySliceObject * slice)
+        __setitem__(_jamminglist self, list< jamminglist >::difference_type i, jamminglist x)
+        """
+        return _sim2d._jamminglist___setitem__(self, *args)
+
+    def append(self, *args) -> "void" :
+        """append(_jamminglist self, jamminglist x)"""
+        return _sim2d._jamminglist_append(self, *args)
+
+    def empty(self) -> "bool" :
+        """empty(_jamminglist self) -> bool"""
+        return _sim2d._jamminglist_empty(self)
+
+    def size(self) -> "list< jamminglist >::size_type" :
+        """size(_jamminglist self) -> list< jamminglist >::size_type"""
+        return _sim2d._jamminglist_size(self)
+
+    def clear(self) -> "void" :
+        """clear(_jamminglist self)"""
+        return _sim2d._jamminglist_clear(self)
+
+    def swap(self, *args) -> "void" :
+        """swap(_jamminglist self, _jamminglist v)"""
+        return _sim2d._jamminglist_swap(self, *args)
+
+    def get_allocator(self) -> "list< jamminglist >::allocator_type" :
+        """get_allocator(_jamminglist self) -> list< jamminglist >::allocator_type"""
+        return _sim2d._jamminglist_get_allocator(self)
+
+    def begin(self) -> "list< jamminglist >::iterator" :
+        """begin(_jamminglist self) -> list< jamminglist >::iterator"""
+        return _sim2d._jamminglist_begin(self)
+
+    def end(self) -> "list< jamminglist >::iterator" :
+        """end(_jamminglist self) -> list< jamminglist >::iterator"""
+        return _sim2d._jamminglist_end(self)
+
+    def rbegin(self) -> "list< jamminglist >::reverse_iterator" :
+        """rbegin(_jamminglist self) -> list< jamminglist >::reverse_iterator"""
+        return _sim2d._jamminglist_rbegin(self)
+
+    def rend(self) -> "list< jamminglist >::reverse_iterator" :
+        """rend(_jamminglist self) -> list< jamminglist >::reverse_iterator"""
+        return _sim2d._jamminglist_rend(self)
+
+    def pop_back(self) -> "void" :
+        """pop_back(_jamminglist self)"""
+        return _sim2d._jamminglist_pop_back(self)
+
+    def erase(self, *args) -> "list< jamminglist >::iterator" :
+        """
+        erase(_jamminglist self, list< jamminglist >::iterator pos) -> list< jamminglist >::iterator
+        erase(_jamminglist self, list< jamminglist >::iterator first, list< jamminglist >::iterator last) -> list< jamminglist >::iterator
+        """
+        return _sim2d._jamminglist_erase(self, *args)
+
+    def __init__(self, *args): 
+        """
+        __init__(list<(jamminglist)> self) -> _jamminglist
+        __init__(list<(jamminglist)> self, _jamminglist arg2) -> _jamminglist
+        __init__(list<(jamminglist)> self, list< jamminglist >::size_type size) -> _jamminglist
+        __init__(list<(jamminglist)> self, list< jamminglist >::size_type size, jamminglist value) -> _jamminglist
+        """
+        this = _sim2d.new__jamminglist(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def push_back(self, *args) -> "void" :
+        """push_back(_jamminglist self, jamminglist x)"""
+        return _sim2d._jamminglist_push_back(self, *args)
+
+    def front(self) -> "list< jamminglist >::value_type const &" :
+        """front(_jamminglist self) -> jamminglist"""
+        return _sim2d._jamminglist_front(self)
+
+    def back(self) -> "list< jamminglist >::value_type const &" :
+        """back(_jamminglist self) -> jamminglist"""
+        return _sim2d._jamminglist_back(self)
+
+    def assign(self, *args) -> "void" :
+        """assign(_jamminglist self, list< jamminglist >::size_type n, jamminglist x)"""
+        return _sim2d._jamminglist_assign(self, *args)
+
+    def resize(self, *args) -> "void" :
+        """
+        resize(_jamminglist self, list< jamminglist >::size_type new_size)
+        resize(_jamminglist self, list< jamminglist >::size_type new_size, jamminglist x)
+        """
+        return _sim2d._jamminglist_resize(self, *args)
+
+    def insert(self, *args) -> "void" :
+        """
+        insert(_jamminglist self, list< jamminglist >::iterator pos, jamminglist x) -> list< jamminglist >::iterator
+        insert(_jamminglist self, list< jamminglist >::iterator pos, list< jamminglist >::size_type n, jamminglist x)
+        """
+        return _sim2d._jamminglist_insert(self, *args)
+
+    def pop_front(self) -> "void" :
+        """pop_front(_jamminglist self)"""
+        return _sim2d._jamminglist_pop_front(self)
+
+    def push_front(self, *args) -> "void" :
+        """push_front(_jamminglist self, jamminglist x)"""
+        return _sim2d._jamminglist_push_front(self, *args)
+
+    def reverse(self) -> "void" :
+        """reverse(_jamminglist self)"""
+        return _sim2d._jamminglist_reverse(self)
+
+    __swig_destroy__ = _sim2d.delete__jamminglist
+    __del__ = lambda self : None;
+_jamminglist_swigregister = _sim2d._jamminglist_swigregister
+_jamminglist_swigregister(_jamminglist)
+
+class _jamminglistrot(collections.MutableSequence):
+    """Proxy of C++ list<(jamminglistrot)> class"""
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _jamminglistrot, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _jamminglistrot, name)
+    __repr__ = _swig_repr
+    def iterator(self) -> "swig::SwigPyIterator *" :
+        """iterator(_jamminglistrot self) -> SwigPyIterator"""
+        return _sim2d._jamminglistrot_iterator(self)
+
+    def __iter__(self): return self.iterator()
+    def __nonzero__(self) -> "bool" :
+        """__nonzero__(_jamminglistrot self) -> bool"""
+        return _sim2d._jamminglistrot___nonzero__(self)
+
+    def __bool__(self) -> "bool" :
+        """__bool__(_jamminglistrot self) -> bool"""
+        return _sim2d._jamminglistrot___bool__(self)
+
+    def __len__(self) -> "list< jamminglistrot >::size_type" :
+        """__len__(_jamminglistrot self) -> list< jamminglistrot >::size_type"""
+        return _sim2d._jamminglistrot___len__(self)
+
+    def pop(self) -> "list< jamminglistrot >::value_type" :
+        """pop(_jamminglistrot self) -> jamminglistrot"""
+        return _sim2d._jamminglistrot_pop(self)
+
+    def __getslice__(self, *args) -> "std::list< jamminglistrot,std::allocator< jamminglistrot > > *" :
+        """__getslice__(_jamminglistrot self, list< jamminglistrot >::difference_type i, list< jamminglistrot >::difference_type j) -> std::list< jamminglistrot,std::allocator< jamminglistrot > > *"""
+        return _sim2d._jamminglistrot___getslice__(self, *args)
+
+    def __setslice__(self, *args) -> "void" :
+        """
+        __setslice__(_jamminglistrot self, list< jamminglistrot >::difference_type i, list< jamminglistrot >::difference_type j, 
+            std::list< jamminglistrot,std::allocator< jamminglistrot > > const & v=std::list< jamminglistrot,std::allocator< jamminglistrot > >())
+        __setslice__(_jamminglistrot self, list< jamminglistrot >::difference_type i, list< jamminglistrot >::difference_type j)
+        """
+        return _sim2d._jamminglistrot___setslice__(self, *args)
+
+    def __delslice__(self, *args) -> "void" :
+        """__delslice__(_jamminglistrot self, list< jamminglistrot >::difference_type i, list< jamminglistrot >::difference_type j)"""
+        return _sim2d._jamminglistrot___delslice__(self, *args)
+
+    def __delitem__(self, *args) -> "void" :
+        """
+        __delitem__(_jamminglistrot self, list< jamminglistrot >::difference_type i)
+        __delitem__(_jamminglistrot self, PySliceObject * slice)
+        """
+        return _sim2d._jamminglistrot___delitem__(self, *args)
+
+    def __getitem__(self, *args) -> "list< jamminglistrot >::value_type const &" :
+        """
+        __getitem__(_jamminglistrot self, PySliceObject * slice) -> std::list< jamminglistrot,std::allocator< jamminglistrot > >
+        __getitem__(_jamminglistrot self, list< jamminglistrot >::difference_type i) -> jamminglistrot
+        """
+        return _sim2d._jamminglistrot___getitem__(self, *args)
+
+    def __setitem__(self, *args) -> "void" :
+        """
+        __setitem__(_jamminglistrot self, PySliceObject * slice, std::list< jamminglistrot,std::allocator< jamminglistrot > > const & v)
+        __setitem__(_jamminglistrot self, PySliceObject * slice)
+        __setitem__(_jamminglistrot self, list< jamminglistrot >::difference_type i, jamminglistrot x)
+        """
+        return _sim2d._jamminglistrot___setitem__(self, *args)
+
+    def append(self, *args) -> "void" :
+        """append(_jamminglistrot self, jamminglistrot x)"""
+        return _sim2d._jamminglistrot_append(self, *args)
+
+    def empty(self) -> "bool" :
+        """empty(_jamminglistrot self) -> bool"""
+        return _sim2d._jamminglistrot_empty(self)
+
+    def size(self) -> "list< jamminglistrot >::size_type" :
+        """size(_jamminglistrot self) -> list< jamminglistrot >::size_type"""
+        return _sim2d._jamminglistrot_size(self)
+
+    def clear(self) -> "void" :
+        """clear(_jamminglistrot self)"""
+        return _sim2d._jamminglistrot_clear(self)
+
+    def swap(self, *args) -> "void" :
+        """swap(_jamminglistrot self, _jamminglistrot v)"""
+        return _sim2d._jamminglistrot_swap(self, *args)
+
+    def get_allocator(self) -> "list< jamminglistrot >::allocator_type" :
+        """get_allocator(_jamminglistrot self) -> list< jamminglistrot >::allocator_type"""
+        return _sim2d._jamminglistrot_get_allocator(self)
+
+    def begin(self) -> "list< jamminglistrot >::iterator" :
+        """begin(_jamminglistrot self) -> list< jamminglistrot >::iterator"""
+        return _sim2d._jamminglistrot_begin(self)
+
+    def end(self) -> "list< jamminglistrot >::iterator" :
+        """end(_jamminglistrot self) -> list< jamminglistrot >::iterator"""
+        return _sim2d._jamminglistrot_end(self)
+
+    def rbegin(self) -> "list< jamminglistrot >::reverse_iterator" :
+        """rbegin(_jamminglistrot self) -> list< jamminglistrot >::reverse_iterator"""
+        return _sim2d._jamminglistrot_rbegin(self)
+
+    def rend(self) -> "list< jamminglistrot >::reverse_iterator" :
+        """rend(_jamminglistrot self) -> list< jamminglistrot >::reverse_iterator"""
+        return _sim2d._jamminglistrot_rend(self)
+
+    def pop_back(self) -> "void" :
+        """pop_back(_jamminglistrot self)"""
+        return _sim2d._jamminglistrot_pop_back(self)
+
+    def erase(self, *args) -> "list< jamminglistrot >::iterator" :
+        """
+        erase(_jamminglistrot self, list< jamminglistrot >::iterator pos) -> list< jamminglistrot >::iterator
+        erase(_jamminglistrot self, list< jamminglistrot >::iterator first, list< jamminglistrot >::iterator last) -> list< jamminglistrot >::iterator
+        """
+        return _sim2d._jamminglistrot_erase(self, *args)
+
+    def __init__(self, *args): 
+        """
+        __init__(list<(jamminglistrot)> self) -> _jamminglistrot
+        __init__(list<(jamminglistrot)> self, _jamminglistrot arg2) -> _jamminglistrot
+        __init__(list<(jamminglistrot)> self, list< jamminglistrot >::size_type size) -> _jamminglistrot
+        __init__(list<(jamminglistrot)> self, list< jamminglistrot >::size_type size, jamminglistrot value) -> _jamminglistrot
+        """
+        this = _sim2d.new__jamminglistrot(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def push_back(self, *args) -> "void" :
+        """push_back(_jamminglistrot self, jamminglistrot x)"""
+        return _sim2d._jamminglistrot_push_back(self, *args)
+
+    def front(self) -> "list< jamminglistrot >::value_type const &" :
+        """front(_jamminglistrot self) -> jamminglistrot"""
+        return _sim2d._jamminglistrot_front(self)
+
+    def back(self) -> "list< jamminglistrot >::value_type const &" :
+        """back(_jamminglistrot self) -> jamminglistrot"""
+        return _sim2d._jamminglistrot_back(self)
+
+    def assign(self, *args) -> "void" :
+        """assign(_jamminglistrot self, list< jamminglistrot >::size_type n, jamminglistrot x)"""
+        return _sim2d._jamminglistrot_assign(self, *args)
+
+    def resize(self, *args) -> "void" :
+        """
+        resize(_jamminglistrot self, list< jamminglistrot >::size_type new_size)
+        resize(_jamminglistrot self, list< jamminglistrot >::size_type new_size, jamminglistrot x)
+        """
+        return _sim2d._jamminglistrot_resize(self, *args)
+
+    def insert(self, *args) -> "void" :
+        """
+        insert(_jamminglistrot self, list< jamminglistrot >::iterator pos, jamminglistrot x) -> list< jamminglistrot >::iterator
+        insert(_jamminglistrot self, list< jamminglistrot >::iterator pos, list< jamminglistrot >::size_type n, jamminglistrot x)
+        """
+        return _sim2d._jamminglistrot_insert(self, *args)
+
+    def pop_front(self) -> "void" :
+        """pop_front(_jamminglistrot self)"""
+        return _sim2d._jamminglistrot_pop_front(self)
+
+    def push_front(self, *args) -> "void" :
+        """push_front(_jamminglistrot self, jamminglistrot x)"""
+        return _sim2d._jamminglistrot_push_front(self, *args)
+
+    def reverse(self) -> "void" :
+        """reverse(_jamminglistrot self)"""
+        return _sim2d._jamminglistrot_reverse(self)
+
+    __swig_destroy__ = _sim2d.delete__jamminglistrot
+    __del__ = lambda self : None;
+_jamminglistrot_swigregister = _sim2d._jamminglistrot_swigregister
+_jamminglistrot_swigregister(_jamminglistrot)
+
 class Pair(_Nvector2):
     """Proxy of C++ Numvector<(double,2)> class"""
     __swig_setmethods__ = {}
@@ -1230,181 +1585,6 @@ class _atomarray4(_object):
     __del__ = lambda self : None;
 _atomarray4_swigregister = _sim2d._atomarray4_swigregister
 _atomarray4_swigregister(_atomarray4)
-
-class _jlist(collections.MutableSequence):
-    """Proxy of C++ list<(jamminglist)> class"""
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _jlist, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _jlist, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(_jlist self) -> SwigPyIterator"""
-        return _sim2d._jlist_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(_jlist self) -> bool"""
-        return _sim2d._jlist___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(_jlist self) -> bool"""
-        return _sim2d._jlist___bool__(self)
-
-    def __len__(self) -> "list< jamminglist >::size_type" :
-        """__len__(_jlist self) -> list< jamminglist >::size_type"""
-        return _sim2d._jlist___len__(self)
-
-    def pop(self) -> "list< jamminglist >::value_type" :
-        """pop(_jlist self) -> jamminglist"""
-        return _sim2d._jlist_pop(self)
-
-    def __getslice__(self, *args) -> "std::list< jamminglist,std::allocator< jamminglist > > *" :
-        """__getslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j) -> std::list< jamminglist,std::allocator< jamminglist > > *"""
-        return _sim2d._jlist___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j, std::list< jamminglist,std::allocator< jamminglist > > const & v=std::list< jamminglist,std::allocator< jamminglist > >())
-        __setslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j)
-        """
-        return _sim2d._jlist___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(_jlist self, list< jamminglist >::difference_type i, list< jamminglist >::difference_type j)"""
-        return _sim2d._jlist___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(_jlist self, list< jamminglist >::difference_type i)
-        __delitem__(_jlist self, PySliceObject * slice)
-        """
-        return _sim2d._jlist___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "list< jamminglist >::value_type const &" :
-        """
-        __getitem__(_jlist self, PySliceObject * slice) -> std::list< jamminglist,std::allocator< jamminglist > >
-        __getitem__(_jlist self, list< jamminglist >::difference_type i) -> jamminglist
-        """
-        return _sim2d._jlist___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(_jlist self, PySliceObject * slice, std::list< jamminglist,std::allocator< jamminglist > > const & v)
-        __setitem__(_jlist self, PySliceObject * slice)
-        __setitem__(_jlist self, list< jamminglist >::difference_type i, jamminglist x)
-        """
-        return _sim2d._jlist___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(_jlist self, jamminglist x)"""
-        return _sim2d._jlist_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(_jlist self) -> bool"""
-        return _sim2d._jlist_empty(self)
-
-    def size(self) -> "list< jamminglist >::size_type" :
-        """size(_jlist self) -> list< jamminglist >::size_type"""
-        return _sim2d._jlist_size(self)
-
-    def clear(self) -> "void" :
-        """clear(_jlist self)"""
-        return _sim2d._jlist_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(_jlist self, _jlist v)"""
-        return _sim2d._jlist_swap(self, *args)
-
-    def get_allocator(self) -> "list< jamminglist >::allocator_type" :
-        """get_allocator(_jlist self) -> list< jamminglist >::allocator_type"""
-        return _sim2d._jlist_get_allocator(self)
-
-    def begin(self) -> "list< jamminglist >::iterator" :
-        """begin(_jlist self) -> list< jamminglist >::iterator"""
-        return _sim2d._jlist_begin(self)
-
-    def end(self) -> "list< jamminglist >::iterator" :
-        """end(_jlist self) -> list< jamminglist >::iterator"""
-        return _sim2d._jlist_end(self)
-
-    def rbegin(self) -> "list< jamminglist >::reverse_iterator" :
-        """rbegin(_jlist self) -> list< jamminglist >::reverse_iterator"""
-        return _sim2d._jlist_rbegin(self)
-
-    def rend(self) -> "list< jamminglist >::reverse_iterator" :
-        """rend(_jlist self) -> list< jamminglist >::reverse_iterator"""
-        return _sim2d._jlist_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(_jlist self)"""
-        return _sim2d._jlist_pop_back(self)
-
-    def erase(self, *args) -> "list< jamminglist >::iterator" :
-        """
-        erase(_jlist self, list< jamminglist >::iterator pos) -> list< jamminglist >::iterator
-        erase(_jlist self, list< jamminglist >::iterator first, list< jamminglist >::iterator last) -> list< jamminglist >::iterator
-        """
-        return _sim2d._jlist_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(list<(jamminglist)> self) -> _jlist
-        __init__(list<(jamminglist)> self, _jlist arg2) -> _jlist
-        __init__(list<(jamminglist)> self, list< jamminglist >::size_type size) -> _jlist
-        __init__(list<(jamminglist)> self, list< jamminglist >::size_type size, jamminglist value) -> _jlist
-        """
-        this = _sim2d.new__jlist(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(_jlist self, jamminglist x)"""
-        return _sim2d._jlist_push_back(self, *args)
-
-    def front(self) -> "list< jamminglist >::value_type const &" :
-        """front(_jlist self) -> jamminglist"""
-        return _sim2d._jlist_front(self)
-
-    def back(self) -> "list< jamminglist >::value_type const &" :
-        """back(_jlist self) -> jamminglist"""
-        return _sim2d._jlist_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(_jlist self, list< jamminglist >::size_type n, jamminglist x)"""
-        return _sim2d._jlist_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(_jlist self, list< jamminglist >::size_type new_size)
-        resize(_jlist self, list< jamminglist >::size_type new_size, jamminglist x)
-        """
-        return _sim2d._jlist_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(_jlist self, list< jamminglist >::iterator pos, jamminglist x) -> list< jamminglist >::iterator
-        insert(_jlist self, list< jamminglist >::iterator pos, list< jamminglist >::size_type n, jamminglist x)
-        """
-        return _sim2d._jlist_insert(self, *args)
-
-    def pop_front(self) -> "void" :
-        """pop_front(_jlist self)"""
-        return _sim2d._jlist_pop_front(self)
-
-    def push_front(self, *args) -> "void" :
-        """push_front(_jlist self, jamminglist x)"""
-        return _sim2d._jlist_push_front(self, *args)
-
-    def reverse(self) -> "void" :
-        """reverse(_jlist self)"""
-        return _sim2d._jlist_reverse(self)
-
-    __swig_destroy__ = _sim2d.delete__jlist
-    __del__ = lambda self : None;
-_jlist_swigregister = _sim2d._jlist_swigregister
-_jlist_swigregister(_jlist)
 
 class fvector(collections.MutableSequence):
     """Proxy of C++ vector<(double)> class"""
@@ -2780,10 +2960,10 @@ def randVecBoxed() -> "Vec" :
   """randVecBoxed() -> Vec"""
   return _sim2d.randVecBoxed()
 
-def seed(*args) -> "void" :
+def seed(*args) -> "unsigned int" :
   """
-    seed(unsigned int n)
-    seed()
+    seed(unsigned int n) -> unsigned int
+    seed() -> unsigned int
     """
   return _sim2d.seed(*args)
 class gaussVec(_object):
@@ -2968,6 +3148,10 @@ class OriginBox(Box):
     def V(self) -> "flt" :
         """V(OriginBox self) -> flt"""
         return _sim2d.OriginBox_V(self)
+
+    def L(self) -> "flt" :
+        """L(OriginBox self) -> flt"""
+        return _sim2d.OriginBox_L(self)
 
     def resize(self, *args) -> "flt" :
         """resize(OriginBox self, flt factor) -> flt"""
@@ -3301,7 +3485,10 @@ class atomvec(atomgroup):
     __getattr__ = lambda self, name: _swig_getattr(self, atomvec, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(atomvec self, fvector masses) -> atomvec"""
+        """
+        __init__(atomvec self, fvector masses) -> atomvec
+        __init__(atomvec self, atomvec other) -> atomvec
+        """
         this = _sim2d.new_atomvec(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -5260,11 +5447,11 @@ class jammingtree(_object):
         return _sim2d.jammingtree_expand(self, *args)
 
     def mylist(self) -> "std::list< jamminglist > &" :
-        """mylist(jammingtree self) -> _jlist"""
+        """mylist(jammingtree self) -> _jamminglist"""
         return _sim2d.jammingtree_mylist(self)
 
     def copylist(self) -> "std::list< jamminglist >" :
-        """copylist(jammingtree self) -> _jlist"""
+        """copylist(jammingtree self) -> _jamminglist"""
         return _sim2d.jammingtree_copylist(self)
 
     def curbest(self) -> "jamminglist" :
@@ -5302,6 +5489,10 @@ class jamminglistrot(jamminglist):
         this = _sim2d.new_jamminglistrot(*args)
         try: self.this.append(this)
         except: self.this = this
+    def __lt__(self, *args) -> "bool" :
+        """__lt__(jamminglistrot self, jamminglistrot other) -> bool"""
+        return _sim2d.jamminglistrot___lt__(self, *args)
+
     __swig_destroy__ = _sim2d.delete_jamminglistrot
     __del__ = lambda self : None;
 jamminglistrot_swigregister = _sim2d.jamminglistrot_swigregister
@@ -5325,32 +5516,83 @@ class jammingtree2(_object):
 
     def expand(self, *args) -> "bool" :
         """
-        expand(jammingtree2 self, jamminglistrot curjlist) -> std::list< jamminglistrot >
+        expand(jammingtree2 self, jamminglistrot curjlist) -> _jamminglistrot
         expand(jammingtree2 self) -> bool
         expand(jammingtree2 self, uint n) -> bool
         """
         return _sim2d.jammingtree2_expand(self, *args)
 
+    def expandto(self, *args) -> "bool" :
+        """expandto(jammingtree2 self, flt maxdistsq) -> bool"""
+        return _sim2d.jammingtree2_expandto(self, *args)
+
     def mylist(self) -> "std::list< jamminglistrot > &" :
-        """mylist(jammingtree2 self) -> std::list< jamminglistrot > &"""
+        """mylist(jammingtree2 self) -> _jamminglistrot"""
         return _sim2d.jammingtree2_mylist(self)
 
-    def copylist(self) -> "std::list< jamminglistrot >" :
-        """copylist(jammingtree2 self) -> std::list< jamminglistrot >"""
-        return _sim2d.jammingtree2_copylist(self)
+    def copylist(self, *args) -> "std::list< jamminglistrot >" :
+        """
+        copylist(jammingtree2 self) -> _jamminglistrot
+        copylist(jammingtree2 self, uint n) -> _jamminglistrot
+        """
+        return _sim2d.jammingtree2_copylist(self, *args)
 
-    def curbest(self) -> "jamminglist" :
-        """curbest(jammingtree2 self) -> jamminglist"""
+    def curbest(self) -> "jamminglistrot" :
+        """curbest(jammingtree2 self) -> jamminglistrot"""
         return _sim2d.jammingtree2_curbest(self)
 
     def size(self) -> "uint" :
         """size(jammingtree2 self) -> uint"""
         return _sim2d.jammingtree2_size(self)
 
+    def locationsB(self, *args) -> "std::vector< Vec >" :
+        """
+        locationsB(jammingtree2 self, jamminglistrot jlist) -> vecvector
+        locationsB(jammingtree2 self) -> vecvector
+        """
+        return _sim2d.jammingtree2_locationsB(self, *args)
+
+    def locationsA(self, *args) -> "std::vector< Vec >" :
+        """
+        locationsA(jammingtree2 self, jamminglistrot jlist) -> vecvector
+        locationsA(jammingtree2 self) -> vecvector
+        """
+        return _sim2d.jammingtree2_locationsA(self, *args)
+
     __swig_destroy__ = _sim2d.delete_jammingtree2
     __del__ = lambda self : None;
 jammingtree2_swigregister = _sim2d.jammingtree2_swigregister
 jammingtree2_swigregister(jammingtree2)
+
+class jammingtreeBD(jammingtree2):
+    """Proxy of C++ jammingtreeBD class"""
+    __swig_setmethods__ = {}
+    for _s in [jammingtree2]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, jammingtreeBD, name, value)
+    __swig_getmethods__ = {}
+    for _s in [jammingtree2]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, jammingtreeBD, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(jammingtreeBD self, Box box, vecvector A, vecvector B, uint cutoff) -> jammingtreeBD
+        __init__(jammingtreeBD self, Box box, vecvector A, vecvector B, uint cutoffA, uint cutoffB) -> jammingtreeBD
+        """
+        this = _sim2d.new_jammingtreeBD(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def expand(self, *args) -> "bool" :
+        """
+        expand(jammingtreeBD self, jamminglistrot curjlist) -> _jamminglistrot
+        expand(jammingtreeBD self) -> bool
+        expand(jammingtreeBD self, uint n) -> bool
+        """
+        return _sim2d.jammingtreeBD_expand(self, *args)
+
+    __swig_destroy__ = _sim2d.delete_jammingtreeBD
+    __del__ = lambda self : None;
+jammingtreeBD_swigregister = _sim2d.jammingtreeBD_swigregister
+jammingtreeBD_swigregister(jammingtreeBD)
 
 class constraint(_object):
     """Proxy of C++ constraint class"""
@@ -6129,6 +6371,53 @@ class LJish(interaction):
 LJish_swigregister = _sim2d.LJish_swigregister
 LJish_swigregister(LJish)
 
+class HertzianSimple(interaction):
+    """Proxy of C++ SimpleListed<(HertzianAtom,HertzianPair)> class"""
+    __swig_setmethods__ = {}
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianSimple, name, value)
+    __swig_getmethods__ = {}
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, HertzianSimple, name)
+    __repr__ = _swig_repr
+    def __init__(self): 
+        """__init__(SimpleListed<(HertzianAtom,HertzianPair)> self) -> HertzianSimple"""
+        this = _sim2d.new_HertzianSimple()
+        try: self.this.append(this)
+        except: self.this = this
+    def add(self, *args) -> "void" :
+        """add(HertzianSimple self, HertzianAtom atm)"""
+        return _sim2d.HertzianSimple_add(self, *args)
+
+    def energy(self, *args) -> "flt" :
+        """energy(HertzianSimple self, Box box) -> flt"""
+        return _sim2d.HertzianSimple_energy(self, *args)
+
+    def pressure(self, *args) -> "flt" :
+        """pressure(HertzianSimple self, Box box) -> flt"""
+        return _sim2d.HertzianSimple_pressure(self, *args)
+
+    def size(self) -> "uint" :
+        """size(HertzianSimple self) -> uint"""
+        return _sim2d.HertzianSimple_size(self)
+
+    def setForces(self, *args) -> "void" :
+        """setForces(HertzianSimple self, Box box)"""
+        return _sim2d.HertzianSimple_setForces(self, *args)
+
+    def setForcesGetPressure(self, *args) -> "flt" :
+        """setForcesGetPressure(HertzianSimple self, Box box) -> flt"""
+        return _sim2d.HertzianSimple_setForcesGetPressure(self, *args)
+
+    def atom_list(self) -> "std::vector< HertzianAtom > &" :
+        """atom_list(HertzianSimple self) -> std::vector< HertzianAtom > &"""
+        return _sim2d.HertzianSimple_atom_list(self)
+
+    __swig_destroy__ = _sim2d.delete_HertzianSimple
+    __del__ = lambda self : None;
+HertzianSimple_swigregister = _sim2d.HertzianSimple_swigregister
+HertzianSimple_swigregister(HertzianSimple)
+
 class HertzianPlain(interaction):
     """Proxy of C++ NListed<(HertzianAtom,HertzianPair)> class"""
     __swig_setmethods__ = {}
@@ -6530,6 +6819,80 @@ class collectionOverdamped(collection):
     __del__ = lambda self : None;
 collectionOverdamped_swigregister = _sim2d.collectionOverdamped_swigregister
 collectionOverdamped_swigregister(collectionOverdamped)
+
+class collectionConjGradient(collection):
+    """Proxy of C++ collectionConjGradient class"""
+    __swig_setmethods__ = {}
+    for _s in [collection]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionConjGradient, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collection]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, collectionConjGradient, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=vector< atomgroup * >(), ivector interactions=vector< interaction * >(), 
+            tvector trackers=vector< statetracker * >(), 
+            constraintvector constraints=vector< constraint * >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=vector< atomgroup * >(), ivector interactions=vector< interaction * >(), 
+            tvector trackers=vector< statetracker * >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=vector< atomgroup * >(), ivector interactions=vector< interaction * >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=vector< atomgroup * >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, Box box, flt const dt) -> collectionConjGradient
+        """
+        this = _sim2d.new_collectionConjGradient(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def timestep(self) -> "void" :
+        """timestep(collectionConjGradient self)"""
+        return _sim2d.collectionConjGradient_timestep(self)
+
+    def setdt(self, *args) -> "void" :
+        """setdt(collectionConjGradient self, flt newdt)"""
+        return _sim2d.collectionConjGradient_setdt(self, *args)
+
+    __swig_destroy__ = _sim2d.delete_collectionConjGradient
+    __del__ = lambda self : None;
+collectionConjGradient_swigregister = _sim2d.collectionConjGradient_swigregister
+collectionConjGradient_swigregister(collectionConjGradient)
+
+class collectionConjGradientBox(collection):
+    """Proxy of C++ collectionConjGradientBox class"""
+    __swig_setmethods__ = {}
+    for _s in [collection]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionConjGradientBox, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collection]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, collectionConjGradientBox, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """
+        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=vector< atomgroup * >(), 
+            ivector interactions=vector< interaction * >(), tvector trackers=vector< statetracker * >(), 
+            constraintvector constraints=vector< constraint * >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=vector< atomgroup * >(), 
+            ivector interactions=vector< interaction * >(), tvector trackers=vector< statetracker * >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=vector< atomgroup * >(), 
+            ivector interactions=vector< interaction * >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=vector< atomgroup * >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0) -> collectionConjGradientBox
+        """
+        this = _sim2d.new_collectionConjGradientBox(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def timestep(self) -> "void" :
+        """timestep(collectionConjGradientBox self)"""
+        return _sim2d.collectionConjGradientBox_timestep(self)
+
+    def setdt(self, *args) -> "void" :
+        """setdt(collectionConjGradientBox self, flt newdt)"""
+        return _sim2d.collectionConjGradientBox_setdt(self, *args)
+
+    __swig_destroy__ = _sim2d.delete_collectionConjGradientBox
+    __del__ = lambda self : None;
+collectionConjGradientBox_swigregister = _sim2d.collectionConjGradientBox_swigregister
+collectionConjGradientBox_swigregister(collectionConjGradientBox)
 
 
 def solveCubic1(*args) -> "flt" :
@@ -6972,10 +7335,6 @@ class collectionGear4NPH(collection):
         this = _sim2d.new_collectionGear4NPH(*args)
         try: self.this.append(this)
         except: self.this = this
-    def setForcesGetPressure(self) -> "flt" :
-        """setForcesGetPressure(collectionGear4NPH self) -> flt"""
-        return _sim2d.collectionGear4NPH_setForcesGetPressure(self)
-
     def timestep(self) -> "void" :
         """timestep(collectionGear4NPH self)"""
         return _sim2d.collectionGear4NPH_timestep(self)

@@ -24,6 +24,7 @@ class collection {
         metagroup atoms;
         void update_trackers();
         void update_constraints();
+        virtual flt setForcesGetPressure(bool seta=true);
         
     public:
         collection(Box *box, 
@@ -186,6 +187,51 @@ class collectionOverdamped : public collection {
                 vector<constraint*> constraints=vector<constraint*>()) :
             collection(box, groups, interactions, trackers, constraints),
                 dt(dt), gamma(gamma){};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+class collectionConjGradient : public collection {
+    // over-damped simulation, v = gamma * f
+    protected:
+        flt dt;
+        
+    public:
+        collectionConjGradient(Box *box, const flt dt,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints),
+                dt(dt){};
+        void timestep();
+        void setdt(flt newdt){dt=newdt;};
+};
+
+class collectionConjGradientBox : public collection {
+    // Conjugate-Gradient energy minimization, with 
+    // H = H0(x₁, x₂, …, L) + P V
+    // More specifically, we take the Nose-Hoover NPH hamiltonian,
+    // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅔ ⃗sᵢ…) + P₀ V
+    // and E = U(V^⅔ ⃗sᵢ…) + P₀ V
+    // We minimize using ⃗sᵢ and V as the two variables
+    /// NOTE: this CANNOT be used with neighbor lists, as it modifies
+    /// the box size as it goes; either that, or you have to update
+    /// the neighbor list more carefully each time.
+    protected:
+        flt dt;
+        flt P0, kappaV;
+        flt hV, FV, lastFV;
+        
+    public:
+        collectionConjGradientBox(OriginBox *box, const flt dt,
+                const flt P0, const flt kappaV=1,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>()) :
+            collection(box, groups, interactions, trackers, constraints),
+                dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0){};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
 };
@@ -503,6 +549,7 @@ class collectionRK4 : public collection {
 
 class collectionGear4NPH : public collection {
     // for use in fixed-E, fixed-NPH simulations
+    // Nose-Hoover, right?
     protected:
         flt dt;
         flt P, Q; // goal pressure, damping
@@ -537,7 +584,6 @@ class collectionGear4NPH : public collection {
                 vector<constraint*> constraints=vector<constraint*>()) :
                 collection(box, groups, interactions, trackers, constraints),
                         dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), ncorrec(1) {resetbs();};
-        flt setForcesGetPressure();
         void timestep();
         flt kinetic();
         flt temp(bool minuscomv=true);

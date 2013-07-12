@@ -4,6 +4,7 @@
 #include <set>
 #include <map>
 #include <list>
+#include <iterator>
 #include <algorithm>
 #include <cassert>
 #include <climits>
@@ -114,9 +115,11 @@ class OriginBox : public Box {
         }
         #ifdef VEC3D
         flt V(){return boxsize[0] * boxsize[1] * boxsize[2];};
+        flt L(){return (boxsize[0] + boxsize[1] + boxsize[2])/3.0;};
         #endif
         #ifdef VEC2D
         flt V(){return boxsize[0] * boxsize[1];};
+        flt L(){return (boxsize[0] + boxsize[1])/2.0;};
         #endif
         flt resize(flt factor){boxsize *= factor; return V();}
         flt resizeV(flt newV){flt curV = V(); boxsize *= pow(newV/curV, 1.0/NDIM); return V();}
@@ -251,6 +254,10 @@ class atomvec : public virtual atomgroup {
         atomvec(vector<flt> masses) : sz(masses.size()){
             atoms = new atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
+        };
+        atomvec(atomvec& other) : sz(other.size()){
+            atoms = new atom[sz];
+            for(uint i=0; i < sz; i++) atoms[i] = other.atoms[i];
         };
         inline atom& operator[](cuint n){return atoms[n];};
         inline atom& operator[](cuint n) const {return atoms[n];};
@@ -895,6 +902,26 @@ class neighborlist : public statetracker{
 };
 
 template <class A, class P>
+class SimpleListed : public interaction {
+    protected:
+        vector<A> atoms;
+    
+    public:
+        SimpleListed(){};
+        inline void add(A atm){atoms.push_back(atm);};
+        //flt energy(Box *box, idpair &pair);
+        flt energy(Box *box);
+        flt pressure(Box *box);
+        uint size(){return atoms.size();};
+        //inline flt energy_pair(P pair, Box *box){return pair.energy(box);}; // This may need to be written!
+        void setForces(Box *box);
+        flt setForcesGetPressure(Box *box);
+        //inline Vec forces_pair(P pair, Box *box){return pair.forces(box);}; // This may need to be written!
+        inline vector<A> &atom_list(){return atoms;};
+        ~SimpleListed(){};
+};
+
+template <class A, class P>
 class NListed : public interaction {
     // neighborlist keeps track of atom* pairs within a particular distance.
     // NListed keeps track of atoms with additional properties
@@ -1496,6 +1523,68 @@ class LJsimple : public interaction {
 };
 
 template <class A, class P>
+flt SimpleListed<A, P>::energy(Box *box){
+    flt E = 0;
+    typename vector<A>::iterator it1;
+    typename vector<A>::iterator it2;
+    for(it1 = atoms.begin(); it1 != atoms.end(); it1++){
+        for(it2 = it1+1; it2 != atoms.end(); it2++){
+            E += P(*it1, *it2).energy(box);
+        }
+    }
+    return E;
+};
+
+template <class A, class P>
+void SimpleListed<A, P>::setForces(Box *box){
+    typename vector<A>::iterator it1;
+    typename vector<A>::iterator it2;
+    for(it1 = atoms.begin(); it1 != atoms.end(); it1++){
+        for(it2 = it1+1; it2 != atoms.end(); it2++){
+            P pair = P(*it1, *it2);
+            Vec f = pair.forces(box);
+            it1->f() += f;
+            it2->f() -= f;
+        }
+    }
+};
+
+template <class A, class P>
+flt SimpleListed<A, P>::setForcesGetPressure(Box *box){
+    flt p=0;
+    typename vector<A>::iterator it1;
+    typename vector<A>::iterator it2;
+    for(it1 = atoms.begin(); it1 != atoms.end(); it1++){
+        for(it2 = it1+1; it2 != atoms.end(); it2++){
+            P pair = P(*it1, *it2);
+            Vec f = pair.forces(box);
+            it1->f() += f;
+            it2->f() -= f;
+            Vec r = box->diff(it1->x(), it2->x());
+            p += r.dot(f);
+        }
+    }
+    //~ cout << "Set forces, got pressure" << p << '\n';
+    return p;
+};
+
+template <class A, class P>
+flt SimpleListed<A, P>::pressure(Box *box){
+    flt p=0;
+    typename vector<A>::iterator it1;
+    typename vector<A>::iterator it2;
+    for(it1 = atoms.begin(); it1 != atoms.end(); it1++){
+        for(it2 = it1+1; it2 != atoms.end(); it2++){
+            P pair = P(*it1, *it2);
+            Vec f = pair.forces(box);
+            Vec r = box->diff(it1->x(), it2->x());
+            p += r.dot(f);
+        }
+    }
+    return p;
+};
+
+template <class A, class P>
 void NListed<A, P>::update_pairs(){
     if(lastupdate == neighbors->which()) return; // already updated
     
@@ -1665,9 +1754,7 @@ class jamminglist {
         }
         inline uint size() const {return assigned.size();};
         
-        inline bool operator<(const jamminglist& other ){
-            return distsq < other.distsq;
-        }
+        bool operator<(const jamminglist& other);
 };
 
 class jammingtree {
@@ -1752,11 +1839,13 @@ class jamminglistrot : public jamminglist {
             : jamminglist(other), rotation(other.rotation){};
         jamminglistrot(const jamminglistrot& other, uint expand, flt addeddist)
             : jamminglist(other, expand, addeddist), rotation(other.rotation){};
+        
+        bool operator<(const jamminglistrot& other);
 };
 
 // Includes rotations, flips, and translations.
 class jammingtree2 {
-    private:
+    protected:
         Box *box;
         list<jamminglistrot> jlists;
         vector<Vec> A;
@@ -1768,31 +1857,84 @@ class jammingtree2 {
         flt distance(jamminglistrot& jlist);
         list<jamminglistrot> expand(jamminglistrot curjlist);
         
-        bool expand();
+        virtual bool expand();
         
         bool expand(uint n){
             bool retval=false;
             for(uint i=0; i<n; i++){
                 retval = expand();
+                if(!retval) break;
             }
+            return retval;
+        }
+        bool expandto(flt maxdistsq){
+            bool retval = true;
+            while((maxdistsq <= 0 or jlists.front().distsq < maxdistsq) and retval){
+                retval = expand();
+            };
             return retval;
         }
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};
+        list<jamminglistrot> copylist(uint n){
+            list<jamminglistrot>::iterator last = jlists.begin();
+            advance(last, n);
+            return list<jamminglistrot>(jlists.begin(), last);
+        };
         
-        jamminglist curbest(){
-            jamminglist j = jamminglist(jlists.front());
+        
+        jamminglistrot curbest(){
+            jamminglistrot j = jamminglistrot(jlists.front());
             //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
             //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
             //~ cout << '\n';
             return j;
             //return jamminglist(jlists.front());
             };
+        
+        //jamminglistrot operator[](uint i){
+        //    assert(i < jlists.size());
+        //    return jamminglistrot(jlists[i]);
+        //};
+        
         uint size(){return jlists.size();};
+        
+        vector<Vec> locationsB(jamminglistrot jlist);
+        vector<Vec> locationsB(){return locationsB(curbest());};
+        vector<Vec> locationsA(jamminglistrot jlist);
+        vector<Vec> locationsA(){return locationsA(curbest());};
+        virtual ~jammingtree2(){};
 };
 
-    
 
+class jammingtreeBD : public jammingtree2 {
+    /* For a bi-disperse packing.
+     * 'cutoff' is the number of particles of the first kind; i.e., the
+     * A vector should have A[0]..A[cutoff-1] be of particle type 1,
+     * and A[cutoff]..A[N-1] of particle type 2.
+     * This does much the same as jammingtree2, but doesn't check any 
+     * reordering in which particles of one type are relabeled as another.
+     * For exampe, with 2+2 particles (cutoff 2), we check
+     * [0123],[1023],[0132],[1032]
+     * But not
+     * [0213],[0231],[0312],[0321],[1203],[1230],[1302],[1320],...
+     * This means at most (cutoff! (N-cutoff)!) combinations are checked,
+     * and not all N!, which can save a lot of time (as well as
+     *  rejecting false combinations).
+     */
+    protected:
+        uint cutoff1,cutoff2;
+    public:
+        jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+            jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
+        jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, 
+                    uint cutoffA, uint cutoffB) :
+            jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
+        
+        list<jamminglistrot> expand(jamminglistrot curjlist);
+        bool expand();
+        bool expand(uint n){return jammingtree2::expand(n);};
+};
 #endif
 
 #endif

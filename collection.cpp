@@ -218,6 +218,30 @@ void collection::setForces(bool seta){
     }
 }
 
+flt collection::setForcesGetPressure(bool seta){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        group.resetForces();
+    }
+    
+    flt p=0;
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        interaction &inter = **it;
+        p += inter.setForcesGetPressure(box);
+    }
+    if(!seta) return p;
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f / m.getmass(i);
+        }
+    }
+    return p;
+}
+
 collectionSol::collectionSol(Box *box, const flt dt, const flt damp,const flt T,
         vector<atomgroup*> groups,vector<interaction*> interactions,
         vector<statetracker*> trackers, vector<constraint*> constraints) :
@@ -407,6 +431,126 @@ void collectionOverdamped::timestep(){
             m[i].a = m[i].f / m.getmass(i);
             m[i].v = m[i].a * gamma;
             m[i].x += m[i].v * dt;
+        }
+    }
+    
+    update_trackers();
+    
+    return;
+}
+
+void collectionConjGradient::timestep(){
+    // Algorithm from https://en.wikipedia.org/wiki/Energy_minimization#Nonlinear_conjugate_gradient_method
+    // Where dt = κ, v = h, F = F
+    // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
+    // and while its called 'a', its actually 'v'
+    setForces(false);
+    update_constraints();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x += m[i].v * dt;
+            Vec newa = m[i].f / m.getmass(i);
+            flt asq = m[i].a.sq();
+            flt gamma = 0;
+            if(asq > 0){// if a was 0, then just set γ = 0
+                gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
+                // gamma = newa.sq() / asq; // Fletcher-Reeves
+            }
+            //if(gamma > 100) gamma = 0;
+            if(gamma < 0) gamma = 0;
+            m[i].v = newa + (m[i].v * gamma);
+            m[i].a = newa;
+            //~ if(git == groups.begin() and i == 0){
+                //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.sq() << endl;
+                //~ //cout << "        " << 
+            //~ }
+            
+        }
+    }
+    
+    update_trackers();
+    
+    return;
+}
+
+void collectionConjGradientBox::timestep(){
+    // Algorithm from https://en.wikipedia.org/wiki/Energy_minimization#Nonlinear_conjugate_gradient_method
+    // Where dt = κ, v = h, F = F
+    // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
+    // and while its called 'a', its actually 'v'
+    
+    OriginBox* obox = (OriginBox*) box;
+    update_constraints();
+    
+    flt oldV = obox->V();
+    flt dV = hV * dt * oldV;
+    if(dV > 1/kappaV) dV = 1/kappaV;
+    if(dV < 0) dV *= kappaV;
+    //~ if(abs(dV) > oldV / 100){
+        //~ // cout << "CGbox DV TOO BIG: " << dV << " -> ";
+        //~ dV = sgn(dV) * oldV/100;
+        //~ // cout << dV << " hV: " << hV << " newFV: " << newFV << " -> ";
+        //~ FV = 0;
+        //~ // newFV = dV / dt / kappaV;
+        //~ // cout << newFV << "\n";
+        //~ hV = 0;
+    //~ }
+    flt newV = oldV + dV;
+    //flt Vfac = dV/((oldV + newV)/2)/NDIM;
+    #ifdef VEC3D
+    flt Vfac = pow(newV/oldV, 1.0/3.0);
+    #endif
+    #ifdef VEC2D
+    flt Vfac = sqrt(newV/oldV);
+    #endif
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x *= Vfac;
+            m[i].x += m[i].v * dt;// + (m[i].x * Vfac);
+        }
+    }
+    
+    obox->resizeV(oldV + dV);
+    flt interacP = setForcesGetPressure();
+    flt newFV = (interacP/NDIM) - (P0*newV);
+    
+    flt gammaV = 0;
+    if(FV*FV > 0) gammaV = newFV * (newFV) / (FV*FV);
+    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
+    if(gammaV > 1) gammaV = 1;
+    
+    if(isnan(oldV) or isnan(newV) or isnan(dV)){
+        cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
+        cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
+        assert(!isnan(oldV));
+    }
+    hV = newFV + (gammaV*hV);
+    FV = newFV;
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            Vec newa = m[i].f / m.getmass(i);
+            flt asq = m[i].a.sq();
+            flt gamma = 0;
+            if(asq > 0){// if a was 0, then just set γ = 0
+                gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
+                // gamma = newa.sq() / asq; // Fletcher-Reeves
+            }
+            //if(gamma > 100) gamma = 0;
+            if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
+            m[i].v = newa + (m[i].v * gamma);
+            m[i].a = newa;
+            //~ if(git == groups.begin() and i == 0){
+                //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.sq() << endl;
+                //~ //cout << "        " << 
+            //~ }
+            
         }
     }
     
@@ -900,22 +1044,6 @@ void collectionRK4::timestep(){
     return;
 }
 
-flt collectionGear4NPH::setForcesGetPressure(){
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        group.resetForces();
-    }
-    
-    flt p=0;
-    vector<interaction*>::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
-        interaction &inter = **it;
-        p += inter.setForcesGetPressure(box);
-    }
-    return p;
-}
-
 flt collectionGear4NPH::kinetic(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
@@ -977,7 +1105,7 @@ void collectionGear4NPH::timestep(){
     
     // Now we set forces and accelerations
     for(uint m=0; m<ncorrec; m++){
-        flt interacP = setForcesGetPressure();
+        flt interacP = setForcesGetPressure(false);
         flt newP = (interacP + (kinetic()*2.0))/NDIM/V;
         //~ for(git = groups.begin(); git<groups.end(); git++){
             //~ atomgroup &g = **git;

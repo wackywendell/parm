@@ -35,8 +35,8 @@ typedef boost::variate_generator<engine&, lindistribution > lingenerator;
 Vec randVec();
 Vec randVecBoxed();
 
-void seed(unsigned int n);
-void seed();
+unsigned int seed(unsigned int n);
+unsigned int seed();
 
 class gaussVec {
     protected:

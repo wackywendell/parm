@@ -26,12 +26,16 @@ Vec randVecBoxed(){
 }
 #endif
 
-void seed(unsigned int n){
+unsigned int seed(unsigned int n){
     randengine.seed(n);
+    return n;
+    
 }
 
-void seed(){
-    randengine.seed(static_cast<unsigned int>(time(0)));
+unsigned int seed(){
+    unsigned int n = static_cast<unsigned int>(time(0));
+    randengine.seed(n);
+    return n;
 }
 
 gaussVec::gaussVec(double sigma) : distro(0,sigma), gauss(randengine,distro){};

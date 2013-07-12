@@ -221,8 +221,8 @@ t=0
 #print(opts.dt, opts.damping, opts.temp) #INFO
 collec = collectionSol(box, opts.dt, opts.damping, opts.temp, atomgroups, intervec, trackers)
 collec.interactions = interactions
-if opts.seed: collec.seed()
-else: collec.seed(1)
+if opts.seed: seed()
+else: seed(1)
 collec.setForces()
 
 mode = 'a' if opts.cont else 'w'

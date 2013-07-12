@@ -196,9 +196,15 @@ class Vector2 : public Numvector<T, 2> {
         
         Vector2 rotate(uint i);
         inline Vector2 flip(){return Vector2(gety(), getx());};
-        inline Vector2 rotateflip(uint i){
-            if((i / 4) % 2 == 1) return flip().rotate(i-4);
-            return rotate(i-4);
+        inline Vector2 rotate_flip(uint i){
+            if((i / 4) % 2 == 1) return flip().rotate(i%4);
+            return rotate(i%4);
+        };
+        
+        inline Vector2 rotate_flip_inv(uint i){
+            Vector2 inv = rotate(4-(i%4));
+            if((i / 4) % 2 == 0) return inv;
+            return inv.flip();
         };
         
         static T angle(const Vector2 &dx1, const Vector2 &dx2){
@@ -444,7 +450,7 @@ Vector2<T>& Vector2<T>::operator/=(const U rhs){
 template <class T>
 Vector2<T> Vector2<T>::rotate(uint i){
     if(i % 4 == 0) return (*this);
-    else if(i % 4 == 1) return Vector2(gety(), -getx());
+    else if(i % 4 == 3) return Vector2(gety(), -getx());
     else if(i % 4 == 2) return Vector2(-getx(), -gety());
     else return Vector2(-gety(), getx());
 }
