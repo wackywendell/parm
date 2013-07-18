@@ -221,7 +221,7 @@ class collectionConjGradientBox : public collection {
     protected:
         flt dt;
         flt P0, kappaV;
-        flt hV, FV, lastFV;
+        flt hV, FV, lastFV, dV;
         
     public:
         collectionConjGradientBox(OriginBox *box, const flt dt,
@@ -231,9 +231,16 @@ class collectionConjGradientBox : public collection {
                 vector<statetracker*> trackers=vector<statetracker*>(),
                 vector<constraint*> constraints=vector<constraint*>()) :
             collection(box, groups, interactions, trackers, constraints),
-                dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0){};
+                dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0){};
+        
+        flt kinetic();
+        
         void timestep();
+        void timestepBox();
+        void timestepAtoms();
+        void resize(flt V);
         void setdt(flt newdt){dt=newdt;};
+        void setP(flt P){P0 = P;};
 };
 
 flt solveCubic1(flt b, flt c, flt d){

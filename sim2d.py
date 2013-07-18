@@ -6881,13 +6881,33 @@ class collectionConjGradientBox(collection):
         this = _sim2d.new_collectionConjGradientBox(*args)
         try: self.this.append(this)
         except: self.this = this
+    def kinetic(self) -> "flt" :
+        """kinetic(collectionConjGradientBox self) -> flt"""
+        return _sim2d.collectionConjGradientBox_kinetic(self)
+
     def timestep(self) -> "void" :
         """timestep(collectionConjGradientBox self)"""
         return _sim2d.collectionConjGradientBox_timestep(self)
 
+    def timestepBox(self) -> "void" :
+        """timestepBox(collectionConjGradientBox self)"""
+        return _sim2d.collectionConjGradientBox_timestepBox(self)
+
+    def timestepAtoms(self) -> "void" :
+        """timestepAtoms(collectionConjGradientBox self)"""
+        return _sim2d.collectionConjGradientBox_timestepAtoms(self)
+
+    def resize(self, *args) -> "void" :
+        """resize(collectionConjGradientBox self, flt V)"""
+        return _sim2d.collectionConjGradientBox_resize(self, *args)
+
     def setdt(self, *args) -> "void" :
         """setdt(collectionConjGradientBox self, flt newdt)"""
         return _sim2d.collectionConjGradientBox_setdt(self, *args)
+
+    def setP(self, *args) -> "void" :
+        """setP(collectionConjGradientBox self, flt P)"""
+        return _sim2d.collectionConjGradientBox_setP(self, *args)
 
     __swig_destroy__ = _sim2d.delete_collectionConjGradientBox
     __del__ = lambda self : None;

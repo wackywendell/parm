@@ -847,7 +847,7 @@ class StatGroup(Namespace):
         
         cuts = 1.0/math.e, 1.0/math.e
         rx = self.relax(*cuts)
-        N = (self.time[-1] - self.time[0]) / rx
+        N = (self.time[-1] - self.time[0]) / rx if rx is not None else 0.01
         
         ts, rijs = self.Rijs()
         myijs = sorted(rijs.keys())
@@ -889,11 +889,13 @@ def _default_str(d):
     if 'Rg' in d:
         t0, tf = d.time[0]/1000, d.time[-1]/1000
         t = tf - t0
-        rlx = d.relax(1.0/math.e, 1.0/math.e)/1000.0
+        rlx = d.relax(1.0/math.e, 1.0/math.e)
+        rlx = rlx/1000.0 if rlx is not None else float('inf')
         return '%8.2f - %8.2f (%6.1f t₀, %6.1f x), Rg = %6.2f +- %5.2f' % (
             t0, tf, rlx, tf/rlx, numpy.mean(d.Rg), numpy.std(d.Rg))
     #return '%8.2f - %8.2f (%6.1f)' % (d.time[0]/1000, d.time[-1]/1000, relax(d, .1, .1)/1000.0)
-    rlx = d.relax(1.0/math.e, 1.0/math.e)/1000.0
+    rlx = d.relax(1.0/math.e, 1.0/math.e)
+    rlx = rlx/1000.0 if rlx is not None else float('inf')
     return '%8.2f - %8.2f (%6.1f)' % (d.time[0]/1000, d.time[-1]/1000, rlx)
     
 def loadAll(fs, cut=0, strfunc=_default_str, func=None):

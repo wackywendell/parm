@@ -70150,6 +70150,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_collectionConjGradientBox_kinetic(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  flt result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:collectionConjGradientBox_kinetic",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionConjGradientBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionConjGradientBox_kinetic" "', argument " "1"" of type '" "collectionConjGradientBox *""'"); 
+  }
+  arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
+  result = (flt)(arg1)->kinetic();
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_collectionConjGradientBox_timestep(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
@@ -70164,6 +70186,78 @@ SWIGINTERN PyObject *_wrap_collectionConjGradientBox_timestep(PyObject *SWIGUNUS
   }
   arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
   (arg1)->timestep();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_collectionConjGradientBox_timestepBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:collectionConjGradientBox_timestepBox",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionConjGradientBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionConjGradientBox_timestepBox" "', argument " "1"" of type '" "collectionConjGradientBox *""'"); 
+  }
+  arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
+  (arg1)->timestepBox();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_collectionConjGradientBox_timestepAtoms(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:collectionConjGradientBox_timestepAtoms",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionConjGradientBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionConjGradientBox_timestepAtoms" "', argument " "1"" of type '" "collectionConjGradientBox *""'"); 
+  }
+  arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
+  (arg1)->timestepAtoms();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_collectionConjGradientBox_resize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
+  flt arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:collectionConjGradientBox_resize",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionConjGradientBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionConjGradientBox_resize" "', argument " "1"" of type '" "collectionConjGradientBox *""'"); 
+  }
+  arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "collectionConjGradientBox_resize" "', argument " "2"" of type '" "flt""'");
+  } 
+  arg2 = static_cast< flt >(val2);
+  (arg1)->resize(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -70194,6 +70288,36 @@ SWIGINTERN PyObject *_wrap_collectionConjGradientBox_setdt(PyObject *SWIGUNUSEDP
   } 
   arg2 = static_cast< flt >(val2);
   (arg1)->setdt(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_collectionConjGradientBox_setP(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
+  flt arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:collectionConjGradientBox_setP",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionConjGradientBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionConjGradientBox_setP" "', argument " "1"" of type '" "collectionConjGradientBox *""'"); 
+  }
+  arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "collectionConjGradientBox_setP" "', argument " "2"" of type '" "flt""'");
+  } 
+  arg2 = static_cast< flt >(val2);
+  (arg1)->setP(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -83150,8 +83274,13 @@ static PyMethodDef SwigMethods[] = {
 		"collectionConjGradientBox(OriginBox box, flt const dt, flt const P0, flt const kappaV=1)\n"
 		"new_collectionConjGradientBox(OriginBox box, flt const dt, flt const P0) -> collectionConjGradientBox\n"
 		""},
+	 { (char *)"collectionConjGradientBox_kinetic", _wrap_collectionConjGradientBox_kinetic, METH_VARARGS, (char *)"collectionConjGradientBox_kinetic(collectionConjGradientBox self) -> flt"},
 	 { (char *)"collectionConjGradientBox_timestep", _wrap_collectionConjGradientBox_timestep, METH_VARARGS, (char *)"collectionConjGradientBox_timestep(collectionConjGradientBox self)"},
+	 { (char *)"collectionConjGradientBox_timestepBox", _wrap_collectionConjGradientBox_timestepBox, METH_VARARGS, (char *)"collectionConjGradientBox_timestepBox(collectionConjGradientBox self)"},
+	 { (char *)"collectionConjGradientBox_timestepAtoms", _wrap_collectionConjGradientBox_timestepAtoms, METH_VARARGS, (char *)"collectionConjGradientBox_timestepAtoms(collectionConjGradientBox self)"},
+	 { (char *)"collectionConjGradientBox_resize", _wrap_collectionConjGradientBox_resize, METH_VARARGS, (char *)"collectionConjGradientBox_resize(collectionConjGradientBox self, flt V)"},
 	 { (char *)"collectionConjGradientBox_setdt", _wrap_collectionConjGradientBox_setdt, METH_VARARGS, (char *)"collectionConjGradientBox_setdt(collectionConjGradientBox self, flt newdt)"},
+	 { (char *)"collectionConjGradientBox_setP", _wrap_collectionConjGradientBox_setP, METH_VARARGS, (char *)"collectionConjGradientBox_setP(collectionConjGradientBox self, flt P)"},
 	 { (char *)"delete_collectionConjGradientBox", _wrap_delete_collectionConjGradientBox, METH_VARARGS, (char *)"delete_collectionConjGradientBox(collectionConjGradientBox self)"},
 	 { (char *)"collectionConjGradientBox_swigregister", collectionConjGradientBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"solveCubic1", _wrap_solveCubic1, METH_VARARGS, (char *)"solveCubic1(flt b, flt c, flt d) -> flt"},
