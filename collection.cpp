@@ -529,6 +529,8 @@ void collectionConjGradientBox::timestep(){
     dV = hV * oldV;
     if(dV*dt > 1/kappaV) dV = 1/kappaV/dt;
     if(dV < 0) dV *= kappaV;
+    if(maxdV >= 0 and dV > maxdV) dV = maxdV;
+    if(maxdV >= 0 and dV < -maxdV) dV = -maxdV;
     //~ if(abs(dV) > oldV / 100){
         //~ // cout << "CGbox DV TOO BIG: " << dV << " -> ";
         //~ dV = sgn(dV) * oldV/100;
@@ -608,6 +610,8 @@ void collectionConjGradientBox::timestepBox(){
     dV = hV * oldV;
     if(dV*dt > 1/kappaV) dV = 1/kappaV/dt;
     if(dV < 0) dV *= kappaV;
+    if(maxdV >= 0 and dV > maxdV) dV = maxdV;
+    if(maxdV >= 0 and dV < -maxdV) dV = -maxdV;
     flt newV = oldV + (dV*dt);
     
     #ifdef VEC3D

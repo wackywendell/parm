@@ -6909,6 +6909,10 @@ class collectionConjGradientBox(collection):
         """setP(collectionConjGradientBox self, flt P)"""
         return _sim2d.collectionConjGradientBox_setP(self, *args)
 
+    def setMaxdV(self, *args) -> "void" :
+        """setMaxdV(collectionConjGradientBox self, flt diff)"""
+        return _sim2d.collectionConjGradientBox_setMaxdV(self, *args)
+
     __swig_destroy__ = _sim2d.delete_collectionConjGradientBox
     __del__ = lambda self : None;
 collectionConjGradientBox_swigregister = _sim2d.collectionConjGradientBox_swigregister

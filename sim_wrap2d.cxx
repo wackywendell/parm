@@ -70325,6 +70325,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_collectionConjGradientBox_setMaxdV(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
+  flt arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:collectionConjGradientBox_setMaxdV",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_collectionConjGradientBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "collectionConjGradientBox_setMaxdV" "', argument " "1"" of type '" "collectionConjGradientBox *""'"); 
+  }
+  arg1 = reinterpret_cast< collectionConjGradientBox * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "collectionConjGradientBox_setMaxdV" "', argument " "2"" of type '" "flt""'");
+  } 
+  arg2 = static_cast< flt >(val2);
+  (arg1)->setMaxdV(arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_collectionConjGradientBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   collectionConjGradientBox *arg1 = (collectionConjGradientBox *) 0 ;
@@ -83281,6 +83311,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"collectionConjGradientBox_resize", _wrap_collectionConjGradientBox_resize, METH_VARARGS, (char *)"collectionConjGradientBox_resize(collectionConjGradientBox self, flt V)"},
 	 { (char *)"collectionConjGradientBox_setdt", _wrap_collectionConjGradientBox_setdt, METH_VARARGS, (char *)"collectionConjGradientBox_setdt(collectionConjGradientBox self, flt newdt)"},
 	 { (char *)"collectionConjGradientBox_setP", _wrap_collectionConjGradientBox_setP, METH_VARARGS, (char *)"collectionConjGradientBox_setP(collectionConjGradientBox self, flt P)"},
+	 { (char *)"collectionConjGradientBox_setMaxdV", _wrap_collectionConjGradientBox_setMaxdV, METH_VARARGS, (char *)"collectionConjGradientBox_setMaxdV(collectionConjGradientBox self, flt diff)"},
 	 { (char *)"delete_collectionConjGradientBox", _wrap_delete_collectionConjGradientBox, METH_VARARGS, (char *)"delete_collectionConjGradientBox(collectionConjGradientBox self)"},
 	 { (char *)"collectionConjGradientBox_swigregister", collectionConjGradientBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"solveCubic1", _wrap_solveCubic1, METH_VARARGS, (char *)"solveCubic1(flt b, flt c, flt d) -> flt"},
