@@ -205,6 +205,8 @@ class collectionConjGradient : public collection {
             collection(box, groups, interactions, trackers, constraints),
                 dt(dt){};
         void timestep();
+        void timestepNewton();
+        void reset();
         void setdt(flt newdt){dt=newdt;};
 };
 
@@ -240,9 +242,10 @@ class collectionConjGradientBox : public collection {
         void timestep();
         void timestepBox();
         void timestepAtoms();
+        void reset();
         void resize(flt V);
-        void setdt(flt newdt){dt=newdt;};
-        void setP(flt P){P0 = P;};
+        void setdt(flt newdt){dt=newdt; reset();};
+        void setP(flt P){P0 = P; reset();};
         void setMaxdV(flt diff){maxdV = diff;};
 };
 

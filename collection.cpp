@@ -475,6 +475,33 @@ void collectionConjGradient::timestep(){
     return;
 }
 
+void collectionConjGradient::timestepNewton(){
+    setForces(false);
+    update_constraints();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].f / m.getmass(i);
+            m[i].x += m[i].v * dt;
+        }
+    }
+    
+    update_trackers();
+    
+    return;
+}
+
+void collectionConjGradient::reset(){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = Vec();
+        }
+    }
+}
+
 flt collectionConjGradientBox::kinetic(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
@@ -482,12 +509,29 @@ flt collectionConjGradientBox::kinetic(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
-            Vec v = g[i].v - (g[i].x * Vfac);
+            //Vec v = g[i].v - (g[i].x * Vfac);
+            Vec v = g[i].v + (g[i].x * Vfac);
             E += v.sq() * g.getmass(i);
         }
     }
     return E/2.0;
 }
+
+void collectionConjGradientBox::reset(){
+    dV = 0;
+    hV = 0;
+    FV = 0;
+    lastFV = 0;
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = Vec();
+        }
+    }
+}
+
 
 void collectionConjGradientBox::resize(flt V){
     dV = 0;
@@ -529,8 +573,9 @@ void collectionConjGradientBox::timestep(){
     dV = hV * oldV;
     if(dV*dt > 1/kappaV) dV = 1/kappaV/dt;
     if(dV < 0) dV *= kappaV;
-    if(maxdV >= 0 and dV > maxdV) dV = maxdV;
-    if(maxdV >= 0 and dV < -maxdV) dV = -maxdV;
+    if(maxdV >= 0 and dV > maxdV*oldV) dV = maxdV*oldV;
+    if(maxdV >= 0 and dV < -maxdV*oldV) dV = -maxdV*oldV;
+    if(maxdV == 0) dV = 0;
     //~ if(abs(dV) > oldV / 100){
         //~ // cout << "CGbox DV TOO BIG: " << dV << " -> ";
         //~ dV = sgn(dV) * oldV/100;
@@ -610,8 +655,8 @@ void collectionConjGradientBox::timestepBox(){
     dV = hV * oldV;
     if(dV*dt > 1/kappaV) dV = 1/kappaV/dt;
     if(dV < 0) dV *= kappaV;
-    if(maxdV >= 0 and dV > maxdV) dV = maxdV;
-    if(maxdV >= 0 and dV < -maxdV) dV = -maxdV;
+    if(maxdV >= 0 and dV > maxdV*oldV) dV = maxdV*oldV;
+    if(maxdV >= 0 and dV < -maxdV*oldV) dV = -maxdV*oldV;
     flt newV = oldV + (dV*dt);
     
     #ifdef VEC3D

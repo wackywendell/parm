@@ -20,7 +20,7 @@
 #ifdef VEC2D
 typedef Vector2<double> Vec;
 #else
-typedef Vector<double> Vec;
+typedef Vector3<double> Vec;
 #endif
 typedef Numvector<double, 2> Pair;
 typedef Nvector<Vec, 2> VecPair;

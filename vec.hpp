@@ -101,12 +101,12 @@ class Numvector : public Nvector<T, N> {
 };
 
 template <class T>
-class Vector : public Numvector<T, 3> {
+class Vector3 : public Numvector<T, 3> {
     public:
-        Vector() {setx(0); sety(0); setz(0);}
-        Vector(const T a, const T b, const T c) {setx(a); sety(b); setz(c);}
-        Vector(const Numvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
-        Vector(const Nvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
+        Vector3() {setx(0); sety(0); setz(0);}
+        Vector3(const T a, const T b, const T c) {setx(a); sety(b); setz(c);}
+        Vector3(const Numvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
+        Vector3(const Nvector<T, 3> rhs) {setx(rhs.get(0)); sety(rhs.get(1)); setz(rhs.get(2));}
         inline const T getx() const {return Nvector<T,3>::get(0);}
         inline const T gety() const {return Nvector<T,3>::get(1);}
         inline const T getz() const {return Nvector<T,3>::get(2);}
@@ -115,49 +115,49 @@ class Vector : public Numvector<T, 3> {
         inline void setz(const T c){Nvector<T,3>::vals[2]=c;}
         inline void set(const T a, const T b, const T c){
             Nvector<T,3>::vals[0]=a; Nvector<T,3>::vals[1]=b; Nvector<T,3>::vals[2]=c;}
-        inline Vector operator-() const{
-            return Vector(-getx(),-gety(),-getz());}
-        inline Vector operator+(const Vector &rhs) const {
-            return Vector(getx()+rhs.getx(),gety()+rhs.gety(),getz()+rhs.getz());}
-        inline Vector operator-(const Vector &rhs) const {
-            return Vector(getx()-rhs.getx(),gety()-rhs.gety(),getz()-rhs.getz());}
-        inline T operator*(const Vector &rhs) const {
+        inline Vector3 operator-() const{
+            return Vector3(-getx(),-gety(),-getz());}
+        inline Vector3 operator+(const Vector3 &rhs) const {
+            return Vector3(getx()+rhs.getx(),gety()+rhs.gety(),getz()+rhs.getz());}
+        inline Vector3 operator-(const Vector3 &rhs) const {
+            return Vector3(getx()-rhs.getx(),gety()-rhs.gety(),getz()-rhs.getz());}
+        inline T operator*(const Vector3 &rhs) const {
             return (getx()*rhs.getx() + gety()*rhs.gety() + getz()*rhs.getz());}
-        template <class U> inline Vector operator*(const U rhs) const {
-            return Vector(getx()*rhs,gety()*rhs,getz()*rhs);}
-        template <class U> inline Vector operator/(const U rhs) const {
-            return Vector(getx()/rhs,gety()/rhs,getz()/rhs);}
-        Vector cross (const Vector &rhs) const;
-        inline Vector norm() const {return Vector(Numvector<T,3>::norm());};
-        inline Vector& operator-=(const Vector &rhs){Nvector<T,3>::operator-=(rhs); return *this;};
-        inline Vector& operator+=(const Vector &rhs){Nvector<T,3>::operator+=(rhs); return *this;}; 
-        template <class U> Vector& operator*=(const U rhs);
-        template <class U> Vector& operator/=(const U rhs);
+        template <class U> inline Vector3 operator*(const U rhs) const {
+            return Vector3(getx()*rhs,gety()*rhs,getz()*rhs);}
+        template <class U> inline Vector3 operator/(const U rhs) const {
+            return Vector3(getx()/rhs,gety()/rhs,getz()/rhs);}
+        Vector3 cross (const Vector3 &rhs) const;
+        inline Vector3 norm() const {return Vector3(Numvector<T,3>::norm());};
+        inline Vector3& operator-=(const Vector3 &rhs){Nvector<T,3>::operator-=(rhs); return *this;};
+        inline Vector3& operator+=(const Vector3 &rhs){Nvector<T,3>::operator+=(rhs); return *this;}; 
+        template <class U> Vector3& operator*=(const U rhs);
+        template <class U> Vector3& operator/=(const U rhs);
         
-        static T angle(const Vector &dx1, const Vector &dx2){
+        static T angle(const Vector3 &dx1, const Vector3 &dx2){
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
         
-        static T angle(const Vector &x1, const Vector &x2, const Vector &x3){
-            Vector dx1 = x1 - x2, dx2 = x3 - x2;
+        static T angle(const Vector3 &x1, const Vector3 &x2, const Vector3 &x3){
+            Vector3 dx1 = x1 - x2, dx2 = x3 - x2;
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
         
-        static T dihedral(const Vector &dx1, const Vector &dx2, const Vector &dx3){
+        static T dihedral(const Vector3 &dx1, const Vector3 &dx2, const Vector3 &dx3){
             return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(), 
                                 (dx1.cross(dx2).dot(dx2.cross(dx3))));
         }
         
-        static T dihedral(const Vector &x1, const Vector &x2, 
-                        const Vector &x3, const Vector &x4){
-            Vector dx1 = x2 - x1, dx2 = x3 - x2, dx3 = x4 - x3;
+        static T dihedral(const Vector3 &x1, const Vector3 &x2, 
+                        const Vector3 &x3, const Vector3 &x4){
+            Vector3 dx1 = x2 - x1, dx2 = x3 - x2, dx3 = x4 - x3;
             return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(), 
                                 (dx1.cross(dx2).dot(dx2.cross(dx3))));
         }
-        ~Vector(){};
+        ~Vector3(){};
         
         template <class U>
-        friend ostream& operator<<(ostream& out, const Vector<U> v);
+        friend ostream& operator<<(ostream& out, const Vector3<U> v);
 
 };
 
@@ -224,10 +224,10 @@ class Vector2 : public Numvector<T, 2> {
 
 //~ typedef float C;
 template<class C>
-class Matrix : public Nvector<Vector<C>,3> {
+class Matrix : public Nvector<Vector3<C>,3> {
     public:
-        Vector<C> dot(Vector<C> v) const;
-        inline Vector<C> operator *(Vector<C> v) const{return dot(v);};
+        Vector3<C> dot(Vector3<C> v) const;
+        inline Vector3<C> operator *(Vector3<C> v) const{return dot(v);};
         Matrix<C> SymmetricInverse() const;
         C det() const;
 };
@@ -258,8 +258,8 @@ Matrix<C> Matrix<C>::SymmetricInverse() const{
 };
 
 template<class C>
-Vector<C> Matrix<C>::dot(Vector<C> vec) const{
-    return Vector<C>(this->get(0).dot(vec),this->get(1).dot(vec),this->get(2).dot(vec));
+Vector3<C> Matrix<C>::dot(Vector3<C> vec) const{
+    return Vector3<C>(this->get(0).dot(vec),this->get(1).dot(vec),this->get(2).dot(vec));
 }
 
 template <class T, unsigned int N>
@@ -402,15 +402,15 @@ ostream& operator<< (ostream& out, const Numvector<U,M> v){
 }
 
 template <class T>
-Vector<T> Vector<T>::cross(const Vector<T> &rhs) const {
+Vector3<T> Vector3<T>::cross(const Vector3<T> &rhs) const {
     T newx = gety()*rhs.getz() - rhs.gety()*getz();
     T newy = getz()*rhs.getx() - rhs.getz()*getx();
     T newz = getx()*rhs.gety() - rhs.getx()*gety();
-    return Vector<T>(newx, newy, newz);
+    return Vector3<T>(newx, newy, newz);
 }
 
 template <class T> template <class U>
-Vector<T>& Vector<T>::operator*=(const U rhs){
+Vector3<T>& Vector3<T>::operator*=(const U rhs){
     Nvector<T,3>::vals[0] *= rhs;
     Nvector<T,3>::vals[1] *= rhs;
     Nvector<T,3>::vals[2] *= rhs;
@@ -418,7 +418,7 @@ Vector<T>& Vector<T>::operator*=(const U rhs){
 }
 
 template <class T> template <class U>
-Vector<T>& Vector<T>::operator/=(const U rhs){
+Vector3<T>& Vector3<T>::operator/=(const U rhs){
     Nvector<T,3>::vals[0] /= rhs;
     Nvector<T,3>::vals[1] /= rhs;
     Nvector<T,3>::vals[2] /= rhs;
@@ -426,7 +426,7 @@ Vector<T>& Vector<T>::operator/=(const U rhs){
 }
 
 template <class U>
-ostream& operator<< (ostream& out, const Vector<U> v){
+ostream& operator<< (ostream& out, const Vector3<U> v){
     out << "{" << v.get(0);
     for(int i = 1; i < 3; i++)
         out << ',' << v.get(i);

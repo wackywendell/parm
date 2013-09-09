@@ -1,6 +1,7 @@
 #include "vec.hpp"
 
 #include <vector>
+#include <bitset> // for contact tracking
 #include <set>
 #include <map>
 #include <list>
@@ -275,6 +276,7 @@ class metagroup : public atomgroup {
         vector<atom*> atoms;
     public:
         metagroup(){};
+        metagroup(vector<atom*> atoms) : atoms(atoms){};
         metagroup(vector<atomgroup*>);
         inline atom& operator[](cuint n){return *atoms[n];};
         inline atom& operator[](cuint n) const{return *atoms[n];};
@@ -899,6 +901,24 @@ class neighborlist : public statetracker{
         inline idpair get(uint i){return curpairs[i];};
         //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
         ~neighborlist(){};
+};
+
+class ContactTracker : public statetracker{
+    protected:
+        atomgroup *atoms;
+        vector<flt> dists;
+        vector<vector<bool> > contacts;
+        
+        unsigned long long breaks;
+        unsigned long long formations;
+        unsigned long long incontact;
+    public:
+        ContactTracker(Box *box, atomgroup *atoms, vector<flt> dists);
+        void update(Box *box);
+        
+        unsigned long long broken(){return breaks;};
+        unsigned long long formed(){return formations;};
+        unsigned long long number(){return incontact;};
 };
 
 template <class A, class P>
@@ -1874,6 +1894,9 @@ class jammingtree2 {
             };
             return retval;
         }
+        static Vec straight_diff(Box *bx, vector<Vec>& A, vector<Vec>& B);
+        static flt straight_distsq(Box *bx, vector<Vec>& A, vector<Vec>& B);
+        
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};
         list<jamminglistrot> copylist(uint n){
@@ -1884,6 +1907,11 @@ class jammingtree2 {
         
         
         jamminglistrot curbest(){
+            if(jlists.size() <= 0){
+                jamminglistrot bad_list = jamminglistrot();
+                bad_list.distsq = -1;
+                return bad_list;
+                }
             jamminglistrot j = jamminglistrot(jlists.front());
             //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
             //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
@@ -1928,8 +1956,8 @@ class jammingtreeBD : public jammingtree2 {
         jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
             jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
         jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, 
-                    uint cutoffA, uint cutoffB) :
-            jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
+                    uint cutoffA, uint cutoffB);// :
+            //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
         
         list<jamminglistrot> expand(jamminglistrot curjlist);
         bool expand();

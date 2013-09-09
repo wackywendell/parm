@@ -849,6 +849,41 @@ bool neighborlist::update_list(bool force){
     return true;
 }
 
+ContactTracker::ContactTracker(Box *box, atomgroup *atoms, vector<flt> dists) :
+    atoms(atoms), dists(dists), contacts(), breaks(0), formations(0),
+        incontact(0){
+    //~ cout << "Making contact tracker." << endl;
+    uint N = atoms->size();
+    dists.resize(N);
+    contacts.resize(N);
+    for(uint i=0; i<N; i++){
+        contacts[i].resize(i, false);
+    }
+    update(box);
+    breaks = 0;
+    formations = 0;
+};
+
+void ContactTracker::update(Box *box){
+    //~ cout << "Contact tracker update." << endl;
+    uint N = atoms->size();
+    incontact = 0;
+    for(uint i=0; i<N; i++){
+        Vec ri = atoms->get(i)->x;
+        for(uint j=0; j<i; j++){
+            Vec rj = atoms->get(j)->x;
+            Vec dr = box->diff(ri,rj);
+            bool curcontact = (dr.mag() <= ((dists[i] + dists[j])/2));
+            if(curcontact && (!contacts[i][j])) formations++;
+            else if(!curcontact && contacts[i][j]) breaks++;
+            if(curcontact) incontact++;
+            
+            contacts[i][j] = curcontact;
+        }
+    }
+    //~ cout << "Contact tracker update done." << endl;
+};
+
 LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
 
 flt LJsimple::energy(Box *box){
@@ -1084,6 +1119,14 @@ bool jammingtree2::expand(){
     return true;
 };
 
+
+jammingtreeBD::jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, 
+                    uint cutoffA, uint cutoffB) :
+            jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
+    if(cutoffA > cutoffB){jlists.clear();}
+    if(A.size() - cutoffA > B.size() - cutoffB){jlists.clear();}
+};
+
 list<jamminglistrot> jammingtreeBD::expand(jamminglistrot curjlist){
     vector<uint>& curlist = curjlist.assigned;
     list<jamminglistrot> newlists = list<jamminglistrot>();
@@ -1159,6 +1202,36 @@ vector<Vec> jammingtree2::locationsA(jamminglistrot jlist){
         locs[si] = locs[si].rotate_flip_inv(rot);
     }
     return locs;
+};
+
+Vec jammingtree2::straight_diff(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
+    uint N = As.size();
+    if(Bs.size() != N) return Vec(NAN,NAN);
+    
+    Vec loc = Vec();
+    for(uint i=0; i<N; i++){
+        for(uint j=0; j<N; j++){
+            Vec rij = bx->diff(As[i], As[j]);
+            Vec sij = bx->diff(Bs[i], Bs[j]);
+            loc += bx->diff(rij, sij);
+        }
+    }
+    return loc / N;
+};
+
+flt jammingtree2::straight_distsq(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
+    uint N = As.size();
+    if(Bs.size() != N) return NAN;
+    
+    flt dist = 0;
+    for(uint i=0; i<N; i++){
+        for(uint j=0; j<N; j++){
+            Vec rij = bx->diff(As[i], As[j]);
+            Vec sij = bx->diff(Bs[i], Bs[j]);
+            dist += bx->diff(rij, sij).sq();
+        }
+    }
+    return dist / N;
 };
 
 #endif
