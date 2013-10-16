@@ -1,5 +1,5 @@
 UNAME := $(shell uname)
-CC=icpc
+CXX=icpc
 SWIG=swig
 CCOPTS=-Wall -O2 -fPIC
 
@@ -11,6 +11,8 @@ LIB=`python3-config --ldflags`
 
 ALL=_sim.so
 
+.PHONY: all 2d 3d 2dlong 3dlong printout clean
+
 all: printout 2d 3d
 	@echo "making all."
 
@@ -18,6 +20,9 @@ all: printout 2d 3d
 
 3d: _sim.so
 
+2dlong: _sim2dlong.so
+
+3dlong: _sim3dlong.so
 	
 printout:
 	@echo Running \"$(CXX)\" on \"$(UNAME)\"
@@ -25,18 +30,26 @@ printout:
 clean:
 	rm -f *.o *.so *.gch
 
-sim_wrap3d.o: sim_wrap3d.cxx
-	ln -sf vecrand3d.hpp vecrand.hpp
-	ln -sf vecrand3d.cpp vecrand.cpp
-	$(CXX) $(CCOPTS) -c sim_wrap3d.cxx $(INC)
-
 sim_wrap2d.o: sim_wrap2d.cxx
-	ln -sf vecrand2d.hpp vecrand.hpp
-	ln -sf vecrand2d.cpp vecrand.cpp
-	$(CXX) $(CCOPTS) -c sim_wrap2d.cxx $(INC)
+	$(CXX) $(CCOPTS) -DVEC2D -c sim_wrap2d.cxx $(INC)
+
+sim_wrap3d.o: sim_wrap3d.cxx
+	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap3d.cxx $(INC)
 
 _sim2d.so: sim_wrap2d.o
-	$(CXX) $(CCOPTS) -shared sim_wrap2d.o -o _sim2d.so $(LIB)
+	$(CXX) $(CCOPTS) -DVEC2D -shared sim_wrap2d.o -o _sim2d.so $(LIB)
 	
 _sim.so: sim_wrap3d.o
-	$(CXX) $(CCOPTS) -shared sim_wrap3d.o -o _sim.so $(LIB)
+	$(CXX) $(CCOPTS) -DVEC3D -shared sim_wrap3d.o -o _sim.so $(LIB)
+
+sim_wrap2dlong.o: sim_wrap2dlong.cxx
+	$(CXX) $(CCOPTS) -DVEC2D -DLONGFLOAT -c sim_wrap2dlong.cxx $(INC)
+
+sim_wrap3dlong.o: sim_wrap3dlong.cxx
+	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -c sim_wrap3dlong.cxx $(INC)
+
+_sim2dlong.so: sim_wrap2dlong.o
+	$(CXX) $(CCOPTS) -DVEC2D -DLONGFLOAT -shared sim_wrap2dlong.o -o _sim2dlong.so $(LIB)
+	
+_sim3dlong.so: sim_wrap3dlong.o
+	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -shared sim_wrap3dlong.o -o _sim3dlong.so $(LIB)

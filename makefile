@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
-CCOPTS=-Wall -O2 -fPIC
+CCOPTS=-Wall -O2 -fPIC  -Wconversion
 
 #INC=-I/usr/include/python2.7
 INC=`python3-config --includes`
@@ -13,16 +13,21 @@ INC=`python3-config --includes`
 	#~ LIB=/opt/local/lib/libpython2.7.dylib
 #~ endif
 
-.PHONY: all 2d 3d printout clean
+.PHONY: all 2d 3d 2dlong 3dlong printout clean wraps
 
-all: printout 2d 3d
+all: 2d 2dlong 3d 3dlong
 	@echo "making all."
 
 2d: _sim2d.so
 
 3d: _sim.so
 
-	
+2dlong: _sim2dlong.so
+
+3dlong: _sim3dlong.so
+
+wraps: sim_wrap2d.cxx sim_wrap2dlong.cxx sim_wrap3d.cxx sim_wrap3dlong.cxx
+
 printout:
 	@echo Running on \"$(UNAME)\"
 
@@ -48,3 +53,23 @@ _sim2d.so: sim_wrap2d.o
 	
 _sim.so: sim_wrap3d.o
 	$(CXX) $(CCOPTS) -DVEC3D -shared sim_wrap3d.o -o _sim.so $(LIB)
+
+sim_wrap2dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+	$(SWIG) -DVEC2D -DLONGFLOAT sim.i
+	mv sim_wrap.cxx sim_wrap2dlong.cxx
+
+sim_wrap3dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+	$(SWIG) -DVEC3D -DLONGFLOAT sim.i
+	mv sim_wrap.cxx sim_wrap3dlong.cxx
+
+sim_wrap2dlong.o: sim_wrap2dlong.cxx
+	$(CXX) $(CCOPTS) -DVEC2D -DLONGFLOAT -c sim_wrap2dlong.cxx $(INC)
+
+sim_wrap3dlong.o: sim_wrap3dlong.cxx
+	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -c sim_wrap3dlong.cxx $(INC)
+
+_sim2dlong.so: sim_wrap2dlong.o
+	$(CXX) $(CCOPTS) -DVEC2D -DLONGFLOAT -shared sim_wrap2dlong.o -o _sim2dlong.so $(LIB)
+	
+_sim3dlong.so: sim_wrap3dlong.o
+	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -shared sim_wrap3dlong.o -o _sim3dlong.so $(LIB)

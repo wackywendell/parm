@@ -17,18 +17,58 @@
 
 #include "vec.hpp"
 
-#ifdef VEC2D
-typedef Vector2<double> Vec;
+#ifdef LONGFLOAT
+typedef long double flt;
+long double toLD(double e){return (long double) e;};
+double fromLD(long double e){return (double) e;};
+vector<flt> LDVector(vector<double> dists){
+    vector<flt> newdists = vector<flt>();
+    for(uint i=0; i<dists.size(); i++){
+        newdists.push_back((flt) dists[i]);
+    }
+    return newdists;
+};
+
+bool isinfflt(long double n){return isinfl(n);};
+bool isnanflt(long double n){return isnanl(n);};
+flt powflt(flt n, flt m){return powl(n,m);};
+flt sqrtflt(flt n){return sqrtl(n);};
+flt cbrtflt(flt n){return cbrtl(n);};
+flt expm1flt(flt n){return expm1l(n);};
 #else
-typedef Vector3<double> Vec;
+typedef double flt;
+bool isinfflt(double n){return isinf(n);};
+bool isnanflt(double n){return isnan(n);};
+flt powflt(flt n, flt m){return pow(n,m);};
+flt sqrtflt(flt n){return sqrt(n);};
+flt cbrtflt(flt n){return cbrt(n);};
+flt expm1flt(flt n){return expm1(n);};
 #endif
-typedef Numvector<double, 2> Pair;
+
+#ifdef VEC2D
+typedef Vector2<flt> Vec;
+#else
+typedef Vector3<flt> Vec;
+#endif
+typedef Numvector<flt, 2> Pair;
 typedef Nvector<Vec, 2> VecPair;
 using namespace std;
 
+const flt OVERNDIM = ((flt) 1.0)/NDIM;
+
+Vector2<flt> vec(double x, double y){
+    return Vector2<flt>(x,y);
+};
+
+Vector3<flt> vec(double x, double y, double z){
+    return Vector3<flt>(x,y,z);
+};
+
+uint vecsize(){return sizeof(Vec);}
+
 typedef boost::mt19937 engine;
-typedef boost::normal_distribution<> normdistribution;
-typedef boost::uniform_01<> lindistribution;
+typedef boost::normal_distribution<flt> normdistribution;
+typedef boost::uniform_01<flt, flt> lindistribution;
 typedef boost::variate_generator<engine&, normdistribution > normgenerator;
 typedef boost::variate_generator<engine&, lindistribution > lingenerator;
 
@@ -43,8 +83,8 @@ class gaussVec {
         normdistribution distro;
         normgenerator gauss;
     public:
-        gaussVec(double sigma);
-        void set(double sigma){distro = normdistribution(0,sigma);};
+        gaussVec(flt sigma);
+        void set(flt sigma){distro = normdistribution(0,sigma);};
 #ifdef VEC2D
         Vec generate(){return Vec(gauss(),gauss());};
 #else
@@ -56,13 +96,13 @@ class bivariateGauss {
     protected:
         normdistribution distro;
         normgenerator gauss;
-        double x11;
-        double x21;
-        double x22;
+        flt x11;
+        flt x21;
+        flt x22;
         
     public:
-        bivariateGauss(const double s1=1, const double s2=1, const double corr=0);
-        void set(const double s1, const double s2, const double corr);
+        bivariateGauss(const flt s1=1, const flt s2=1, const flt corr=0);
+        void set(const flt s1, const flt s2, const flt corr);
         Pair generate();
 #ifdef VEC2D
         Vec genVec(){return Vec(gauss(), gauss());};

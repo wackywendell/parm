@@ -162,7 +162,7 @@ void atomgroup::setAccel(){
 };
 
 atomid atomvec::get_id(atom* a){
-    uint n = a - atoms;
+    uint n = (uint) (a - atoms);
     if (n >= sz or a < atoms) return atomid();
     return atomid(atoms + n, n);
 };
@@ -190,12 +190,12 @@ atomid metagroup::get_id(atom* a){
 
 //~ flt LJforce::energy(flt r){
     //~ flt l = r / sigma;
-    //~ return 4*epsilon*(pow(l,-12) - pow(l,-6));
+    //~ return 4*epsilon*(powflt(l,-12) - powflt(l,-6));
 //~ }
 //~ 
 //~ flt LJforce::forces(flt r){
     //~ flt l = r / sigma;
-    //~ return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
+    //~ return 4*epsilon*(12*powflt(l,-13)-6*powflt(l,-7))/sigma;
 //~ }
 
 //~ LJcutoff::LJcutoff(const flt ep, const flt sig, const flt cut) : 
@@ -206,19 +206,19 @@ atomid metagroup::get_id(atom* a){
 //~ void LJcutoff::setcut(const flt cut){
     //~ cutoff = cut;
     //~ flt l = cutoff / sigma;
-    //~ cutoffenergy = 4*epsilon*(pow(l,-12) - pow(l,-6));
+    //~ cutoffenergy = 4*epsilon*(powflt(l,-12) - powflt(l,-6));
 //~ }
 //~ 
 //~ flt LJcutoff::energy(const flt r){
     //~ if(r > cutoff) return 0;
     //~ flt l = r / sigma;
-    //~ return 4*epsilon*(pow(l,-12) - pow(l,-6)) - cutoffenergy;
+    //~ return 4*epsilon*(powflt(l,-12) - powflt(l,-6)) - cutoffenergy;
 //~ }
 //~ 
 //~ flt LJcutoff::forces(const flt r){
     //~ if(r > cutoff) return 0;
     //~ flt l = r / sigma;
-    //~ return 4*epsilon*(12*pow(l,-13)-6*pow(l,-7))/sigma;
+    //~ return 4*epsilon*(12*powflt(l,-13)-6*powflt(l,-7))/sigma;
 //~ }
 //~ 
 //~ LJcutrepulsive::LJcutrepulsive(const flt ep, const flt sig, const flt cut) : 
@@ -229,17 +229,17 @@ atomid metagroup::get_id(atom* a){
 //~ void LJcutrepulsive::setcut(const flt cut){
     //~ cutoff = cut;
     //~ flt l = cutoff / sigma;
-    //~ cutoffenergy = 4*(pow(l,-12));
+    //~ cutoffenergy = 4*(powflt(l,-12));
 //~ }
 //~ 
 //~ flt LJcutrepulsive::energy(const flt r, const flt eps, const flt cutoff){
     //~ if(cutoff>0 and r > cutoff) return 0;
-    //~ return 4*eps*(pow(r,-12)) - energy(cutoff,eps,0);
+    //~ return 4*eps*(powflt(r,-12)) - energy(cutoff,eps,0);
 //~ }
 //~ 
 //~ flt LJcutrepulsive::forces(const flt r, const flt sig, const flt eps, const flt cutoff){
     //~ if(r > cutoff) return 0;
-    //~ return 4*eps*(12*pow(r,-13))/sig;
+    //~ return 4*eps*(12*powflt(r,-13))/sig;
 //~ }
 
 flt spring::energy(const Vec r){
@@ -250,6 +250,7 @@ flt spring::energy(const Vec r){
 
 Vec spring::forces(const Vec r){
     flt m = r.mag();
+    if(m < 1e-32) return Vec();
     flt fmag = (x0 - m) * springk;
     return r * (fmag / m);
 }
@@ -274,8 +275,8 @@ Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, cons
 
 flt bondangle::energy(const Vec& r1, const Vec& r2){
     flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
-    if(!usecos) return springk*pow(acos(costheta) - theta0,2)/2;
-    else return springk*pow(costheta - cos(theta0),2)/2;
+    if(!usecos) return springk*powflt(acos(costheta) - theta0,2)/2;
+    else return springk*powflt(costheta - cos(theta0),2)/2;
 }
 
 Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
@@ -345,7 +346,7 @@ sides of the bond. */
     flt qa = c[0][0]*c[1][1] - c[0][1] * c[0][1];
     flt qb = c[1][1]*c[2][2] - c[1][2] * c[1][2];
     flt q = qa * qb;
-    flt sqq = sqrt(q);
+    flt sqq = sqrtflt(q);
     
     flt t1 = p;
     flt t2 = c[0][0] * c[1][2] - c[0][1] * c[0][2];
@@ -384,7 +385,7 @@ sides of the bond. */
                             derivs[3] * (1 + c[1][2]/c[1][1]);
     
      /*
-     Rapaport says costheta = p/sqrt(q); we add a negative for the cosine.
+     Rapaport says costheta = p/sqrtflt(q); we add a negative for the cosine.
      */
     
     flt dcostheta;
@@ -410,7 +411,7 @@ sides of the bond. */
     //~ assert(derivs[3].sq() < 1e8);
         
     
-    //~ flt mag = sqrt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
+    //~ flt mag = sqrtflt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
                     //~ derivs[3].sq());
     //~ 
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
@@ -430,7 +431,7 @@ flt dihedral::dudcosthetaCOS(const flt costheta) const{
     flt tot = 0;
     unsigned int cosmx = coscoeffs.size();
     for(unsigned int i=1; i < cosmx; i++){
-        tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
+        tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
     }
     //~ cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
@@ -446,9 +447,9 @@ flt dihedral::dudcostheta(const flt theta) const{
         flt costheta = cos(theta), sintheta = sin(theta);
         flt cottheta = -costheta / sintheta;
         for(unsigned int i=1; i < mx; i++){
-            if (i < cosmx) tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
+            if (i < cosmx) tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
             if (i < sinmx) tot += sincoeffs[i] * i * cottheta
-                                    * pow(sintheta, flt(i-1));
+                                    * powflt(sintheta, flt(i-1));
         }
     } else {
         flt csctheta = 1 / sin(theta);
@@ -495,8 +496,8 @@ flt dihedral::energy(const flt ang) const{
     flt tot = 0;
     for(unsigned int i=0; i < mx; i++){
         if(usepow) {
-            if(i < cosmx) tot += coscoeffs[i] * pow(costheta, flt(i));
-            if(i < sinmx) tot += sincoeffs[i] * pow(sintheta, flt(i));
+            if(i < cosmx) tot += coscoeffs[i] * powflt(costheta, flt(i));
+            if(i < sinmx) tot += sincoeffs[i] * powflt(sintheta, flt(i));
         } else {
             if(i < cosmx) tot += coscoeffs[i] * cos(i * ang);
             if(i < sinmx) tot += sincoeffs[i] * sin(i * ang);
@@ -583,7 +584,7 @@ flt bondpairs::std_dists() const{
         stds += curdist*curdist;
         N++;
     }
-    return sqrt(stds/N);
+    return sqrtflt(stds/N);
 }
 
 angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
@@ -659,7 +660,7 @@ flt angletriples::std_dists() const{
         stds += curdist*curdist;
         N++;
     }
-    return sqrt(stds/N);
+    return sqrtflt(stds/N);
 };
 
 #ifdef VEC3D
@@ -739,7 +740,7 @@ flt dihedrals::mean_dists() const{
         //~ stds += curdist*curdist;
         //~ N++;
     //~ }
-    //~ return sqrt(stds/N);
+    //~ return sqrtflt(stds/N);
 //~ };
 #endif
 
@@ -882,6 +883,32 @@ void ContactTracker::update(Box *box){
         }
     }
     //~ cout << "Contact tracker update done." << endl;
+};
+
+void EnergyTracker::update(Box *box){
+    if(nskipped + 1 < nskip){
+        nskipped += 1;
+        return;
+    }
+    
+    nskipped = 0;
+    uint Natoms = atoms->size();
+    flt curU = 0, curK = 0;
+    for(uint i=0; i<Natoms; i++){
+        atom &curatom = *(atoms->get(i));
+        curK += curatom.v.sq() * curatom.m / 2;
+    }
+    
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it != interactions.end(); it++){
+        curU += (*it)->energy(box);
+    }
+    
+    curU -= U0;
+    Ks += curK;
+    Us += curU;
+    Es += curK + curU;
+    N++;
 };
 
 LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
@@ -1078,7 +1105,7 @@ flt jammingtree2::distance(jamminglistrot& jlist){
             dist += box->diff(rij, sij).sq();
         }
     }
-    return dist / jlist.assigned.size();
+    return dist / ((flt) jlist.assigned.size());
 };
 
 list<jamminglistrot> jammingtree2::expand(jamminglistrot curjlist){
@@ -1088,7 +1115,7 @@ list<jamminglistrot> jammingtree2::expand(jamminglistrot curjlist){
         return newlists;
     }
     
-    uint N = Bs[curjlist.rotation].size();
+    uint N = (uint) Bs[curjlist.rotation].size();
     for(uint i=0; i < N; i++){
         vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
         //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
@@ -1134,7 +1161,7 @@ list<jamminglistrot> jammingtreeBD::expand(jamminglistrot curjlist){
         return newlists;
     }
     
-    uint N = Bs[curjlist.rotation].size();
+    uint N = (uint) Bs[curjlist.rotation].size();
     uint start = 0, end=cutoff2;
     if(curlist.size() >= cutoff1){
         start=cutoff2;
@@ -1205,7 +1232,7 @@ vector<Vec> jammingtree2::locationsA(jamminglistrot jlist){
 };
 
 Vec jammingtree2::straight_diff(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
-    uint N = As.size();
+    uint N = (uint) As.size();
     if(Bs.size() != N) return Vec(NAN,NAN);
     
     Vec loc = Vec();
@@ -1220,7 +1247,7 @@ Vec jammingtree2::straight_diff(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
 };
 
 flt jammingtree2::straight_distsq(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
-    uint N = As.size();
+    uint N = (uint) As.size();
     if(Bs.size() != N) return NAN;
     
     flt dist = 0;

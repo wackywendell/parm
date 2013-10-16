@@ -25,6 +25,7 @@ class collection {
         void update_trackers();
         void update_constraints();
         virtual flt setForcesGetPressure(bool seta=true);
+        flt E0;
         
     public:
         collection(Box *box, 
@@ -75,7 +76,9 @@ class collection {
         
         vector<interaction*> getInteractions(){return interactions;};
         
-        uint numInteraction(){ return interactions.size();};
+        uint numInteraction(){ return (uint) interactions.size();};
+        
+        void setE0(flt newE0){E0=newE0;};
 };
 
 class StaticCollec : public collection {
@@ -214,9 +217,9 @@ class collectionConjGradientBox : public collection {
     // Conjugate-Gradient energy minimization, with 
     // H = H0(x₁, x₂, …, L) + P V
     // More specifically, we take the Nose-Hoover NPH hamiltonian,
-    // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅔ ⃗sᵢ…) + P₀ V
-    // and E = U(V^⅔ ⃗sᵢ…) + P₀ V
-    // We minimize using ⃗sᵢ and V as the two variables
+    // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅓ ⃗sᵢ…) + P₀ V
+    // and E = U(V^⅓ ⃗sᵢ…) + P₀ V
+    // We minimize using ⃗sᵢ and ln V as the two variables
     /// NOTE: this CANNOT be used with neighbor lists, as it modifies
     /// the box size as it goes; either that, or you have to update
     /// the neighbor list more carefully each time.
@@ -249,19 +252,133 @@ class collectionConjGradientBox : public collection {
         void setMaxdV(flt diff){maxdV = diff;};
 };
 
+class collectionNLCG : public collection {
+    // Conjugate-Gradient energy minimization, with 
+    // H = H0(x₁, x₂, …, L) + P V
+    // More specifically, we take the Nose-Hoover NPH hamiltonian,
+    // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅔ ⃗sᵢ…) + P₀ V
+    // and E = U(V^⅔ ⃗sᵢ…) + P₀ V
+    // We minimize using ⃗sᵢ and κ ln V as the dN+1 variables
+    
+    public:
+        // Parameters
+        flt dt;
+        flt secmax, seceps, alphamax, dxmax;
+        flt kappa;
+        flt kmax;
+        
+        // Goal pressure
+        flt P0;
+        
+        // To keep between iterations
+        flt Knew;
+        flt k;
+        flt vl, fl, al;
+        
+        // For tracking purposes
+        flt alpha, dxsum, alphavmax, maxdV;
+        uint sec;
+        
+        void stepx(flt dx);
+        flt getLsq();
+        flt fdota();
+        flt fdotf();
+        flt fdotv();
+        flt vdotv();
+        //~ void resizedl(flt dl);
+        
+    public:
+        collectionNLCG(OriginBox *box, const flt dt, const flt P0, 
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>(),
+                const flt kappa=0, const flt kmax=1000,
+                const flt secmax=10, const flt seceps = 0.0001);
+        
+        flt kinetic();  // Note: masses are ignored
+        flt pressure();
+        flt Hamiltonian();
+        void setForces(bool seta=true){setForces(seta,true);};
+        void setForces(bool seta, bool setV);
+        
+        void timestep();
+        void descend(); // use steepest descent
+        void reset();
+        void resize(flt V);
+        
+        void setdt(flt newdt){dt=newdt; reset();};
+        void setP(flt P){P0 = P; reset();};
+        void setkappa(flt k){kappa=k; reset();};
+        void setamax(flt a){alphamax=a;};
+        void setdxmax(flt d){dxmax=d;};
+        void setmaxdV(flt d){maxdV=d;};
+};
+
+
+
+class collectionNLCGV : public collection {
+    // Conjugate-Gradient energy minimization, with 
+    // and E = U(⃗rᵢ…)
+    
+    public:
+        // Parameters
+        flt dt;
+        flt secmax, seceps;
+        flt alphamax, afrac, dxmax, stepmax, kmax;
+        
+        // To keep between iterations
+        flt Knew;
+        flt k;
+        flt vl, fl, al;
+        
+        // For tracking purposes
+        flt alpha, beta, betaused, dxsum, alphavmax;
+        uint sec;
+        
+        void stepx(flt dx);
+        
+        flt fdota();
+        flt fdotf();
+        flt fdotv();
+        flt vdotv();
+        //~ void resizedl(flt dl);
+        
+    public:
+        collectionNLCGV(Box *box, const flt dt,
+                vector<atomgroup*> groups=vector<atomgroup*>(),
+                vector<interaction*> interactions=vector<interaction*>(),
+                vector<statetracker*> trackers=vector<statetracker*>(),
+                vector<constraint*> constraints=vector<constraint*>(),
+                const flt kmax=1000, const flt secmax=10, 
+                const flt seceps = 1e-4);
+        
+        flt pressure();
+        
+        void reset();
+        void descend(); // use steepest descent
+        void timestep();
+        
+        void setdt(flt newdt){dt=newdt; reset();};
+        void setamax(flt a){alphamax=a;};
+        void setafrac(flt a){afrac=a;};
+        void setdxmax(flt d){dxmax=d;};
+        void setstepmax(flt m){stepmax=m;};
+};
+
 flt solveCubic1(flt b, flt c, flt d){
     // from Wikipedia
-    flt determ = (pow(2*pow(b,2) - 9*b*c + 27*d,2) - 4*pow(b*b - 3*c,3));
+    flt determ = (powflt(2*powflt(b,2) - 9*b*c + 27*d,2) - 4*powflt(b*b - 3*c,3));
     if (determ < 0)
-        printf("bad determ: %.4f\n", determ);
-    flt firstpartundercube = (2*pow(b,3) - 9*b*c + 27*d)/2;
-    flt secondpartundercube = sqrt(determ)/2;
+        printf("bad determ: %.4f\n", (double) determ);
+    flt firstpartundercube = (2*powflt(b,3) - 9*b*c + 27*d)/2;
+    flt secondpartundercube = sqrtflt(determ)/2;
     if (firstpartundercube < secondpartundercube) 
         printf("bad pairs under cube: %.4f < %.4f (%.4f)\n", 
-                    firstpartundercube, secondpartundercube,
-                    firstpartundercube - secondpartundercube);
-    flt cuberoot1=cbrt(firstpartundercube + secondpartundercube);
-    flt cuberoot2=cbrt(firstpartundercube - secondpartundercube);
+                    (double) firstpartundercube, (double) secondpartundercube,
+                    (double) (firstpartundercube - secondpartundercube));
+    flt cuberoot1=cbrtflt(firstpartundercube + secondpartundercube);
+    flt cuberoot2=cbrtflt(firstpartundercube - secondpartundercube);
     return (-b/3) - (cuberoot1/3) - (cuberoot2/3);
 }
 
@@ -277,10 +394,10 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
     flt R2 = R*R;
     bool determ = (Q3 >= R2);
     if (determ){
-        printf("Multiple Answers: %.4f, %.4f\n", Q,R);
+        printf("Multiple Answers: %.4f, %.4f\n", (double) Q,(double) R);
         assert(!determ);
-        flt theta = acos(R / sqrt(Q3));
-        flt sqQ = -2*sqrt(Q);
+        flt theta = acos(R / sqrtflt(Q3));
+        flt sqQ = -2*sqrtflt(Q);
         flt x1 = sqQ*cos(theta/3) - (a1/3);
         flt x2 = sqQ*cos((theta + (2*M_PI))/3) - (a1/3);
         flt x3 = sqQ*cos((theta + (4*M_PI))/3) - (a1/3);
@@ -302,15 +419,16 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
         
         #define tol 1e-3
         if(d1 > tol and d2 > tol and d3 > tol){
-            printf("Multiple Answers: %.4f, %.4f\n", Q,R);
+            printf("Multiple Answers: %.4f, %.4f\n", (double) Q,(double) R);
             //~ printf("pi: %.4f\n", M_2_PI);
             //~ printf("theta %.4f : %.4f, %.4f, %.4f\n", theta, 
                 //~ theta/3, (theta + (2*M_PI))/3, (theta + (4*M_PI))/3);
-            printf("%.4f (%.4f), %.4f (%.4f), %.4f (%.4f) : %.4f\n", x1,d1,x2,d2,x3,d3, x);
+            printf("%.4f (%.4f), %.4f (%.4f), %.4f (%.4f) : %.4f\n",
+                (double) x1,(double) d1,(double) x2,(double) d2,(double) x3,(double) d3, (double) x);
         }
         return x;
     }
-    flt R2Q3 = cbrt(sqrt(R2 - Q3) + fabs(R));
+    flt R2Q3 = cbrtflt(sqrtflt(R2 - Q3) + fabs(R));
     return -(sgn(R)*(R2Q3 + (Q/R2Q3))) - (a1/3);
 }
 
@@ -497,7 +615,7 @@ class atomvecRK4 : public virtual atomgroup {
         atomRK4* atoms;
         uint sz;
     public:
-        atomvecRK4(vector<flt> masses) : sz(masses.size()){
+        atomvecRK4(vector<flt> masses) : sz((uint) masses.size()){
             atoms = new atomRK4[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
         };

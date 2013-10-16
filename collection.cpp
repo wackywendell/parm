@@ -3,7 +3,7 @@
 collection::collection(Box *box, vector<atomgroup*> gs, vector<interaction*> is,
               vector<statetracker*> ts, vector<constraint*> cs)
         : box(box), groups(gs), interactions(is), trackers(ts), constraints(cs),
-                atoms(gs){
+                atoms(gs), E0(0){
     update_trackers();
     setForces(true);
     update_constraints();
@@ -22,7 +22,7 @@ void collection::scaleVs(flt scaleby){
 
 void collection::scaleVelocitiesT(flt T){
     flt t = temp();
-    flt scaleby = sqrt(T/t);
+    flt scaleby = sqrtflt(T/t);
     scaleVs(scaleby);
 }
 
@@ -30,7 +30,7 @@ void collection::scaleVelocitiesE(flt E){
     flt E0 = energy();
     flt k0 = kinetic();
     flt goalkinetic = k0 + (E - E0);
-    flt scaleby = sqrt(goalkinetic/k0);
+    flt scaleby = sqrtflt(goalkinetic/k0);
     scaleVs(scaleby);
 }
 
@@ -69,7 +69,7 @@ flt collection::virial(){
 
 flt collection::pressure(){
     flt V = box->V();
-    //~ if(isnan(V) or isinf(V)) return NAN;
+    //~ if(isnanflt(V) or isinf(V)) return NAN;
     //~ int ndof = 0, nc = 0;
     //~ vector<constraint*>::iterator cit;
     //~ for(cit = constraints.begin(); cit<constraints.end(); cit++){
@@ -87,7 +87,7 @@ flt collection::pressure(){
     vector<interaction*>::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         E += (*it)->pressure(box);
-        assert(not isnan(E));
+        assert(not isnanflt(E));
     }
     return E / V / flt(NDIM);
 }
@@ -99,14 +99,14 @@ flt collection::potentialenergy(){
         interaction &inter = **it;
         E += inter.energy(box);
         //~ cout << "potential energy: " << E << endl;
-        assert(not isnan(E));
+        assert(not isnanflt(E));
     }
     return E;
 }
 
 flt collection::energy(){
-    flt E = potentialenergy() + kinetic();
-    assert(not isnan(E));
+    flt E = potentialenergy() - E0 + kinetic();
+    assert(not isnanflt(E));
     return E;
 };
 
@@ -138,7 +138,7 @@ flt collection::temp(bool minuscomv){
         totatoms += group.size();
     }
     
-    int ndof = dof();
+    int ndof = (int) dof();
     if (minuscomv) ndof -= NDIM;
     //~ cout << minuscomv << " " << ndof << " " << NDIM << endl;
     //~ cout << "K: " << totkinetic << ", totatoms: " << totatoms << "\n";
@@ -193,7 +193,7 @@ flt collection::gyradius(){
         for(uint i = 0; i<g.size(); i++) Rgsq += (g[i].x - avgr).sq();
     }
     
-    return sqrt(Rgsq/N);
+    return sqrtflt(Rgsq/N);
 }
 
 void collection::setForces(bool seta){
@@ -264,7 +264,7 @@ void collectionSol::setCs(){
     // from Allen and Tildesley, 262
     flt dampdt = damping * dt;
     c0 = exp(-dampdt);
-    c1 = (-expm1(-dampdt))/dampdt;
+    c1 = (-expm1flt(-dampdt))/dampdt;
     c2 = (1-c1)/dampdt;
     
     // note that for sigmar, sigmav, and corr, we have taken the
@@ -273,16 +273,16 @@ void collectionSol::setCs(){
     // so sigmar has a dt*sqrt(k T/m) removed, and sigmav has a sqrt(k T/m)
     // removed
     if(dampdt > 1e-4)
-        sigmar = sqrt((1/dampdt) * (
-            2-(-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
+        sigmar = sqrtflt((1/dampdt) * (
+            2-(-4*expm1flt(-dampdt) + expm1flt(-2*dampdt))/dampdt
             ));
     else
-        sigmar = sqrt(2*dampdt/3 - dampdt*dampdt/2 + 7*dampdt*dampdt*dampdt/30);
+        sigmar = sqrtflt(2*dampdt/3 - dampdt*dampdt/2 + 7*dampdt*dampdt*dampdt/30);
     //~ cout << "setCs: " << -4*expm1(-dampdt) << ',' << expm1(-2*dampdt)
          //~ << ", (...): " << (-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
          //~ << ", sigmar:" << sigmar << '\n';
-    sigmav = sqrt(-expm1(-2*dampdt));
-    flt exdpdt = (-expm1(-dampdt));
+    sigmav = sqrtflt(-expm1flt(-2*dampdt));
+    flt exdpdt = (-expm1flt(-dampdt));
     corr = exdpdt*exdpdt/dampdt/sigmar/sigmav;
     //~ cout << "vals: " << c0 << ',' << c1 << ',' << c2 << "; T=" <<desT
          //~ << ", sigmas: (" << sigmar << ',' << sigmav << ',' << corr << ')'
@@ -305,7 +305,7 @@ void collectionSol::timestep(){
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
-            flt v0 = sqrt(desT/m.getmass(i));
+            flt v0 = sqrtflt(desT/m.getmass(i));
             flt r0 = dt * v0;
             VecPair vecpair;
             if (damping > 0) vecpair = gauss.genVecs();
@@ -344,7 +344,7 @@ collectionSolHT::collectionSolHT(Box *box, const flt dt, const flt damp,const fl
         vector<atomgroup*> groups,vector<interaction*> interactions,
         vector<statetracker*> trackers, vector<constraint*> constraints) :
             collection(box, groups, interactions, trackers, constraints), 
-            dt(dt), damping(damp), desT(T), gauss(sqrt(2.0*desT*damping/dt)){
+            dt(dt), damping(damp), desT(T), gauss(sqrtflt(2.0*desT*damping/dt)){
     setGauss();
     update_trackers();
     setForces(true);
@@ -353,7 +353,7 @@ collectionSolHT::collectionSolHT(Box *box, const flt dt, const flt damp,const fl
 };
 
 void collectionSolHT::setGauss(){
-    gauss.set(sqrt(2.0*desT*damping/dt)); // TODO: Is that correct?
+    gauss.set(sqrtflt(2.0*desT*damping/dt)); // TODO: Is that correct?
 }
 
 void collectionSolHT::timestep(){
@@ -542,10 +542,10 @@ void collectionConjGradientBox::resize(flt V){
     OriginBox* obox = (OriginBox*) box;
     flt oldV = obox->V();
     #ifdef VEC3D
-    flt Vfac = pow(V/oldV, 1.0/3.0);
+    flt Vfac = powflt(V/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Vfac = sqrt(V/oldV);
+    flt Vfac = sqrtflt(V/oldV);
     #endif
     
     vector<atomgroup*>::iterator git;
@@ -588,10 +588,10 @@ void collectionConjGradientBox::timestep(){
     flt newV = oldV + (dV*dt);
     //flt Vfac = dV/((oldV + newV)/2)/NDIM;
     #ifdef VEC3D
-    flt Vfac = pow(newV/oldV, 1.0/3.0);
+    flt Vfac = powflt(newV/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Vfac = sqrt(newV/oldV);
+    flt Vfac = sqrtflt(newV/oldV);
     #endif
     
     vector<atomgroup*>::iterator git;
@@ -608,14 +608,14 @@ void collectionConjGradientBox::timestep(){
     flt newFV = (interacP/NDIM) - (P0*newV);
     
     flt gammaV = 0;
-    if(FV*FV > 0) gammaV = newFV * (newFV) / (FV*FV);
-    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
+    if(FV*FV > 0) gammaV = newFV * (newFV-FV) / (FV*FV);
+    if(gammaV < 0 or isnanflt(gammaV) or isinfflt(gammaV)) gammaV = 0;
     if(gammaV > 1) gammaV = 1;
     
-    if(isnan(oldV) or isnan(newV) or isnan(dV)){
+    if(isnanflt(oldV) or isnanflt(newV) or isnanflt(dV)){
         cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
         cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
-        assert(!isnan(oldV));
+        assert(!isnanflt(oldV));
     }
     hV = newFV + (gammaV*hV);
     FV = newFV;
@@ -631,7 +631,7 @@ void collectionConjGradientBox::timestep(){
                 // gamma = newa.sq() / asq; // Fletcher-Reeves
             }
             //if(gamma > 100) gamma = 0;
-            if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
+            if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
             m[i].v = newa + (m[i].v * gamma);
             m[i].a = newa;
             //~ if(git == groups.begin() and i == 0){
@@ -660,10 +660,10 @@ void collectionConjGradientBox::timestepBox(){
     flt newV = oldV + (dV*dt);
     
     #ifdef VEC3D
-    flt Vfac = pow(newV/oldV, 1.0/3.0);
+    flt Vfac = powflt(newV/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Vfac = sqrt(newV/oldV);
+    flt Vfac = sqrtflt(newV/oldV);
     #endif
     
     vector<atomgroup*>::iterator git;
@@ -681,13 +681,13 @@ void collectionConjGradientBox::timestepBox(){
     
     flt gammaV = 0;
     if(FV*FV > 0) gammaV = newFV * (newFV) / (FV*FV);
-    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
+    if(gammaV < 0 or isnanflt(gammaV) or isinfflt(gammaV)) gammaV = 0;
     if(gammaV > 1) gammaV = 1;
     
-    if(isnan(oldV) or isnan(newV) or isnan(dV)){
+    if(isnanflt(oldV) or isnanflt(newV) or isnanflt(dV)){
         cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
         cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
-        assert(!isnan(oldV));
+        assert(!isnanflt(oldV));
     }
     hV = newFV + (gammaV*hV);
     FV = newFV;
@@ -724,7 +724,7 @@ void collectionConjGradientBox::timestepAtoms(){
                 // gamma = newa.sq() / asq; // Fletcher-Reeves
             }
             //if(gamma > 100) gamma = 0;
-            if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
+            if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
             m[i].v = newa + (m[i].v * gamma);
             m[i].a = newa;            
         }
@@ -733,6 +733,610 @@ void collectionConjGradientBox::timestepAtoms(){
     update_trackers();
     return;
 }
+
+collectionNLCG::collectionNLCG(OriginBox *box, const flt dt, const flt P0,
+                vector<atomgroup*> groups,
+                vector<interaction*> interactions,
+                vector<statetracker*> trackers,
+                vector<constraint*> constraints,
+                const flt kappa, const flt kmax,
+                const flt secmax, const flt seceps) :
+            collection(box, groups, interactions, trackers, 
+                constraints), dt(dt), secmax(secmax), seceps(seceps),
+                alphamax(10), dxmax(0), kappa(kappa), kmax(kmax),
+                P0(P0), Knew(0), k(0), vl(0), fl(0), al(0), alpha(0), 
+                dxsum(0), alphavmax(0), maxdV(0), sec(0){
+};
+
+void collectionNLCG::reset(){
+    k = 0;
+    setForces(true, true);
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].a;
+        }
+    }
+    vl = al;
+}
+
+void collectionNLCG::setForces(bool seta, bool setV){
+    flt V = box->V();
+    if(setV){
+        flt interacP = collection::setForcesGetPressure(false);
+        fl = ((interacP/NDIM) - (P0*V))/kappa;
+        if(seta){
+            al = fl;
+            vl = fl;
+        }
+        //~ cout << "NLCG::setForces: fl = " << fl
+             //~ << " -- P/d = " << (interacP/NDIM) << " -- V*P0 = " << (P0*V)
+             //~ << '\n';
+    } else {
+        collection::setForces(false);
+    }
+    if(seta){
+        vector<atomgroup*>::iterator git;
+        for(git = groups.begin(); git<groups.end(); git++){
+            atomgroup &m = **git;
+            for(uint i=0; i<m.size(); i++){
+                m[i].a = m[i].f;
+                m[i].v = m[i].f;
+            }
+        }
+        Knew = fdota();
+    }
+}
+
+
+flt collectionNLCG::Hamiltonian(){
+    return potentialenergy() + P0*(box->V());
+};
+
+/*
+void collectionNLCG::resizedl(flt dl){
+    OriginBox* obox = (OriginBox*) box;
+    flt oldV = obox->V();
+    
+    flt Vfac = exp(dl / kappa);
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x *= Vfac;
+            m[i].v = Vec();
+        }
+    }
+    
+    obox->resizeV(V);
+}*/
+
+void collectionNLCG::resize(flt V){
+    reset();
+    OriginBox* obox = (OriginBox*) box;
+    flt oldV = obox->V();
+    #ifdef VEC3D
+    flt Lfac = powflt(V/oldV, 1.0/3.0);
+    #endif
+    #ifdef VEC2D
+    flt Lfac = sqrtflt(V/oldV);
+    #endif
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x *= Lfac;
+            m[i].v = Vec();
+        }
+    }
+    
+    obox->resizeV(V);
+}
+
+flt collectionNLCG::kinetic(){
+    flt E=0;
+    flt Lfac = exp(vl / (kappa*NDIM));
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            //Vec v = g[i].v - (g[i].x * Vfac);
+            Vec v = g[i].v + (g[i].x * Lfac);
+            E += v.sq();// * g.getmass(i);
+        }
+    }
+    
+    return E/2.0;
+}
+
+flt collectionNLCG::pressure(){
+    flt V = box->V();
+    
+    flt E = 0;
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        E += (*it)->pressure(box);
+        assert(not isnanflt(E));
+    }
+    return E / V / flt(NDIM);
+}
+
+void collectionNLCG::stepx(flt dx){
+    OriginBox* obox = (OriginBox*) box;
+    flt Lfac = exp(dx * vl / (kappa*NDIM));
+    
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x *= Lfac;
+            m[i].x += m[i].v * dx;
+        }
+    }
+    
+    //~ cout << "NLCG::stepx: V0 = " << obox->V() << " -- dx = " << dx 
+         //~ << " -- Vfac = " << Vfac;
+    obox->resize(Lfac);
+    //~ cout << " -- V = " << obox->V() << '\n';
+}
+
+flt collectionNLCG::getLsq(){
+    OriginBox* obox = (OriginBox*) box;
+    #ifdef VEC3D
+    return powflt(obox->V(), 2.0/3.0);
+    #endif
+    #ifdef VEC2D
+    return obox->V();
+    #endif
+};
+
+flt collectionNLCG::fdotf(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].f.sq();
+        }
+    }
+    
+    return returnvalue / getLsq() + fl * fl;
+}
+
+flt collectionNLCG::fdota(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].f.dot(g[i].a);
+        }
+    }
+    
+    return returnvalue / getLsq() + fl * al;
+}
+
+flt collectionNLCG::fdotv(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].f.dot(g[i].v);
+        }
+    }
+    
+    return returnvalue / getLsq() + fl * vl;
+}
+
+flt collectionNLCG::vdotv(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].v.sq();
+        }
+    }
+    
+    return returnvalue / getLsq() + vl * vl;
+}
+
+void collectionNLCG::timestep(){
+    // Algorithm from
+    // An Introduction to the Conjugate Gradient Method Without the Agonizing Pain
+    // Edition 1 1/4
+    // Jonathan Richard Shewchuk
+    // August 4, 1994
+    // An electronic copy of this article is available by anonymous FTP to WARP.CS.CMU.EDU (IP address 128.2.209.103) under the filename quake-papers/painless-conjugate-gradient.ps. 
+    
+    // Uses a combination of
+    // B4. Nonlinear Conjugate Gradients with Newton-Raphson and Fletcher-Reeves
+    // B5. Preconditioned Nonlinear Conjugate Gradients with Secant and Polak-Ribi`ere
+    
+    // where I use Secant and Polak-Ribi`ere, but no preconditioning.
+    
+    // Where m[i].a/L = -f', m[i].v/L = d, σ0 = dt
+    // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
+    // and while its called 'a', its actually 'v'
+    
+    vector<atomgroup*>::iterator git;
+    
+    flt V0 = box->V();
+    
+    alpha = -dt;
+    stepx(dt);
+    setForces(false, true); // sets both atom.f and fl, but not atom.a or al
+    update_constraints();
+    flt eta0 = -fdotv(); // slope at x0 - dt
+    //~ bool bigeta = eta0 > 1e-2;
+    //~ if(bigeta) cout << "NLCG::timestep 1: eta0 " << eta0 << endl;
+    stepx(-dt);
+    setForces(false, true); // sets both atom.f and fl, but not atom.a or al
+    update_constraints();
+    dxsum = 0;
+    flt vdv = (flt) vdotv();
+    
+    /// Secant stepping
+    // note that v does not change here; we simply step in the direction
+    // of v until the force along v (eta, fdotv) gets very small...
+    for(sec=0; sec < secmax; sec++){
+        flt eta = -fdotv(); // slope at x
+                            // eta0 is the slope at x - α
+        if(eta == eta0){break;}
+        
+        // Go in the direction of -slope (-eta), approximating a quadratic.
+        // abs added to ensure we go in the direction of the slope, and don't
+        // maximize a quadratic
+        flt alphafac = -eta / abs(eta0-eta);
+        if(alphafac > alphamax) alphafac = alphamax;
+        if(alphafac < -alphamax) alphafac = -alphamax;
+        // abs added here, same reason
+        alpha = abs(alpha) * alphafac;
+        //~ if(abs(dxsum) > 10) bigeta = true;
+        //~ if(abs(eta) > 1e-2) bigeta = true;
+        //~ if(bigeta) cout << "NLCG::timestep 2: secant " << sec
+             //~ << " eta = " << eta << " -- alpha = " << alpha
+             //~ << " -- H = " << Hamiltonian() 
+             //~ << " -- V = " << box->V() << endl;
+        if(dxmax > 0 and abs(dxsum + alpha) > dxmax){
+            k = 0;
+            break;
+        }
+        flt dVoverV = expm1flt(abs(dxsum + alpha) * vl / (kappa*NDIM));
+        if(maxdV > 0 and dVoverV > maxdV){
+            k = 0;
+            flt V1 = box->V();
+            cout << "V overflow, " << V0 << " -> " << V1 << '\n';
+            break;
+        }
+        dxsum += alpha;
+        stepx(alpha);
+        setForces(false, true);
+        update_constraints();
+        eta0 = eta;
+        if(alpha*alpha*vdv < seceps*seceps) break;
+    }
+    
+    alphavmax = sqrtflt(alpha*alpha*vdv);
+    
+    flt Kold = Knew;
+    flt Kmid = fdota();
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f;
+        }
+    }
+    al = fl;
+    
+    Knew = fdota();
+    flt beta = (Knew - Kmid) / Kold;
+    if(k >= kmax or beta <= 0){
+        k = 0;
+        beta = 0;
+    }
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].a + m[i].v*beta;
+        }
+    }
+    vl = al + beta * vl;
+    
+    update_trackers();
+}
+
+void collectionNLCG::descend(){
+    setForces(false, true);
+    update_constraints();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].f;
+            m[i].a = m[i].f;
+        }
+    }
+    al = fl;
+    vl = fl;
+    
+    stepx(dt);
+    update_trackers();
+}
+
+collectionNLCGV::collectionNLCGV(Box *box, const flt dt,
+                vector<atomgroup*> groups,
+                vector<interaction*> interactions,
+                vector<statetracker*> trackers,
+                vector<constraint*> constraints,
+                const flt kmax,
+                const flt secmax, const flt seceps) :
+            collection(box, groups, interactions, trackers, 
+                constraints), dt(dt), secmax(secmax), seceps(seceps),
+                alphamax(0), afrac(0), dxmax(0), stepmax(0), kmax(kmax),
+                Knew(0), k(0), vl(0), fl(0), al(0), alpha(0), beta(0),
+                betaused(0), dxsum(0), alphavmax(0), sec(0){
+};
+
+
+void collectionNLCGV::stepx(flt dx){
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x += m[i].v * dx;
+        }
+    }
+}
+
+flt collectionNLCGV::fdotf(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].f.sq();
+        }
+    }
+    
+    return returnvalue;
+}
+
+flt collectionNLCGV::fdota(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].f.dot(g[i].a);
+        }
+    }
+    
+    return returnvalue;
+}
+
+flt collectionNLCGV::fdotv(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].f.dot(g[i].v);
+            if(isnanflt(returnvalue)){
+                cout << "collectionNLCGV::fdotv : Got nan on atom " << i;
+                cout << " f: " << g[i].f;
+                cout << " v: " << g[i].v;
+                cout << '\n';
+                assert(false);
+            }
+        }
+    }
+    
+    return returnvalue;
+}
+
+flt collectionNLCGV::vdotv(){
+    flt returnvalue = 0;
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i=0; i<g.size(); i++){
+            returnvalue += g[i].v.sq();
+        }
+    }
+    
+    return returnvalue;
+}
+
+void collectionNLCGV::reset(){
+    k = 0;
+    setForces(false);
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].f;
+            m[i].a = m[i].f;
+        }
+    }
+}
+
+void collectionNLCGV::descend(){
+    setForces(false);
+    update_constraints();
+    vector<atomgroup*>::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].f;
+            m[i].a = m[i].f;
+        }
+    }
+
+    stepx(dt);
+    update_trackers();
+}
+
+flt collectionNLCGV::pressure(){
+    flt V = box->V();
+    
+    flt E = 0;
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it<interactions.end(); it++){
+        E += (*it)->pressure(box);
+        assert(not isnanflt(E));
+    }
+    return E / V / flt(NDIM);
+}
+
+
+
+void collectionNLCGV::timestep(){
+    // Algorithm from
+    // An Introduction to the Conjugate Gradient Method Without the Agonizing Pain
+    // Edition 1 1/4
+    // Jonathan Richard Shewchuk
+    // August 4, 1994
+    // An electronic copy of this article is available by anonymous FTP to WARP.CS.CMU.EDU (IP address 128.2.209.103) under the filename quake-papers/painless-conjugate-gradient.ps. 
+    
+    // Uses a combination of
+    // B4. Nonlinear Conjugate Gradients with Newton-Raphson and Fletcher-Reeves
+    // B5. Preconditioned Nonlinear Conjugate Gradients with Secant and Polak-Ribi`ere
+    
+    // where I use Secant and Polak-Ribi`ere, but no preconditioning.
+    
+    // Where m[i].a = -f', m[i].v = d, σ0 = dt
+    
+    
+    vector<atomgroup*>::iterator git;
+    stepx(dt);
+    setForces(false);
+    update_constraints();
+    flt eta0 = -fdotv();
+    
+    //~ cout << "NLCGV::timestep 1:"
+             //~ << " eta0 = " << eta0;
+        //~ cout << " -- E = " << energy();
+        //~ cout << " -- K = " << kinetic();
+        //~ cout << " -- fdv = " << fdotv() << endl;
+    
+    stepx(-dt);
+    update_trackers();
+    alpha = -dt;
+    setForces(false); // sets both atom.f and fl, but not atom.a or al
+    update_constraints();
+    dxsum = 0;
+    flt vdv = vdotv();
+    
+    /// Secant stepping
+    // note that v does not change here; we simply step in the direction
+    // of v until the force along v (eta, fdotv) gets very small...
+    for(sec=0; sec < secmax; sec++){
+        flt eta = -fdotv(); // slope at x
+                            // eta0 is the slope at x - α
+        
+        // Go in the direction of -slope (-eta), approximating a quadratic.
+        // abs added to ensure we go in the direction of the slope, and don't
+        // maximize a quadratic
+        flt alphafac = -eta / abs(eta0-eta);
+        if(eta == eta0){alphafac = alphamax > 0 ? alphamax : 1.1;}
+        if(alphamax > 0 and alphafac > alphamax) alphafac = alphamax;
+        if(alphamax > 0 and alphafac < -alphamax) alphafac = -alphamax;
+        
+        // abs added here, same reason
+        //~ flt oldalpha = alpha;
+        alpha = abs(alpha) * alphafac;
+        
+        //~ if(abs(alpha) <= 1e-32 and abs(eta) >= 1e-8){
+            //~ cout << "NLCGV::timestep 2: secant " << sec
+                 //~ << " eta = " << eta << " -- alpha = " << alpha;
+            //~ cout << " -- alpha0 = " << oldalpha;
+            //~ cout << " -- alphafac = " << alphafac;
+            //~ cout << " -- E = " << energy();
+            //~ cout << " -- K = " << kinetic();
+            //~ cout << " -- fdv = " << fdotv() << endl;
+        //~ }
+        
+        flt newdxsum = abs(dxsum + alpha);
+        if(dxmax > 0 and newdxsum > dxmax){
+            //~ cout << "dxmaxed: " << newdxsum << "  step: " << sqrtflt(dxsum*dxsum*vdv) << '\n';
+            k = 0;
+            break;
+        }
+        dxsum += alpha;
+        stepx(alpha);
+        
+        //~ cout << "NLCGV::timestep 3: secant " << sec
+             //~ << " eta = " << eta << " -- alpha = " << alpha;
+        //~ cout << " -- E = " << energy();
+        //~ cout << " -- K = " << kinetic();
+        //~ cout << " -- fdv = " << fdotv() << endl;
+        
+        update_trackers();
+        
+        setForces(false);
+        update_constraints();
+        eta0 = eta;
+        if(alpha*alpha*vdv < seceps*seceps) break;
+        if((sec > 1)
+                and (afrac > 0)
+                and (abs(alpha) < abs(dxsum))
+                and (abs(alpha) / abs(dxsum) < afrac)) break;
+        if(stepmax > 0 and dxsum*dxsum*vdv > stepmax*stepmax){
+            k = 0;
+            //~ cout << "stepmaxed: " << sqrtflt(dxsum*dxsum*vdv)
+                //~ << "  alpha: " << alpha
+                //~ << "  dx: " << dxsum
+                //~ << "  eta: " << eta
+                //~ << "  beta: " << beta << " -> " << betaused << '\n';
+            break;
+        }
+    }
+    
+    alphavmax = sqrtflt(alpha*alpha*vdv);
+    
+    flt Kold = Knew;
+    flt Kmid = fdota();
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].a = m[i].f;
+        }
+    }
+    al = fl;
+    
+    Knew = fdota();
+    beta = (Knew - Kmid) / Kold;
+    betaused = beta;
+    if(k >= kmax or isinfflt(betaused) or isnanflt(betaused) or betaused <= 0){
+        k = 0;
+        betaused = 0;
+    } else if(betaused > 1){
+        betaused = 1;
+    }
+    
+    
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].v = m[i].a + m[i].v*betaused;
+        }
+    }
+    
+    //~ cout << "NLCGV::timestep 4: beta " << beta;
+        //~ cout << " -- E = " << energy();
+        //~ cout << " -- K = " << kinetic();
+        //~ cout << " -- fdv = " << fdotv() << endl;
+        
+}
+
 
 void collectionNoseHoover::timestep(){
     // From Corey's notes. Note that xi and lns are now coordinates, with
@@ -818,7 +1422,7 @@ void collectionNoseHoover::timestep(){
 flt collectionNoseHoover::Hamiltonian(){
     flt H = (kinetic() + potentialenergy() + 
                 (xi*xi*Q/2) + (dof() * lns * T));
-    assert(not isnan(H));
+    assert(not isnanflt(H));
     return H;
 }
 
@@ -1107,7 +1711,7 @@ void collectionGear6A::timestep(){
 
 atomid atomvecRK4::get_id(atom* atm){
     atomRK4* a = (atomRK4*) atm;
-    uint n = a - atoms;
+    uint n = (uint) (a - atoms);
     if (n >= sz or a < atoms) return atomid();
     return atomid(atoms + n, n);
 };
@@ -1248,7 +1852,7 @@ flt collectionGear4NPH::temp(bool minuscomv){
         totatoms += g.size();
     }
     
-    int ndof = dof();
+    int ndof = (int) dof();
     if (minuscomv) ndof -= NDIM;
     return totkinetic2 / ndof;
 }
@@ -1469,7 +2073,7 @@ void collectionVerletNPT::timestep(){
     update_constraints();
     
     //~ vector<Vec> lastvhalf = vhalf; // This does copy, right?
-    uint ndof = dof();
+    uint ndof = (uint) dof();
     flt xieta = (xidot + eta) * dt/2.0;
     flt Ktot2 = 0, lastKtot2 = 0;
     
@@ -1522,7 +2126,7 @@ void collectionVerletNPT::timestep(){
     assert(Verr > 0.999);
     
     n=0;
-    flt Vfac1=pow(newV/V, 1.0/NDIM), Vfac2 = pow(2*newV/(newV+V), 1.0/NDIM);
+    flt Vfac1=powflt(newV/V, OVERNDIM), Vfac2 = powflt(2*newV/(newV+V), OVERNDIM);
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){

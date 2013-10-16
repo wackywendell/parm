@@ -38,15 +38,15 @@ unsigned int seed(){
     return n;
 }
 
-gaussVec::gaussVec(double sigma) : distro(0,sigma), gauss(randengine,distro){};
+gaussVec::gaussVec(flt sigma) : distro(0,sigma), gauss(randengine,distro){};
 
 
-bivariateGauss::bivariateGauss(const double s1, const double s2,
-        const double corr) : distro(0,1), gauss(randengine,distro){
+bivariateGauss::bivariateGauss(const flt s1, const flt s2,
+        const flt corr) : distro(0,1), gauss(randengine,distro){
             set(s1, s2, corr);
 };
 
-void bivariateGauss::set(const double s1, const double s2, const double corr){
+void bivariateGauss::set(const flt s1, const flt s2, const flt corr){
     // Taken from Allen and Tildesley, 348
     assert(s1 >= 0);
     assert(s2 >= 0);
@@ -54,12 +54,12 @@ void bivariateGauss::set(const double s1, const double s2, const double corr){
     assert(corr <= 1);
     x11 = s1;
     x21 = s2 * corr;
-    x22 = s2 * sqrt(1 - corr*corr);
+    x22 = s2 * sqrtflt(1 - corr*corr);
 }
 
 Pair bivariateGauss::generate(){
-    double x1 = gauss();
-    double x2 = gauss();
+    flt x1 = gauss();
+    flt x2 = gauss();
     // Taken from Allen and Tildesley, 348
     Pair p;
     p[0] = x11*x1;

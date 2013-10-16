@@ -87,7 +87,7 @@ class Numvector : public Nvector<T, N> {
                     for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=rhs[i];}
         T dot (const Numvector &other) const;
         inline T sq() const {return dot(*this);};
-        inline T mag() const {return sqrt(sq());};
+        inline T mag() const {return sqrtl(sq());};
         inline T distance(const Numvector &rhs) const;
         Numvector perpto(const Numvector &other) const;
         //returns the component of this perpendicular to other
@@ -110,9 +110,15 @@ class Vector3 : public Numvector<T, 3> {
         inline const T getx() const {return Nvector<T,3>::get(0);}
         inline const T gety() const {return Nvector<T,3>::get(1);}
         inline const T getz() const {return Nvector<T,3>::get(2);}
+        inline double getxd() const {return Nvector<T,3>::get(0);}
+        inline double getyd() const {return Nvector<T,3>::get(1);}
+        inline double getzd() const {return Nvector<T,3>::get(2);}
         inline void setx(const T a){Nvector<T,3>::vals[0]=a;}
         inline void sety(const T b){Nvector<T,3>::vals[1]=b;}
         inline void setz(const T c){Nvector<T,3>::vals[2]=c;}
+        inline void setxd(const double a){Nvector<T,3>::vals[0]=a;}
+        inline void setyd(const double b){Nvector<T,3>::vals[1]=b;}
+        inline void setzd(const double c){Nvector<T,3>::vals[2]=c;}
         inline void set(const T a, const T b, const T c){
             Nvector<T,3>::vals[0]=a; Nvector<T,3>::vals[1]=b; Nvector<T,3>::vals[2]=c;}
         inline Vector3 operator-() const{
@@ -170,8 +176,12 @@ class Vector2 : public Numvector<T, 2> {
         Vector2(const Nvector<T, 2> rhs) {setx(rhs.get(0)); sety(rhs.get(1));}
         inline const T getx() const {return Nvector<T,2>::get(0);}
         inline const T gety() const {return Nvector<T,2>::get(1);}
+        inline double getxd() const {return (double) Nvector<T,2>::get(0);}
+        inline double getyd() const {return (double) Nvector<T,2>::get(1);}
         inline void setx(const T a){Nvector<T,2>::vals[0]=a;}
         inline void sety(const T b){Nvector<T,2>::vals[1]=b;}
+        inline void setxd(const double a){Nvector<T,2>::vals[0]= (T) a;}
+        inline void setyd(const double b){Nvector<T,2>::vals[1]= (T) b;}
         inline void set(const T a, const T b){
             Nvector<T,2>::vals[0]=a; Nvector<T,2>::vals[1]=b;}
         inline Vector2 operator-() const{
@@ -387,9 +397,65 @@ template <class T, unsigned int N>
 T Numvector<T,N>::distance(const Numvector<T,N> &rhs) const{
     T sum = 0;
     for(unsigned int i=0; i<N; i++){
-        sum += pow(Nvector<T,N>::get(i) - rhs.get(i), 2);
+        sum += powl(Nvector<T,N>::get(i) - rhs.get(i), 2);
     }
-    return sqrt(sum);
+    return sqrtl(sum);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+double Numvector<double,2>::distance(const Numvector<double,2> &rhs) const{
+    double x=get(0) - rhs.get(0), y=get(1) - rhs.get(1);
+    return hypot(x,y);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+long double Numvector<long double,2>::distance(const Numvector<long double,2> &rhs) const{
+    long double x=get(0) - rhs.get(0), y=get(1) - rhs.get(1);
+    return hypotl(x,y);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+double Numvector<double,3>::distance(const Numvector<double,3> &rhs) const{
+    double x=get(0)-rhs.get(0), y=get(1)-rhs.get(1), z=get(2)-rhs.get(2);
+    return sqrt(x*x + y*y + z*z);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+long double Numvector<long double,3>::distance(const Numvector<long double,3> &rhs) const{
+    long double x=get(0)-rhs.get(0), y=get(1)-rhs.get(1), z=get(2)-rhs.get(2);
+    return sqrtl(x*x + y*y + z*z);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+double Numvector<double,2>::mag() const{
+    double x=get(0), y=get(1);
+    return hypot(x,y);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+long double Numvector<long double,2>::mag() const{
+    long double x=get(0), y=get(1);
+    return hypotl(x,y);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+double Numvector<double,3>::mag() const{
+    double x=get(0), y=get(1), z=get(2);
+    return sqrt(x*x + y*y + z*z);
+    // return Numvector<T,N>(*this - rhs).mag();
+}
+
+template<>
+long double Numvector<long double,3>::mag() const{
+    long double x=get(0), y=get(1), z=get(2);
+    return sqrtl(x*x + y*y + z*z);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
