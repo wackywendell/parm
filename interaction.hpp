@@ -2190,13 +2190,13 @@ class SCatomvec : public virtual atomgroup {
                 atoms[i].last().m = mass/2;
             }
         };
-        SCatomvec(SCatomvec& other) : sz(other.size()){
+        SCatomvec(SCatomvec& other) : sz(other.pairs()){
             atoms = new atompair[sz];
             for(uint i=0; i < sz; i++) atoms[i] = other.atoms[i];
         };
         inline atom& operator[](cuint n){return atoms[n / 2][n % 2];};
         inline atom& operator[](cuint n) const {return atoms[n / 2][n % 2];};
-        inline atompair& pair(cuint n){return atoms[n / 2];};
+        inline atompair& pair(cuint n){return atoms[n];};
         //inline atompair& pair(cuint n) const {return atoms[n / 2];};
         //~ atomid get_id(atom *a){
             //~ uint n = (uint) (a - atoms); WON'T WORK
@@ -2205,7 +2205,8 @@ class SCatomvec : public virtual atomgroup {
         //~ }
         //~ inline atomid get_id(uint n) {
             //~ if (n > sz*2) return atomid(); return atomid(&(atoms[n/2][n%2]),n);};
-        inline uint size() const {return sz;};
+        inline uint size() const {return sz*2;};
+        inline uint pairs() const {return sz;};
         ~SCatomvec(){ delete [] atoms;};
 };
 
@@ -2257,11 +2258,20 @@ struct SCSpringPair : public SCPair {
     Vec forces(Box *box, SpheroCylinderDiff diff){
         flt dsq = diff.delta.sq();
         if(dsq > sig*sig) return Vec();
-        flt dmag = sqrt(dsq);
+        flt dmag = sqrtflt(dsq);
         Vec dhat = diff.delta / dmag;
         
         return dhat * (eps * (sig - dmag));
     };
+};
+
+class SCSpringList {
+    private:
+        SCatomvec *scs;
+        flt eps, sig, l;
+    public:
+        SCSpringList(SCatomvec *scs, flt eps, flt sig, flt l) : 
+            scs(scs), eps(eps), sig(sig), l(l){};
 };
 
 #endif

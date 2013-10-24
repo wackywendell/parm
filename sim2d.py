@@ -7282,6 +7282,10 @@ class SCatomvec(atomgroup):
         """size(SCatomvec self) -> uint"""
         return _sim2d.SCatomvec_size(self)
 
+    def pairs(self) -> "uint" :
+        """pairs(SCatomvec self) -> uint"""
+        return _sim2d.SCatomvec_pairs(self)
+
     __swig_destroy__ = _sim2d.delete_SCatomvec
     __del__ = lambda self : None;
 SCatomvec_swigregister = _sim2d.SCatomvec_swigregister
@@ -7399,6 +7403,23 @@ class SCSpringPair(SCPair):
     __del__ = lambda self : None;
 SCSpringPair_swigregister = _sim2d.SCSpringPair_swigregister
 SCSpringPair_swigregister(SCSpringPair)
+
+class SCSpringList(_object):
+    """Proxy of C++ SCSpringList class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SCSpringList, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SCSpringList, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """__init__(SCSpringList self, SCatomvec scs, flt eps, flt sig, flt l) -> SCSpringList"""
+        this = _sim2d.new_SCSpringList(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _sim2d.delete_SCSpringList
+    __del__ = lambda self : None;
+SCSpringList_swigregister = _sim2d.SCSpringList_swigregister
+SCSpringList_swigregister(SCSpringList)
 
 class constraint(_object):
     """Proxy of C++ constraint class"""

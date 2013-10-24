@@ -1273,6 +1273,8 @@ flt jammingtree2::straight_distsq(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
     return dist / N;
 };
 
+#endif
+
 SpheroCylinderDiff SCPair::NearestLoc(Box *box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
@@ -1283,30 +1285,54 @@ SpheroCylinderDiff SCPair::NearestLoc(Box *box){
     atom &a2 = p2.first();
     atom &a2p = p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
-    Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
-    flt myl1 = s1.mag(), myl2 = s2.mag();
-    Vec u1 = s1/l1, u2=s2/l2;
+    Vec s1 = (a1p.x - a1.x), s2 = (a2p.x - a2.x);
+    //flt myl1 = s1.mag(), myl2 = s2.mag();
+    Vec u1 = s1.norm(), u2=s2.norm();
     diff.r = box->diff(r2, r1);
     
     flt u1u2 = u1.dot(u2);
+    //~ cout << "u1: " << u1 << "  u2: " << u2 << "  u1u2:" << u1u2 << "\n";
+    
     flt u1u2sq = u1u2*u1u2;
     flt u1r12 = u1.dot(diff.r), u2r12 = u2.dot(diff.r);
+    //~ cout << "r: " << diff.r << "  u1r12: " << u1r12 << "  u2r12: " << u2r12 << "\n";
     
-    flt lambda1p = (u1r12 - (u1u2*u2r12))/(1-u1u2sq);
-    flt lambda2p = ((u1u2*u1r12) - u2r12)/(1-u1u2sq);
+    // Where the two lines would intersect
+    flt lambda1p, lambda2p;
+    
+    if(abs(1-u1u2sq) < 1e-8){
+        // They are too close to parallel, so we just say the "middle" 
+        // of the two spherocylinders (r12/2) projected onto their axes (u1)
+        lambda1p = u1r12/2;
+        // symmetry would be u2r21/2, but r21 = -r12
+        lambda2p = -u2r12/2;
+        //~ cout << "Too small, adjusted." << '\n';
+    } else {
+        // Where the two lines actually would intersect
+        lambda1p = (u1r12 - (u1u2*u2r12))/(1-u1u2sq);
+        lambda2p = ((u1u2*u1r12) - u2r12)/(1-u1u2sq);
+    }
+
+    //~ cout << "l1p: " << lambda1p << "  l2p: " << lambda2p << "\n";
     
     flt lambda1s=lambda1p, lambda2s=lambda2p;
     
-    flt L1 = abs(lambda1p) - (myl1/2);
-    flt L2 = abs(lambda2p) - (myl2/2);
+    flt L1 = abs(lambda1p) - (l1/2);
+    flt L2 = abs(lambda2p) - (l2/2);
     if(L1 > 0 or L2 > 0){
         if(L2 > L1){
-            lambda2s = copysignflt(myl2/2, lambda2p);
-            lambda1s = confineRange(-myl1/2, -u1r12 + (lambda2s*u1u2), myl1/2);
+            lambda2s = copysignflt(l2/2, lambda2p);
+            lambda1s = u1r12 + (lambda2s*u1u2);
+            //~ cout << "new l2s: " << lambda2s << "  l1s: " << lambda1s;
+            lambda1s = confineRange(-l1/2, lambda1s, l1/2);
+            //~ cout << " -> " << lambda1s << "\n";
         }
         else{
-            lambda1s = copysignflt(myl1/2, lambda1p);
-            lambda2s = confineRange(-myl2/2, u2r12 + (lambda1s*u1u2), myl2/2);
+            lambda1s = copysignflt(l1/2, lambda1p);
+            lambda2s = -u2r12 + (lambda1s*u1u2);
+            //~ cout << "new l1s: " << lambda1s << "  l2s: " << lambda2s;
+            lambda2s = confineRange(-l2/2, lambda2s, l2/2);
+            //~ cout << " -> " << lambda2s << "\n";
         }
     }
     
@@ -1325,20 +1351,24 @@ void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I){
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     
-    a1.f += f;
-    a1p.f += f;
-    a2.f -= f;
-    a2p.f -= f;
+    a1.f -= f/2; // note that the force on a1 is half the total force, this carries through to atau1
+    a1p.f -= f/2;
+    a2.f += f/2;
+    a2p.f += f/2;
     
-    Vec t1 = r1 + (s1*(diff.lambda1/l1));
-    Vec atau1 = s1.cross(t1.cross(f)) / (-2*I); // -2 because it should be (t1×f)×s1, but we wrote s1×(t1×f)
+    Vec t1 = s1*(diff.lambda1/l1);
+    Vec atau1 = s1.cross(t1.cross(f)) / (-2*I);
+    //~ cout << "t1: " << t1 << "  atau1: " << atau1 << endl;
+    // Formula says (t1×f)×s1 / 2I
+    // -I because it should be (t1×f)×s1, but we wrote s1×(t1×f)
+    // 4 and not 2 because f is the force on the whole thing, we only want half
     a1.f += atau1 * a1.m;
     a1p.f -= atau1 * a1p.m;
     
-    Vec t2 = r2 + (s2*(diff.lambda2/l2));
+    Vec t2 = s2*(diff.lambda2/l2);
     Vec atau2 = s2.cross(t2.cross(f)) / (2*I); // 2 because it should be -f
     a2.f += atau2 * a2.m;
     a2p.f -= atau2 * a2p.m;
+    
+    //~ cout << "t2: " << t2 << "  atau2: " << atau1 << endl;
 };
-
-#endif
