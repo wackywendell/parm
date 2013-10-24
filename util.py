@@ -24,7 +24,7 @@ def get_eta(cur, tot, starttime):
     
     # timedeltas cannot be multiplied by floats (?), so we get out the 
     #seconds, use that, and make it back into a dt
-    usedsecs = 24*60*60 * tused.days + tused.seconds
+    usedsecs = 24*60*60 * tused.days + tused.seconds + (1e-6 * tused.microseconds)
     tleft = (timedelta(0, (usedsecs) * ((tot - cur) / cur)) if cur > 0
             else timedelta(0, 0))
     
