@@ -4316,6 +4316,10 @@ def expm1flt(*args) -> "flt" :
   """expm1flt(flt n) -> flt"""
   return _sim2dlong.expm1flt(*args)
 
+def copysignflt(*args) -> "flt" :
+  """copysignflt(flt n, flt m) -> flt"""
+  return _sim2dlong.copysignflt(*args)
+
 def vec(*args) -> "Vector3< flt >" :
   """
     vec(double x, double y) -> VecL
@@ -5894,8 +5898,8 @@ class EnergyTracker(statetracker):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(EnergyTracker self, Box box, atomgroup atoms, ivector interactions, uint nskip=1) -> EnergyTracker
-        __init__(EnergyTracker self, Box box, atomgroup atoms, ivector interactions) -> EnergyTracker
+        __init__(EnergyTracker self, atomgroup atoms, ivector interactions, uint nskip=1) -> EnergyTracker
+        __init__(EnergyTracker self, atomgroup atoms, ivector interactions) -> EnergyTracker
         """
         this = _sim2dlong.new_EnergyTracker(*args)
         try: self.this.append(this)
@@ -5909,8 +5913,15 @@ class EnergyTracker(statetracker):
         return _sim2dlong.EnergyTracker_reset(self)
 
     def setU0(self, *args) -> "void" :
-        """setU0(EnergyTracker self, flt newU0)"""
+        """
+        setU0(EnergyTracker self, flt newU0)
+        setU0(EnergyTracker self, Box box)
+        """
         return _sim2dlong.EnergyTracker_setU0(self, *args)
+
+    def getU0(self) -> "flt" :
+        """getU0(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_getU0(self)
 
     def E(self) -> "flt" :
         """E(EnergyTracker self) -> flt"""
@@ -5924,8 +5935,32 @@ class EnergyTracker(statetracker):
         """K(EnergyTracker self) -> flt"""
         return _sim2dlong.EnergyTracker_K(self)
 
-    def n(self) -> "unsigned long long" :
-        """n(EnergyTracker self) -> unsigned long long"""
+    def Estd(self) -> "flt" :
+        """Estd(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_Estd(self)
+
+    def Kstd(self) -> "flt" :
+        """Kstd(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_Kstd(self)
+
+    def Ustd(self) -> "flt" :
+        """Ustd(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_Ustd(self)
+
+    def Esqmean(self) -> "flt" :
+        """Esqmean(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_Esqmean(self)
+
+    def Ksqmean(self) -> "flt" :
+        """Ksqmean(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_Ksqmean(self)
+
+    def Usqmean(self) -> "flt" :
+        """Usqmean(EnergyTracker self) -> flt"""
+        return _sim2dlong.EnergyTracker_Usqmean(self)
+
+    def n(self) -> "uint" :
+        """n(EnergyTracker self) -> uint"""
         return _sim2dlong.EnergyTracker_n(self)
 
     __swig_destroy__ = _sim2dlong.delete_EnergyTracker
@@ -7198,6 +7233,40 @@ class jammingtreeBD(jammingtree2):
 jammingtreeBD_swigregister = _sim2dlong.jammingtreeBD_swigregister
 jammingtreeBD_swigregister(jammingtreeBD)
 
+
+def confineRange(*args) -> "flt" :
+  """confineRange(flt minimum, flt val, flt maximum) -> flt"""
+  return _sim2dlong.confineRange(*args)
+class SpheroCylinderDiff(_object):
+    """Proxy of C++ SpheroCylinderDiff class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SpheroCylinderDiff, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, SpheroCylinderDiff, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["delta"] = _sim2dlong.SpheroCylinderDiff_delta_set
+    __swig_getmethods__["delta"] = _sim2dlong.SpheroCylinderDiff_delta_get
+    if _newclass:delta = _swig_property(_sim2dlong.SpheroCylinderDiff_delta_get, _sim2dlong.SpheroCylinderDiff_delta_set)
+    __swig_setmethods__["lambda1"] = _sim2dlong.SpheroCylinderDiff_lambda1_set
+    __swig_getmethods__["lambda1"] = _sim2dlong.SpheroCylinderDiff_lambda1_get
+    if _newclass:lambda1 = _swig_property(_sim2dlong.SpheroCylinderDiff_lambda1_get, _sim2dlong.SpheroCylinderDiff_lambda1_set)
+    __swig_setmethods__["lambda2"] = _sim2dlong.SpheroCylinderDiff_lambda2_set
+    __swig_getmethods__["lambda2"] = _sim2dlong.SpheroCylinderDiff_lambda2_get
+    if _newclass:lambda2 = _swig_property(_sim2dlong.SpheroCylinderDiff_lambda2_get, _sim2dlong.SpheroCylinderDiff_lambda2_set)
+    def __init__(self): 
+        """__init__(SpheroCylinderDiff self) -> SpheroCylinderDiff"""
+        this = _sim2dlong.new_SpheroCylinderDiff()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _sim2dlong.delete_SpheroCylinderDiff
+    __del__ = lambda self : None;
+SpheroCylinderDiff_swigregister = _sim2dlong.SpheroCylinderDiff_swigregister
+SpheroCylinderDiff_swigregister(SpheroCylinderDiff)
+
+
+def nearestLoc(*args) -> "SpheroCylinderDiff" :
+  """nearestLoc(VecL x1, VecL x1p, VecL x2, VecL x2p) -> SpheroCylinderDiff"""
+  return _sim2dlong.nearestLoc(*args)
 class constraint(_object):
     """Proxy of C++ constraint class"""
     __swig_setmethods__ = {}
@@ -7365,6 +7434,10 @@ class LJgroup(interaction):
         """getpair(LJgroup self, idpair pair) -> LJpair"""
         return _sim2dlong.LJgroup_getpair(self, *args)
 
+    def getatom(self, *args) -> "LJatom &" :
+        """getatom(LJgroup self, uint n) -> LJatom"""
+        return _sim2dlong.LJgroup_getatom(self, *args)
+
     def energy(self, *args) -> "flt" :
         """
         energy(LJgroup self, Box box, idpair pair) -> flt
@@ -7437,6 +7510,10 @@ class LJfull(interaction):
     def getpair(self, *args) -> "LJAttractPair" :
         """getpair(LJfull self, idpair pair) -> LJAttractPair"""
         return _sim2dlong.LJfull_getpair(self, *args)
+
+    def getatom(self, *args) -> "LJatomcut &" :
+        """getatom(LJfull self, uint n) -> LJatomcut"""
+        return _sim2dlong.LJfull_getatom(self, *args)
 
     def energy(self, *args) -> "flt" :
         """
@@ -7511,6 +7588,10 @@ class Hydrophobicity(interaction):
         """getpair(Hydrophobicity self, idpair pair) -> HydroPair"""
         return _sim2dlong.Hydrophobicity_getpair(self, *args)
 
+    def getatom(self, *args) -> "HydroAtom &" :
+        """getatom(Hydrophobicity self, uint n) -> HydroAtom"""
+        return _sim2dlong.Hydrophobicity_getatom(self, *args)
+
     def energy(self, *args) -> "flt" :
         """
         energy(Hydrophobicity self, Box box, idpair pair) -> flt
@@ -7580,6 +7661,10 @@ class LJdetailed(interaction):
     def getpair(self, *args) -> "LJFullPair" :
         """getpair(LJdetailed self, idpair pair) -> LJFullPair"""
         return _sim2dlong.LJdetailed_getpair(self, *args)
+
+    def getatom(self, *args) -> "LJAtomIndexed &" :
+        """getatom(LJdetailed self, uint n) -> LJAtomIndexed"""
+        return _sim2dlong.LJdetailed_getatom(self, *args)
 
     def energy(self, *args) -> "flt" :
         """
@@ -7651,6 +7736,10 @@ class LJAttractRepulse(interaction):
         """getpair(LJAttractRepulse self, idpair pair) -> LJAttractRepulsePair"""
         return _sim2dlong.LJAttractRepulse_getpair(self, *args)
 
+    def getatom(self, *args) -> "LJAttractRepulseAtom &" :
+        """getatom(LJAttractRepulse self, uint n) -> LJAttractRepulseAtom"""
+        return _sim2dlong.LJAttractRepulse_getatom(self, *args)
+
     def energy(self, *args) -> "flt" :
         """
         energy(LJAttractRepulse self, Box box, idpair pair) -> flt
@@ -7720,6 +7809,10 @@ class LJAttractFixedRepulse(interaction):
     def getpair(self, *args) -> "LJAttractFixedRepulsePair" :
         """getpair(LJAttractFixedRepulse self, idpair pair) -> LJAttractFixedRepulsePair"""
         return _sim2dlong.LJAttractFixedRepulse_getpair(self, *args)
+
+    def getatom(self, *args) -> "LJAttractFixedRepulseAtom &" :
+        """getatom(LJAttractFixedRepulse self, uint n) -> LJAttractFixedRepulseAtom"""
+        return _sim2dlong.LJAttractFixedRepulse_getatom(self, *args)
 
     def energy(self, *args) -> "flt" :
         """
@@ -7791,6 +7884,10 @@ class LJDouble(interaction):
         """getpair(LJDouble self, idpair pair) -> LJDoublePair"""
         return _sim2dlong.LJDouble_getpair(self, *args)
 
+    def getatom(self, *args) -> "LJDoubleAtom &" :
+        """getatom(LJDouble self, uint n) -> LJDoubleAtom"""
+        return _sim2dlong.LJDouble_getatom(self, *args)
+
     def energy(self, *args) -> "flt" :
         """
         energy(LJDouble self, Box box, idpair pair) -> flt
@@ -7861,6 +7958,10 @@ class EisMclachlan(interaction):
         """getpair(EisMclachlan self, idpair pair) -> EisMclachlanPair"""
         return _sim2dlong.EisMclachlan_getpair(self, *args)
 
+    def getatom(self, *args) -> "EisMclachlanAtom &" :
+        """getatom(EisMclachlan self, uint n) -> EisMclachlanAtom"""
+        return _sim2dlong.EisMclachlan_getatom(self, *args)
+
     def energy(self, *args) -> "flt" :
         """
         energy(EisMclachlan self, Box box, idpair pair) -> flt
@@ -7930,6 +8031,10 @@ class LJish(interaction):
     def getpair(self, *args) -> "LJishPair" :
         """getpair(LJish self, idpair pair) -> LJishPair"""
         return _sim2dlong.LJish_getpair(self, *args)
+
+    def getatom(self, *args) -> "LJishAtom &" :
+        """getatom(LJish self, uint n) -> LJishAtom"""
+        return _sim2dlong.LJish_getatom(self, *args)
 
     def energy(self, *args) -> "flt" :
         """
@@ -8048,6 +8153,10 @@ class HertzianPlain(interaction):
         """getpair(HertzianPlain self, idpair pair) -> HertzianPair"""
         return _sim2dlong.HertzianPlain_getpair(self, *args)
 
+    def getatom(self, *args) -> "HertzianAtom &" :
+        """getatom(HertzianPlain self, uint n) -> HertzianAtom"""
+        return _sim2dlong.HertzianPlain_getatom(self, *args)
+
     def energy(self, *args) -> "flt" :
         """
         energy(HertzianPlain self, Box box, idpair pair) -> flt
@@ -8159,6 +8268,10 @@ class LoisOhern(interaction):
     def getpair(self, *args) -> "LoisOhernPair" :
         """getpair(LoisOhern self, idpair pair) -> LoisOhernPair"""
         return _sim2dlong.LoisOhern_getpair(self, *args)
+
+    def getatom(self, *args) -> "LoisOhernAtom &" :
+        """getatom(LoisOhern self, uint n) -> LoisOhernAtom"""
+        return _sim2dlong.LoisOhern_getatom(self, *args)
 
     def energy(self, *args) -> "flt" :
         """

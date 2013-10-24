@@ -5858,8 +5858,8 @@ class EnergyTracker(statetracker):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(EnergyTracker self, Box box, atomgroup atoms, ivector interactions, uint nskip=1) -> EnergyTracker
-        __init__(EnergyTracker self, Box box, atomgroup atoms, ivector interactions) -> EnergyTracker
+        __init__(EnergyTracker self, atomgroup atoms, ivector interactions, uint nskip=1) -> EnergyTracker
+        __init__(EnergyTracker self, atomgroup atoms, ivector interactions) -> EnergyTracker
         """
         this = _sim3dlong.new_EnergyTracker(*args)
         try: self.this.append(this)
@@ -5873,8 +5873,15 @@ class EnergyTracker(statetracker):
         return _sim3dlong.EnergyTracker_reset(self)
 
     def setU0(self, *args) -> "void" :
-        """setU0(EnergyTracker self, flt newU0)"""
+        """
+        setU0(EnergyTracker self, flt newU0)
+        setU0(EnergyTracker self, Box box)
+        """
         return _sim3dlong.EnergyTracker_setU0(self, *args)
+
+    def getU0(self) -> "flt" :
+        """getU0(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_getU0(self)
 
     def E(self) -> "flt" :
         """E(EnergyTracker self) -> flt"""
@@ -5888,8 +5895,32 @@ class EnergyTracker(statetracker):
         """K(EnergyTracker self) -> flt"""
         return _sim3dlong.EnergyTracker_K(self)
 
-    def n(self) -> "unsigned long long" :
-        """n(EnergyTracker self) -> unsigned long long"""
+    def Estd(self) -> "flt" :
+        """Estd(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_Estd(self)
+
+    def Kstd(self) -> "flt" :
+        """Kstd(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_Kstd(self)
+
+    def Ustd(self) -> "flt" :
+        """Ustd(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_Ustd(self)
+
+    def Esqmean(self) -> "flt" :
+        """Esqmean(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_Esqmean(self)
+
+    def Ksqmean(self) -> "flt" :
+        """Ksqmean(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_Ksqmean(self)
+
+    def Usqmean(self) -> "flt" :
+        """Usqmean(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_Usqmean(self)
+
+    def n(self) -> "uint" :
+        """n(EnergyTracker self) -> uint"""
         return _sim3dlong.EnergyTracker_n(self)
 
     __swig_destroy__ = _sim3dlong.delete_EnergyTracker

@@ -429,7 +429,7 @@ flt dihedral::dudcosthetaCOS(const flt costheta) const{
     assert(sincoeffs.empty());
     assert(!usepow);
     flt tot = 0;
-    unsigned int cosmx = coscoeffs.size();
+    unsigned int cosmx = (unsigned int)(coscoeffs.size());
     for(unsigned int i=1; i < cosmx; i++){
         tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
     }
@@ -440,8 +440,8 @@ flt dihedral::dudcosthetaCOS(const flt costheta) const{
 
 flt dihedral::dudcostheta(const flt theta) const{
     flt tot = 0;
-    unsigned int cosmx = coscoeffs.size();
-    unsigned int sinmx = sincoeffs.size();
+    unsigned int cosmx = (unsigned int)(coscoeffs.size());
+    unsigned int sinmx = (unsigned int)(sincoeffs.size());
     unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
     if(usepow) {
         flt costheta = cos(theta), sintheta = sin(theta);
@@ -489,8 +489,8 @@ flt dihedral::energy(const flt ang) const{
     flt costheta = (usepow ? cos(ang) : NAN);
     flt sintheta = (usepow ? sin(ang) : NAN);
     
-    unsigned int cosmx = coscoeffs.size();
-    unsigned int sinmx = sincoeffs.size();
+    unsigned int cosmx = (unsigned int)(coscoeffs.size());
+    unsigned int sinmx = (unsigned int)(sincoeffs.size());
     unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
     
     flt tot = 0;
@@ -908,7 +908,19 @@ void EnergyTracker::update(Box *box){
     Ks += curK;
     Us += curU;
     Es += curK + curU;
+    Ksq += curK*curK;
+    Usq += curU*curU;
+    Esq += (curK + curU)*(curK + curU);
     N++;
+};
+
+void EnergyTracker::setU0(Box *box){
+    flt curU = 0;
+    vector<interaction*>::iterator it;
+    for(it = interactions.begin(); it != interactions.end(); it++){
+        curU += (*it)->energy(box);
+    }
+    setU0(curU);
 };
 
 LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
@@ -1259,6 +1271,74 @@ flt jammingtree2::straight_distsq(Box *bx, vector<Vec>& As, vector<Vec>& Bs){
         }
     }
     return dist / N;
+};
+
+SpheroCylinderDiff SCPair::NearestLoc(Box *box){
+    // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
+    // Uses that notation, just i -> 1, j -> 2, adds s1,s2
+    SpheroCylinderDiff diff;
+    
+    atom &a1 = p1.first();
+    atom &a1p = p1.last();
+    atom &a2 = p2.first();
+    atom &a2p = p2.last();
+    Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
+    Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
+    flt myl1 = s1.mag(), myl2 = s2.mag();
+    Vec u1 = s1/l1, u2=s2/l2;
+    diff.r = box->diff(r2, r1);
+    
+    flt u1u2 = u1.dot(u2);
+    flt u1u2sq = u1u2*u1u2;
+    flt u1r12 = u1.dot(diff.r), u2r12 = u2.dot(diff.r);
+    
+    flt lambda1p = (u1r12 - (u1u2*u2r12))/(1-u1u2sq);
+    flt lambda2p = ((u1u2*u1r12) - u2r12)/(1-u1u2sq);
+    
+    flt lambda1s=lambda1p, lambda2s=lambda2p;
+    
+    flt L1 = abs(lambda1p) - (myl1/2);
+    flt L2 = abs(lambda2p) - (myl2/2);
+    if(L1 > 0 or L2 > 0){
+        if(L2 > L1){
+            lambda2s = copysignflt(myl2/2, lambda2p);
+            lambda1s = confineRange(-myl1/2, -u1r12 + (lambda2s*u1u2), myl1/2);
+        }
+        else{
+            lambda1s = copysignflt(myl1/2, lambda1p);
+            lambda2s = confineRange(-myl2/2, u2r12 + (lambda1s*u1u2), myl2/2);
+        }
+    }
+    
+    diff.lambda1 = lambda1s;
+    diff.lambda2 = lambda2s;
+    diff.delta = box->diff(r2 + (u2*lambda2s), r1 + (u1*lambda1s));
+    
+    return diff;
+};
+
+void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I){
+    atom &a1 = p1.first();
+    atom &a1p = p1.last();
+    atom &a2 = p2.first();
+    atom &a2p = p2.last();
+    Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
+    Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
+    
+    a1.f += f;
+    a1p.f += f;
+    a2.f -= f;
+    a2p.f -= f;
+    
+    Vec t1 = r1 + (s1*(diff.lambda1/l1));
+    Vec atau1 = s1.cross(t1.cross(f)) / (-2*I); // -2 because it should be (t1×f)×s1, but we wrote s1×(t1×f)
+    a1.f += atau1 * a1.m;
+    a1p.f -= atau1 * a1p.m;
+    
+    Vec t2 = r2 + (s2*(diff.lambda2/l2));
+    Vec atau2 = s2.cross(t2.cross(f)) / (2*I); // 2 because it should be -f
+    a2.f += atau2 * a2.m;
+    a2p.f -= atau2 * a2p.m;
 };
 
 #endif

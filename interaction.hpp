@@ -196,12 +196,12 @@ class idpair : public array<atomid, 2> {
         inline atomid last() const {return vals[1];};
 };
 
-class atompair : public array<atom*, 2> {
-    public:
-        atompair(atom* a, atom* b){ vals[0] = a; vals[1] = b;};
-        inline atom& first() const {return *(vals[0]);};
-        inline atom& last() const {return *(vals[1]);};
-};
+//~ class atompair : public array<atom*, 2> {
+    //~ public:
+        //~ atompair(atom* a, atom* b){ vals[0] = a; vals[1] = b;};
+        //~ inline atom& first() const {return *(vals[0]);};
+        //~ inline atom& last() const {return *(vals[1]);};
+//~ };
 
 class atomgroup {
     // a group of atoms, such as a molecule, sidebranch, etc.
@@ -759,7 +759,7 @@ class dihedrals : public interaction {
         inline void add(vector<flt> coscoeffs, vector<flt> sincoeffs, 
                             atom* a1, atom* a2, atom* a3, atom *a4, bool usepow=true){
             add(dihedralgrouping(coscoeffs, sincoeffs,a1,a2,a3,a4, usepow));};
-        uint size() const{ return groups.size();};
+        uint size() const{ return uint(groups.size());};
         flt mean_dists() const;
         //~ flt std_dists() const;
         flt energy(Box *box);
@@ -802,10 +802,10 @@ class interactionpairsx : public interaction {
         virtual ~interactionpairsx(){};
 };
 
-struct atompaircomp {
-    bool operator() (const atompair& lhs, const atompair& rhs) const{
-        return (lhs[0] == rhs[0] and lhs[1] == rhs[1]);}
-};
+//~ struct atompaircomp {
+    //~ bool operator() (const atompair& lhs, const atompair& rhs) const{
+        //~ return (lhs[0] == rhs[0] and lhs[1] == rhs[1]);}
+//~ };
 
 class pairlist {
     protected:
@@ -951,32 +951,45 @@ ContactTracker* ContactTrackerD(Box *box, atomgroup *atoms, vector<double> dists
 
 class EnergyTracker : public statetracker{
     protected:
-        Box *box;
         atomgroup *atoms;
         vector<interaction*> interactions;
         
-        unsigned long long N;
+        uint N;
         uint nskip, nskipped;
         flt U0;
         flt Es, Us, Ks;
+        flt Esq, Usq, Ksq;
     public:
-        EnergyTracker(Box *box, atomgroup *atoms, 
+        EnergyTracker(atomgroup *atoms, 
             vector<interaction*> interactions, uint nskip=1)
-             : box(box), atoms(atoms),
-            interactions(interactions), N(0), nskip(nskip), nskipped(0),
-            U0(0),Es(0),Us(0),Ks(0){};
+             : atoms(atoms),
+            interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
+            U0(0),Es(0),Us(0),Ks(0), Esq(0), Usq(0), Ksq(0){};
         void update(Box *box);
-        void reset(){N=0;U0=0;Es=0;Us=0;Ks=0;};
+        void reset(){
+            nskipped=0;
+            N=0; Es=0; Us=0; Ks=0;
+            Esq=0; Usq=0; Ksq=0;
+        };
         void setU0(flt newU0){
-            Us -= (newU0 - U0) * ((flt) N);
-            Es -= (newU0 - U0) * ((flt) N);
             U0 = newU0;
-         };
+            reset();
+        };
+        void setU0(Box *box);
+        flt getU0(){return U0;};
             
         flt E(){return Es/((flt) N);};
         flt U(){return Us/((flt) N);};
         flt K(){return Ks/((flt) N);};
-        unsigned long long n(){return N;};
+        flt Estd(){return sqrt(Esq/N -Es*Es/N/N);};
+        flt Kstd(){return sqrt(Ksq/N -Ks*Ks/N/N);};
+        flt Ustd(){return sqrt(Usq/N -Us*Us/N/N);};
+        flt Esqmean(){return Esq/N;};
+        flt Ksqmean(){return Ksq/N;};
+        flt Usqmean(){return Usq/N;};
+        //~ flt Ustd(){return sqrt((Usq -(U*U)) / ((flt) N));};
+        //~ flt Kstd(){return sqrt((Ksq -(K*K)) / ((flt) N));};
+        uint n(){return N;};
 };
 
 template <class A, class P>
@@ -1031,6 +1044,7 @@ class NListed : public interaction {
         void update_pairs();
         P getpair(idpair &pair){
             return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
+        A& getatom(uint n){return atoms[n];}
         flt energy(Box *box, idpair &pair);
         flt energy(Box *box);
         flt pressure(Box *box);
@@ -2132,5 +2146,122 @@ class jammingtreeBD : public jammingtree2 {
         bool expand(uint n){return jammingtree2::expand(n);};
 };
 #endif
+
+flt confineRange(flt minimum, flt val, flt maximum){
+    if(val <= minimum) return minimum;
+    if(val >= maximum) return maximum;
+    return val;
+}
+
+class atompair : public array<atom, 2> {
+    public:
+        atompair() : array<atom, 2>(){};
+        atompair(flt m) : array<atom, 2>(){
+            vals[0].m = m/2;
+            vals[1].m = m/2;
+        };
+        atompair(flt m1, flt m2) : array<atom, 2>(){
+            vals[0].m = m1;
+            vals[1].m = m2;
+        };
+        atompair(atom* a, atom* b){ vals[0] = *a; vals[1] = *b;};
+        inline atom& first() {return vals[0];};
+        inline atom& last() {return vals[1];};
+};
+
+class SCatomvec : public virtual atomgroup {
+    // this is an atomgroup which actually owns the atoms, which are
+    // arranged in pairs.
+    private:
+        atompair* atoms;
+        uint sz;
+    public:
+        SCatomvec(vector<double> masses) : sz((uint) masses.size()){
+            atoms = new atompair[sz];
+            for(uint i=0; i < sz; i++){
+                atoms[i].first().m = masses[i]/2;
+                atoms[i].last().m = masses[i]/2;
+            }
+        };
+        SCatomvec(uint N, flt mass) : sz(N){
+            atoms = new atompair[sz];
+            for(uint i=0; i < sz; i++){
+                atoms[i].first().m = mass/2;
+                atoms[i].last().m = mass/2;
+            }
+        };
+        SCatomvec(SCatomvec& other) : sz(other.size()){
+            atoms = new atompair[sz];
+            for(uint i=0; i < sz; i++) atoms[i] = other.atoms[i];
+        };
+        inline atom& operator[](cuint n){return atoms[n / 2][n % 2];};
+        inline atom& operator[](cuint n) const {return atoms[n / 2][n % 2];};
+        inline atompair& pair(cuint n){return atoms[n / 2];};
+        //inline atompair& pair(cuint n) const {return atoms[n / 2];};
+        //~ atomid get_id(atom *a){
+            //~ uint n = (uint) (a - atoms); WON'T WORK
+            //~ if (n >= sz or a < atoms) return atomid();
+            //~ return get_id(n);
+        //~ }
+        //~ inline atomid get_id(uint n) {
+            //~ if (n > sz*2) return atomid(); return atomid(&(atoms[n/2][n%2]),n);};
+        inline uint size() const {return sz;};
+        ~SCatomvec(){ delete [] atoms;};
+};
+
+struct SpheroCylinderDiff{
+    Vec delta, r;
+    flt lambda1, lambda2;
+};
+
+struct SCPair {
+    atompair &p1;
+    atompair &p2;
+    flt l1, l2;
+    SCPair(atompair &p1, atompair &p2, flt l1, flt l2) : 
+        p1(p1), p2(p2), l1(l1), l2(l2){};
+    SCPair(atompair &p1, atompair &p2, flt l) : 
+        p1(p1), p2(p2), l1(l), l2(l){};
+    SpheroCylinderDiff NearestLoc(Box *box);
+    void applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I);
+};
+
+struct SCSpringPair : public SCPair {
+    flt eps, sig;
+    
+    SCSpringPair(atompair &p1, atompair &p2, flt eps, flt sig, flt l1, flt l2) : 
+        SCPair(p1, p2, l1, l2), eps(eps), sig(sig){};
+    SCSpringPair(atompair &p1, atompair &p2, flt eps, flt sig, flt l) : 
+        SCPair(p1, p2, l), eps(eps), sig(sig){};
+    
+    inline flt maxdist(){return sig + (l1+l2)/2;};
+    inline flt maxdelta(){return sig;};
+    
+    flt energy(Box *box, SpheroCylinderDiff diff){
+        //~ atom &a1 = p1.first();
+        //~ atom &a1p = p1.last();
+        //~ atom &a2 = p2.first();
+        //~ atom &a2p = p2.last();
+        //~ Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
+        //~ Vec r12 = r2 - r1;
+        //~ flt rsq = r12.sq();
+        //~ if(rsq > pow(sig+l, 2)) return 0.0;
+        
+        //~ SpheroCylinderDiff diff = SCNearestLoc(a1.x, a1p.x, a2.x, a2p.x);
+        flt dsq = diff.delta.sq();
+        if(dsq > sig*sig) return 0;
+        flt d = sqrtflt(dsq);
+        flt dsig = d-sig;
+        return dsig*dsig*eps/2;
+    }
+    Vec forces(Box *box, SpheroCylinderDiff diff){
+        flt dsq = diff.delta.sq();
+        if(dsq > sig*sig) return Vec();
+        flt dmag = sqrt(dsq);
+        Vec dhat = diff.delta / dmag;
+        
+        return dhat * (eps * (sig - dmag));
+    };
+};
 
 #endif

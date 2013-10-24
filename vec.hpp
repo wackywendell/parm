@@ -110,9 +110,9 @@ class Vector3 : public Numvector<T, 3> {
         inline const T getx() const {return Nvector<T,3>::get(0);}
         inline const T gety() const {return Nvector<T,3>::get(1);}
         inline const T getz() const {return Nvector<T,3>::get(2);}
-        inline double getxd() const {return Nvector<T,3>::get(0);}
-        inline double getyd() const {return Nvector<T,3>::get(1);}
-        inline double getzd() const {return Nvector<T,3>::get(2);}
+        inline double getxd() const {return double(Nvector<T,3>::get(0));}
+        inline double getyd() const {return double(Nvector<T,3>::get(1));}
+        inline double getzd() const {return double(Nvector<T,3>::get(2));}
         inline void setx(const T a){Nvector<T,3>::vals[0]=a;}
         inline void sety(const T b){Nvector<T,3>::vals[1]=b;}
         inline void setz(const T c){Nvector<T,3>::vals[2]=c;}
@@ -197,6 +197,7 @@ class Vector2 : public Numvector<T, 2> {
         template <class U> inline Vector2 operator/(const U rhs) const {
             return Vector2(getx()/rhs,gety()/rhs);}
         T cross (const Vector2 &rhs) const{return getx()*rhs.gety() - rhs.getx()*gety();};
+        Vector2 cross (const T v) const{return Vector2(gety()*v, -getx()*v);};
         Vector2 perp() const{return Vector2(-gety(),getx());};
         inline Vector2 norm() const {return Vector2(Numvector<T,2>::norm());};
         inline Vector2& operator-=(const Vector2 &rhs){Nvector<T,2>::operator-=(rhs); return *this;};

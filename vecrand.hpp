@@ -29,20 +29,22 @@ vector<flt> LDVector(vector<double> dists){
     return newdists;
 };
 
-bool isinfflt(long double n){return isinfl(n);};
-bool isnanflt(long double n){return isnanl(n);};
-flt powflt(flt n, flt m){return powl(n,m);};
-flt sqrtflt(flt n){return sqrtl(n);};
-flt cbrtflt(flt n){return cbrtl(n);};
-flt expm1flt(flt n){return expm1l(n);};
+inline bool isinfflt(long double n){return isinfl(n);};
+inline bool isnanflt(long double n){return isnanl(n);};
+inline flt powflt(flt n, flt m){return powl(n,m);};
+inline flt sqrtflt(flt n){return sqrtl(n);};
+inline flt cbrtflt(flt n){return cbrtl(n);};
+inline flt expm1flt(flt n){return expm1l(n);};
+inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
 #else
 typedef double flt;
-bool isinfflt(double n){return isinf(n);};
-bool isnanflt(double n){return isnan(n);};
-flt powflt(flt n, flt m){return pow(n,m);};
-flt sqrtflt(flt n){return sqrt(n);};
-flt cbrtflt(flt n){return cbrt(n);};
-flt expm1flt(flt n){return expm1(n);};
+inline bool isinfflt(double n){return isinf(n);};
+inline bool isnanflt(double n){return isnan(n);};
+inline flt powflt(flt n, flt m){return pow(n,m);};
+inline flt sqrtflt(flt n){return sqrt(n);};
+inline flt cbrtflt(flt n){return cbrt(n);};
+inline flt expm1flt(flt n){return expm1(n);};
+inline flt copysignflt(flt n, flt m){return copysign(n,m);};
 #endif
 
 #ifdef VEC2D
