@@ -275,6 +275,14 @@ Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, cons
 
 flt bondangle::energy(const Vec& r1, const Vec& r2){
     flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
+    if(costheta > 1){
+        //~ cout << "resetting! " << costheta << endl;
+        costheta = 1;
+    }
+    else if(costheta < -1){
+        //~ cout << "resetting! " << costheta << endl;
+        costheta = -1;
+    }
     if(!usecos) return springk*powflt(acos(costheta) - theta0,2)/2;
     else return springk*powflt(costheta - cos(theta0),2)/2;
 }
@@ -284,6 +292,14 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     flt r2mag = r2.mag();
     
     flt costheta = r1.dot(r2) / r1mag / r2mag;
+    if(costheta > 1){
+        //~ cout << "resetting! " << costheta << endl;
+        costheta = 1;
+    }
+    else if(costheta < -1){
+        //~ cout << "resetting! " << costheta << endl;
+        costheta = -1;
+    }
     flt theta = acos(costheta);
     //theta is now the angle between x1 and x2
     
@@ -294,21 +310,36 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     // Then -f = grad V = \frac{k}{r}(\theta-\theta_{0})\hat{\theta}
     // first we get the direction:
     Nvector<Vec, 3> force;
-    force[0] = r2.perpto(r1);
+    if (fmag == 0) {return force;}
+    Vec f0 = r2.perpto(r1);
+    Vec f2 = r1.perpto(r2);
+    if ((f0.sq() <= 1e-30) or (f2.sq() <= 1e-30)) {return force;}
+    force[0] = f0;
     force[0].normalize();
-    force[2] = r1.perpto(r2);
+    force[2] = f2;
     force[2].normalize();
     
     // now we get magnitude: 
     force[0] *= fmag/r1mag;
     force[2] *= fmag/r2mag;
     
+    //~ if(!(force[0].sq() < 1e6)){
+        //~ cout << "theta: " << theta << "  theta0: " << theta0 << endl;
+        //~ cout << "fmag: " << fmag << "  r1mag: " << r1mag << "  r2mag: " << r2mag << endl;
+        //~ cout << "f0: " << f0 << "  force[0]: " << force[0] << endl;
+        //~ cout << "f2: " << f2 << "  force[2]: " << force[2] << endl;
+    //~ }
+    
     //~ cout << force[2] << x2 << "force(2).x2: " << force[2].dot(x2) << endl;
     force[1] = -(force[0] + force[2]);
     // The direction of the force on the first atom (f0) is 
     // perpendicular to x1, and same for f2.
-    // **TODO** its possible that x1 = +/-x2, and then x1.perp(x2) = 0
+    // **FIXED** its possible that x1 = +/-x2, and then x1.perp(x2) = 0
     // and then we get a divide by zero error.
+    
+    //~ assert(force[0].sq() <= 1e7);
+    //~ assert(force[1].sq() <= 1e7);
+    //~ assert(force[2].sq() <= 1e7);
     
     return force;
 }
@@ -612,12 +643,15 @@ void angletriples::setForces(Box *box){
         Vec r1 = diff(atom2.x, atom1.x);
         Vec r2 = diff(atom2.x, atom3.x);
         Nvector<Vec,3> f = bondangle(it->k, it->x0).forces(r1, r2);
+        assert(f[0].sq() < 1e8);
+        assert(f[1].sq() < 1e8);
+        assert(f[2].sq() < 1e8);
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
-        //~ assert(f[0].sq() < 1000000);
-        //~ assert(f[1].sq() < 1000000);
-        //~ assert(f[2].sq() < 1000000);
+        assert(f[0].sq() < 1e8);
+        assert(f[1].sq() < 1e8);
+        assert(f[2].sq() < 1e8);
     }
 };
 
@@ -1326,8 +1360,7 @@ SpheroCylinderDiff SCPair::NearestLoc(Box *box){
             //~ cout << "new l2s: " << lambda2s << "  l1s: " << lambda1s;
             lambda1s = confineRange(-l1/2, lambda1s, l1/2);
             //~ cout << " -> " << lambda1s << "\n";
-        }
-        else{
+        } else {
             lambda1s = copysignflt(l1/2, lambda1p);
             lambda2s = -u2r12 + (lambda1s*u1u2);
             //~ cout << "new l1s: " << lambda1s << "  l2s: " << lambda2s;
@@ -1343,13 +1376,15 @@ SpheroCylinderDiff SCPair::NearestLoc(Box *box){
     return diff;
 };
 
-void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I){
+void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt IoverM){
     atom &a1 = p1.first();
     atom &a1p = p1.last();
     atom &a2 = p2.first();
     atom &a2p = p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
+    flt M1 = a1.m + a1p.m;
+    flt M2 = a2.m + a2p.m;
     
     a1.f -= f/2; // note that the force on a1 is half the total force, this carries through to atau1
     a1p.f -= f/2;
@@ -1357,7 +1392,7 @@ void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I){
     a2p.f += f/2;
     
     Vec t1 = s1*(diff.lambda1/l1);
-    Vec atau1 = s1.cross(t1.cross(f)) / (-2*I);
+    Vec atau1 = s1.cross(t1.cross(f)) / (-2*IoverM*M1);
     //~ cout << "t1: " << t1 << "  atau1: " << atau1 << endl;
     // Formula says (t1×f)×s1 / 2I
     // -I because it should be (t1×f)×s1, but we wrote s1×(t1×f)
@@ -1366,9 +1401,39 @@ void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I){
     a1p.f -= atau1 * a1p.m;
     
     Vec t2 = s2*(diff.lambda2/l2);
-    Vec atau2 = s2.cross(t2.cross(f)) / (2*I); // 2 because it should be -f
+    Vec atau2 = s2.cross(t2.cross(f)) / (2*IoverM*M2); // 2 because it should be -f
     a2.f += atau2 * a2.m;
     a2p.f -= atau2 * a2p.m;
     
     //~ cout << "t2: " << t2 << "  atau2: " << atau1 << endl;
+};
+
+flt SCSpringList::energy(Box *box){
+    flt E = 0;
+    for(uint i = 0; i < scs->pairs() - 1; i++){
+        atompair &pi = scs->pair(i);
+        for(uint j = i+1; j < scs->pairs(); j++){
+            atompair &pj = scs->pair(j);
+            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l);
+            SpheroCylinderDiff diff = scp.NearestLoc(box);
+            //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
+            //~ cout << "SCSpringList diff lambdas: " << diff.lambda1 << "    " << diff.lambda2 << '\n';
+            E += scp.energy(box, diff);
+            //~ cout << "SCSpringList energy: " << E << '\n';
+        }
+    }
+    return E;
+};
+
+void SCSpringList::setForces(Box *box){
+    for(uint i = 0; i < scs->pairs() - 1; i++){
+        atompair &pi = scs->pair(i);
+        for(uint j = i+1; j < scs->pairs(); j++){
+            atompair &pj = scs->pair(j);
+            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l);
+            SpheroCylinderDiff diff = scp.NearestLoc(box);
+            Vec f = scp.forces(box, diff);
+            scp.applyForce(box, f, diff, l*l/4);
+        }
+    }
 };

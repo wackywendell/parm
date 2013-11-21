@@ -125,13 +125,94 @@ class distConstraint : public constraint {
             
             Vec dx = a2->x - a1->x;
             flt dxmag = dx.mag();
-            //~ Vec dxnorm = dx / dxmag;
-            //~ Vec dv = a2->v - a1->v;
-            //~ flt dvmag = dv.mag();
+            Vec dxnorm = dx / dxmag;
             
             a1->x += dx * ((1 - dist/dxmag)*mratio2);
             a2->x -= dx * ((1 - dist/dxmag)*mratio1);
-            //TODO: fix fs, vs, etc. like relativeConstraint
+            //~ dx = a2->x - a1->x;
+            //~ dxmag = dx.mag();
+            //~ dxnorm = dx / dxmag; dxnorm should still be the same
+            
+            Vec baddv = dxnorm * ((a2->v - a1->v).dot(dxnorm)/2);
+            a1->v += baddv;
+            a2->v -= baddv;
+            
+            // newv2 • u = v2 - |baddv|
+            // newv1 • u = v1 + |baddv|
+            // (newv2 - newv1) • u = (v2 - v1 - (2*baddv)) • u
+            //                     = ((v2 - v1)•u - (2*baddv)•u)
+            //                     = (|baddv|*2 - |baddv|*2) = 0
+            assert((a2->v - a1->v).dot(dxnorm) < 1e-8);
+            
+            // TODO: Fix mass ratio stuff
+            Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
+            a1->f += baddf;
+            a2->f -= baddf;
+            assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
+        }
+};
+
+
+class linearConstraint : public constraint {
+    private:
+        atomgroup& atms;
+        flt dist;
+        flt lincom, I, M;
+    public:
+        linearConstraint(atomgroup& atms, flt dist) :
+            atms(atms), dist(dist), lincom(0), I(0), M(0) {
+            for(uint i = 0; i < atms.size(); i++){
+                M += atms[i].m;
+                lincom += (dist*i)*atms[i].m;
+            }
+            lincom /= M;
+            
+            for(uint i = 0; i < atms.size(); i++){
+                flt dx = (dist*i - lincom);
+                I += atms[i].m * dx * dx;
+            }
+        };
+        int ndof(){return atms.size()-1;};
+        
+        void apply(Box *box){
+            Vec com = atms.com();
+            Vec comv = atms.comv();
+            Vec comf = Vec();
+            
+            uint sz = atms.size();
+            Vec lvec = Vec();
+            #ifdef VEC3D
+            Vec L = Vec();
+            Vec omega  = Vec();
+            Vec tau = Vec();
+            Vec alpha = Vec();
+            #else
+            flt L = 0;
+            flt omega = 0;
+            flt tau = 0;
+            flt alpha = 0;
+            #endif
+            
+            for(uint i = 0; i < sz; i++){
+                flt chaindist = i * dist - lincom;
+                Vec dx = atms[i].x - com;
+                comf += atms[i].f;
+                lvec += dx.norm() * chaindist;
+                L += dx.cross(atms[i].v) * atms[i].m;
+                tau += dx.cross(atms[i].f);
+            }
+            
+            lvec.normalize();
+            omega = L / I;
+            alpha = tau / I;
+            
+            for(uint i = 0; i < sz; i++){
+                flt chaindist = i * dist - lincom;
+                Vec dx = lvec*chaindist;
+                atms[i].x = com + dx;
+                atms[i].v = comv + dx.cross(omega);
+                atms[i].f = comf + (dx.cross(alpha)*atms[i].m);
+            }
         }
 };
 

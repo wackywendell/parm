@@ -1079,11 +1079,11 @@ collectionNLCGV::collectionNLCGV(Box *box, const flt dt,
                 const flt secmax, const flt seceps) :
             collection(box, groups, interactions, trackers, 
                 constraints), dt(dt), secmax(secmax), seceps(seceps),
-                alphamax(0), afrac(0), dxmax(0), stepmax(0), kmax(kmax),
-                Knew(0), k(0), vl(0), fl(0), al(0), alpha(0), beta(0),
-                betaused(0), dxsum(0), alphavmax(0), sec(0){
+                alphamax(0), afrac(0), dxmax(0), stepmax(0),
+                kmax(kmax), Knew(0), k(0), vl(0), fl(0), al(0), 
+                alpha(0), beta(0), betaused(0), dxsum(0), alphavmax(0),
+                sec(0){
 };
-
 
 void collectionNLCGV::stepx(flt dx){
     vector<atomgroup*>::iterator git;
@@ -1093,7 +1093,7 @@ void collectionNLCGV::stepx(flt dx){
             m[i].x += m[i].v * dx;
         }
     }
-}
+};
 
 flt collectionNLCGV::fdotf(){
     flt returnvalue = 0;

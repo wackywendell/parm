@@ -323,9 +323,18 @@ class collectionNLCGV : public collection {
     
     public:
         // Parameters
-        flt dt;
+        flt dt; // initial step attempt
         flt secmax, seceps;
+        // secmax is the max number of iterations within a timestep
+        // seceps is the minimum alpha * v before we call it "close enough"
         flt alphamax, afrac, dxmax, stepmax, kmax;
+        // alpha is how much larger the next step is, proportionally
+        // if alpha < afrac * dxsum, we break, its "close enough"
+        // alphamax is the largest proportion
+        // dxmax is the maximum "step" you take in one "timestep"; the full
+        //    step is v * dxsum
+        // stepmax is the largest v*dxsum allowed
+        // We reset after kmax iterations
         
         // To keep between iterations
         flt Knew;
@@ -334,6 +343,11 @@ class collectionNLCGV : public collection {
         
         // For tracking purposes
         flt alpha, beta, betaused, dxsum, alphavmax;
+        // alpha is how much bigger one iteration is than the previous
+        // beta is how much we use of the previous v
+        // betaused is after we take into account 0 <= beta <= 1
+        // dxsum is the total of alphas over a timestep; atoms move v*dxsum in one timestep
+        // alphavmax = (last alpha) * sqrt(v dot v)
         uint sec;
         
         void stepx(flt dx);

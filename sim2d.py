@@ -7343,6 +7343,7 @@ class SCPair(_object):
         """
         __init__(SCPair self, atompair p1, atompair p2, flt l1, flt l2) -> SCPair
         __init__(SCPair self, atompair p1, atompair p2, flt l) -> SCPair
+        __init__(SCPair self, SCPair other) -> SCPair
         """
         this = _sim2d.new_SCPair(*args)
         try: self.this.append(this)
@@ -7404,11 +7405,13 @@ class SCSpringPair(SCPair):
 SCSpringPair_swigregister = _sim2d.SCSpringPair_swigregister
 SCSpringPair_swigregister(SCSpringPair)
 
-class SCSpringList(_object):
+class SCSpringList(interaction):
     """Proxy of C++ SCSpringList class"""
     __swig_setmethods__ = {}
+    for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SCSpringList, name, value)
     __swig_getmethods__ = {}
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, SCSpringList, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
@@ -7416,6 +7419,22 @@ class SCSpringList(_object):
         this = _sim2d.new_SCSpringList(*args)
         try: self.this.append(this)
         except: self.this = this
+    def energy(self, *args) -> "flt" :
+        """energy(SCSpringList self, Box box) -> flt"""
+        return _sim2d.SCSpringList_energy(self, *args)
+
+    def setForces(self, *args) -> "void" :
+        """setForces(SCSpringList self, Box box)"""
+        return _sim2d.SCSpringList_setForces(self, *args)
+
+    def setForcesGetPressure(self, *args) -> "flt" :
+        """setForcesGetPressure(SCSpringList self, Box box) -> flt"""
+        return _sim2d.SCSpringList_setForcesGetPressure(self, *args)
+
+    def pressure(self, *args) -> "flt" :
+        """pressure(SCSpringList self, Box box) -> flt"""
+        return _sim2d.SCSpringList_pressure(self, *args)
+
     __swig_destroy__ = _sim2d.delete_SCSpringList
     __del__ = lambda self : None;
 SCSpringList_swigregister = _sim2d.SCSpringList_swigregister
@@ -7561,6 +7580,33 @@ class distConstraint(constraint):
     __del__ = lambda self : None;
 distConstraint_swigregister = _sim2d.distConstraint_swigregister
 distConstraint_swigregister(distConstraint)
+
+class linearConstraint(constraint):
+    """Proxy of C++ linearConstraint class"""
+    __swig_setmethods__ = {}
+    for _s in [constraint]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, linearConstraint, name, value)
+    __swig_getmethods__ = {}
+    for _s in [constraint]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, linearConstraint, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """__init__(linearConstraint self, atomgroup atms, flt dist) -> linearConstraint"""
+        this = _sim2d.new_linearConstraint(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def ndof(self) -> "int" :
+        """ndof(linearConstraint self) -> int"""
+        return _sim2d.linearConstraint_ndof(self)
+
+    def apply(self, *args) -> "void" :
+        """apply(linearConstraint self, Box box)"""
+        return _sim2d.linearConstraint_apply(self, *args)
+
+    __swig_destroy__ = _sim2d.delete_linearConstraint
+    __del__ = lambda self : None;
+linearConstraint_swigregister = _sim2d.linearConstraint_swigregister
+linearConstraint_swigregister(linearConstraint)
 
 class NPHGaussianConstraint(constraint):
     """Proxy of C++ NPHGaussianConstraint class"""

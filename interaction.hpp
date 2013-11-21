@@ -2223,6 +2223,8 @@ struct SCPair {
         p1(p1), p2(p2), l1(l1), l2(l2){};
     SCPair(atompair &p1, atompair &p2, flt l) : 
         p1(p1), p2(p2), l1(l), l2(l){};
+    SCPair(const SCPair &other) : p1(other.p1), p2(other.p2),
+            l1(other.l1), l2(other.l2){}
     SpheroCylinderDiff NearestLoc(Box *box);
     void applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I);
 };
@@ -2253,6 +2255,9 @@ struct SCSpringPair : public SCPair {
         if(dsq > sig*sig) return 0;
         flt d = sqrtflt(dsq);
         flt dsig = d-sig;
+        //~ cout << "SCSpringPair d: " << d << "  sig: " 
+                //~ << sig << "  dsig: " << dsig << "  eps: " << eps << '\n';
+        //~ cout << "SCSpringPair energy: " << (dsig*dsig*eps/2.0) << '\n';
         return dsig*dsig*eps/2;
     }
     Vec forces(Box *box, SpheroCylinderDiff diff){
@@ -2265,13 +2270,18 @@ struct SCSpringPair : public SCPair {
     };
 };
 
-class SCSpringList {
+class SCSpringList : public interaction {
     private:
         SCatomvec *scs;
         flt eps, sig, l;
     public:
         SCSpringList(SCatomvec *scs, flt eps, flt sig, flt l) : 
             scs(scs), eps(eps), sig(sig), l(l){};
+        flt energy(Box *box);
+        void setForces(Box *box);
+        flt setForcesGetPressure(Box *box){setForces(box); return NAN;};
+        flt pressure(Box *box){return NAN;};
+        ~SCSpringList(){};
 };
 
 #endif
