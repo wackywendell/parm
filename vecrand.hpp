@@ -29,8 +29,8 @@ vector<flt> LDVector(vector<double> dists){
     return newdists;
 };
 
-inline bool isinfflt(long double n){return isinfl(n);};
-inline bool isnanflt(long double n){return isnanl(n);};
+inline bool isinfflt(long double n){return std::isinf(n);};
+inline bool isnanflt(long double n){return std::isnan(n);};
 inline flt powflt(flt n, flt m){return powl(n,m);};
 inline flt sqrtflt(flt n){return sqrtl(n);};
 inline flt cbrtflt(flt n){return cbrtl(n);};
@@ -38,8 +38,8 @@ inline flt expm1flt(flt n){return expm1l(n);};
 inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
 #else
 typedef double flt;
-inline bool isinfflt(double n){return isinf(n);};
-inline bool isnanflt(double n){return isnan(n);};
+inline const bool isinfflt(double n){return std::isinf(n);};
+inline const bool isnanflt(double n){return std::isnan(n);};
 inline flt powflt(flt n, flt m){return pow(n,m);};
 inline flt sqrtflt(flt n){return sqrt(n);};
 inline flt cbrtflt(flt n){return cbrt(n);};

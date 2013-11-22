@@ -16,26 +16,26 @@
 using namespace std;
 
 template <class T, unsigned int N>
-class array {
+class Array {
     protected:
         T vals[N];
     public:
-        array();
-        array(const array &rhs);
-        template <class U> array(const array<U, N> &rhs);
-        array(const T locs[N]);
+        Array();
+        Array(const Array &rhs);
+        template <class U> Array(const Array<U, N> &rhs);
+        Array(const T locs[N]);
         const T& get(const unsigned int n) const {return vals[n];}
         void set(const unsigned int n, const T a){vals[n]=a;}
         unsigned int len() const {return N;};
         
         T& operator[](const unsigned int i){return vals[i];};
         const T& operator[](const unsigned int i) const {return vals[i];};
-        //~ template <class U> bool operator==(const array<U,N> a) const{
+        //~ template <class U> bool operator==(const Array<U,N> a) const{
             //~ for(uint i=0; i<N; i++) if(a[i] != get[i]) return false;
             //~ return true;};
         T* begin(){return vals;};
         T* end(){return vals + N;};
-        ~array(){};
+        ~Array(){};
         
         //~ template <class U, unsigned int M>
         //~ friend ostream& operator<<(ostream& out, const Nvector<U, M> v);
@@ -274,22 +274,22 @@ Vector3<C> Matrix<C>::dot(Vector3<C> vec) const{
 }
 
 template <class T, unsigned int N>
-array<T, N>::array(const array<T, N> &rhs) {
+Array<T, N>::Array(const Array<T, N> &rhs) {
     for(unsigned int i=0; i < N; i++){
         vals[i] = rhs.get(i);
     }
 }
 
 template <class T, unsigned int N>
-array<T, N>::array() {}
+Array<T, N>::Array() {}
 
 template <class T, unsigned int N>
-array<T, N>::array(const T locs[N]) {
+Array<T, N>::Array(const T locs[N]) {
     for(unsigned int i=0; i < N; i++) vals[i] = locs[i];
 }
 
 template <class T, unsigned int N> template<class U>
-array<T, N>::array(const array<U,N> &rhs) {
+Array<T, N>::Array(const Array<U,N> &rhs) {
     for(unsigned int i=0; i < N; i++){
         vals[i] = T(rhs.get(i));
     }

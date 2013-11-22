@@ -157,6 +157,7 @@ class SwigPyIterator(_object):
 SwigPyIterator_swigregister = _sim3dlong.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
+SHARED_PTR_DISOWN = _sim3dlong.SHARED_PTR_DISOWN
 class _Nvector3(_object):
     """Proxy of C++ Nvector<(double,3)> class"""
     __swig_setmethods__ = {}
@@ -2038,7 +2039,7 @@ VecPair_swigregister = _sim3dlong.VecPair_swigregister
 VecPair_swigregister(VecPair)
 
 class _atomarray2(_object):
-    """Proxy of C++ array<(p.atom,2)> class"""
+    """Proxy of C++ Array<(p.atom,2)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, _atomarray2, name, value)
     __swig_getmethods__ = {}
@@ -2046,9 +2047,9 @@ class _atomarray2(_object):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(array<(p.atom,2)> self) -> _atomarray2
-        __init__(array<(p.atom,2)> self, _atomarray2 rhs) -> _atomarray2
-        __init__(array<(p.atom,2)> self, atom *const [2] locs) -> _atomarray2
+        __init__(Array<(p.atom,2)> self) -> _atomarray2
+        __init__(Array<(p.atom,2)> self, _atomarray2 rhs) -> _atomarray2
+        __init__(Array<(p.atom,2)> self, atom *const [2] locs) -> _atomarray2
         """
         this = _sim3dlong.new__atomarray2(*args)
         try: self.this.append(this)
@@ -2079,7 +2080,7 @@ _atomarray2_swigregister = _sim3dlong._atomarray2_swigregister
 _atomarray2_swigregister(_atomarray2)
 
 class _atompair2(_object):
-    """Proxy of C++ array<(atom,2)> class"""
+    """Proxy of C++ Array<(atom,2)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, _atompair2, name, value)
     __swig_getmethods__ = {}
@@ -2087,9 +2088,9 @@ class _atompair2(_object):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(array<(atom,2)> self) -> _atompair2
-        __init__(array<(atom,2)> self, _atompair2 rhs) -> _atompair2
-        __init__(array<(atom,2)> self, atom locs) -> _atompair2
+        __init__(Array<(atom,2)> self) -> _atompair2
+        __init__(Array<(atom,2)> self, _atompair2 rhs) -> _atompair2
+        __init__(Array<(atom,2)> self, atom locs) -> _atompair2
         """
         this = _sim3dlong.new__atompair2(*args)
         try: self.this.append(this)
@@ -2120,7 +2121,7 @@ _atompair2_swigregister = _sim3dlong._atompair2_swigregister
 _atompair2_swigregister(_atompair2)
 
 class _idarray2(_object):
-    """Proxy of C++ array<(atomid,2)> class"""
+    """Proxy of C++ Array<(atomid,2)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, _idarray2, name, value)
     __swig_getmethods__ = {}
@@ -2128,9 +2129,9 @@ class _idarray2(_object):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(array<(atomid,2)> self) -> _idarray2
-        __init__(array<(atomid,2)> self, _idarray2 rhs) -> _idarray2
-        __init__(array<(atomid,2)> self, atomid locs) -> _idarray2
+        __init__(Array<(atomid,2)> self) -> _idarray2
+        __init__(Array<(atomid,2)> self, _idarray2 rhs) -> _idarray2
+        __init__(Array<(atomid,2)> self, atomid locs) -> _idarray2
         """
         this = _sim3dlong.new__idarray2(*args)
         try: self.this.append(this)
@@ -2161,7 +2162,7 @@ _idarray2_swigregister = _sim3dlong._idarray2_swigregister
 _idarray2_swigregister(_idarray2)
 
 class _atomarray3(_object):
-    """Proxy of C++ array<(p.atom,3)> class"""
+    """Proxy of C++ Array<(p.atom,3)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, _atomarray3, name, value)
     __swig_getmethods__ = {}
@@ -2169,9 +2170,9 @@ class _atomarray3(_object):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(array<(p.atom,3)> self) -> _atomarray3
-        __init__(array<(p.atom,3)> self, _atomarray3 rhs) -> _atomarray3
-        __init__(array<(p.atom,3)> self, atom *const [3] locs) -> _atomarray3
+        __init__(Array<(p.atom,3)> self) -> _atomarray3
+        __init__(Array<(p.atom,3)> self, _atomarray3 rhs) -> _atomarray3
+        __init__(Array<(p.atom,3)> self, atom *const [3] locs) -> _atomarray3
         """
         this = _sim3dlong.new__atomarray3(*args)
         try: self.this.append(this)
@@ -2202,7 +2203,7 @@ _atomarray3_swigregister = _sim3dlong._atomarray3_swigregister
 _atomarray3_swigregister(_atomarray3)
 
 class _atomarray4(_object):
-    """Proxy of C++ array<(p.atom,4)> class"""
+    """Proxy of C++ Array<(p.atom,4)> class"""
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, _atomarray4, name, value)
     __swig_getmethods__ = {}
@@ -2210,9 +2211,9 @@ class _atomarray4(_object):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(array<(p.atom,4)> self) -> _atomarray4
-        __init__(array<(p.atom,4)> self, _atomarray4 rhs) -> _atomarray4
-        __init__(array<(p.atom,4)> self, atom *const [4] locs) -> _atomarray4
+        __init__(Array<(p.atom,4)> self) -> _atomarray4
+        __init__(Array<(p.atom,4)> self, _atomarray4 rhs) -> _atomarray4
+        __init__(Array<(p.atom,4)> self, atom *const [4] locs) -> _atomarray4
         """
         this = _sim3dlong.new__atomarray4(*args)
         try: self.this.append(this)
@@ -2759,177 +2760,6 @@ class ldvector(collections.MutableSequence):
 ldvector_swigregister = _sim3dlong.ldvector_swigregister
 ldvector_swigregister(ldvector)
 
-class avector(_object):
-    """Proxy of C++ std::vector<(p.atomgroup)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, avector, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, avector, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(avector self) -> SwigPyIterator"""
-        return _sim3dlong.avector_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(avector self) -> bool"""
-        return _sim3dlong.avector___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(avector self) -> bool"""
-        return _sim3dlong.avector___bool__(self)
-
-    def __len__(self) -> "std::vector< atomgroup * >::size_type" :
-        """__len__(avector self) -> std::vector< atomgroup * >::size_type"""
-        return _sim3dlong.avector___len__(self)
-
-    def pop(self) -> "std::vector< atomgroup * >::value_type" :
-        """pop(avector self) -> atomgroup"""
-        return _sim3dlong.avector_pop(self)
-
-    def __getslice__(self, *args) -> "std::vector< atomgroup *,std::allocator< atomgroup * > > *" :
-        """__getslice__(avector self, std::vector< atomgroup * >::difference_type i, std::vector< atomgroup * >::difference_type j) -> avector"""
-        return _sim3dlong.avector___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(avector self, std::vector< atomgroup * >::difference_type i, std::vector< atomgroup * >::difference_type j, 
-            avector v=std::vector< atomgroup *,std::allocator< atomgroup * > >())
-        __setslice__(avector self, std::vector< atomgroup * >::difference_type i, std::vector< atomgroup * >::difference_type j)
-        """
-        return _sim3dlong.avector___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(avector self, std::vector< atomgroup * >::difference_type i, std::vector< atomgroup * >::difference_type j)"""
-        return _sim3dlong.avector___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(avector self, std::vector< atomgroup * >::difference_type i)
-        __delitem__(avector self, PySliceObject * slice)
-        """
-        return _sim3dlong.avector___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "std::vector< atomgroup * >::value_type" :
-        """
-        __getitem__(avector self, PySliceObject * slice) -> avector
-        __getitem__(avector self, std::vector< atomgroup * >::difference_type i) -> atomgroup
-        """
-        return _sim3dlong.avector___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(avector self, PySliceObject * slice, avector v)
-        __setitem__(avector self, PySliceObject * slice)
-        __setitem__(avector self, std::vector< atomgroup * >::difference_type i, atomgroup x)
-        """
-        return _sim3dlong.avector___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(avector self, atomgroup x)"""
-        return _sim3dlong.avector_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(avector self) -> bool"""
-        return _sim3dlong.avector_empty(self)
-
-    def size(self) -> "std::vector< atomgroup * >::size_type" :
-        """size(avector self) -> std::vector< atomgroup * >::size_type"""
-        return _sim3dlong.avector_size(self)
-
-    def clear(self) -> "void" :
-        """clear(avector self)"""
-        return _sim3dlong.avector_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(avector self, avector v)"""
-        return _sim3dlong.avector_swap(self, *args)
-
-    def get_allocator(self) -> "std::vector< atomgroup * >::allocator_type" :
-        """get_allocator(avector self) -> std::vector< atomgroup * >::allocator_type"""
-        return _sim3dlong.avector_get_allocator(self)
-
-    def begin(self) -> "std::vector< atomgroup * >::iterator" :
-        """begin(avector self) -> std::vector< atomgroup * >::iterator"""
-        return _sim3dlong.avector_begin(self)
-
-    def end(self) -> "std::vector< atomgroup * >::iterator" :
-        """end(avector self) -> std::vector< atomgroup * >::iterator"""
-        return _sim3dlong.avector_end(self)
-
-    def rbegin(self) -> "std::vector< atomgroup * >::reverse_iterator" :
-        """rbegin(avector self) -> std::vector< atomgroup * >::reverse_iterator"""
-        return _sim3dlong.avector_rbegin(self)
-
-    def rend(self) -> "std::vector< atomgroup * >::reverse_iterator" :
-        """rend(avector self) -> std::vector< atomgroup * >::reverse_iterator"""
-        return _sim3dlong.avector_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(avector self)"""
-        return _sim3dlong.avector_pop_back(self)
-
-    def erase(self, *args) -> "std::vector< atomgroup * >::iterator" :
-        """
-        erase(avector self, std::vector< atomgroup * >::iterator pos) -> std::vector< atomgroup * >::iterator
-        erase(avector self, std::vector< atomgroup * >::iterator first, std::vector< atomgroup * >::iterator last) -> std::vector< atomgroup * >::iterator
-        """
-        return _sim3dlong.avector_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(std::vector<(p.atomgroup)> self) -> avector
-        __init__(std::vector<(p.atomgroup)> self, avector arg2) -> avector
-        __init__(std::vector<(p.atomgroup)> self, std::vector< atomgroup * >::size_type size) -> avector
-        __init__(std::vector<(p.atomgroup)> self, std::vector< atomgroup * >::size_type size, atomgroup value) -> avector
-        """
-        this = _sim3dlong.new_avector(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(avector self, atomgroup x)"""
-        return _sim3dlong.avector_push_back(self, *args)
-
-    def front(self) -> "std::vector< atomgroup * >::value_type" :
-        """front(avector self) -> atomgroup"""
-        return _sim3dlong.avector_front(self)
-
-    def back(self) -> "std::vector< atomgroup * >::value_type" :
-        """back(avector self) -> atomgroup"""
-        return _sim3dlong.avector_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(avector self, std::vector< atomgroup * >::size_type n, atomgroup x)"""
-        return _sim3dlong.avector_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(avector self, std::vector< atomgroup * >::size_type new_size)
-        resize(avector self, std::vector< atomgroup * >::size_type new_size, atomgroup x)
-        """
-        return _sim3dlong.avector_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(avector self, std::vector< atomgroup * >::iterator pos, atomgroup x) -> std::vector< atomgroup * >::iterator
-        insert(avector self, std::vector< atomgroup * >::iterator pos, std::vector< atomgroup * >::size_type n, 
-            atomgroup x)
-        """
-        return _sim3dlong.avector_insert(self, *args)
-
-    def reserve(self, *args) -> "void" :
-        """reserve(avector self, std::vector< atomgroup * >::size_type n)"""
-        return _sim3dlong.avector_reserve(self, *args)
-
-    def capacity(self) -> "std::vector< atomgroup * >::size_type" :
-        """capacity(avector self) -> std::vector< atomgroup * >::size_type"""
-        return _sim3dlong.avector_capacity(self)
-
-    __swig_destroy__ = _sim3dlong.delete_avector
-    __del__ = lambda self : None;
-avector_swigregister = _sim3dlong.avector_swigregister
-avector_swigregister(avector)
-
 class aptrvector(_object):
     """Proxy of C++ std::vector<(p.atom)> class"""
     __swig_setmethods__ = {}
@@ -3099,861 +2929,6 @@ class aptrvector(_object):
     __del__ = lambda self : None;
 aptrvector_swigregister = _sim3dlong.aptrvector_swigregister
 aptrvector_swigregister(aptrvector)
-
-class ivector(_object):
-    """Proxy of C++ std::vector<(p.interaction)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ivector, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ivector, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(ivector self) -> SwigPyIterator"""
-        return _sim3dlong.ivector_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(ivector self) -> bool"""
-        return _sim3dlong.ivector___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(ivector self) -> bool"""
-        return _sim3dlong.ivector___bool__(self)
-
-    def __len__(self) -> "std::vector< interaction * >::size_type" :
-        """__len__(ivector self) -> std::vector< interaction * >::size_type"""
-        return _sim3dlong.ivector___len__(self)
-
-    def pop(self) -> "std::vector< interaction * >::value_type" :
-        """pop(ivector self) -> interaction"""
-        return _sim3dlong.ivector_pop(self)
-
-    def __getslice__(self, *args) -> "std::vector< interaction *,std::allocator< interaction * > > *" :
-        """__getslice__(ivector self, std::vector< interaction * >::difference_type i, std::vector< interaction * >::difference_type j) -> ivector"""
-        return _sim3dlong.ivector___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(ivector self, std::vector< interaction * >::difference_type i, std::vector< interaction * >::difference_type j, 
-            ivector v=std::vector< interaction *,std::allocator< interaction * > >())
-        __setslice__(ivector self, std::vector< interaction * >::difference_type i, std::vector< interaction * >::difference_type j)
-        """
-        return _sim3dlong.ivector___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(ivector self, std::vector< interaction * >::difference_type i, std::vector< interaction * >::difference_type j)"""
-        return _sim3dlong.ivector___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(ivector self, std::vector< interaction * >::difference_type i)
-        __delitem__(ivector self, PySliceObject * slice)
-        """
-        return _sim3dlong.ivector___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "std::vector< interaction * >::value_type" :
-        """
-        __getitem__(ivector self, PySliceObject * slice) -> ivector
-        __getitem__(ivector self, std::vector< interaction * >::difference_type i) -> interaction
-        """
-        return _sim3dlong.ivector___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(ivector self, PySliceObject * slice, ivector v)
-        __setitem__(ivector self, PySliceObject * slice)
-        __setitem__(ivector self, std::vector< interaction * >::difference_type i, interaction x)
-        """
-        return _sim3dlong.ivector___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(ivector self, interaction x)"""
-        return _sim3dlong.ivector_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(ivector self) -> bool"""
-        return _sim3dlong.ivector_empty(self)
-
-    def size(self) -> "std::vector< interaction * >::size_type" :
-        """size(ivector self) -> std::vector< interaction * >::size_type"""
-        return _sim3dlong.ivector_size(self)
-
-    def clear(self) -> "void" :
-        """clear(ivector self)"""
-        return _sim3dlong.ivector_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(ivector self, ivector v)"""
-        return _sim3dlong.ivector_swap(self, *args)
-
-    def get_allocator(self) -> "std::vector< interaction * >::allocator_type" :
-        """get_allocator(ivector self) -> std::vector< interaction * >::allocator_type"""
-        return _sim3dlong.ivector_get_allocator(self)
-
-    def begin(self) -> "std::vector< interaction * >::iterator" :
-        """begin(ivector self) -> std::vector< interaction * >::iterator"""
-        return _sim3dlong.ivector_begin(self)
-
-    def end(self) -> "std::vector< interaction * >::iterator" :
-        """end(ivector self) -> std::vector< interaction * >::iterator"""
-        return _sim3dlong.ivector_end(self)
-
-    def rbegin(self) -> "std::vector< interaction * >::reverse_iterator" :
-        """rbegin(ivector self) -> std::vector< interaction * >::reverse_iterator"""
-        return _sim3dlong.ivector_rbegin(self)
-
-    def rend(self) -> "std::vector< interaction * >::reverse_iterator" :
-        """rend(ivector self) -> std::vector< interaction * >::reverse_iterator"""
-        return _sim3dlong.ivector_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(ivector self)"""
-        return _sim3dlong.ivector_pop_back(self)
-
-    def erase(self, *args) -> "std::vector< interaction * >::iterator" :
-        """
-        erase(ivector self, std::vector< interaction * >::iterator pos) -> std::vector< interaction * >::iterator
-        erase(ivector self, std::vector< interaction * >::iterator first, std::vector< interaction * >::iterator last) -> std::vector< interaction * >::iterator
-        """
-        return _sim3dlong.ivector_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(std::vector<(p.interaction)> self) -> ivector
-        __init__(std::vector<(p.interaction)> self, ivector arg2) -> ivector
-        __init__(std::vector<(p.interaction)> self, std::vector< interaction * >::size_type size) -> ivector
-        __init__(std::vector<(p.interaction)> self, std::vector< interaction * >::size_type size, interaction value) -> ivector
-        """
-        this = _sim3dlong.new_ivector(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(ivector self, interaction x)"""
-        return _sim3dlong.ivector_push_back(self, *args)
-
-    def front(self) -> "std::vector< interaction * >::value_type" :
-        """front(ivector self) -> interaction"""
-        return _sim3dlong.ivector_front(self)
-
-    def back(self) -> "std::vector< interaction * >::value_type" :
-        """back(ivector self) -> interaction"""
-        return _sim3dlong.ivector_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(ivector self, std::vector< interaction * >::size_type n, interaction x)"""
-        return _sim3dlong.ivector_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(ivector self, std::vector< interaction * >::size_type new_size)
-        resize(ivector self, std::vector< interaction * >::size_type new_size, interaction x)
-        """
-        return _sim3dlong.ivector_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(ivector self, std::vector< interaction * >::iterator pos, interaction x) -> std::vector< interaction * >::iterator
-        insert(ivector self, std::vector< interaction * >::iterator pos, std::vector< interaction * >::size_type n, 
-            interaction x)
-        """
-        return _sim3dlong.ivector_insert(self, *args)
-
-    def reserve(self, *args) -> "void" :
-        """reserve(ivector self, std::vector< interaction * >::size_type n)"""
-        return _sim3dlong.ivector_reserve(self, *args)
-
-    def capacity(self) -> "std::vector< interaction * >::size_type" :
-        """capacity(ivector self) -> std::vector< interaction * >::size_type"""
-        return _sim3dlong.ivector_capacity(self)
-
-    __swig_destroy__ = _sim3dlong.delete_ivector
-    __del__ = lambda self : None;
-ivector_swigregister = _sim3dlong.ivector_swigregister
-ivector_swigregister(ivector)
-
-class ifxvector(_object):
-    """Proxy of C++ std::vector<(p.interactionpairsx)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, ifxvector, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, ifxvector, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(ifxvector self) -> SwigPyIterator"""
-        return _sim3dlong.ifxvector_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(ifxvector self) -> bool"""
-        return _sim3dlong.ifxvector___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(ifxvector self) -> bool"""
-        return _sim3dlong.ifxvector___bool__(self)
-
-    def __len__(self) -> "std::vector< interactionpairsx * >::size_type" :
-        """__len__(ifxvector self) -> std::vector< interactionpairsx * >::size_type"""
-        return _sim3dlong.ifxvector___len__(self)
-
-    def pop(self) -> "std::vector< interactionpairsx * >::value_type" :
-        """pop(ifxvector self) -> interactionpairsx"""
-        return _sim3dlong.ifxvector_pop(self)
-
-    def __getslice__(self, *args) -> "std::vector< interactionpairsx *,std::allocator< interactionpairsx * > > *" :
-        """__getslice__(ifxvector self, std::vector< interactionpairsx * >::difference_type i, std::vector< interactionpairsx * >::difference_type j) -> ifxvector"""
-        return _sim3dlong.ifxvector___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(ifxvector self, std::vector< interactionpairsx * >::difference_type i, std::vector< interactionpairsx * >::difference_type j, 
-            ifxvector v=std::vector< interactionpairsx *,std::allocator< interactionpairsx * > >())
-        __setslice__(ifxvector self, std::vector< interactionpairsx * >::difference_type i, std::vector< interactionpairsx * >::difference_type j)
-        """
-        return _sim3dlong.ifxvector___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(ifxvector self, std::vector< interactionpairsx * >::difference_type i, std::vector< interactionpairsx * >::difference_type j)"""
-        return _sim3dlong.ifxvector___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(ifxvector self, std::vector< interactionpairsx * >::difference_type i)
-        __delitem__(ifxvector self, PySliceObject * slice)
-        """
-        return _sim3dlong.ifxvector___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "std::vector< interactionpairsx * >::value_type" :
-        """
-        __getitem__(ifxvector self, PySliceObject * slice) -> ifxvector
-        __getitem__(ifxvector self, std::vector< interactionpairsx * >::difference_type i) -> interactionpairsx
-        """
-        return _sim3dlong.ifxvector___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(ifxvector self, PySliceObject * slice, ifxvector v)
-        __setitem__(ifxvector self, PySliceObject * slice)
-        __setitem__(ifxvector self, std::vector< interactionpairsx * >::difference_type i, interactionpairsx x)
-        """
-        return _sim3dlong.ifxvector___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(ifxvector self, interactionpairsx x)"""
-        return _sim3dlong.ifxvector_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(ifxvector self) -> bool"""
-        return _sim3dlong.ifxvector_empty(self)
-
-    def size(self) -> "std::vector< interactionpairsx * >::size_type" :
-        """size(ifxvector self) -> std::vector< interactionpairsx * >::size_type"""
-        return _sim3dlong.ifxvector_size(self)
-
-    def clear(self) -> "void" :
-        """clear(ifxvector self)"""
-        return _sim3dlong.ifxvector_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(ifxvector self, ifxvector v)"""
-        return _sim3dlong.ifxvector_swap(self, *args)
-
-    def get_allocator(self) -> "std::vector< interactionpairsx * >::allocator_type" :
-        """get_allocator(ifxvector self) -> std::vector< interactionpairsx * >::allocator_type"""
-        return _sim3dlong.ifxvector_get_allocator(self)
-
-    def begin(self) -> "std::vector< interactionpairsx * >::iterator" :
-        """begin(ifxvector self) -> std::vector< interactionpairsx * >::iterator"""
-        return _sim3dlong.ifxvector_begin(self)
-
-    def end(self) -> "std::vector< interactionpairsx * >::iterator" :
-        """end(ifxvector self) -> std::vector< interactionpairsx * >::iterator"""
-        return _sim3dlong.ifxvector_end(self)
-
-    def rbegin(self) -> "std::vector< interactionpairsx * >::reverse_iterator" :
-        """rbegin(ifxvector self) -> std::vector< interactionpairsx * >::reverse_iterator"""
-        return _sim3dlong.ifxvector_rbegin(self)
-
-    def rend(self) -> "std::vector< interactionpairsx * >::reverse_iterator" :
-        """rend(ifxvector self) -> std::vector< interactionpairsx * >::reverse_iterator"""
-        return _sim3dlong.ifxvector_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(ifxvector self)"""
-        return _sim3dlong.ifxvector_pop_back(self)
-
-    def erase(self, *args) -> "std::vector< interactionpairsx * >::iterator" :
-        """
-        erase(ifxvector self, std::vector< interactionpairsx * >::iterator pos) -> std::vector< interactionpairsx * >::iterator
-        erase(ifxvector self, std::vector< interactionpairsx * >::iterator first, std::vector< interactionpairsx * >::iterator last) -> std::vector< interactionpairsx * >::iterator
-        """
-        return _sim3dlong.ifxvector_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(std::vector<(p.interactionpairsx)> self) -> ifxvector
-        __init__(std::vector<(p.interactionpairsx)> self, ifxvector arg2) -> ifxvector
-        __init__(std::vector<(p.interactionpairsx)> self, std::vector< interactionpairsx * >::size_type size) -> ifxvector
-        __init__(std::vector<(p.interactionpairsx)> self, std::vector< interactionpairsx * >::size_type size, interactionpairsx value) -> ifxvector
-        """
-        this = _sim3dlong.new_ifxvector(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(ifxvector self, interactionpairsx x)"""
-        return _sim3dlong.ifxvector_push_back(self, *args)
-
-    def front(self) -> "std::vector< interactionpairsx * >::value_type" :
-        """front(ifxvector self) -> interactionpairsx"""
-        return _sim3dlong.ifxvector_front(self)
-
-    def back(self) -> "std::vector< interactionpairsx * >::value_type" :
-        """back(ifxvector self) -> interactionpairsx"""
-        return _sim3dlong.ifxvector_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(ifxvector self, std::vector< interactionpairsx * >::size_type n, interactionpairsx x)"""
-        return _sim3dlong.ifxvector_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(ifxvector self, std::vector< interactionpairsx * >::size_type new_size)
-        resize(ifxvector self, std::vector< interactionpairsx * >::size_type new_size, interactionpairsx x)
-        """
-        return _sim3dlong.ifxvector_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(ifxvector self, std::vector< interactionpairsx * >::iterator pos, interactionpairsx x) -> std::vector< interactionpairsx * >::iterator
-        insert(ifxvector self, std::vector< interactionpairsx * >::iterator pos, std::vector< interactionpairsx * >::size_type n, 
-            interactionpairsx x)
-        """
-        return _sim3dlong.ifxvector_insert(self, *args)
-
-    def reserve(self, *args) -> "void" :
-        """reserve(ifxvector self, std::vector< interactionpairsx * >::size_type n)"""
-        return _sim3dlong.ifxvector_reserve(self, *args)
-
-    def capacity(self) -> "std::vector< interactionpairsx * >::size_type" :
-        """capacity(ifxvector self) -> std::vector< interactionpairsx * >::size_type"""
-        return _sim3dlong.ifxvector_capacity(self)
-
-    __swig_destroy__ = _sim3dlong.delete_ifxvector
-    __del__ = lambda self : None;
-ifxvector_swigregister = _sim3dlong.ifxvector_swigregister
-ifxvector_swigregister(ifxvector)
-
-class tvector(_object):
-    """Proxy of C++ std::vector<(p.statetracker)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, tvector, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, tvector, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(tvector self) -> SwigPyIterator"""
-        return _sim3dlong.tvector_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(tvector self) -> bool"""
-        return _sim3dlong.tvector___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(tvector self) -> bool"""
-        return _sim3dlong.tvector___bool__(self)
-
-    def __len__(self) -> "std::vector< statetracker * >::size_type" :
-        """__len__(tvector self) -> std::vector< statetracker * >::size_type"""
-        return _sim3dlong.tvector___len__(self)
-
-    def pop(self) -> "std::vector< statetracker * >::value_type" :
-        """pop(tvector self) -> statetracker"""
-        return _sim3dlong.tvector_pop(self)
-
-    def __getslice__(self, *args) -> "std::vector< statetracker *,std::allocator< statetracker * > > *" :
-        """__getslice__(tvector self, std::vector< statetracker * >::difference_type i, std::vector< statetracker * >::difference_type j) -> tvector"""
-        return _sim3dlong.tvector___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(tvector self, std::vector< statetracker * >::difference_type i, std::vector< statetracker * >::difference_type j, 
-            tvector v=std::vector< statetracker *,std::allocator< statetracker * > >())
-        __setslice__(tvector self, std::vector< statetracker * >::difference_type i, std::vector< statetracker * >::difference_type j)
-        """
-        return _sim3dlong.tvector___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(tvector self, std::vector< statetracker * >::difference_type i, std::vector< statetracker * >::difference_type j)"""
-        return _sim3dlong.tvector___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(tvector self, std::vector< statetracker * >::difference_type i)
-        __delitem__(tvector self, PySliceObject * slice)
-        """
-        return _sim3dlong.tvector___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "std::vector< statetracker * >::value_type" :
-        """
-        __getitem__(tvector self, PySliceObject * slice) -> tvector
-        __getitem__(tvector self, std::vector< statetracker * >::difference_type i) -> statetracker
-        """
-        return _sim3dlong.tvector___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(tvector self, PySliceObject * slice, tvector v)
-        __setitem__(tvector self, PySliceObject * slice)
-        __setitem__(tvector self, std::vector< statetracker * >::difference_type i, statetracker x)
-        """
-        return _sim3dlong.tvector___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(tvector self, statetracker x)"""
-        return _sim3dlong.tvector_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(tvector self) -> bool"""
-        return _sim3dlong.tvector_empty(self)
-
-    def size(self) -> "std::vector< statetracker * >::size_type" :
-        """size(tvector self) -> std::vector< statetracker * >::size_type"""
-        return _sim3dlong.tvector_size(self)
-
-    def clear(self) -> "void" :
-        """clear(tvector self)"""
-        return _sim3dlong.tvector_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(tvector self, tvector v)"""
-        return _sim3dlong.tvector_swap(self, *args)
-
-    def get_allocator(self) -> "std::vector< statetracker * >::allocator_type" :
-        """get_allocator(tvector self) -> std::vector< statetracker * >::allocator_type"""
-        return _sim3dlong.tvector_get_allocator(self)
-
-    def begin(self) -> "std::vector< statetracker * >::iterator" :
-        """begin(tvector self) -> std::vector< statetracker * >::iterator"""
-        return _sim3dlong.tvector_begin(self)
-
-    def end(self) -> "std::vector< statetracker * >::iterator" :
-        """end(tvector self) -> std::vector< statetracker * >::iterator"""
-        return _sim3dlong.tvector_end(self)
-
-    def rbegin(self) -> "std::vector< statetracker * >::reverse_iterator" :
-        """rbegin(tvector self) -> std::vector< statetracker * >::reverse_iterator"""
-        return _sim3dlong.tvector_rbegin(self)
-
-    def rend(self) -> "std::vector< statetracker * >::reverse_iterator" :
-        """rend(tvector self) -> std::vector< statetracker * >::reverse_iterator"""
-        return _sim3dlong.tvector_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(tvector self)"""
-        return _sim3dlong.tvector_pop_back(self)
-
-    def erase(self, *args) -> "std::vector< statetracker * >::iterator" :
-        """
-        erase(tvector self, std::vector< statetracker * >::iterator pos) -> std::vector< statetracker * >::iterator
-        erase(tvector self, std::vector< statetracker * >::iterator first, std::vector< statetracker * >::iterator last) -> std::vector< statetracker * >::iterator
-        """
-        return _sim3dlong.tvector_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(std::vector<(p.statetracker)> self) -> tvector
-        __init__(std::vector<(p.statetracker)> self, tvector arg2) -> tvector
-        __init__(std::vector<(p.statetracker)> self, std::vector< statetracker * >::size_type size) -> tvector
-        __init__(std::vector<(p.statetracker)> self, std::vector< statetracker * >::size_type size, statetracker value) -> tvector
-        """
-        this = _sim3dlong.new_tvector(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(tvector self, statetracker x)"""
-        return _sim3dlong.tvector_push_back(self, *args)
-
-    def front(self) -> "std::vector< statetracker * >::value_type" :
-        """front(tvector self) -> statetracker"""
-        return _sim3dlong.tvector_front(self)
-
-    def back(self) -> "std::vector< statetracker * >::value_type" :
-        """back(tvector self) -> statetracker"""
-        return _sim3dlong.tvector_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(tvector self, std::vector< statetracker * >::size_type n, statetracker x)"""
-        return _sim3dlong.tvector_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(tvector self, std::vector< statetracker * >::size_type new_size)
-        resize(tvector self, std::vector< statetracker * >::size_type new_size, statetracker x)
-        """
-        return _sim3dlong.tvector_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(tvector self, std::vector< statetracker * >::iterator pos, statetracker x) -> std::vector< statetracker * >::iterator
-        insert(tvector self, std::vector< statetracker * >::iterator pos, std::vector< statetracker * >::size_type n, 
-            statetracker x)
-        """
-        return _sim3dlong.tvector_insert(self, *args)
-
-    def reserve(self, *args) -> "void" :
-        """reserve(tvector self, std::vector< statetracker * >::size_type n)"""
-        return _sim3dlong.tvector_reserve(self, *args)
-
-    def capacity(self) -> "std::vector< statetracker * >::size_type" :
-        """capacity(tvector self) -> std::vector< statetracker * >::size_type"""
-        return _sim3dlong.tvector_capacity(self)
-
-    __swig_destroy__ = _sim3dlong.delete_tvector
-    __del__ = lambda self : None;
-tvector_swigregister = _sim3dlong.tvector_swigregister
-tvector_swigregister(tvector)
-
-class constraintvector(_object):
-    """Proxy of C++ std::vector<(p.constraint)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, constraintvector, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, constraintvector, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(constraintvector self) -> SwigPyIterator"""
-        return _sim3dlong.constraintvector_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(constraintvector self) -> bool"""
-        return _sim3dlong.constraintvector___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(constraintvector self) -> bool"""
-        return _sim3dlong.constraintvector___bool__(self)
-
-    def __len__(self) -> "std::vector< constraint * >::size_type" :
-        """__len__(constraintvector self) -> std::vector< constraint * >::size_type"""
-        return _sim3dlong.constraintvector___len__(self)
-
-    def pop(self) -> "std::vector< constraint * >::value_type" :
-        """pop(constraintvector self) -> constraint"""
-        return _sim3dlong.constraintvector_pop(self)
-
-    def __getslice__(self, *args) -> "std::vector< constraint *,std::allocator< constraint * > > *" :
-        """__getslice__(constraintvector self, std::vector< constraint * >::difference_type i, std::vector< constraint * >::difference_type j) -> constraintvector"""
-        return _sim3dlong.constraintvector___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(constraintvector self, std::vector< constraint * >::difference_type i, std::vector< constraint * >::difference_type j, 
-            constraintvector v=std::vector< constraint *,std::allocator< constraint * > >())
-        __setslice__(constraintvector self, std::vector< constraint * >::difference_type i, std::vector< constraint * >::difference_type j)
-        """
-        return _sim3dlong.constraintvector___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(constraintvector self, std::vector< constraint * >::difference_type i, std::vector< constraint * >::difference_type j)"""
-        return _sim3dlong.constraintvector___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(constraintvector self, std::vector< constraint * >::difference_type i)
-        __delitem__(constraintvector self, PySliceObject * slice)
-        """
-        return _sim3dlong.constraintvector___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "std::vector< constraint * >::value_type" :
-        """
-        __getitem__(constraintvector self, PySliceObject * slice) -> constraintvector
-        __getitem__(constraintvector self, std::vector< constraint * >::difference_type i) -> constraint
-        """
-        return _sim3dlong.constraintvector___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(constraintvector self, PySliceObject * slice, constraintvector v)
-        __setitem__(constraintvector self, PySliceObject * slice)
-        __setitem__(constraintvector self, std::vector< constraint * >::difference_type i, constraint x)
-        """
-        return _sim3dlong.constraintvector___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(constraintvector self, constraint x)"""
-        return _sim3dlong.constraintvector_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(constraintvector self) -> bool"""
-        return _sim3dlong.constraintvector_empty(self)
-
-    def size(self) -> "std::vector< constraint * >::size_type" :
-        """size(constraintvector self) -> std::vector< constraint * >::size_type"""
-        return _sim3dlong.constraintvector_size(self)
-
-    def clear(self) -> "void" :
-        """clear(constraintvector self)"""
-        return _sim3dlong.constraintvector_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(constraintvector self, constraintvector v)"""
-        return _sim3dlong.constraintvector_swap(self, *args)
-
-    def get_allocator(self) -> "std::vector< constraint * >::allocator_type" :
-        """get_allocator(constraintvector self) -> std::vector< constraint * >::allocator_type"""
-        return _sim3dlong.constraintvector_get_allocator(self)
-
-    def begin(self) -> "std::vector< constraint * >::iterator" :
-        """begin(constraintvector self) -> std::vector< constraint * >::iterator"""
-        return _sim3dlong.constraintvector_begin(self)
-
-    def end(self) -> "std::vector< constraint * >::iterator" :
-        """end(constraintvector self) -> std::vector< constraint * >::iterator"""
-        return _sim3dlong.constraintvector_end(self)
-
-    def rbegin(self) -> "std::vector< constraint * >::reverse_iterator" :
-        """rbegin(constraintvector self) -> std::vector< constraint * >::reverse_iterator"""
-        return _sim3dlong.constraintvector_rbegin(self)
-
-    def rend(self) -> "std::vector< constraint * >::reverse_iterator" :
-        """rend(constraintvector self) -> std::vector< constraint * >::reverse_iterator"""
-        return _sim3dlong.constraintvector_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(constraintvector self)"""
-        return _sim3dlong.constraintvector_pop_back(self)
-
-    def erase(self, *args) -> "std::vector< constraint * >::iterator" :
-        """
-        erase(constraintvector self, std::vector< constraint * >::iterator pos) -> std::vector< constraint * >::iterator
-        erase(constraintvector self, std::vector< constraint * >::iterator first, std::vector< constraint * >::iterator last) -> std::vector< constraint * >::iterator
-        """
-        return _sim3dlong.constraintvector_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(std::vector<(p.constraint)> self) -> constraintvector
-        __init__(std::vector<(p.constraint)> self, constraintvector arg2) -> constraintvector
-        __init__(std::vector<(p.constraint)> self, std::vector< constraint * >::size_type size) -> constraintvector
-        __init__(std::vector<(p.constraint)> self, std::vector< constraint * >::size_type size, constraint value) -> constraintvector
-        """
-        this = _sim3dlong.new_constraintvector(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(constraintvector self, constraint x)"""
-        return _sim3dlong.constraintvector_push_back(self, *args)
-
-    def front(self) -> "std::vector< constraint * >::value_type" :
-        """front(constraintvector self) -> constraint"""
-        return _sim3dlong.constraintvector_front(self)
-
-    def back(self) -> "std::vector< constraint * >::value_type" :
-        """back(constraintvector self) -> constraint"""
-        return _sim3dlong.constraintvector_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(constraintvector self, std::vector< constraint * >::size_type n, constraint x)"""
-        return _sim3dlong.constraintvector_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(constraintvector self, std::vector< constraint * >::size_type new_size)
-        resize(constraintvector self, std::vector< constraint * >::size_type new_size, constraint x)
-        """
-        return _sim3dlong.constraintvector_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(constraintvector self, std::vector< constraint * >::iterator pos, constraint x) -> std::vector< constraint * >::iterator
-        insert(constraintvector self, std::vector< constraint * >::iterator pos, std::vector< constraint * >::size_type n, 
-            constraint x)
-        """
-        return _sim3dlong.constraintvector_insert(self, *args)
-
-    def reserve(self, *args) -> "void" :
-        """reserve(constraintvector self, std::vector< constraint * >::size_type n)"""
-        return _sim3dlong.constraintvector_reserve(self, *args)
-
-    def capacity(self) -> "std::vector< constraint * >::size_type" :
-        """capacity(constraintvector self) -> std::vector< constraint * >::size_type"""
-        return _sim3dlong.constraintvector_capacity(self)
-
-    __swig_destroy__ = _sim3dlong.delete_constraintvector
-    __del__ = lambda self : None;
-constraintvector_swigregister = _sim3dlong.constraintvector_swigregister
-constraintvector_swigregister(constraintvector)
-
-class aRK4vector(_object):
-    """Proxy of C++ std::vector<(p.atomvecRK4)> class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, aRK4vector, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, aRK4vector, name)
-    __repr__ = _swig_repr
-    def iterator(self) -> "swig::SwigPyIterator *" :
-        """iterator(aRK4vector self) -> SwigPyIterator"""
-        return _sim3dlong.aRK4vector_iterator(self)
-
-    def __iter__(self): return self.iterator()
-    def __nonzero__(self) -> "bool" :
-        """__nonzero__(aRK4vector self) -> bool"""
-        return _sim3dlong.aRK4vector___nonzero__(self)
-
-    def __bool__(self) -> "bool" :
-        """__bool__(aRK4vector self) -> bool"""
-        return _sim3dlong.aRK4vector___bool__(self)
-
-    def __len__(self) -> "std::vector< atomvecRK4 * >::size_type" :
-        """__len__(aRK4vector self) -> std::vector< atomvecRK4 * >::size_type"""
-        return _sim3dlong.aRK4vector___len__(self)
-
-    def pop(self) -> "std::vector< atomvecRK4 * >::value_type" :
-        """pop(aRK4vector self) -> atomvecRK4"""
-        return _sim3dlong.aRK4vector_pop(self)
-
-    def __getslice__(self, *args) -> "std::vector< atomvecRK4 *,std::allocator< atomvecRK4 * > > *" :
-        """__getslice__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i, std::vector< atomvecRK4 * >::difference_type j) -> aRK4vector"""
-        return _sim3dlong.aRK4vector___getslice__(self, *args)
-
-    def __setslice__(self, *args) -> "void" :
-        """
-        __setslice__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i, std::vector< atomvecRK4 * >::difference_type j, 
-            aRK4vector v=std::vector< atomvecRK4 *,std::allocator< atomvecRK4 * > >())
-        __setslice__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i, std::vector< atomvecRK4 * >::difference_type j)
-        """
-        return _sim3dlong.aRK4vector___setslice__(self, *args)
-
-    def __delslice__(self, *args) -> "void" :
-        """__delslice__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i, std::vector< atomvecRK4 * >::difference_type j)"""
-        return _sim3dlong.aRK4vector___delslice__(self, *args)
-
-    def __delitem__(self, *args) -> "void" :
-        """
-        __delitem__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i)
-        __delitem__(aRK4vector self, PySliceObject * slice)
-        """
-        return _sim3dlong.aRK4vector___delitem__(self, *args)
-
-    def __getitem__(self, *args) -> "std::vector< atomvecRK4 * >::value_type" :
-        """
-        __getitem__(aRK4vector self, PySliceObject * slice) -> aRK4vector
-        __getitem__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i) -> atomvecRK4
-        """
-        return _sim3dlong.aRK4vector___getitem__(self, *args)
-
-    def __setitem__(self, *args) -> "void" :
-        """
-        __setitem__(aRK4vector self, PySliceObject * slice, aRK4vector v)
-        __setitem__(aRK4vector self, PySliceObject * slice)
-        __setitem__(aRK4vector self, std::vector< atomvecRK4 * >::difference_type i, atomvecRK4 x)
-        """
-        return _sim3dlong.aRK4vector___setitem__(self, *args)
-
-    def append(self, *args) -> "void" :
-        """append(aRK4vector self, atomvecRK4 x)"""
-        return _sim3dlong.aRK4vector_append(self, *args)
-
-    def empty(self) -> "bool" :
-        """empty(aRK4vector self) -> bool"""
-        return _sim3dlong.aRK4vector_empty(self)
-
-    def size(self) -> "std::vector< atomvecRK4 * >::size_type" :
-        """size(aRK4vector self) -> std::vector< atomvecRK4 * >::size_type"""
-        return _sim3dlong.aRK4vector_size(self)
-
-    def clear(self) -> "void" :
-        """clear(aRK4vector self)"""
-        return _sim3dlong.aRK4vector_clear(self)
-
-    def swap(self, *args) -> "void" :
-        """swap(aRK4vector self, aRK4vector v)"""
-        return _sim3dlong.aRK4vector_swap(self, *args)
-
-    def get_allocator(self) -> "std::vector< atomvecRK4 * >::allocator_type" :
-        """get_allocator(aRK4vector self) -> std::vector< atomvecRK4 * >::allocator_type"""
-        return _sim3dlong.aRK4vector_get_allocator(self)
-
-    def begin(self) -> "std::vector< atomvecRK4 * >::iterator" :
-        """begin(aRK4vector self) -> std::vector< atomvecRK4 * >::iterator"""
-        return _sim3dlong.aRK4vector_begin(self)
-
-    def end(self) -> "std::vector< atomvecRK4 * >::iterator" :
-        """end(aRK4vector self) -> std::vector< atomvecRK4 * >::iterator"""
-        return _sim3dlong.aRK4vector_end(self)
-
-    def rbegin(self) -> "std::vector< atomvecRK4 * >::reverse_iterator" :
-        """rbegin(aRK4vector self) -> std::vector< atomvecRK4 * >::reverse_iterator"""
-        return _sim3dlong.aRK4vector_rbegin(self)
-
-    def rend(self) -> "std::vector< atomvecRK4 * >::reverse_iterator" :
-        """rend(aRK4vector self) -> std::vector< atomvecRK4 * >::reverse_iterator"""
-        return _sim3dlong.aRK4vector_rend(self)
-
-    def pop_back(self) -> "void" :
-        """pop_back(aRK4vector self)"""
-        return _sim3dlong.aRK4vector_pop_back(self)
-
-    def erase(self, *args) -> "std::vector< atomvecRK4 * >::iterator" :
-        """
-        erase(aRK4vector self, std::vector< atomvecRK4 * >::iterator pos) -> std::vector< atomvecRK4 * >::iterator
-        erase(aRK4vector self, std::vector< atomvecRK4 * >::iterator first, std::vector< atomvecRK4 * >::iterator last) -> std::vector< atomvecRK4 * >::iterator
-        """
-        return _sim3dlong.aRK4vector_erase(self, *args)
-
-    def __init__(self, *args): 
-        """
-        __init__(std::vector<(p.atomvecRK4)> self) -> aRK4vector
-        __init__(std::vector<(p.atomvecRK4)> self, aRK4vector arg2) -> aRK4vector
-        __init__(std::vector<(p.atomvecRK4)> self, std::vector< atomvecRK4 * >::size_type size) -> aRK4vector
-        __init__(std::vector<(p.atomvecRK4)> self, std::vector< atomvecRK4 * >::size_type size, atomvecRK4 value) -> aRK4vector
-        """
-        this = _sim3dlong.new_aRK4vector(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def push_back(self, *args) -> "void" :
-        """push_back(aRK4vector self, atomvecRK4 x)"""
-        return _sim3dlong.aRK4vector_push_back(self, *args)
-
-    def front(self) -> "std::vector< atomvecRK4 * >::value_type" :
-        """front(aRK4vector self) -> atomvecRK4"""
-        return _sim3dlong.aRK4vector_front(self)
-
-    def back(self) -> "std::vector< atomvecRK4 * >::value_type" :
-        """back(aRK4vector self) -> atomvecRK4"""
-        return _sim3dlong.aRK4vector_back(self)
-
-    def assign(self, *args) -> "void" :
-        """assign(aRK4vector self, std::vector< atomvecRK4 * >::size_type n, atomvecRK4 x)"""
-        return _sim3dlong.aRK4vector_assign(self, *args)
-
-    def resize(self, *args) -> "void" :
-        """
-        resize(aRK4vector self, std::vector< atomvecRK4 * >::size_type new_size)
-        resize(aRK4vector self, std::vector< atomvecRK4 * >::size_type new_size, atomvecRK4 x)
-        """
-        return _sim3dlong.aRK4vector_resize(self, *args)
-
-    def insert(self, *args) -> "void" :
-        """
-        insert(aRK4vector self, std::vector< atomvecRK4 * >::iterator pos, atomvecRK4 x) -> std::vector< atomvecRK4 * >::iterator
-        insert(aRK4vector self, std::vector< atomvecRK4 * >::iterator pos, std::vector< atomvecRK4 * >::size_type n, 
-            atomvecRK4 x)
-        """
-        return _sim3dlong.aRK4vector_insert(self, *args)
-
-    def reserve(self, *args) -> "void" :
-        """reserve(aRK4vector self, std::vector< atomvecRK4 * >::size_type n)"""
-        return _sim3dlong.aRK4vector_reserve(self, *args)
-
-    def capacity(self) -> "std::vector< atomvecRK4 * >::size_type" :
-        """capacity(aRK4vector self) -> std::vector< atomvecRK4 * >::size_type"""
-        return _sim3dlong.aRK4vector_capacity(self)
-
-    __swig_destroy__ = _sim3dlong.delete_aRK4vector
-    __del__ = lambda self : None;
-aRK4vector_swigregister = _sim3dlong.aRK4vector_swigregister
-aRK4vector_swigregister(aRK4vector)
 
 class _uintvector(collections.MutableSequence):
     """Proxy of C++ std::vector<(unsigned int)> class"""
@@ -4752,7 +3727,8 @@ class metagroup(atomgroup):
     def __init__(self, *args): 
         """
         __init__(metagroup self) -> metagroup
-        __init__(metagroup self, avector arg2) -> metagroup
+        __init__(metagroup self, std::vector< atomgroup * > arg2) -> metagroup
+        __init__(metagroup self, std::vector< std::shared_ptr< atomgroup > > arg2) -> metagroup
         """
         this = _sim3dlong.new_metagroup(*args)
         try: self.this.append(this)
@@ -5724,9 +4700,10 @@ class neighborlist(statetracker):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(neighborlist self, Box box, flt const innerradius, flt const outerradius) -> neighborlist
-        __init__(neighborlist self, Box box, atomgroup vec, flt const innerradius, flt const outerradius, pairlist ignore=pairlist()) -> neighborlist
-        __init__(neighborlist self, Box box, atomgroup vec, flt const innerradius, flt const outerradius) -> neighborlist
+        __init__(neighborlist self, std::shared_ptr< Box > box, flt const innerradius, flt const outerradius) -> neighborlist
+        __init__(neighborlist self, std::shared_ptr< Box > box, atomgroup vec, flt const innerradius, flt const outerradius, 
+            pairlist ignore=pairlist()) -> neighborlist
+        __init__(neighborlist self, std::shared_ptr< Box > box, atomgroup vec, flt const innerradius, flt const outerradius) -> neighborlist
         """
         this = _sim3dlong.new_neighborlist(*args)
         try: self.this.append(this)
@@ -5803,7 +4780,7 @@ neighborlist_swigregister(neighborlist)
 
 
 def neighborlistL(*args) -> "neighborlist *" :
-  """neighborlistL(Box box, double const innerradius, double const outerradius) -> neighborlist"""
+  """neighborlistL(std::shared_ptr< Box > box, double const innerradius, double const outerradius) -> neighborlist"""
   return _sim3dlong.neighborlistL(*args)
 class ContactTracker(statetracker):
     """Proxy of C++ ContactTracker class"""
@@ -5815,7 +4792,7 @@ class ContactTracker(statetracker):
     __getattr__ = lambda self, name: _swig_getattr(self, ContactTracker, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(ContactTracker self, Box box, atomgroup atoms, ldvector dists) -> ContactTracker"""
+        """__init__(ContactTracker self, std::shared_ptr< Box > box, std::shared_ptr< atomgroup > atoms, ldvector dists) -> ContactTracker"""
         this = _sim3dlong.new_ContactTracker(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -5842,7 +4819,7 @@ ContactTracker_swigregister(ContactTracker)
 
 
 def ContactTrackerD(*args) -> "ContactTracker *" :
-  """ContactTrackerD(Box box, atomgroup atoms, dvector dists) -> ContactTracker"""
+  """ContactTrackerD(std::shared_ptr< Box > box, std::shared_ptr< atomgroup > atoms, dvector dists) -> ContactTracker"""
   return _sim3dlong.ContactTrackerD(*args)
 class EnergyTracker(statetracker):
     """Proxy of C++ EnergyTracker class"""
@@ -5855,8 +4832,8 @@ class EnergyTracker(statetracker):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(EnergyTracker self, atomgroup atoms, ivector interactions, uint nskip=1) -> EnergyTracker
-        __init__(EnergyTracker self, atomgroup atoms, ivector interactions) -> EnergyTracker
+        __init__(EnergyTracker self, atomgroup atoms, std::vector< interaction * > interactions, uint nskip=1) -> EnergyTracker
+        __init__(EnergyTracker self, atomgroup atoms, std::vector< interaction * > interactions) -> EnergyTracker
         """
         this = _sim3dlong.new_EnergyTracker(*args)
         try: self.this.append(this)
@@ -7011,7 +5988,7 @@ class jammingtree(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, jammingtree, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(jammingtree self, Box box, vecvectorL A, vecvectorL B) -> jammingtree"""
+        """__init__(jammingtree self, std::shared_ptr< Box > box, vecvectorL A, vecvectorL B) -> jammingtree"""
         this = _sim3dlong.new_jammingtree(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7441,7 +6418,7 @@ class NPHGaussianConstraint(constraint):
     __getattr__ = lambda self, name: _swig_getattr(self, NPHGaussianConstraint, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NPHGaussianConstraint self, OriginBox box, avector groups) -> NPHGaussianConstraint"""
+        """__init__(NPHGaussianConstraint self, std::shared_ptr< OriginBox > box, std::vector< atomgroup * > groups) -> NPHGaussianConstraint"""
         this = _sim3dlong.new_NPHGaussianConstraint(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7468,7 +6445,7 @@ class LJgroup(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJgroup, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJatom,LJpair)> self, neighborlist neighbors) -> LJgroup"""
+        """__init__(NListed<(LJatom,LJpair)> self, std::shared_ptr< neighborlist > neighbors) -> LJgroup"""
         this = _sim3dlong.new_LJgroup(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7499,6 +6476,10 @@ class LJgroup(interaction):
         """pressure(LJgroup self, Box box) -> flt"""
         return _sim3dlong.LJgroup_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJpair > &" :
+        """pairiter(LJgroup self) -> std::vector< LJpair > &"""
+        return _sim3dlong.LJgroup_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJgroup self) -> uint"""
         return _sim3dlong.LJgroup_size(self)
@@ -7523,8 +6504,8 @@ class LJgroup(interaction):
         """atom_list(LJgroup self) -> std::vector< LJatom > &"""
         return _sim3dlong.LJgroup_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJgroup self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJgroup self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJgroup_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJgroup
@@ -7545,7 +6526,7 @@ class LJfull(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJfull, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJatomcut,LJAttractPair)> self, neighborlist neighbors) -> LJfull"""
+        """__init__(NListed<(LJatomcut,LJAttractPair)> self, std::shared_ptr< neighborlist > neighbors) -> LJfull"""
         this = _sim3dlong.new_LJfull(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7576,6 +6557,10 @@ class LJfull(interaction):
         """pressure(LJfull self, Box box) -> flt"""
         return _sim3dlong.LJfull_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJAttractPair > &" :
+        """pairiter(LJfull self) -> std::vector< LJAttractPair > &"""
+        return _sim3dlong.LJfull_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJfull self) -> uint"""
         return _sim3dlong.LJfull_size(self)
@@ -7600,8 +6585,8 @@ class LJfull(interaction):
         """atom_list(LJfull self) -> std::vector< LJatomcut > &"""
         return _sim3dlong.LJfull_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJfull self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJfull self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJfull_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJfull
@@ -7622,7 +6607,7 @@ class Hydrophobicity(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, Hydrophobicity, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(HydroAtom,HydroPair)> self, neighborlist neighbors) -> Hydrophobicity"""
+        """__init__(NListed<(HydroAtom,HydroPair)> self, std::shared_ptr< neighborlist > neighbors) -> Hydrophobicity"""
         this = _sim3dlong.new_Hydrophobicity(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7653,6 +6638,10 @@ class Hydrophobicity(interaction):
         """pressure(Hydrophobicity self, Box box) -> flt"""
         return _sim3dlong.Hydrophobicity_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< HydroPair > &" :
+        """pairiter(Hydrophobicity self) -> std::vector< HydroPair > &"""
+        return _sim3dlong.Hydrophobicity_pairiter(self)
+
     def size(self) -> "uint" :
         """size(Hydrophobicity self) -> uint"""
         return _sim3dlong.Hydrophobicity_size(self)
@@ -7677,8 +6666,8 @@ class Hydrophobicity(interaction):
         """atom_list(Hydrophobicity self) -> std::vector< HydroAtom > &"""
         return _sim3dlong.Hydrophobicity_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(Hydrophobicity self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(Hydrophobicity self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.Hydrophobicity_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_Hydrophobicity
@@ -7696,7 +6685,7 @@ class LJdetailed(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJdetailed, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJAtomIndexed,LJFullPair)> self, neighborlist neighbors) -> LJdetailed"""
+        """__init__(NListed<(LJAtomIndexed,LJFullPair)> self, std::shared_ptr< neighborlist > neighbors) -> LJdetailed"""
         this = _sim3dlong.new_LJdetailed(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7727,6 +6716,10 @@ class LJdetailed(interaction):
         """pressure(LJdetailed self, Box box) -> flt"""
         return _sim3dlong.LJdetailed_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJFullPair > &" :
+        """pairiter(LJdetailed self) -> std::vector< LJFullPair > &"""
+        return _sim3dlong.LJdetailed_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJdetailed self) -> uint"""
         return _sim3dlong.LJdetailed_size(self)
@@ -7751,8 +6744,8 @@ class LJdetailed(interaction):
         """atom_list(LJdetailed self) -> std::vector< LJAtomIndexed > &"""
         return _sim3dlong.LJdetailed_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJdetailed self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJdetailed self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJdetailed_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJdetailed
@@ -7770,7 +6763,7 @@ class LJAttractRepulse(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJAttractRepulse, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJAttractRepulseAtom,LJAttractRepulsePair)> self, neighborlist neighbors) -> LJAttractRepulse"""
+        """__init__(NListed<(LJAttractRepulseAtom,LJAttractRepulsePair)> self, std::shared_ptr< neighborlist > neighbors) -> LJAttractRepulse"""
         this = _sim3dlong.new_LJAttractRepulse(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7801,6 +6794,10 @@ class LJAttractRepulse(interaction):
         """pressure(LJAttractRepulse self, Box box) -> flt"""
         return _sim3dlong.LJAttractRepulse_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJAttractRepulsePair > &" :
+        """pairiter(LJAttractRepulse self) -> std::vector< LJAttractRepulsePair > &"""
+        return _sim3dlong.LJAttractRepulse_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJAttractRepulse self) -> uint"""
         return _sim3dlong.LJAttractRepulse_size(self)
@@ -7825,8 +6822,8 @@ class LJAttractRepulse(interaction):
         """atom_list(LJAttractRepulse self) -> std::vector< LJAttractRepulseAtom > &"""
         return _sim3dlong.LJAttractRepulse_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJAttractRepulse self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJAttractRepulse self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJAttractRepulse_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJAttractRepulse
@@ -7844,7 +6841,7 @@ class LJAttractFixedRepulse(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJAttractFixedRepulse, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair)> self, neighborlist neighbors) -> LJAttractFixedRepulse"""
+        """__init__(NListed<(LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair)> self, std::shared_ptr< neighborlist > neighbors) -> LJAttractFixedRepulse"""
         this = _sim3dlong.new_LJAttractFixedRepulse(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7875,6 +6872,10 @@ class LJAttractFixedRepulse(interaction):
         """pressure(LJAttractFixedRepulse self, Box box) -> flt"""
         return _sim3dlong.LJAttractFixedRepulse_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJAttractFixedRepulsePair > &" :
+        """pairiter(LJAttractFixedRepulse self) -> std::vector< LJAttractFixedRepulsePair > &"""
+        return _sim3dlong.LJAttractFixedRepulse_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJAttractFixedRepulse self) -> uint"""
         return _sim3dlong.LJAttractFixedRepulse_size(self)
@@ -7899,8 +6900,8 @@ class LJAttractFixedRepulse(interaction):
         """atom_list(LJAttractFixedRepulse self) -> std::vector< LJAttractFixedRepulseAtom > &"""
         return _sim3dlong.LJAttractFixedRepulse_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJAttractFixedRepulse self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJAttractFixedRepulse self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJAttractFixedRepulse_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJAttractFixedRepulse
@@ -7918,7 +6919,7 @@ class LJDouble(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJDouble, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJDoubleAtom,LJDoublePair)> self, neighborlist neighbors) -> LJDouble"""
+        """__init__(NListed<(LJDoubleAtom,LJDoublePair)> self, std::shared_ptr< neighborlist > neighbors) -> LJDouble"""
         this = _sim3dlong.new_LJDouble(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -7949,6 +6950,10 @@ class LJDouble(interaction):
         """pressure(LJDouble self, Box box) -> flt"""
         return _sim3dlong.LJDouble_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJDoublePair > &" :
+        """pairiter(LJDouble self) -> std::vector< LJDoublePair > &"""
+        return _sim3dlong.LJDouble_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJDouble self) -> uint"""
         return _sim3dlong.LJDouble_size(self)
@@ -7973,8 +6978,8 @@ class LJDouble(interaction):
         """atom_list(LJDouble self) -> std::vector< LJDoubleAtom > &"""
         return _sim3dlong.LJDouble_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJDouble self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJDouble self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJDouble_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJDouble
@@ -7992,7 +6997,7 @@ class EisMclachlan(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, EisMclachlan, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(EisMclachlanAtom,EisMclachlanPair)> self, neighborlist neighbors) -> EisMclachlan"""
+        """__init__(NListed<(EisMclachlanAtom,EisMclachlanPair)> self, std::shared_ptr< neighborlist > neighbors) -> EisMclachlan"""
         this = _sim3dlong.new_EisMclachlan(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -8023,6 +7028,10 @@ class EisMclachlan(interaction):
         """pressure(EisMclachlan self, Box box) -> flt"""
         return _sim3dlong.EisMclachlan_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< EisMclachlanPair > &" :
+        """pairiter(EisMclachlan self) -> std::vector< EisMclachlanPair > &"""
+        return _sim3dlong.EisMclachlan_pairiter(self)
+
     def size(self) -> "uint" :
         """size(EisMclachlan self) -> uint"""
         return _sim3dlong.EisMclachlan_size(self)
@@ -8047,8 +7056,8 @@ class EisMclachlan(interaction):
         """atom_list(EisMclachlan self) -> std::vector< EisMclachlanAtom > &"""
         return _sim3dlong.EisMclachlan_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(EisMclachlan self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(EisMclachlan self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.EisMclachlan_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_EisMclachlan
@@ -8066,7 +7075,7 @@ class LJish(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LJish, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LJishAtom,LJishPair)> self, neighborlist neighbors) -> LJish"""
+        """__init__(NListed<(LJishAtom,LJishPair)> self, std::shared_ptr< neighborlist > neighbors) -> LJish"""
         this = _sim3dlong.new_LJish(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -8097,6 +7106,10 @@ class LJish(interaction):
         """pressure(LJish self, Box box) -> flt"""
         return _sim3dlong.LJish_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LJishPair > &" :
+        """pairiter(LJish self) -> std::vector< LJishPair > &"""
+        return _sim3dlong.LJish_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LJish self) -> uint"""
         return _sim3dlong.LJish_size(self)
@@ -8121,8 +7134,8 @@ class LJish(interaction):
         """atom_list(LJish self) -> std::vector< LJishAtom > &"""
         return _sim3dlong.LJish_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LJish self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LJish self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LJish_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJish
@@ -8177,121 +7190,129 @@ class HertzianSimple(interaction):
 HertzianSimple_swigregister = _sim3dlong.HertzianSimple_swigregister
 HertzianSimple_swigregister(HertzianSimple)
 
-class HertzianPlain(interaction):
+class Hertzian(interaction):
     """Proxy of C++ NListed<(HertzianAtom,HertzianPair)> class"""
     __swig_setmethods__ = {}
     for _s in [interaction]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianPlain, name, value)
-    __swig_getmethods__ = {}
-    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianPlain, name)
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        """__init__(NListed<(HertzianAtom,HertzianPair)> self, neighborlist neighbors) -> HertzianPlain"""
-        this = _sim3dlong.new_HertzianPlain(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    def add(self, *args) -> "void" :
-        """add(HertzianPlain self, HertzianAtom atm)"""
-        return _sim3dlong.HertzianPlain_add(self, *args)
-
-    def update_pairs(self) -> "void" :
-        """update_pairs(HertzianPlain self)"""
-        return _sim3dlong.HertzianPlain_update_pairs(self)
-
-    def getpair(self, *args) -> "HertzianPair" :
-        """getpair(HertzianPlain self, idpair pair) -> HertzianPair"""
-        return _sim3dlong.HertzianPlain_getpair(self, *args)
-
-    def getatom(self, *args) -> "HertzianAtom &" :
-        """getatom(HertzianPlain self, uint n) -> HertzianAtom"""
-        return _sim3dlong.HertzianPlain_getatom(self, *args)
-
-    def energy(self, *args) -> "flt" :
-        """
-        energy(HertzianPlain self, Box box, idpair pair) -> flt
-        energy(HertzianPlain self, Box box) -> flt
-        """
-        return _sim3dlong.HertzianPlain_energy(self, *args)
-
-    def pressure(self, *args) -> "flt" :
-        """pressure(HertzianPlain self, Box box) -> flt"""
-        return _sim3dlong.HertzianPlain_pressure(self, *args)
-
-    def size(self) -> "uint" :
-        """size(HertzianPlain self) -> uint"""
-        return _sim3dlong.HertzianPlain_size(self)
-
-    def energy_pair(self, *args) -> "flt" :
-        """energy_pair(HertzianPlain self, HertzianPair pair, Box box) -> flt"""
-        return _sim3dlong.HertzianPlain_energy_pair(self, *args)
-
-    def setForces(self, *args) -> "void" :
-        """setForces(HertzianPlain self, Box box)"""
-        return _sim3dlong.HertzianPlain_setForces(self, *args)
-
-    def setForcesGetPressure(self, *args) -> "flt" :
-        """setForcesGetPressure(HertzianPlain self, Box box) -> flt"""
-        return _sim3dlong.HertzianPlain_setForcesGetPressure(self, *args)
-
-    def forces_pair(self, *args) -> "Vec" :
-        """forces_pair(HertzianPlain self, HertzianPair pair, Box box) -> VecL"""
-        return _sim3dlong.HertzianPlain_forces_pair(self, *args)
-
-    def atom_list(self) -> "std::vector< HertzianAtom > &" :
-        """atom_list(HertzianPlain self) -> std::vector< HertzianAtom > &"""
-        return _sim3dlong.HertzianPlain_atom_list(self)
-
-    def nlist(self) -> "neighborlist *" :
-        """nlist(HertzianPlain self) -> neighborlist"""
-        return _sim3dlong.HertzianPlain_nlist(self)
-
-    __swig_destroy__ = _sim3dlong.delete_HertzianPlain
-    __del__ = lambda self : None;
-HertzianPlain_swigregister = _sim3dlong.HertzianPlain_swigregister
-HertzianPlain_swigregister(HertzianPlain)
-
-class Hertzian(interactionpairsx,HertzianPlain):
-    """Proxy of C++ NListedVirial<(HertzianAtom,HertzianPair)> class"""
-    __swig_setmethods__ = {}
-    for _s in [interactionpairsx,HertzianPlain]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Hertzian, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairsx,HertzianPlain]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    for _s in [interaction]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
     __getattr__ = lambda self, name: _swig_getattr(self, Hertzian, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListedVirial<(HertzianAtom,HertzianPair)> self, neighborlist neighbors) -> Hertzian"""
+        """__init__(NListed<(HertzianAtom,HertzianPair)> self, std::shared_ptr< neighborlist > neighbors) -> Hertzian"""
         this = _sim3dlong.new_Hertzian(*args)
         try: self.this.append(this)
         except: self.this = this
-    def setForces(self, *args) -> "void" :
-        """
-        setForces(Hertzian self, Box box)
-        setForces(Hertzian self, Box box, fpairxFunct arg3)
-        """
-        return _sim3dlong.Hertzian_setForces(self, *args)
+    def add(self, *args) -> "void" :
+        """add(Hertzian self, HertzianAtom atm)"""
+        return _sim3dlong.Hertzian_add(self, *args)
 
-    def setForcesGetPressure(self, *args) -> "flt" :
-        """setForcesGetPressure(Hertzian self, Box box) -> flt"""
-        return _sim3dlong.Hertzian_setForcesGetPressure(self, *args)
+    def update_pairs(self) -> "void" :
+        """update_pairs(Hertzian self)"""
+        return _sim3dlong.Hertzian_update_pairs(self)
 
-    def setForcesGetEnergy(self, *args) -> "flt" :
-        """setForcesGetEnergy(Hertzian self, Box box) -> flt"""
-        return _sim3dlong.Hertzian_setForcesGetEnergy(self, *args)
+    def getpair(self, *args) -> "HertzianPair" :
+        """getpair(Hertzian self, idpair pair) -> HertzianPair"""
+        return _sim3dlong.Hertzian_getpair(self, *args)
+
+    def getatom(self, *args) -> "HertzianAtom &" :
+        """getatom(Hertzian self, uint n) -> HertzianAtom"""
+        return _sim3dlong.Hertzian_getatom(self, *args)
 
     def energy(self, *args) -> "flt" :
-        """energy(Hertzian self, Box box) -> flt"""
+        """
+        energy(Hertzian self, Box box, idpair pair) -> flt
+        energy(Hertzian self, Box box) -> flt
+        """
         return _sim3dlong.Hertzian_energy(self, *args)
 
     def pressure(self, *args) -> "flt" :
         """pressure(Hertzian self, Box box) -> flt"""
         return _sim3dlong.Hertzian_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< HertzianPair > &" :
+        """pairiter(Hertzian self) -> std::vector< HertzianPair > &"""
+        return _sim3dlong.Hertzian_pairiter(self)
+
+    def size(self) -> "uint" :
+        """size(Hertzian self) -> uint"""
+        return _sim3dlong.Hertzian_size(self)
+
+    def energy_pair(self, *args) -> "flt" :
+        """energy_pair(Hertzian self, HertzianPair pair, Box box) -> flt"""
+        return _sim3dlong.Hertzian_energy_pair(self, *args)
+
+    def setForces(self, *args) -> "void" :
+        """setForces(Hertzian self, Box box)"""
+        return _sim3dlong.Hertzian_setForces(self, *args)
+
+    def setForcesGetPressure(self, *args) -> "flt" :
+        """setForcesGetPressure(Hertzian self, Box box) -> flt"""
+        return _sim3dlong.Hertzian_setForcesGetPressure(self, *args)
+
+    def forces_pair(self, *args) -> "Vec" :
+        """forces_pair(Hertzian self, HertzianPair pair, Box box) -> VecL"""
+        return _sim3dlong.Hertzian_forces_pair(self, *args)
+
+    def atom_list(self) -> "std::vector< HertzianAtom > &" :
+        """atom_list(Hertzian self) -> std::vector< HertzianAtom > &"""
+        return _sim3dlong.Hertzian_atom_list(self)
+
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(Hertzian self) -> std::shared_ptr< neighborlist >"""
+        return _sim3dlong.Hertzian_nlist(self)
+
     __swig_destroy__ = _sim3dlong.delete_Hertzian
     __del__ = lambda self : None;
 Hertzian_swigregister = _sim3dlong.Hertzian_swigregister
 Hertzian_swigregister(Hertzian)
+
+class HertzianVirial(interactionpairsx):
+    """Proxy of C++ NListedVirial<(HertzianAtom,HertzianPair)> class"""
+    __swig_setmethods__ = {}
+    for _s in [interactionpairsx]: __swig_setmethods__.update(getattr(_s,'__swig_setmethods__',{}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianVirial, name, value)
+    __swig_getmethods__ = {}
+    for _s in [interactionpairsx]: __swig_getmethods__.update(getattr(_s,'__swig_getmethods__',{}))
+    __getattr__ = lambda self, name: _swig_getattr(self, HertzianVirial, name)
+    __repr__ = _swig_repr
+    def __init__(self, *args): 
+        """__init__(NListedVirial<(HertzianAtom,HertzianPair)> self, std::shared_ptr< neighborlist > neighbors) -> HertzianVirial"""
+        this = _sim3dlong.new_HertzianVirial(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    def setForces(self, *args) -> "void" :
+        """
+        setForces(HertzianVirial self, Box box)
+        setForces(HertzianVirial self, Box box, fpairxFunct arg3)
+        """
+        return _sim3dlong.HertzianVirial_setForces(self, *args)
+
+    def setForcesGetPressure(self, *args) -> "flt" :
+        """setForcesGetPressure(HertzianVirial self, Box box) -> flt"""
+        return _sim3dlong.HertzianVirial_setForcesGetPressure(self, *args)
+
+    def setForcesGetEnergy(self, *args) -> "flt" :
+        """setForcesGetEnergy(HertzianVirial self, Box box) -> flt"""
+        return _sim3dlong.HertzianVirial_setForcesGetEnergy(self, *args)
+
+    def energy(self, *args) -> "flt" :
+        """energy(HertzianVirial self, Box box) -> flt"""
+        return _sim3dlong.HertzianVirial_energy(self, *args)
+
+    def pressure(self, *args) -> "flt" :
+        """pressure(HertzianVirial self, Box box) -> flt"""
+        return _sim3dlong.HertzianVirial_pressure(self, *args)
+
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(HertzianVirial self) -> std::shared_ptr< neighborlist >"""
+        return _sim3dlong.HertzianVirial_nlist(self)
+
+    __swig_destroy__ = _sim3dlong.delete_HertzianVirial
+    __del__ = lambda self : None;
+HertzianVirial_swigregister = _sim3dlong.HertzianVirial_swigregister
+HertzianVirial_swigregister(HertzianVirial)
 
 class LoisOhern(interaction):
     """Proxy of C++ NListed<(LoisOhernAtom,LoisOhernPair)> class"""
@@ -8303,7 +7324,7 @@ class LoisOhern(interaction):
     __getattr__ = lambda self, name: _swig_getattr(self, LoisOhern, name)
     __repr__ = _swig_repr
     def __init__(self, *args): 
-        """__init__(NListed<(LoisOhernAtom,LoisOhernPair)> self, neighborlist neighbors) -> LoisOhern"""
+        """__init__(NListed<(LoisOhernAtom,LoisOhernPair)> self, std::shared_ptr< neighborlist > neighbors) -> LoisOhern"""
         this = _sim3dlong.new_LoisOhern(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -8334,6 +7355,10 @@ class LoisOhern(interaction):
         """pressure(LoisOhern self, Box box) -> flt"""
         return _sim3dlong.LoisOhern_pressure(self, *args)
 
+    def pairiter(self) -> "std::vector< LoisOhernPair > &" :
+        """pairiter(LoisOhern self) -> std::vector< LoisOhernPair > &"""
+        return _sim3dlong.LoisOhern_pairiter(self)
+
     def size(self) -> "uint" :
         """size(LoisOhern self) -> uint"""
         return _sim3dlong.LoisOhern_size(self)
@@ -8358,8 +7383,8 @@ class LoisOhern(interaction):
         """atom_list(LoisOhern self) -> std::vector< LoisOhernAtom > &"""
         return _sim3dlong.LoisOhern_atom_list(self)
 
-    def nlist(self) -> "neighborlist *" :
-        """nlist(LoisOhern self) -> neighborlist"""
+    def nlist(self) -> "std::shared_ptr< neighborlist >" :
+        """nlist(LoisOhern self) -> std::shared_ptr< neighborlist >"""
         return _sim3dlong.LoisOhern_nlist(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisOhern
@@ -8417,8 +7442,8 @@ class collection(_object):
         """pressure(collection self) -> flt"""
         return _sim3dlong.collection_pressure(self)
 
-    def getbox(self) -> "Box *" :
-        """getbox(collection self) -> Box"""
+    def getbox(self) -> "std::shared_ptr< Box >" :
+        """getbox(collection self) -> std::shared_ptr< Box >"""
         return _sim3dlong.collection_getbox(self)
 
     def com(self) -> "Vec" :
@@ -8462,16 +7487,33 @@ class collection(_object):
         """scaleVelocitiesE(collection self, flt E)"""
         return _sim3dlong.collection_scaleVelocitiesE(self, *args)
 
+    def addAtoms(self, *args) -> "void" :
+        """addAtoms(collection self, std::shared_ptr< atomgroup > a)"""
+        return _sim3dlong.collection_addAtoms(self, *args)
+
     def addInteraction(self, *args) -> "void" :
-        """addInteraction(collection self, interaction inter)"""
+        """addInteraction(collection self, std::shared_ptr< interaction > inter)"""
         return _sim3dlong.collection_addInteraction(self, *args)
 
     def addTracker(self, *args) -> "void" :
-        """addTracker(collection self, statetracker track)"""
+        """addTracker(collection self, std::shared_ptr< statetracker > track)"""
         return _sim3dlong.collection_addTracker(self, *args)
 
-    def getInteractions(self) -> "std::vector< interaction * >" :
-        """getInteractions(collection self) -> ivector"""
+    def addConstraint(self, *args) -> "void" :
+        """addConstraint(collection self, std::shared_ptr< constraint > c)"""
+        return _sim3dlong.collection_addConstraint(self, *args)
+
+    def add(self, *args) -> "void" :
+        """
+        add(collection self, std::shared_ptr< atomgroup > a)
+        add(collection self, std::shared_ptr< interaction > a)
+        add(collection self, std::shared_ptr< statetracker > a)
+        add(collection self, std::shared_ptr< constraint > a)
+        """
+        return _sim3dlong.collection_add(self, *args)
+
+    def getInteractions(self) -> "std::vector< std::shared_ptr< interaction > >" :
+        """getInteractions(collection self) -> std::vector< std::shared_ptr< interaction > >"""
         return _sim3dlong.collection_getInteractions(self)
 
     def numInteraction(self) -> "uint" :
@@ -8496,11 +7538,13 @@ class StaticCollec(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(StaticCollec self, Box box, avector groups, ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> StaticCollec
-        __init__(StaticCollec self, Box box, avector groups, ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> StaticCollec
-        __init__(StaticCollec self, Box box, avector groups, ivector interactions=std::vector< interaction * >()) -> StaticCollec
-        __init__(StaticCollec self, Box box, avector groups) -> StaticCollec
+        __init__(StaticCollec self, std::shared_ptr< Box > box, std::vector< std::shared_ptr< atomgroup > > groups, std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> StaticCollec
+        __init__(StaticCollec self, std::shared_ptr< Box > box, std::vector< std::shared_ptr< atomgroup > > groups, std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> StaticCollec
+        __init__(StaticCollec self, std::shared_ptr< Box > box, std::vector< std::shared_ptr< atomgroup > > groups, std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> StaticCollec
+        __init__(StaticCollec self, std::shared_ptr< Box > box, std::vector< std::shared_ptr< atomgroup > > groups) -> StaticCollec
         """
         this = _sim3dlong.new_StaticCollec(*args)
         try: self.this.append(this)
@@ -8529,16 +7573,21 @@ class collectionSol(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionSol self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), constraintvector constraints=std::vector< constraint * >()) -> collectionSol
-        __init__(collectionSol self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionSol
-        __init__(collectionSol self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionSol
-        __init__(collectionSol self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >()) -> collectionSol
-        __init__(collectionSol self, Box box, flt const dt, flt const damping, flt const desiredT) -> collectionSol
+        __init__(collectionSol self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionSol
+        __init__(collectionSol self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionSol
+        __init__(collectionSol self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionSol
+        __init__(collectionSol self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionSol
+        __init__(collectionSol self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT) -> collectionSol
         """
         this = _sim3dlong.new_collectionSol(*args)
         try: self.this.append(this)
@@ -8567,16 +7616,21 @@ class collectionSolHT(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionSolHT self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), constraintvector constraints=std::vector< constraint * >()) -> collectionSolHT
-        __init__(collectionSolHT self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionSolHT
-        __init__(collectionSolHT self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionSolHT
-        __init__(collectionSolHT self, Box box, flt const dt, flt const damping, flt const desiredT, avector groups=std::vector< atomgroup * >()) -> collectionSolHT
-        __init__(collectionSolHT self, Box box, flt const dt, flt const damping, flt const desiredT) -> collectionSolHT
+        __init__(collectionSolHT self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionSolHT
+        __init__(collectionSolHT self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionSolHT
+        __init__(collectionSolHT self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionSolHT
+        __init__(collectionSolHT self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionSolHT
+        __init__(collectionSolHT self, std::shared_ptr< Box > box, flt const dt, flt const damping, flt const desiredT) -> collectionSolHT
         """
         this = _sim3dlong.new_collectionSolHT(*args)
         try: self.this.append(this)
@@ -8605,14 +7659,17 @@ class collectionVerlet(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionVerlet self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionVerlet
-        __init__(collectionVerlet self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionVerlet
-        __init__(collectionVerlet self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionVerlet
-        __init__(collectionVerlet self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionVerlet
-        __init__(collectionVerlet self, Box box, flt const dt) -> collectionVerlet
+        __init__(collectionVerlet self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionVerlet
+        __init__(collectionVerlet self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionVerlet
+        __init__(collectionVerlet self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionVerlet
+        __init__(collectionVerlet self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionVerlet
+        __init__(collectionVerlet self, std::shared_ptr< Box > box, flt const dt) -> collectionVerlet
         """
         this = _sim3dlong.new_collectionVerlet(*args)
         try: self.this.append(this)
@@ -8641,15 +7698,17 @@ class collectionOverdamped(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionOverdamped self, Box box, flt const dt, float const gamma, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionOverdamped
-        __init__(collectionOverdamped self, Box box, flt const dt, float const gamma, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionOverdamped
-        __init__(collectionOverdamped self, Box box, flt const dt, float const gamma, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionOverdamped
-        __init__(collectionOverdamped self, Box box, flt const dt, float const gamma, avector groups=std::vector< atomgroup * >()) -> collectionOverdamped
-        __init__(collectionOverdamped self, Box box, flt const dt, float const gamma) -> collectionOverdamped
+        __init__(collectionOverdamped self, std::shared_ptr< Box > box, flt const dt, float const gamma, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionOverdamped
+        __init__(collectionOverdamped self, std::shared_ptr< Box > box, flt const dt, float const gamma, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionOverdamped
+        __init__(collectionOverdamped self, std::shared_ptr< Box > box, flt const dt, float const gamma, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionOverdamped
+        __init__(collectionOverdamped self, std::shared_ptr< Box > box, flt const dt, float const gamma, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionOverdamped
+        __init__(collectionOverdamped self, std::shared_ptr< Box > box, flt const dt, float const gamma) -> collectionOverdamped
         """
         this = _sim3dlong.new_collectionOverdamped(*args)
         try: self.this.append(this)
@@ -8678,14 +7737,17 @@ class collectionConjGradient(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionConjGradient
-        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionConjGradient
-        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionConjGradient
-        __init__(collectionConjGradient self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionConjGradient
-        __init__(collectionConjGradient self, Box box, flt const dt) -> collectionConjGradient
+        __init__(collectionConjGradient self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionConjGradient
+        __init__(collectionConjGradient self, std::shared_ptr< Box > box, flt const dt) -> collectionConjGradient
         """
         this = _sim3dlong.new_collectionConjGradient(*args)
         try: self.this.append(this)
@@ -8722,17 +7784,22 @@ class collectionConjGradientBox(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), constraintvector constraints=std::vector< constraint * >()) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1, avector groups=std::vector< atomgroup * >()) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0, flt const kappaV=1) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, OriginBox box, flt const dt, flt const P0) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, flt const kappaV=1, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, flt const kappaV=1, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, flt const kappaV=1, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, flt const kappaV=1, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, flt const kappaV=1) -> collectionConjGradientBox
+        __init__(collectionConjGradientBox self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0) -> collectionConjGradientBox
         """
         this = _sim3dlong.new_collectionConjGradientBox(*args)
         try: self.this.append(this)
@@ -8867,32 +7934,43 @@ class collectionNLCG(collection):
 
     def __init__(self, *args): 
         """
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
-            flt const kappa=0, flt const kmax=1000, flt const secmax=10, 
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
+            flt const kappa=0, 
+            flt const kmax=1000, 
+            flt const secmax=10, 
             flt const seceps=0.0001) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
-            flt const kappa=0, flt const kmax=1000, flt const secmax=10) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
-            flt const kappa=0, flt const kmax=1000) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
+            flt const kappa=0, 
+            flt const kmax=1000, 
+            flt const secmax=10) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
+            flt const kappa=0, 
+            flt const kmax=1000) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
             flt const kappa=0) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0, avector groups=std::vector< atomgroup * >()) -> collectionNLCG
-        __init__(collectionNLCG self, OriginBox box, flt const dt, flt const P0) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionNLCG
+        __init__(collectionNLCG self, std::shared_ptr< OriginBox > box, flt const dt, flt const P0) -> collectionNLCG
         """
         this = _sim3dlong.new_collectionNLCG(*args)
         try: self.this.append(this)
@@ -9050,26 +8128,35 @@ class collectionNLCGV(collection):
 
     def __init__(self, *args): 
         """
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
-            flt const kmax=1000, flt const secmax=10, flt const seceps=1e-4) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
-            flt const kmax=1000, flt const secmax=10) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >(), 
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
+            flt const kmax=1000, 
+            flt const secmax=10, 
+            flt const seceps=1e-4) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
+            flt const kmax=1000, 
+            flt const secmax=10) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >(), 
             flt const kmax=1000) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionNLCGV
-        __init__(collectionNLCGV self, Box box, flt const dt) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionNLCGV
+        __init__(collectionNLCGV self, std::shared_ptr< Box > box, flt const dt) -> collectionNLCGV
         """
         this = _sim3dlong.new_collectionNLCGV(*args)
         try: self.this.append(this)
@@ -9137,15 +8224,17 @@ class collectionNoseHoover(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionNoseHoover self, Box box, flt const dt, flt const Q, flt const T, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, Box box, flt const dt, flt const Q, flt const T, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, Box box, flt const dt, flt const Q, flt const T, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, Box box, flt const dt, flt const Q, flt const T, avector groups=std::vector< atomgroup * >()) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, Box box, flt const dt, flt const Q, flt const T) -> collectionNoseHoover
+        __init__(collectionNoseHoover self, std::shared_ptr< Box > box, flt const dt, flt const Q, flt const T, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionNoseHoover
+        __init__(collectionNoseHoover self, std::shared_ptr< Box > box, flt const dt, flt const Q, flt const T, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionNoseHoover
+        __init__(collectionNoseHoover self, std::shared_ptr< Box > box, flt const dt, flt const Q, flt const T, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionNoseHoover
+        __init__(collectionNoseHoover self, std::shared_ptr< Box > box, flt const dt, flt const Q, flt const T, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionNoseHoover
+        __init__(collectionNoseHoover self, std::shared_ptr< Box > box, flt const dt, flt const Q, flt const T) -> collectionNoseHoover
         """
         this = _sim3dlong.new_collectionNoseHoover(*args)
         try: self.this.append(this)
@@ -9194,15 +8283,17 @@ class collectionGaussianT(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionGaussianT self, Box box, flt const dt, flt const Q, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGaussianT
-        __init__(collectionGaussianT self, Box box, flt const dt, flt const Q, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionGaussianT
-        __init__(collectionGaussianT self, Box box, flt const dt, flt const Q, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionGaussianT
-        __init__(collectionGaussianT self, Box box, flt const dt, flt const Q, avector groups=std::vector< atomgroup * >()) -> collectionGaussianT
-        __init__(collectionGaussianT self, Box box, flt const dt, flt const Q) -> collectionGaussianT
+        __init__(collectionGaussianT self, std::shared_ptr< Box > box, flt const dt, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGaussianT
+        __init__(collectionGaussianT self, std::shared_ptr< Box > box, flt const dt, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGaussianT
+        __init__(collectionGaussianT self, std::shared_ptr< Box > box, flt const dt, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGaussianT
+        __init__(collectionGaussianT self, std::shared_ptr< Box > box, flt const dt, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGaussianT
+        __init__(collectionGaussianT self, std::shared_ptr< Box > box, flt const dt, flt const Q) -> collectionGaussianT
         """
         this = _sim3dlong.new_collectionGaussianT(*args)
         try: self.this.append(this)
@@ -9243,14 +8334,17 @@ class collectionGear3A(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionGear3A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear3A
-        __init__(collectionGear3A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear3A
-        __init__(collectionGear3A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionGear3A
-        __init__(collectionGear3A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionGear3A
-        __init__(collectionGear3A self, Box box, flt const dt) -> collectionGear3A
+        __init__(collectionGear3A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear3A
+        __init__(collectionGear3A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear3A
+        __init__(collectionGear3A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear3A
+        __init__(collectionGear3A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear3A
+        __init__(collectionGear3A self, std::shared_ptr< Box > box, flt const dt) -> collectionGear3A
         """
         this = _sim3dlong.new_collectionGear3A(*args)
         try: self.this.append(this)
@@ -9279,23 +8373,28 @@ class collectionGear4A(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionGear4A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, uint ncorrectionsteps) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionGear4A
-        __init__(collectionGear4A self, Box box, flt const dt) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear4A
+        __init__(collectionGear4A self, std::shared_ptr< Box > box, flt const dt) -> collectionGear4A
         """
         this = _sim3dlong.new_collectionGear4A(*args)
         try: self.this.append(this)
@@ -9324,23 +8423,28 @@ class collectionGear5A(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionGear5A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, uint ncorrectionsteps) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionGear5A
-        __init__(collectionGear5A self, Box box, flt const dt) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear5A
+        __init__(collectionGear5A self, std::shared_ptr< Box > box, flt const dt) -> collectionGear5A
         """
         this = _sim3dlong.new_collectionGear5A(*args)
         try: self.this.append(this)
@@ -9369,23 +8473,28 @@ class collectionGear6A(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionGear6A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, uint ncorrectionsteps) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionGear6A
-        __init__(collectionGear6A self, Box box, flt const dt) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, uint ncorrectionsteps) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear6A
+        __init__(collectionGear6A self, std::shared_ptr< Box > box, flt const dt) -> collectionGear6A
         """
         this = _sim3dlong.new_collectionGear6A(*args)
         try: self.this.append(this)
@@ -9498,14 +8607,17 @@ class collectionRK4(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionRK4 self, Box box, flt const dt, aRK4vector rgroups=std::vector< atomvecRK4 * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionRK4
-        __init__(collectionRK4 self, Box box, flt const dt, aRK4vector rgroups=std::vector< atomvecRK4 * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionRK4
-        __init__(collectionRK4 self, Box box, flt const dt, aRK4vector rgroups=std::vector< atomvecRK4 * >(), ivector interactions=std::vector< interaction * >()) -> collectionRK4
-        __init__(collectionRK4 self, Box box, flt const dt, aRK4vector rgroups=std::vector< atomvecRK4 * >()) -> collectionRK4
-        __init__(collectionRK4 self, Box box, flt const dt) -> collectionRK4
+        __init__(collectionRK4 self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomvecRK4 > > rgroups=std::vector< std::shared_ptr< atomvecRK4 > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionRK4
+        __init__(collectionRK4 self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomvecRK4 > > rgroups=std::vector< std::shared_ptr< atomvecRK4 > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionRK4
+        __init__(collectionRK4 self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomvecRK4 > > rgroups=std::vector< std::shared_ptr< atomvecRK4 > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionRK4
+        __init__(collectionRK4 self, std::shared_ptr< Box > box, flt const dt, std::vector< std::shared_ptr< atomvecRK4 > > rgroups=std::vector< std::shared_ptr< atomvecRK4 > >()) -> collectionRK4
+        __init__(collectionRK4 self, std::shared_ptr< Box > box, flt const dt) -> collectionRK4
         """
         this = _sim3dlong.new_collectionRK4(*args)
         try: self.this.append(this)
@@ -9534,25 +8646,32 @@ class collectionGear4NPH(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), constraintvector constraints=std::vector< constraint * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >(), tvector trackers=std::vector< statetracker * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, avector groups=std::vector< atomgroup * >(), 
-            ivector interactions=std::vector< interaction * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q, avector groups=std::vector< atomgroup * >()) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, OriginBox box, flt const dt, flt const P, flt const Q) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, 
+            std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, uint ncorrectionsteps) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear4NPH
+        __init__(collectionGear4NPH self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const Q) -> collectionGear4NPH
         """
         this = _sim3dlong.new_collectionGear4NPH(*args)
         try: self.this.append(this)
@@ -9615,7 +8734,7 @@ class xrpsummer(fpairxFunct):
     __swig_getmethods__["rfsum"] = _sim3dlong.xrpsummer_rfsum_get
     if _newclass:rfsum = _swig_property(_sim3dlong.xrpsummer_rfsum_get, _sim3dlong.xrpsummer_rfsum_set)
     def __init__(self, *args): 
-        """__init__(xrpsummer self, Box box) -> xrpsummer"""
+        """__init__(xrpsummer self, std::shared_ptr< Box > box) -> xrpsummer"""
         this = _sim3dlong.new_xrpsummer(*args)
         try: self.this.append(this)
         except: self.this = this
@@ -9684,32 +8803,36 @@ class collectionGear4NPT(collection):
         """resetbs(collectionGear4NPT self)"""
         return _sim3dlong.collectionGear4NPT_resetbs(self)
 
-    def tointerpair(*args) -> "std::vector< interaction * >" :
-        """tointerpair(ifxvector arg1) -> ivector"""
+    def tointerpair(*args) -> "std::vector< std::shared_ptr< interaction > >" :
+        """tointerpair(std::vector< std::shared_ptr< interactionpairsx > > & arg1) -> std::vector< std::shared_ptr< interaction > >"""
         return _sim3dlong.collectionGear4NPT_tointerpair(*args)
 
     if _newclass:tointerpair = staticmethod(tointerpair)
     __swig_getmethods__["tointerpair"] = lambda x: tointerpair
     def __init__(self, *args): 
         """
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ifxvector interactions=std::vector< interactionpairsx * >(), 
-            tvector trackers=std::vector< statetracker * >(), constraintvector constraints=std::vector< constraint * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ifxvector interactions=std::vector< interactionpairsx * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >(), 
-            ifxvector interactions=std::vector< interactionpairsx * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, uint ncorrectionsteps, avector groups=std::vector< atomgroup * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, uint ncorrectionsteps) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, avector groups=std::vector< atomgroup * >(), ifxvector interactions=std::vector< interactionpairsx * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, avector groups=std::vector< atomgroup * >(), ifxvector interactions=std::vector< interactionpairsx * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, avector groups=std::vector< atomgroup * >(), ifxvector interactions=std::vector< interactionpairsx * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt, avector groups=std::vector< atomgroup * >()) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, OriginBox box, flt const dt) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interactionpairsx > > interactions=std::vector< std::shared_ptr< interactionpairsx > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interactionpairsx > > interactions=std::vector< std::shared_ptr< interactionpairsx > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interactionpairsx > > interactions=std::vector< std::shared_ptr< interactionpairsx > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, uint ncorrectionsteps, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, uint ncorrectionsteps) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interactionpairsx > > interactions=std::vector< std::shared_ptr< interactionpairsx > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interactionpairsx > > interactions=std::vector< std::shared_ptr< interactionpairsx > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interactionpairsx > > interactions=std::vector< std::shared_ptr< interactionpairsx > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionGear4NPT
+        __init__(collectionGear4NPT self, std::shared_ptr< OriginBox > box, flt const dt) -> collectionGear4NPT
         """
         this = _sim3dlong.new_collectionGear4NPT(*args)
         try: self.this.append(this)
@@ -9730,8 +8853,8 @@ class collectionGear4NPT(collection):
 collectionGear4NPT_swigregister = _sim3dlong.collectionGear4NPT_swigregister
 collectionGear4NPT_swigregister(collectionGear4NPT)
 
-def collectionGear4NPT_tointerpair(*args) -> "std::vector< interaction * >" :
-  """collectionGear4NPT_tointerpair(ifxvector arg1) -> ivector"""
+def collectionGear4NPT_tointerpair(*args) -> "std::vector< std::shared_ptr< interaction > >" :
+  """collectionGear4NPT_tointerpair(std::vector< std::shared_ptr< interactionpairsx > > & arg1) -> std::vector< std::shared_ptr< interaction > >"""
   return _sim3dlong.collectionGear4NPT_tointerpair(*args)
 
 class collectionVerletNPT(collection):
@@ -9745,18 +8868,22 @@ class collectionVerletNPT(collection):
     __repr__ = _swig_repr
     def __init__(self, *args): 
         """
-        __init__(collectionVerletNPT self, OriginBox box, flt const dt, flt const P, flt const QP, flt const T, flt const QT, 
-            avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >(), 
-            constraintvector constraints=std::vector< constraint * >()) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, OriginBox box, flt const dt, flt const P, flt const QP, flt const T, flt const QT, 
-            avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >(), 
-            tvector trackers=std::vector< statetracker * >()) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, OriginBox box, flt const dt, flt const P, flt const QP, flt const T, flt const QT, 
-            avector groups=std::vector< atomgroup * >(), ivector interactions=std::vector< interaction * >()) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, OriginBox box, flt const dt, flt const P, flt const QP, flt const T, flt const QT, 
-            avector groups=std::vector< atomgroup * >()) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, OriginBox box, flt const dt, flt const P, flt const QP, flt const T, flt const QT) -> collectionVerletNPT
+        __init__(collectionVerletNPT self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const QP, flt const T, 
+            flt const QT, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >(), 
+            std::vector< std::shared_ptr< constraint > > constraints=std::vector< std::shared_ptr< constraint > >()) -> collectionVerletNPT
+        __init__(collectionVerletNPT self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const QP, flt const T, 
+            flt const QT, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >(), 
+            std::vector< std::shared_ptr< statetracker > > trackers=std::vector< std::shared_ptr< statetracker > >()) -> collectionVerletNPT
+        __init__(collectionVerletNPT self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const QP, flt const T, 
+            flt const QT, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >(), 
+            std::vector< std::shared_ptr< interaction > > interactions=std::vector< std::shared_ptr< interaction > >()) -> collectionVerletNPT
+        __init__(collectionVerletNPT self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const QP, flt const T, 
+            flt const QT, std::vector< std::shared_ptr< atomgroup > > groups=std::vector< std::shared_ptr< atomgroup > >()) -> collectionVerletNPT
+        __init__(collectionVerletNPT self, std::shared_ptr< OriginBox > box, flt const dt, flt const P, flt const QP, flt const T, 
+            flt const QT) -> collectionVerletNPT
         """
         this = _sim3dlong.new_collectionVerletNPT(*args)
         try: self.this.append(this)

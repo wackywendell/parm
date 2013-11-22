@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
+#include <memory>
 
 #ifndef INTERACTION_H
 #define INTERACTION_H
@@ -69,16 +70,16 @@ class Box {
 
 class interaction {
     public:
-        virtual flt energy(Box *box)=0;
-        virtual void setForces(Box *box)=0;
-        virtual flt setForcesGetPressure(Box *box){return NAN;};
-        virtual flt pressure(Box *box)=0;
+        virtual flt energy(Box &box)=0;
+        virtual void setForces(Box &box)=0;
+        virtual flt setForcesGetPressure(Box &box){return NAN;};
+        virtual flt pressure(Box &box)=0;
         virtual ~interaction(){};
 };
 
 class statetracker {
     public:
-        virtual void update(Box *box) = 0;
+        virtual void update(Box &box) = 0;
         virtual ~statetracker(){};
 };
 
@@ -189,7 +190,7 @@ class atomid : public atomref {
         inline uint n() const {return num;};
 };
 
-class idpair : public array<atomid, 2> {
+class idpair : public Array<atomid, 2> {
     public:
         idpair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
         inline atomid first() const {return vals[0];};
@@ -223,22 +224,22 @@ class atomgroup {
         flt kinetic(const Vec &originvelocity=Vec()) const;
         Vec momentum() const;
         #ifdef VEC3D
-        flt moment(const Vec &loc, const Vec &axis, Box *box) const;
-        Vec angmomentum(const Vec &loc, Box *box) const;
-        Matrix<flt> moment(const Vec &loc, Box *box) const;
-        Vec omega(const Vec &loc, Box *box) const;
-        void addOmega(Vec w, Vec origin, Box *box);
-        inline void resetL(Box *box){
+        flt moment(const Vec &loc, const Vec &axis, Box &box) const;
+        Vec angmomentum(const Vec &loc, Box &box) const;
+        Matrix<flt> moment(const Vec &loc, Box &box) const;
+        Vec omega(const Vec &loc, Box &box) const;
+        void addOmega(Vec w, Vec origin, Box &box);
+        inline void resetL(Box &box){
             Vec c = com(), w = omega(c, box);
             if (w.sq() == 0) return;
             addOmega(-w, c, box);
         }
         #elif defined VEC2D
-        flt moment(const Vec &loc, Box *box) const;
-        flt angmomentum(const Vec &loc, Box *box) const;
-        flt omega(const Vec &loc, Box *box) const{return angmomentum(loc, box) / moment(loc, box);};
-        void addOmega(flt w, Vec origin, Box *box);
-        inline void resetL(Box *box){
+        flt moment(const Vec &loc, Box &box) const;
+        flt angmomentum(const Vec &loc, Box &box) const;
+        flt omega(const Vec &loc, Box &box) const{return angmomentum(loc, box) / moment(loc, box);};
+        void addOmega(flt w, Vec origin, Box &box);
+        inline void resetL(Box &box){
             Vec c = com();
             flt w = omega(c, box);
             if (w == 0) return;
@@ -294,6 +295,7 @@ class metagroup : public atomgroup {
         metagroup(){};
         //metagroup(vector<atom*> atoms) : atoms(atoms){};
         metagroup(vector<atomgroup*>);
+        metagroup(vector<shared_ptr<atomgroup> >);
         inline atom& operator[](cuint n){return *atoms[n];};
         inline atom& operator[](cuint n) const{return *atoms[n];};
         inline atom* get(cuint n){if(n>=size()) return NULL; return (atoms[n]);};
@@ -540,24 +542,12 @@ class electricScreened : public interactpair {
         static Vec forces(const Vec r, const flt qaqb, const flt screen, const flt cutoff=0);
 };
 
-//~ class interactgroup : public interaction {
-    //~ protected:
-        //~ vector<interaction*> inters;
-    //~ public:
-        //~ interactgroup(vector<interaction*> inters=vector<interaction*>())
-                    //~ : inters(inters){};
-        //~ void add(interaction* a){inters.push_back(a);};
-        //~ uint size() const{ return inters.size();};
-        //~ flt energy(Box *box);
-        //~ void setForces(Box *box);
-//~ };
-
 struct fixedForceAtom {
     Vec F;
     atom *a;
     fixedForceAtom(Vec F, atom *a) : F(F), a(a) {};
-    flt energy(Box *box){return -F.dot(a->x);};
-    void setForce(Box *box){a->f += F;};
+    flt energy(Box &box){return -F.dot(a->x);};
+    void setForce(Box &box){a->f += F;};
 };
 
 class fixedForce : public interaction{
@@ -573,17 +563,17 @@ class fixedForce : public interaction{
         void add(flt x, flt y, atom* a){add(fixedForceAtom(Vec(x,y),a));};
         #endif
         uint size() const{ return (uint) atoms.size();};
-        flt energy(Box *box){
+        flt energy(Box &box){
             flt E=0;
             for(vector<fixedForceAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
                 E += it->energy(box);
             return E;
         };
-        void setForces(Box *box){
+        void setForces(Box &box){
             for(vector<fixedForceAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
                 it->setForce(box);
         };
-        flt pressure(Box *box){return NAN;};
+        flt pressure(Box &box){return NAN;};
 };
 
 
@@ -598,14 +588,14 @@ struct fixedSpringAtom {
                 usecoord[1] = usey;
                 usecoord[2] = usez;
                 };
-    flt energy(Box *box){
+    flt energy(Box &box){
             Vec diffx = a->x - loc;
             for(uint i=0; i<2; i++){
                 if(!usecoord[i]) diffx[i] = 0;
             }
             return k*diffx.sq()/2;
         };
-    void setForce(Box *box){
+    void setForce(Box &box){
         Vec diffx = a->x - loc;
         for(uint i=0; i<2; i++){
             if(!usecoord[i]) diffx[i] = 0;
@@ -625,17 +615,17 @@ class fixedSpring : public interaction{
         //void add(Vec F, atom* a){add(fixedForceAtom(F,a));};
         //void add(flt x, flt y, flt z, atom* a){add(fixedForceAtom(Vec(x,y,z),a));};
         uint size() const{ return (uint) atoms.size();};
-        flt energy(Box *box){
+        flt energy(Box &box){
             flt E=0;
             for(vector<fixedSpringAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
                 E += it->energy(box);
             return E;
         };
-        void setForces(Box *box){
+        void setForces(Box &box){
             for(vector<fixedSpringAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
                 it->setForce(box);
         };
-        flt pressure(Box *box){return NAN;};
+        flt pressure(Box &box){return NAN;};
 };
 
 class COMSpring : public interaction{
@@ -647,11 +637,11 @@ class COMSpring : public interaction{
     public:
         COMSpring(atomgroup *g1, atomgroup *g2, flt k, flt x0=0) : 
             g1(g1), g2(g2), k(k), x0(x0), m1(g1->mass()), m2(g2->mass()){};
-        flt energy(Box *box){
+        flt energy(Box &box){
             flt dx = (g1->com() - g2->com()).mag() - x0;
             return k/2 * dx * dx;
         };
-        void setForces(Box *box){
+        void setForces(Box &box){
             Vec comvec = g1->com() - g2->com();
             flt comdist = comvec.mag();
             flt fmag = -k * (comdist - x0);
@@ -667,7 +657,7 @@ class COMSpring : public interaction{
                 atm.f += a2 * atm.m;
             }
         };
-        flt pressure(Box *box){
+        flt pressure(Box &box){
             //~ return NAN;
             // I think this is right, but I haven't checked it
             Vec comvec = g1->com() - g2->com();
@@ -682,7 +672,7 @@ class COMSpring : public interaction{
                     atom &atm1 = *(g1->get(i));
                     atom &atm2 = *(g2->get(i));
                     Vec fij = a12 * (atm1.m * atm2.m);
-                    Vec rij = box->diff(atm1.x, atm2.x);
+                    Vec rij = box.diff(atm1.x, atm2.x);
                     P += fij.dot(rij);
                 }
             }
@@ -708,9 +698,9 @@ class bondpairs : public interaction {
         uint size() const{ return (uint) pairs.size();};
         flt mean_dists() const;
         flt std_dists() const;
-        flt energy(Box *box);
-        void setForces(Box *box);
-        flt pressure(Box *box);
+        flt energy(Box &box);
+        void setForces(Box &box);
+        flt pressure(Box &box);
 };
 
 struct anglegrouping {
@@ -729,9 +719,9 @@ class angletriples : public interaction {
         void add(anglegrouping b){triples.push_back(b);};
         void add(flt k, flt x0, atom* a1, atom* a2, atom* a3){
                                 add(anglegrouping(k,x0,a1,a2,a3));};
-        inline flt energy(Box *box);
-        inline flt pressure(Box *box){return 0;};
-        inline void setForces(Box *box);
+        inline flt energy(Box &box);
+        inline flt pressure(Box &box){return 0;};
+        inline void setForces(Box &box);
         uint size() const {return (uint) triples.size();};
         flt mean_dists() const;
         flt std_dists() const;
@@ -762,9 +752,9 @@ class dihedrals : public interaction {
         uint size() const{ return uint(groups.size());};
         flt mean_dists() const;
         //~ flt std_dists() const;
-        flt energy(Box *box);
-        void setForces(Box *box);
-        inline flt pressure(Box *box){return 0;};
+        flt energy(Box &box);
+        void setForces(Box &box);
+        inline flt pressure(Box &box){return 0;};
 };
 //~ class LJgroup : private vector<LJdata>, public atomgroup {
     //~ public:
@@ -798,7 +788,7 @@ inline fpairxFunct::~fpairxFunct() { }  // defined even though it's pure virtual
 class interactionpairsx : public interaction {
     public:
         using interaction::setForces;
-        virtual void setForces(Box *box, fpairxFunct*)=0;
+        virtual void setForces(Box &box, fpairxFunct*)=0;
         virtual ~interactionpairsx(){};
 };
 
@@ -871,7 +861,7 @@ class neighborlist : public statetracker{
     // are neighbors, and the begin(n), end(n) allow for iterating over
     // the neighbor lists
     protected:
-        Box *box;
+        shared_ptr<Box> box;
         flt critdist, skinradius;
         metagroup atoms;
         vector<idpair> curpairs;
@@ -883,10 +873,10 @@ class neighborlist : public statetracker{
         //~ bool checkneighbors(const uint n, const uint m) const;
         // this is a full check
     public:
-        neighborlist(Box *box, const flt innerradius, const flt outerradius);
-        neighborlist(Box *box, atomgroup &vec, const flt innerradius, 
+        neighborlist(shared_ptr<Box> box, const flt innerradius, const flt outerradius);
+        neighborlist(shared_ptr<Box> box, atomgroup &vec, const flt innerradius, 
         const flt outerradius, pairlist ignore = pairlist());
-        void update(Box *newbox){assert(newbox == box); update_list(false);};
+        void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
         bool update_list(bool force = true);
         // if force = false, we check if updating necessary first
         
@@ -919,13 +909,13 @@ class neighborlist : public statetracker{
         ~neighborlist(){};
 };
 
-neighborlist* neighborlistL(Box *box, const double innerradius, const double outerradius){
+neighborlist* neighborlistL(shared_ptr<Box> box, const double innerradius, const double outerradius){
     return new neighborlist(box, innerradius, outerradius);
 };
 
 class ContactTracker : public statetracker{
     protected:
-        atomgroup *atoms;
+        shared_ptr<atomgroup> atoms;
         vector<flt> dists;
         vector<vector<bool> > contacts;
         
@@ -933,15 +923,15 @@ class ContactTracker : public statetracker{
         unsigned long long formations;
         unsigned long long incontact;
     public:
-        ContactTracker(Box *box, atomgroup *atoms, vector<flt> dists);
-        void update(Box *box);
+        ContactTracker(shared_ptr<Box> box, shared_ptr<atomgroup> atoms, vector<flt> dists);
+        void update(Box &box);
         
         unsigned long long broken(){return breaks;};
         unsigned long long formed(){return formations;};
         unsigned long long number(){return incontact;};
 };
 
-ContactTracker* ContactTrackerD(Box *box, atomgroup *atoms, vector<double> dists){
+ContactTracker* ContactTrackerD(shared_ptr<Box> box, shared_ptr<atomgroup> atoms, vector<double> dists){
     vector<flt> newdists = vector<flt>();
     for(uint i=0; i<dists.size(); i++){
         newdists.push_back(dists[i]);
@@ -965,7 +955,7 @@ class EnergyTracker : public statetracker{
              : atoms(atoms),
             interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
             U0(0),Es(0),Us(0),Ks(0), Esq(0), Usq(0), Ksq(0){};
-        void update(Box *box);
+        void update(Box &box);
         void reset(){
             nskipped=0;
             N=0; Es=0; Us=0; Ks=0;
@@ -975,7 +965,7 @@ class EnergyTracker : public statetracker{
             U0 = newU0;
             reset();
         };
-        void setU0(Box *box);
+        void setU0(Box &box);
         flt getU0(){return U0;};
             
         flt E(){return Es/((flt) N);};
@@ -1000,14 +990,14 @@ class SimpleListed : public interaction {
     public:
         SimpleListed(){};
         inline void add(A atm){atoms.push_back(atm);};
-        //flt energy(Box *box, idpair &pair);
-        flt energy(Box *box);
-        flt pressure(Box *box);
+        //flt energy(Box &box, idpair &pair);
+        flt energy(Box &box);
+        flt pressure(Box &box);
         uint size(){return ((uint) (atoms.size()));};
-        //inline flt energy_pair(P pair, Box *box){return pair.energy(box);}; // This may need to be written!
-        void setForces(Box *box);
-        flt setForcesGetPressure(Box *box);
-        //inline Vec forces_pair(P pair, Box *box){return pair.forces(box);}; // This may need to be written!
+        //inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box);
+        //inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         ~SimpleListed(){};
 };
@@ -1031,10 +1021,10 @@ class NListed : public interaction {
     protected:
         vector<A> atoms;
         vector<P> pairs;
-        neighborlist *neighbors;
+        shared_ptr<neighborlist> neighbors;
         uint lastupdate;
     public:
-        NListed(neighborlist *neighbors) : neighbors(neighbors){};
+        NListed(shared_ptr<neighborlist> neighbors) : neighbors(neighbors){};
         inline void add(A atm){
             atomid id = neighbors->add(atm.pointer());
             A a = A(id, atm);
@@ -1045,31 +1035,35 @@ class NListed : public interaction {
         P getpair(idpair &pair){
             return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
         A& getatom(uint n){return atoms[n];}
-        flt energy(Box *box, idpair &pair);
-        flt energy(Box *box);
-        flt pressure(Box *box);
+        flt energy(Box &box, idpair &pair);
+        flt energy(Box &box);
+        flt pressure(Box &box);
+        inline vector<P> &pairiter(){return pairs;};
         uint size(){return ((uint) (atoms.size()));};
-        inline flt energy_pair(P pair, Box *box){return pair.energy(box);}; // This may need to be written!
-        void setForces(Box *box);
-        flt setForcesGetPressure(Box *box);
-        inline Vec forces_pair(P pair, Box *box){return pair.forces(box);}; // This may need to be written!
+        inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box);
+        inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
-        neighborlist *nlist(){return neighbors;};
+        inline shared_ptr<neighborlist> nlist(){return neighbors;};
         //~ flt energy_test(flt dist);
         //~ flt force_test(flt dist);
         ~NListed(){};
 };
 
 template <class A, class P>
-class NListedVirial : public interactionpairsx, public NListed<A,P> {
+class NListedVirial : public interactionpairsx {
+    private:
+        NListed<A,P> nlisted;
     public:
-        NListedVirial(neighborlist *neighbors) : NListed<A,P>(neighbors){};
-        void setForces(Box *box){NListed<A,P>::setForces(box);};
-        void setForces(Box *box, fpairxFunct*);
-        virtual inline flt setForcesGetPressure(Box *box){return NListed<A,P>::setForcesGetPressure(box);};
-        virtual flt setForcesGetEnergy(Box *box);
-        virtual inline flt energy(Box *box){return NListed<A,P>::energy(box);};
-        virtual inline flt pressure(Box *box){return NListed<A,P>::pressure(box);};
+        NListedVirial(shared_ptr<neighborlist> neighbors) : nlisted(neighbors){};
+        void setForces(Box &box){nlisted.setForces(box);};
+        void setForces(Box &box, fpairxFunct*);
+        virtual inline flt setForcesGetPressure(Box &box){return nlisted.setForcesGetPressure(box);};
+        virtual flt setForcesGetEnergy(Box &box);
+        virtual inline flt energy(Box &box){return nlisted.energy(box);};
+        virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
+        inline shared_ptr<neighborlist> nlist(){return nlisted.nlist();};
 };
 
 struct Charged : public atomid {
@@ -1102,10 +1096,10 @@ struct LJpair {
             epsilon(sqrtflt(LJ1.epsilon * LJ2.epsilon)),
             sigma((LJ1.sigma + LJ2.sigma) / 2),
             atom1(LJ1), atom2(LJ2){};
-    inline flt energy(Box *box){
-        return LJrepulsive::energy(box->diff(atom1.x(),atom2.x()), epsilon, sigma);};
-    inline Vec forces(Box *box){
-        return LJrepulsive::forces(box->diff(atom1.x(),atom2.x()), epsilon, sigma);};
+    inline flt energy(Box &box){
+        return LJrepulsive::energy(box.diff(atom1.x(),atom2.x()), epsilon, sigma);};
+    inline Vec forces(Box &box){
+        return LJrepulsive::forces(box.diff(atom1.x(),atom2.x()), epsilon, sigma);};
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -1127,8 +1121,8 @@ struct LJAttractPair {
               (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){return inter.energy(box->diff(atom1.x(), atom2.x()));};
-    inline Vec forces(Box *box){return inter.forces(box->diff(atom1.x(), atom2.x()));};
+    inline flt energy(Box &box){return inter.energy(box.diff(atom1.x(), atom2.x()));};
+    inline Vec forces(Box &box){return inter.forces(box.diff(atom1.x(), atom2.x()));};
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -1164,8 +1158,8 @@ struct HydroPair {
               (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){return inter.energy(box->diff(atom1.x(), atom2.x()));};
-    inline Vec forces(Box *box){return inter.forces(box->diff(atom1.x(), atom2.x()));};
+    inline flt energy(Box &box){return inter.energy(box.diff(atom1.x(), atom2.x()));};
+    inline Vec forces(Box &box){return inter.forces(box.diff(atom1.x(), atom2.x()));};
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -1210,8 +1204,8 @@ struct LJFullPair {
               a1.getSigma(a2),
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){return inter.energy(box->diff(atom1.x(), atom2.x()));};
-    inline Vec forces(Box *box){return inter.forces(box->diff(atom1.x(), atom2.x()));};
+    inline flt energy(Box &box){return inter.energy(box.diff(atom1.x(), atom2.x()));};
+    inline Vec forces(Box &box){return inter.forces(box.diff(atom1.x(), atom2.x()));};
 };
 
 
@@ -1272,8 +1266,8 @@ struct LJishPair {
         flt mid = (1-powflt(cutR,-n));
         cutE = epsilon*(mid*mid);
     };
-    inline flt energy(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt rsq = rij.sq()/(sigma*sigma);
         if(rsq > cutR * cutR){
             //~ printf("LJish: dx=%.2f, σ=%.2f, rsq=%.2f, cutR²=%.2f\n", rij.mag(), sigma, rsq, cutR);
@@ -1285,8 +1279,8 @@ struct LJishPair {
         if (rsq > 1) return epsilon*(mid*mid) - cutE;
         return repeps*(mid*mid) - cutE;
     };
-    inline Vec forces(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         flt rsq = dsq/(sigma*sigma);
         if(rsq > cutR * cutR) return Vec();
@@ -1341,8 +1335,8 @@ struct LJAttractRepulsePair {
             flt mid = (1-powflt(cutR,-6));
             cutE = eps*(mid*mid);
         };
-    inline flt energy(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt rsq = rij.sq()/(sig*sig);
         if(rsq > cutR*cutR) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
@@ -1356,9 +1350,9 @@ struct LJAttractRepulsePair {
         //~ }
         return eps*(mid*mid) - cutE;
     };
-    inline Vec forces(Box *box){
+    inline Vec forces(Box &box){
         if(eps == 0) return Vec();
-        Vec rij = box->diff(atom1.x(), atom2.x());
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         flt rsq = dsq/(sig*sig);
         if(rsq > (cutR*cutR)) return Vec();
@@ -1421,8 +1415,8 @@ struct LJAttractFixedRepulsePair {
             flt mid = (1-powflt(cutR,-6));
             cutE = eps*(mid*mid);
         };
-    inline flt energy(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt rsq = rij.sq()/(sig*sig);
         if(rsq > cutR*cutR) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
@@ -1442,8 +1436,8 @@ struct LJAttractFixedRepulsePair {
                     //~ sqrtflt(rij.sq()), E, eps, repeps, sig, cutR, cutE);
         //~ return E;
     };
-    inline Vec forces(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         flt rsq = dsq/(sig*sig);
         if(rsq > (cutR*cutR)) return Vec();
@@ -1517,14 +1511,14 @@ struct EisMclachlanPair {
         c2(M_PI*(a1.sigmai*a2.dist + a2.sigmai*a1.dist)),
         cutoff(a1.dist + a2.dist),
         atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt R = rij.mag();
         if (R > cutoff) return 0;
         return c0/R + c1 + c2*R;
     }
-    inline Vec forces(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > (cutoff*cutoff)) return Vec();
         flt R = sqrtflt(dsq);
@@ -1561,22 +1555,22 @@ struct HertzianPair {
     HertzianPair(HertzianAtom a1, HertzianAtom a2) : 
         eps(sqrtflt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         exponent((a1.exponent + a2.exponent)/2.0), atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig) return 0.0;
         flt R = sqrtflt(dsq);
         return eps * powflt(1.0 - (R/sig), exponent) / exponent;
     }
-    inline Vec forces(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig) return Vec();
         flt R = sqrtflt(dsq);
         return rij * (eps * powflt(1.0 - (R/sig), exponent-1) /sig/R);
     }
-    inline EnergyForce EnergyForces(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline EnergyForce EnergyForces(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig) return EnergyForce(Vec(),0);
         flt R = sqrtflt(dsq);
@@ -1585,17 +1579,17 @@ struct HertzianPair {
         flt E = eps * powflt(1.0 - (R/sig), exponent) / exponent;
         return EnergyForce(f, E);
     }
-    //~ inline flt xrij(Box *box){
-        //~ Vec rij = box->diff(atom1.x(), atom2.x());
+    //~ inline flt xrij(Box &box){
+        //~ Vec rij = box.diff(atom1.x(), atom2.x());
         //~ flt dsq = rij.sq();
         //~ if(dsq > sig*sig) return 0.0;
         //~ flt R = sqrtflt(dsq);
         //~ return (R*eps*(exponent-1)/sig/sig) * powflt(1.0 - (R/sig), exponent-2);
     //~ }
-    inline void fill(Box *box, forcepairx &fpair){
+    inline void fill(Box &box, forcepairx &fpair){
         fpair.a1 = atom1.pointer();
         fpair.a2 = atom2.pointer();
-        Vec rij = box->diff(atom1.x(), atom2.x());
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig){
             fpair.fij = Vec();
@@ -1646,8 +1640,8 @@ struct LoisOhernPair {
         eps(sqrtflt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         C((a1.C + a2.C)/2.0), l((a1.l + a2.l)/2.0), sigcut(sig*(1+C+l)),
         atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sigcut*sigcut) return 0.0;
         flt R = sqrtflt(dsq)/sig;
@@ -1660,8 +1654,8 @@ struct LoisOhernPair {
         return -C*eps*sig/2/l*dR2*dR2;
     }
     
-    inline Vec forces(Box *box){
-        Vec rij = box->diff(atom1.x(), atom2.x());
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sigcut*sigcut) return Vec();
         flt R = sqrtflt(dsq);
@@ -1699,14 +1693,14 @@ class LJsimple : public interaction {
             ignore(get_id(a),get_id(b));};
         inline uint ignore_size() const{return ignorepairs.size();};
         inline uint atoms_size() const{return (uint) atoms.size();};
-        flt energy(Box *box);
-        flt pressure(Box *box);
-        void setForces(Box *box);
+        flt energy(Box &box);
+        flt pressure(Box &box);
+        void setForces(Box &box);
         //~ ~LJsimple(){};
 };
 
 template <class A, class P>
-flt SimpleListed<A, P>::energy(Box *box){
+flt SimpleListed<A, P>::energy(Box &box){
     flt E = 0;
     typename vector<A>::iterator it1;
     typename vector<A>::iterator it2;
@@ -1719,7 +1713,7 @@ flt SimpleListed<A, P>::energy(Box *box){
 };
 
 template <class A, class P>
-void SimpleListed<A, P>::setForces(Box *box){
+void SimpleListed<A, P>::setForces(Box &box){
     typename vector<A>::iterator it1;
     typename vector<A>::iterator it2;
     for(it1 = atoms.begin(); it1 != atoms.end(); it1++){
@@ -1733,7 +1727,7 @@ void SimpleListed<A, P>::setForces(Box *box){
 };
 
 template <class A, class P>
-flt SimpleListed<A, P>::setForcesGetPressure(Box *box){
+flt SimpleListed<A, P>::setForcesGetPressure(Box &box){
     flt p=0;
     typename vector<A>::iterator it1;
     typename vector<A>::iterator it2;
@@ -1743,7 +1737,7 @@ flt SimpleListed<A, P>::setForcesGetPressure(Box *box){
             Vec f = pair.forces(box);
             it1->f() += f;
             it2->f() -= f;
-            Vec r = box->diff(it1->x(), it2->x());
+            Vec r = box.diff(it1->x(), it2->x());
             p += r.dot(f);
         }
     }
@@ -1752,7 +1746,7 @@ flt SimpleListed<A, P>::setForcesGetPressure(Box *box){
 };
 
 template <class A, class P>
-flt SimpleListed<A, P>::pressure(Box *box){
+flt SimpleListed<A, P>::pressure(Box &box){
     flt p=0;
     typename vector<A>::iterator it1;
     typename vector<A>::iterator it2;
@@ -1760,7 +1754,7 @@ flt SimpleListed<A, P>::pressure(Box *box){
         for(it2 = it1+1; it2 != atoms.end(); it2++){
             P pair = P(*it1, *it2);
             Vec f = pair.forces(box);
-            Vec r = box->diff(it1->x(), it2->x());
+            Vec r = box.diff(it1->x(), it2->x());
             p += r.dot(f);
         }
     }
@@ -1782,27 +1776,27 @@ void NListed<A, P>::update_pairs(){
 }
 
 template <class A, class P>
-flt NListed<A, P>::energy(Box *box, idpair &pair){
+flt NListed<A, P>::energy(Box &box, idpair &pair){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     P Epair = P(atoms[pair.first().n()],atoms[pair.last().n()]);
-    //~ Vec dist = box->diff(Epair.atom1.x(), Epair.atom2.x());
+    //~ Vec dist = box.diff(Epair.atom1.x(), Epair.atom2.x());
     return energy_pair(Epair, box);
 };
 
 template <class A, class P>
-flt NListed<A, P>::energy(Box *box){
+flt NListed<A, P>::energy(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt E = 0;
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); it++){
-        //~ Vec dist = box->diff(it->atom1.x(), it->atom2.x());
+        //~ Vec dist = box.diff(it->atom1.x(), it->atom2.x());
         E += energy_pair(*it, box);
     }
     return E;
 };
 
 template <class A, class P>
-void NListed<A, P>::setForces(Box *box){
+void NListed<A, P>::setForces(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); it++){
@@ -1814,11 +1808,11 @@ void NListed<A, P>::setForces(Box *box){
 };
 
 template <class A, class P>
-flt NListedVirial<A, P>::setForcesGetEnergy(Box *box){
-    NListed<A, P>::update_pairs(); // make sure the LJpairs match the neighbor list ones
+flt NListedVirial<A, P>::setForcesGetEnergy(Box &box){
+    nlisted.update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt E = 0;
-    typename vector<P>::iterator it;
-    for(it = NListed<A, P>::pairs.begin(); it != NListed<A, P>::pairs.end(); it++){
+    //typename vector<P>::iterator it;
+    for(auto it = nlisted.pairiter().begin(); it != nlisted.pairiter().end(); it++){
         EnergyForce EF = it->EnergyForces(box);
         it->atom1.f() += EF.f;
         it->atom2.f() -= EF.f;
@@ -1849,11 +1843,11 @@ flt NListedVirial<A, P>::setForcesGetEnergy(Box *box){
 //~ };
 
 template <class A, class P>
-void NListedVirial<A, P>::setForces(Box *box, fpairxFunct* funct){
-    NListed<A, P>::update_pairs(); // make sure the LJpairs match the neighbor list ones
+void NListedVirial<A, P>::setForces(Box &box, fpairxFunct* funct){
+    nlisted.update_pairs(); // make sure the LJpairs match the neighbor list ones
     forcepairx myfpair;
-    typename vector<P>::iterator it;
-    for(it = NListed<A, P>::pairs.begin(); it != NListed<A, P>::pairs.end(); it++){
+    //typename vector<P>::iterator it;
+    for(auto it = nlisted.pairiter().begin(); it != nlisted.pairiter().end(); it++){
         it->fill(box, myfpair);
         //~ assert(!isnan(myfpair.fij[0]));
         funct->run(&myfpair);
@@ -1864,7 +1858,7 @@ void NListedVirial<A, P>::setForces(Box *box, fpairxFunct* funct){
 };
 
 template <class A, class P>
-flt NListed<A, P>::setForcesGetPressure(Box *box){
+flt NListed<A, P>::setForcesGetPressure(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt p=0;
     typename vector<P>::iterator it;
@@ -1872,7 +1866,7 @@ flt NListed<A, P>::setForcesGetPressure(Box *box){
         Vec f = forces_pair(*it, box);
         it->atom1.f() += f;
         it->atom2.f() -= f;
-        Vec r = box->diff(it->atom1.x(), it->atom2.x());
+        Vec r = box.diff(it->atom1.x(), it->atom2.x());
         p += r.dot(f);
     }
     //~ cout << "Set forces, got pressure" << p << '\n';
@@ -1880,14 +1874,14 @@ flt NListed<A, P>::setForcesGetPressure(Box *box){
 };
 
 template <class A, class P>
-flt NListed<A, P>::pressure(Box *box){
+flt NListed<A, P>::pressure(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt p=0;
     //~ printf("Updating pressure...\n");
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); it++){
         Vec f = forces_pair(*it, box);
-        Vec r = box->diff(it->atom1.x(), it->atom2.x());
+        Vec r = box.diff(it->atom1.x(), it->atom2.x());
         //Vec r = it->atom1.x() - it->atom2.x();
         p += r.dot(f);
         //~ assert(!isnan(p));
@@ -1914,9 +1908,9 @@ class Charges : public interaction {
             ignore(get_id(a),get_id(b));};
         inline uint ignore_size() const{return ignorepairs.size();};
         inline uint size() const{return (uint) atoms.size();};
-        flt energy(Box *box);
-        flt pressure(Box *box);
-        void setForces(Box *box);
+        flt energy(Box &box);
+        flt pressure(Box &box);
+        void setForces(Box &box);
         //~ ~LJsimple(){};
 };
 
@@ -1961,12 +1955,12 @@ class jamminglist {
 
 class jammingtree {
     private:
-        Box *box;
+        shared_ptr<Box> box;
         list<jamminglist> jlists;
         vector<Vec> A;
         vector<Vec> B;
     public:
-        jammingtree(Box *box, vector<Vec>& A, vector<Vec>& B)
+        jammingtree(shared_ptr<Box> box, vector<Vec>& A, vector<Vec>& B)
             : box(box), jlists(), A(A), B(B) {
             jlists.push_back(jamminglist());
             assert(A.size() <= B.size());
@@ -2048,14 +2042,14 @@ class jamminglistrot : public jamminglist {
 // Includes rotations, flips, and translations.
 class jammingtree2 {
     protected:
-        Box *box;
+        shared_ptr<Box> box;
         list<jamminglistrot> jlists;
         vector<Vec> A;
         vector<vector<Vec> > Bs;
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        jammingtree2(Box *box, vector<Vec>& A, vector<Vec>& B);
+        jammingtree2(shared_ptr<Box>box, vector<Vec>& A, vector<Vec>& B);
         flt distance(jamminglistrot& jlist);
         list<jamminglistrot> expand(jamminglistrot curjlist);
         
@@ -2135,9 +2129,9 @@ class jammingtreeBD : public jammingtree2 {
     protected:
         uint cutoff1,cutoff2;
     public:
-        jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+        jammingtreeBD(shared_ptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
             jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        jammingtreeBD(Box *box, vector<Vec>& A, vector<Vec>& B, 
+        jammingtreeBD(shared_ptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
                     uint cutoffA, uint cutoffB);// :
             //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
         
@@ -2153,14 +2147,14 @@ flt confineRange(flt minimum, flt val, flt maximum){
     return val;
 }
 
-class atompair : public array<atom, 2> {
+class atompair : public Array<atom, 2> {
     public:
-        atompair() : array<atom, 2>(){};
-        atompair(flt m) : array<atom, 2>(){
+        atompair() : Array<atom, 2>(){};
+        atompair(flt m) : Array<atom, 2>(){
             vals[0].m = m/2;
             vals[1].m = m/2;
         };
-        atompair(flt m1, flt m2) : array<atom, 2>(){
+        atompair(flt m1, flt m2) : Array<atom, 2>(){
             vals[0].m = m1;
             vals[1].m = m2;
         };
@@ -2225,8 +2219,8 @@ struct SCPair {
         p1(p1), p2(p2), l1(l), l2(l){};
     SCPair(const SCPair &other) : p1(other.p1), p2(other.p2),
             l1(other.l1), l2(other.l2){}
-    SpheroCylinderDiff NearestLoc(Box *box);
-    void applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I);
+    SpheroCylinderDiff NearestLoc(Box &box);
+    void applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt I);
 };
 
 struct SCSpringPair : public SCPair {
@@ -2240,7 +2234,7 @@ struct SCSpringPair : public SCPair {
     inline flt maxdist(){return sig + (l1+l2)/2;};
     inline flt maxdelta(){return sig;};
     
-    flt energy(Box *box, SpheroCylinderDiff diff){
+    flt energy(Box &box, SpheroCylinderDiff diff){
         //~ atom &a1 = p1.first();
         //~ atom &a1p = p1.last();
         //~ atom &a2 = p2.first();
@@ -2260,7 +2254,7 @@ struct SCSpringPair : public SCPair {
         //~ cout << "SCSpringPair energy: " << (dsig*dsig*eps/2.0) << '\n';
         return dsig*dsig*eps/2;
     }
-    Vec forces(Box *box, SpheroCylinderDiff diff){
+    Vec forces(Box &box, SpheroCylinderDiff diff){
         flt dsq = diff.delta.sq();
         if(dsq > sig*sig) return Vec();
         flt dmag = sqrtflt(dsq);
@@ -2277,10 +2271,10 @@ class SCSpringList : public interaction {
     public:
         SCSpringList(SCatomvec *scs, flt eps, flt sig, flt l) : 
             scs(scs), eps(eps), sig(sig), l(l){};
-        flt energy(Box *box);
-        void setForces(Box *box);
-        flt setForcesGetPressure(Box *box){setForces(box); return NAN;};
-        flt pressure(Box *box){return NAN;};
+        flt energy(Box &box);
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box){setForces(box); return NAN;};
+        flt pressure(Box &box){return NAN;};
         ~SCSpringList(){};
 };
 

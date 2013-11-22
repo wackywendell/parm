@@ -11,7 +11,7 @@
 
 class constraint {
     public:
-        virtual void apply(Box *box) = 0;
+        virtual void apply(Box &box) = 0;
         virtual int ndof() = 0;
         virtual ~constraint(){};
 };
@@ -29,7 +29,7 @@ class coordConstraint : public constraint {
         coordConstraint(atom* atm) :
             a(atm), loc(a->x) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box *box){
+        void apply(Box &box){
             for(uint i=0; i<3; i++){
                 if(not fixed[i]) continue;
                 a->f[i] = 0;
@@ -52,7 +52,7 @@ class coordCOMConstraint : public constraint {
         coordCOMConstraint(atomgroup* atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box *box){
+        void apply(Box &box){
             Vec com = a->com() - loc;
             Vec comv = a->comv();
             Vec totf = Vec();
@@ -90,7 +90,7 @@ class relativeConstraint : public constraint {
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box *box){
+        void apply(Box &box){
             flt mratio1 = a1->m / (a1->m + a2->m);
             flt mratio2 = a2->m / (a1->m + a2->m);
             Vec totf = a2->f + a1->f;
@@ -118,7 +118,7 @@ class distConstraint : public constraint {
         distConstraint(atom* atm1, atom* atm2, flt dist) :
             a1(atm1), a2(atm2), dist(dist) {};
         int ndof(){return 1;};
-        void apply(Box *box){
+        void apply(Box &box){
             flt M = (a1->m + a2->m);
             flt mratio1 = a1->m / M;
             flt mratio2 = a2->m / M;
@@ -174,7 +174,7 @@ class linearConstraint : public constraint {
         };
         int ndof(){return atms.size()-1;};
         
-        void apply(Box *box){
+        void apply(Box &box){
             Vec com = atms.com();
             Vec comv = atms.comv();
             Vec comf = Vec();
@@ -218,16 +218,16 @@ class linearConstraint : public constraint {
 
 class NPHGaussianConstraint : public constraint {
     private:
-        OriginBox *box;
+        shared_ptr<OriginBox> box;
         flt ddV, dV; // that's dV²/dt², dV/dt
         vector<atomgroup*> groups;
     public:
-        NPHGaussianConstraint(OriginBox *box, vector<atomgroup*> groups) : 
+        NPHGaussianConstraint(shared_ptr<OriginBox> box, vector<atomgroup*> groups) : 
                 box(box), ddV(0), dV(0), groups(groups){};
         int ndof(){return 0;};
-        void apply(Box *box2){
+        void apply(Box &box2){
             //~ flt V = box->V();
-            assert((Box*) box == box2);
+            assert((Box*) box.get() == &box2);
             //~ vector<atomgroup*>::iterator git;
             //~ for(git = groups.begin(); git<groups.end(); git++){
                 //~ atomgroup &m = **git;
