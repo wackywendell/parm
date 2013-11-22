@@ -21,57 +21,12 @@
 %include carrays.i
 %include std_vector.i
 %include std_list.i
-%include std_shared_ptr.i
 %include "vec.hpp"
 
 %apply double { long double } 
 
 %include <pybuffer.i>
 %pybuffer_mutable_binary(double *buffer, size_t sizet)
-
-%shared_ptr(Box)
-%shared_ptr(OriginBox)
-%shared_ptr(InfiniteBox)
-%shared_ptr(atomgroup)
-%shared_ptr(atomvecRK4)
-%shared_ptr(statetracker)
-%shared_ptr(interaction)
-%shared_ptr(constraint)
-%shared_ptr(atomvec)
-%shared_ptr(metagroup)
-%shared_ptr(neighborlist)
-%shared_ptr(ContactTracker)
-%shared_ptr(EnergyTracker)
-%shared_ptr(SCatomvec)
-%shared_ptr(coordConstraint)
-%shared_ptr(fixedForce)
-%shared_ptr(fixedSpring)
-%shared_ptr(COMSpring)
-%shared_ptr(bondpairs)
-%shared_ptr(angletriples)
-%shared_ptr(dihedrals)
-%shared_ptr(interactionpairsx)
-%shared_ptr(LJsimple)
-%shared_ptr(Charges)
-%shared_ptr(SCSpringList)
-%shared_ptr(coordCOMConstraint)
-%shared_ptr(relativeConstraint)
-%shared_ptr(distConstraint)
-%shared_ptr(linearConstraint)
-%shared_ptr(NPHGaussianConstraint)
-%shared_ptr(SimpleListed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListed< LJatom,LJpair >)
-%shared_ptr(NListed< LJatomcut,LJAttractPair >)
-%shared_ptr(NListed< HydroAtom,HydroPair >)
-%shared_ptr(NListed< LJAtomIndexed,LJFullPair >)
-%shared_ptr(NListed< LJAttractRepulseAtom,LJAttractRepulsePair >)
-%shared_ptr(NListed< LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair >)
-%shared_ptr(NListed< LJDoubleAtom,LJDoublePair >)
-%shared_ptr(NListed< EisMclachlanAtom,EisMclachlanPair >)
-%shared_ptr(NListed< LJishAtom,LJishPair >)
-%shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
-%shared_ptr(NListed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
 
 %{
 #include "vec.hpp"
@@ -244,24 +199,24 @@ namespace std {
 #endif
 %template(Pair) Numvector<double, 2>;
 %template(VecPair) Nvector<Vec, 2>;
-%template(_atomarray2) Array<atom*, 2>;
-%template(_atompair2) Array<atom, 2>;
-%template(_idarray2) Array<atomid, 2>;
-%template(_atomarray3) Array<atom*, 3>;
-%template(_atomarray4) Array<atom*, 4>;
+%template(_atomarray2) array<atom*, 2>;
+%template(_atompair2) array<atom, 2>;
+%template(_idarray2) array<atomid, 2>;
+%template(_atomarray3) array<atom*, 3>;
+%template(_atomarray4) array<atom*, 4>;
 
 
 namespace std {
     %template(fvector) vector<float>;
     %template(dvector) vector<double>;
     %template(ldvector) vector<long double>;
-    //%template(avector) vector<shared_ptr<atomgroup> >;
+    %template(avector) vector<atomgroup* >;
     %template(aptrvector) vector<atom*>;
-    //%template(ivector) vector<shared_ptr<interaction> >;
-    //%template(ifxvector) vector<shared_ptr<interactionpairsx> >;
-    //%template(tvector) vector<shared_ptr<statetracker> >;
-    //%template(constraintvector) vector<shared_ptr<constraint> >;
-    //%template(aRK4vector) vector<shared_ptr<atomvecRK4> >;
+    %template(ivector) vector<interaction* >;
+    %template(ifxvector) vector<interactionpairsx* >;
+    %template(tvector) vector<statetracker* >;
+    %template(constraintvector) vector<constraint* >;
+    %template(aRK4vector) vector<atomvecRK4* >;
     //%template(idpairvector) vector<idpair>;
     %template(_uintvector) vector<unsigned int>;
 }
