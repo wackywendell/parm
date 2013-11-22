@@ -54,8 +54,8 @@ class collection {
         inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc, *box);};
         inline Vec angmomentum(){return atoms.angmomentum(com(), *box);};
         #elif defined VEC2D
-        inline flt angmomentum(const Vec &loc){return atoms.angmomentum(loc, box);};
-        inline flt angmomentum(){return atoms.angmomentum(com(), box);};
+        inline flt angmomentum(const Vec &loc){return atoms.angmomentum(loc, *box);};
+        inline flt angmomentum(){return atoms.angmomentum(com(), *box);};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};

@@ -1154,9 +1154,9 @@ flt jammingtree2::distance(jamminglistrot& jlist){
         uint si = jlist.assigned[i];
         for(uint j=0; j<i; j++){
             uint sj = jlist.assigned[j];
-            Vec rij = box.diff(A[i], A[j]);
-            Vec sij = box.diff(Bs[rot][si], Bs[rot][sj]);
-            dist += box.diff(rij, sij).sq();
+            Vec rij = box->diff(A[i], A[j]);
+            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            dist += box->diff(rij, sij).sq();
         }
     }
     return dist / ((flt) jlist.assigned.size());
@@ -1255,9 +1255,9 @@ vector<Vec> jammingtree2::locationsB(jamminglistrot jlist){
         locs[i] = A[i];
         for(uint j=0; j<N; j++){
             uint sj = jlist.assigned[j];
-            Vec rij = box.diff(A[i], A[j]);
-            Vec sij = box.diff(Bs[rot][si], Bs[rot][sj]);
-            locs[i] -= box.diff(rij, sij)/N;
+            Vec rij = box->diff(A[i], A[j]);
+            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            locs[i] -= box->diff(rij, sij)/N;
         }
     }
     return locs;
@@ -1274,9 +1274,9 @@ vector<Vec> jammingtree2::locationsA(jamminglistrot jlist){
         locs[si] = Bs[rot][si];
         for(uint j=0; j<N; j++){
             uint sj = jlist.assigned[j];
-            Vec rij = box.diff(A[i], A[j]);
-            Vec sij = box.diff(Bs[rot][si], Bs[rot][sj]);
-            locs[si] += box.diff(rij, sij)/N;
+            Vec rij = box->diff(A[i], A[j]);
+            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            locs[si] += box->diff(rij, sij)/N;
         }
         
         // this is an inverse rotateflip
@@ -1292,9 +1292,9 @@ Vec jammingtree2::straight_diff(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
     Vec loc = Vec();
     for(uint i=0; i<N; i++){
         for(uint j=0; j<N; j++){
-            Vec rij = bx->diff(As[i], As[j]);
-            Vec sij = bx->diff(Bs[i], Bs[j]);
-            loc += bx->diff(rij, sij);
+            Vec rij = bx.diff(As[i], As[j]);
+            Vec sij = bx.diff(Bs[i], Bs[j]);
+            loc += bx.diff(rij, sij);
         }
     }
     return loc / N;
@@ -1307,9 +1307,9 @@ flt jammingtree2::straight_distsq(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
     flt dist = 0;
     for(uint i=0; i<N; i++){
         for(uint j=0; j<N; j++){
-            Vec rij = bx->diff(As[i], As[j]);
-            Vec sij = bx->diff(Bs[i], Bs[j]);
-            dist += bx->diff(rij, sij).sq();
+            Vec rij = bx.diff(As[i], As[j]);
+            Vec sij = bx.diff(Bs[i], Bs[j]);
+            dist += bx.diff(rij, sij).sq();
         }
     }
     return dist / N;

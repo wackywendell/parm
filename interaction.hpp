@@ -2070,8 +2070,8 @@ class jammingtree2 {
             };
             return retval;
         }
-        static Vec straight_diff(Box *bx, vector<Vec>& A, vector<Vec>& B);
-        static flt straight_distsq(Box *bx, vector<Vec>& A, vector<Vec>& B);
+        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
         
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};
