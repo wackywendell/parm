@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 CXX=icpc
 SWIG=swig
-CCOPTS=-Wall -O2 -fPIC
+CCOPTS=-Wall -O2 -fPIC -std=c++0x
 
 #BOOSTINC=/usr/local/cluster/hpc/Software/BDK/Libraries/Boost/boost_1_47_0/include/
 #INC=`python-config --include`

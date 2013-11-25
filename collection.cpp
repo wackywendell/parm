@@ -11,11 +11,10 @@ collection::collection(shared_ptr<Box> box, vector<shared_ptr<atomgroup> > gs, v
 }
 
 void collection::scaleVs(flt scaleby){
-    vector<shared_ptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++){
-            g[i].v *= scaleby;
+    for(auto git  : groups){
+        atomgroup &g = *git;
+        for(auto a : g){
+            a.v *= scaleby;
         }
     }
 }
@@ -35,25 +34,21 @@ void collection::scaleVelocitiesE(flt E){
 }
 
 void collection::update_trackers(){
-    vector<shared_ptr<statetracker> >::iterator git;
-    for(git = trackers.begin(); git<trackers.end(); git++){
-        (*git)->update(*box);
+    for(auto t : trackers){
+        t->update(*box);
     }
 }
 
 void collection::update_constraints(){
-    vector<shared_ptr<constraint> >::iterator git;
-    for(git = constraints.begin(); git<constraints.end(); git++){
-        (*git)->apply(*box);
+    for(auto c : constraints){
+        c->apply(*box);
     }
 }
 
 flt collection::kinetic(){
     flt E=0;
-    vector<shared_ptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        E+= group.kinetic();
+    for(auto group : groups){
+        E+= group->kinetic();
     }
     return E;
 }
@@ -112,14 +107,11 @@ flt collection::energy(){
 
 flt collection::dof(){
     int ndof = 0;
-    vector<shared_ptr<constraint> >::iterator cit;
-    for(cit = constraints.begin(); cit<constraints.end(); cit++){
-        ndof -= (*cit)->ndof();
+    for(auto c : constraints){
+        ndof -= c->ndof();
     }
-    vector<shared_ptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        ndof += NDIM*(group.size());
+    for(auto group : groups){
+        ndof += NDIM*(group->size());
     }
     
     return ndof;
@@ -130,12 +122,10 @@ flt collection::temp(bool minuscomv){
     flt totkinetic = 0;
     Vec v = Vec();
     if(minuscomv) v = comv();
-    vector<shared_ptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        totkinetic += group.kinetic(v);
+    for(auto group : groups){
+        totkinetic += group->kinetic(v);
         //~ cout << "group K: " << group.kinetic(v) << ", totatoms: " << group.size() << "\n";
-        totatoms += group.size();
+        totatoms += group->size();
     }
     
     int ndof = (int) dof();
@@ -176,21 +166,18 @@ flt collection::temp(bool minuscomv){
 //~ }
 
 flt collection::gyradius(){
-    vector<shared_ptr<atomgroup> >::iterator git;
     Vec avgr = Vec();
     flt N = 0;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++){
-            avgr += g[i].x;
+    for(auto group : groups){
+        for(auto a : *group){
+            avgr += a.x;
             N++;
         }
     }
     avgr /= N; // now avgr is the average location, akin to c.o.m.
     flt Rgsq = 0;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++) Rgsq += (g[i].x - avgr).sq();
+    for(auto group : groups){
+        for(auto a : *group) Rgsq += (a.x - avgr).sq();
     }
     
     return sqrtflt(Rgsq/N);

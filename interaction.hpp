@@ -204,6 +204,19 @@ class idpair : public Array<atomid, 2> {
         //~ inline atom& last() const {return *(vals[1]);};
 //~ };
 
+class atomgroup;
+
+class AtomIter{
+    private:
+        uint i;
+        atomgroup &g;
+    public:
+        AtomIter (atomgroup& g, uint i): i(i), g(g){};
+        bool operator!=(const AtomIter& other) const{return i != other.i;};
+        atom& operator* () const;
+        const AtomIter& operator++(){++i; return *this;};
+};
+
 class atomgroup {
     // a group of atoms, such as a molecule, sidebranch, etc.
     public:
@@ -214,7 +227,8 @@ class atomgroup {
         virtual atomid get_id(cuint n){return atomid(get(n),n);};
         virtual uint size() const=0;
         virtual flt getmass(const unsigned int n) const {return (*this)[n].m;};
-        
+        virtual AtomIter begin(){return AtomIter(*this, 0);};
+        virtual AtomIter end(){return AtomIter(*this, size());};
         
         Vec com() const; //center of mass
         Vec comv() const; //center of mass velocity
@@ -259,6 +273,8 @@ class atomgroup {
         virtual ~atomgroup(){};
 };
 
+atom& AtomIter::operator*() const{return g[i];};
+
 class atomvec : public virtual atomgroup {
     // this is an atomgroup which actually owns the atoms.
     private:
@@ -285,6 +301,7 @@ class atomvec : public virtual atomgroup {
         //~ inline flt getmass(cuint n) const{return atoms[n].m;};
         //~ inline void setmass(cuint n, flt m){atoms[n].m = m;};
         inline uint size() const {return sz;};
+        
         ~atomvec(){ delete [] atoms;};
 };
 
@@ -2070,8 +2087,8 @@ class jammingtree2 {
             };
             return retval;
         }
-        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
-        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        static Vec straight_diff(Box *bx, vector<Vec>& A, vector<Vec>& B);
+        static flt straight_distsq(Box *bx, vector<Vec>& A, vector<Vec>& B);
         
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};

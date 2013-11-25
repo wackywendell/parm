@@ -32,6 +32,7 @@
 %shared_ptr(Box)
 %shared_ptr(OriginBox)
 %shared_ptr(InfiniteBox)
+%ignore AtomIter;
 %shared_ptr(atomgroup)
 %shared_ptr(atomvecRK4)
 %shared_ptr(statetracker)
