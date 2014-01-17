@@ -51,6 +51,7 @@ else:
 steps = int(opts.time * 1000 / opts.dt + .5)
 showtime = opts.time * 1000 / opts.showcount if opts.showcount else 1000*opts.showsteps
 showsteps = int(showtime / opts.dt + .5)
+print("STEPS:", steps, showtime, showsteps)
 
 assert len(args) == 1
 arg, = args
@@ -83,6 +84,7 @@ if sigmas:
     neighbors = neighborlist(box, innerradius, outerradius)
     trackers.append(neighbors)
     interactions['LJ'] = LJ = LJAttractFixedRepulse(neighbors)
+    LJ2 = LJAttractFixedRepulse(neighbors) # TESTING
 else:
     neighbors = None
     LJ = None
@@ -101,6 +103,7 @@ else: charges = None
 # Make Atoms
 LJattractions = []
 chargeset = []
+LJtestatoms = [] # TESTING
 for n,resdict in enumerate(parameters['structure']):
     name = resdict['type']
     atoms = resdict['atoms']
@@ -112,12 +115,25 @@ for n,resdict in enumerate(parameters['structure']):
         adict = atoms[atom.name]
         x,y,z = adict['xyz']
         atom.x = Vec(x,y,z)
+        if 'v' in adict:
+            x,y,z = adict['v']
+            atom.v = Vec(x,y,z)
+            print("Setting v")
         #~ print(name, atom.name, adict.keys())
         if 'LJAttractFixedRepulse' in adict.keys():
             params = dict(adict['LJAttractFixedRepulse'])
             
             epsilon_A = opts.alpha*chargek/params['sigma']
-            diameter = params['sigma'] = params['sigma'] * pow(2, 1.0/6.0)
+            errprint("epsilon_A:", epsilon_A)
+            # In paper, we say V(r) = 4ε (σ¹²/r¹² - σ⁶/r⁶)
+            # σ is where it crosses 0, smaller than the σ at minimum
+            
+            # Attractive Potential is V(r) = ε (σ⁶/r⁶ - 1)² [- ε (r₀⁻⁶ - 1)²]
+            # σ is at the minimum, larger than the paper version
+            params['sigma'] = params['sigma'] * pow(2, 1.0/6.0)
+            #params['cut'] = params['cut']# / pow(2, 1.0/6.0)
+            
+            params['cut'] = 2.9045 / pow(2, 1.0/6.0)
             
             neweps = [e*epsilon_A for e in params['epsilons']]
             args = [neweps] + [params[k] for k in ['repeps','sigma','indx', 'cut']]
@@ -129,11 +145,20 @@ for n,resdict in enumerate(parameters['structure']):
             assert abs(LJat.sig - params['sigma']) < .0001
             LJattractions.append(LJat.epsilons[LJat.indx])
             #~ LJattractions.append(params['epsilons'][params['indx']])
+            if n in (0,3): # TESTING
+                LJtestatoms.append(LJat)
         if charges is not None and 'Charge' in adict.keys():
             charges.add(atom, adict['Charge'])
             chargeset.append(adict['Charge'])
     
     rvecs.append(res)
+
+# TESTING
+testpair = LJAttractFixedRepulsePair(*LJtestatoms)
+testx1, testx2 = LJtestatoms[0].x(), LJtestatoms[1].x()
+print(testx1, testx2)
+testdist = box.diff(LJtestatoms[0].x(), LJtestatoms[1].x()).mag()
+print("sig:", testpair.sig, "dist:", testdist, "eps:", testpair.eps, "cutE:", testpair.cutE, "energy:", testpair.energy(box))
 
 #--------------------
 ## print out
@@ -169,7 +194,7 @@ if len(parameters['angles']) > 0:
         a1,a2,a3 = rvecs[n1][aname1], rvecs[n2][aname2], rvecs[n3][aname3]
         angles.add(k,q0,a1,a2,a3)
         #neighbors.ignore(a1,a3)
-        #totignored += 1
+        totignored += 1
         
     errprint(len(parameters['angles']), "angles,", end=' ')
 
@@ -182,7 +207,7 @@ if len(parameters['dihedrals']) > 0:
         sincoeff = [opts.T*n for n in sincoeff]
         dihedral.add(coscoeff,sincoeff,a1,a2,a3,a4,usepow)
         #neighbors.ignore(a1,a4) # CAᵢ - CAᵢ₊₃
-        #totignored += 1
+        totignored += 1
 
     errprint(len(parameters['dihedrals']), "dihedrals,", end=' ')
 
@@ -195,7 +220,7 @@ atomgroups = [r.atomvec for r in rvecs]
 collec = collectionSol(box, opts.dt, opts.damping, opts.T,
                             atomgroups, list(interactions.values()),
                             trackers, constraints)
-collec.seed()
+seed()
 if neighbors: neighbors.update_list(True)
 collec.setForces()
 
@@ -244,7 +269,7 @@ valtracker = collections.defaultdict(list)
 if opts.xyzfile:
     global xyz
     #~ print(' '.join(rvecs[0].names), '::', ' ' .join(rvecs[1].names))
-    xyz = xyzfile.XYZwriter(open(opts.xyzfile, 'w'), usevels=False, printnames=True)
+    xyz = xyzfile.XYZwriter(open(opts.xyzfile, 'w'), usevels=True, printnames=True)
 
 def statprintline(stats):
     global opts, xyz, collec
@@ -270,13 +295,12 @@ if opts.statfile:
     with open(opts.statfile, 'w') as f:
         ks, vs = zip(*sorted(allstats.items()))
         errprint(*ks, file=f, sep='\t')
-    statprintline(stats)
+    #statprintline(stats)
 
 #-----------------------------------------------------------------------
 ## Actual run
 
 def makestats(t):
-    c = collec.com()
     stats = statistics(t*opts.dt)
     statprintline(stats)
     #~ table.update(int(t * opts.dt+.5), write=True)

@@ -15,6 +15,8 @@
 #include <cmath>
 using namespace std;
 
+typedef unsigned int uint;
+
 template <class T, unsigned int N>
 class array {
     protected:
@@ -395,7 +397,7 @@ Numvector<T,N> Numvector<T,N>::norm() const{
 
 
 template <class T, unsigned int N>
-T Numvector<T,N>::distance(const Numvector<T,N> &rhs) const{
+inline T Numvector<T,N>::distance(const Numvector<T,N> &rhs) const{
     T sum = 0;
     for(unsigned int i=0; i<N; i++){
         sum += powl(Nvector<T,N>::get(i) - rhs.get(i), 2);
@@ -405,56 +407,56 @@ T Numvector<T,N>::distance(const Numvector<T,N> &rhs) const{
 }
 
 template<>
-double Numvector<double,2>::distance(const Numvector<double,2> &rhs) const{
+inline double Numvector<double,2>::distance(const Numvector<double,2> &rhs) const{
     double x=get(0) - rhs.get(0), y=get(1) - rhs.get(1);
     return hypot(x,y);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-long double Numvector<long double,2>::distance(const Numvector<long double,2> &rhs) const{
+inline long double Numvector<long double,2>::distance(const Numvector<long double,2> &rhs) const{
     long double x=get(0) - rhs.get(0), y=get(1) - rhs.get(1);
     return hypotl(x,y);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-double Numvector<double,3>::distance(const Numvector<double,3> &rhs) const{
+inline double Numvector<double,3>::distance(const Numvector<double,3> &rhs) const{
     double x=get(0)-rhs.get(0), y=get(1)-rhs.get(1), z=get(2)-rhs.get(2);
     return sqrt(x*x + y*y + z*z);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-long double Numvector<long double,3>::distance(const Numvector<long double,3> &rhs) const{
+inline long double Numvector<long double,3>::distance(const Numvector<long double,3> &rhs) const{
     long double x=get(0)-rhs.get(0), y=get(1)-rhs.get(1), z=get(2)-rhs.get(2);
     return sqrtl(x*x + y*y + z*z);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-double Numvector<double,2>::mag() const{
+inline double Numvector<double,2>::mag() const{
     double x=get(0), y=get(1);
     return hypot(x,y);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-long double Numvector<long double,2>::mag() const{
+inline long double Numvector<long double,2>::mag() const{
     long double x=get(0), y=get(1);
     return hypotl(x,y);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-double Numvector<double,3>::mag() const{
+inline double Numvector<double,3>::mag() const{
     double x=get(0), y=get(1), z=get(2);
     return sqrt(x*x + y*y + z*z);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 
 template<>
-long double Numvector<long double,3>::mag() const{
+inline long double Numvector<long double,3>::mag() const{
     long double x=get(0), y=get(1), z=get(2);
     return sqrtl(x*x + y*y + z*z);
     // return Numvector<T,N>(*this - rhs).mag();

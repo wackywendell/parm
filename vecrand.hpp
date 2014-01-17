@@ -36,6 +36,7 @@ inline flt sqrtflt(flt n){return sqrtl(n);};
 inline flt cbrtflt(flt n){return cbrtl(n);};
 inline flt expm1flt(flt n){return expm1l(n);};
 inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
+inline flt remflt(flt n, flt m){return remainderl(n,m);};
 #else
 typedef double flt;
 inline bool isinfflt(double n){return isinf(n);};
@@ -45,6 +46,7 @@ inline flt sqrtflt(flt n){return sqrt(n);};
 inline flt cbrtflt(flt n){return cbrt(n);};
 inline flt expm1flt(flt n){return expm1(n);};
 inline flt copysignflt(flt n, flt m){return copysign(n,m);};
+inline flt remflt(flt n, flt m){return remainder(n,m);};
 #endif
 
 #ifdef VEC2D
@@ -58,15 +60,15 @@ using namespace std;
 
 const flt OVERNDIM = ((flt) 1.0)/NDIM;
 
-Vector2<flt> vec(double x, double y){
+inline Vector2<flt> vec(double x, double y){
     return Vector2<flt>(x,y);
 };
 
-Vector3<flt> vec(double x, double y, double z){
+inline Vector3<flt> vec(double x, double y, double z){
     return Vector3<flt>(x,y,z);
 };
 
-uint vecsize(){return sizeof(Vec);}
+inline uint vecsize(){return sizeof(Vec);}
 
 typedef boost::mt19937 engine;
 typedef boost::normal_distribution<flt> normdistribution;

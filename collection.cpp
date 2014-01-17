@@ -1076,7 +1076,7 @@ collectionNLCGV::collectionNLCGV(Box *box, const flt dt,
                 vector<statetracker*> trackers,
                 vector<constraint*> constraints,
                 const flt kmax,
-                const flt secmax, const flt seceps) :
+                const uint secmax, const flt seceps) :
             collection(box, groups, interactions, trackers, 
                 constraints), dt(dt), secmax(secmax), seceps(seceps),
                 alphamax(0), afrac(0), dxmax(0), stepmax(0),
@@ -1219,7 +1219,7 @@ void collectionNLCGV::timestep(){
     setForces(false);
     update_constraints();
     flt eta0 = -fdotv();
-    
+    flt eta = eta0;
     //~ cout << "NLCGV::timestep 1:"
              //~ << " eta0 = " << eta0;
         //~ cout << " -- E = " << energy();
@@ -1234,20 +1234,28 @@ void collectionNLCGV::timestep(){
     dxsum = 0;
     flt vdv = vdotv();
     
+    // flt alphamin = 1.0 / alphamax;
+    
     /// Secant stepping
     // note that v does not change here; we simply step in the direction
     // of v until the force along v (eta, fdotv) gets very small...
     for(sec=0; sec < secmax; sec++){
-        flt eta = -fdotv(); // slope at x
+        eta = -fdotv(); // slope at x
                             // eta0 is the slope at x - α
         
         // Go in the direction of -slope (-eta), approximating a quadratic.
         // abs added to ensure we go in the direction of the slope, and don't
         // maximize a quadratic
         flt alphafac = -eta / abs(eta0-eta);
-        if(eta == eta0){alphafac = alphamax > 0 ? alphamax : 1.1;}
+        if(abs(eta0 - eta) <= 1e-12 * abs(eta)){
+            alphafac = alphamax > 0 ? alphamax : 1.1;
+            sec = sec > 0 ? sec*2 - 1 : 1;
+        }
+        
         if(alphamax > 0 and alphafac > alphamax) alphafac = alphamax;
+        //if(alphamax > 0 and alphafac > 0 and alphafac < alphamin) alphafac = alphamin;
         if(alphamax > 0 and alphafac < -alphamax) alphafac = -alphamax;
+        //if(alphamax > 0 and alphafac < 0 and alphafac > -alphamin) alphafac = -alphamin;
         
         // abs added here, same reason
         //~ flt oldalpha = alpha;
@@ -1261,6 +1269,13 @@ void collectionNLCGV::timestep(){
             //~ cout << " -- E = " << energy();
             //~ cout << " -- K = " << kinetic();
             //~ cout << " -- fdv = " << fdotv() << endl;
+        //~ }
+        
+        //~ if(sec >= secmax - 9){
+            //~ cout << "sec: " << sec << " eta: " << eta << " eta0: " << eta0 
+                //~ << " diff: " << (eta0 - eta) << " alpha: " << alpha
+                //~ << " alphafac: "  << alphafac << " alphamax: " << alphamax
+                //~ << " dxsum: " << (dxsum + alpha) << endl;
         //~ }
         
         flt newdxsum = abs(dxsum + alpha);
@@ -1283,6 +1298,7 @@ void collectionNLCGV::timestep(){
         setForces(false);
         update_constraints();
         eta0 = eta;
+        
         if(alpha*alpha*vdv < seceps*seceps) break;
         if((sec > 1)
                 and (afrac > 0)
@@ -1315,13 +1331,13 @@ void collectionNLCGV::timestep(){
     Knew = fdota();
     beta = (Knew - Kmid) / Kold;
     betaused = beta;
+    k++;
     if(k >= kmax or isinfflt(betaused) or isnanflt(betaused) or betaused <= 0){
         k = 0;
         betaused = 0;
     } else if(betaused > 1){
         betaused = 1;
     }
-    
     
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;

@@ -1,10 +1,11 @@
 #ifndef COLLECTION_H
 #define COLLECTION_H
 
-#include "vecrand.hpp"
-#include "interaction.hpp"
+//#include "vecrand.hpp"
+//#include "interaction.hpp"
 #include "constraints.hpp"
 #include <vector>
+#include <cstdio>
 
 //~ #include <complex>
 //~ typedef complex<double> complx;
@@ -324,7 +325,8 @@ class collectionNLCGV : public collection {
     public:
         // Parameters
         flt dt; // initial step attempt
-        flt secmax, seceps;
+        uint secmax;
+        flt seceps;
         // secmax is the max number of iterations within a timestep
         // seceps is the minimum alpha * v before we call it "close enough"
         flt alphamax, afrac, dxmax, stepmax, kmax;
@@ -364,7 +366,7 @@ class collectionNLCGV : public collection {
                 vector<interaction*> interactions=vector<interaction*>(),
                 vector<statetracker*> trackers=vector<statetracker*>(),
                 vector<constraint*> constraints=vector<constraint*>(),
-                const flt kmax=1000, const flt secmax=10, 
+                const flt kmax=1000, const uint secmax=10, 
                 const flt seceps = 1e-4);
         
         flt pressure();

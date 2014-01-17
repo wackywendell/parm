@@ -213,6 +213,9 @@ namespace std {
     %template(avector) vector<atomgroup* >;
     %template(aptrvector) vector<atom*>;
     %template(ivector) vector<interaction* >;
+    #ifdef VEC2D
+    %template(wallvector) vector<SoftWall* >;
+    #endif
     %template(ifxvector) vector<interactionpairsx* >;
     %template(tvector) vector<statetracker* >;
     %template(constraintvector) vector<constraint* >;

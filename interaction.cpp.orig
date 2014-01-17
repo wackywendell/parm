@@ -1,7 +1,5 @@
 #include "interaction.hpp"
 
-InfiniteBox infbox;
-
 Vec atomgroup::com() const{
     flt curmass = 0;
     Vec v = Vec();
@@ -1060,68 +1058,6 @@ flt Charges::pressure(Box *box){
     return P;
 };
 
-flt SoftWall::energy(Box *box){
-    flt E=0;
-    typename vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
-        atom &a = **it;
-        Vec r = box->diff(a.x, loc);
-        flt dist = r.dot(norm)*2;
-        if(dist > it->sigma) continue;
-        E += it->epsilon * powflt(1 - (dist/(it->sigma)), expt)/expt/2.0;
-        // Note that normally you have ε(1-r/σ)^n for 2 particles.
-        // We divide by 2 because now there is only one particle, pushing
-        // on its mirror image; the force should be the same as if the 
-        // mirror image was there, so the energy needs to be half
-    }
-    return E;
-};
-
-void SoftWall::setForces(Box *box){
-    lastf = 0;
-    typename vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
-        atom &a = **it;
-        Vec r = box->diff(a.x, loc);
-        flt dist = r.dot(norm)*2;
-        if(dist > it->sigma) continue;
-        flt f = it->epsilon * powflt(1 - (dist/(it->sigma)), expt - 1.0);
-        lastf += -f;
-        a.f += norm*f;
-    }
-};
-
-flt SoftWall::setForcesGetPressure(Box *box){
-    flt p=0;
-    lastf = 0;
-    typename vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
-        atom &a = **it;
-        Vec r = box->diff(a.x, loc);
-        flt dist = r.dot(norm)*2;
-        if(dist > it->sigma) continue;
-        flt f = it->epsilon * powflt(1 - (dist/(it->sigma)), expt - 1.0);
-        p += dist*f/2;
-        lastf += -f;
-        a.f += norm*f;
-    }
-    return p;
-};
-
-flt SoftWall::pressure(Box *box){
-    flt p = 0;
-    typename vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
-        atom &a = **it;
-        Vec r = box->diff(a.x, loc);
-        flt dist = r.dot(norm)*2;
-        if(dist > it->sigma) continue;
-        flt f = it->epsilon * powflt(1 - (dist/(it->sigma)), expt - 1.0);
-        p += dist*f/2;
-    }
-    return p;
-};
-
 bool jamminglist::operator<(const jamminglist& other ){
     //return distsq < other.distsq;
     if(other.distsq  - distsq > 1e-8) return true;
@@ -1400,10 +1336,10 @@ SpheroCylinderDiff SCPair::NearestLoc(Box *box){
     
     if(abs(1-u1u2sq) < 1e-8){
         // They are too close to parallel, so we just say the "middle" 
-        // of the two spherocylinders (r12*l1/(l1+l2)) projected onto their axes (u1)
-        lambda1p = u1r12*l1/(l1+l2);
+        // of the two spherocylinders (r12/2) projected onto their axes (u1)
+        lambda1p = u1r12/2;
         // symmetry would be u2r21/2, but r21 = -r12
-        lambda2p = -u2r12*l2/(l1+l2);
+        lambda2p = -u2r12/2;
         //~ cout << "Too small, adjusted." << '\n';
     } else {
         // Where the two lines actually would intersect
@@ -1440,7 +1376,7 @@ SpheroCylinderDiff SCPair::NearestLoc(Box *box){
     return diff;
 };
 
-void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt IoverM1, flt IoverM2){
+void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt IoverM){
     atom &a1 = p1.first();
     atom &a1p = p1.last();
     atom &a2 = p2.first();
@@ -1456,7 +1392,7 @@ void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     a2p.f += f/2;
     
     Vec t1 = s1*(diff.lambda1/l1);
-    Vec atau1 = s1.cross(t1.cross(f)) / (-2*IoverM1*M1);
+    Vec atau1 = s1.cross(t1.cross(f)) / (-2*IoverM*M1);
     //~ cout << "t1: " << t1 << "  atau1: " << atau1 << endl;
     // Formula says (t1×f)×s1 / 2I
     // -I because it should be (t1×f)×s1, but we wrote s1×(t1×f)
@@ -1465,7 +1401,7 @@ void SCPair::applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     a1p.f -= atau1 * a1p.m;
     
     Vec t2 = s2*(diff.lambda2/l2);
-    Vec atau2 = s2.cross(t2.cross(f)) / (2*IoverM2*M2); // 2 because it should be -f
+    Vec atau2 = s2.cross(t2.cross(f)) / (2*IoverM*M2); // 2 because it should be -f
     a2.f += atau2 * a2.m;
     a2p.f -= atau2 * a2p.m;
     
@@ -1478,7 +1414,7 @@ flt SCSpringList::energy(Box *box){
         atompair &pi = scs->pair(i);
         for(uint j = i+1; j < scs->pairs(); j++){
             atompair &pj = scs->pair(j);
-            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
+            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
             //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
             //~ cout << "SCSpringList diff lambdas: " << diff.lambda1 << "    " << diff.lambda2 << '\n';
@@ -1492,14 +1428,12 @@ flt SCSpringList::energy(Box *box){
 void SCSpringList::setForces(Box *box){
     for(uint i = 0; i < scs->pairs() - 1; i++){
         atompair &pi = scs->pair(i);
-        flt l1 = ls[i];
         for(uint j = i+1; j < scs->pairs(); j++){
             atompair &pj = scs->pair(j);
-            flt l2 = ls[j];
-            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
+            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
             Vec f = scp.forces(box, diff);
-            scp.applyForce(box, f, diff, l1*l1/4, l2*l2/4);
+            scp.applyForce(box, f, diff, l*l/4);
         }
     }
 };

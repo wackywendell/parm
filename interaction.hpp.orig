@@ -1,4 +1,4 @@
-#include "vecrand.hpp"
+#include "vec.hpp"
 
 #include <vector>
 #include <bitset> // for contact tracking
@@ -57,7 +57,7 @@
 */
 
 //typedef double flt; defined in vecrand.hpp
-//typedef unsigned int uint;
+typedef unsigned int uint;
 typedef const unsigned int cuint;
 
 class Box {
@@ -116,8 +116,10 @@ class InfiniteBox : public Box {
         flt V(){return NAN;};
 };
 
+InfiniteBox infbox;
+
 class OriginBox : public Box {
-    protected:
+    private:
         Vec boxsize;
     public:
         OriginBox(Vec size) : boxsize(size){};
@@ -125,12 +127,10 @@ class OriginBox : public Box {
             return vecmod((r1-r2), boxsize);
         }
         #ifdef VEC3D
-        OriginBox(flt L) : boxsize(L,L,L){};
         flt V(){return boxsize[0] * boxsize[1] * boxsize[2];};
         flt L(){return (boxsize[0] + boxsize[1] + boxsize[2])/3.0;};
         #endif
         #ifdef VEC2D
-        OriginBox(flt L) : boxsize(L,L){};
         flt V(){return boxsize[0] * boxsize[1];};
         flt L(){return (boxsize[0] + boxsize[1])/2.0;};
         #endif
@@ -919,7 +919,7 @@ class neighborlist : public statetracker{
         ~neighborlist(){};
 };
 
-inline neighborlist* neighborlistL(Box *box, const double innerradius, const double outerradius){
+neighborlist* neighborlistL(Box *box, const double innerradius, const double outerradius){
     return new neighborlist(box, innerradius, outerradius);
 };
 
@@ -941,7 +941,7 @@ class ContactTracker : public statetracker{
         unsigned long long number(){return incontact;};
 };
 
-inline ContactTracker* ContactTrackerD(Box *box, atomgroup *atoms, vector<double> dists){
+ContactTracker* ContactTrackerD(Box *box, atomgroup *atoms, vector<double> dists){
     vector<flt> newdists = vector<flt>();
     for(uint i=0; i<dists.size(); i++){
         newdists.push_back(dists[i]);
@@ -1418,7 +1418,7 @@ struct LJAttractFixedRepulsePair {
                 attract = false;
                 return;
             }
-            flt mid = (1-powflt(cutR,-6.0));
+            flt mid = (1-powflt(cutR,-6));
             cutE = eps*(mid*mid);
         };
     inline flt energy(Box *box){
@@ -1545,7 +1545,7 @@ struct HertzianAtom : public atomid {
         eps(other.eps), sigma(other.sigma), exponent(other.exponent){};
 };
 
-inline HertzianAtom hertzd(atom *a, double eps, double sigma, double exponent=2.5){
+HertzianAtom hertzd(atom *a, double eps, double sigma, double exponent=2.5){
     return HertzianAtom(a, eps, sigma, exponent);
 };
 
@@ -1921,7 +1921,7 @@ class Charges : public interaction {
 };
 
 
-inline bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
+bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
     if(sizet < NDIM * arr.size()){return false;};
     for(uint i=0; i < arr.size(); i++)
     for(uint j=0; j < NDIM; j++)
@@ -1930,101 +1930,6 @@ inline bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
     }
     return true;
 };
-
-////////////////////////////////////////////////////////////////////////
-// A wall
-
-struct WallAtom : atomref {
-    public:
-        flt sigma;
-        flt epsilon;
-    public:
-        WallAtom(atom *a, flt sigma, flt epsilon=1.0) : 
-            atomref(a), sigma(sigma), epsilon(epsilon){};
-};
-
-class SoftWall : public interaction {
-    protected:
-        Vec loc;
-        Vec norm;
-        flt expt;
-        vector<WallAtom> group;
-        flt lastf;
-    public:
-        SoftWall(Vec loc, Vec norm, flt expt=2.0) : 
-            loc(loc), norm(norm.norm()), expt(expt), lastf(NAN){};
-        void add(WallAtom a){group.push_back(a);};
-        flt energy(Box *box);
-        void setForces(Box *box);
-        flt setForcesGetPressure(Box *box);
-        flt pressure(Box *box);
-        
-        void setLoc(Vec newloc){loc = newloc;};
-        Vec getLoc(){return loc;};
-        void setNorm(Vec newNorm){norm = newNorm.norm();};
-        Vec getNorm(){return norm;};
-};
-
-#ifdef VEC2D
-class WalledBox2D : public OriginBox {
-    protected:
-        bool xwalls, ywalls;
-        vector<SoftWall*> walls;
-    public:
-        WalledBox2D(Vec size, bool xwalled, bool ywalled, flt expt=2.0) :
-            OriginBox(size), xwalls(xwalled), ywalls(ywalled){
-                if(xwalls){
-                    walls.push_back(new SoftWall(
-                        Vec(-size[0]/2.0, 0), Vec(1, 0), expt));
-                    walls.push_back(new SoftWall(
-                        Vec(size[0]/2.0, 0), Vec(-1, 0), expt));
-                }
-                if(ywalls){
-                    walls.push_back(new SoftWall(
-                        Vec(0, -size[0]/2.0), Vec(0, 1), expt));
-                    walls.push_back(new SoftWall(
-                        Vec(0, size[0]/2.0), Vec(0, -1), expt));
-                }
-            };
-        Vec diff(Vec r1, Vec r2){
-            Vec dr = r1 - r2;
-            if(!xwalls) dr[0] = remflt(r1[0], boxsize[0]);
-            if(!ywalls) dr[1] = remflt(r1[1], boxsize[1]);
-            return dr;
-        }
-        flt V(){return boxsize[0] * boxsize[1];};
-        flt L(){return (boxsize[0] + boxsize[1])/2.0;};
-        
-        flt resize(flt factor){
-            boxsize *= factor;
-            vector<SoftWall*>::iterator it;
-            for(it = walls.begin(); it != walls.end(); it++){
-                (*it)->setLoc((*it)->getLoc() * factor);
-            };
-            return V();
-        }
-        flt resizeV(flt newV){
-            flt curV = V();
-            return resize(powflt(newV/curV, OVERNDIM));
-        }
-        Vec randLoc(flt walldist){
-            Vec bxvec = boxsize;
-            if(xwalls) bxvec[0] -= walldist/2.0;
-            if(ywalls) bxvec[1] -= walldist/2.0;
-            Vec v = randVecBoxed();
-            for(uint i=0; i<NDIM; i++){
-                v[i] *= bxvec[i];
-            }
-            return diff(v, Vec());
-        };
-        vector<SoftWall*> getWalls() {return walls;};
-        ~WalledBox2D(){
-            for(vector<SoftWall*>::iterator it = walls.begin(); it != walls.end(); it++){
-                delete *it;
-            }
-        };
-};
-#endif
 
 ////////////////////////////////////////////////////////////////////////
 // For comparing two jammed structures
@@ -2242,7 +2147,7 @@ class jammingtreeBD : public jammingtree2 {
 };
 #endif
 
-inline flt confineRange(flt minimum, flt val, flt maximum){
+flt confineRange(flt minimum, flt val, flt maximum){
     if(val <= minimum) return minimum;
     if(val >= maximum) return maximum;
     return val;
@@ -2321,10 +2226,7 @@ struct SCPair {
     SCPair(const SCPair &other) : p1(other.p1), p2(other.p2),
             l1(other.l1), l2(other.l2){}
     SpheroCylinderDiff NearestLoc(Box *box);
-    void applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I1, flt I2);
-    inline void applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I){
-        return applyForce(box, f, diff, I, I);
-    }
+    void applyForce(Box *box, Vec f, SpheroCylinderDiff diff, flt I);
 };
 
 struct SCSpringPair : public SCPair {
@@ -2371,13 +2273,10 @@ struct SCSpringPair : public SCPair {
 class SCSpringList : public interaction {
     private:
         SCatomvec *scs;
-        flt eps, sig;
-        vector<flt> ls;
+        flt eps, sig, l;
     public:
         SCSpringList(SCatomvec *scs, flt eps, flt sig, flt l) : 
-            scs(scs), eps(eps), sig(sig), ls(scs->pairs(), l){};
-        SCSpringList(SCatomvec *scs, flt eps, flt sig, vector<flt> ls) : 
-            scs(scs), eps(eps), sig(sig), ls(ls){};
+            scs(scs), eps(eps), sig(sig), l(l){};
         flt energy(Box *box);
         void setForces(Box *box);
         flt setForcesGetPressure(Box *box){setForces(box); return NAN;};
