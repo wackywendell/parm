@@ -98,3 +98,9 @@ $(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
 
 LJatoms: libsim3D.so LJatoms.cpp
 	$(CXX) $(CCOPTS) -DVEC3D LJatoms.cpp -L. -lsim3D -Wl,-rpath=. -o LJatoms
+
+LJatoms2D: libsim2D.so LJatoms.cpp
+	$(CXX) $(CCOPTS) -DVEC2D LJatoms.cpp -L. -lsim2D -Wl,-rpath=. -o LJatoms2D
+
+basicsim.zip: collection.cpp  collection.hpp  constraints.cpp  constraints.hpp  interaction.cpp  interaction.hpp  LJatoms.cpp  makefile  vec.hpp  vecrand.cpp  vecrand.hpp .vmdrc
+	zip -r basicsim.zip vec.hpp {vecrand,interaction,collection,constraints}.{h,c}pp LJatoms.cpp makefile .vmdrc

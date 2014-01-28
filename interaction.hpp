@@ -143,6 +143,7 @@ class OriginBox : public Box {
             }
             return diff(v, Vec());
         };
+        Vec boxshape(){return boxsize;};
 };
 
 /***********************************************************************
@@ -428,6 +429,9 @@ class LJattractCut {
 };
 
 class LJFullCut {
+    // uses ε*((1-1/r⁶)² - 1)
+    // sigma is thus at the minimum
+    // cutR is unitless; that times sigma is the distance we cut the potential
     protected:
         flt epsilon;
         flt sigma;
@@ -439,23 +443,30 @@ class LJFullCut {
                 flt mid = (1-1/rsix);
                 cutE = epsilon*(mid*mid-1);
             };
-        inline static flt energy(const Vec diff, const flt eps, const flt sig, const flt cutsig){
-            flt rsq = diff.sq()/(sig*sig);
-            if(rsq > (cutsig*cutsig)) return 0;
+        //~ inline static flt energy(const Vec diff, const flt eps, const flt sig, const flt cutsig){
+            //~ flt rsq = diff.sq()/(sig*sig);
+            //~ if(rsq > (cutsig*cutsig)) return 0;
+            //~ flt rsix = rsq*rsq*rsq;
+            //~ //return eps*(4*(1/(rsix*rsix) - 1/rsix) + 1);
+            //~ flt mid = (1-1/rsix);
+            //~ return eps*(mid*mid-1);
+        //~ };
+        //~ inline static flt energy(const flt rsig, const flt cutsig){
+            //~ if(rsig > cutsig) return 0;
+            //~ flt rsq = rsig * rsig;
+            //~ flt rsix = rsq*rsq*rsq;
+            //~ flt mid = (1-1/rsix);
+            //~ return mid*mid-1;
+            //~ // Minimum of -1 occurs at r = 1
+        //~ };
+        inline flt energy(const Vec& diff){
+            //~ return energy(diff, epsilon, sigma, cutR);
+            flt rsq = diff.sq()/(sigma*sigma);
+            if(rsq > (cutR*cutR)) return 0;
             flt rsix = rsq*rsq*rsq;
-            //~ return eps*(4*(1/(rsix*rsix) - 1/rsix) + 1);
             flt mid = (1-1/rsix);
-            return eps*(mid*mid-1);
+            return epsilon*(mid*mid-1) - cutE;
         };
-        inline static flt energy(const flt rsig, const flt cutsig){
-            if(rsig > cutsig) return 0;
-            flt rsq = rsig * rsig;
-            flt rsix = rsq*rsq*rsq;
-            flt mid = (1-1/rsix);
-            return mid*mid-1;
-            // Minimum of -1 occurs at r = 1
-        };
-        inline flt energy(const Vec& diff){return energy(diff, epsilon, sigma, cutR);};
         inline static Vec forces(const Vec diff, const flt eps, const flt sig, const flt cutsig){
             flt dsq = diff.sq();
             flt rsq = dsq/(sig*sig);
@@ -1117,6 +1128,18 @@ struct LJatomcut : public LJatom {
             LJatom(epsilon, sigma, a), sigcut(cut){};
     LJatomcut(atomid a, LJatomcut other) : LJatom(a, other), 
         sigcut(other.sigcut){};
+};
+
+struct LJCutPair {
+    LJFullCut inter;
+    atomid atom1, atom2;
+    LJCutPair(LJatomcut a1, LJatomcut a2) : 
+        inter(sqrtflt(a1.epsilon * a2.epsilon),
+              (a1.sigma + a2.sigma) / 2, 
+              max(a1.sigcut, a2.sigcut)),
+        atom1(a1), atom2(a2){};
+    inline flt energy(Box *box){return inter.energy(box->diff(atom1.x(), atom2.x()));};
+    inline Vec forces(Box *box){return inter.forces(box->diff(atom1.x(), atom2.x()));};
 };
 
 struct LJAttractPair {

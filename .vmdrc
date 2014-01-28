@@ -1,0 +1,36 @@
+mol modstyle 0 0 VDW 1 32
+mol rep VDW 1 20
+mol default material Diffuse
+mol modmaterial 0 0 Diffuse
+
+animate speed 0.8
+animate style once
+animate goto start
+display resetview
+
+animate forward
+
+user add key q exit
+user add key f {animate speed [expr .1 + [animate speed]]}
+user add key F {animate speed [expr .2 + [animate speed]]}
+user add key Alt-f {animate speed 1}
+user add key g {animate speed [expr -.1 + [animate speed]]}
+user add key G {animate speed [expr -.2 + [animate speed]]}
+user add key Alt-g {animate speed 0}
+user add key o {mol off 0; mol on 1}
+user add key p {mol off 1; mol on 0}
+user add key y {rock y by 0.2 200}
+user add key Y {rock y by 0}
+user add key b {
+    #set cell [pbc set {5 5 5} -all];
+    #pbc readxst LJatoms.xst;
+    #source LJatoms-pbc.tcl;
+    pbc box -toggle -center origin -color red;
+};
+
+set natoms [atomselect 0 "name C";];
+$natoms set radius 0.500000;
+set natoms [atomselect 0 "name N";];
+$natoms set radius 0.500000;
+set natoms [atomselect 0 "name S";];
+$natoms set radius 0.500000;
