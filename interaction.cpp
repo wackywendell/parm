@@ -181,8 +181,8 @@ metagroup::metagroup(vector<atomgroup*> groups){
     }
 };
 
-metagroup::metagroup(vector<shared_ptr<atomgroup> > groups){
-    vector<shared_ptr<atomgroup> >::iterator git;
+metagroup::metagroup(vector<sptr<atomgroup> > groups){
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git < groups.end(); git++){
         atomgroup &g = **git;
         for(uint i = 0; i < g.size(); i++) atoms.push_back(& (g[i]));
@@ -793,11 +793,11 @@ void pairlist::clear(){
     }
 };
 
-neighborlist::neighborlist(shared_ptr<Box> box, const flt innerradius, const flt outerradius) :
+neighborlist::neighborlist(sptr<Box> box, const flt innerradius, const flt outerradius) :
                 box(box), critdist(innerradius), skinradius(outerradius),
                 atoms(){};
 
-neighborlist::neighborlist(shared_ptr<Box> box, atomgroup &group, const flt innerradius,
+neighborlist::neighborlist(sptr<Box> box, atomgroup &group, const flt innerradius,
             const flt outerradius, pairlist ignore) :
                 box(box), critdist(innerradius), skinradius(outerradius),
                 atoms(), ignorepairs(ignore), ignorechanged(false){
@@ -892,7 +892,7 @@ bool neighborlist::update_list(bool force){
     return true;
 }
 
-ContactTracker::ContactTracker(shared_ptr<Box> box, shared_ptr<atomgroup> atoms, vector<flt> dists) :
+ContactTracker::ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists) :
     atoms(atoms), dists(dists), contacts(), breaks(0), formations(0),
         incontact(0){
     //~ cout << "Making contact tracker." << endl;
@@ -1198,7 +1198,7 @@ bool jamminglistrot::operator<(const jamminglistrot& other ){
     return false; // consider them equal
 };
 
-jammingtree2::jammingtree2(shared_ptr<Box>box, vector<Vec>& A0, vector<Vec>& B0)
+jammingtree2::jammingtree2(sptr<Box>box, vector<Vec>& A0, vector<Vec>& B0)
             : box(box), jlists(), A(A0), Bs(8, B0){
     for(uint rot=0; rot < 8; rot++){
         for(uint i=0; i<B0.size(); i++){
@@ -1263,7 +1263,7 @@ bool jammingtree2::expand(){
 };
 
 
-jammingtreeBD::jammingtreeBD(shared_ptr<Box> box, vector<Vec>& A, vector<Vec>& B, 
+jammingtreeBD::jammingtreeBD(sptr<Box> box, vector<Vec>& A, vector<Vec>& B, 
                     uint cutoffA, uint cutoffB) :
             jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
     if(cutoffA > cutoffB){jlists.clear();}
@@ -1379,7 +1379,7 @@ flt jammingtree2::straight_distsq(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
 
 #endif
 
-SpheroCylinderDiff SCPair::NearestLoc(Box *box){
+SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
     SpheroCylinderDiff diff;
@@ -1478,7 +1478,7 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     //~ cout << "t2: " << t2 << "  atau2: " << atau1 << endl;
 };
 
-flt SCSpringList::energy(Box *box){
+flt SCSpringList::energy(Box &box){
     flt E = 0;
     for(uint i = 0; i < scs->pairs() - 1; i++){
         atompair &pi = scs->pair(i);

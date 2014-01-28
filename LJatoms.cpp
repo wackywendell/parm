@@ -24,13 +24,16 @@ int main(){
     seed();
     
     // Create the bounding box (sides of length L), and a "vector" of Natoms atoms
-    OriginBox obox(L);
-    atomvec atoms(Natoms, 1);
+    boost::shared_ptr<OriginBox> obox(new OriginBox(L));
+    boost::shared_ptr<atomvec> atomptr(new atomvec(Natoms, 1));
+    atomvec & atoms = *atomptr;
     
     // LJ interaction
     // We'll cut it off at 2.5σ, and have a neighborlist out to 1.4 times that
-    neighborlist nl(&obox, sigcut*sigma, 1.4*(sigcut*sigma));
-    NListed<LJatomcut, LJCutPair> LJ(&nl); // <- this is the interaction
+    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
+    boost::shared_ptr<NListed<LJatomcut, LJCutPair> > LJ(new NListed<LJatomcut, LJCutPair>(nl));
+    // ^ this is the interaction
+    
     // Note that NListed is a class template; its an interaction that
     // takes various structs as template parameters, and turns them into 
     // a neighbor interaction
@@ -43,36 +46,36 @@ int main(){
     // and add them to the LJ interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
         // we track energy to see if things are overlapping
-        flt E0 = LJ.energy(&obox);
-        atoms[i].x = obox.randLoc(); // random location in the box
+        flt E0 = LJ->energy(*obox);
+        atoms[i].x = obox->randLoc(); // random location in the box
         atoms[i].v = randVec(); // from a Gaussian
         atoms[i].f = Vec();
         atoms[i].a = Vec();
         
         // Add it to the Lennard-Jones potential
-        LJ.add(LJatomcut(epsilon, sigma, &atoms[i], sigcut));
+        LJ->add(LJatomcut(epsilon, sigma, &atoms[i], sigcut));
         // force an update the neighborlist, so we can get an accurate energy
-        nl.update_list(true);
+        nl->update_list(true);
         // If we're overlapping too much, try a new location
-        while(LJ.energy(&obox) > E0 + epsilon/2.0){
-            atoms[i].x = obox.randLoc(); // random location in the box
-            nl.update_list(true);
+        while(LJ->energy(*obox) > E0 + epsilon/2.0){
+            atoms[i].x = obox->randLoc(); // random location in the box
+            nl->update_list(true);
         }
     }
     
     // collections take a vector<atomgroup*>, not just an atomgroup.
     // note that atomvec is a subclass of atomgroup
     // So now we make a "vector<atomgroup*>" with just one item in it: our atomvec
-    vector<atomgroup*> allatoms;
-    allatoms.push_back(&atoms);
+    vector<boost::shared_ptr<atomgroup> > allatoms;
+    allatoms.push_back(atomptr);
     
     //Now we make our "collection"
-    collectionVerlet collec = collectionVerlet(&obox, dt, allatoms);
+    collectionVerlet collec = collectionVerlet((boost::shared_ptr<Box>) obox, dt, allatoms);
     
     // This is very important! Otherwise the neighborlist won't update!
-    collec.addTracker(&nl);
+    collec.addTracker(nl);
     // And add the interaction
-    collec.addInteraction(&LJ);
+    collec.addInteraction(LJ);
     
     // subtract off center of mass velocity, and set a total energy
     collec.resetcomv();
@@ -84,20 +87,20 @@ int main(){
     
     ofstream outfile;
     outfile.open("LJatoms.xyz", ios::out);
-    writefile(outfile, atoms, obox);
+    writefile(outfile, atoms, *obox);
     
     //Print out total energy, kinetic energy, and potential energy
     cout << "E: " << collec.energy() << " K: " << collec.kinetic() 
-        << " U: " << LJ.energy(&obox) << "\n";
+        << " U: " << LJ->energy(*obox) << "\n";
     // Run the simulation! And every _ steps, write a frame to the .xyz
     // file and print out the energies again
     for(uint i=0; i<500; i++){
         for(uint j=0; j<1000; j++){
             collec.timestep();
         }
-        writefile(outfile, atoms, obox);
-        cout << "E: " << collec.energy() << " K: " << collec.kinetic()
-            << " U: " << LJ.energy(&obox) << "\n";
+        writefile(outfile, atoms, *obox);
+        cout << "E: " << collec.energy() << " K: " << collec.kinetic() 
+            << " U: " << LJ->energy(*obox) << "\n";
     }
     
     // Unnecessary extra:
@@ -107,7 +110,7 @@ int main(){
     pbcfile.open("LJatoms-pbc.tcl", ios::out);
     pbcfile << "set cell [pbc set {";
     for(uint j=0; j<NDIM; j++){
-        pbcfile << obox.boxshape()[j] << " ";
+        pbcfile << obox->boxshape()[j] << " ";
     }
     pbcfile << "} -all];\n";
     pbcfile << "pbc box -toggle -center origin -color red;\n";

@@ -21,7 +21,7 @@
 %include carrays.i
 %include std_vector.i
 %include std_list.i
-%include std_shared_ptr.i
+%include boost_shared_ptr.i
 %include "vec.hpp"
 
 %apply double { long double } 
@@ -47,6 +47,8 @@
 %shared_ptr(coordConstraint)
 %shared_ptr(fixedForce)
 %shared_ptr(fixedSpring)
+%shared_ptr(SoftWall)
+%shared_ptr(WalledBox2D)
 %shared_ptr(COMSpring)
 %shared_ptr(bondpairs)
 %shared_ptr(angletriples)
@@ -245,11 +247,11 @@ namespace std {
 #endif
 %template(Pair) Numvector<double, 2>;
 %template(VecPair) Nvector<Vec, 2>;
-%template(_atomarray2) array<atom*, 2>;
-%template(_atompair2) array<atom, 2>;
-%template(_idarray2) array<atomid, 2>;
-%template(_atomarray3) array<atom*, 3>;
-%template(_atomarray4) array<atom*, 4>;
+%template(_atomarray2) Array<atom*, 2>;
+%template(_atompair2) Array<atom, 2>;
+%template(_idarray2) Array<atomid, 2>;
+%template(_atomarray3) Array<atom*, 3>;
+%template(_atomarray4) Array<atom*, 4>;
 
 
 namespace std {
@@ -264,7 +266,7 @@ namespace std {
     //%template(constraintvector) vector<shared_ptr<constraint> >;
     //%template(aRK4vector) vector<shared_ptr<atomvecRK4> >;
     #ifdef VEC2D
-    %template(wallvector) vector<shared_ptrSoftWall> >;
+    %template(wallvector) vector<shared_ptr<SoftWall> >;
     #endif
     //%template(idpairvector) vector<idpair>;
     %template(_uintvector) vector<unsigned int>;

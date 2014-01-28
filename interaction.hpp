@@ -9,10 +9,13 @@
 #include <algorithm>
 #include <cassert>
 #include <climits>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 #ifndef INTERACTION_H
 #define INTERACTION_H
+
+#define sptr boost::shared_ptr
+using namespace boost; // required for SWIG for some reason
 
 /***********************************************************************
  * L-J Note:
@@ -215,7 +218,7 @@ class AtomIter{
         AtomIter (atomgroup& g, uint i): i(i), g(g){};
         bool operator!=(const AtomIter& other) const{return i != other.i;};
         atom& operator* () const;
-        const AtomIter& operator++(){++i; return *this;};
+        inline const AtomIter& operator++(){++i; return *this;};
 };
 
 class atomgroup {
@@ -274,7 +277,7 @@ class atomgroup {
         virtual ~atomgroup(){};
 };
 
-atom& AtomIter::operator*() const{return g[i];};
+inline atom& AtomIter::operator*() const{return g[i];};
 
 class atomvec : public virtual atomgroup {
     // this is an atomgroup which actually owns the atoms.
@@ -313,7 +316,7 @@ class metagroup : public atomgroup {
         metagroup(){};
         //metagroup(vector<atom*> atoms) : atoms(atoms){};
         metagroup(vector<atomgroup*>);
-        metagroup(vector<shared_ptr<atomgroup> >);
+        metagroup(vector<sptr<atomgroup> >);
         inline atom& operator[](cuint n){return *atoms[n];};
         inline atom& operator[](cuint n) const{return *atoms[n];};
         inline atom* get(cuint n){if(n>=size()) return NULL; return (atoms[n]);};
@@ -884,7 +887,7 @@ class neighborlist : public statetracker{
     // are neighbors, and the begin(n), end(n) allow for iterating over
     // the neighbor lists
     protected:
-        shared_ptr<Box> box;
+        sptr<Box> box;
         flt critdist, skinradius;
         metagroup atoms;
         vector<idpair> curpairs;
@@ -896,8 +899,8 @@ class neighborlist : public statetracker{
         //~ bool checkneighbors(const uint n, const uint m) const;
         // this is a full check
     public:
-        neighborlist(shared_ptr<Box> box, const flt innerradius, const flt outerradius);
-        neighborlist(shared_ptr<Box> box, atomgroup &vec, const flt innerradius, 
+        neighborlist(sptr<Box> box, const flt innerradius, const flt outerradius);
+        neighborlist(sptr<Box> box, atomgroup &vec, const flt innerradius, 
         const flt outerradius, pairlist ignore = pairlist());
         void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
         bool update_list(bool force = true);
@@ -932,13 +935,13 @@ class neighborlist : public statetracker{
         ~neighborlist(){};
 };
 
-inline neighborlist* neighborlistL(shared_ptr<Box> box, const double innerradius, const double outerradius){
+inline neighborlist* neighborlistL(sptr<Box> box, const double innerradius, const double outerradius){
     return new neighborlist(box, innerradius, outerradius);
 };
 
 class ContactTracker : public statetracker{
     protected:
-        shared_ptr<atomgroup> atoms;
+        sptr<atomgroup> atoms;
         vector<flt> dists;
         vector<vector<bool> > contacts;
         
@@ -946,7 +949,7 @@ class ContactTracker : public statetracker{
         unsigned long long formations;
         unsigned long long incontact;
     public:
-        ContactTracker(shared_ptr<Box> box, shared_ptr<atomgroup> atoms, vector<flt> dists);
+        ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists);
         void update(Box &box);
         
         unsigned long long broken(){return breaks;};
@@ -954,7 +957,7 @@ class ContactTracker : public statetracker{
         unsigned long long number(){return incontact;};
 };
 
-inline ContactTracker* ContactTrackerD(shared_ptr<Box> box, shared_ptr<atomgroup> atoms, vector<double> dists){
+inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<atomgroup> atoms, vector<double> dists){
     vector<flt> newdists = vector<flt>();
     for(uint i=0; i<dists.size(); i++){
         newdists.push_back(dists[i]);
@@ -1044,10 +1047,10 @@ class NListed : public interaction {
     protected:
         vector<A> atoms;
         vector<P> pairs;
-        shared_ptr<neighborlist> neighbors;
+        sptr<neighborlist> neighbors;
         uint lastupdate;
     public:
-        NListed(shared_ptr<neighborlist> neighbors) : neighbors(neighbors){};
+        NListed(sptr<neighborlist> neighbors) : neighbors(neighbors){};
         inline void add(A atm){
             atomid id = neighbors->add(atm.pointer());
             A a = A(id, atm);
@@ -1068,7 +1071,7 @@ class NListed : public interaction {
         flt setForcesGetPressure(Box &box);
         inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
-        inline shared_ptr<neighborlist> nlist(){return neighbors;};
+        inline sptr<neighborlist> nlist(){return neighbors;};
         //~ flt energy_test(flt dist);
         //~ flt force_test(flt dist);
         ~NListed(){};
@@ -1079,14 +1082,14 @@ class NListedVirial : public interactionpairsx {
     private:
         NListed<A,P> nlisted;
     public:
-        NListedVirial(shared_ptr<neighborlist> neighbors) : nlisted(neighbors){};
+        NListedVirial(sptr<neighborlist> neighbors) : nlisted(neighbors){};
         void setForces(Box &box){nlisted.setForces(box);};
         void setForces(Box &box, fpairxFunct*);
         virtual inline flt setForcesGetPressure(Box &box){return nlisted.setForcesGetPressure(box);};
         virtual flt setForcesGetEnergy(Box &box);
         virtual inline flt energy(Box &box){return nlisted.energy(box);};
         virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
-        inline shared_ptr<neighborlist> nlist(){return nlisted.nlist();};
+        inline sptr<neighborlist> nlist(){return nlisted.nlist();};
 };
 
 struct Charged : public atomid {
@@ -1144,8 +1147,8 @@ struct LJCutPair {
               (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
-    inline flt energy(Box *box){return inter.energy(box->diff(atom1.x(), atom2.x()));};
-    inline Vec forces(Box *box){return inter.forces(box->diff(atom1.x(), atom2.x()));};
+    inline flt energy(Box &box){return inter.energy(box.diff(atom1.x(), atom2.x()));};
+    inline Vec forces(Box &box){return inter.forces(box.diff(atom1.x(), atom2.x()));};
 };
 
 struct LJAttractPair {
@@ -1846,8 +1849,8 @@ template <class A, class P>
 flt NListedVirial<A, P>::setForcesGetEnergy(Box &box){
     nlisted.update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt E = 0;
-    typename vector<P>::iterator it;
-    for(it = NListed<A, P>::pairs.begin(); it != NListed<A, P>::pairs.end(); it++){
+    vector<P> & pairs = nlisted.pairiter();
+    for(typename vector<P>::iterator it = pairs.begin(); it != pairs.end(); it++){
         EnergyForce EF = it->EnergyForces(box);
         it->atom1.f() += EF.f;
         it->atom2.f() -= EF.f;
@@ -1881,8 +1884,8 @@ template <class A, class P>
 void NListedVirial<A, P>::setForces(Box &box, fpairxFunct* funct){
     nlisted.update_pairs(); // make sure the LJpairs match the neighbor list ones
     forcepairx myfpair;
-    //typename vector<P>::iterator it;
-    for(auto it = nlisted.pairiter().begin(); it != nlisted.pairiter().end(); it++){
+    typename vector<P>::iterator it;
+    for(it = nlisted.pairiter().begin(); it != nlisted.pairiter().end(); it++){
         it->fill(box, myfpair);
         //~ assert(!isnan(myfpair.fij[0]));
         funct->run(&myfpair);
@@ -2085,12 +2088,12 @@ class jamminglist {
 
 class jammingtree {
     private:
-        shared_ptr<Box> box;
+        sptr<Box> box;
         list<jamminglist> jlists;
         vector<Vec> A;
         vector<Vec> B;
     public:
-        jammingtree(shared_ptr<Box> box, vector<Vec>& A, vector<Vec>& B)
+        jammingtree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
             : box(box), jlists(), A(A), B(B) {
             jlists.push_back(jamminglist());
             assert(A.size() <= B.size());
@@ -2172,14 +2175,14 @@ class jamminglistrot : public jamminglist {
 // Includes rotations, flips, and translations.
 class jammingtree2 {
     protected:
-        shared_ptr<Box> box;
+        sptr<Box> box;
         list<jamminglistrot> jlists;
         vector<Vec> A;
         vector<vector<Vec> > Bs;
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        jammingtree2(shared_ptr<Box>box, vector<Vec>& A, vector<Vec>& B);
+        jammingtree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
         flt distance(jamminglistrot& jlist);
         list<jamminglistrot> expand(jamminglistrot curjlist);
         
@@ -2200,8 +2203,8 @@ class jammingtree2 {
             };
             return retval;
         }
-        static Vec straight_diff(Box *bx, vector<Vec>& A, vector<Vec>& B);
-        static flt straight_distsq(Box *bx, vector<Vec>& A, vector<Vec>& B);
+        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
         
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};
@@ -2259,9 +2262,9 @@ class jammingtreeBD : public jammingtree2 {
     protected:
         uint cutoff1,cutoff2;
     public:
-        jammingtreeBD(shared_ptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
             jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        jammingtreeBD(shared_ptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
+        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
                     uint cutoffA, uint cutoffB);// :
             //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
         

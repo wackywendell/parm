@@ -1,7 +1,7 @@
 #include "collection.hpp"
 
-collection::collection(shared_ptr<Box> box, vector<shared_ptr<atomgroup> > gs, vector<shared_ptr<interaction> > is,
-              vector<shared_ptr<statetracker> > ts, vector<shared_ptr<constraint> > cs)
+collection::collection(sptr<Box> box, vector<sptr<atomgroup> > gs, vector<sptr<interaction> > is,
+              vector<sptr<statetracker> > ts, vector<sptr<constraint> > cs)
         : box(box), groups(gs), interactions(is), trackers(ts), constraints(cs),
                 atoms(gs), E0(0){
     update_trackers();
@@ -11,10 +11,11 @@ collection::collection(shared_ptr<Box> box, vector<shared_ptr<atomgroup> > gs, v
 }
 
 void collection::scaleVs(flt scaleby){
-    for(auto git  : groups){
-        atomgroup &g = *git;
-        for(auto a : g){
-            a.v *= scaleby;
+    vector<sptr<atomgroup> >::iterator git;
+    for(git = groups.begin(); git != groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.size(); i++){
+            g[i].v *= scaleby;
         }
     }
 }
@@ -34,28 +35,32 @@ void collection::scaleVelocitiesE(flt E){
 }
 
 void collection::update_trackers(){
-    for(auto t : trackers){
-        t->update(*box);
+    vector<sptr<statetracker> >::iterator git;
+    for(git = trackers.begin(); git<trackers.end(); git++){
+        (*git)->update(*box);
     }
 }
 
 void collection::update_constraints(){
-    for(auto c : constraints){
-        c->apply(*box);
+    vector<sptr<constraint> >::iterator git;
+    for(git = constraints.begin(); git<constraints.end(); git++){
+        (*git)->apply(*box);
     }
 }
 
 flt collection::kinetic(){
     flt E=0;
-    for(auto group : groups){
-        E+= group->kinetic();
+    vector<sptr<atomgroup> >::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        E+= group.kinetic();
     }
     return E;
 }
 
 flt collection::virial(){
     flt E = 0;
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         E += (*it)->pressure(*box);
     }
@@ -66,11 +71,11 @@ flt collection::pressure(){
     flt V = box->V();
     //~ if(isnanflt(V) or isinf(V)) return NAN;
     //~ int ndof = 0, nc = 0;
-    //~ vector<shared_ptr<constraint> >::iterator cit;
+    //~ vector<sptr<constraint> >::iterator cit;
     //~ for(cit = constraints.begin(); cit<constraints.end(); cit++){
         //~ nc += (*cit)->ndof();
     //~ }
-    //~ vector<shared_ptr<atomgroup> >::iterator git;
+    //~ vector<sptr<atomgroup> >::iterator git;
     //~ for(git = groups.begin(); git<groups.end(); git++){
         //~ atomgroup &group = **git;
         //~ ndof += 3*(group.size());
@@ -79,7 +84,7 @@ flt collection::pressure(){
     
     flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;
     //flt E = (ndof - nc) * temp();
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         E += (*it)->pressure(*box);
         assert(not isnanflt(E));
@@ -89,7 +94,7 @@ flt collection::pressure(){
 
 flt collection::potentialenergy(){
     flt E=0;
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         interaction &inter = **it;
         E += inter.energy(*box);
@@ -107,11 +112,15 @@ flt collection::energy(){
 
 flt collection::dof(){
     int ndof = 0;
-    for(auto c : constraints){
-        ndof -= c->ndof();
+    vector<sptr<constraint> >::iterator cit;
+    for(cit = constraints.begin(); cit<constraints.end(); cit++){
+        ndof -= (*cit)->ndof();
     }
-    for(auto group : groups){
-        ndof += NDIM*(group->size());
+    
+    vector<sptr<atomgroup> >::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        ndof += NDIM*(group.size());
     }
     
     return ndof;
@@ -122,10 +131,13 @@ flt collection::temp(bool minuscomv){
     flt totkinetic = 0;
     Vec v = Vec();
     if(minuscomv) v = comv();
-    for(auto group : groups){
-        totkinetic += group->kinetic(v);
+    
+    vector<sptr<atomgroup> >::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &group = **git;
+        totkinetic += group.kinetic(v);
         //~ cout << "group K: " << group.kinetic(v) << ", totatoms: " << group.size() << "\n";
-        totatoms += group->size();
+        totatoms += group.size();
     }
     
     int ndof = (int) dof();
@@ -136,7 +148,7 @@ flt collection::temp(bool minuscomv){
 }
 
 //~ Vec collection::com(){
-    //~ vector<shared_ptr<atomgroup> >::iterator git;
+    //~ vector<sptr<atomgroup> >::iterator git;
     //~ flt mass = 0;
     //~ Vec totcom = Vec();
     //~ for(git = groups.begin(); git<groups.end(); git++){
@@ -151,7 +163,7 @@ flt collection::temp(bool minuscomv){
 //~ }
 //~ 
 //~ Vec collection::comv(){
-    //~ vector<shared_ptr<atomgroup> >::iterator git;
+    //~ vector<sptr<atomgroup> >::iterator git;
     //~ flt mass = 0;
     //~ Vec totcom = Vec();
     //~ for(git = groups.begin(); git<groups.end(); git++){
@@ -166,31 +178,34 @@ flt collection::temp(bool minuscomv){
 //~ }
 
 flt collection::gyradius(){
+    vector<sptr<atomgroup> >::iterator git;
     Vec avgr = Vec();
     flt N = 0;
-    for(auto group : groups){
-        for(auto a : *group){
-            avgr += a.x;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.size(); i++){
+            avgr += g[i].x;
             N++;
         }
     }
     avgr /= N; // now avgr is the average location, akin to c.o.m.
     flt Rgsq = 0;
-    for(auto group : groups){
-        for(auto a : *group) Rgsq += (a.x - avgr).sq();
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &g = **git;
+        for(uint i = 0; i<g.size(); i++) Rgsq += (g[i].x - avgr).sq();
     }
     
     return sqrtflt(Rgsq/N);
 }
 
 void collection::setForces(bool seta){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
         group.resetForces();
     }
     
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         interaction &inter = **it;
         inter.setForces(*box);
@@ -206,14 +221,14 @@ void collection::setForces(bool seta){
 }
 
 flt collection::setForcesGetPressure(bool seta){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
         group.resetForces();
     }
     
     flt p=0;
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         interaction &inter = **it;
         p += inter.setForcesGetPressure(*box);
@@ -229,9 +244,9 @@ flt collection::setForcesGetPressure(bool seta){
     return p;
 }
 
-collectionSol::collectionSol(shared_ptr<Box> box, const flt dt, const flt damp,const flt T,
-        vector<shared_ptr<atomgroup> > groups,vector<shared_ptr<interaction> > interactions,
-        vector<shared_ptr<statetracker> > trackers, vector<shared_ptr<constraint> > constraints) :
+collectionSol::collectionSol(sptr<Box> box, const flt dt, const flt damp,const flt T,
+        vector<sptr<atomgroup> > groups,vector<sptr<interaction> > interactions,
+        vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
             collection(box, groups, interactions, trackers, constraints), 
             dt(dt), damping(damp), desT(T){
     setCs();
@@ -278,7 +293,7 @@ void collectionSol::setCs(){
 }
 
 void collectionSol::timestep(){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     // From Allen and Tildesley 263, Verlet-like, our equations are
     // r(t+dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + drG
     // v(t+dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t+dt) + dvG
@@ -327,9 +342,9 @@ void collectionSol::timestep(){
     update_trackers();
 };
 
-collectionSolHT::collectionSolHT(shared_ptr<Box> box, const flt dt, const flt damp,const flt T,
-        vector<shared_ptr<atomgroup> > groups,vector<shared_ptr<interaction> > interactions,
-        vector<shared_ptr<statetracker> > trackers, vector<shared_ptr<constraint> > constraints) :
+collectionSolHT::collectionSolHT(sptr<Box> box, const flt dt, const flt damp,const flt T,
+        vector<sptr<atomgroup> > groups,vector<sptr<interaction> > interactions,
+        vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
             collection(box, groups, interactions, trackers, constraints), 
             dt(dt), damping(damp), desT(T), gauss(sqrtflt(2.0*desT*damping/dt)){
     setGauss();
@@ -349,7 +364,7 @@ void collectionSolHT::timestep(){
     // includes the random term / damping term.
     // atom.f includes only the forces from other particles.
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     flt keepv = 1-(damping*dt);
     flt xpartfromv = dt - (dt*dt*damping/2);
     
@@ -383,7 +398,7 @@ void collectionSolHT::timestep(){
 }
 
 void collectionVerlet::timestep(){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -411,7 +426,7 @@ void collectionVerlet::timestep(){
 void collectionOverdamped::timestep(){
     setForces(false);
     update_constraints();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -433,7 +448,7 @@ void collectionConjGradient::timestep(){
     // and while its called 'a', its actually 'v'
     setForces(false);
     update_constraints();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -465,7 +480,7 @@ void collectionConjGradient::timestep(){
 void collectionConjGradient::timestepNewton(){
     setForces(false);
     update_constraints();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -480,7 +495,7 @@ void collectionConjGradient::timestepNewton(){
 }
 
 void collectionConjGradient::reset(){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -492,7 +507,7 @@ void collectionConjGradient::reset(){
 flt collectionConjGradientBox::kinetic(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -510,7 +525,7 @@ void collectionConjGradientBox::reset(){
     FV = 0;
     lastFV = 0;
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -535,7 +550,7 @@ void collectionConjGradientBox::resize(flt V){
     flt Vfac = sqrtflt(V/oldV);
     #endif
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -581,7 +596,7 @@ void collectionConjGradientBox::timestep(){
     flt Vfac = sqrtflt(newV/oldV);
     #endif
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -653,7 +668,7 @@ void collectionConjGradientBox::timestepBox(){
     flt Vfac = sqrtflt(newV/oldV);
     #endif
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -697,7 +712,7 @@ void collectionConjGradientBox::timestepAtoms(){
     FV = 0;
     lastFV = 0;
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -721,11 +736,11 @@ void collectionConjGradientBox::timestepAtoms(){
     return;
 }
 
-collectionNLCG::collectionNLCG(shared_ptr<OriginBox> box, const flt dt, const flt P0,
-                vector<shared_ptr<atomgroup> > groups,
-                vector<shared_ptr<interaction> > interactions,
-                vector<shared_ptr<statetracker> > trackers,
-                vector<shared_ptr<constraint> > constraints,
+collectionNLCG::collectionNLCG(sptr<OriginBox> box, const flt dt, const flt P0,
+                vector<sptr<atomgroup> > groups,
+                vector<sptr<interaction> > interactions,
+                vector<sptr<statetracker> > trackers,
+                vector<sptr<constraint> > constraints,
                 const flt kappa, const flt kmax,
                 const flt secmax, const flt seceps) :
             collection(box, groups, interactions, trackers, 
@@ -738,7 +753,7 @@ collectionNLCG::collectionNLCG(shared_ptr<OriginBox> box, const flt dt, const fl
 void collectionNLCG::reset(){
     k = 0;
     setForces(true, true);
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -764,7 +779,7 @@ void collectionNLCG::setForces(bool seta, bool setV){
         collection::setForces(false);
     }
     if(seta){
-        vector<shared_ptr<atomgroup> >::iterator git;
+        vector<sptr<atomgroup> >::iterator git;
         for(git = groups.begin(); git<groups.end(); git++){
             atomgroup &m = **git;
             for(uint i=0; i<m.size(); i++){
@@ -788,7 +803,7 @@ void collectionNLCG::resizedl(flt dl){
     
     flt Vfac = exp(dl / kappa);
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -811,7 +826,7 @@ void collectionNLCG::resize(flt V){
     flt Lfac = sqrtflt(V/oldV);
     #endif
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -826,7 +841,7 @@ void collectionNLCG::resize(flt V){
 flt collectionNLCG::kinetic(){
     flt E=0;
     flt Lfac = exp(vl / (kappa*NDIM));
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -843,7 +858,7 @@ flt collectionNLCG::pressure(){
     flt V = box->V();
     
     flt E = 0;
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         E += (*it)->pressure(*box);
         assert(not isnanflt(E));
@@ -855,7 +870,7 @@ void collectionNLCG::stepx(flt dx){
     OriginBox& obox = (OriginBox&) *box;
     flt Lfac = exp(dx * vl / (kappa*NDIM));
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -882,7 +897,7 @@ flt collectionNLCG::getLsq(){
 
 flt collectionNLCG::fdotf(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -895,7 +910,7 @@ flt collectionNLCG::fdotf(){
 
 flt collectionNLCG::fdota(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -908,7 +923,7 @@ flt collectionNLCG::fdota(){
 
 flt collectionNLCG::fdotv(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -921,7 +936,7 @@ flt collectionNLCG::fdotv(){
 
 flt collectionNLCG::vdotv(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -950,7 +965,7 @@ void collectionNLCG::timestep(){
     // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
     // and while its called 'a', its actually 'v'
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     
     flt V0 = box->V();
     
@@ -1042,7 +1057,7 @@ void collectionNLCG::timestep(){
 void collectionNLCG::descend(){
     setForces(false, true);
     update_constraints();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1057,15 +1072,15 @@ void collectionNLCG::descend(){
     update_trackers();
 }
 
-collectionNLCGV::collectionNLCGV(shared_ptr<Box> box, const flt dt,
-                vector<shared_ptr<atomgroup> > groups,
-                vector<shared_ptr<interaction> > interactions,
-                vector<shared_ptr<statetracker> > trackers,
-                vector<shared_ptr<constraint> > constraints,
+collectionNLCGV::collectionNLCGV(sptr<Box> box, const flt dt,
+                vector<sptr<atomgroup> > groups,
+                vector<sptr<interaction> > interactions,
+                vector<sptr<statetracker> > trackers,
+                vector<sptr<constraint> > constraints,
                 const flt kmax,
                 const uint secmax, const flt seceps) :
             collection(box, groups, interactions, trackers, 
-                constraints), dt(dt), secmax(secmax), seceps(seceps),
+                constraints), dt(dt), seceps(seceps), secmax(secmax),
                 alphamax(0), afrac(0), dxmax(0), stepmax(0),
                 kmax(kmax), Knew(0), k(0), vl(0), fl(0), al(0), 
                 alpha(0), beta(0), betaused(0), dxsum(0), alphavmax(0),
@@ -1073,7 +1088,7 @@ collectionNLCGV::collectionNLCGV(shared_ptr<Box> box, const flt dt,
 };
 
 void collectionNLCGV::stepx(flt dx){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1084,7 +1099,7 @@ void collectionNLCGV::stepx(flt dx){
 
 flt collectionNLCGV::fdotf(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1097,7 +1112,7 @@ flt collectionNLCGV::fdotf(){
 
 flt collectionNLCGV::fdota(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1110,7 +1125,7 @@ flt collectionNLCGV::fdota(){
 
 flt collectionNLCGV::fdotv(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1130,7 +1145,7 @@ flt collectionNLCGV::fdotv(){
 
 flt collectionNLCGV::vdotv(){
     flt returnvalue = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1144,7 +1159,7 @@ flt collectionNLCGV::vdotv(){
 void collectionNLCGV::reset(){
     k = 0;
     setForces(false);
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1157,7 +1172,7 @@ void collectionNLCGV::reset(){
 void collectionNLCGV::descend(){
     setForces(false);
     update_constraints();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1174,7 +1189,7 @@ flt collectionNLCGV::pressure(){
     flt V = box->V();
     
     flt E = 0;
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
         E += (*it)->pressure(*box);
         assert(not isnanflt(E));
@@ -1201,7 +1216,7 @@ void collectionNLCGV::timestep(){
     // Where m[i].a = -f', m[i].v = d, σ0 = dt
     
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     stepx(dt);
     setForces(false);
     update_constraints();
@@ -1368,7 +1383,7 @@ void collectionNoseHoover::timestep(){
     flt Kt = 2*kinetic();
     
     //Step 1: set atom.x = r(t+dt)
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1431,7 +1446,7 @@ flt collectionNoseHoover::Hamiltonian(){
 
 flt collectionGaussianT::setxi(){
     flt xiNumerator = 0, xiDenominator = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1451,7 +1466,7 @@ void collectionGaussianT::setForces(bool seta, bool shouldwesetxi){
 
 void collectionGaussianT::timestep(){
     //~ flt oldT = temp();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1492,7 +1507,7 @@ void collectionGaussianT::timestep(){
 
 
 void collectionGear3A::timestep(){
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
@@ -1524,7 +1539,7 @@ void collectionGear4A::timestep(){
     uint n=0;
     //~ cout << "Gear 4A timestep, ncorrec = " << ncorrec << "\n";
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         //~ cout << "Gear 4A timestep loop 1, g.size() = " << g.size() << "\n";
@@ -1568,7 +1583,7 @@ void collectionGear5A::timestep(){
     flt dt2 = dt*dt/2;
     flt dt3 = dt*dt2/3;
     flt dt4 = dt*dt3/4;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1617,7 +1632,7 @@ void collectionGear6A::timestep(){
     flt dt5 = dt*dt4/5;
     
     uint n=0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1725,7 +1740,7 @@ void collectionRK4::timestep(){
     //~ Vec xold = a0.x, vold = a0.v;
     
     
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         //atomgroup *agroup = *git;
         //atomvecRK4 &m = *aRK;
@@ -1829,7 +1844,7 @@ void collectionRK4::timestep(){
 flt collectionGear4NPH::kinetic(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1846,7 +1861,7 @@ flt collectionGear4NPH::temp(bool minuscomv){
     Vec cv = Vec();
     if(minuscomv) cv = comv();
     flt Vfac = dV/box->V()/flt(NDIM);
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;for(uint i=0; i<g.size(); i++){
             Vec v = g[i].v - cv - (g[i].x * Vfac);
@@ -1865,7 +1880,7 @@ void collectionGear4NPH::timestep(){
     OriginBox& obox = (OriginBox&) *box;
     
     /// Prediction
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -1932,11 +1947,11 @@ void collectionGear4NPH::timestep(){
     return;
 }
 
-vector<shared_ptr<interaction> > collectionGear4NPT::tointerpair(vector<shared_ptr<interactionpairsx> > &v){
-    vector<shared_ptr<interaction> > newv = vector<shared_ptr<interaction> >();
-    vector<shared_ptr<interactionpairsx> >::iterator it;
+vector<sptr<interaction> > collectionGear4NPT::tointerpair(vector<sptr<interactionpairsx> > &v){
+    vector<sptr<interaction> > newv = vector<sptr<interaction> >();
+    vector<sptr<interactionpairsx> >::iterator it;
     for(it = v.begin(); it<v.end(); it++){
-        newv.push_back((shared_ptr<interaction>) *it);
+        newv.push_back((sptr<interaction>) *it);
     }
     return newv;
 }
@@ -1952,15 +1967,15 @@ void xrpsummer::run(forcepairx *fpairx){
 
 void collectionGear4NPT::setForces(bool seta){
     xrpsums.reset();
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &group = **git;
         group.resetForces();
     }
     
-    vector<shared_ptr<interaction> >::iterator it;
+    vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
-        shared_ptr<interactionpairsx> inter = dynamic_pointer_cast<interactionpairsx>(*it);
+        sptr<interactionpairsx> inter = boost::dynamic_pointer_cast<interactionpairsx>(*it);
         inter->setForces(*box, &xrpsums);
     }
     if(!seta) return;
@@ -1980,7 +1995,7 @@ void collectionGear4NPT::timestep(){
     const flt c1 = dt, c2 = dt*dt/2, c3 = dt*dt*dt/6;
     
     /// Prediction
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &g = **git;
         for(uint i=0; i<g.size(); i++){
@@ -2055,7 +2070,7 @@ void collectionGear4NPT::timestep(){
 
 void collectionVerletNPT::resetvhalf(){
     uint Natoms = 0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         Natoms += (*git)->size();
     };
@@ -2081,7 +2096,7 @@ void collectionVerletNPT::timestep(){
     flt Ktot2 = 0, lastKtot2 = 0;
     
     uint n=0;
-    vector<shared_ptr<atomgroup> >::iterator git;
+    vector<sptr<atomgroup> >::iterator git;
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){

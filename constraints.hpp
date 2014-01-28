@@ -218,11 +218,11 @@ class linearConstraint : public constraint {
 
 class NPHGaussianConstraint : public constraint {
     private:
-        shared_ptr<OriginBox> box;
+        sptr<OriginBox> box;
         flt ddV, dV; // that's dV²/dt², dV/dt
         vector<atomgroup*> groups;
     public:
-        NPHGaussianConstraint(shared_ptr<OriginBox> box, vector<atomgroup*> groups) : 
+        NPHGaussianConstraint(sptr<OriginBox> box, vector<atomgroup*> groups) : 
                 box(box), ddV(0), dV(0), groups(groups){};
         int ndof(){return 0;};
         void apply(Box &box2){
