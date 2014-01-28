@@ -245,24 +245,27 @@ namespace std {
 #endif
 %template(Pair) Numvector<double, 2>;
 %template(VecPair) Nvector<Vec, 2>;
-%template(_atomarray2) Array<atom*, 2>;
-%template(_atompair2) Array<atom, 2>;
-%template(_idarray2) Array<atomid, 2>;
-%template(_atomarray3) Array<atom*, 3>;
-%template(_atomarray4) Array<atom*, 4>;
+%template(_atomarray2) array<atom*, 2>;
+%template(_atompair2) array<atom, 2>;
+%template(_idarray2) array<atomid, 2>;
+%template(_atomarray3) array<atom*, 3>;
+%template(_atomarray4) array<atom*, 4>;
 
 
 namespace std {
     %template(fvector) vector<float>;
     %template(dvector) vector<double>;
     %template(ldvector) vector<long double>;
-    //%template(avector) vector<shared_ptr<atomgroup> >;
+    %template(avector) vector<atomgroup* >;
     %template(aptrvector) vector<atom*>;
     //%template(ivector) vector<shared_ptr<interaction> >;
     //%template(ifxvector) vector<shared_ptr<interactionpairsx> >;
     //%template(tvector) vector<shared_ptr<statetracker> >;
     //%template(constraintvector) vector<shared_ptr<constraint> >;
     //%template(aRK4vector) vector<shared_ptr<atomvecRK4> >;
+    #ifdef VEC2D
+    %template(wallvector) vector<shared_ptrSoftWall> >;
+    #endif
     //%template(idpairvector) vector<idpair>;
     %template(_uintvector) vector<unsigned int>;
 }

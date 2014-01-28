@@ -242,7 +242,7 @@ class XYZreader:
         return self._size
         
 class Frame:
-    dtype = np.float16
+    dtype = np.float64
     
     def __init__(self, locs, t=None): #, indx=None):
         self.t = t

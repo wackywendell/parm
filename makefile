@@ -73,3 +73,34 @@ _sim2dlong.so: sim_wrap2dlong.o
 	
 _sim3dlong.so: sim_wrap3dlong.o
 	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -shared sim_wrap3dlong.o -o _sim3dlong.so $(LIB)
+
+VECOPTS := 2D 3D
+
+define VEC_TARGET_RULE
+vecrand$(1).o: vec.hpp vecrand.hpp vecrand.cpp
+	$(CXX) $(CCOPTS) -DVEC$(1) -c vecrand.cpp -o vecrand$(1).o
+
+interaction$(1).o: vec.hpp vecrand.hpp interaction.hpp interaction.cpp
+	$(CXX) $(CCOPTS) -DVEC$(1) -c interaction.cpp -o interaction$(1).o
+
+constraints$(1).o: vec.hpp vecrand.hpp interaction.hpp constraints.hpp constraints.cpp
+	$(CXX) $(CCOPTS) -DVEC$(1) -c constraints.cpp -o constraints$(1).o
+		
+collection$(1).o: vec.hpp vecrand.hpp interaction.hpp collection.hpp constraints.hpp collection.cpp
+	$(CXX) $(CCOPTS) -DVEC$(1) -c collection.cpp -o collection$(1).o
+
+libsim$(1).so: vecrand$(1).o interaction$(1).o constraints$(1).o collection$(1).o 
+	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o libsim$(1).so vecrand$(1).o interaction$(1).o constraints$(1).o collection$(1).o
+
+endef
+
+$(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
+
+LJatoms: libsim3D.so LJatoms.cpp
+	$(CXX) $(CCOPTS) -DVEC3D LJatoms.cpp -L. -lsim3D -Wl,-rpath=. -o LJatoms
+
+LJatoms2D: libsim2D.so LJatoms.cpp
+	$(CXX) $(CCOPTS) -DVEC2D LJatoms.cpp -L. -lsim2D -Wl,-rpath=. -o LJatoms2D
+
+basicsim.zip: collection.cpp  collection.hpp  constraints.cpp  constraints.hpp  interaction.cpp  interaction.hpp  LJatoms.cpp  makefile  vec.hpp  vecrand.cpp  vecrand.hpp .vmdrc
+	zip -r basicsim.zip vec.hpp {vecrand,interaction,collection,constraints}.{h,c}pp LJatoms.cpp makefile .vmdrc
