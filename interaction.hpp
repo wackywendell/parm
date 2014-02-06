@@ -939,75 +939,6 @@ inline neighborlist* neighborlistL(sptr<Box> box, const double innerradius, cons
     return new neighborlist(box, innerradius, outerradius);
 };
 
-class ContactTracker : public statetracker{
-    protected:
-        sptr<atomgroup> atoms;
-        vector<flt> dists;
-        vector<vector<bool> > contacts;
-        
-        unsigned long long breaks;
-        unsigned long long formations;
-        unsigned long long incontact;
-    public:
-        ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists);
-        void update(Box &box);
-        
-        unsigned long long broken(){return breaks;};
-        unsigned long long formed(){return formations;};
-        unsigned long long number(){return incontact;};
-};
-
-inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<atomgroup> atoms, vector<double> dists){
-    vector<flt> newdists = vector<flt>();
-    for(uint i=0; i<dists.size(); i++){
-        newdists.push_back(dists[i]);
-    }
-    return new ContactTracker(box, atoms, newdists);
-}
-
-class EnergyTracker : public statetracker{
-    protected:
-        atomgroup *atoms;
-        vector<interaction*> interactions;
-        
-        uint N;
-        uint nskip, nskipped;
-        flt U0;
-        flt Es, Us, Ks;
-        flt Esq, Usq, Ksq;
-    public:
-        EnergyTracker(atomgroup *atoms, 
-            vector<interaction*> interactions, uint nskip=1)
-             : atoms(atoms),
-            interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
-            U0(0),Es(0),Us(0),Ks(0), Esq(0), Usq(0), Ksq(0){};
-        void update(Box &box);
-        void reset(){
-            nskipped=0;
-            N=0; Es=0; Us=0; Ks=0;
-            Esq=0; Usq=0; Ksq=0;
-        };
-        void setU0(flt newU0){
-            U0 = newU0;
-            reset();
-        };
-        void setU0(Box &box);
-        flt getU0(){return U0;};
-            
-        flt E(){return Es/((flt) N);};
-        flt U(){return Us/((flt) N);};
-        flt K(){return Ks/((flt) N);};
-        flt Estd(){return sqrt(Esq/N -Es*Es/N/N);};
-        flt Kstd(){return sqrt(Ksq/N -Ks*Ks/N/N);};
-        flt Ustd(){return sqrt(Usq/N -Us*Us/N/N);};
-        flt Esqmean(){return Esq/N;};
-        flt Ksqmean(){return Ksq/N;};
-        flt Usqmean(){return Usq/N;};
-        //~ flt Ustd(){return sqrt((Usq -(U*U)) / ((flt) N));};
-        //~ flt Kstd(){return sqrt((Ksq -(K*K)) / ((flt) N));};
-        uint n(){return N;};
-};
-
 template <class A, class P>
 class SimpleListed : public interaction {
     protected:
@@ -1131,6 +1062,7 @@ struct LJpair {
 ////////////////////////////////////////////////////////////////////////
 // Purely attractive LJ, with ε = √(ε₁ ε₂) and σ = (σ₁+σ₂)/2
 // cutoff at some sigcut
+// Minimum at σ
 struct LJatomcut : public LJatom {
     flt sigcut; // sigma units
     LJatomcut(flt epsilon, flt sigma, atom* a, flt cut) : 

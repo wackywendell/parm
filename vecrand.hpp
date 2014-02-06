@@ -39,8 +39,8 @@ inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
 inline flt remflt(flt n, flt m){return remainderl(n,m);};
 #else
 typedef double flt;
-inline const bool isinfflt(double n){return std::isinf(n);};
-inline const bool isnanflt(double n){return std::isnan(n);};
+inline bool isinfflt(double n){return std::isinf(n);};
+inline bool isnanflt(double n){return std::isnan(n);};
 inline flt powflt(flt n, flt m){return pow(n,m);};
 inline flt sqrtflt(flt n){return sqrt(n);};
 inline flt cbrtflt(flt n){return cbrt(n);};

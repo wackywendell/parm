@@ -43,6 +43,7 @@
 %shared_ptr(neighborlist)
 %shared_ptr(ContactTracker)
 %shared_ptr(EnergyTracker)
+%shared_ptr(RsqTracker)
 %shared_ptr(SCatomvec)
 %shared_ptr(coordConstraint)
 %shared_ptr(fixedForce)
@@ -83,6 +84,7 @@
 #include "interaction.hpp"
 #include "interaction.cpp"
 #include "constraints.hpp"
+#include "constraints.cpp"
 #include "collection.hpp"
 #include "collection.cpp"
 static int myErr = 0;
@@ -256,15 +258,17 @@ namespace std {
 
 namespace std {
     %template(fvector) vector<float>;
+    %template(_ffvector) vector<vector<float> >;
     %template(dvector) vector<double>;
+    %template(_ddvector) vector<vector<double> >;
     %template(ldvector) vector<long double>;
-    %template(avector) vector<atomgroup* >;
-    %template(aptrvector) vector<atom*>;
-    //%template(ivector) vector<shared_ptr<interaction> >;
-    //%template(ifxvector) vector<shared_ptr<interactionpairsx> >;
-    //%template(tvector) vector<shared_ptr<statetracker> >;
-    //%template(constraintvector) vector<shared_ptr<constraint> >;
-    //%template(aRK4vector) vector<shared_ptr<atomvecRK4> >;
+    %template(avector) vector<shared_ptr<atomgroup> >;
+    //%template(aptrvector) vector<shared_ptr<atom> >;
+    %template(ivector) vector<shared_ptr<interaction> >;
+    %template(ifxvector) vector<shared_ptr<interactionpairsx> >;
+    %template(tvector) vector<shared_ptr<statetracker> >;
+    %template(constraintvector) vector<shared_ptr<constraint> >;
+    %template(aRK4vector) vector<shared_ptr<atomvecRK4> >;
     #ifdef VEC2D
     %template(wallvector) vector<shared_ptr<SoftWall> >;
     #endif

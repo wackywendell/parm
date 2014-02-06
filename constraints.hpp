@@ -41,15 +41,15 @@ class coordConstraint : public constraint {
 
 class coordCOMConstraint : public constraint {
     private:
-        atomgroup* a;
+        sptr<atomgroup> a;
         bool fixed[3];
         Vec loc;
     public:
-        coordCOMConstraint(atomgroup* atm, bool fixx, bool fixy, bool fixz, Vec loc) :
+        coordCOMConstraint(sptr<atomgroup> atm, bool fixx, bool fixy, bool fixz, Vec loc) :
             a(atm), loc(loc) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordCOMConstraint(atomgroup* atm, bool fixx, bool fixy, bool fixz) :
+        coordCOMConstraint(sptr<atomgroup> atm, bool fixx, bool fixy, bool fixz) :
             a(atm), loc(a->com()) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordCOMConstraint(atomgroup* atm) :
+        coordCOMConstraint(sptr<atomgroup> atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         void apply(Box &box){
@@ -155,31 +155,31 @@ class distConstraint : public constraint {
 
 class linearConstraint : public constraint {
     private:
-        atomgroup& atms;
+        sptr<atomgroup> atms;
         flt dist;
         flt lincom, I, M;
     public:
-        linearConstraint(atomgroup& atms, flt dist) :
+        linearConstraint(sptr<atomgroup> atms, flt dist) :
             atms(atms), dist(dist), lincom(0), I(0), M(0) {
-            for(uint i = 0; i < atms.size(); i++){
-                M += atms[i].m;
-                lincom += (dist*i)*atms[i].m;
+            for(uint i = 0; i < atms->size(); i++){
+                M += (*atms)[i].m;
+                lincom += (dist*i)*(*atms)[i].m;
             }
             lincom /= M;
             
-            for(uint i = 0; i < atms.size(); i++){
+            for(uint i = 0; i < atms->size(); i++){
                 flt dx = (dist*i - lincom);
-                I += atms[i].m * dx * dx;
+                I += (*atms)[i].m * dx * dx;
             }
         };
-        int ndof(){return atms.size()-1;};
+        int ndof(){return atms->size()-1;};
         
         void apply(Box &box){
-            Vec com = atms.com();
-            Vec comv = atms.comv();
+            Vec com = atms->com();
+            Vec comv = atms->comv();
             Vec comf = Vec();
             
-            uint sz = atms.size();
+            uint sz = atms->size();
             Vec lvec = Vec();
             #ifdef VEC3D
             Vec L = Vec();
@@ -195,11 +195,12 @@ class linearConstraint : public constraint {
             
             for(uint i = 0; i < sz; i++){
                 flt chaindist = i * dist - lincom;
-                Vec dx = atms[i].x - com;
-                comf += atms[i].f;
+                atom& ai = (*atms)[i];
+                Vec dx = ai.x - com;
+                comf += ai.f;
                 lvec += dx.norm() * chaindist;
-                L += dx.cross(atms[i].v) * atms[i].m;
-                tau += dx.cross(atms[i].f);
+                L += dx.cross(ai.v) * ai.m;
+                tau += dx.cross(ai.f);
             }
             
             lvec.normalize();
@@ -209,9 +210,10 @@ class linearConstraint : public constraint {
             for(uint i = 0; i < sz; i++){
                 flt chaindist = i * dist - lincom;
                 Vec dx = lvec*chaindist;
-                atms[i].x = com + dx;
-                atms[i].v = comv + dx.cross(omega);
-                atms[i].f = comf + (dx.cross(alpha)*atms[i].m);
+                atom& ai = (*atms)[i];
+                ai.x = com + dx;
+                ai.v = comv + dx.cross(omega);
+                ai.f = comf + (dx.cross(alpha)*ai.m);
             }
         }
 };
@@ -220,9 +222,9 @@ class NPHGaussianConstraint : public constraint {
     private:
         sptr<OriginBox> box;
         flt ddV, dV; // that's dV²/dt², dV/dt
-        vector<atomgroup*> groups;
+        vector<sptr<atomgroup> > groups;
     public:
-        NPHGaussianConstraint(sptr<OriginBox> box, vector<atomgroup*> groups) : 
+        NPHGaussianConstraint(sptr<OriginBox> box, vector<sptr<atomgroup> > groups) : 
                 box(box), ddV(0), dV(0), groups(groups){};
         int ndof(){return 0;};
         void apply(Box &box2){
@@ -237,6 +239,133 @@ class NPHGaussianConstraint : public constraint {
             //~ }
         };
 };
+
+
+
+class ContactTracker : public statetracker{
+    protected:
+        sptr<atomgroup> atoms;
+        vector<flt> dists;
+        vector<vector<bool> > contacts;
+        
+        unsigned long long breaks;
+        unsigned long long formations;
+        unsigned long long incontact;
+    public:
+        ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists);
+        void update(Box &box);
+        
+        unsigned long long broken(){return breaks;};
+        unsigned long long formed(){return formations;};
+        unsigned long long number(){return incontact;};
+};
+
+inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<atomgroup> atoms, vector<double> dists){
+    vector<flt> newdists = vector<flt>();
+    for(uint i=0; i<dists.size(); i++){
+        newdists.push_back(dists[i]);
+    }
+    return new ContactTracker(box, atoms, newdists);
+}
+
+class EnergyTracker : public statetracker{
+    protected:
+        sptr<atomgroup> atoms;
+        vector<sptr<interaction> > interactions;
+        
+        uint N;
+        uint nskip, nskipped;
+        flt U0;
+        flt Es, Us, Ks;
+        flt Esq, Usq, Ksq;
+    public:
+        EnergyTracker(sptr<atomgroup> atoms, 
+            vector<sptr<interaction> > interactions, uint nskip=1)
+             : atoms(atoms),
+            interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
+            U0(0),Es(0),Us(0),Ks(0), Esq(0), Usq(0), Ksq(0){};
+        void update(Box &box);
+        void reset(){
+            nskipped=0;
+            N=0; Es=0; Us=0; Ks=0;
+            Esq=0; Usq=0; Ksq=0;
+        };
+        void setU0(flt newU0){
+            U0 = newU0;
+            reset();
+        };
+        void setU0(Box &box);
+        flt getU0(){return U0;};
+            
+        flt E(){return Es/((flt) N);};
+        flt U(){return Us/((flt) N);};
+        flt K(){return Ks/((flt) N);};
+        flt Estd(){return sqrt(Esq/N -Es*Es/N/N);};
+        flt Kstd(){return sqrt(Ksq/N -Ks*Ks/N/N);};
+        flt Ustd(){return sqrt(Usq/N -Us*Us/N/N);};
+        flt Esqmean(){return Esq/N;};
+        flt Ksqmean(){return Ksq/N;};
+        flt Usqmean(){return Usq/N;};
+        //~ flt Ustd(){return sqrt((Usq -(U*U)) / ((flt) N));};
+        //~ flt Kstd(){return sqrt((Ksq -(K*K)) / ((flt) N));};
+        uint n(){return N;};
+};
+
+class RsqTracker1 {
+    // Tracks only a single dt (skip)
+    public:
+        vector<Vec> pastlocs;
+        vector<flt> rsqsums;
+        vector<flt> rsqsqsums;
+        uint skip, count;
+    public:
+        RsqTracker1(atomgroup& atoms, uint skip);
+        
+        void reset(atomgroup& atoms);
+            
+        bool update(Box& box, atomgroup& atoms, uint t); // updates if necessary.
+        vector<flt> rsq_mean();
+        vector<flt> rsq_var();
+        
+        uint get_skip(){return skip;};
+        uint get_count(){return count;};
+};
+
+//~ class RsqTrackerN {
+    //~ // Tracks only a single dt (skip)
+    //~ public:
+        //~ vector<Vec> pastlocs;
+        //~ vector<flt> rsqsums;
+        //~ vector<flt> rsqsqsums;
+        //~ uint skip, count;
+    //~ public:
+        //~ RsqTracker1(atomgroup& atoms, uint skip);
+        //~ 
+        //~ void reset(atomgroup& atoms);
+            //~ 
+        //~ bool update(Box& box, atomgroup& atoms, uint t); // updates if necessary.
+        //~ vector<flt> rsq_mean();
+        //~ vector<flt> rsq_var();
+        //~ 
+        //~ uint get_skip(){return skip;};
+        //~ uint get_count(){return count;};
+//~ };
+
+class RsqTracker : public statetracker {
+    public:
+        sptr<atomgroup> atoms;
+        vector<RsqTracker1> singles;
+        uint curt;
+        
+    public:
+        RsqTracker(sptr<atomgroup> atoms, vector<uint> ns);
+        
+        void update(Box &box);
+        
+        vector<vector<flt> > means();
+        vector<vector<flt> > vars();
+        vector<flt> counts();
+        
+};
+
 #endif
-
-
