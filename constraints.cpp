@@ -75,34 +75,35 @@ void EnergyTracker::setU0(Box &box){
 };
 
 
-RsqTracker1::RsqTracker1(atomgroup& atoms, uint skip) :
+RsqTracker1::RsqTracker1(atomgroup& atoms, uint skip, Vec com) :
             pastlocs(atoms.size(), Vec()), rsqsums(atoms.size(), 0.0),
             rsqsqsums(atoms.size(), 0.0), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); i++){
-        pastlocs[i] = atoms[i].x;
+        pastlocs[i] = atoms[i].x - com;
     };
 };
         
-void RsqTracker1::reset(atomgroup& atoms){
+void RsqTracker1::reset(atomgroup& atoms, Vec com){
     pastlocs.resize(atoms.size());
     rsqsums.assign(atoms.size(), 0);
     rsqsqsums.assign(atoms.size(), 0);
     for(uint i = 0; i<atoms.size(); i++){
-        pastlocs[i] = atoms[i].x;
+        pastlocs[i] = atoms[i].x - com;
     };
     count = 0;
 };
 
-bool RsqTracker1::update(Box& box, atomgroup& atoms, uint t){
+bool RsqTracker1::update(Box& box, atomgroup& atoms, uint t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); i++){
         //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
-        flt dist = (atoms[i].x - pastlocs[i]).sq();
+        Vec r = atoms[i].x - com;
+        flt dist = (r - pastlocs[i]).sq();
         // We don't want the boxed distance - we want the actual distance moved!
         rsqsums[i] += dist;
         rsqsqsums[i] += dist*dist;
-        pastlocs[i] = atoms[i].x;
+        pastlocs[i] = r;
     };
     count += 1;
     return true;
@@ -127,17 +128,27 @@ vector<flt> RsqTracker1::rsq_var(){
 };
     
 
-RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<uint> ns) : 
-            atoms(atoms), curt(0){
+RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<uint> ns, bool usecom) : 
+            atoms(atoms), curt(0), usecom(usecom){
+    Vec com = usecom ? atoms->com() : Vec();
     for(vector<uint>::iterator n=ns.begin(); n!=ns.end(); n++){
-        singles.push_back(RsqTracker1(*atoms, *n));
+        singles.push_back(RsqTracker1(*atoms, *n, com));
     }
 };
 
 void RsqTracker::update(Box &box){
     curt++;
+    Vec com = usecom ? atoms->com() : Vec();
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
-        it->update(box, *atoms, curt);
+        it->update(box, *atoms, curt, com);
+    }
+};
+
+void RsqTracker::reset(){
+    curt = 0;
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        it->reset(*atoms, com);
     }
 };
 

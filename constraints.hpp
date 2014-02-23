@@ -319,11 +319,11 @@ class RsqTracker1 {
         vector<flt> rsqsqsums;
         uint skip, count;
     public:
-        RsqTracker1(atomgroup& atoms, uint skip);
+        RsqTracker1(atomgroup& atoms, uint skip, Vec com);
         
-        void reset(atomgroup& atoms);
+        void reset(atomgroup& atoms, Vec com);
             
-        bool update(Box& box, atomgroup& atoms, uint t); // updates if necessary.
+        bool update(Box& box, atomgroup& atoms, uint t, Vec com); // updates if necessary.
         vector<flt> rsq_mean();
         vector<flt> rsq_var();
         
@@ -356,10 +356,12 @@ class RsqTracker : public statetracker {
         sptr<atomgroup> atoms;
         vector<RsqTracker1> singles;
         uint curt;
+        bool usecom;
         
     public:
-        RsqTracker(sptr<atomgroup> atoms, vector<uint> ns);
+        RsqTracker(sptr<atomgroup> atoms, vector<uint> ns, bool usecom=true);
         
+        void reset();
         void update(Box &box);
         
         vector<vector<flt> > means();

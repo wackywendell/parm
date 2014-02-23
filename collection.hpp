@@ -6,6 +6,7 @@
 #include "constraints.hpp"
 #include <cstdio>
 #include <vector>
+#include <set>
 #include <boost/shared_ptr.hpp>
 
 class collection {
@@ -850,4 +851,54 @@ class collectionVerletNPT : public collection {
         Vec getvhalf(uint n){return vhalf[n];};
 };
 
+struct event {
+    flt t; // when it will occur
+    atomid a; // atom 1
+    atomid b; // atom 2
+    
+    bool operator<(const event& other ) const {
+        if (t < other.t) { return true;};
+        if (t > other.t) { return false;};
+        if (a < other.a) { return true;};
+        if (a > other.a) { return false;};
+        if (b < other.b) { return true;};
+        return false;
+    };
+        
+};
+
+/// Collision-Driven Brownian-Dynamics
+class collectionCDBD : public collection {
+    public:
+        flt T;
+        flt dt, curt;
+        set<event> events; // note that this a sorted binary tree
+        vector<flt> atomsizes; /// diameters
+        
+        void reset_events();
+        void line_advance(flt deltat);
+        
+    public:
+        collectionCDBD(sptr<OriginBox> box, const flt dt, const flt T,
+                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+                vector<flt> sizes = vector<flt>(),
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collection(box, groups, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(sizes) {
+            if (groups.size() > 0) {
+                if (atomsizes.size() == 0) {
+                    atomsizes.resize(groups.size(), 1.0);
+                } else if (atomsizes.size() == 1) {
+                    atomsizes.resize(groups.size(), atomsizes[0]);
+                }
+            };
+            assert(atomsizes.size() == atoms.size());
+        };
+    
+        void reset_velocities();
+        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
+        void timestep();
+};
 #endif

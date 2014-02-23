@@ -21,6 +21,7 @@
 %include carrays.i
 %include std_vector.i
 %include std_list.i
+%include std_set.i
 %include boost_shared_ptr.i
 %include "vec.hpp"
 
@@ -274,6 +275,7 @@ namespace std {
     #endif
     //%template(idpairvector) vector<idpair>;
     %template(_uintvector) vector<unsigned int>;
+    %template(_eventset) set<event>;
 }
 
 %extend atom {

@@ -2156,4 +2156,211 @@ void collectionVerletNPT::timestep(){
     update_trackers();
     
     return;
+};
+
+void collectionCDBD::reset_velocities(){
+    vector<sptr<atomgroup> >::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            flt mi = m.getmass(i);
+            m[i].v = randVec() * sqrtflt(T/mi);
+        }
+    }
+    reset_events();
+};
+
+void collectionCDBD::line_advance(flt deltat){
+    vector<sptr<atomgroup> >::iterator git;
+    for(git = groups.begin(); git<groups.end(); git++){
+        atomgroup &m = **git;
+        for(uint i=0; i<m.size(); i++){
+            m[i].x += m[i].v * deltat;
+        }
+    }
+    
+    curt += deltat;
+};
+
+bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
+    Vec rij = box.diff(a.x(), b.x());
+    Vec vij = a.v() - b.v();
+    flt bij = rij.dot(vij);
+    if(bij >= 0) return false;
+    
+    flt bijsq = bij*bij;
+    flt vijsq = vij.sq();
+    flt underroot = bijsq - vijsq*(rij.sq() - sigma*sigma);
+    if(underroot < 0) return false;
+    
+    flt tau_ij = -(bij + sqrtflt(underroot))/vijsq;
+    // collide immediately if the event already happened (its overlapping)
+    if(tau_ij < 0) tau_ij = 0;
+    
+    e.t = curt + tau_ij;
+    if(a.n() > b.n()){
+        atomid c = a;
+        a = b;
+        b = c;
+    }
+    e.a = a;
+    e.b = b;
+    return true;
 }
+
+void collectionCDBD::reset_events(){
+    events.clear();
+    
+    vector<sptr<atomgroup> >::iterator git1, git2;
+    uint n=0, m=0;
+    for(git1 = groups.begin(); git1<groups.end(); git1++){
+    atomgroup &g1 = **git1;
+    for(uint i=0; i<g1.size(); i++){
+        m = 0;
+        for(git2 = groups.begin(); git2<groups.end(); git2++){
+        atomgroup &g2 = **git2;
+        for(uint j=0; j<g2.size(); j++){
+            if(m < n){
+                m++;
+                continue;
+            }
+            flt sigma = (atomsizes[n] + atomsizes[m]) / 2;
+            
+            event e;
+            if(make_event(*box, e, atomid(&g1[i], n), atomid(&g2[j], m), sigma, curt)){
+                events.insert(e);
+            };
+            m++;
+        }}
+        n++;
+    }};
+};
+
+inline void collide(Box &box, atom& a, atom &b){
+    Vec rij = box.diff(a.x, b.x);
+    flt rmag = rij.mag();
+    Vec rhat = rij / rmag;
+    
+    flt rvi = rhat.dot(a.v);
+    flt rvj = rhat.dot(b.v);
+    if(rvi >= rvj) return; // they're already moving away
+    Vec p = rhat * (2 * a.m * b.m * (rvj - rvi) / (a.m + b.m));
+    a.v += p / a.m;
+    b.v -= p / b.m;
+};
+
+bool collectionCDBD::take_step(flt tlim){
+    // TODO: more efficient looping and merging
+    
+    // If we have a limit, and we've already passed it, stop.
+    if((tlim > 0) && (tlim <= curt)) return false;
+    
+    //~ std::cerr << "take_step: started.\n";
+    event e = *(events.begin());
+    if ((tlim > 0) & (e.t > tlim)){
+        // if we have a limit, and the next event is farther in the 
+        // future than that limit, then we just move everyone forward and
+        // no collisions happen
+        line_advance(tlim - curt);
+        curt = tlim;
+        return false;
+    };
+    events.erase(e);
+    
+    // move everyone forward
+    line_advance(e.t - curt);
+    curt = e.t;
+    //~ std::cerr << "take_step: advanced.\n";
+    
+    // collide our two atoms (i.e. have them bounce)
+    //~ std::cerr << "take_step: colliding " << e.a.n() << " - " << e.b.n() << "\n";
+    collide(*box, *(e.a), *(e.b));
+    //~ std::cerr << "take_step: collided " << e.a.n() << " - " << e.b.n() << "\n";
+    
+    // Remove all "bad" scheduled events (involving these two atoms),
+    // and mark which atoms need rescheduling
+    set<atomid> badatoms;
+    set<atomid>::iterator ait;
+    badatoms.insert(e.a);
+    badatoms.insert(e.b);
+    
+    set<event>::iterator eit, eit2;
+    eit = events.begin();
+    while (eit != events.end()){
+        if((eit->a == e.a) || (eit->a == e.b)){
+            badatoms.insert(eit->b);
+        } else if((eit->b == e.a) || (eit->b == e.b)){
+            badatoms.insert(eit->a);
+        } else {
+            // no matches, carry on
+            eit++;
+            continue;
+        }
+        
+        
+        //~ std::cerr << "take_step: removing event...";
+        // need to remove that event
+        eit2 = eit;
+        eit++;
+        events.erase(eit2);
+        //~ std::cerr << "Removed.\n";
+    };
+    
+    
+    //~ std::cerr << "take_step: new events (" << badatoms.size() << ")...";
+    // Make new events, add them to the list
+    vector<event> newevents(badatoms.size());
+    //~ std::cerr << "made events vector...";
+    vector<bool> new_filled(badatoms.size(), false);
+    //~ std::cerr << "made new_filled.\n";
+    uint n = 0;
+    vector<sptr<atomgroup> >::iterator git1;
+    //~ std::cerr << "Starting loop.\n";
+    for(git1 = groups.begin(); git1<groups.end(); git1++){
+        atomgroup &g1 = **git1;
+        //~ std::cerr << "Starting atom loop.\n";
+        for(uint i=0; i<g1.size(); i++){
+            uint bi=0;
+            //~ std::cerr << "Starting badatoms loop.\n";
+            for(ait=badatoms.begin(); ait!=badatoms.end(); ait++){
+                //~ cerr << "Testing " << ait->n() << " - " << n  << "(" << bi << "), ";
+                flt sigma = (atomsizes[ait->n()] + atomsizes[n])/2.;
+                //~ cerr << "sigma " << sigma << "\n";
+                event testevent;
+                if(make_event(*box, testevent, *ait, atomid(&g1[i], n), sigma, curt)){
+                    //~ cerr << "Made good event\n";
+                    if(!new_filled[bi] || (testevent < newevents[bi])){
+                        newevents[bi] = testevent;
+                        new_filled[bi] = true;
+                        //~ cerr << "Its the best event\n";
+                    } else {
+                        //~ cerr << "event ignored\n";
+                    }
+                } else {
+                    //~ cerr << "event not made.\n";
+                };
+                bi++;
+            }
+            n++;
+        }
+    };
+    
+    //~ std::cerr << "take_step: made new events\n";
+    
+    for(uint bi=0; bi<newevents.size(); bi++){
+        if(new_filled[bi]){
+            //~ std::cerr << "take_step: inserting collision between " << 
+                //~ newevents[bi].a.n() << " - " << newevents[bi].b.n() << "\n";
+            events.insert(newevents[bi]);
+        }
+    };
+    //~ std::cerr << "take_step: Done.\n";
+    return true;
+};
+
+void collectionCDBD::timestep() {
+    reset_velocities();
+    flt newt = curt + dt;
+    while(take_step(newt)){};
+    update_trackers();
+};
