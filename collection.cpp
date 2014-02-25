@@ -2210,7 +2210,9 @@ bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
 
 void collectionCDBD::reset_events(){
     events.clear();
+    //~ std::cerr << "reset_events: events " << events.size() << "\n";
     
+    //~ std::cerr << "reset_events: pairs: ";
     vector<sptr<atomgroup> >::iterator git1, git2;
     uint n=0, m=0;
     for(git1 = groups.begin(); git1<groups.end(); git1++){
@@ -2226,14 +2228,18 @@ void collectionCDBD::reset_events(){
             }
             flt sigma = (atomsizes[n] + atomsizes[m]) / 2;
             
+            //~ std::cerr << n << "-" << m;
             event e;
             if(make_event(*box, e, atomid(&g1[i], n), atomid(&g2[j], m), sigma, curt)){
                 events.insert(e);
+                //~ std::cerr << " MADE!";
             };
+            //~ std::cerr << " ... ";
             m++;
         }}
         n++;
     }};
+    //~ std::cerr << " Done, events " << events.size() << "\n";
 };
 
 inline void collide(Box &box, atom& a, atom &b){
@@ -2255,7 +2261,13 @@ bool collectionCDBD::take_step(flt tlim){
     // If we have a limit, and we've already passed it, stop.
     if((tlim > 0) && (tlim <= curt)) return false;
     
-    //~ std::cerr << "take_step: started.\n";
+    //~ std::cerr << "take_step: events " << events.size() << "\n";
+    if(events.size() <= 0) reset_events();
+    
+    assert(atoms.size() > 0);
+    assert(atomsizes.size() > 0);
+    assert(events.size() > 0);
+    //~ std::cerr << "take_step: started, events " << events.size() << "\n";
     event e = *(events.begin());
     if ((tlim > 0) & (e.t > tlim)){
         // if we have a limit, and the next event is farther in the 

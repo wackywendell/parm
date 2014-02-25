@@ -887,13 +887,16 @@ class collectionCDBD : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, groups, interactions, trackers, constraints), 
             T(T), dt(dt), curt(0), atomsizes(sizes) {
-            if (groups.size() > 0) {
-                if (atomsizes.size() == 0) {
-                    atomsizes.resize(groups.size(), 1.0);
-                } else if (atomsizes.size() == 1) {
-                    atomsizes.resize(groups.size(), atomsizes[0]);
-                }
-            };
+            assert(atomsizes.size() == atoms.size());
+        };
+        collectionCDBD(sptr<OriginBox> box, const flt dt, const flt T,
+                vector<sptr<atomgroup> > groups,
+                flt sizes,
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collection(box, groups, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(atoms.size(), sizes) {
             assert(atomsizes.size() == atoms.size());
         };
     
