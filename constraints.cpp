@@ -178,3 +178,254 @@ vector<flt> RsqTracker::counts(){
     }
     return vals;
 };
+
+bool jamminglist::operator<(const jamminglist& other ){
+    //return distsq < other.distsq;
+    if(other.distsq  - distsq > 1e-8) return true;
+    if(distsq  - other.distsq > 1e-8) return false;
+    //~ cout << "\nWithin 1e-8\n";
+    
+    uint sz = size();
+    uint osz = other.size();
+    if(sz < osz) return true;
+    if(sz > osz) return false;
+    //~ cout << sz << ' ' << osz << ' ' << N << " Indices:";
+    for(uint i=0; i<sz; i++){
+        if (assigned[i] < other.assigned[i]) return true;
+        if (assigned[i] > other.assigned[i]) return false;
+        //~ cout << " " << i;
+    }
+    //~ cout << " Done. Comparing sizes...\n";
+    //~ cout << "Equal!\n";
+    return false; // consider them equal
+};
+
+#ifdef VEC2D
+/* There are two ways of looking at the different arrangements.
+ * In both cases, we leave A the same as it was, and rotate / flip / translate B.
+ * Also in both cases, we wrap A, then subtract off its COM (in an infinite box).
+ * 
+ * Method 1:
+   * "unwrap" the box into 9 boxes (2D), and then choose a box for each
+   * of the particles.
+   * (N-1)⁹, right? (×8×N!, with rotations / flips / permutations)
+ * Method 2:
+   * Pick a particle (in B), move the box so that's on the left.
+   * Pick another particle (maybe the same), move the box so its on the bottom.
+   * Calculate COM of B without PBC, subtract that off.
+   * Compare A and B, but using the PBC to calculate distances.
+   * N² (×8×N!)
+ * Method 3:
+   * Only try different rotations, but measure distances as Σ (\vec r_{ij} - \vec s_{ij})²
+ 
+ * We'll go with method 3.
+*/
+
+bool jamminglistrot::operator<(const jamminglistrot& other ){
+    //return distsq < other.distsq;
+    if(other.distsq  - distsq > 1e-8) return true;
+    if(distsq  - other.distsq > 1e-8) return false;
+    
+    uint sz = size();
+    uint osz = other.size();
+    if(sz < osz) return true;
+    if(sz > osz) return false;
+    //~ cout << "\nWithin 1e-8. ";
+    
+    //~ cout << sz << ' ' << osz << ' ' << N << " Indices:";
+    for(uint i=0; i<sz; i++){
+        if (assigned[i] < other.assigned[i]) return true;
+        if (assigned[i] > other.assigned[i]) return false;
+        //~ cout << " " << i;
+    }
+    //~ cout << " Done. Comparing rotations...";
+    if(rotation < other.rotation) return true;
+    if(rotation > other.rotation) return false;
+    
+    //~ cout << " Comparing sizes...";
+    if(sz < osz) return true;
+    if(sz > osz) return false;
+    //~ cout << "Equal!\n";
+    return false; // consider them equal
+};
+
+jammingtree2::jammingtree2(sptr<Box>box, vector<Vec>& A0, vector<Vec>& B0)
+            : box(box), jlists(), A(A0), Bs(8, B0){
+    for(uint rot=0; rot < 8; rot++){
+        for(uint i=0; i<B0.size(); i++){
+                        Bs[rot][i] = B0[i].rotate_flip(rot); }
+        if(A0.size() <= B0.size()) jlists.push_back(jamminglistrot(rot));
+        //~ cout << "Created, now size " << jlists.size() << endl;
+    }
+    
+};
+
+flt jammingtree2::distance(jamminglistrot& jlist){
+    flt dist = 0;
+    uint rot = jlist.rotation;
+    for(uint i=1; i<jlist.size(); i++){
+        uint si = jlist.assigned[i];
+        for(uint j=0; j<i; j++){
+            uint sj = jlist.assigned[j];
+            Vec rij = box->diff(A[i], A[j]);
+            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            dist += box->diff(rij, sij).sq();
+        }
+    }
+    return dist / ((flt) jlist.assigned.size());
+};
+
+list<jamminglistrot> jammingtree2::expand(jamminglistrot curjlist){
+    vector<uint>& curlist = curjlist.assigned;
+    list<jamminglistrot> newlists = list<jamminglistrot>();
+    if(curlist.size() >= A.size()){
+        return newlists;
+    }
+    
+    uint N = (uint) Bs[curjlist.rotation].size();
+    for(uint i=0; i < N; i++){
+        vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
+        //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
+        if (found != curlist.end()) continue;
+        
+        jamminglistrot newjlist = jamminglistrot(curjlist, i, 0);
+        newjlist.distsq = distance(newjlist);
+        newlists.push_back(newjlist);
+    }
+    return newlists;
+};
+
+bool jammingtree2::expand(){
+    jamminglistrot curjlist = jlists.front();
+    list<jamminglistrot> newlists = expand(curjlist);
+    
+    if(newlists.size() <= 0){
+        //~ cout << "No lists made\n";
+        return false;
+    }
+    //~ cout << "Have " << newlists.size() << "\n";
+    newlists.sort();
+    //~ cout << "Sorted.\n";
+    jlists.pop_front();
+    //~ cout << "Popped.\n";
+    jlists.merge(newlists);
+    //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
+    return true;
+};
+
+
+jammingtreeBD::jammingtreeBD(sptr<Box> box, vector<Vec>& A, vector<Vec>& B, 
+                    uint cutoffA, uint cutoffB) :
+            jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
+    if(cutoffA > cutoffB){jlists.clear();}
+    if(A.size() - cutoffA > B.size() - cutoffB){jlists.clear();}
+};
+
+list<jamminglistrot> jammingtreeBD::expand(jamminglistrot curjlist){
+    vector<uint>& curlist = curjlist.assigned;
+    list<jamminglistrot> newlists = list<jamminglistrot>();
+    if(curlist.size() >= A.size()){
+        return newlists;
+    }
+    
+    uint N = (uint) Bs[curjlist.rotation].size();
+    uint start = 0, end=cutoff2;
+    if(curlist.size() >= cutoff1){
+        start=cutoff2;
+        end = N;
+    }
+    for(uint i=start; i < end; i++){
+        vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
+        //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
+        if (found != curlist.end()) continue;
+        
+        jamminglistrot newjlist = jamminglistrot(curjlist, i, 0);
+        newjlist.distsq = distance(newjlist);
+        newlists.push_back(newjlist);
+    }
+    return newlists;
+};
+
+bool jammingtreeBD::expand(){
+    jamminglistrot curjlist = jlists.front();
+    list<jamminglistrot> newlists = expand(curjlist);
+    
+    if(newlists.size() <= 0) return false;
+    newlists.sort();
+    jlists.pop_front();
+    jlists.merge(newlists);
+    return true;
+};
+
+
+vector<Vec> jammingtree2::locationsB(jamminglistrot jlist){
+    uint rot = jlist.rotation;
+    vector<Vec> locs = vector<Vec>(jlist.size());
+    
+    uint N = jlist.size();
+    for(uint i=0; i<N; i++){
+        uint si = jlist.assigned[i];
+        locs[i] = A[i];
+        for(uint j=0; j<N; j++){
+            uint sj = jlist.assigned[j];
+            Vec rij = box->diff(A[i], A[j]);
+            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            locs[i] -= box->diff(rij, sij)/N;
+        }
+    }
+    return locs;
+};
+
+
+vector<Vec> jammingtree2::locationsA(jamminglistrot jlist){
+    uint rot = jlist.rotation;
+    vector<Vec> locs = vector<Vec>(Bs[rot].size(), Vec(NAN,NAN));
+    
+    uint N = jlist.size();
+    for(uint i=0; i<N; i++){
+        uint si = jlist.assigned[i];
+        locs[si] = Bs[rot][si];
+        for(uint j=0; j<N; j++){
+            uint sj = jlist.assigned[j];
+            Vec rij = box->diff(A[i], A[j]);
+            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            locs[si] += box->diff(rij, sij)/N;
+        }
+        
+        // this is an inverse rotateflip
+        locs[si] = locs[si].rotate_flip_inv(rot);
+    }
+    return locs;
+};
+
+Vec jammingtree2::straight_diff(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
+    uint N = (uint) As.size();
+    if(Bs.size() != N) return Vec(NAN,NAN);
+    
+    Vec loc = Vec();
+    for(uint i=0; i<N; i++){
+        for(uint j=0; j<N; j++){
+            Vec rij = bx.diff(As[i], As[j]);
+            Vec sij = bx.diff(Bs[i], Bs[j]);
+            loc += bx.diff(rij, sij);
+        }
+    }
+    return loc / N;
+};
+
+flt jammingtree2::straight_distsq(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
+    uint N = (uint) As.size();
+    if(Bs.size() != N) return NAN;
+    
+    flt dist = 0;
+    for(uint i=0; i<N; i++){
+        for(uint j=0; j<N; j++){
+            Vec rij = bx.diff(As[i], As[j]);
+            Vec sij = bx.diff(Bs[i], Bs[j]);
+            dist += bx.diff(rij, sij).sq();
+        }
+    }
+    return dist / N;
+};
+
+#endif

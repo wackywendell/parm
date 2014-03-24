@@ -83,6 +83,10 @@
 #include "vec.hpp"
 #include "vecrand.hpp"
 #include "vecrand.cpp"
+#include "box.hpp"
+#include "box.cpp"
+#include "trackers.hpp"
+#include "trackers.cpp"
 #include "interaction.hpp"
 #include "interaction.cpp"
 #include "constraints.hpp"
@@ -356,8 +360,9 @@ namespace std {
 };
 
 %include "vecrand.hpp"
+%include "box.hpp"
+%include "trackers.hpp"
 %include "interaction.hpp"
-%include "interaction.cpp"
 %include "constraints.hpp"
 %template(LJgroup) NListed<LJatom, LJpair>; // Pure repulsive
 %template(LJfull) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive

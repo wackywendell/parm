@@ -1,14 +1,14 @@
-#include "vecrand.hpp"
+#include "trackers.hpp"
 
-#include <vector>
-#include <bitset> // for contact tracking
-#include <set>
-#include <map>
-#include <list>
-#include <iterator>
-#include <algorithm>
-#include <cassert>
-#include <climits>
+//~ #include <vector>
+//~ #include <bitset> // for contact tracking
+//~ #include <set>
+//~ #include <map>
+//~ #include <list>
+//~ #include <iterator>
+//~ #include <algorithm>
+//~ #include <cassert>
+//~ #include <climits>
 #include <boost/shared_ptr.hpp>
 
 #ifndef INTERACTION_H
@@ -62,17 +62,6 @@ using namespace boost; // required for SWIG for some reason
 
 //typedef double flt; defined in vecrand.hpp
 //typedef unsigned int uint;
-typedef const unsigned int cuint;
-
-class atomgroup;
-
-class Box {
-    public:
-        virtual Vec diff(Vec r1, Vec r2)=0;
-        virtual flt V()=0;
-        virtual ~Box(){};
-};
-
 class interaction {
     public:
         virtual flt energy(Box &box)=0;
@@ -80,288 +69,6 @@ class interaction {
         virtual flt setForcesGetPressure(Box &box){return NAN;};
         virtual flt pressure(Box &box)=0;
         virtual ~interaction(){};
-};
-
-class statetracker {
-    public:
-        virtual void update(Box &box) = 0;
-        virtual ~statetracker(){};
-};
-
-/***********************************************************************
- * Boxes
- */
-
-#ifdef VEC3D
-inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remflt(r1[0], r2[0]), remflt(r1[1], r2[1]), remflt(r1[2], r2[2]));
-};
-#endif
-#ifdef VEC2D
-inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remflt(r1[0], r2[0]), remflt(r1[1], r2[1]));
-};
-#endif
-
-
-class InfiniteBox : public Box {
-    public:
-        Vec diff(Vec r1, Vec r2){return r1-r2;};
-        flt V(){return NAN;};
-};
-
-class OriginBox : public Box {
-    protected:
-        Vec boxsize;
-    public:
-        OriginBox(Vec size) : boxsize(size){};
-        Vec diff(Vec r1, Vec r2){
-            return vecmod((r1-r2), boxsize);
-        }
-        #ifdef VEC3D
-        OriginBox(flt L) : boxsize(L,L,L){};
-        flt V(){return boxsize[0] * boxsize[1] * boxsize[2];};
-        flt L(){return (boxsize[0] + boxsize[1] + boxsize[2])/3.0;};
-        #endif
-        #ifdef VEC2D
-        OriginBox(flt L) : boxsize(L,L){};
-        flt V(){return boxsize[0] * boxsize[1];};
-        flt L(){return (boxsize[0] + boxsize[1])/2.0;};
-        #endif
-        flt resize(flt factor){boxsize *= factor; return V();}
-        flt resize(Vec newsize){boxsize = newsize; return V();}
-        flt resizeV(flt newV){
-            flt curV = V();
-            boxsize *= powflt(newV/curV, OVERNDIM);
-            return V();
-        }
-        flt resizeL(flt newL){
-            flt curL = powflt(V(), OVERNDIM);
-            boxsize *= newL/curL;
-            return V();
-        }
-        Vec randLoc(){
-            Vec v = randVecBoxed();
-            for(uint i=0; i<NDIM; i++){
-                v[i] *= boxsize[i];
-            }
-            return diff(v, Vec());
-        };
-        Vec boxshape(){return boxsize;};
-};
-
-class LeesEdwardsBox : public OriginBox {
-    // Uses shear in the x-direction, relative to y
-    protected:
-        flt gamma;
-    public:
-        LeesEdwardsBox(Vec size, flt gamma=0.0) : OriginBox(size), gamma(gamma){};
-        Vec diff(Vec r1, Vec r2){
-            flt Ly = boxsize[1];
-            flt dy = r1[1]-r2[1];
-            int im = (int) roundflt(dy / Ly);
-            dy = dy - (im*Ly);
-            
-            flt Lx = boxsize[0];
-            flt dx = r1[0] - r2[0];
-            dx = dx - roundflt((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
-            
-            #ifdef VEC2D
-            return Vec(dx, dy);
-            #endif
-            #ifdef VEC3D
-            flt dz = remflt(r1[2], r2[2]);
-            return Vec(dx, dy, dz);
-            #endif
-        }
-        flt get_gamma(){return gamma;};
-        
-        void shear(flt dgamma, atomgroup &atoms);
-        Vec nonaffine(Vec v){
-            v[0] -= gamma * v[1];
-            return v;
-        }
-        
-        Vec affine(Vec v){
-            v[0] += gamma * v[1];
-            return v;
-        }
-};
-
-/***********************************************************************
- * Atoms
- */
-struct atom {
-    Vec x; // location
-    Vec v; // velocity
-    Vec a; // acceleration
-    Vec f; // forces
-    flt m; // mass
-};
-
-class atomref {
-    private:
-        atom *ptr;
-    public:
-        inline atomref() : ptr(NULL){};
-        inline atomref(atom *a) : ptr(a){};
-        inline atom& operator *(){return *ptr;};
-        inline atom* pointer(){return ptr;};
-        inline Vec& x(){return ptr->x;};
-        inline Vec& v(){return ptr->v;};
-        inline Vec& f(){return ptr->f;};
-        inline Vec& a(){return ptr->a;};
-        inline flt& m(){return ptr->m;};
-        inline bool operator==(const atomref &other) const {return other.ptr == ptr;};
-        inline bool operator==(const atom* other) const {return other == ptr;};
-        inline bool operator!=(const atomref &other) const {return other.ptr != ptr;};
-        inline bool operator<(const atomref &other) const {return ptr < other.ptr;};
-        inline bool operator<=(const atomref &other) const {return ptr <= other.ptr;};
-        inline bool operator>=(const atomref &other) const {return ptr >= other.ptr;};
-        inline bool operator>(const atomref &other) const {return ptr > other.ptr;};
-};
-
-class atomid : public atomref {
-    private:
-        uint num; // note that these are generally only in reference to 
-                  // a specific atomgroup
-    public:
-        inline atomid() : atomref(), num(UINT_MAX){};
-        inline atomid(atom *a) : atomref(a), num(UINT_MAX){};
-        inline atomid(atom *a, uint n) : atomref(a), num(n){};
-        inline uint n() const {return num;};
-};
-
-class idpair : public Array<atomid, 2> {
-    public:
-        idpair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
-        inline atomid first() const {return vals[0];};
-        inline atomid last() const {return vals[1];};
-};
-
-//~ class atompair : public array<atom*, 2> {
-    //~ public:
-        //~ atompair(atom* a, atom* b){ vals[0] = a; vals[1] = b;};
-        //~ inline atom& first() const {return *(vals[0]);};
-        //~ inline atom& last() const {return *(vals[1]);};
-//~ };
-
-class atomgroup;
-
-class AtomIter{
-    private:
-        uint i;
-        atomgroup &g;
-    public:
-        AtomIter (atomgroup& g, uint i): i(i), g(g){};
-        bool operator!=(const AtomIter& other) const{return i != other.i;};
-        atom& operator* () const;
-        inline const AtomIter& operator++(){++i; return *this;};
-};
-
-class atomgroup {
-    // a group of atoms, such as a molecule, sidebranch, etc.
-    public:
-        // access individual atoms
-        virtual atom& operator[](cuint n)=0;
-        virtual atom& operator[](cuint n) const=0;
-        virtual atom* get(cuint n){if(n>=size()) return NULL; return &((*this)[n]);};
-        virtual atomid get_id(cuint n){return atomid(get(n),n);};
-        virtual uint size() const=0;
-        virtual flt getmass(const unsigned int n) const {return (*this)[n].m;};
-        virtual AtomIter begin(){return AtomIter(*this, 0);};
-        virtual AtomIter end(){return AtomIter(*this, size());};
-        
-        Vec com() const; //center of mass
-        Vec comv() const; //center of mass velocity
-        
-        //Stats
-        flt mass() const;
-        flt kinetic(const Vec &originvelocity=Vec()) const;
-        Vec momentum() const;
-        #ifdef VEC3D
-        flt moment(const Vec &loc, const Vec &axis, Box &box) const;
-        Vec angmomentum(const Vec &loc, Box &box) const;
-        Matrix<flt> moment(const Vec &loc, Box &box) const;
-        Vec omega(const Vec &loc, Box &box) const;
-        void addOmega(Vec w, Vec origin, Box &box);
-        inline void resetL(Box &box){
-            Vec c = com(), w = omega(c, box);
-            if (w.sq() == 0) return;
-            addOmega(-w, c, box);
-        }
-        #elif defined VEC2D
-        flt moment(const Vec &loc, Box &box) const;
-        flt angmomentum(const Vec &loc, Box &box) const;
-        flt omega(const Vec &loc, Box &box) const{return angmomentum(loc, box) / moment(loc, box);};
-        void addOmega(flt w, Vec origin, Box &box);
-        inline void resetL(Box &box){
-            Vec c = com();
-            flt w = omega(c, box);
-            if (w == 0) return;
-            addOmega(-w, c, box);
-        }
-        #endif
-        
-        
-        // for resetting
-        void addv(Vec v);
-        void resetcomv(){addv(-comv());};
-        
-        
-        // for timestepping
-        void resetForces();
-        void setAccel();
-        virtual ~atomgroup(){};
-};
-
-inline atom& AtomIter::operator*() const{return g[i];};
-
-class atomvec : public virtual atomgroup {
-    // this is an atomgroup which actually owns the atoms.
-    private:
-        atom* atoms;
-        uint sz;
-    public:
-        atomvec(vector<double> masses) : sz((uint) masses.size()){
-            atoms = new atom[sz];
-            for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
-        };
-        atomvec(uint N, flt mass) : sz(N){
-            atoms = new atom[sz];
-            for(uint i=0; i < sz; i++) atoms[i].m = mass;
-        };
-        atomvec(atomvec& other) : sz(other.size()){
-            atoms = new atom[sz];
-            for(uint i=0; i < sz; i++) atoms[i] = other.atoms[i];
-        };
-        inline atom& operator[](cuint n){return atoms[n];};
-        inline atom& operator[](cuint n) const {return atoms[n];};
-        atomid get_id(atom *a);
-        inline atomid get_id(uint n) {
-            if (n > sz) return atomid(); return atomid(atoms + n,n);};
-        //~ inline flt getmass(cuint n) const{return atoms[n].m;};
-        //~ inline void setmass(cuint n, flt m){atoms[n].m = m;};
-        inline uint size() const {return sz;};
-        
-        ~atomvec(){ delete [] atoms;};
-};
-
-class metagroup : public atomgroup {
-    protected:
-        vector<atom*> atoms;
-    public:
-        metagroup(){};
-        //metagroup(vector<atom*> atoms) : atoms(atoms){};
-        metagroup(vector<atomgroup*>);
-        metagroup(vector<sptr<atomgroup> >);
-        inline atom& operator[](cuint n){return *atoms[n];};
-        inline atom& operator[](cuint n) const{return *atoms[n];};
-        inline atom* get(cuint n){if(n>=size()) return NULL; return (atoms[n]);};
-        inline void add(atom *a){return atoms.push_back(a);};
-        atomid get_id(atom *a);
-        inline atomid get_id(uint n) {return atomid(atoms[n],n);};
-        inline uint size() const {return (uint) atoms.size();};
 };
 
 /***********************************************************************
@@ -868,206 +575,6 @@ class interactionpairsx : public interaction {
     //~ bool operator() (const atompair& lhs, const atompair& rhs) const{
         //~ return (lhs[0] == rhs[0] and lhs[1] == rhs[1]);}
 //~ };
-
-class pairlist {
-    protected:
-        map<const atomid, set<atomid> > pairs;
-    public:
-        //~ pairlist(atomgroup *group);
-        pairlist(){};
-        
-        inline void ensure(const atomid a){
-            pairs.insert(std::pair<atomid, set<atomid> >(a, set<atomid>()));
-        }
-        inline void ensure(vector<atomid> ps){
-            vector<atomid>::iterator it;
-            for(it=ps.begin(); it != ps.end(); it++) ensure(*it);
-        }
-        inline void ensure(atomgroup &group){
-            for(uint i=0; i<group.size(); i++) ensure(group.get_id(i));
-        }
-        
-        inline bool has_pair(atomid a1, atomid a2){
-            if(a1 > a2) return pairs[a1].count(a2) > 0;
-            else return pairs[a2].count(a1) > 0;
-        }
-        
-        inline void add_pair(atomid a1, atomid a2){
-            //~ cout << "pairlist ignore " << a1.n() << '-' << a2.n() << "\n";
-            if(a1 > a2){pairs[a1].insert(a2);}
-            else{pairs[a2].insert(a1);};
-        }
-        
-        inline void erase_pair(atomid a1, atomid a2){
-            if(a1 > a2){pairs[a1].erase(a2);}
-            else{pairs[a2].erase(a1);};
-        }
-        
-        inline set<atomid> get_pairs(const atomid a){ensure(a); return pairs[a];};
-        
-        // for iterating over neighbors
-        inline set<atomid>::iterator begin(const atomid a){return pairs[a].begin();};
-        inline set<atomid>::iterator end(const atomid a){return pairs[a].end();};
-        
-        inline uint size() const { uint N=0; for(
-            map<const atomid, set<atomid> >::const_iterator it=pairs.begin();
-            it != pairs.end(); it++) N+= (uint) it->second.size();
-            return N;
-        };
-        
-        void clear();
-};
-
-class neighborlist : public statetracker{
-    //maintains a Verlet list of "neighbors": molecules within a 
-    // 'skin radius' of each other.
-    // note that molecules are counted as neighbors if any point within
-    // their molecular radius is within a 'skin radius' of any point
-    // within another molecule's molecular radius.
-    //
-    // update(false) should be called frequently; it checks (O(N)) if
-    // any two molecules might conceivably overlap by more than a critical
-    // distance, and if so, it updates all the neighbor lists.
-    
-    // the <bool areneighbors()> function returns whether two molecules
-    // are neighbors, and the begin(n), end(n) allow for iterating over
-    // the neighbor lists
-    protected:
-        sptr<Box> box;
-        flt critdist, skinradius;
-        metagroup atoms;
-        vector<idpair> curpairs;
-        pairlist ignorepairs;
-        vector<Vec> lastlocs;
-        uint updatenum;
-        atomid get_id(atom* a);
-        bool ignorechanged; // if true, forces a full check on next update
-        //~ bool checkneighbors(const uint n, const uint m) const;
-        // this is a full check
-    public:
-        neighborlist(sptr<Box> box, const flt innerradius, const flt outerradius);
-        neighborlist(sptr<Box> box, atomgroup &vec, const flt innerradius, 
-        const flt outerradius, pairlist ignore = pairlist());
-        void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
-        bool update_list(bool force = true);
-        // if force = false, we check if updating necessary first
-        
-        inline uint which(){return updatenum;};
-        inline uint numpairs(){return (uint) curpairs.size();};
-        inline void ignore(atomid a, atomid b){ignorepairs.add_pair(a,b); ignorechanged=true;};
-        void ignore(atom*, atom*);
-        atomid add(atom* a){
-            atomid id = atoms.get_id(a);
-            if(id != NULL) return id;
-            atoms.add(a);
-            assert(lastlocs.size() == atoms.size() - 1);
-            lastlocs.push_back(a->x);
-            id = atoms.get_id(a);
-            ignorechanged = true;
-            return id;
-        }
-        
-        inline void changesize(flt inner, flt outer){
-            critdist = inner; skinradius = outer; update_list(true);};
-        inline void changesize(flt ratio){
-            skinradius = critdist*ratio; update_list(true);};
-
-        inline uint ignore_size() const{return ignorepairs.size();};
-        inline uint size() const{return atoms.size();};
-        inline vector<idpair>::iterator begin(){return curpairs.begin();};
-        inline vector<idpair>::iterator end(){return curpairs.end();};
-        inline idpair get(uint i){return curpairs[i];};
-        //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
-        ~neighborlist(){};
-};
-
-inline neighborlist* neighborlistL(sptr<Box> box, const double innerradius, const double outerradius){
-    return new neighborlist(box, innerradius, outerradius);
-};
-
-template <class A, class P>
-class SimpleListed : public interaction {
-    protected:
-        vector<A> atoms;
-    
-    public:
-        SimpleListed(){};
-        inline void add(A atm){atoms.push_back(atm);};
-        //flt energy(Box &box, idpair &pair);
-        flt energy(Box &box);
-        flt pressure(Box &box);
-        uint size(){return ((uint) (atoms.size()));};
-        //inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
-        //inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
-        inline vector<A> &atom_list(){return atoms;};
-        ~SimpleListed(){};
-};
-
-template <class A, class P>
-class NListed : public interaction {
-    // neighborlist keeps track of atom* pairs within a particular distance.
-    // NListed keeps track of atoms with additional properties
-    // that interact through a particular interaction.
-    // class A needs to inherit from atomid, and also have an initialization
-    // method A(atomid a, A other)
-    // you also need to implement a couple methods below
-    
-    // Implementation detail:
-    // note that neighborlist maintains its own metagroup, so that when
-    // a member of A is created and passed to this group, the atomid in that
-    // member has an A.n() value referring to its place in the *original*
-    // atomgroup, not this one. This is why we need an A(atomid, A) method;
-    // so we can make a new A with all the same properties as before,
-    // but with the n() referring to the neighborlist maintained atomgroup.
-    protected:
-        vector<A> atoms;
-        vector<P> pairs;
-        sptr<neighborlist> neighbors;
-        uint lastupdate;
-    public:
-        NListed(sptr<neighborlist> neighbors) : neighbors(neighbors){};
-        inline void add(A atm){
-            atomid id = neighbors->add(atm.pointer());
-            A a = A(id, atm);
-            assert(a.n() <= atoms.size());
-            if (a.n() == atoms.size()) {atoms.push_back(a); return;};
-            atoms[a.n()] = a;};
-        void update_pairs();
-        P getpair(idpair &pair){
-            return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
-        A& getatom(uint n){return atoms[n];}
-        flt energy(Box &box, idpair &pair);
-        flt energy(Box &box);
-        flt pressure(Box &box);
-        inline vector<P> &pairiter(){return pairs;};
-        uint size(){return ((uint) (atoms.size()));};
-        inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
-        inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
-        inline vector<A> &atom_list(){return atoms;};
-        inline sptr<neighborlist> nlist(){return neighbors;};
-        //~ flt energy_test(flt dist);
-        //~ flt force_test(flt dist);
-        ~NListed(){};
-};
-
-template <class A, class P>
-class NListedVirial : public interactionpairsx {
-    private:
-        NListed<A,P> nlisted;
-    public:
-        NListedVirial(sptr<neighborlist> neighbors) : nlisted(neighbors){};
-        void setForces(Box &box){nlisted.setForces(box);};
-        void setForces(Box &box, fpairxFunct*);
-        virtual inline flt setForcesGetPressure(Box &box){return nlisted.setForcesGetPressure(box);};
-        virtual flt setForcesGetEnergy(Box &box);
-        virtual inline flt energy(Box &box){return nlisted.energy(box);};
-        virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
-        inline sptr<neighborlist> nlist(){return nlisted.nlist();};
-};
 
 struct Charged : public atomid {
     flt q;
@@ -1716,6 +1223,90 @@ class LJsimple : public interaction {
 };
 
 template <class A, class P>
+class SimpleListed : public interaction {
+    protected:
+        vector<A> atoms;
+    
+    public:
+        SimpleListed(){};
+        inline void add(A atm){atoms.push_back(atm);};
+        //flt energy(Box &box, idpair &pair);
+        flt energy(Box &box);
+        flt pressure(Box &box);
+        uint size(){return ((uint) (atoms.size()));};
+        //inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box);
+        //inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
+        inline vector<A> &atom_list(){return atoms;};
+        ~SimpleListed(){};
+};
+
+template <class A, class P>
+class NListed : public interaction {
+    // neighborlist keeps track of atom* pairs within a particular distance.
+    // NListed keeps track of atoms with additional properties
+    // that interact through a particular interaction.
+    // class A needs to inherit from atomid, and also have an initialization
+    // method A(atomid a, A other)
+    // you also need to implement a couple methods below
+    
+    // Implementation detail:
+    // note that neighborlist maintains its own metagroup, so that when
+    // a member of A is created and passed to this group, the atomid in that
+    // member has an A.n() value referring to its place in the *original*
+    // atomgroup, not this one. This is why we need an A(atomid, A) method;
+    // so we can make a new A with all the same properties as before,
+    // but with the n() referring to the neighborlist maintained atomgroup.
+    protected:
+        vector<A> atoms;
+        vector<P> pairs;
+        sptr<neighborlist> neighbors;
+        uint lastupdate;
+    public:
+        NListed(sptr<neighborlist> neighbors) : neighbors(neighbors){};
+        inline void add(A atm){
+            atomid id = neighbors->add(atm.pointer());
+            A a = A(id, atm);
+            assert(a.n() <= atoms.size());
+            if (a.n() == atoms.size()) {atoms.push_back(a); return;};
+            atoms[a.n()] = a;};
+        void update_pairs();
+        P getpair(idpair &pair){
+            return P(atoms[pair.first().n()], atoms[pair.last().n()]);}
+        A& getatom(uint n){return atoms[n];}
+        flt energy(Box &box, idpair &pair);
+        flt energy(Box &box);
+        flt pressure(Box &box);
+        inline vector<P> &pairiter(){return pairs;};
+        uint size(){return ((uint) (atoms.size()));};
+        inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box);
+        inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
+        inline vector<A> &atom_list(){return atoms;};
+        inline sptr<neighborlist> nlist(){return neighbors;};
+        //~ flt energy_test(flt dist);
+        //~ flt force_test(flt dist);
+        ~NListed(){};
+};
+
+template <class A, class P>
+class NListedVirial : public interactionpairsx {
+    private:
+        NListed<A,P> nlisted;
+    public:
+        NListedVirial(sptr<neighborlist> neighbors) : nlisted(neighbors){};
+        void setForces(Box &box){nlisted.setForces(box);};
+        void setForces(Box &box, fpairxFunct*);
+        virtual inline flt setForcesGetPressure(Box &box){return nlisted.setForcesGetPressure(box);};
+        virtual flt setForcesGetEnergy(Box &box);
+        virtual inline flt energy(Box &box){return nlisted.energy(box);};
+        virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
+        inline sptr<neighborlist> nlist(){return nlisted.nlist();};
+};
+
+template <class A, class P>
 flt SimpleListed<A, P>::energy(Box &box){
     flt E = 0;
     typename vector<A>::iterator it1;
@@ -1930,17 +1521,6 @@ class Charges : public interaction {
         //~ ~LJsimple(){};
 };
 
-
-inline bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
-    if(sizet < NDIM * arr.size()){return false;};
-    for(uint i=0; i < arr.size(); i++)
-    for(uint j=0; j < NDIM; j++)
-    {
-        buffer[i*NDIM + j] = (double) ((*arr[i])[j]);
-    }
-    return true;
-};
-
 ////////////////////////////////////////////////////////////////////////
 // A wall
 
@@ -2033,222 +1613,6 @@ class WalledBox2D : public OriginBox {
                 delete *it;
             }
         };
-};
-#endif
-
-////////////////////////////////////////////////////////////////////////
-// For comparing two jammed structures
-
-/* We have two packings, A and B, and want to know the sequence {A1, A2, A3...}
- * such that particle A1 of packing 1 matches particle 1 of packing B.
- * A jamminglist is a partial list; it has a list {A1 .. An}, with n / N
- * particles assigned, with a total distance² of distsq.
-*/ 
-class jamminglist {
-    public:
-        vector<uint> assigned;
-        flt distsq;
-        
-        jamminglist() : assigned(), distsq(0){};
-        jamminglist(const jamminglist& other) 
-            : assigned(other.assigned), distsq(other.distsq){};
-        jamminglist(const jamminglist& other, uint expand, flt addeddist)
-            : assigned(other.size() + 1, 0), distsq(other.distsq + addeddist){
-            for(uint i=0; i < other.size(); i++){
-                assigned[i] = other.assigned[i];
-            }
-            assigned[assigned.size()-1] = expand;
-        }
-        inline uint size() const {return (uint) assigned.size();};
-        
-        bool operator<(const jamminglist& other);
-};
-
-class jammingtree {
-    private:
-        sptr<Box> box;
-        list<jamminglist> jlists;
-        vector<Vec> A;
-        vector<Vec> B;
-    public:
-        jammingtree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
-            : box(box), jlists(), A(A), B(B) {
-            jlists.push_back(jamminglist());
-            assert(A.size() <= B.size());
-        };
-
-        bool expand(){
-            jamminglist curjlist = jlists.front();
-            vector<uint>& curlist = curjlist.assigned;
-            if(curlist.size() >= A.size()){
-                //~ cout << "List already too big\n";
-                return false;
-            }
-            
-            list<jamminglist> newlists = list<jamminglist>();
-            for(uint i=0; i < B.size(); i++){
-                vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
-                //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
-                if (found != curlist.end()){
-                    //~ cout << "Found " << i << "\n";
-                    //cout << found << '\n';
-                    continue;
-                }
-                flt newdist = box->diff(A[curlist.size()], B[i]).sq();
-                jamminglist newjlist = jamminglist(curjlist, i, newdist);
-                newlists.push_back(newjlist);
-                //~ cout << "Made " << i << "\n";
-            }
-            
-            if(newlists.size() <= 0){
-                //~ cout << "No lists made\n";
-                return false;
-            }
-            //~ cout << "Have " << newlists.size() << "\n";
-            newlists.sort();
-            //~ cout << "Sorted.\n";
-            jlists.pop_front();
-            //~ cout << "Popped.\n";
-            jlists.merge(newlists);
-            //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
-            return true;
-        }
-        bool expand(uint n){
-            bool retval=false;
-            for(uint i=0; i<n; i++){
-                retval = expand();
-            }
-            return retval;
-        }
-        list<jamminglist> &mylist(){return jlists;};
-        list<jamminglist> copylist(){return jlists;};
-        
-        jamminglist curbest(){
-            jamminglist j = jamminglist(jlists.front());
-            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
-            //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
-            //~ cout << '\n';
-            return j;
-            //return jamminglist(jlists.front());
-            };
-        uint size(){return (uint) jlists.size();};
-};
-
-#ifdef VEC2D
-
-class jamminglistrot : public jamminglist {
-    public:
-        uint rotation;
-        
-        jamminglistrot() : jamminglist(), rotation(0){};
-        jamminglistrot(uint rot) : jamminglist(), rotation(rot){};
-        jamminglistrot(const jamminglistrot& other) 
-            : jamminglist(other), rotation(other.rotation){};
-        jamminglistrot(const jamminglistrot& other, uint expand, flt addeddist)
-            : jamminglist(other, expand, addeddist), rotation(other.rotation){};
-        
-        bool operator<(const jamminglistrot& other);
-};
-
-// Includes rotations, flips, and translations.
-class jammingtree2 {
-    protected:
-        sptr<Box> box;
-        list<jamminglistrot> jlists;
-        vector<Vec> A;
-        vector<vector<Vec> > Bs;
-    public:
-        // make all 8 possible rotations / flips
-        // then subtract off all possible COMVs
-        jammingtree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
-        flt distance(jamminglistrot& jlist);
-        list<jamminglistrot> expand(jamminglistrot curjlist);
-        
-        virtual bool expand();
-        
-        bool expand(uint n){
-            bool retval=false;
-            for(uint i=0; i<n; i++){
-                retval = expand();
-                if(!retval) break;
-            }
-            return retval;
-        }
-        bool expandto(flt maxdistsq){
-            bool retval = true;
-            while((maxdistsq <= 0 or jlists.front().distsq < maxdistsq) and retval){
-                retval = expand();
-            };
-            return retval;
-        }
-        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
-        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
-        
-        list<jamminglistrot> &mylist(){return jlists;};
-        list<jamminglistrot> copylist(){return jlists;};
-        list<jamminglistrot> copylist(uint n){
-            list<jamminglistrot>::iterator last = jlists.begin();
-            advance(last, n);
-            return list<jamminglistrot>(jlists.begin(), last);
-        };
-        
-        
-        jamminglistrot curbest(){
-            if(jlists.size() <= 0){
-                jamminglistrot bad_list = jamminglistrot();
-                bad_list.distsq = -1;
-                return bad_list;
-                }
-            jamminglistrot j = jamminglistrot(jlists.front());
-            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
-            //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
-            //~ cout << '\n';
-            return j;
-            //return jamminglist(jlists.front());
-            };
-        
-        //jamminglistrot operator[](uint i){
-        //    assert(i < jlists.size());
-        //    return jamminglistrot(jlists[i]);
-        //};
-        
-        uint size(){return (uint) jlists.size();};
-        
-        vector<Vec> locationsB(jamminglistrot jlist);
-        vector<Vec> locationsB(){return locationsB(curbest());};
-        vector<Vec> locationsA(jamminglistrot jlist);
-        vector<Vec> locationsA(){return locationsA(curbest());};
-        virtual ~jammingtree2(){};
-};
-
-
-class jammingtreeBD : public jammingtree2 {
-    /* For a bi-disperse packing.
-     * 'cutoff' is the number of particles of the first kind; i.e., the
-     * A vector should have A[0]..A[cutoff-1] be of particle type 1,
-     * and A[cutoff]..A[N-1] of particle type 2.
-     * This does much the same as jammingtree2, but doesn't check any 
-     * reordering in which particles of one type are relabeled as another.
-     * For exampe, with 2+2 particles (cutoff 2), we check
-     * [0123],[1023],[0132],[1032]
-     * But not
-     * [0213],[0231],[0312],[0321],[1203],[1230],[1302],[1320],...
-     * This means at most (cutoff! (N-cutoff)!) combinations are checked,
-     * and not all N!, which can save a lot of time (as well as
-     *  rejecting false combinations).
-     */
-    protected:
-        uint cutoff1,cutoff2;
-    public:
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
-            jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
-                    uint cutoffA, uint cutoffB);// :
-            //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
-        
-        list<jamminglistrot> expand(jamminglistrot curjlist);
-        bool expand();
-        bool expand(uint n){return jammingtree2::expand(n);};
 };
 #endif
 

@@ -1,13 +1,10 @@
 #include "interaction.hpp"
 
-#include <vector>
-//#include <set>
-//#include <map>
-//#include <cassert>
-//#include <climits>
-
 #ifndef CONSTRAINTS_H
 #define CONSTRAINTS_H
+
+#include <vector>
+#include <list>
 
 class constraint {
     public:
@@ -396,5 +393,221 @@ class RsqTracker : public statetracker {
         //~ 
     //~ 
 //~ };
+
+////////////////////////////////////////////////////////////////////////
+// For comparing two jammed structures
+
+/* We have two packings, A and B, and want to know the sequence {A1, A2, A3...}
+ * such that particle A1 of packing 1 matches particle 1 of packing B.
+ * A jamminglist is a partial list; it has a list {A1 .. An}, with n / N
+ * particles assigned, with a total distance² of distsq.
+*/ 
+class jamminglist {
+    public:
+        vector<uint> assigned;
+        flt distsq;
+        
+        jamminglist() : assigned(), distsq(0){};
+        jamminglist(const jamminglist& other) 
+            : assigned(other.assigned), distsq(other.distsq){};
+        jamminglist(const jamminglist& other, uint expand, flt addeddist)
+            : assigned(other.size() + 1, 0), distsq(other.distsq + addeddist){
+            for(uint i=0; i < other.size(); i++){
+                assigned[i] = other.assigned[i];
+            }
+            assigned[assigned.size()-1] = expand;
+        }
+        inline uint size() const {return (uint) assigned.size();};
+        
+        bool operator<(const jamminglist& other);
+};
+
+class jammingtree {
+    private:
+        sptr<Box> box;
+        list<jamminglist> jlists;
+        vector<Vec> A;
+        vector<Vec> B;
+    public:
+        jammingtree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
+            : box(box), jlists(), A(A), B(B) {
+            jlists.push_back(jamminglist());
+            assert(A.size() <= B.size());
+        };
+
+        bool expand(){
+            jamminglist curjlist = jlists.front();
+            vector<uint>& curlist = curjlist.assigned;
+            if(curlist.size() >= A.size()){
+                //~ cout << "List already too big\n";
+                return false;
+            }
+            
+            list<jamminglist> newlists = list<jamminglist>();
+            for(uint i=0; i < B.size(); i++){
+                vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
+                //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
+                if (found != curlist.end()){
+                    //~ cout << "Found " << i << "\n";
+                    //cout << found << '\n';
+                    continue;
+                }
+                flt newdist = box->diff(A[curlist.size()], B[i]).sq();
+                jamminglist newjlist = jamminglist(curjlist, i, newdist);
+                newlists.push_back(newjlist);
+                //~ cout << "Made " << i << "\n";
+            }
+            
+            if(newlists.size() <= 0){
+                //~ cout << "No lists made\n";
+                return false;
+            }
+            //~ cout << "Have " << newlists.size() << "\n";
+            newlists.sort();
+            //~ cout << "Sorted.\n";
+            jlists.pop_front();
+            //~ cout << "Popped.\n";
+            jlists.merge(newlists);
+            //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
+            return true;
+        }
+        bool expand(uint n){
+            bool retval=false;
+            for(uint i=0; i<n; i++){
+                retval = expand();
+            }
+            return retval;
+        }
+        list<jamminglist> &mylist(){return jlists;};
+        list<jamminglist> copylist(){return jlists;};
+        
+        jamminglist curbest(){
+            jamminglist j = jamminglist(jlists.front());
+            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
+            //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
+            //~ cout << '\n';
+            return j;
+            //return jamminglist(jlists.front());
+            };
+        uint size(){return (uint) jlists.size();};
+};
+
+#ifdef VEC2D
+
+class jamminglistrot : public jamminglist {
+    public:
+        uint rotation;
+        
+        jamminglistrot() : jamminglist(), rotation(0){};
+        jamminglistrot(uint rot) : jamminglist(), rotation(rot){};
+        jamminglistrot(const jamminglistrot& other) 
+            : jamminglist(other), rotation(other.rotation){};
+        jamminglistrot(const jamminglistrot& other, uint expand, flt addeddist)
+            : jamminglist(other, expand, addeddist), rotation(other.rotation){};
+        
+        bool operator<(const jamminglistrot& other);
+};
+
+// Includes rotations, flips, and translations.
+class jammingtree2 {
+    protected:
+        sptr<Box> box;
+        list<jamminglistrot> jlists;
+        vector<Vec> A;
+        vector<vector<Vec> > Bs;
+    public:
+        // make all 8 possible rotations / flips
+        // then subtract off all possible COMVs
+        jammingtree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
+        flt distance(jamminglistrot& jlist);
+        list<jamminglistrot> expand(jamminglistrot curjlist);
+        
+        virtual bool expand();
+        
+        bool expand(uint n){
+            bool retval=false;
+            for(uint i=0; i<n; i++){
+                retval = expand();
+                if(!retval) break;
+            }
+            return retval;
+        }
+        bool expandto(flt maxdistsq){
+            bool retval = true;
+            while((maxdistsq <= 0 or jlists.front().distsq < maxdistsq) and retval){
+                retval = expand();
+            };
+            return retval;
+        }
+        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        
+        list<jamminglistrot> &mylist(){return jlists;};
+        list<jamminglistrot> copylist(){return jlists;};
+        list<jamminglistrot> copylist(uint n){
+            list<jamminglistrot>::iterator last = jlists.begin();
+            advance(last, n);
+            return list<jamminglistrot>(jlists.begin(), last);
+        };
+        
+        
+        jamminglistrot curbest(){
+            if(jlists.size() <= 0){
+                jamminglistrot bad_list = jamminglistrot();
+                bad_list.distsq = -1;
+                return bad_list;
+                }
+            jamminglistrot j = jamminglistrot(jlists.front());
+            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
+            //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
+            //~ cout << '\n';
+            return j;
+            //return jamminglist(jlists.front());
+            };
+        
+        //jamminglistrot operator[](uint i){
+        //    assert(i < jlists.size());
+        //    return jamminglistrot(jlists[i]);
+        //};
+        
+        uint size(){return (uint) jlists.size();};
+        
+        vector<Vec> locationsB(jamminglistrot jlist);
+        vector<Vec> locationsB(){return locationsB(curbest());};
+        vector<Vec> locationsA(jamminglistrot jlist);
+        vector<Vec> locationsA(){return locationsA(curbest());};
+        virtual ~jammingtree2(){};
+};
+
+
+class jammingtreeBD : public jammingtree2 {
+    /* For a bi-disperse packing.
+     * 'cutoff' is the number of particles of the first kind; i.e., the
+     * A vector should have A[0]..A[cutoff-1] be of particle type 1,
+     * and A[cutoff]..A[N-1] of particle type 2.
+     * This does much the same as jammingtree2, but doesn't check any 
+     * reordering in which particles of one type are relabeled as another.
+     * For exampe, with 2+2 particles (cutoff 2), we check
+     * [0123],[1023],[0132],[1032]
+     * But not
+     * [0213],[0231],[0312],[0321],[1203],[1230],[1302],[1320],...
+     * This means at most (cutoff! (N-cutoff)!) combinations are checked,
+     * and not all N!, which can save a lot of time (as well as
+     *  rejecting false combinations).
+     */
+    protected:
+        uint cutoff1,cutoff2;
+    public:
+        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+            jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
+        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
+                    uint cutoffA, uint cutoffB);// :
+            //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
+        
+        list<jamminglistrot> expand(jamminglistrot curjlist);
+        bool expand();
+        bool expand(uint n){return jammingtree2::expand(n);};
+};
+#endif
 
 #endif

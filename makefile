@@ -34,11 +34,11 @@ printout:
 clean:
 	rm -f *.o *.so *.gch sim_wrap*.cxx
 
-sim_wrap2d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+sim_wrap2d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
 	$(SWIG) -DVEC2D sim.i
 	mv sim_wrap.cxx sim_wrap2d.cxx
 
-sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
 	$(SWIG) -DVEC3D sim.i
 	mv sim_wrap.cxx sim_wrap3d.cxx
 
@@ -54,11 +54,11 @@ _sim2d.so: sim_wrap2d.o
 _sim.so: sim_wrap3d.o
 	$(CXX) $(CCOPTS) -DVEC3D -shared sim_wrap3d.o -o _sim.so $(LIB)
 
-sim_wrap2dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+sim_wrap2dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
 	$(SWIG) -DVEC2D -DLONGFLOAT sim.i
 	mv sim_wrap.cxx sim_wrap2dlong.cxx
 
-sim_wrap3dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp vecrand.cpp vec.hpp
+sim_wrap3dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
 	$(SWIG) -DVEC3D -DLONGFLOAT sim.i
 	mv sim_wrap.cxx sim_wrap3dlong.cxx
 
@@ -80,17 +80,23 @@ define VEC_TARGET_RULE
 vecrand$(1).o: vec.hpp vecrand.hpp vecrand.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c vecrand.cpp -o vecrand$(1).o
 
-interaction$(1).o: vec.hpp vecrand.hpp interaction.hpp interaction.cpp
+box$(1).o: vec.hpp vecrand.hpp box.hpp box.cpp
+	$(CXX) $(CCOPTS) -DVEC$(1) -c box.cpp -o box$(1).o
+
+trackers$(1).o: vec.hpp vecrand.hpp box.hpp trackers.hpp trackers.cpp
+	$(CXX) $(CCOPTS) -DVEC$(1) -c trackers.cpp -o trackers$(1).o
+
+interaction$(1).o: vec.hpp vecrand.hpp box.hpp trackers.hpp interaction.hpp interaction.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c interaction.cpp -o interaction$(1).o
 
-constraints$(1).o: vec.hpp vecrand.hpp interaction.hpp constraints.hpp constraints.cpp
+constraints$(1).o: vec.hpp vecrand.hpp box.hpp trackers.hpp interaction.hpp constraints.hpp constraints.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c constraints.cpp -o constraints$(1).o
 		
-collection$(1).o: vec.hpp vecrand.hpp interaction.hpp collection.hpp constraints.hpp collection.cpp
+collection$(1).o: vec.hpp vecrand.hpp box.hpp trackers.hpp interaction.hpp collection.hpp constraints.hpp collection.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c collection.cpp -o collection$(1).o
 
-libsim$(1).so: vecrand$(1).o interaction$(1).o constraints$(1).o collection$(1).o 
-	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o libsim$(1).so vecrand$(1).o interaction$(1).o constraints$(1).o collection$(1).o
+libsim$(1).so: vecrand$(1).o box$(1).o trackers$(1).o interaction$(1).o constraints$(1).o collection$(1).o 
+	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o libsim$(1).so box$(1).o trackers$(1).o vecrand$(1).o interaction$(1).o constraints$(1).o collection$(1).o
 
 endef
 
