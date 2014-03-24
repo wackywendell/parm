@@ -1,15 +1,5 @@
 #include "box.hpp"
 
-//~ #include <vector>
-//~ #include <set>
-//~ #include <map>
-//~ #include <list>
-//~ #include <iterator>
-//~ #include <algorithm>
-//~ #include <cassert>
-//~ #include <climits>
-//~ #include <boost/shared_ptr.hpp>
-
 #ifndef TRACKERS_H
 #define TRACKERS_H
 

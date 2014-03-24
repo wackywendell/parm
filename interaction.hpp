@@ -1,16 +1,5 @@
 #include "trackers.hpp"
 
-//~ #include <vector>
-//~ #include <bitset> // for contact tracking
-//~ #include <set>
-//~ #include <map>
-//~ #include <list>
-//~ #include <iterator>
-//~ #include <algorithm>
-//~ #include <cassert>
-//~ #include <climits>
-#include <boost/shared_ptr.hpp>
-
 #ifndef INTERACTION_H
 #define INTERACTION_H
 
