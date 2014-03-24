@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
-CCOPTS=-Wall -O2 -fPIC -Wconversion #-std=c++11
+CCOPTS=-Wall -O2 -fPIC #-std=c++11
 
 #INC=-I/usr/include/python2.7
 INC=`python3-config --includes`
@@ -63,16 +63,16 @@ sim_wrap3dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp vecrand
 	mv sim_wrap.cxx sim_wrap3dlong.cxx
 
 sim_wrap2dlong.o: sim_wrap2dlong.cxx
-	$(CXX) $(CCOPTS) -DVEC2D -DLONGFLOAT -c sim_wrap2dlong.cxx $(INC)
+	$(CXX) $(CCOPTS)  -Wconversion -DVEC2D -DLONGFLOAT -c sim_wrap2dlong.cxx $(INC)
 
 sim_wrap3dlong.o: sim_wrap3dlong.cxx
-	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -c sim_wrap3dlong.cxx $(INC)
+	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -c sim_wrap3dlong.cxx $(INC)
 
 _sim2dlong.so: sim_wrap2dlong.o
-	$(CXX) $(CCOPTS) -DVEC2D -DLONGFLOAT -shared sim_wrap2dlong.o -o _sim2dlong.so $(LIB)
+	$(CXX) $(CCOPTS) -Wconversion -DVEC2D -DLONGFLOAT -shared sim_wrap2dlong.o -o _sim2dlong.so $(LIB)
 	
 _sim3dlong.so: sim_wrap3dlong.o
-	$(CXX) $(CCOPTS) -DVEC3D -DLONGFLOAT -shared sim_wrap3dlong.o -o _sim3dlong.so $(LIB)
+	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -shared sim_wrap3dlong.o -o _sim3dlong.so $(LIB)
 
 VECOPTS := 2D 3D
 

@@ -370,4 +370,31 @@ class RsqTracker : public statetracker {
         
 };
 
+//~ class DividedBox : public statetracker {
+    //~ protected:
+        //~ sptr<OriginBox> box;
+        //~ sptr<atomgroup> atoms;
+        //~ flt mindist;
+        //~ uint Nperside;
+        //~ Vec cellshape;
+        //~ 
+    //~ public:
+        //~ DividedBox(sptr<OriginBox> box, sptr<atomgroup> atoms, flt mindist,
+            //~ uint cellcount) : box(box), atoms(atoms), mindist(mindist){
+                //~ Nperside = (uint) ceill(powflt(cellcount, OVERNDIM));
+                //~ 
+                //~ Vec shape = box->boxshape();
+                //~ flt Lmin = shape[0];
+                //~ for(uint i=1; i<NDIM; i++) Lmin = shape[i] < Lmin ? shape[i] : Lmin;
+                //~ 
+                //~ uint maxperside = (uint) floorl(Lmin / mindist);
+                //~ 
+                //~ if(maxperside < Nperside) Nperside = maxperside;
+                //~ cellshape = shape / Nperside;
+            //~ };
+        //~ 
+        //~ 
+    //~ 
+//~ };
+
 #endif

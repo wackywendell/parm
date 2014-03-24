@@ -64,6 +64,8 @@ using namespace boost; // required for SWIG for some reason
 //typedef unsigned int uint;
 typedef const unsigned int cuint;
 
+class atomgroup;
+
 class Box {
     public:
         virtual Vec diff(Vec r1, Vec r2)=0;
@@ -91,26 +93,14 @@ class statetracker {
  */
 
 #ifdef VEC3D
-#ifdef LONGFLOAT
 inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remainderl(r1[0], r2[0]), remainderl(r1[1], r2[1]), remainderl(r1[2], r2[2]));
+    return Vec(remflt(r1[0], r2[0]), remflt(r1[1], r2[1]), remflt(r1[2], r2[2]));
 };
-#else
-inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]), remainder(r1[2], r2[2]));
-};
-#endif
 #endif
 #ifdef VEC2D
-#ifdef LONGFLOAT
 inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remainderl(r1[0], r2[0]), remainderl(r1[1], r2[1]));
+    return Vec(remflt(r1[0], r2[0]), remflt(r1[1], r2[1]));
 };
-#else
-inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]));
-};
-#endif
 #endif
 
 
@@ -139,7 +129,17 @@ class OriginBox : public Box {
         flt L(){return (boxsize[0] + boxsize[1])/2.0;};
         #endif
         flt resize(flt factor){boxsize *= factor; return V();}
-        flt resizeV(flt newV){flt curV = V(); boxsize *= powflt(newV/curV, OVERNDIM); return V();}
+        flt resize(Vec newsize){boxsize = newsize; return V();}
+        flt resizeV(flt newV){
+            flt curV = V();
+            boxsize *= powflt(newV/curV, OVERNDIM);
+            return V();
+        }
+        flt resizeL(flt newL){
+            flt curL = powflt(V(), OVERNDIM);
+            boxsize *= newL/curL;
+            return V();
+        }
         Vec randLoc(){
             Vec v = randVecBoxed();
             for(uint i=0; i<NDIM; i++){
@@ -148,6 +148,44 @@ class OriginBox : public Box {
             return diff(v, Vec());
         };
         Vec boxshape(){return boxsize;};
+};
+
+class LeesEdwardsBox : public OriginBox {
+    // Uses shear in the x-direction, relative to y
+    protected:
+        flt gamma;
+    public:
+        LeesEdwardsBox(Vec size, flt gamma=0.0) : OriginBox(size), gamma(gamma){};
+        Vec diff(Vec r1, Vec r2){
+            flt Ly = boxsize[1];
+            flt dy = r1[1]-r2[1];
+            int im = (int) roundflt(dy / Ly);
+            dy = dy - (im*Ly);
+            
+            flt Lx = boxsize[0];
+            flt dx = r1[0] - r2[0];
+            dx = dx - roundflt((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
+            
+            #ifdef VEC2D
+            return Vec(dx, dy);
+            #endif
+            #ifdef VEC3D
+            flt dz = remflt(r1[2], r2[2]);
+            return Vec(dx, dy, dz);
+            #endif
+        }
+        flt get_gamma(){return gamma;};
+        
+        void shear(flt dgamma, atomgroup &atoms);
+        Vec nonaffine(Vec v){
+            v[0] -= gamma * v[1];
+            return v;
+        }
+        
+        Vec affine(Vec v){
+            v[0] += gamma * v[1];
+            return v;
+        }
 };
 
 /***********************************************************************
@@ -715,18 +753,26 @@ struct bondgrouping {
 
 class bondpairs : public interaction {
     protected:
+        bool zeropressure;
         vector<bondgrouping> pairs;
-        inline static Vec diff(Vec r1, Vec r2){return r1-r2;};
+        //inline static Vec diff(Box &box, Vec r1, Vec r2){return r1-r2;};
+        inline static Vec diff(Box &box, Vec r1, Vec r2){return box.diff(r1, r2);};
     public:
-        bondpairs(vector<bondgrouping> pairs = vector<bondgrouping>());
+        bondpairs(vector<bondgrouping> pairs, bool zeropressure=true);
+        bondpairs(bool zeropressure=true);
         void add(bondgrouping b){pairs.push_back(b);};
-        void add(flt k, flt x0, atom* a1, atom* a2){add(bondgrouping(k,x0,a1,a2));};
+        inline void add(flt k, flt x0, atom* a1, atom* a2){
+            add(bondgrouping(k,x0,a1,a2));};
+        bool add_or_replace(bondgrouping b); // true means replaced
+        inline bool add_or_replace(flt k, flt x0, atom* a1, atom* a2){
+            return add_or_replace(bondgrouping(k,x0,a1,a2));};
         uint size() const{ return (uint) pairs.size();};
-        flt mean_dists() const;
-        flt std_dists() const;
+        flt mean_dists(Box &box) const;
+        flt std_dists(Box &box) const;
         flt energy(Box &box);
         void setForces(Box &box);
         flt pressure(Box &box);
+        flt setForcesGetPressure(Box &box);
 };
 
 struct anglegrouping {

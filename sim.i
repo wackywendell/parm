@@ -33,6 +33,7 @@
 %shared_ptr(Box)
 %shared_ptr(OriginBox)
 %shared_ptr(InfiniteBox)
+%shared_ptr(LeesEdwardsBox)
 %ignore AtomIter;
 %shared_ptr(atomgroup)
 %shared_ptr(atomvecRK4)

@@ -8,6 +8,9 @@ lingenerator uniformrand(randengine, mylineardistribution);
 // Note: there also exists the 'uniform_on_sphere' distribution
 // See http://www.boost.org/doc/libs/1_53_0/doc/html/boost_random/reference.html
 
+// for export, esp. to python, in case you want to be using the same seeds
+flt rand01(){return uniformrand();};
+
 #ifdef VEC2D
 Vec randVec(){
     return Vec(gauss(), gauss());

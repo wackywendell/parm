@@ -29,24 +29,26 @@ vector<flt> LDVector(vector<double> dists){
     return newdists;
 };
 
-inline bool isinfflt(long double n){return std::isinf(n);};
-inline bool isnanflt(long double n){return std::isnan(n);};
+inline bool isinfflt(long double n){return isinfl(n);};
+inline bool isnanflt(long double n){return isnanl(n);};
 inline flt powflt(flt n, flt m){return powl(n,m);};
 inline flt sqrtflt(flt n){return sqrtl(n);};
 inline flt cbrtflt(flt n){return cbrtl(n);};
 inline flt expm1flt(flt n){return expm1l(n);};
 inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
 inline flt remflt(flt n, flt m){return remainderl(n,m);};
+inline flt roundflt(flt n){return roundl(n);};
 #else
 typedef double flt;
-inline bool isinfflt(double n){return std::isinf(n);};
-inline bool isnanflt(double n){return std::isnan(n);};
+inline bool isinfflt(double n){return isinf(n);};
+inline bool isnanflt(double n){return isnan(n);};
 inline flt powflt(flt n, flt m){return pow(n,m);};
 inline flt sqrtflt(flt n){return sqrt(n);};
 inline flt cbrtflt(flt n){return cbrt(n);};
 inline flt expm1flt(flt n){return expm1(n);};
 inline flt copysignflt(flt n, flt m){return copysign(n,m);};
 inline flt remflt(flt n, flt m){return remainder(n,m);};
+inline flt roundflt(flt n){return round(n);};
 #endif
 
 #ifdef VEC2D
@@ -76,6 +78,7 @@ typedef boost::uniform_01<flt, flt> lindistribution;
 typedef boost::variate_generator<engine&, normdistribution > normgenerator;
 typedef boost::variate_generator<engine&, lindistribution > lingenerator;
 
+flt rand01();
 Vec randVec();
 Vec randVecBoxed();
 

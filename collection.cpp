@@ -233,6 +233,7 @@ flt collection::setForcesGetPressure(bool seta){
         interaction &inter = **it;
         p += inter.setForcesGetPressure(*box);
     }
+    assert(!isnanflt(p));
     if(!seta) return p;
     
     for(git = groups.begin(); git<groups.end(); git++){
@@ -241,6 +242,7 @@ flt collection::setForcesGetPressure(bool seta){
             m[i].a = m[i].f / m.getmass(i);
         }
     }
+    assert(!isnanflt(p));
     return p;
 }
 
@@ -742,12 +744,14 @@ collectionNLCG::collectionNLCG(sptr<OriginBox> box, const flt dt, const flt P0,
                 vector<sptr<statetracker> > trackers,
                 vector<sptr<constraint> > constraints,
                 const flt kappa, const flt kmax,
-                const flt secmax, const flt seceps) :
+                const uint secmax, const flt seceps) :
             collection(box, groups, interactions, trackers, 
-                constraints), dt(dt), secmax(secmax), seceps(seceps),
-                alphamax(10), dxmax(0), kappa(kappa), kmax(kmax),
+                constraints), dt(dt), seceps(seceps), secmax(secmax),
+                kappa(kappa), alphamax(0), afrac(0), dxmax(0),
+                stepmax(0), kmax(kmax), 
                 P0(P0), Knew(0), k(0), vl(0), fl(0), al(0), alpha(0), 
-                dxsum(0), alphavmax(0), maxdV(0), sec(0){
+                beta(0), betaused(0), dxsum(0), alphavmax(0), maxdV(0),
+                sec(0){
 };
 
 void collectionNLCG::reset(){
@@ -768,6 +772,11 @@ void collectionNLCG::setForces(bool seta, bool setV){
     if(setV){
         flt interacP = collection::setForcesGetPressure(false);
         fl = ((interacP/NDIM) - (P0*V))/kappa;
+        assert(kappa > 0);
+        assert(!isnanflt(interacP));
+        assert(!isnanflt(V));
+        assert(!isnanflt(P0));
+        assert(!isnanflt(fl));
         if(seta){
             al = fl;
             vl = fl;
@@ -967,52 +976,72 @@ void collectionNLCG::timestep(){
     
     vector<sptr<atomgroup> >::iterator git;
     
-    flt V0 = box->V();
-    
-    alpha = -dt;
+    //~ flt V0 = box->V();
     stepx(dt);
     setForces(false, true); // sets both atom.f and fl, but not atom.a or al
     update_constraints();
     flt eta0 = -fdotv(); // slope at x0 - dt
-    //~ bool bigeta = eta0 > 1e-2;
-    //~ if(bigeta) cout << "NLCG::timestep 1: eta0 " << eta0 << endl;
+    flt eta = eta0;
     stepx(-dt);
+    update_trackers();
+    alpha = -dt;
     setForces(false, true); // sets both atom.f and fl, but not atom.a or al
     update_constraints();
     dxsum = 0;
-    flt vdv = (flt) vdotv();
+    flt vdv = vdotv();
     
     /// Secant stepping
     // note that v does not change here; we simply step in the direction
     // of v until the force along v (eta, fdotv) gets very small...
     for(sec=0; sec < secmax; sec++){
-        flt eta = -fdotv(); // slope at x
+        eta = -fdotv(); // slope at x
                             // eta0 is the slope at x - α
-        if(eta == eta0){break;}
         
         // Go in the direction of -slope (-eta), approximating a quadratic.
         // abs added to ensure we go in the direction of the slope, and don't
         // maximize a quadratic
         flt alphafac = -eta / abs(eta0-eta);
-        if(alphafac > alphamax) alphafac = alphamax;
-        if(alphafac < -alphamax) alphafac = -alphamax;
+        if(abs(eta0 - eta) <= 1e-12 * abs(eta)){
+            alphafac = alphamax > 0 ? alphamax : 1.1;
+            sec = sec > 0 ? sec*2 - 1 : 1;
+        }
+        
+        if(alphamax > 0 and alphafac > alphamax) alphafac = alphamax;
+        //if(alphamax > 0 and alphafac > 0 and alphafac < alphamin) alphafac = alphamin;
+        if(alphamax > 0 and alphafac < -alphamax) alphafac = -alphamax;
+        //if(alphamax > 0 and alphafac < 0 and alphafac > -alphamin) alphafac = -alphamin;
+        
         // abs added here, same reason
         alpha = abs(alpha) * alphafac;
-        //~ if(abs(dxsum) > 10) bigeta = true;
-        //~ if(abs(eta) > 1e-2) bigeta = true;
-        //~ if(bigeta) cout << "NLCG::timestep 2: secant " << sec
-             //~ << " eta = " << eta << " -- alpha = " << alpha
-             //~ << " -- H = " << Hamiltonian() 
-             //~ << " -- V = " << box->V() << endl;
-        if(dxmax > 0 and abs(dxsum + alpha) > dxmax){
+        
+        //~ if(abs(alpha) <= 1e-32 and abs(eta) >= 1e-8){
+            //~ cout << "NLCGV::timestep 2: secant " << sec
+                 //~ << " eta = " << eta << " -- alpha = " << alpha;
+            //~ cout << " -- alpha0 = " << oldalpha;
+            //~ cout << " -- alphafac = " << alphafac;
+            //~ cout << " -- E = " << energy();
+            //~ cout << " -- K = " << kinetic();
+            //~ cout << " -- fdv = " << fdotv() << endl;
+        //~ }
+        
+        //~ if(sec >= secmax - 9){
+            //~ cout << "sec: " << sec << " eta: " << eta << " eta0: " << eta0 
+                //~ << " diff: " << (eta0 - eta) << " alpha: " << alpha
+                //~ << " alphafac: "  << alphafac << " alphamax: " << alphamax
+                //~ << " dxsum: " << (dxsum + alpha) << endl;
+        //~ }
+        
+        flt newdxsum = abs(dxsum + alpha);
+        if(dxmax > 0 and newdxsum > dxmax){
+            //~ cout << "dxmaxed: " << newdxsum << "  step: " << sqrtflt(dxsum*dxsum*vdv) << '\n';
             k = 0;
             break;
         }
         flt dVoverV = expm1flt(abs(dxsum + alpha) * vl / (kappa*NDIM));
         if(maxdV > 0 and dVoverV > maxdV){
             k = 0;
-            flt V1 = box->V();
-            cout << "V overflow, " << V0 << " -> " << V1 << '\n';
+            //~ flt V1 = box->V();
+            //~ cout << "V overflow, " << V0 << " -> " << V1 << '\n';
             break;
         }
         dxsum += alpha;
@@ -1021,6 +1050,19 @@ void collectionNLCG::timestep(){
         update_constraints();
         eta0 = eta;
         if(alpha*alpha*vdv < seceps*seceps) break;
+        if((sec > 1)
+                and (afrac > 0)
+                and (abs(alpha) < abs(dxsum))
+                and (abs(alpha) / abs(dxsum) < afrac)) break;
+        if(stepmax > 0 and dxsum*dxsum*vdv > stepmax*stepmax){
+            k = 0;
+            //~ cout << "stepmaxed: " << sqrtflt(dxsum*dxsum*vdv)
+                //~ << "  alpha: " << alpha
+                //~ << "  dx: " << dxsum
+                //~ << "  eta: " << eta
+                //~ << "  beta: " << beta << " -> " << betaused << '\n';
+            break;
+        }
     }
     
     alphavmax = sqrtflt(alpha*alpha*vdv);
@@ -1037,21 +1079,23 @@ void collectionNLCG::timestep(){
     al = fl;
     
     Knew = fdota();
-    flt beta = (Knew - Kmid) / Kold;
-    if(k >= kmax or beta <= 0){
+    beta = (Knew - Kmid) / Kold;
+    betaused = beta;
+    k++;
+    if(k >= kmax or isinfflt(betaused) or isnanflt(betaused) or betaused <= 0){
         k = 0;
-        beta = 0;
+        betaused = 0;
+    } else if(betaused > 1){
+        betaused = 1;
     }
     
     for(git = groups.begin(); git<groups.end(); git++){
         atomgroup &m = **git;
         for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].a + m[i].v*beta;
+            m[i].v = m[i].a + m[i].v*betaused;
         }
     }
-    vl = al + beta * vl;
-    
-    update_trackers();
+    vl = al + betaused * vl;
 }
 
 void collectionNLCG::descend(){

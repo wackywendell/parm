@@ -275,9 +275,10 @@ class collectionNLCG : public collection {
     public:
         // Parameters
         flt dt;
-        flt secmax, seceps, alphamax, dxmax;
+        flt seceps;
+        uint secmax;
         flt kappa;
-        flt kmax;
+        flt alphamax, afrac, dxmax, stepmax, kmax;
         
         // Goal pressure
         flt P0;
@@ -288,7 +289,7 @@ class collectionNLCG : public collection {
         flt vl, fl, al;
         
         // For tracking purposes
-        flt alpha, dxsum, alphavmax, maxdV;
+        flt alpha, beta, betaused, dxsum, alphavmax, maxdV;
         uint sec;
         
         void stepx(flt dx);
@@ -305,8 +306,8 @@ class collectionNLCG : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
-                const flt kappa=0, const flt kmax=1000,
-                const flt secmax=10, const flt seceps = 0.0001);
+                const flt kappa=1, const flt kmax=1000,
+                const uint secmax=10, const flt seceps = 0.0001);
         
         flt kinetic();  // Note: masses are ignored
         flt pressure();
@@ -323,8 +324,10 @@ class collectionNLCG : public collection {
         void setP(flt P){P0 = P; reset();};
         void setkappa(flt k){kappa=k; reset();};
         void setamax(flt a){alphamax=a;};
+        void setafrac(flt a){afrac=a;};
         void setdxmax(flt d){dxmax=d;};
-        void setmaxdV(flt d){maxdV=d;};
+        void setstepmax(flt m){stepmax=m;};
+        
 };
 
 

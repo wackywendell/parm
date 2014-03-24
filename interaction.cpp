@@ -250,6 +250,18 @@ atomid metagroup::get_id(atom* a){
     //~ return 4*eps*(12*powflt(r,-13))/sig;
 //~ }
 
+void LeesEdwardsBox::shear(flt dgamma, atomgroup &atoms){
+    // TODO: is this right for non-square boxes?
+    // Is gamma Δx / Lx or Δx / Ly?
+    for(uint i=0; i<atoms.size(); i++){
+        //flt dy = remflt(atoms[i].x[1], boxsize[1]);
+        flt dy = atoms[i].x[1];
+        atoms[i].x[0] += dy * dgamma;
+    }
+    
+    gamma += dgamma;
+}
+
 flt spring::energy(const Vec r){
     flt m = r.mag();
     flt l = m - x0;
@@ -562,13 +574,30 @@ flt dihedral::energy(const flt ang) const{
     //~ }
 //~ };
 
-bondpairs::bondpairs(vector<bondgrouping> pairs) : pairs(pairs){};
+bondpairs::bondpairs(vector<bondgrouping> pairs, bool zeropressure) : 
+        zeropressure(zeropressure), pairs(pairs){};
+
+bondpairs::bondpairs(bool zeropressure) : 
+        zeropressure(zeropressure){};
+
+bool bondpairs::add_or_replace(bondgrouping b){
+    vector<bondgrouping>::iterator it;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        if(((b.a1 == it->a1) and (b.a2 == it->a2)) or
+            ((b.a1 == it->a2) and (b.a2 == it->a1))){
+                *it = b;
+                return true;
+            }
+        }
+    pairs.push_back(b);
+    return false;
+};
 
 flt bondpairs::energy(Box &box){
     flt E=0;
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); it++){
-        Vec r = diff(it->a1->x, it->a2->x);
+        Vec r = diff(box, it->a1->x, it->a2->x);
         E += spring(it->k, it->x0).energy(r);
     }
     return E;
@@ -579,7 +608,7 @@ void bondpairs::setForces(Box &box){
     for(it = pairs.begin(); it < pairs.end(); it++){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
-        Vec r = diff(atom1.x, atom2.x);
+        Vec r = diff(box, atom1.x, atom2.x);
         Vec f = spring(it->k, it->x0).forces(r);
         //~ assert(f.sq() < 10000000);
         atom1.f += f;
@@ -587,38 +616,58 @@ void bondpairs::setForces(Box &box){
     }
 }
 
+flt bondpairs::setForcesGetPressure(Box &box){
+    if(zeropressure){
+        setForces(box);
+        return 0.0;
+    }
+    flt P=0;
+    vector<bondgrouping>::iterator it;
+    for(it = pairs.begin(); it < pairs.end(); it++){
+        atom & atom1 = *it->a1;
+        atom & atom2 = *it->a2;
+        Vec r = diff(box, atom1.x, atom2.x);
+        Vec f = spring(it->k, it->x0).forces(r);
+        //~ assert(f.sq() < 10000000);
+        atom1.f += f;
+        atom2.f -= f;
+        P += f.dot(r);
+    }
+    return P;
+}
+
 flt bondpairs::pressure(Box &box){
-    return 0;
+    if(zeropressure) return 0;
     vector<bondgrouping>::iterator it;
     flt P=0;
     for(it = pairs.begin(); it < pairs.end(); it++){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
-        Vec r = diff(atom1.x, atom2.x);
+        Vec r = diff(box, atom1.x, atom2.x);
         Vec f = spring(it->k, it->x0).forces(r);
         P += f.dot(r);
     }
     return P;
 }
 
-flt bondpairs::mean_dists() const{
+flt bondpairs::mean_dists(Box &box) const{
     flt dist=0;
     uint N=0;
     vector<bondgrouping>::const_iterator it;
     for(it = pairs.begin(); it < pairs.end(); it++){
-        Vec r = diff(it->a1->x, it->a2->x);
+        Vec r = diff(box, it->a1->x, it->a2->x);
         dist += abs(r.mag() - it->x0);
         N++;
     }
     return dist/N;
 }
 
-flt bondpairs::std_dists() const{
+flt bondpairs::std_dists(Box &box) const{
     flt stds=0;
     uint N=0;
     vector<bondgrouping>::const_iterator it;
     for(it = pairs.begin(); it < pairs.end(); it++){
-        Vec r = diff(it->a1->x, it->a2->x);
+        Vec r = diff(box, it->a1->x, it->a2->x);
         flt curdist = r.mag() - it->x0;
         stds += curdist*curdist;
         N++;
