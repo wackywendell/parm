@@ -5,6 +5,7 @@
 
 #include <set>
 #include <map>
+#include "assert.h"
 
 class statetracker {
     public:
@@ -126,6 +127,88 @@ class neighborlist : public statetracker{
 
 inline neighborlist* neighborlistL(sptr<Box> box, const double innerradius, const double outerradius){
     return new neighborlist(box, innerradius, outerradius);
+};
+
+class GridIterator;
+
+class Grid {
+    public:
+        sptr<OriginBox> box;
+        metagroup atoms;
+        flt minwidth, goalwidth;
+        uint widths[NDIM];
+        vector<set<atomid> > gridlocs;
+        
+        vector<uint> neighbors(uint i);
+        uint get_loc(Vec v, Vec bsize);
+        
+    public:
+        typedef GridIterator iterator;
+        
+        Grid(sptr<OriginBox> box, const uint width) : box(box),
+                minwidth(-1), goalwidth(-1){
+            widths[0] = width;
+            widths[1] = width;
+            #ifndef VEC2D
+            widths[2] = width;
+            #endif
+        };
+        
+        Grid(sptr<OriginBox> box, vector<uint> width) : box(box),
+                minwidth(-1), goalwidth(-1){
+            assert(width.size() == NDIM);
+            widths[0] = width[0];
+            widths[1] = width[1];
+            #ifndef VEC2D
+            widths[2] = width[2];
+            #endif
+        };
+        
+        Grid(sptr<OriginBox> box, const flt goalwidth, const flt minwidth) :
+            box(box), minwidth(minwidth), goalwidth(goalwidth){
+                widths[0] = 0;
+                widths[1] = 0;
+                #ifndef VEC2D
+                widths[2] = 0;
+                #endif
+        };
+        
+        void update_widths();
+        void make_grid();
+        
+        friend class GridIterator;
+        iterator begin();
+        iterator end();
+};
+
+class GridIterator {
+    protected:
+        Grid & grid;
+        vector<set<atomid> >::iterator cell1;
+        set<atomid>::iterator atom1;
+        
+        vector<uint> neighbor_cells;
+        vector<uint>::iterator cellnum2;
+        set<atomid> *cell2;
+        set<atomid>::iterator atom2;
+    
+        // returns "successful increment", e.g. cell1 points to an element
+        bool increment_cell1();
+        bool increment_atom1();
+        bool increment_cell2();
+        bool increment_atom2();
+    
+    public:
+        GridIterator(Grid & grid);
+        GridIterator(Grid & grid, vector<set<atomid> >::iterator cell1);
+        
+        GridIterator& operator++();
+        idpair operator*(){return idpair(*atom1, *atom2);};
+        bool operator==(const GridIterator &other);
+        
+        bool operator!=(const GridIterator &other){
+            return !(*this == other);
+        };
 };
 
 #endif

@@ -38,6 +38,8 @@ inline flt expm1flt(flt n){return expm1l(n);};
 inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
 inline flt remflt(flt n, flt m){return remainderl(n,m);};
 inline flt roundflt(flt n){return roundl(n);};
+inline flt ceilflt(flt n){return ceill(n);};
+inline flt floorflt(flt n){return floorl(n);};
 #else
 typedef double flt;
 inline bool isinfflt(double n){return isinf(n);};
@@ -49,6 +51,8 @@ inline flt expm1flt(flt n){return expm1(n);};
 inline flt copysignflt(flt n, flt m){return copysign(n,m);};
 inline flt remflt(flt n, flt m){return remainder(n,m);};
 inline flt roundflt(flt n){return round(n);};
+inline flt ceilflt(flt n){return ceil(n);};
+inline flt floorflt(flt n){return floor(n);};
 #endif
 
 #ifdef VEC2D

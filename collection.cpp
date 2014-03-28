@@ -2310,7 +2310,12 @@ bool collectionCDBD::take_step(flt tlim){
     
     assert(atoms.size() > 0);
     assert(atomsizes.size() > 0);
-    assert(events.size() > 0);
+    if(events.size() == 0){
+        // TODO: this should check time to leave box, and only go that far
+        line_advance(tlim - curt);
+        curt = tlim;
+        return false;
+    }
     //~ std::cerr << "take_step: started, events " << events.size() << "\n";
     event e = *(events.begin());
     if ((tlim > 0) & (e.t > tlim)){
