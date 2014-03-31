@@ -63,14 +63,8 @@ int main(){
         }
     }
     
-    // collections take a vector<atomgroup*>, not just an atomgroup.
-    // note that atomvec is a subclass of atomgroup
-    // So now we make a "vector<atomgroup*>" with just one item in it: our atomvec
-    vector<boost::shared_ptr<atomgroup> > allatoms;
-    allatoms.push_back(atomptr);
-    
     //Now we make our "collection"
-    collectionVerlet collec = collectionVerlet((boost::shared_ptr<Box>) obox, dt, allatoms);
+    collectionVerlet collec = collectionVerlet(boost::static_pointer_cast<Box>(obox), atomptr, dt);
     
     // This is very important! Otherwise the neighborlist won't update!
     collec.addTracker(nl);

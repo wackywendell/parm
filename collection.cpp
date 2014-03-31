@@ -1,9 +1,9 @@
 #include "collection.hpp"
 
-collection::collection(sptr<Box> box, vector<sptr<atomgroup> > gs, vector<sptr<interaction> > is,
+collection::collection(sptr<Box> box, sptr<atomgroup> atoms, vector<sptr<interaction> > is,
               vector<sptr<statetracker> > ts, vector<sptr<constraint> > cs)
-        : box(box), groups(gs), interactions(is), trackers(ts), constraints(cs),
-                atoms(gs), E0(0){
+        : box(box), atoms(atoms), interactions(is), trackers(ts), constraints(cs),
+                E0(0){
     update_trackers();
     setForces(true);
     update_constraints();
@@ -12,11 +12,8 @@ collection::collection(sptr<Box> box, vector<sptr<atomgroup> > gs, vector<sptr<i
 
 void collection::scaleVs(flt scaleby){
     vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git != groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++){
-            g[i].v *= scaleby;
-        }
+    for(uint i = 0; i<atoms->size(); i++){
+        (*atoms)[i].v *= scaleby;
     }
 }
 
@@ -48,15 +45,6 @@ void collection::update_constraints(){
     }
 }
 
-flt collection::kinetic(){
-    flt E=0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        E+= group.kinetic();
-    }
-    return E;
-}
 
 flt collection::virial(){
     flt E = 0;
@@ -69,19 +57,7 @@ flt collection::virial(){
 
 flt collection::pressure(){
     flt V = box->V();
-    //~ if(isnanflt(V) or isinf(V)) return NAN;
-    //~ int ndof = 0, nc = 0;
-    //~ vector<sptr<constraint> >::iterator cit;
-    //~ for(cit = constraints.begin(); cit<constraints.end(); cit++){
-        //~ nc += (*cit)->ndof();
-    //~ }
-    //~ vector<sptr<atomgroup> >::iterator git;
-    //~ for(git = groups.begin(); git<groups.end(); git++){
-        //~ atomgroup &group = **git;
-        //~ ndof += 3*(group.size());
-    //~ }
-    
-    
+
     flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;
     //flt E = (ndof - nc) * temp();
     vector<sptr<interaction> >::iterator it;
@@ -117,93 +93,37 @@ flt collection::dof(){
         ndof -= (*cit)->ndof();
     }
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        ndof += NDIM*(group.size());
-    }
-    
-    return ndof;
+    return ndof + NDIM*(atoms->size());
 }
 
 flt collection::temp(bool minuscomv){
-    flt totatoms = 0;
-    flt totkinetic = 0;
     Vec v = Vec();
     if(minuscomv) v = comv();
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        totkinetic += group.kinetic(v);
-        //~ cout << "group K: " << group.kinetic(v) << ", totatoms: " << group.size() << "\n";
-        totatoms += group.size();
-    }
-    
     int ndof = (int) dof();
     if (minuscomv) ndof -= NDIM;
-    //~ cout << minuscomv << " " << ndof << " " << NDIM << endl;
-    //~ cout << "K: " << totkinetic << ", totatoms: " << totatoms << "\n";
-    return totkinetic * 2 / ndof;
+    return atoms->kinetic(v) * 2 / ndof;
 }
-
-//~ Vec collection::com(){
-    //~ vector<sptr<atomgroup> >::iterator git;
-    //~ flt mass = 0;
-    //~ Vec totcom = Vec();
-    //~ for(git = groups.begin(); git<groups.end(); git++){
-        //~ atomgroup &g = **git;
-        //~ for(uint i = 0; i<g.size(); i++){
-            //~ flt curmass = g.getmass(i);
-            //~ mass += curmass;
-            //~ totcom += g[i].x * curmass;
-        //~ }
-    //~ }
-    //~ return totcom / mass;
-//~ }
-//~ 
-//~ Vec collection::comv(){
-    //~ vector<sptr<atomgroup> >::iterator git;
-    //~ flt mass = 0;
-    //~ Vec totcom = Vec();
-    //~ for(git = groups.begin(); git<groups.end(); git++){
-        //~ atomgroup &g = **git;
-        //~ for(uint i = 0; i<g.size(); i++){
-            //~ flt curmass = g.getmass(i);
-            //~ mass += curmass;
-            //~ totcom += g[i].v * curmass;
-        //~ }
-    //~ }
-    //~ return totcom / mass;
-//~ }
 
 flt collection::gyradius(){
     vector<sptr<atomgroup> >::iterator git;
     Vec avgr = Vec();
-    flt N = 0;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++){
-            avgr += g[i].x;
-            N++;
-        }
+    flt N = atoms->size();
+    for(uint i = 0; i<atoms->size(); i++){
+        avgr += (*atoms)[i].x;
+        N++;
     }
     avgr /= N; // now avgr is the average location, akin to c.o.m.
     flt Rgsq = 0;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i<g.size(); i++) Rgsq += (g[i].x - avgr).sq();
+    for(uint i = 0; i<atoms->size(); i++){
+        Rgsq += ((*atoms)[i].x - avgr).sq();
     }
     
     return sqrtflt(Rgsq/N);
 }
 
 void collection::setForces(bool seta){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        group.resetForces();
-    }
+    atoms->resetForces();
     
     vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
@@ -212,20 +132,13 @@ void collection::setForces(bool seta){
     }
     if(!seta) return;
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].a = (*atoms)[i].f / atoms->getmass(i);
     }
 }
 
 flt collection::setForcesGetPressure(bool seta){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        group.resetForces();
-    }
+    atoms->resetForces();
     
     flt p=0;
     vector<sptr<interaction> >::iterator it;
@@ -236,20 +149,18 @@ flt collection::setForcesGetPressure(bool seta){
     assert(!isnanflt(p));
     if(!seta) return p;
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+            (*atoms)[i].a = (*atoms)[i].f / atoms->getmass(i);
     }
     assert(!isnanflt(p));
     return p;
 }
 
-collectionSol::collectionSol(sptr<Box> box, const flt dt, const flt damp,const flt T,
-        vector<sptr<atomgroup> > groups,vector<sptr<interaction> > interactions,
+collectionSol::collectionSol(sptr<Box> box, sptr<atomgroup> atoms,
+        const flt dt, const flt damp, const flt T,
+        vector<sptr<interaction> > interactions,
         vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
             dt(dt), damping(damp), desT(T){
     setCs();
     update_trackers();
@@ -306,48 +217,41 @@ void collectionSol::timestep(){
     // v(t+dt) = vp(t) + c2 dt a(t+dt)
     
     //Step 1: set atom.x = r(t+dt) and atom.v = vp(t)
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            flt v0 = sqrtflt(desT/m.getmass(i));
-            flt r0 = dt * v0;
-            VecPair vecpair;
-            if (damping > 0) vecpair = gauss.genVecs();
-            else vecpair[0] = vecpair[1] = Vec();
-            // vecpair[0] is drG, and vecpair[1] is dvG
-            m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0]*r0;
-            m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1]*v0;
-            //~ if(i==0 and git == groups.begin()) cout 
-                //~ << "drG: " << vecpair[0].mag() 
-                //~ << ", dvG: " << vecpair[1].mag()
-                //~ << "\n";
-        }
+        atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        flt v0 = sqrtflt(desT/m.getmass(i));
+        flt r0 = dt * v0;
+        VecPair vecpair;
+        if (damping > 0) vecpair = gauss.genVecs();
+        else vecpair[0] = vecpair[1] = Vec();
+        // vecpair[0] is drG, and vecpair[1] is dvG
+        m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0]*r0;
+        m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1]*v0;
+        //~ if(i==0 and git == groups.begin()) cout 
+            //~ << "drG: " << vecpair[0].mag() 
+            //~ << ", dvG: " << vecpair[1].mag()
+            //~ << "\n";
     }
     // Now we set forces and accelerations
     setForces(false);
     update_constraints();
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-        }
+    for(uint i=0; i<m.size(); i++){
+        m[i].a = m[i].f / m.getmass(i);
     }
     
     // And finish m[i].v
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v += m[i].a * (dt*c2);
-        }
+    for(uint i=0; i<m.size(); i++){
+    m[i].v += m[i].a * (dt*c2);
     }
     
     update_trackers();
 };
 
-collectionSolHT::collectionSolHT(sptr<Box> box, const flt dt, const flt damp,const flt T,
-        vector<sptr<atomgroup> > groups,vector<sptr<interaction> > interactions,
+collectionSolHT::collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
+        const flt dt, const flt damp,const flt T,
+        vector<sptr<interaction> > interactions,
         vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
             dt(dt), damping(damp), desT(T), gauss(sqrtflt(2.0*desT*damping/dt)){
     setGauss();
     update_trackers();
@@ -370,77 +274,59 @@ void collectionSolHT::timestep(){
     flt keepv = 1-(damping*dt);
     flt xpartfromv = dt - (dt*dt*damping/2);
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            // step 1: get new x
-            m[i].x += (m[i].v * xpartfromv) + (m[i].a * (.5 * dt*dt));
-            
-            // step 2: make v1 (intermediate v)
-            m[i].v = m[i].v*keepv + m[i].a*(dt/2);
-        }
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        // step 1: get new x
+        m[i].x += (m[i].v * xpartfromv) + (m[i].a * (.5 * dt*dt));
+        
+        // step 2: make v1 (intermediate v)
+        m[i].v = m[i].v*keepv + m[i].a*(dt/2);
     }
     
     // step 3: set forces
     setForces();
     
     // step 4: intermediate acceleration
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            Vec g = gauss.generate();
-            //~ cout << "g " << g << "\n";
-            m[i].a = (m[i].f + g) / m.getmass(i);
-            
-            // step 5: finish v
-            m[i].v += m[i].a * (dt/2);
-        }
+    for(uint i=0; i<m.size(); i++){
+        Vec g = gauss.generate();
+        //~ cout << "g " << g << "\n";
+        m[i].a = (m[i].f + g) / m.getmass(i);
+        
+        // step 5: finish v
+        m[i].v += m[i].a * (dt/2);
     }
     update_trackers();
 }
 
 void collectionVerlet::timestep(){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
-            m[i].v += m[i].a * (dt/2);
-        }
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
+        m[i].v += m[i].a * (dt/2);
     }
     // Now we set forces and accelerations
     setForces(false);
     update_constraints();
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-            // And finish m[i].v
-            m[i].v += m[i].a * (dt/2);
-        }
+    for(uint i=0; i<m.size(); i++){
+        m[i].a = m[i].f / m.getmass(i);
+        // And finish m[i].v
+        m[i].v += m[i].a * (dt/2);
     }
     
     update_trackers();
-    
-    return;
 }
 
 void collectionOverdamped::timestep(){
     setForces(false);
     update_constraints();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-            m[i].v = m[i].a * gamma;
-            m[i].x += m[i].v * dt;
-        }
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].a = m[i].f / m.getmass(i);
+        m[i].v = m[i].a * gamma;
+        m[i].x += m[i].v * dt;
     }
     
     update_trackers();
-    
-    return;
 }
 
 void collectionConjGradient::timestep(){
@@ -450,73 +336,54 @@ void collectionConjGradient::timestep(){
     // and while its called 'a', its actually 'v'
     setForces(false);
     update_constraints();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * dt;
-            Vec newa = m[i].f / m.getmass(i);
-            flt asq = m[i].a.sq();
-            flt gamma = 0;
-            if(asq > 0){// if a was 0, then just set γ = 0
-                gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
-                // gamma = newa.sq() / asq; // Fletcher-Reeves
-            }
-            //if(gamma > 100) gamma = 0;
-            if(gamma < 0) gamma = 0;
-            m[i].v = newa + (m[i].v * gamma);
-            m[i].a = newa;
-            //~ if(git == groups.begin() and i == 0){
-                //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.sq() << endl;
-                //~ //cout << "        " << 
-            //~ }
-            
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].x += m[i].v * dt;
+        Vec newa = m[i].f / m.getmass(i);
+        flt asq = m[i].a.sq();
+        flt gamma = 0;
+        if(asq > 0){// if a was 0, then just set γ = 0
+            gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
+            // gamma = newa.sq() / asq; // Fletcher-Reeves
         }
+        //if(gamma > 100) gamma = 0;
+        if(gamma < 0) gamma = 0;
+        m[i].v = newa + (m[i].v * gamma);
+        m[i].a = newa;
+        //~ if(git == groups.begin() and i == 0){
+            //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.sq() << endl;
+            //~ //cout << "        " << 
+        //~ }
+        
     }
     
     update_trackers();
-    
-    return;
 }
 
 void collectionConjGradient::timestepNewton(){
     setForces(false);
     update_constraints();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].f / m.getmass(i);
-            m[i].x += m[i].v * dt;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = (*atoms)[i].f / atoms->getmass(i);
+        (*atoms)[i].x += (*atoms)[i].v * dt;
     }
     
     update_trackers();
-    
-    return;
 }
 
 void collectionConjGradient::reset(){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = Vec();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = Vec();
     }
 }
 
 flt collectionConjGradientBox::kinetic(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            //Vec v = g[i].v - (g[i].x * Vfac);
-            Vec v = g[i].v + (g[i].x * Vfac);
-            E += v.sq() * g.getmass(i);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        //Vec v = g[i].v - (g[i].x * Vfac);
+        Vec v = (*atoms)[i].v + ((*atoms)[i].x * Vfac);
+        E += v.sq() * atoms->getmass(i);
     }
     return E/2.0;
 }
@@ -527,12 +394,8 @@ void collectionConjGradientBox::reset(){
     FV = 0;
     lastFV = 0;
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = Vec();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = Vec();
     }
 }
 
@@ -552,13 +415,9 @@ void collectionConjGradientBox::resize(flt V){
     flt Vfac = sqrtflt(V/oldV);
     #endif
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x *= Vfac;
-            m[i].v = Vec();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x *= Vfac;
+        (*atoms)[i].v = Vec();
     }
     
     obox.resizeV(V);
@@ -571,6 +430,7 @@ void collectionConjGradientBox::timestep(){
     // and while its called 'a', its actually 'v'
     
     OriginBox& obox = (OriginBox&) *box;
+    atomgroup& g = (*atoms);
     update_constraints();
     
     flt oldV = obox.V();
@@ -580,15 +440,7 @@ void collectionConjGradientBox::timestep(){
     if(maxdV >= 0 and dV > maxdV*oldV) dV = maxdV*oldV;
     if(maxdV >= 0 and dV < -maxdV*oldV) dV = -maxdV*oldV;
     if(maxdV == 0) dV = 0;
-    //~ if(abs(dV) > oldV / 100){
-        //~ // cout << "CGbox DV TOO BIG: " << dV << " -> ";
-        //~ dV = sgn(dV) * oldV/100;
-        //~ // cout << dV << " hV: " << hV << " newFV: " << newFV << " -> ";
-        //~ FV = 0;
-        //~ // newFV = dV / dt / kappaV;
-        //~ // cout << newFV << "\n";
-        //~ hV = 0;
-    //~ }
+
     flt newV = oldV + (dV*dt);
     //flt Vfac = dV/((oldV + newV)/2)/NDIM;
     #ifdef VEC3D
@@ -598,13 +450,9 @@ void collectionConjGradientBox::timestep(){
     flt Vfac = sqrtflt(newV/oldV);
     #endif
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x *= Vfac;
-            m[i].x += m[i].v * dt;// + (m[i].x * Vfac);
-        }
+    for(uint i=0; i<g.size(); i++){
+        g[i].x *= Vfac;
+        g[i].x += g[i].v * dt;// + (m[i].x * Vfac);
     }
     
     obox.resizeV(newV);
@@ -624,31 +472,22 @@ void collectionConjGradientBox::timestep(){
     hV = newFV + (gammaV*hV);
     FV = newFV;
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            Vec newa = m[i].f / m.getmass(i);
-            flt asq = m[i].a.sq();
-            flt gamma = 0;
-            if(asq > 0){// if a was 0, then just set γ = 0
-                gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
-                // gamma = newa.sq() / asq; // Fletcher-Reeves
-            }
-            //if(gamma > 100) gamma = 0;
-            if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
-            m[i].v = newa + (m[i].v * gamma);
-            m[i].a = newa;
-            //~ if(git == groups.begin() and i == 0){
-                //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.sq() << endl;
-                //~ //cout << "        " << 
-            //~ }
-            
+    for(uint i=0; i<g.size(); i++){
+        Vec newa = g[i].f / g.getmass(i);
+        flt asq = g[i].a.sq();
+        flt gamma = 0;
+        if(asq > 0){// if a was 0, then just set γ = 0
+            gamma = (newa - g[i].a).dot(newa) / asq; // Polak-Ribière
+            // gamma = newa.sq() / asq; // Fletcher-Reeves
         }
+        //if(gamma > 100) gamma = 0;
+        if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
+        g[i].v = newa + (g[i].v * gamma);
+        g[i].a = newa;
+        
     }
     
     update_trackers();
-    
-    return;
 }
 
 void collectionConjGradientBox::timestepBox(){
@@ -670,13 +509,9 @@ void collectionConjGradientBox::timestepBox(){
     flt Vfac = sqrtflt(newV/oldV);
     #endif
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x *= Vfac;
-            m[i].v = Vec();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x *= Vfac;
+        (*atoms)[i].v = Vec();
     }
     
     obox.resizeV(newV);
@@ -714,38 +549,34 @@ void collectionConjGradientBox::timestepAtoms(){
     FV = 0;
     lastFV = 0;
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * dt;// + (m[i].x * Vfac);
-            
-            Vec newa = m[i].f / m.getmass(i);
-            flt asq = m[i].a.sq();
-            flt gamma = 0;
-            if(asq > 0){// if a was 0, then just set γ = 0
-                gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
-                // gamma = newa.sq() / asq; // Fletcher-Reeves
-            }
-            //if(gamma > 100) gamma = 0;
-            if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
-            m[i].v = newa + (m[i].v * gamma);
-            m[i].a = newa;            
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].x += m[i].v * dt;// + (m[i].x * Vfac);
+        
+        Vec newa = m[i].f / m.getmass(i);
+        flt asq = m[i].a.sq();
+        flt gamma = 0;
+        if(asq > 0){// if a was 0, then just set γ = 0
+            gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
+            // gamma = newa.sq() / asq; // Fletcher-Reeves
         }
+        //if(gamma > 100) gamma = 0;
+        if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
+        m[i].v = newa + (m[i].v * gamma);
+        m[i].a = newa;            
     }
     
     update_trackers();
-    return;
 }
 
-collectionNLCG::collectionNLCG(sptr<OriginBox> box, const flt dt, const flt P0,
-                vector<sptr<atomgroup> > groups,
+collectionNLCG::collectionNLCG(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt P0,
                 vector<sptr<interaction> > interactions,
                 vector<sptr<statetracker> > trackers,
                 vector<sptr<constraint> > constraints,
                 const flt kappa, const flt kmax,
                 const uint secmax, const flt seceps) :
-            collection(box, groups, interactions, trackers, 
+            collection(box, atoms, interactions, trackers, 
                 constraints), dt(dt), seceps(seceps), secmax(secmax),
                 kappa(kappa), alphamax(0), afrac(0), dxmax(0),
                 stepmax(0), kmax(kmax), 
@@ -757,12 +588,8 @@ collectionNLCG::collectionNLCG(sptr<OriginBox> box, const flt dt, const flt P0,
 void collectionNLCG::reset(){
     k = 0;
     setForces(true, true);
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].a;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = (*atoms)[i].a;
     }
     vl = al;
 }
@@ -788,13 +615,9 @@ void collectionNLCG::setForces(bool seta, bool setV){
         collection::setForces(false);
     }
     if(seta){
-        vector<sptr<atomgroup> >::iterator git;
-        for(git = groups.begin(); git<groups.end(); git++){
-            atomgroup &m = **git;
-            for(uint i=0; i<m.size(); i++){
-                m[i].a = m[i].f;
-                m[i].v = m[i].f;
-            }
+        for(uint i=0; i<atoms->size(); i++){
+            (*atoms)[i].a = (*atoms)[i].f;
+            (*atoms)[i].v = (*atoms)[i].f;
         }
         Knew = fdota();
     }
@@ -804,25 +627,6 @@ void collectionNLCG::setForces(bool seta, bool setV){
 flt collectionNLCG::Hamiltonian(){
     return potentialenergy() + P0*(box->V());
 };
-
-/*
-void collectionNLCG::resizedl(flt dl){
-    OriginBox* obox = (OriginBox*) box;
-    flt oldV = obox->V();
-    
-    flt Vfac = exp(dl / kappa);
-    
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x *= Vfac;
-            m[i].v = Vec();
-        }
-    }
-    
-    obox->resizeV(V);
-}*/
 
 void collectionNLCG::resize(flt V){
     reset();
@@ -835,13 +639,9 @@ void collectionNLCG::resize(flt V){
     flt Lfac = sqrtflt(V/oldV);
     #endif
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x *= Lfac;
-            m[i].v = Vec();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x *= Lfac;
+        (*atoms)[i].v = Vec();
     }
     
     obox.resizeV(V);
@@ -850,14 +650,10 @@ void collectionNLCG::resize(flt V){
 flt collectionNLCG::kinetic(){
     flt E=0;
     flt Lfac = exp(vl / (kappa*NDIM));
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            //Vec v = g[i].v - (g[i].x * Vfac);
-            Vec v = g[i].v + (g[i].x * Lfac);
-            E += v.sq();// * g.getmass(i);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        //Vec v = g[i].v - (g[i].x * Vfac);
+        Vec v = (*atoms)[i].v + ((*atoms)[i].x * Lfac);
+        E += v.sq();// * g.getmass(i);
     }
     
     return E/2.0;
@@ -879,13 +675,9 @@ void collectionNLCG::stepx(flt dx){
     OriginBox& obox = (OriginBox&) *box;
     flt Lfac = exp(dx * vl / (kappa*NDIM));
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x *= Lfac;
-            m[i].x += m[i].v * dx;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x *= Lfac;
+        (*atoms)[i].x += (*atoms)[i].v * dx;
     }
     
     //~ cout << "NLCG::stepx: V0 = " << obox->V() << " -- dx = " << dx 
@@ -906,12 +698,8 @@ flt collectionNLCG::getLsq(){
 
 flt collectionNLCG::fdotf(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].f.sq();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].f.sq();
     }
     
     return returnvalue / getLsq() + fl * fl;
@@ -919,12 +707,8 @@ flt collectionNLCG::fdotf(){
 
 flt collectionNLCG::fdota(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].f.dot(g[i].a);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].f.dot((*atoms)[i].a);
     }
     
     return returnvalue / getLsq() + fl * al;
@@ -932,12 +716,8 @@ flt collectionNLCG::fdota(){
 
 flt collectionNLCG::fdotv(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].f.dot(g[i].v);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].f.dot((*atoms)[i].v);
     }
     
     return returnvalue / getLsq() + fl * vl;
@@ -945,12 +725,8 @@ flt collectionNLCG::fdotv(){
 
 flt collectionNLCG::vdotv(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].v.sq();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].v.sq();
     }
     
     return returnvalue / getLsq() + vl * vl;
@@ -1070,11 +846,8 @@ void collectionNLCG::timestep(){
     flt Kold = Knew;
     flt Kmid = fdota();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].a = (*atoms)[i].f;
     }
     al = fl;
     
@@ -1089,11 +862,8 @@ void collectionNLCG::timestep(){
         betaused = 1;
     }
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].a + m[i].v*betaused;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = (*atoms)[i].a + (*atoms)[i].v*betaused;
     }
     vl = al + betaused * vl;
 }
@@ -1101,13 +871,9 @@ void collectionNLCG::timestep(){
 void collectionNLCG::descend(){
     setForces(false, true);
     update_constraints();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].f;
-            m[i].a = m[i].f;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = (*atoms)[i].f;
+        (*atoms)[i].a = (*atoms)[i].f;
     }
     al = fl;
     vl = fl;
@@ -1116,14 +882,14 @@ void collectionNLCG::descend(){
     update_trackers();
 }
 
-collectionNLCGV::collectionNLCGV(sptr<Box> box, const flt dt,
-                vector<sptr<atomgroup> > groups,
+collectionNLCGV::collectionNLCGV(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt,
                 vector<sptr<interaction> > interactions,
                 vector<sptr<statetracker> > trackers,
                 vector<sptr<constraint> > constraints,
                 const flt kmax,
                 const uint secmax, const flt seceps) :
-            collection(box, groups, interactions, trackers, 
+            collection(box, atoms, interactions, trackers, 
                 constraints), dt(dt), seceps(seceps), secmax(secmax),
                 alphamax(0), afrac(0), dxmax(0), stepmax(0),
                 kmax(kmax), Knew(0), k(0), vl(0), fl(0), al(0), 
@@ -1132,23 +898,15 @@ collectionNLCGV::collectionNLCGV(sptr<Box> box, const flt dt,
 };
 
 void collectionNLCGV::stepx(flt dx){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * dx;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x += (*atoms)[i].v * dx;
     }
 };
 
 flt collectionNLCGV::fdotf(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].f.sq();
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].f.sq();
     }
     
     return returnvalue;
@@ -1156,45 +914,33 @@ flt collectionNLCGV::fdotf(){
 
 flt collectionNLCGV::fdota(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].f.dot(g[i].a);
-        }
-    }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].f.dot((*atoms)[i].a);
+    };
     
     return returnvalue;
 }
 
 flt collectionNLCGV::fdotv(){
     flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].f.dot(g[i].v);
-            if(isnanflt(returnvalue)){
-                cout << "collectionNLCGV::fdotv : Got nan on atom " << i;
-                cout << " f: " << g[i].f;
-                cout << " v: " << g[i].v;
-                cout << '\n';
-                assert(false);
-            }
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].f.dot((*atoms)[i].v);
+        //~ if(isnanflt(returnvalue)){
+            //~ cout << "collectionNLCGV::fdotv : Got nan on atom " << i;
+            //~ cout << " f: " << (*atoms)[i].f;
+            //~ cout << " v: " << (*atoms)[i].v;
+            //~ cout << '\n';
+            //~ assert(false);
+        //~ }
     }
     
     return returnvalue;
 }
 
 flt collectionNLCGV::vdotv(){
-    flt returnvalue = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            returnvalue += g[i].v.sq();
-        }
+    flt returnvalue=0;
+    for(uint i=0; i<atoms->size(); i++){
+        returnvalue += (*atoms)[i].v.sq();
     }
     
     return returnvalue;
@@ -1203,26 +949,18 @@ flt collectionNLCGV::vdotv(){
 void collectionNLCGV::reset(){
     k = 0;
     setForces(false);
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].f;
-            m[i].a = m[i].f;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+            (*atoms)[i].v = (*atoms)[i].f;
+            (*atoms)[i].a = (*atoms)[i].f;
     }
 }
 
 void collectionNLCGV::descend(){
     setForces(false);
     update_constraints();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].f;
-            m[i].a = m[i].f;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v = (*atoms)[i].f;
+        (*atoms)[i].a = (*atoms)[i].f;
     }
 
     stepx(dt);
@@ -1366,11 +1104,9 @@ void collectionNLCGV::timestep(){
     flt Kold = Knew;
     flt Kmid = fdota();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f;
-        }
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].a = m[i].f;
     }
     al = fl;
     
@@ -1385,11 +1121,8 @@ void collectionNLCGV::timestep(){
         betaused = 1;
     }
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v = m[i].a + m[i].v*betaused;
-        }
+    for(uint i=0; i<m.size(); i++){
+        m[i].v = m[i].a + m[i].v*betaused;
     }
     
     //~ cout << "NLCGV::timestep 4: beta " << beta;
@@ -1427,15 +1160,12 @@ void collectionNoseHoover::timestep(){
     flt Kt = 2*kinetic();
     
     //Step 1: set atom.x = r(t+dt)
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            Vec Ftilde = (m[i].a - (m[i].v*xi));
-            m[i].x += m[i].v * dt + Ftilde * (dt*dt/2);
-            // first half of y
-            m[i].v += Ftilde * (dt/2);
-        }
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        Vec Ftilde = (m[i].a - (m[i].v*xi));
+        m[i].x += m[i].v * dt + Ftilde * (dt*dt/2);
+        // first half of y
+        m[i].v += Ftilde * (dt/2);
     }
     
     lns += xi * dt + (Kt - ndof*T) * (dt*dt/2/Q);
@@ -1444,13 +1174,10 @@ void collectionNoseHoover::timestep(){
     // Now we set forces and accelerations
     setForces(false);
     update_constraints();
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-            // And finish y
-            m[i].v += m[i].a * (dt/2);
-        }
+    for(uint i=0; i<m.size(); i++){
+        m[i].a = m[i].f / m.getmass(i);
+        // And finish y
+        m[i].v += m[i].a * (dt/2);
     }
     
     // Now we solve for xi
@@ -1464,11 +1191,8 @@ void collectionNoseHoover::timestep(){
     
     // And finish v
     flt ytov = 1 + xi*dt/2;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v /= ytov;
-        }
+    for(uint i=0; i<m.size(); i++){
+        m[i].v /= ytov;
     }
     
     //~ flt Kt2 = 2*kinetic();
@@ -1490,14 +1214,10 @@ flt collectionNoseHoover::Hamiltonian(){
 
 flt collectionGaussianT::setxi(){
     flt xiNumerator = 0, xiDenominator = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            flt m = g.getmass(i);
-            xiNumerator += g[i].f.dot(g[i].v) * m;
-            xiDenominator += (g[i].v.sq()) * m*m;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+            flt m = atoms->getmass(i);
+            xiNumerator += (*atoms)[i].f.dot((*atoms)[i].v) * m;
+            xiDenominator += ((*atoms)[i].v.sq()) * m*m;
     }
     xi = xiNumerator / xiDenominator;
     return xi;
@@ -1510,25 +1230,18 @@ void collectionGaussianT::setForces(bool seta, bool shouldwesetxi){
 
 void collectionGaussianT::timestep(){
     //~ flt oldT = temp();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
-            m[i].v += (m[i].a - (m[i].v*xi)) * (dt/2);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x += (*atoms)[i].v * dt + (*atoms)[i].a * (dt*dt/2);
+        (*atoms)[i].v += ((*atoms)[i].a - ((*atoms)[i].v*xi)) * (dt/2);
     }
     // Now we set forces and accelerations
     setForces(false, false);
     update_constraints();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-            // And finish y
-            m[i].v += m[i].a * (dt/2);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].a = (*atoms)[i].f / atoms->getmass(i);
+        // And finish y
+        (*atoms)[i].v += (*atoms)[i].a * (dt/2);
     }
     
     // now we get z and set xi
@@ -1538,62 +1251,47 @@ void collectionGaussianT::timestep(){
     
     // And finish v
     flt ytov = 1 + xi*dt/2;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].v /= ytov;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].v /= ytov;
     }
     
     update_trackers();
-    return;
 }
 
 
 void collectionGear3A::timestep(){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
-            m[i].v += m[i].a * dt;
-        }
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
+        m[i].v += m[i].a * dt;
     }
     // Now we set forces and accelerations
     setForces(false);
     update_constraints();
     
     // Make correction
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            Vec a = m[i].f / m.getmass(i);
-            Vec correction = a - m[i].a;
-            m[i].v += correction * (dt/2);
-            m[i].a = a;
-        }
+    for(uint i=0; i<m.size(); i++){
+        Vec a = m[i].f / m.getmass(i);
+        Vec correction = a - m[i].a;
+        m[i].v += correction * (dt/2);
+        m[i].a = a;
     }
     
     update_trackers();
-    
-    return;
 }
 
 void collectionGear4A::timestep(){
     uint n=0;
     //~ cout << "Gear 4A timestep, ncorrec = " << ncorrec << "\n";
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        //~ cout << "Gear 4A timestep loop 1, g.size() = " << g.size() << "\n";
-        for(uint i=0; i<g.size(); i++){
-            //~ cout << "Gear 4A timestep loop 2, i = " << i << "\n";
-            g[i].x += g[i].v * dt + g[i].a * (dt*dt/2) + bs[n] * (dt*dt*dt/6);
-            g[i].v += g[i].a * dt + bs[n] * (dt*dt/2);
-            g[i].a += bs[n] * dt;
-            n++;
-        }
+    atomgroup &g = *atoms;
+    //~ cout << "Gear 4A timestep loop 1, g.size() = " << g.size() << "\n";
+    for(uint i=0; i<g.size(); i++){
+        //~ cout << "Gear 4A timestep loop 2, i = " << i << "\n";
+        g[i].x += g[i].v * dt + g[i].a * (dt*dt/2) + bs[n] * (dt*dt*dt/6);
+        g[i].v += g[i].a * dt + bs[n] * (dt*dt/2);
+        g[i].a += bs[n] * dt;
+        n++;
     }
     
     //~ cout << "Gear 4A timestep 2, ncorrec = " << ncorrec << "\n";
@@ -1605,38 +1303,31 @@ void collectionGear4A::timestep(){
     
         // Make correction
         n=0;
-        for(git = groups.begin(); git<groups.end(); git++){
-            atomgroup &g = **git;
-            for(uint i=0; i<g.size(); i++){
-                Vec a = g[i].f / g.getmass(i);
-                Vec correction = a - g[i].a;
-                g[i].x += correction * (dt*dt/12);
-                g[i].v += correction * (5*dt/12);
-                g[i].a = a;
-                bs[n] += correction / dt;
-                n++;
-            }
+        for(uint i=0; i<g.size(); i++){
+            Vec a = g[i].f / g.getmass(i);
+            Vec correction = a - g[i].a;
+            g[i].x += correction * (dt*dt/12);
+            g[i].v += correction * (5*dt/12);
+            g[i].a = a;
+            bs[n] += correction / dt;
+            n++;
         }
     }
     update_trackers();
-    return;
 }
 
 void collectionGear5A::timestep(){
+    atomgroup &g = *atoms;
     uint n=0;
     flt dt2 = dt*dt/2;
     flt dt3 = dt*dt2/3;
     flt dt4 = dt*dt3/4;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            g[i].x += g[i].v * dt + g[i].a * dt2 + bs[n] * dt3 + cs[n] * dt4;
-            g[i].v += g[i].a * dt + bs[n] * dt2 + cs[n] * dt3;
-            g[i].a += bs[n] * dt + cs[n] * dt2;
-            bs[n] += cs[n] * dt;
-            n++;
-        }
+    for(uint i=0; i<g.size(); i++){
+        g[i].x += g[i].v * dt + g[i].a * dt2 + bs[n] * dt3 + cs[n] * dt4;
+        g[i].v += g[i].a * dt + bs[n] * dt2 + cs[n] * dt3;
+        g[i].a += bs[n] * dt + cs[n] * dt2;
+        bs[n] += cs[n] * dt;
+        n++;
     }
     flt c0 = 19*dt*dt/240, c1 = 3*dt/8;
     //flt c2 = 1
@@ -1649,26 +1340,23 @@ void collectionGear5A::timestep(){
         
         // Make correction
         n=0;
-        for(git = groups.begin(); git<groups.end(); git++){
-            atomgroup &g = **git;
-            for(uint i=0; i<g.size(); i++){
-                Vec a = g[i].f / g.getmass(i);
-                Vec correction = a - g[i].a;
-                g[i].x += correction * c0;
-                g[i].v += correction * c1;
-                g[i].a = a;
-                bs[n] += correction * c3;
-                cs[n] += correction * c4;
-                n++;
-            }
+        for(uint i=0; i<g.size(); i++){
+            Vec a = g[i].f / g.getmass(i);
+            Vec correction = a - g[i].a;
+            g[i].x += correction * c0;
+            g[i].v += correction * c1;
+            g[i].a = a;
+            bs[n] += correction * c3;
+            cs[n] += correction * c4;
+            n++;
         }
     }
     
     update_trackers();
-    return;
 }
 
 void collectionGear6A::timestep(){
+    atomgroup &g = *atoms;
     //~ cout << "Timestep\n";
     flt dt2 = dt*dt/2;
     flt dt3 = dt*dt2/3;
@@ -1676,37 +1364,17 @@ void collectionGear6A::timestep(){
     flt dt5 = dt*dt4/5;
     
     uint n=0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            //~ assert(n < bs.size());
-            //~ assert(n < cs.size());
-            //~ assert(n < ds.size());
-            g[i].x += g[i].v * dt + g[i].a * dt2 + bs[n] * dt3 + cs[n] * dt4 + ds[n] * dt5;
-            g[i].v += g[i].a * dt + bs[n] * dt2 + cs[n] * dt3 + ds[n] * dt4;
-            g[i].a += bs[n] * dt + cs[n] * dt2 + ds[n] * dt3;
-            bs[n] += cs[n] * dt + ds[n] * dt2;
-            cs[n] += ds[n] * dt;
-            n++;
-        }
+    for(uint i=0; i<g.size(); i++){
+        //~ assert(n < bs.size());
+        //~ assert(n < cs.size());
+        //~ assert(n < ds.size());
+        g[i].x += g[i].v * dt + g[i].a * dt2 + bs[n] * dt3 + cs[n] * dt4 + ds[n] * dt5;
+        g[i].v += g[i].a * dt + bs[n] * dt2 + cs[n] * dt3 + ds[n] * dt4;
+        g[i].a += bs[n] * dt + cs[n] * dt2 + ds[n] * dt3;
+        bs[n] += cs[n] * dt + ds[n] * dt2;
+        cs[n] += ds[n] * dt;
+        n++;
     }
-    
-    //~ atomgroup &gbegin = **(groups.begin());
-    //~ printf("predic = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
-        //~ gbegin[0].x[0], gbegin[0].v[0], gbegin[0].a[0],
-            //~ bs[0][0], cs[0][0], ds[0][0]);
-    //~ printf("predicscaled = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
-        //~ gbegin[0].x[0], gbegin[0].v[0]*dt, gbegin[0].a[0]*dt2,
-            //~ bs[0][0]*dt3, cs[0][0]*dt4, ds[0][0]*dt5);
-    //~ cout << "Prediction: " 
-         //~ << gbegin[0].x[0] << ", "
-         //~ << gbegin[0].v[0] << ", "
-         //~ << gbegin[0].a[0] << ", "
-         //~ << bs[0][0] << ", "
-         //~ << cs[0][0] << ", "
-         //~ << ds[0][0] << "\n";
-    
     
     flt c0 = 3*dt*dt/40, c1 = 251*dt/720;
     //flt c2 = 1
@@ -1723,32 +1391,29 @@ void collectionGear6A::timestep(){
     
         // Make correction
         n=0;
-        for(git = groups.begin(); git<groups.end(); git++){
-            atomgroup &g = **git;
-            for(uint i=0; i<g.size(); i++){
-                //~ assert(n < bs.size());
-                //~ assert(n < cs.size());
-                //~ assert(n < ds.size());                
-                Vec a = g[i].f / g.getmass(i);
-                Vec correction = a - g[i].a;
-                g[i].x += correction * c0;
-                g[i].v += correction * c1;
-                g[i].a = a;
-                bs[n] += correction * c3;
-                cs[n] += correction * c4;
-                ds[n] += correction * c5;
-                //~ if(correction.mag()*dt2 > .05) cout << "|c[" << i << "]| = " << correction.mag()*dt2 << '\n';
-                //~ if(a.mag()*dt2 > .1) cout << "|a[" << i << "]| = " << a.mag()*dt2 << '\n';
-                //~ if(bs[n].mag()*dt3 > .1) cout << "|bs[" << n << "]| = " << bs[n].mag()*dt3 << '\n';
-                //~ if(cs[n].mag()*dt4 > .1) cout << "|cs[" << n << "]| = " << cs[n].mag()*dt4 << '\n';
-                //~ if(ds[n].mag()*dt5 > .1) cout << "|ds[" << n << "]| = " << ds[n].mag()*dt5 << '\n';
-                //~ assert(correction.mag()*dt2 < 1);
-                //~ assert(a.mag()*dt2 < 3);
-                //~ assert(bs[n].mag()*dt3 < 3);
-                //~ assert(cs[n].mag()*dt4 < 3);
-                //~ assert(ds[n].mag()*dt5 < 3);
-                n++;
-            }
+        for(uint i=0; i<g.size(); i++){
+            //~ assert(n < bs.size());
+            //~ assert(n < cs.size());
+            //~ assert(n < ds.size());                
+            Vec a = g[i].f / g.getmass(i);
+            Vec correction = a - g[i].a;
+            g[i].x += correction * c0;
+            g[i].v += correction * c1;
+            g[i].a = a;
+            bs[n] += correction * c3;
+            cs[n] += correction * c4;
+            ds[n] += correction * c5;
+            //~ if(correction.mag()*dt2 > .05) cout << "|c[" << i << "]| = " << correction.mag()*dt2 << '\n';
+            //~ if(a.mag()*dt2 > .1) cout << "|a[" << i << "]| = " << a.mag()*dt2 << '\n';
+            //~ if(bs[n].mag()*dt3 > .1) cout << "|bs[" << n << "]| = " << bs[n].mag()*dt3 << '\n';
+            //~ if(cs[n].mag()*dt4 > .1) cout << "|cs[" << n << "]| = " << cs[n].mag()*dt4 << '\n';
+            //~ if(ds[n].mag()*dt5 > .1) cout << "|ds[" << n << "]| = " << ds[n].mag()*dt5 << '\n';
+            //~ assert(correction.mag()*dt2 < 1);
+            //~ assert(a.mag()*dt2 < 3);
+            //~ assert(bs[n].mag()*dt3 < 3);
+            //~ assert(cs[n].mag()*dt4 < 3);
+            //~ assert(ds[n].mag()*dt5 < 3);
+            n++;
         }
         //~ printf("final = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
         //~ gbegin[0].x[0], gbegin[0].v[0], gbegin[0].a[0],
@@ -1768,7 +1433,6 @@ void collectionGear6A::timestep(){
     }
     
     update_trackers();
-    return;
 }
 
 atomid atomvecRK4::get_id(atom* atm){
@@ -1779,45 +1443,31 @@ atomid atomvecRK4::get_id(atom* atm){
 };
 
 void collectionRK4::timestep(){
+    atomgroup &g = *atoms;
     //~ atom &atm0 = *((*(groups.begin()))->get(0));
     //~ atomRK4 &a0 = (atomRK4 &) atm0;
     //~ Vec xold = a0.x, vold = a0.v;
     
     
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        //atomgroup *agroup = *git;
-        //atomvecRK4 &m = *aRK;
-        //atomvecRK4 &m = *((atomvecRK4*) *git);
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            atomRK4 &a = *((atomRK4 *) m.get(i));
-            a.Kxa = a.v * dt;
-            a.Kva = a.f * (dt / m.getmass(i));
-            a.x += a.Kxa / 2;
-            a.v += a.Kva / 2;
-            //~ if(i == 0) cout << "f " << a.f;
-        }
+    for(uint i=0; i<g.size(); i++){
+        atomRK4 &a = (atomRK4 &) g[i];
+        a.Kxa = a.v * dt;
+        a.Kva = a.f * (dt / g.getmass(i));
+        a.x += a.Kxa / 2;
+        a.v += a.Kva / 2;
+        //~ if(i == 0) cout << "f " << a.f;
     }
-    //~ cout << (xold + (a0.Kxa / 2) - a0.x) << "    "
-         //~ << (vold + (a0.Kva / 2) - a0.v) << '\n';
-    
-    // x = x0 + Kxa/2
-    // v = v0 + Kva/2
     
     setForces(false);
     update_constraints();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            atomRK4 &a = *((atomRK4 *) m.get(i));
-            a.Kxb = a.v * dt;
-            a.Kvb = a.f * (dt / m.getmass(i));
-            a.x += a.Kxb / 2 - a.Kxa / 2;
-            a.v += a.Kvb / 2 - a.Kva / 2;
-            //~ if(i == 0) cout << " " << a.f;
-        }
+    for(uint i=0; i<g.size(); i++){
+        atomRK4 &a = (atomRK4 &) g[i];
+        a.Kxb = a.v * dt;
+        a.Kvb = a.f * (dt / g.getmass(i));
+        a.x += a.Kxb / 2 - a.Kxa / 2;
+        a.v += a.Kvb / 2 - a.Kva / 2;
+        //~ if(i == 0) cout << " " << a.f;
     }
     
     //~ cout << (xold + (a0.Kxb / 2) - a0.x) << "    "
@@ -1829,89 +1479,55 @@ void collectionRK4::timestep(){
     setForces(false);
     update_constraints();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            atomRK4 &a = *((atomRK4 *) m.get(i));
-            a.Kxc = a.v * dt;
-            a.Kvc = a.f * (dt / m.getmass(i));
-            a.x += a.Kxc - a.Kxb / 2;
-            a.v += a.Kvc - a.Kvb / 2;
-            //~ if(i == 0) cout << " " << a.f;
-        }
+    for(uint i=0; i<g.size(); i++){
+        atomRK4 &a = (atomRK4 &) g[i];
+        a.Kxc = a.v * dt;
+        a.Kvc = a.f * (dt / g.getmass(i));
+        a.x += a.Kxc - a.Kxb / 2;
+        a.v += a.Kvc - a.Kvb / 2;
     }
-    // x = x0 + Kxc
-    // v = v0 + Kvc
-    //~ cout << (xold + (a0.Kxc) - a0.x) << "    "
-         //~ << (vold + (a0.Kvc) - a0.v) << '\n';
     
     setForces(false);
     update_constraints();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            atomRK4 &a = *((atomRK4 *) m.get(i));
-            a.a = a.f / m.getmass(i);
-            a.Kxd = a.v * dt;
-            a.Kvd = a.a * dt;
-            a.x += (a.Kxa + a.Kxd)/6 + (a.Kxb)/3 - (a.Kxc * (2.0/3.0));
-            a.v += (a.Kva + a.Kvd)/6 + (a.Kvb)/3 - (a.Kvc * (2.0/3.0));
-            //~ if(i == 0){
-                
-                //~ cout << " " << a.f << '\n';
-                //~ cout << "x " << a.x << a.Kxa << a.Kxb << a.Kxc << a.Kxd << '\n' 
-                     //~ << "v " << a.v << a.Kva << a.Kvb << a.Kvc << a.Kvd << '\n';
-                 //~ }
-        }
+    
+    for(uint i=0; i<g.size(); i++){
+        atomRK4 &a = (atomRK4 &) g[i];
+        a.a = a.f / g.getmass(i);
+        a.Kxd = a.v * dt;
+        a.Kvd = a.a * dt;
+        a.x += (a.Kxa + a.Kxd)/6 + (a.Kxb)/3 - (a.Kxc * (2.0/3.0));
+        a.v += (a.Kva + a.Kvd)/6 + (a.Kvb)/3 - (a.Kvc * (2.0/3.0));
     }
-    //~ Vec x1 = xold + (a0.Kxa/6) + (a0.Kxb/3) + (a0.Kxc/3) + (a0.Kxd/6);
-    //~ Vec v1 = xold + (a0.Kxa/6) + (a0.Kxb/3) + (a0.Kxc/3) + (a0.Kxd/6);
-    //~ cout << x1 << a0.x << (a0.x - x1) << "\n"
-         //~ << v1 << a0.v << (a0.v - v1) << '\n';
     
     setForces(false);
     update_constraints();
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-        }
+    for(uint i=0; i<g.size(); i++){
+        g[i].a = g[i].f / g.getmass(i);
     }
     
     update_trackers();
-    
-    return;
 }
 
 flt collectionGear4NPH::kinetic(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            Vec v = g[i].v - (g[i].x * Vfac);
-            E += v.sq() * g.getmass(i);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        Vec v = (*atoms)[i].v - ((*atoms)[i].x * Vfac);
+        E += v.sq() * atoms->getmass(i);
     }
     return E/2.0;
 }
 
 flt collectionGear4NPH::temp(bool minuscomv){
-    flt totatoms = 0;
     flt totkinetic2 = 0; // kinetic * 2
     Vec cv = Vec();
     if(minuscomv) cv = comv();
     flt Vfac = dV/box->V()/flt(NDIM);
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;for(uint i=0; i<g.size(); i++){
-            Vec v = g[i].v - cv - (g[i].x * Vfac);
-            totkinetic2 += v.sq() * g.getmass(i);
-        }
-        totatoms += g.size();
+    for(uint i=0; i<atoms->size(); i++){
+            Vec v = (*atoms)[i].v - cv - ((*atoms)[i].x * Vfac);
+            totkinetic2 += v.sq() * atoms->getmass(i);
     }
     
     int ndof = (int) dof();
@@ -1922,18 +1538,16 @@ flt collectionGear4NPH::temp(bool minuscomv){
 void collectionGear4NPH::timestep(){
     uint n=0;
     OriginBox& obox = (OriginBox&) *box;
+    atomgroup &g = *atoms;
     
     /// Prediction
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            g[i].x += g[i].v * dt + g[i].a * (dt*dt/2) + bs[n] * (dt*dt*dt/6);
-            g[i].v += g[i].a * dt + bs[n] * (dt*dt/2);
-            g[i].a += bs[n] * dt;
-            n++;
-        }
+    for(uint i=0; i<g.size(); i++){
+        g[i].x += g[i].v * dt + g[i].a * (dt*dt/2) + bs[n] * (dt*dt*dt/6);
+        g[i].v += g[i].a * dt + bs[n] * (dt*dt/2);
+        g[i].a += bs[n] * dt;
+        n++;
     }
+
     flt V = obox.V();
     flt newV = V + dV * dt + ddV * (dt*dt/2) + dddV * (dt*dt*dt/6);
     dV += ddV * dt + dddV * (dt*dt/2);
@@ -1974,21 +1588,18 @@ void collectionGear4NPH::timestep(){
         
         
         n=0;
-        for(git = groups.begin(); git<groups.end(); git++){
-            atomgroup &g = **git;
-            for(uint i=0; i<g.size(); i++){
-                Vec a = g[i].f / g.getmass(i) + g[i].x * Vfac;
-                Vec correction = a - g[i].a;
-                g[i].x += correction * (dt*dt/12);
-                g[i].v += correction * (5*dt/12);
-                g[i].a = a;
-                bs[n] += correction / dt;
-                n++;
-            }
+        
+        for(uint i=0; i<g.size(); i++){
+            Vec a = g[i].f / g.getmass(i) + g[i].x * Vfac;
+            Vec correction = a - g[i].a;
+            g[i].x += correction * (dt*dt/12);
+            g[i].v += correction * (5*dt/12);
+            g[i].a = a;
+            bs[n] += correction / dt;
+            n++;
         }
     }
     update_trackers();
-    return;
 }
 
 vector<sptr<interaction> > collectionGear4NPT::tointerpair(vector<sptr<interactionpairsx> > &v){
@@ -2011,11 +1622,7 @@ void xrpsummer::run(forcepairx *fpairx){
 
 void collectionGear4NPT::setForces(bool seta){
     xrpsums.reset();
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &group = **git;
-        group.resetForces();
-    }
+    atoms->resetForces();
     
     vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); it++){
@@ -2024,34 +1631,29 @@ void collectionGear4NPT::setForces(bool seta){
     }
     if(!seta) return;
     
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].a = m[i].f / m.getmass(i);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].a = (*atoms)[i].f / atoms->getmass(i);
     }
 }
 
 void collectionGear4NPT::timestep(){
     uint n=0;
     OriginBox& obox = (OriginBox&) *box;
+    atomgroup &g = *atoms;
     
     const flt c1 = dt, c2 = dt*dt/2, c3 = dt*dt*dt/6;
     
     /// Prediction
     vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            g[i].x += xs1[n]*c1 + xs2[n]*c2 + xs3[n]*c3;
-            xs1[n] += xs2[n]*c1 + xs3[n]*c2;
-            xs2[n] += xs3[n]*c1;
-            
-            g[i].v += g[i].a*c1 + vs2[n]*c2 + vs3[n]*c3;
-            g[i].a += vs2[n]*c1 + vs3[n]*c2;
-            vs2[n] += vs3[n]*c1;
-            n++;
-        }
+    for(uint i=0; i<g.size(); i++){
+        g[i].x += xs1[n]*c1 + xs2[n]*c2 + xs3[n]*c3;
+        xs1[n] += xs2[n]*c1 + xs3[n]*c2;
+        xs2[n] += xs3[n]*c1;
+        
+        g[i].v += g[i].a*c1 + vs2[n]*c2 + vs3[n]*c3;
+        g[i].a += vs2[n]*c1 + vs3[n]*c2;
+        vs2[n] += vs3[n]*c1;
+        n++;
     }
     
     flt V = obox.V();
@@ -2088,49 +1690,38 @@ void collectionGear4NPT::timestep(){
         
         
         n=0;
-        for(git = groups.begin(); git<groups.end(); git++){
-            atomgroup &g = **git;
-            for(uint i=0; i<g.size(); i++){
-                Vec newx1 = g[i].v + (g[i].x * chi);
-                Vec xcorr = newx1 - xs1[n];
-                g[i].x += xcorr*d0;
-                xs1[n] = newx1;
-                xs2[n] += xcorr*d2;
-                xs3[n] += xcorr*d3;
-                
-                Vec newa = g[i].f / g.getmass(i) - g[i].v*chixi;
-                Vec vcorr = newa - g[i].a;
-                g[i].v += vcorr*d0;
-                g[i].a = newa;
-                vs2[n] += vcorr*d2;
-                vs3[n] += vcorr*d3;
-                n++;
-            }
+        for(uint i=0; i<g.size(); i++){
+            Vec newx1 = g[i].v + (g[i].x * chi);
+            Vec xcorr = newx1 - xs1[n];
+            g[i].x += xcorr*d0;
+            xs1[n] = newx1;
+            xs2[n] += xcorr*d2;
+            xs3[n] += xcorr*d3;
+            
+            Vec newa = g[i].f / g.getmass(i) - g[i].v*chixi;
+            Vec vcorr = newa - g[i].a;
+            g[i].v += vcorr*d0;
+            g[i].a = newa;
+            vs2[n] += vcorr*d2;
+            vs3[n] += vcorr*d3;
+            n++;
         }
     }
     update_trackers();
-    return;
 }
 
 void collectionVerletNPT::resetvhalf(){
-    uint Natoms = 0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        Natoms += (*git)->size();
-    };
-    vhalf.resize(Natoms, Vec());
+    vhalf.resize(atoms->size(), Vec());
     uint n=0;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i=0; i<g.size(); i++){
-            vhalf[n] = g[i].v;
-            n++;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        vhalf[n] = (*atoms)[i].v;
+        n++;
     }
 }
 
 void collectionVerletNPT::timestep(){
     OriginBox& obox = (OriginBox&) *box;
+    atomgroup &g = *atoms;
     setForces(false);
     update_constraints();
     
@@ -2140,31 +1731,16 @@ void collectionVerletNPT::timestep(){
     flt Ktot2 = 0, lastKtot2 = 0;
     
     uint n=0;
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            flt mi = m.getmass(i);
-            m[i].a = m[i].f / mi;
-            lastKtot2 += vhalf[n].sq() / mi;
-            Vec lastvhalf = vhalf[n];
-            vhalf[n] = (vhalf[n]*(1-xieta) + m[i].a*dt)/(1+xieta);
-            //~ if(n == 0){
-                //~ cout << "v: " << lastvhalf << " -> " << vhalf[n]
-                     //~ << ", xieta: " << xieta << ", a: " << m[i].a
-                     //~ << "\n";
-                //~ }
-            //~ 
-            //~ if(vhalf[n].mag() > 0.6){
-                //~ cout << "n: " << n
-                     //~ << ", v: " << lastvhalf << " -> " << vhalf[n]
-                     //~ << ", xieta: " << xieta << ", a: " << m[i].a
-                     //~ << "\n";
-                //~ }
-            m[i].v = (lastvhalf + vhalf[n])/2.0;
-            Ktot2 += vhalf[n].sq() / mi;
-            n++;
-        }
+    for(uint i=0; i<g.size(); i++){
+        flt mi = g.getmass(i);
+        g[i].a = g[i].f / mi;
+        lastKtot2 += vhalf[n].sq() / mi;
+        Vec lastvhalf = vhalf[n];
+        vhalf[n] = (vhalf[n]*(1-xieta) + g[i].a*dt)/(1+xieta);
+        
+        g[i].v = (lastvhalf + vhalf[n])/2.0;
+        Ktot2 += vhalf[n].sq() / mi;
+        n++;
     }
     
     eta += dt*(Ktot2 - ndof*T)/QT;
@@ -2189,38 +1765,25 @@ void collectionVerletNPT::timestep(){
     
     n=0;
     flt Vfac1=powflt(newV/V, OVERNDIM), Vfac2 = powflt(2*newV/(newV+V), OVERNDIM);
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x = m[i].x*Vfac1 + vhalf[n]*dt*Vfac2;
-            n++;
-        }
+    for(uint i=0; i<g.size(); i++){
+        g[i].x = g[i].x*Vfac1 + vhalf[n]*dt*Vfac2;
+        n++;
     }
     
     update_trackers();
-    
-    return;
 };
 
 void collectionCDBD::reset_velocities(){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            flt mi = m.getmass(i);
-            m[i].v = randVec() * sqrtflt(T/mi);
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        flt mi = atoms->getmass(i);
+        (*atoms)[i].v = randVec() * sqrtflt(T/mi);
     }
     reset_events();
 };
 
 void collectionCDBD::line_advance(flt deltat){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git<groups.end(); git++){
-        atomgroup &m = **git;
-        for(uint i=0; i<m.size(); i++){
-            m[i].x += m[i].v * deltat;
-        }
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x += (*atoms)[i].v * deltat;
     }
     
     curt += deltat;
@@ -2254,35 +1817,20 @@ bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
 
 void collectionCDBD::reset_events(){
     events.clear();
-    //~ std::cerr << "reset_events: events " << events.size() << "\n";
     
-    //~ std::cerr << "reset_events: pairs: ";
-    vector<sptr<atomgroup> >::iterator git1, git2;
-    uint n=0, m=0;
-    for(git1 = groups.begin(); git1<groups.end(); git1++){
-    atomgroup &g1 = **git1;
-    for(uint i=0; i<g1.size(); i++){
-        m = 0;
-        for(git2 = groups.begin(); git2<groups.end(); git2++){
-        atomgroup &g2 = **git2;
-        for(uint j=0; j<g2.size(); j++){
-            if(m < n){
-                m++;
-                continue;
-            }
-            flt sigma = (atomsizes[n] + atomsizes[m]) / 2;
+    for(uint i=0; i<atoms->size(); i++){
+        for(uint j=0; j<i-1; j++){
+            flt sigma = (atomsizes[i] + atomsizes[j]) / 2;
             
             //~ std::cerr << n << "-" << m;
             event e;
-            if(make_event(*box, e, atomid(&g1[i], n), atomid(&g2[j], m), sigma, curt)){
+            if(make_event(*box, e, atoms->get_id(j), atoms->get_id(i), sigma, curt)){
                 events.insert(e);
                 //~ std::cerr << " MADE!";
             };
             //~ std::cerr << " ... ";
-            m++;
-        }}
-        n++;
-    }};
+        }
+    };
     //~ std::cerr << " Done, events " << events.size() << "\n";
 };
 
@@ -2308,7 +1856,7 @@ bool collectionCDBD::take_step(flt tlim){
     //~ std::cerr << "take_step: events " << events.size() << "\n";
     if(events.size() <= 0) reset_events();
     
-    assert(atoms.size() > 0);
+    assert(atoms->size() > 0);
     assert(atomsizes.size() > 0);
     if(events.size() == 0){
         // TODO: this should check time to leave box, and only go that far
@@ -2374,35 +1922,28 @@ bool collectionCDBD::take_step(flt tlim){
     //~ std::cerr << "made events vector...";
     vector<bool> new_filled(badatoms.size(), false);
     //~ std::cerr << "made new_filled.\n";
-    uint n = 0;
-    vector<sptr<atomgroup> >::iterator git1;
     //~ std::cerr << "Starting loop.\n";
-    for(git1 = groups.begin(); git1<groups.end(); git1++){
-        atomgroup &g1 = **git1;
-        //~ std::cerr << "Starting atom loop.\n";
-        for(uint i=0; i<g1.size(); i++){
-            uint bi=0;
-            //~ std::cerr << "Starting badatoms loop.\n";
-            for(ait=badatoms.begin(); ait!=badatoms.end(); ait++){
-                //~ cerr << "Testing " << ait->n() << " - " << n  << "(" << bi << "), ";
-                flt sigma = (atomsizes[ait->n()] + atomsizes[n])/2.;
-                //~ cerr << "sigma " << sigma << "\n";
-                event testevent;
-                if(make_event(*box, testevent, *ait, atomid(&g1[i], n), sigma, curt)){
-                    //~ cerr << "Made good event\n";
-                    if(!new_filled[bi] || (testevent < newevents[bi])){
-                        newevents[bi] = testevent;
-                        new_filled[bi] = true;
-                        //~ cerr << "Its the best event\n";
-                    } else {
-                        //~ cerr << "event ignored\n";
-                    }
+    for(uint i=0; i<atoms->size(); i++){
+        uint bi=0;
+        //~ std::cerr << "Starting badatoms loop.\n";
+        for(ait=badatoms.begin(); ait!=badatoms.end(); ait++){
+            //~ cerr << "Testing " << ait->n() << " - " << n  << "(" << bi << "), ";
+            flt sigma = (atomsizes[ait->n()] + atomsizes[i])/2.;
+            //~ cerr << "sigma " << sigma << "\n";
+            event testevent;
+            if(make_event(*box, testevent, *ait, atoms->get_id(i), sigma, curt)){
+                //~ cerr << "Made good event\n";
+                if(!new_filled[bi] || (testevent < newevents[bi])){
+                    newevents[bi] = testevent;
+                    new_filled[bi] = true;
+                    //~ cerr << "Its the best event\n";
                 } else {
-                    //~ cerr << "event not made.\n";
-                };
-                bi++;
-            }
-            n++;
+                    //~ cerr << "event ignored\n";
+                }
+            } else {
+                //~ cerr << "event not made.\n";
+            };
+            bi++;
         }
     };
     
