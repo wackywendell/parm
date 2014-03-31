@@ -278,7 +278,8 @@ namespace std {
     #ifdef VEC2D
     %template(wallvector) vector<shared_ptr<SoftWall> >;
     #endif
-    //%template(idpairvector) vector<idpair>;
+    %template(idvector) vector<atomid>;
+    %template(idpairvector) vector<idpair>;
     %template(_uintvector) vector<unsigned int>;
     %template(_eventset) set<event>;
 }

@@ -1787,6 +1787,7 @@ void collectionCDBD::line_advance(flt deltat){
     }
     
     curt += deltat;
+    update_grid();
 };
 
 bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
@@ -1823,7 +1824,7 @@ void collectionCDBD::update_grid(bool force){
 
 event collectionCDBD::next_event(atomid a){
     event e;
-    e.t = grid.time_to_edge(*a);
+    e.t = curt + grid.time_to_edge(*a);
     e.a = a;
     e.b = a;
         
@@ -1886,14 +1887,12 @@ bool collectionCDBD::take_step(flt tlim){
         // future than that limit, then we just move everyone forward and
         // no collisions happen
         line_advance(tlim - curt);
-        curt = tlim;
         return false;
     };
     events.erase(e);
     
     // move everyone forward
     line_advance(e.t - curt);
-    curt = e.t;
     //~ std::cerr << "take_step: advanced.\n";
     
     
@@ -1970,17 +1969,17 @@ void collectionCDBDsimple::line_advance(flt deltat){
 void collectionCDBDsimple::reset_events(){
     events.clear();
     
-    for(uint i=0; i<atoms->size(); i++){
-        for(uint j=0; j<i-1; j++){
+    for(uint i=1; i<atoms->size(); i++){
+        for(uint j=0; j<i; j++){
             flt sigma = (atomsizes[i] + atomsizes[j]) / 2;
             
-            //~ std::cerr << n << "-" << m;
+            //~ std::cerr << i << "-" << j;
             event e;
             if(make_event(*box, e, atoms->get_id(j), atoms->get_id(i), sigma, curt)){
                 events.insert(e);
                 //~ std::cerr << " MADE!";
             };
-            //~ std::cerr << " ... ";
+            //~ std::cerr << ", ";
         }
     };
     //~ std::cerr << " Done, events " << events.size() << "\n";

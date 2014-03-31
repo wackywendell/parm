@@ -157,7 +157,6 @@ class Grid {
         //void add(atomgroup& a){for(uint i=0; i<a.size(); i++) add(a[i]);};
         
         void optimize_widths();
-        void update_widths();
         void make_grid();
         
         friend class GridIterator;
@@ -168,6 +167,16 @@ class Grid {
         pair_iter pairs(atomid a);
         flt time_to_edge(atom& a);
         flt time_to_edge(uint i){return time_to_edge((*atoms)[i]);}
+        
+        vector<idpair> allpairs();
+        vector<atomid> allpairs(atomid a);
+        
+        uint numcells(uint i){assert(i<NDIM); return widths[i];}
+        #ifdef VEC2D
+        uint numcells(){ return widths[0] * widths[1];};
+        #else
+        uint numcells(){ return widths[0] * widths[1] * widths[2];};
+        #endif
 };
 
 class GridPairedIterator {

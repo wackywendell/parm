@@ -149,6 +149,7 @@ class atomref {
         inline atomref() : ptr(NULL){};
         inline atomref(atom *a) : ptr(a){};
         inline atom& operator *(){return *ptr;};
+        inline atom &operator->() const{ return *ptr;}
         inline atom* pointer(){return ptr;};
         inline Vec& x(){return ptr->x;};
         inline Vec& v(){return ptr->v;};
@@ -177,6 +178,7 @@ class atomid : public atomref {
 
 class idpair : public Array<atomid, 2> {
     public:
+        idpair(){vals[0] = atomid(); vals[1] = atomid();};
         idpair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
         inline atomid first() const {return vals[0];};
         inline atomid last() const {return vals[1];};

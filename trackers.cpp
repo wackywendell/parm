@@ -188,7 +188,7 @@ vector<uint> Grid::neighbors(uint i){
 void Grid::optimize_widths(){
     if(minwidth <= 0) return;
     flt width_per_atom = pow(box->V() * goalwidth / atoms->size(), OVERNDIM);
-    if (width_per_atom > minwidth) width_per_atom = minwidth;
+    if (width_per_atom < minwidth) width_per_atom = minwidth;
     Vec bshape = box->boxshape();
     widths[0] = (uint) floorflt(bshape[0] / width_per_atom);
     widths[1] = (uint) floorflt(bshape[1] / width_per_atom);
@@ -245,12 +245,16 @@ Grid::pair_iter Grid::pairs(atomid a){
 };
 
 flt Grid::time_to_edge(atom &a){
-    Vec bshape = box->boxshape();
+    Vec bsize = box->boxshape();
+    Vec v = vecmod(a.x - bsize/2., bsize) + bsize/2;
+    
     flt t = 0;
-    for(uint i=0; i<NDIM; i++){
-        bshape[i] /= widths[i];
-        flt dist = remflt(a.x[i], bshape[i]);
-        if(a.v[i] < 0) dist = bshape[i] - dist;
+    for(uint i=0; i<NDIM; ++i){
+        flt cellwidth = bsize[i] / widths[i];
+        uint xd = (uint)floorflt(v[i] / cellwidth + 1.0);
+        if(a.v[i] < 0) --xd;
+        flt dist = abs(xd*cellwidth - v[i]);
+        if(dist < 1e-15) dist += cellwidth;
         flt newt = dist / abs(a.v[i]);
         if(t == 0 or newt < t) t = newt;
     };
@@ -258,13 +262,46 @@ flt Grid::time_to_edge(atom &a){
     return t;
 };
 
+vector<idpair> Grid::allpairs(){
+    vector<idpair> v = vector<idpair>();
+    for(iterator p=begin(); p!=end(); ++p){
+        idpair pr = *p;
+        cout << "n1: " << pr.first().n()
+                << "  n2: "  << pr.last().n() << '\n';
+        assert(pr.first().n() < atoms->size());
+        assert(pr.last().n() < atoms->size());
+        v.push_back(pr);
+    }
+    return v;
+};
+
+vector<atomid> Grid::allpairs(atomid a){
+    vector<atomid> v = vector<atomid>();
+    for(pair_iter p=pairs(a); p!=p.end(); ++p) v.push_back(*p);
+    return v;
+};
+
 GridPairedIterator::GridPairedIterator(Grid & grid, atomid a) : 
         grid(grid), atom1(a){
     uint cellnum = grid.get_loc(a.x(), grid.box->boxshape());
     neighbor_cells = grid.neighbors(cellnum);
     cellnum2 = neighbor_cells.begin();
+    
+    assert(cellnum2 != neighbor_cells.end());
+    // neighbor_cells should be non-empty
     cell2 = &(grid.gridlocs[*cellnum2]);
     atom2 = cell2->begin();
+    while(atom2 == cell2->end()){
+        if(!increment_cell2()) return;
+        atom2 = cell2->begin();
+    };
+    
+    while(*atom2 == atom1){
+        if(!increment_atom2()) return;
+    }
+    if(cellnum2 != neighbor_cells.end()){
+        assert(atom2->n() < grid.atoms->size());
+    };
 };
 
 bool GridPairedIterator::increment_cell2(){
@@ -281,6 +318,7 @@ bool GridPairedIterator::increment_atom2(){
         if (!increment_cell2()) return false;
         atom2 = cell2->begin();
     };
+    if(*atom2 == atom1) return increment_atom2();
     return true;
 };
 
@@ -296,28 +334,69 @@ bool GridPairedIterator::operator==(const GridPairedIterator &other){
     return (atom2 == other.atom2);
 }
 
-
 GridIterator::GridIterator(Grid & grid) : grid(grid), cell1(grid.gridlocs.begin()){
     if(cell1 == grid.gridlocs.end()) return;
     atom1 = cell1->begin();
+    while(atom1 == cell1->end()){
+        if(!increment_cell1()) return;
+        atom1 = cell1->begin();
+    };
     uint n = cell1 - grid.gridlocs.begin();
     neighbor_cells = grid.neighbors(n);
+    assert(neighbor_cells.size() > 0);
     cellnum2 = neighbor_cells.begin();
+    while(cellnum2 == neighbor_cells.end()){
+        if (!increment_atom1()) return;
+        assert(neighbor_cells.size() > 0);
+        cellnum2 = neighbor_cells.begin();
+    }
     // neighbor_cells should be non-empty
     cell2 = &(grid.gridlocs[*cellnum2]);
     atom2 = cell2->begin();
+    while(atom2 == cell2->end()){
+        if(!increment_cell2()) return;
+        atom2 = cell2->begin();
+    };
+    
+    while(*atom2 == *atom1){
+        if(!increment_atom2()) return;
+    }
+    if(cell1 != grid.gridlocs.end()){
+        assert(atom1->n() < grid.atoms->size());
+        assert(atom2->n() < grid.atoms->size());
+    };
 };
 
 GridIterator::GridIterator(Grid & grid, vector<set<atomid> >::iterator cell1) : 
                         grid(grid), cell1(cell1){
     if(cell1 == grid.gridlocs.end()) return;
     atom1 = cell1->begin();
+    while(atom1 == cell1->end()){
+        if(!increment_cell1()) return;
+        atom1 = cell1->begin();
+    };
     uint n = cell1 - grid.gridlocs.begin();
     neighbor_cells = grid.neighbors(n);
+    assert(neighbor_cells.size() > 0);
     cellnum2 = neighbor_cells.begin();
+    while(cellnum2 == neighbor_cells.end()){
+        if (!increment_atom1()) return;
+        assert(neighbor_cells.size() > 0);
+        cellnum2 = neighbor_cells.begin();
+    }
     // neighbor_cells should be non-empty
     cell2 = &(grid.gridlocs[*cellnum2]);
     atom2 = cell2->begin();
+    while(atom2 == cell2->end()){
+        if(!increment_cell2()) return;
+        atom2 = cell2->begin();
+    };
+    while(*atom2 == *atom1){
+        if(!increment_atom2()) return;
+    };
+    
+    assert((cell1 == grid.gridlocs.end()) or 
+        (atom1->n() < grid.atoms->size() and atom2->n() < grid.atoms->size()));
 };
 
 bool GridIterator::increment_cell1(){
@@ -330,6 +409,8 @@ bool GridIterator::increment_cell1(){
 };
 
 bool GridIterator::increment_atom1(){
+    if(cell1 == grid.gridlocs.end()) return false;
+    assert(atom1 != cell1->end());
     atom1++;
     while(atom1 == cell1->end()){
         if (!increment_cell1()) return false;
@@ -339,6 +420,8 @@ bool GridIterator::increment_atom1(){
 };
 
 bool GridIterator::increment_cell2(){
+    if(cell1 == grid.gridlocs.end()) return false;
+    assert(cellnum2 != neighbor_cells.end());
     cellnum2++;
     while(cellnum2 == neighbor_cells.end()){
         if (!increment_atom1()) return false;
@@ -349,8 +432,10 @@ bool GridIterator::increment_cell2(){
 };
 
 bool GridIterator::increment_atom2(){
+    if(cell1 == grid.gridlocs.end()) return false;
+    assert(atom2 != cell2->end());
     atom2++;
-    while(atom2 == cell2->end() or atom2 == atom1){
+    while(atom2 == cell2->end()){
         if (!increment_cell2()) return false;
         atom2 = cell2->begin();
     }
@@ -360,6 +445,8 @@ bool GridIterator::increment_atom2(){
 
 GridIterator& GridIterator::operator++(){
     increment_atom2();
+    assert((cell1 == grid.gridlocs.end()) or 
+        (atom1->n() < grid.atoms->size() and atom2->n() < grid.atoms->size()));
     return *this;
 };
 
