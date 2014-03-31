@@ -17,11 +17,11 @@ class collection {
      */
     protected:
         sptr<Box> box;
-        vector<sptr<atomgroup> > groups;
+        sptr<atomgroup> atoms;
         vector<sptr<interaction> > interactions;
         vector<sptr<statetracker> > trackers;
         vector<sptr<constraint> > constraints;
-        metagroup atoms;
+        
         void update_trackers();
         void update_constraints();
         virtual flt setForcesGetPressure(bool seta=true);
@@ -29,7 +29,7 @@ class collection {
         
     public:
         collection(sptr<Box> box, 
-            vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+            sptr<atomgroup> atoms,
             vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
             vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
             vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
@@ -43,32 +43,28 @@ class collection {
         flt potentialenergy();
         flt energy();
         virtual flt temp(bool minuscomv=true);
-        virtual flt kinetic();
+        virtual flt kinetic(){return atoms->kinetic();};
         virtual flt virial();
         virtual flt pressure();
         sptr<Box> getbox(){return box;};
-        inline Vec com(){return atoms.com();};
-        inline Vec comv(){return atoms.comv();};
+        inline Vec com(){return atoms->com();};
+        inline Vec comv(){return atoms->comv();};
         #ifdef VEC3D
-        inline Vec angmomentum(const Vec &loc){return atoms.angmomentum(loc, *box);};
-        inline Vec angmomentum(){return atoms.angmomentum(com(), *box);};
+        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
+        inline Vec angmomentum(){return atoms->angmomentum(com(), *box);};
         #elif defined VEC2D
-        inline flt angmomentum(const Vec &loc){return atoms.angmomentum(loc, *box);};
-        inline flt angmomentum(){return atoms.angmomentum(com(), *box);};
+        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
+        inline flt angmomentum(){return atoms->angmomentum(com(), *box);};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
         
-        void resetcomv(){atoms.resetcomv();};
-        void resetL(){atoms.resetL(*box);};
+        void resetcomv(){atoms->resetcomv();};
+        void resetL(){atoms->resetL(*box);};
         void scaleVs(flt scaleby);
         void scaleVelocitiesT(flt T);
         void scaleVelocitiesE(flt E);
         
-        void addAtoms(sptr<atomgroup> a){
-            groups.push_back(a);
-            update_trackers();
-        };
         void addInteraction(sptr<interaction> inter){
             interactions.push_back(inter);
             update_trackers();
@@ -81,7 +77,6 @@ class collection {
             constraints.push_back(c);
             update_trackers();
         };
-        void add(sptr<atomgroup> a){addAtoms(a);};
         void add(sptr<interaction> a){addInteraction(a);};
         void add(sptr<statetracker> a){addTracker(a);};
         void add(sptr<constraint> a){addConstraint(a);};
@@ -95,11 +90,11 @@ class collection {
 
 class StaticCollec : public collection {
     public:
-        StaticCollec(sptr<Box> box, vector<sptr<atomgroup> > groups,
+        StaticCollec(sptr<Box> box, sptr<atomgroup> atoms,
             vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
             vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
             vector<sptr<constraint> > constraints=vector<sptr<constraint> >())
-                            : collection(box, groups, interactions, trackers, constraints){};
+                            : collection(box, atoms, interactions, trackers, constraints){};
         virtual void timestep(){};
         void update(){update_trackers(); update_constraints();};
 };
@@ -116,8 +111,8 @@ class collectionSol : public collection {
         void setCs();
     
     public:
-        collectionSol(sptr<Box> box, const flt dt, const flt damping, const flt desiredT, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionSol(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, const flt damping, const flt desiredT, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
@@ -161,8 +156,8 @@ class collectionSolHT : public collection {
         void setGauss();
     
     public:
-        collectionSolHT(sptr<Box> box, const flt dt, const flt damping, const flt desiredT, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, const flt damping, const flt desiredT, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
@@ -179,12 +174,11 @@ class collectionVerlet : public collection {
         flt dt;
         
     public:
-        collectionVerlet(sptr<Box> box, const flt dt, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionVerlet(sptr<Box> box, sptr<atomgroup> atoms, const flt dt, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), dt(dt){};
+            collection(box, atoms, interactions, trackers, constraints), dt(dt){};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
 };
@@ -196,11 +190,11 @@ class collectionOverdamped : public collection {
         
     public:
         collectionOverdamped(sptr<Box> box, const flt dt, const float gamma,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+                sptr<atomgroup> atoms,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints),
+            collection(box, atoms, interactions, trackers, constraints),
                 dt(dt), gamma(gamma){};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
@@ -212,12 +206,12 @@ class collectionConjGradient : public collection {
         flt dt;
         
     public:
-        collectionConjGradient(sptr<Box> box, const flt dt,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionConjGradient(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints),
+            collection(box, atoms, interactions, trackers, constraints),
                 dt(dt){};
         void timestep();
         void timestepNewton();
@@ -242,13 +236,12 @@ class collectionConjGradientBox : public collection {
         flt maxdV;
         
     public:
-        collectionConjGradientBox(sptr<OriginBox> box, const flt dt,
-                const flt P0, const flt kappaV=1,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionConjGradientBox(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt P0, const flt kappaV=1.0,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints),
+            collection(box, atoms, interactions, trackers, constraints),
                 dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0),
                 maxdV(-1){};
         
@@ -301,8 +294,8 @@ class collectionNLCG : public collection {
         //~ void resizedl(flt dl);
         
     public:
-        collectionNLCG(sptr<OriginBox> box, const flt dt, const flt P0, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionNLCG(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt P0, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
@@ -376,8 +369,7 @@ class collectionNLCGV : public collection {
         //~ void resizedl(flt dl);
         
     public:
-        collectionNLCGV(sptr<Box> box, const flt dt,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionNLCGV(sptr<Box> box, sptr<atomgroup> atoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
@@ -470,12 +462,12 @@ class collectionNoseHoover : public collection {
         flt xi, lns;
         
     public:
-        collectionNoseHoover(sptr<Box> box, const flt dt, const flt Q, const flt T, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionNoseHoover(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, const flt Q, const flt T, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
             dt(dt), Q(Q), T(T){
                 xi = 0; lns = 0; 
             };
@@ -499,11 +491,11 @@ class collectionGaussianT : public collection {
         
     public:
         collectionGaussianT(sptr<Box> box, const flt dt, const flt Q, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+                sptr<atomgroup> atoms,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
             dt(dt), Q(Q){};
         void setdt(flt newdt){dt=newdt;};
         void setQ(flt newQ){Q=newQ;};
@@ -518,12 +510,11 @@ class collectionGear3A : public collection {
         flt dt;
         
     public:
-        collectionGear3A(sptr<Box> box, const flt dt, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear3A(sptr<Box> box, sptr<atomgroup> atoms, const flt dt, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), dt(dt){};
+            collection(box, atoms, interactions, trackers, constraints), dt(dt){};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
 };
@@ -535,30 +526,25 @@ class collectionGear4A : public collection {
         uint ncorrec;
         vector<Vec> bs;
         void resetbs(){
-            uint Natoms = 0;
-            vector<sptr<atomgroup> >::iterator git;
-            for(git = groups.begin(); git<groups.end(); git++){
-                Natoms += (*git)->size();
-            };
-            bs.resize(Natoms, Vec());
+            bs.resize(atoms->size(), Vec());
         }
         
     public:
-        collectionGear4A(sptr<Box> box, const flt dt, uint ncorrectionsteps,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear4A(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, uint ncorrectionsteps,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, 
+            collection(box, atoms, interactions, trackers, 
                         constraints), dt(dt), ncorrec(ncorrectionsteps){
                 resetbs();
             };
-        collectionGear4A(sptr<Box> box, const flt dt,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear4A(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-                collection(box, groups, interactions, trackers, constraints),
+                collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(1) {resetbs();};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
@@ -571,29 +557,25 @@ class collectionGear5A : public collection {
         uint ncorrec;
         vector<Vec> bs, cs;
         void resetbcs(){
-            uint Natoms = 0;
-            vector<sptr<atomgroup> >::iterator git;
-            for(git = groups.begin(); git<groups.end(); git++){
-                Natoms += (*git)->size();
-            };
+            uint Natoms = atoms->size();
             bs.resize(Natoms, Vec());
             cs.resize(Natoms, Vec());
         }
         
     public:
-        collectionGear5A(sptr<Box> box, const flt dt, uint ncorrectionsteps,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear5A(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, uint ncorrectionsteps,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
                         dt(dt), ncorrec(ncorrectionsteps){resetbcs();};
         collectionGear5A(sptr<Box> box, const flt dt,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+                sptr<atomgroup> atoms,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-                collection(box, groups, interactions, trackers, constraints),
+                collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(1) {resetbcs();};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
@@ -606,11 +588,7 @@ class collectionGear6A : public collection {
         uint ncorrec;
         vector<Vec> bs, cs, ds;
         void resetbcds(){
-            uint Natoms = 0;
-            vector<sptr<atomgroup> >::iterator git;
-            for(git = groups.begin(); git<groups.end(); git++){
-                Natoms += (*git)->size();
-            };
+            uint Natoms = atoms->size();
             bs.clear(); cs.clear(); ds.clear();
             bs.resize(Natoms, Vec());
             cs.resize(Natoms, Vec());
@@ -618,19 +596,18 @@ class collectionGear6A : public collection {
         }
         
     public:
-        collectionGear6A(sptr<Box> box, const flt dt, uint ncorrectionsteps,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear6A(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, uint ncorrectionsteps,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
                         dt(dt), ncorrec(ncorrectionsteps){resetbcds();};
-        collectionGear6A(sptr<Box> box, const flt dt,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear6A(sptr<Box> box, sptr<atomgroup> atoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-                collection(box, groups, interactions, trackers, constraints),
+                collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(1) {resetbcds();};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
@@ -677,32 +654,19 @@ class collectionRK4 : public collection {
     // for use in fixed-E simulations
     protected:
         flt dt;
-        vector<sptr<atomgroup> > convertRK4vec(vector<sptr<atomvecRK4> > rgroups){
-            vector<sptr<atomgroup> > v;
-            vector<sptr<atomvecRK4> >::iterator git;
-            for(git = rgroups.begin(); git<rgroups.end(); git++){
-                v.push_back((sptr<atomgroup>) *git);
-            }
-            return v;
-        };
         
     public:
-        collectionRK4(sptr<Box> box, const flt dt, 
-                vector<sptr<atomvecRK4> > rgroups=vector<sptr<atomvecRK4> >(),
+        collectionRK4(sptr<Box> box, sptr<atomvecRK4> ratoms, const flt dt, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, convertRK4vec(rgroups), interactions, 
+            collection(box, static_pointer_cast<atomgroup>(ratoms), interactions, 
                         trackers, constraints), dt(dt){
                 setForces();
                 update_constraints();
-                vector<sptr<atomgroup> >::iterator git;
-                for(git = groups.begin(); git<groups.end(); git++){
-                    atomgroup &m = **git;
-                    for(uint i=0; i<m.size(); i++){
-                        atomRK4 & a = (atomRK4 &) m[i];
-                        a.a = a.f / m.getmass(i);
-                    };
+                for(uint i=0; i<atoms->size(); i++){
+                    atomRK4 & a = (atomRK4 &) (*atoms)[i];
+                    a.a = a.f / atoms->getmass(i);
                 };
             };
         void timestep();
@@ -719,32 +683,27 @@ class collectionGear4NPH : public collection {
         uint ncorrec;
         vector<Vec> bs;
         void resetbs(){
-            uint Natoms = 0;
-            vector<sptr<atomgroup> >::iterator git;
-            for(git = groups.begin(); git<groups.end(); git++){
-                Natoms += (*git)->size();
-            };
-            bs.resize(Natoms, Vec());
+            bs.resize(atoms->size(), Vec());
         }
         
     public:
-        collectionGear4NPH(sptr<OriginBox> box, const flt dt, const flt P,
+        collectionGear4NPH(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt P,
                 const flt Q, uint ncorrectionsteps,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, 
+            collection(box, atoms, interactions, trackers, 
                         constraints), dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), 
                         ncorrec(ncorrectionsteps){
                 resetbs();
             };
-        collectionGear4NPH(sptr<OriginBox> box, const flt dt, const flt P, const flt Q, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear4NPH(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt P, const flt Q, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-                collection(box, groups, interactions, trackers, constraints),
+                collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), ncorrec(1) {resetbs();};
         void timestep();
         flt kinetic();
@@ -778,11 +737,7 @@ class collectionGear4NPT : public collection {
         vector<Vec> xs1, xs2, xs3;
         vector<Vec> vs2, vs3;
         void resetbs(){
-            uint Natoms = 0;
-            vector<sptr<atomgroup> >::iterator git;
-            for(git = groups.begin(); git<groups.end(); git++){
-                Natoms += (*git)->size();
-            };
+            uint Natoms = atoms->size();
             xs1.resize(Natoms, Vec());
             xs2.resize(Natoms, Vec());
             xs3.resize(Natoms, Vec());
@@ -793,22 +748,22 @@ class collectionGear4NPT : public collection {
         static vector<sptr<interaction> > tointerpair(vector<sptr<interactionpairsx> >&);
         
     public:
-        collectionGear4NPT(sptr<OriginBox> box, const flt dt, uint ncorrectionsteps,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionGear4NPT(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, uint ncorrectionsteps,
                 vector<sptr<interactionpairsx> > interactions=vector<sptr<interactionpairsx> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, tointerpair(interactions), trackers, 
+            collection(box, atoms, tointerpair(interactions), trackers, 
                         constraints), dt(dt), xrpsums(box),
                         ncorrec(ncorrectionsteps){
                 resetbs();
             };
         collectionGear4NPT(sptr<OriginBox> box, const flt dt, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+                sptr<atomgroup> atoms,
                 vector<sptr<interactionpairsx> > interactions=vector<sptr<interactionpairsx> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, tointerpair(interactions),
+            collection(box, atoms, tointerpair(interactions),
                             trackers, constraints),
                     dt(dt), xrpsums(box), ncorrec(1) {
                 resetbs();
@@ -829,13 +784,13 @@ class collectionVerletNPT : public collection {
         void resetvhalf();
         
     public:
-        collectionVerletNPT(sptr<OriginBox> box, const flt dt, const flt P,
+        collectionVerletNPT(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt P,
                 const flt QP, const flt T, const flt QT, 
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
             dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), P(P), 
             QP(QP), T(T), QT(QT), curP(0){resetvhalf();};
         void timestep();
@@ -882,25 +837,24 @@ class collectionCDBD : public collection {
         void line_advance(flt deltat);
         
     public:
-        collectionCDBD(sptr<OriginBox> box, const flt dt, const flt T,
-                vector<sptr<atomgroup> > groups=vector<sptr<atomgroup> >(),
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt T,
                 vector<flt> sizes = vector<flt>(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints), 
             T(T), dt(dt), curt(0), atomsizes(sizes) {
-            assert(atomsizes.size() == atoms.size());
+            assert(atomsizes.size() == atoms->size());
         };
-        collectionCDBD(sptr<OriginBox> box, const flt dt, const flt T,
-                vector<sptr<atomgroup> > groups,
-                flt sizes,
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt T, flt sizes,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, groups, interactions, trackers, constraints), 
-            T(T), dt(dt), curt(0), atomsizes(atoms.size(), sizes) {
-            assert(atomsizes.size() == atoms.size());
+            collection(box, atoms, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes) {
+            assert(atomsizes.size() == atoms->size());
         };
     
         void reset_velocities();
