@@ -130,6 +130,9 @@ Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms,
 };
 
 vector<uint> Grid::neighbors(uint i){
+    if(widths[0] == 1){
+        return vector<uint>(1,0);
+    };
     #ifdef VEC2D
     uint yrow = widths[0];
     
@@ -189,8 +192,18 @@ void Grid::optimize_widths(){
     Vec bshape = box->boxshape();
     widths[0] = (uint) floorflt(bshape[0] / width_per_atom);
     widths[1] = (uint) floorflt(bshape[1] / width_per_atom);
-    #ifndef VEC2D
+    #ifdef VEC2D
+    if(widths[0] < 3 or widths[1] < 3){
+        widths[0] = 1;
+        widths[1] = 1;
+    }
+    #else
     widths[2] = (uint) floorflt(bshape[2] / width_per_atom);
+    if(widths[0] < 3 or widths[1] < 3 or widths[2] < 3){
+        widths[0] = 1;
+        widths[1] = 1;
+        widths[2] = 1;
+    }
     #endif
 };
 
