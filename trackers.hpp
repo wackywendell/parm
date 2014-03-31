@@ -130,11 +130,14 @@ inline neighborlist* neighborlistL(sptr<Box> box, const double innerradius, cons
 };
 
 class GridIterator;
+class GridPairedIterator;
 
 class Grid {
     public:
         sptr<OriginBox> box;
-        metagroup atoms;
+        sptr<atomgroup> atoms;
+        // minwidth is minimum size of a box, in real units
+        // goalwidth is how many atoms per box (goal)
         flt minwidth, goalwidth;
         uint widths[NDIM];
         vector<set<atomid> > gridlocs;
@@ -144,44 +147,69 @@ class Grid {
         
     public:
         typedef GridIterator iterator;
+        typedef GridPairedIterator pair_iter;
         
-        Grid(sptr<OriginBox> box, const uint width) : box(box),
-                minwidth(-1), goalwidth(-1){
-            widths[0] = width;
-            widths[1] = width;
-            #ifndef VEC2D
-            widths[2] = width;
-            #endif
-        };
+        Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const uint width=1);
+        Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, vector<uint> width);
+        Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt minwidth, const flt goalwidth);
         
-        Grid(sptr<OriginBox> box, vector<uint> width) : box(box),
-                minwidth(-1), goalwidth(-1){
-            assert(width.size() == NDIM);
-            widths[0] = width[0];
-            widths[1] = width[1];
-            #ifndef VEC2D
-            widths[2] = width[2];
-            #endif
-        };
+        //void add(atom& a){atoms.add(&a);};
+        //void add(atomgroup& a){for(uint i=0; i<a.size(); i++) add(a[i]);};
         
-        Grid(sptr<OriginBox> box, const flt goalwidth, const flt minwidth) :
-            box(box), minwidth(minwidth), goalwidth(goalwidth){
-                widths[0] = 0;
-                widths[1] = 0;
-                #ifndef VEC2D
-                widths[2] = 0;
-                #endif
-        };
-        
+        void optimize_widths();
         void update_widths();
         void make_grid();
         
         friend class GridIterator;
+        friend class GridPairedIterator;
         iterator begin();
         iterator end();
+        
+        pair_iter pairs(atomid a);
+        flt time_to_edge(atom& a);
+        flt time_to_edge(uint i){return time_to_edge((*atoms)[i]);}
+};
+
+class GridPairedIterator {
+    // For iterating over all pairs of a single atom
+    protected:
+        Grid & grid;
+        atomid atom1;
+        
+        vector<uint> neighbor_cells;
+        vector<uint>::iterator cellnum2;
+        set<atomid> *cell2;
+        set<atomid>::iterator atom2;
+        
+        // returns "successful increment", e.g. cell1 points to an element
+        bool increment_cell2();
+        bool increment_atom2();
+    
+    public:
+        typedef set<atomid>::iterator end_type;
+    
+        GridPairedIterator(Grid & grid, atomid a);
+        
+        GridPairedIterator& operator++();
+        atomid operator*(){return *atom2;};
+        bool operator==(const GridPairedIterator &other);
+        
+        bool operator!=(const GridPairedIterator &other){
+            return !(*this == other);
+        };
+        
+        bool operator==(const end_type other){
+            return (atom2 == other);
+        }
+        bool operator!=(const end_type other){
+            return !(atom2 == other);
+        };
+        
+        end_type end(){return grid.gridlocs[neighbor_cells.back()].end();};
 };
 
 class GridIterator {
+    // For iterating over all possible pairs
     protected:
         Grid & grid;
         vector<set<atomid> >::iterator cell1;

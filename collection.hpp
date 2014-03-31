@@ -825,8 +825,63 @@ struct event {
         
 };
 
+flt get_max(vector<flt> v){
+    flt mx = 0.0;
+    for(vector<flt>::iterator it=v.begin(); it != v.end(); it++){
+        if(*it < mx) mx = *it;
+    }
+    return mx;
+};
+
 /// Collision-Driven Brownian-Dynamics
 class collectionCDBD : public collection {
+    public:
+        flt T;
+        flt dt, curt;
+        set<event> events; // note that this a sorted binary tree
+        vector<flt> atomsizes; /// diameters
+        
+        void reset_events(bool force=true);
+        void line_advance(flt deltat);
+        
+        Grid grid;
+        flt gridt; // when it was updated
+        
+        event next_event(atomid a);
+        
+    public:
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt T,
+                vector<flt> sizes = vector<flt>(),
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collection(box, atoms, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(sizes), 
+            grid(box, atoms, get_max(sizes), 1.0) {
+            assert(atomsizes.size() == atoms->size());
+        };
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
+                flt sizes,
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collection(box, atoms, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes),
+            grid(box, atoms, sizes, 1.0) {
+            assert(atomsizes.size() == atoms->size());
+        };
+    
+        void update_grid(bool force=true);
+        Grid &get_grid(){return grid;};
+        void reset_velocities();
+        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
+        void timestep();
+};
+
+
+/// Collision-Driven Brownian-Dynamics
+class collectionCDBDsimple : public collection {
     public:
         flt T;
         flt dt, curt;
@@ -837,7 +892,7 @@ class collectionCDBD : public collection {
         void line_advance(flt deltat);
         
     public:
-        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+        collectionCDBDsimple(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T,
                 vector<flt> sizes = vector<flt>(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
@@ -847,7 +902,7 @@ class collectionCDBD : public collection {
             T(T), dt(dt), curt(0), atomsizes(sizes) {
             assert(atomsizes.size() == atoms->size());
         };
-        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+        collectionCDBDsimple(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T, flt sizes,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),

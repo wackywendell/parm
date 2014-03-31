@@ -1815,7 +1815,159 @@ bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
     return true;
 }
 
-void collectionCDBD::reset_events(){
+void collectionCDBD::update_grid(bool force){
+    if(!force && (gridt == curt)) return;
+    grid.optimize_widths();
+    grid.make_grid();
+};
+
+event collectionCDBD::next_event(atomid a){
+    event e;
+    e.t = grid.time_to_edge(*a);
+    e.a = a;
+    e.b = a;
+        
+    for(Grid::pair_iter j=grid.pairs(a); j!=j.end(); ++j){
+        event e2;
+        flt sigma = (atomsizes[a.n()] + atomsizes[(*j).n()])/2.0;
+        if(make_event(*box, e2, *j, a, sigma, curt)
+                and e2 < e){
+            e = e2;
+        };
+    }
+    return e;
+}
+
+void collectionCDBD::reset_events(bool force){
+    events.clear();
+    update_grid(force);
+    
+    for(uint i=0; i<atoms->size(); i++){
+        events.insert(next_event(atoms->get_id(i)));
+    };
+};
+
+inline void collide(Box &box, atom& a, atom &b){
+    assert(&a != &b);
+    Vec rij = box.diff(a.x, b.x);
+    flt rmag = rij.mag();
+    Vec rhat = rij / rmag;
+    
+    flt rvi = rhat.dot(a.v);
+    flt rvj = rhat.dot(b.v);
+    if(rvi >= rvj) return; // they're already moving away
+    Vec p = rhat * (2 * a.m * b.m * (rvj - rvi) / (a.m + b.m));
+    a.v += p / a.m;
+    b.v -= p / b.m;
+};
+
+bool collectionCDBD::take_step(flt tlim){
+    // TODO: more efficient looping and merging
+    
+    // If we have a limit, and we've already passed it, stop.
+    if((tlim > 0) && (tlim <= curt)) return false;
+    
+    //~ std::cerr << "take_step: events " << events.size() << "\n";
+    if(events.size() <= 0) reset_events();
+    
+    assert(atoms->size() > 0);
+    assert(atomsizes.size() > 0);
+    if(events.size() == 0){
+        assert(events.size() > 0);
+        //~ // TODO: this should check time to leave box, and only go that far
+        //~ line_advance(tlim - curt);
+        //~ curt = tlim;
+        //~ return false;
+    }
+    //~ std::cerr << "take_step: started, events " << events.size() << "\n";
+    event e = *(events.begin());
+    if ((tlim > 0) & (e.t > tlim)){
+        // if we have a limit, and the next event is farther in the 
+        // future than that limit, then we just move everyone forward and
+        // no collisions happen
+        line_advance(tlim - curt);
+        curt = tlim;
+        return false;
+    };
+    events.erase(e);
+    
+    // move everyone forward
+    line_advance(e.t - curt);
+    curt = e.t;
+    //~ std::cerr << "take_step: advanced.\n";
+    
+    
+    // Remove all "bad" scheduled events (involving these two atoms),
+    // and mark which atoms need rescheduling
+    vector<atomid> badatoms(1);
+    badatoms[0] = e.a;
+    
+    bool fakecollision = (e.a == e.b);
+    
+    // if e.a == e.b, that just means that e.a is entering a new box,
+    // and we don't need to worry about any other atoms
+    if(!fakecollision){
+        // collide our two atoms (i.e. have them bounce)
+        //~ std::cerr << "take_step: colliding " << e.a.n() << " - " << e.b.n() << "\n";
+        collide(*box, *(e.a), *(e.b));
+        //~ std::cerr << "take_step: collided " << e.a.n() << " - " << e.b.n() << "\n";
+        badatoms.push_back(e.b);
+        
+        set<event>::iterator eit, eit2;
+        eit = events.begin();
+        while (eit != events.end()){
+            if((eit->a == e.a) || (eit->a == e.b)){
+                badatoms.push_back(eit->b);
+            } else if((eit->b == e.a) || (eit->b == e.b)){
+                badatoms.push_back(eit->a);
+            } else {
+                // no matches, carry on
+                eit++;
+                continue;
+            }
+            
+            
+            //~ std::cerr << "take_step: removing event...";
+            // need to remove that event
+            eit2 = eit;
+            eit++;
+            events.erase(eit2);
+            //~ std::cerr << "Removed.\n";
+        };
+    }
+    
+    //~ std::cerr << "made events vector...";
+    for(uint i=0; i<badatoms.size(); i++){
+        event e = next_event(badatoms[i]);
+        events.insert(e);
+    };
+    return true;
+};
+
+void collectionCDBD::timestep() {
+    reset_velocities();
+    flt newt = curt + dt;
+    while(take_step(newt)){};
+    update_trackers();
+};
+
+void collectionCDBDsimple::reset_velocities(){
+    for(uint i=0; i<atoms->size(); i++){
+        flt mi = atoms->getmass(i);
+        (*atoms)[i].v = randVec() * sqrtflt(T/mi);
+    }
+    reset_events();
+};
+
+void collectionCDBDsimple::line_advance(flt deltat){
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x += (*atoms)[i].v * deltat;
+    }
+    
+    curt += deltat;
+};
+
+void collectionCDBDsimple::reset_events(){
     events.clear();
     
     for(uint i=0; i<atoms->size(); i++){
@@ -1834,20 +1986,7 @@ void collectionCDBD::reset_events(){
     //~ std::cerr << " Done, events " << events.size() << "\n";
 };
 
-inline void collide(Box &box, atom& a, atom &b){
-    Vec rij = box.diff(a.x, b.x);
-    flt rmag = rij.mag();
-    Vec rhat = rij / rmag;
-    
-    flt rvi = rhat.dot(a.v);
-    flt rvj = rhat.dot(b.v);
-    if(rvi >= rvj) return; // they're already moving away
-    Vec p = rhat * (2 * a.m * b.m * (rvj - rvi) / (a.m + b.m));
-    a.v += p / a.m;
-    b.v -= p / b.m;
-};
-
-bool collectionCDBD::take_step(flt tlim){
+bool collectionCDBDsimple::take_step(flt tlim){
     // TODO: more efficient looping and merging
     
     // If we have a limit, and we've already passed it, stop.
@@ -1960,7 +2099,7 @@ bool collectionCDBD::take_step(flt tlim){
     return true;
 };
 
-void collectionCDBD::timestep() {
+void collectionCDBDsimple::timestep() {
     reset_velocities();
     flt newt = curt + dt;
     while(take_step(newt)){};
