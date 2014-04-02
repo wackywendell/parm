@@ -1782,6 +1782,9 @@ void collectionCDBD::reset_velocities(){
 };
 
 void collectionCDBD::line_advance(flt deltat){
+    if(deltat == 0) return;
+    
+    //~ assert(deltat > 0);
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].x += (*atoms)[i].v * deltat;
     }
@@ -1824,7 +1827,12 @@ void collectionCDBD::update_grid(bool force){
 
 event collectionCDBD::next_event(atomid a){
     event e;
-    e.t = curt + grid.time_to_edge(*a);
+    flt vmag = a.v().mag();
+    if(!isfinite(vmag) or vmag <= 0) vmag = sqrtflt(T/a.m()) * edge_epsilon;
+    flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
+    assert(epsilon_t > 0);
+    
+    e.t = curt + grid.time_to_edge(*a) + epsilon_t;
     e.a = a;
     e.b = a;
         
@@ -1836,16 +1844,22 @@ event collectionCDBD::next_event(atomid a){
             e = e2;
         };
     }
+    assert(e.t >= curt);
     return e;
 }
 
 void collectionCDBD::reset_events(bool force){
+    //~ std::cerr << "CDBD::reset_events...\n";
     events.clear();
+    //~ std::cerr << "CDBD::reset_events cleared...\n";
     update_grid(force);
+    //~ std::cerr << "CDBD::reset_events updated grid...\n";
     
     for(uint i=0; i<atoms->size(); i++){
+        //~ std::cerr << "CDBD::reset_events" << i << "\n";
         events.insert(next_event(atoms->get_id(i)));
     };
+    //~ std::cerr << "CDBD::reset_events done.\n";
 };
 
 inline void collide(Box &box, atom& a, atom &b){
@@ -1868,7 +1882,6 @@ bool collectionCDBD::take_step(flt tlim){
     // If we have a limit, and we've already passed it, stop.
     if((tlim > 0) && (tlim <= curt)) return false;
     
-    //~ std::cerr << "take_step: events " << events.size() << "\n";
     if(events.size() <= 0) reset_events();
     
     assert(atoms->size() > 0);
@@ -1880,7 +1893,6 @@ bool collectionCDBD::take_step(flt tlim){
         //~ curt = tlim;
         //~ return false;
     }
-    //~ std::cerr << "take_step: started, events " << events.size() << "\n";
     event e = *(events.begin());
     if ((tlim > 0) & (e.t > tlim)){
         // if we have a limit, and the next event is farther in the 
@@ -1893,8 +1905,6 @@ bool collectionCDBD::take_step(flt tlim){
     
     // move everyone forward
     line_advance(e.t - curt);
-    //~ std::cerr << "take_step: advanced.\n";
-    
     
     // Remove all "bad" scheduled events (involving these two atoms),
     // and mark which atoms need rescheduling
@@ -1907,9 +1917,7 @@ bool collectionCDBD::take_step(flt tlim){
     // and we don't need to worry about any other atoms
     if(!fakecollision){
         // collide our two atoms (i.e. have them bounce)
-        //~ std::cerr << "take_step: colliding " << e.a.n() << " - " << e.b.n() << "\n";
         collide(*box, *(e.a), *(e.b));
-        //~ std::cerr << "take_step: collided " << e.a.n() << " - " << e.b.n() << "\n";
         badatoms.push_back(e.b);
         
         set<event>::iterator eit, eit2;
@@ -1925,17 +1933,13 @@ bool collectionCDBD::take_step(flt tlim){
                 continue;
             }
             
-            
-            //~ std::cerr << "take_step: removing event...";
             // need to remove that event
             eit2 = eit;
             eit++;
             events.erase(eit2);
-            //~ std::cerr << "Removed.\n";
         };
     }
     
-    //~ std::cerr << "made events vector...";
     for(uint i=0; i<badatoms.size(); i++){
         event e = next_event(badatoms[i]);
         events.insert(e);

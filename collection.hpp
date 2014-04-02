@@ -840,6 +840,7 @@ class collectionCDBD : public collection {
         flt dt, curt;
         set<event> events; // note that this a sorted binary tree
         vector<flt> atomsizes; /// diameters
+        flt edge_epsilon;
         
         void reset_events(bool force=true);
         void line_advance(flt deltat);
@@ -857,8 +858,8 @@ class collectionCDBD : public collection {
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints), 
-            T(T), dt(dt), curt(0), atomsizes(sizes), 
-            grid(box, atoms, get_max(sizes), 1.0) {
+            T(T), dt(dt), curt(0), atomsizes(sizes), edge_epsilon(1e-8),
+            grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0) {
             assert(atomsizes.size() == atoms->size());
         };
         collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
@@ -874,11 +875,12 @@ class collectionCDBD : public collection {
     
         void update_grid(bool force=true);
         Grid &get_grid(){return grid;};
+        flt get_epsilon(){return edge_epsilon;};
+        void set_epsilon(flt eps){edge_epsilon = eps;};
         void reset_velocities();
         bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
         void timestep();
 };
-
 
 /// Collision-Driven Brownian-Dynamics
 class collectionCDBDsimple : public collection {
