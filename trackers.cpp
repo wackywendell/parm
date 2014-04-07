@@ -346,7 +346,7 @@ GridIterator::GridIterator(Grid & grid) : grid(grid), cell1(grid.gridlocs.begin(
         if(!increment_cell1()) return;
         atom1 = cell1->begin();
     };
-    uint n = cell1 - grid.gridlocs.begin();
+    uint n = (uint)(cell1 - grid.gridlocs.begin());
     neighbor_cells = grid.neighbors(n);
     assert(neighbor_cells.size() > 0);
     cellnum2 = neighbor_cells.begin();
@@ -380,7 +380,7 @@ GridIterator::GridIterator(Grid & grid, vector<set<atomid> >::iterator cell1) :
         if(!increment_cell1()) return;
         atom1 = cell1->begin();
     };
-    uint n = cell1 - grid.gridlocs.begin();
+    uint n = (uint)(cell1 - grid.gridlocs.begin());
     neighbor_cells = grid.neighbors(n);
     assert(neighbor_cells.size() > 0);
     cellnum2 = neighbor_cells.begin();
@@ -408,7 +408,7 @@ bool GridIterator::increment_cell1(){
     if(cell1 == grid.gridlocs.end()) return false;
     cell1++;
     if(cell1 == grid.gridlocs.end()) return false;
-    uint n = cell1 - grid.gridlocs.begin();
+    uint n = (uint) (cell1 - grid.gridlocs.begin());
     neighbor_cells = grid.neighbors(n);
     return true;
 };

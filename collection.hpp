@@ -189,8 +189,8 @@ class collectionOverdamped : public collection {
         flt dt, gamma;
         
     public:
-        collectionOverdamped(sptr<Box> box, const flt dt, const float gamma,
-                sptr<atomgroup> atoms,
+        collectionOverdamped(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, const flt gamma=1.0,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :

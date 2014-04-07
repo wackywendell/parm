@@ -440,11 +440,21 @@ class COMSpring : public interaction{
         };
 };
 
+enum BondDiffType {
+    BOXED,
+    UNBOXED,
+    FIXEDBOX
+};
+
 struct bondgrouping {
     flt k, x0;
     atom *a1, *a2;
-    bondgrouping(flt k, flt x0, atom* a1, atom* a2) : 
-                k(k),x0(x0), a1(a1), a2(a2){};
+    BondDiffType diff_type;
+    array<int,NDIM> fixed_box;
+    bondgrouping(flt k, flt x0, atom* a1, atom* a2, 
+            BondDiffType diff=UNBOXED, OriginBox *box=NULL);
+    Vec diff(Box &box) const;
+    int get_fixed(uint i){return fixed_box[i];};
 };
 
 class bondpairs : public interaction {
@@ -452,7 +462,7 @@ class bondpairs : public interaction {
         bool zeropressure;
         vector<bondgrouping> pairs;
         //inline static Vec diff(Box &box, Vec r1, Vec r2){return r1-r2;};
-        inline static Vec diff(Box &box, Vec r1, Vec r2){return box.diff(r1, r2);};
+        //inline static Vec diff(Box &box, Vec r1, Vec r2){return box.diff(r1, r2);};
     public:
         bondpairs(vector<bondgrouping> pairs, bool zeropressure=true);
         bondpairs(bool zeropressure=true);
@@ -460,9 +470,9 @@ class bondpairs : public interaction {
         inline void add(flt k, flt x0, atom* a1, atom* a2){
             add(bondgrouping(k,x0,a1,a2));};
         bool add_or_replace(bondgrouping b); // true means replaced
-        inline bool add_or_replace(flt k, flt x0, atom* a1, atom* a2){
-            return add_or_replace(bondgrouping(k,x0,a1,a2));};
+        bool replace(flt k, flt x0, atom* a1, atom* a2);
         uint size() const{ return (uint) pairs.size();};
+        bondgrouping get(uint i) const{ return pairs[i];};
         flt mean_dists(Box &box) const;
         flt std_dists(Box &box) const;
         flt energy(Box &box);

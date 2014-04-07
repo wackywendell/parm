@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/array.hpp>
 
 #define sptr boost::shared_ptr
 
@@ -60,7 +61,18 @@ class OriginBox : public Box {
         OriginBox(Vec size) : boxsize(size){};
         Vec diff(Vec r1, Vec r2){
             return vecmod((r1-r2), boxsize);
-        }
+        };
+        virtual Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes){
+            Vec dr = r1 - r2;
+            for(uint i=0; i<NDIM; i++) dr[i] -= boxsize[i] * boxes[i];
+            return dr;
+        };
+        virtual array<int,NDIM> box_round(Vec r1, Vec r2){
+            array<int,NDIM> boxes;
+            Vec dr = r1 - r2;
+            for(uint i=0; i<NDIM; i++) boxes[i] = (int) roundflt(dr[i] / boxsize[i]);
+            return boxes;
+        };
         #ifdef VEC3D
         OriginBox(flt L) : boxsize(L,L,L){};
         flt V(){return boxsize[0] * boxsize[1] * boxsize[2];};
@@ -99,24 +111,10 @@ class LeesEdwardsBox : public OriginBox {
         flt gamma;
     public:
         LeesEdwardsBox(Vec size, flt gamma=0.0) : OriginBox(size), gamma(gamma){};
-        Vec diff(Vec r1, Vec r2){
-            flt Ly = boxsize[1];
-            flt dy = r1[1]-r2[1];
-            int im = (int) roundflt(dy / Ly);
-            dy = dy - (im*Ly);
-            
-            flt Lx = boxsize[0];
-            flt dx = r1[0] - r2[0];
-            dx = dx - roundflt((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
-            
-            #ifdef VEC2D
-            return Vec(dx, dy);
-            #endif
-            #ifdef VEC3D
-            flt dz = remflt(r1[2], r2[2]);
-            return Vec(dx, dy, dz);
-            #endif
-        }
+        Vec diff(Vec r1, Vec r2);
+        virtual Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes);
+        virtual array<int,NDIM> box_round(Vec r1, Vec r2);
+        
         flt get_gamma(){return gamma;};
         
         void shear(flt dgamma, atomgroup &atoms);

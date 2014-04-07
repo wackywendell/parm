@@ -1,5 +1,45 @@
 #include "box.hpp"
 
+Vec LeesEdwardsBox::diff(Vec r1, Vec r2){
+    flt Ly = boxsize[1];
+    flt dy = r1[1]-r2[1];
+    int im = (int) roundflt(dy / Ly);
+    dy = dy - (im*Ly);
+    
+    flt Lx = boxsize[0];
+    flt dx = r1[0] - r2[0];
+    dx = dx - roundflt((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
+    
+    #ifdef VEC2D
+    return Vec(dx, dy);
+    #endif
+    #ifdef VEC3D
+    flt dz = remflt(r1[2] - r2[2], boxsize[2]);
+    return Vec(dx, dy, dz);
+    #endif
+};
+
+array<int,NDIM> LeesEdwardsBox::box_round(Vec r1, Vec r2){
+    Vec dr = r1 - r2;
+    array<int,NDIM> boxes;
+    boxes[1] = (int) roundflt(dr[1] / boxsize[1]);
+    boxes[0] = (int) roundflt((dr[0]/boxsize[0])-boxes[1]*gamma);
+    #ifdef VEC3D
+    boxes[2] = (int) roundflt(dr[2] / boxsize[2]);
+    #endif
+    return boxes;
+};
+
+Vec LeesEdwardsBox::diff(Vec r1, Vec r2, array<int,NDIM> boxes){
+    Vec dr = r1 - r2;
+    dr[0] -= (boxes[0] + boxes[1]*gamma)*boxsize[0];
+    dr[1] -= boxes[1]*boxsize[1];
+    #ifdef VEC3D
+    dr[2] -= boxes[2]*boxsize[2];
+    #endif
+    return dr;
+}
+
 Vec atomgroup::com() const{
     flt curmass = 0;
     Vec v = Vec();

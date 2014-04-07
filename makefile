@@ -108,5 +108,8 @@ LJatoms: libsim3D.so LJatoms.cpp
 LJatoms2D: libsim2D.so LJatoms.cpp
 	$(CXX) $(CCOPTS) -DVEC2D LJatoms.cpp -L. -lsim2D -Wl,-rpath=. -o LJatoms2D
 
-basicsim.zip: collection.cpp  collection.hpp  constraints.cpp  constraints.hpp  interaction.cpp  interaction.hpp  LJatoms.cpp  makefile  vec.hpp  vecrand.cpp  vecrand.hpp .vmdrc
-	zip -r basicsim.zip vec.hpp {vecrand,interaction,collection,constraints}.{h,c}pp LJatoms.cpp makefile .vmdrc
+hardspheres: libsim3D.so hardspheres.cpp
+	$(CXX) $(CCOPTS) -DVEC3D hardspheres.cpp -L. -lsim3D -Wl,-rpath=. -o hardspheres
+
+basicsim.zip: box.cpp box.hpp collection.cpp collection.hpp constraints.cpp constraints.hpp hardspheres.cpp interaction.cpp interaction.hpp LJatoms.cpp makefile trackers.cpp trackers.hpp vec.hpp vecrand.cpp vecrand.hpp .vmdrc
+	zip -r $@ $^
