@@ -403,6 +403,7 @@ flt bondpairs::setForcesGetPressure(Box &box){
         //~ assert(f.sq() < 10000000);
         atom1.f += f;
         atom2.f -= f;
+        if(it->diff_type == UNBOXED) continue;
         P += f.dot(r);
     }
     return P;
@@ -413,6 +414,7 @@ flt bondpairs::pressure(Box &box){
     vector<bondgrouping>::iterator it;
     flt P=0;
     for(it = pairs.begin(); it < pairs.end(); it++){
+        if(it->diff_type == UNBOXED) continue;
         Vec r = it->diff(box);
         Vec f = spring(it->k, it->x0).forces(r);
         P += f.dot(r);

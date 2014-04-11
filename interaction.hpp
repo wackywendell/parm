@@ -441,9 +441,9 @@ class COMSpring : public interaction{
 };
 
 enum BondDiffType {
-    BOXED,
-    UNBOXED,
-    FIXEDBOX
+    BOXED, // use box.diff(r1, r2)
+    UNBOXED, // use r2 - r1
+    FIXEDBOX // use r2 - r1 - (original box separation)
 };
 
 struct bondgrouping {
@@ -1579,6 +1579,12 @@ class WalledBox2D : public OriginBox {
             Vec dr = r1 - r2;
             if(!xwalls) dr[0] = remflt(r1[0], boxsize[0]);
             if(!ywalls) dr[1] = remflt(r1[1], boxsize[1]);
+            return dr;
+        }
+        Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes){
+            Vec dr = r1 - r2;
+            if(!xwalls) dr[0] -= boxes[0]*boxsize[0];
+            if(!ywalls) dr[1] -= boxes[1]*boxsize[1];
             return dr;
         }
         flt V(){return boxsize[0] * boxsize[1];};

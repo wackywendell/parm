@@ -581,8 +581,8 @@ collectionNLCG::collectionNLCG(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const uint secmax, const flt seceps) :
             collection(box, atoms, interactions, trackers, 
                 constraints), dt(dt), seceps(seceps), secmax(secmax),
-                kappa(kappa), alphamax(0), afrac(0), dxmax(0),
-                stepmax(0), kmax(kmax), 
+                kappa(kappa), alphamax(2.0), afrac(0), dxmax(100),
+                stepmax(1e-3), kmax(kmax), 
                 P0(P0), Knew(0), k(0), vl(0), fl(0), al(0), alpha(0), 
                 beta(0), betaused(0), dxsum(0), alphavmax(0), maxdV(0),
                 sec(0){
