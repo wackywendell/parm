@@ -407,13 +407,13 @@ class COMSpring : public interaction{
             flt fmag = -k * (comdist - x0);
             Vec a1 = comvec * (fmag / m1 / comdist);
             for(uint i=0; i < g1->size(); i++){
-                atom &atm = *(g1->get(i));
+                atom &atm = g1->get(i);
                 atm.f += a1 * atm.m;
             }
             
             Vec a2 = comvec * (-fmag / m2 / comdist);
             for(uint i=0; i < g2->size(); i++){
-                atom &atm = *(g2->get(i));
+                atom &atm = g2->get(i);
                 atm.f += a2 * atm.m;
             }
         };
@@ -429,8 +429,8 @@ class COMSpring : public interaction{
             flt P = 0;
             for(uint i=0; i < g1->size(); i++){
                 for(uint j=0; j < g2->size(); j++){
-                    atom &atm1 = *(g1->get(i));
-                    atom &atm2 = *(g2->get(i));
+                    atom &atm1 = g1->get(i);
+                    atom &atm2 = g2->get(i);
                     Vec fij = a12 * (atm1.m * atm2.m);
                     Vec rij = box.diff(atm1.x, atm2.x);
                     P += fij.dot(rij);
@@ -544,12 +544,12 @@ class dihedrals : public interaction {
 
 ////////////////////////////////////////////////////////////////////////
 struct forcepair {
-    atom *a1, *a2;
+    atom a1, a2;
     Vec fij;
 };
 
 struct forcepairx {
-    atom *a1, *a2;
+    atomid a1, a2;
     flt xij;
     Vec fij;
 }; 
@@ -596,6 +596,7 @@ struct LJatom : public atomid {
             epsilon(epsilon), sigma(sigma){};
     LJatom(atomid a, LJatom other) : atomid(a),
                     epsilon(other.epsilon), sigma(other.sigma){};
+    flt maxsize(){return sigma;};
 };
 
 struct LJpair {
@@ -621,6 +622,7 @@ struct LJatomcut : public LJatom {
             LJatom(epsilon, sigma, a), sigcut(cut){};
     LJatomcut(atomid a, LJatomcut other) : LJatom(a, other), 
         sigcut(other.sigcut){};
+    flt maxsize(){return sigma*sigcut;};
 };
 
 struct LJCutPair {
@@ -670,6 +672,7 @@ struct HydroAtom : public atomid {
         assert(other.epsilons[indx] == myeps);
         return myeps;
     }
+    flt maxsize(){return sigma*sigcut;};
 };
 
 struct HydroPair {
@@ -716,6 +719,13 @@ struct LJAtomIndexed : public atomid {
         //~ assert(other.sigmas[indx] == myeps);
         return myeps;
     }
+    flt maxsize(){
+        flt sigma = sigmas[0];
+        for(uint i=1; i<sigmas.size(); ++i){
+            if(sigma < sigmas[i]) sigma = sigmas[i];
+        }
+        return sigma*sigcut;
+    };
 };
 
 struct LJFullPair {
@@ -732,7 +742,7 @@ struct LJFullPair {
 
 
 ////////////////////////////////////////////////////////////////////////
-// Full LJish, with ε = ε₁₂ and σ = σ₁₂ (both indexed)
+// Full LJish, with ε = ε₁₂ (indexed) and σ = (σ₁+σ₂)
 // Potential is V(r) = ε (σ^n/r^n - 1)² - ε (r₀^-n - 1)²
 // cutoff at some sigcut r₀
 
@@ -765,8 +775,10 @@ struct LJishAtom : public atomid {
         return myeps;
     }
     flt getSigma(LJishAtom &other){
-        return sqrtflt(sigma * other.sigma);
+        return (sigma + other.sigma)/2.0;
     }
+    flt maxsize(){return sigma*sigcut;};
+    
 };
 
 struct LJishPair {
@@ -838,6 +850,7 @@ struct LJAttractRepulseAtom : public atomid {
         flt myeps = epsilons[other.indx];
         return myeps;
     }
+    flt maxsize(){return sig*sigcut;};
 };
 
 struct LJAttractRepulsePair {
@@ -909,6 +922,7 @@ struct LJAttractFixedRepulseAtom : public atomid {
         flt myeps = epsilons[other.indx];
         return myeps;
     }
+    flt maxsize(){return sig*sigcut;};
 };
 
 // r < 1        εr (1 - σ⁶/r⁶)² - εa (1 - σ⁶/R⁶)²
@@ -1019,6 +1033,7 @@ struct EisMclachlanAtom : public atomid {
             dist(dist), sigmai(sigmai){};
     EisMclachlanAtom(atomid a, EisMclachlanAtom other) : atomid(a), 
         dist(other.dist), sigmai(other.sigmai){};
+    flt maxsize(){return dist;};
 };
 
 struct EisMclachlanPair {
@@ -1059,6 +1074,7 @@ struct HertzianAtom : public atomid {
             eps(eps), sigma(sigma), exponent(exponent){};
     HertzianAtom(atomid a, HertzianAtom other) : atomid(a), 
         eps(other.eps), sigma(other.sigma), exponent(other.exponent){};
+    flt maxsize(){return sigma;};
 };
 
 inline HertzianAtom hertzd(atom *a, double eps, double sigma, double exponent=2.5){
@@ -1109,8 +1125,8 @@ struct HertzianPair {
         //~ return (R*eps*(exponent-1)/sig/sig) * powflt(1.0 - (R/sig), exponent-2);
     //~ }
     inline void fill(Box &box, forcepairx &fpair){
-        fpair.a1 = atom1.pointer();
-        fpair.a2 = atom2.pointer();
+        fpair.a1 = atom1;
+        fpair.a2 = atom2;
         Vec rij = box.diff(atom1.x(), atom2.x());
         flt dsq = rij.sq();
         if(dsq > sig*sig){
@@ -1153,6 +1169,7 @@ struct LoisOhernAtom : public atomid {
             eps(eps), sigma(sigma), C(C), l(l){};
     LoisOhernAtom(atomid a, LoisOhernAtom other) : atomid(a), 
         eps(other.eps), sigma(other.sigma), C(other.C), l(other.l){};
+    flt maxsize(){return sigma*(1+C+l);};
 };
 
 struct LoisOhernPair {
@@ -1265,7 +1282,7 @@ class NListed : public interaction {
     public:
         NListed(sptr<neighborlist> neighbors) : neighbors(neighbors){};
         inline void add(A atm){
-            atomid id = neighbors->add(atm.pointer());
+            atomid id = neighbors->add(atm.pointer(), atm.maxsize());
             A a = A(id, atm);
             assert(a.n() <= atoms.size());
             if (a.n() == atoms.size()) {atoms.push_back(a); return;};
@@ -1627,50 +1644,32 @@ inline flt confineRange(flt minimum, flt val, flt maximum){
     return val;
 }
 
-class atompair : public Array<atom, 2> {
+class atompair {
+    private:
+        atomid vals[2];
     public:
-        atompair() : Array<atom, 2>(){};
-        atompair(flt m) : Array<atom, 2>(){
-            vals[0].m = m/2;
-            vals[1].m = m/2;
-        };
-        atompair(flt m1, flt m2) : Array<atom, 2>(){
-            vals[0].m = m1;
-            vals[1].m = m2;
-        };
-        atompair(atom* a, atom* b){ vals[0] = *a; vals[1] = *b;};
-        inline atom& first() {return vals[0];};
-        inline atom& last() {return vals[1];};
+        atompair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
+        inline atom& first() {return *vals[0];};
+        inline atom& last() {return *vals[1];};
 };
 
 class SCatomvec : public virtual atomgroup {
     // this is an atomgroup which actually owns the atoms, which are
     // arranged in pairs.
     private:
-        atompair* atoms;
-        uint sz;
+        atomvec atoms;
     public:
-        SCatomvec(vector<double> masses) : sz((uint) masses.size()){
-            atoms = new atompair[sz];
-            for(uint i=0; i < sz; i++){
-                atoms[i].first().m = masses[i]/2;
-                atoms[i].last().m = masses[i]/2;
+        SCatomvec(vector<double> masses) : atoms(masses.size()*2, 0.0){
+            for(uint i=0; i < masses.size(); i++){
+                atoms[2*i].m = masses[i]/2;
+                atoms[2*i+1].m = masses[i]/2;
             }
         };
-        SCatomvec(uint N, flt mass) : sz(N){
-            atoms = new atompair[sz];
-            for(uint i=0; i < sz; i++){
-                atoms[i].first().m = mass/2;
-                atoms[i].last().m = mass/2;
-            }
-        };
-        SCatomvec(SCatomvec& other) : sz(other.pairs()){
-            atoms = new atompair[sz];
-            for(uint i=0; i < sz; i++) atoms[i] = other.atoms[i];
-        };
-        inline atom& operator[](cuint n){return atoms[n / 2][n % 2];};
-        inline atom& operator[](cuint n) const {return atoms[n / 2][n % 2];};
-        inline atompair& pair(cuint n){return atoms[n];};
+        SCatomvec(uint N, flt mass) : atoms(N*2, mass/2.0){};
+        inline atomvec &vec(){return atoms;};
+        inline atom& operator[](cuint n){return atoms[n];};
+        inline atom& operator[](cuint n) const {return atoms[n];};
+        inline atompair pair(cuint n){return atompair(atoms.get_id(n*2), atoms.get_id(n*2 + 1));};
         //inline atompair& pair(cuint n) const {return atoms[n / 2];};
         //~ atomid get_id(atom *a){
             //~ uint n = (uint) (a - atoms); WON'T WORK
@@ -1679,9 +1678,9 @@ class SCatomvec : public virtual atomgroup {
         //~ }
         //~ inline atomid get_id(uint n) {
             //~ if (n > sz*2) return atomid(); return atomid(&(atoms[n/2][n%2]),n);};
-        inline uint size() const {return sz*2;};
-        inline uint pairs() const {return sz;};
-        ~SCatomvec(){ delete [] atoms;};
+        inline uint size() const {return atoms.size();};
+        inline uint pairs() const {return atoms.size()/2;};
+        ~SCatomvec(){};
 };
 
 struct SpheroCylinderDiff{

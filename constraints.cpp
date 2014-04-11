@@ -21,9 +21,9 @@ void ContactTracker::update(Box &box){
     uint N = atoms->size();
     incontact = 0;
     for(uint i=0; i<N; i++){
-        Vec ri = atoms->get(i)->x;
+        Vec ri = atoms->get(i).x;
         for(uint j=0; j<i; j++){
-            Vec rj = atoms->get(j)->x;
+            Vec rj = atoms->get(j).x;
             Vec dr = box.diff(ri,rj);
             bool curcontact = (dr.mag() <= ((dists[i] + dists[j])/2));
             if(curcontact && (!contacts[i][j])) formations++;
@@ -46,7 +46,7 @@ void EnergyTracker::update(Box &box){
     uint Natoms = atoms->size();
     flt curU = 0, curK = 0;
     for(uint i=0; i<Natoms; i++){
-        atom &curatom = *(atoms->get(i));
+        atom &curatom = atoms->get(i);
         curK += curatom.v.sq() * curatom.m / 2;
     }
     

@@ -1438,13 +1438,6 @@ void collectionGear6A::timestep(){
     update_trackers();
 }
 
-atomid atomvecRK4::get_id(atom* atm){
-    atomRK4* a = (atomRK4*) atm;
-    uint n = (uint) (a - atoms);
-    if (n >= sz or a < atoms) return atomid();
-    return atomid(atoms + n, n);
-};
-
 void collectionRK4::timestep(){
     atomgroup &g = *atoms;
     //~ atom &atm0 = *((*(groups.begin()))->get(0));
@@ -1453,11 +1446,12 @@ void collectionRK4::timestep(){
     
     
     for(uint i=0; i<g.size(); i++){
-        atomRK4 &a = (atomRK4 &) g[i];
-        a.Kxa = a.v * dt;
-        a.Kva = a.f * (dt / g.getmass(i));
-        a.x += a.Kxa / 2;
-        a.v += a.Kva / 2;
+        atomid a = g.get_id(i);
+        RK4data adat = data[a.n()];
+        adat.Kxa = a.v() * dt;
+        adat.Kva = a.f() * (dt / g.getmass(i));
+        a.x() += adat.Kxa / 2;
+        a.v() += adat.Kva / 2;
         //~ if(i == 0) cout << "f " << a.f;
     }
     
@@ -1465,11 +1459,12 @@ void collectionRK4::timestep(){
     update_constraints();
     
     for(uint i=0; i<g.size(); i++){
-        atomRK4 &a = (atomRK4 &) g[i];
-        a.Kxb = a.v * dt;
-        a.Kvb = a.f * (dt / g.getmass(i));
-        a.x += a.Kxb / 2 - a.Kxa / 2;
-        a.v += a.Kvb / 2 - a.Kva / 2;
+        atomid a = g.get_id(i);
+        RK4data adat = data[a.n()];
+        adat.Kxb = a.v() * dt;
+        adat.Kvb = a.f() * (dt / g.getmass(i));
+        a.x() += adat.Kxb / 2 - adat.Kxa / 2;
+        a.v() += adat.Kvb / 2 - adat.Kva / 2;
         //~ if(i == 0) cout << " " << a.f;
     }
     
@@ -1483,11 +1478,12 @@ void collectionRK4::timestep(){
     update_constraints();
     
     for(uint i=0; i<g.size(); i++){
-        atomRK4 &a = (atomRK4 &) g[i];
-        a.Kxc = a.v * dt;
-        a.Kvc = a.f * (dt / g.getmass(i));
-        a.x += a.Kxc - a.Kxb / 2;
-        a.v += a.Kvc - a.Kvb / 2;
+        atomid a = g.get_id(i);
+        RK4data adat = data[a.n()];
+        adat.Kxc = a.v * dt;
+        adat.Kvc = a.f * (dt / g.getmass(i));
+        a.x() += adat.Kxc - adat.Kxb / 2;
+        a.v() += adat.Kvc - adat.Kvb / 2;
     }
     
     setForces(false);

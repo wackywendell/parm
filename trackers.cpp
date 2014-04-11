@@ -1,35 +1,22 @@
 #include "trackers.hpp"
 
-neighborlist::neighborlist(sptr<Box> box, const flt innerradius, const flt outerradius) :
-                box(box), critdist(innerradius), skinradius(outerradius),
-                atoms(){};
+neighborlist::neighborlist(sptr<Box> box, const flt skin) :
+                box(box), skin(skin), atoms(), diameters(){};
 
-neighborlist::neighborlist(sptr<Box> box, atomgroup &group, const flt innerradius,
-            const flt outerradius, pairlist ignore) :
-                box(box), critdist(innerradius), skinradius(outerradius),
-                atoms(), ignorepairs(ignore), ignorechanged(false){
+neighborlist::neighborlist(sptr<Box> box, atomgroup &group,
+        const vector<flt> diameters, const flt skin, pairlist ignore) :
+                box(box), skin(skin), atoms(), diameters(diameters),
+                ignorepairs(ignore), ignorechanged(false){
+    assert(atoms.size() == diameters.size());
     lastlocs.resize(group.size());
     for(uint i=0; i<group.size(); i++){
         atomid a = group.get_id(i);
         ignorepairs.ensure(a);
-        atoms.add(a.pointer());
+        atoms.add(a);
         lastlocs[i] = a.x();
     }
     update_list(true);
     updatenum = 1;
-};
-
-atomid neighborlist::get_id(atom* a){
-    for(uint i=0; i < atoms.size(); i++)
-        if (atoms.get(i) == a) return atoms.get_id(i);
-    return atomid();
-};
-
-void neighborlist::ignore(atom* a, atom* b){
-    atomid aid = get_id(a), bid = get_id(b);
-    assert(a != NULL);
-    assert(b != NULL);
-    ignore(aid, bid);
 };
 
 bool neighborlist::update_list(bool force){
@@ -52,7 +39,7 @@ bool neighborlist::update_list(bool force){
             
             // if we haven't continued, that means bigdist and/or biggestdist
             // have been changed, so we check
-            if(bigdist + biggestdist >= skinradius - critdist){
+            if(bigdist + biggestdist >= skin){
                 force = true;
                 break; // we do need to update, stop checking
             }
@@ -79,7 +66,8 @@ bool neighborlist::update_list(bool force){
         for(uint j=0; j<i; j++){
             atomid a2=atoms.get_id(j);
             if (ignorepairs.has_pair(a1, a2)) continue;
-            if(box->diff(a1.x(), a2.x()).mag() < skinradius)
+            flt diam = (diameters[i] + diameters[j])/2;
+            if(box->diff(a1.x(), a2.x()).mag() < (diam + skin))
                 curpairs.push_back(idpair(a1, a2));
         }
     }

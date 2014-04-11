@@ -65,9 +65,9 @@ class pairlist {
 class neighborlist : public statetracker{
     //maintains a Verlet list of "neighbors": molecules within a 
     // 'skin radius' of each other.
-    // note that molecules are counted as neighbors if any point within
-    // their molecular radius is within a 'skin radius' of any point
-    // within another molecule's molecular radius.
+    // note that molecules are counted as neighbors if the distance
+    // between them is less than (r1 + r2 + R), where r1 and r2 are the 
+    // radii, and R is the "skin radius".
     //
     // update(false) should be called frequently; it checks (O(N)) if
     // any two molecules might conceivably overlap by more than a critical
@@ -78,20 +78,20 @@ class neighborlist : public statetracker{
     // the neighbor lists
     protected:
         sptr<Box> box;
-        flt critdist, skinradius;
-        metagroup atoms;
+        flt skin;
+        subgroup atoms;
+        vector<flt> diameters;
         vector<idpair> curpairs;
         pairlist ignorepairs;
         vector<Vec> lastlocs;
         uint updatenum;
-        atomid get_id(atom* a);
         bool ignorechanged; // if true, forces a full check on next update
         //~ bool checkneighbors(const uint n, const uint m) const;
         // this is a full check
     public:
-        neighborlist(sptr<Box> box, const flt innerradius, const flt outerradius);
-        neighborlist(sptr<Box> box, atomgroup &vec, const flt innerradius, 
-        const flt outerradius, pairlist ignore = pairlist());
+        neighborlist(sptr<Box> box, const flt skin);
+        neighborlist(sptr<Box> box, atomgroup &vec, const vector<flt> diameters, 
+        const flt skin, pairlist ignore = pairlist());
         void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
         bool update_list(bool force = true);
         // if force = false, we check if updating necessary first
@@ -99,23 +99,15 @@ class neighborlist : public statetracker{
         inline uint which(){return updatenum;};
         inline uint numpairs(){return (uint) curpairs.size();};
         inline void ignore(atomid a, atomid b){ignorepairs.add_pair(a,b); ignorechanged=true;};
-        void ignore(atom*, atom*);
-        atomid add(atom* a){
-            atomid id = atoms.get_id(a);
-            if(id != NULL) return id;
+        void add(atomid a, flt diameter){
             atoms.add(a);
+            diameters.push_back(diameter);
             assert(lastlocs.size() == atoms.size() - 1);
             lastlocs.push_back(a->x);
-            id = atoms.get_id(a);
             ignorechanged = true;
-            return id;
         }
         
-        inline void changesize(flt inner, flt outer){
-            critdist = inner; skinradius = outer; update_list(true);};
-        inline void changesize(flt ratio){
-            skinradius = critdist*ratio; update_list(true);};
-
+        
         inline uint ignore_size() const{return ignorepairs.size();};
         inline uint size() const{return atoms.size();};
         inline vector<idpair>::iterator begin(){return curpairs.begin();};
@@ -123,10 +115,6 @@ class neighborlist : public statetracker{
         inline idpair get(uint i){return curpairs[i];};
         //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
         ~neighborlist(){};
-};
-
-inline neighborlist* neighborlistL(sptr<Box> box, const double innerradius, const double outerradius){
-    return new neighborlist(box, innerradius, outerradius);
 };
 
 class GridIterator;

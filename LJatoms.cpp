@@ -30,7 +30,7 @@ int main(){
     
     // LJ interaction
     // We'll cut it off at 2.5σ, and have a neighborlist out to 1.4 times that
-    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
+    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, 0.4*(sigcut*sigma)));
     boost::shared_ptr<NListed<LJatomcut, LJCutPair> > LJ(new NListed<LJatomcut, LJCutPair>(nl));
     // ^ this is the interaction
     

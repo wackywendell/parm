@@ -201,39 +201,11 @@ void atomgroup::setAccel(){
     }
 };
 
-atomid atomvec::get_id(atom* a){
-    uint n = (uint) (a - atoms);
-    if (n >= sz or a < atoms) return atomid();
-    return atomid(atoms + n, n);
-};
-
 //~ void atomgroup::vverlet2(const flt dt){
     //~ for(uint i=0; i<size(); i++){
         //~ (*this)[i].v += (*this)[i].a * (dt/2);
     //~ }
 //~ };
-
-metagroup::metagroup(vector<atomgroup*> groups){
-    vector<atomgroup*>::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i < g.size(); i++) atoms.push_back(& (g[i]));
-    }
-};
-
-metagroup::metagroup(vector<sptr<atomgroup> > groups){
-    vector<sptr<atomgroup> >::iterator git;
-    for(git = groups.begin(); git < groups.end(); git++){
-        atomgroup &g = **git;
-        for(uint i = 0; i < g.size(); i++) atoms.push_back(& (g[i]));
-    }
-};
-
-atomid metagroup::get_id(atom* a){
-    for(uint n=0; n<atoms.size(); n++)
-        if(atoms[n] == a) return atomid(a, n);
-    return atomid();
-};
 
 void LeesEdwardsBox::shear(flt dgamma, atomgroup &atoms){
     // TODO: is this right for non-square boxes?

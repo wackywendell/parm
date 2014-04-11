@@ -879,9 +879,9 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
 flt SCSpringList::energy(Box &box){
     flt E = 0;
     for(uint i = 0; i < scs->pairs() - 1; i++){
-        atompair &pi = scs->pair(i);
+        atompair pi = scs->pair(i);
         for(uint j = i+1; j < scs->pairs(); j++){
-            atompair &pj = scs->pair(j);
+            atompair pj = scs->pair(j);
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
             //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
@@ -895,10 +895,10 @@ flt SCSpringList::energy(Box &box){
 
 void SCSpringList::setForces(Box &box){
     for(uint i = 0; i < scs->pairs() - 1; i++){
-        atompair &pi = scs->pair(i);
+        atompair pi = scs->pair(i);
         flt l1 = ls[i];
         for(uint j = i+1; j < scs->pairs(); j++){
-            atompair &pj = scs->pair(j);
+            atompair pj = scs->pair(j);
             flt l2 = ls[j];
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
             SpheroCylinderDiff diff = scp.NearestLoc(box);

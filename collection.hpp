@@ -614,59 +614,27 @@ class collectionGear6A : public collection {
         void setdt(flt newdt){dt=newdt;};
 };
 
-struct atomRK4 : atom {
+struct RK4data {
     Vec Kxa, Kxb, Kxc, Kxd, Kva, Kvb, Kvc, Kvd;
-};
-
-class atomvecRK4 : public virtual atomgroup {
-    // this is an atomgroup which actually owns the atoms.
-    private:
-        atomRK4* atoms;
-        uint sz;
-    public:
-        atomvecRK4(vector<flt> masses) : sz((uint) masses.size()){
-            atoms = new atomRK4[sz];
-            for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
-        };
-        atomvecRK4(atomgroup &g) : sz(g.size()){
-            atoms = new atomRK4[sz];
-            for(uint i=0; i < sz; i++){
-                (atom &) atoms[i] = g[i];
-                //~ if(i > 1) cout << i-1 << ' ' << atoms[i-1].x << ' ' << atoms[i-1].Kvd << '\n';
-                //~ cout << i << ' ' << atoms[i].x << ' ' << atoms[i].Kvd << '\n';
-            }
-        };
-        atom& operator[](cuint n){return atoms[n];};
-        atom& operator[](cuint n) const {return atoms[n];};
-        //~ inline atomRK4& operator[](cuint n){return atoms[n];};
-        //~ inline atomRK4& operator[](cuint n) const {return atoms[n];};
-        atom* get(cuint n){if(n>=sz) return NULL; return &(atoms[n]);};
-        atomRK4* getRK4(cuint n){if(n>=sz) return NULL; return &(atoms[n]);};
-        atomid get_id(atom *a);
-        inline atomid get_id(uint n) {
-            if (n > sz) return atomid(); return atomid(atoms + n,n);};
-        //~ inline flt getmass(cuint n) const{return atoms[n].m;};
-        //~ inline void setmass(cuint n, flt m){atoms[n].m = m;};
-        inline uint size() const {return sz;};
-        ~atomvecRK4(){ delete [] atoms;};
 };
 
 class collectionRK4 : public collection {
     // for use in fixed-E simulations
     protected:
         flt dt;
+        vector<RK4data> data;
         
     public:
-        collectionRK4(sptr<Box> box, sptr<atomvecRK4> ratoms, const flt dt, 
+        collectionRK4(sptr<Box> box, sptr<atomgroup> ratoms, const flt dt, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, static_pointer_cast<atomgroup>(ratoms), interactions, 
-                        trackers, constraints), dt(dt){
+            collection(box, ratoms, interactions, 
+                        trackers, constraints), dt(dt), data(ratoms->vec().size()){
                 setForces();
                 update_constraints();
                 for(uint i=0; i<atoms->size(); i++){
-                    atomRK4 & a = (atomRK4 &) (*atoms)[i];
+                    atom& a = (*atoms)[i];
                     a.a = a.f / atoms->getmass(i);
                 };
             };
