@@ -1,23 +1,8 @@
 #include "trackers.hpp"
 
-neighborlist::neighborlist(sptr<Box> box, const flt skin) :
-                box(box), skin(skin), atoms(), diameters(){};
-
-neighborlist::neighborlist(sptr<Box> box, atomgroup &group,
-        const vector<flt> diameters, const flt skin, pairlist ignore) :
-                box(box), skin(skin), atoms(), diameters(diameters),
-                ignorepairs(ignore), ignorechanged(false){
-    assert(atoms.size() == diameters.size());
-    lastlocs.resize(group.size());
-    for(uint i=0; i<group.size(); i++){
-        atomid a = group.get_id(i);
-        ignorepairs.ensure(a);
-        atoms.add(a);
-        lastlocs[i] = a.x();
-    }
-    update_list(true);
-    updatenum = 1;
-};
+neighborlist::neighborlist(sptr<Box> box, sptr<atomvec> atomv, const flt skin) :
+                box(box), skin(skin), atoms(atomv), diameters(),
+                lastlocs(){};
 
 bool neighborlist::update_list(bool force){
     flt curdist = 0, bigdist = 0, biggestdist = 0;
@@ -62,12 +47,12 @@ bool neighborlist::update_list(bool force){
     curpairs.clear();
     for(uint i=0; i<atoms.size(); i++){
         atomid a1=atoms.get_id(i);
-        lastlocs[i] = a1.x();
+        lastlocs[i] = a1->x;
         for(uint j=0; j<i; j++){
             atomid a2=atoms.get_id(j);
             if (ignorepairs.has_pair(a1, a2)) continue;
             flt diam = (diameters[i] + diameters[j])/2;
-            if(box->diff(a1.x(), a2.x()).mag() < (diam + skin))
+            if(box->diff(a1->x, a2->x).mag() < (diam + skin))
                 curpairs.push_back(idpair(a1, a2));
         }
     }
@@ -276,7 +261,7 @@ vector<atomid> Grid::allpairs(atomid a){
 
 GridPairedIterator::GridPairedIterator(Grid & grid, atomid a) : 
         grid(grid), atom1(a){
-    uint cellnum = grid.get_loc(a.x(), grid.box->boxshape());
+    uint cellnum = grid.get_loc(a->x, grid.box->boxshape());
     neighbor_cells = grid.neighbors(cellnum);
     cellnum2 = neighbor_cells.begin();
     

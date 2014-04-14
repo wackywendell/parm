@@ -11,10 +11,10 @@
 const flt sigma = 1.0;
 const flt epsilon = 1.0;
 const flt sigcut = 2.5;
-const flt L = 4.0;
+const flt phi = 0.3;
 const flt dt = 0.0001;
 // uint is just short for unsigned int
-const uint Natoms = 10;
+const uint Natoms = 400;
 
 // Function for writing a frame to an open file
 void writefile(ofstream& outf, atomvec& atoms, Box& bx);
@@ -23,15 +23,20 @@ int main(){
     // new random seed each time, for velocities and placement
     seed();
     
+    const flt Vs = Natoms * powflt(sigma, NDIM) * M_PI_2 / NDIM;
+    const flt L = powflt(Vs / phi, OVERNDIM);
+    cout << "Using L = " << L << "\n";
+    
     // Create the bounding box (sides of length L), and a "vector" of Natoms atoms
     boost::shared_ptr<OriginBox> obox(new OriginBox(L));
-    boost::shared_ptr<atomvec> atomptr(new atomvec(Natoms, 1));
+    boost::shared_ptr<atomvec> atomptr(new atomvec(Natoms, 1.0));
     atomvec & atoms = *atomptr;
     
     // LJ interaction
     // We'll cut it off at 2.5σ, and have a neighborlist out to 1.4 times that
-    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, 0.4*(sigcut*sigma)));
-    boost::shared_ptr<NListed<LJatomcut, LJCutPair> > LJ(new NListed<LJatomcut, LJCutPair>(nl));
+    boost::shared_ptr<NListed<LJatomcut, LJCutPair> > 
+        LJ(new NListed<LJatomcut, LJCutPair>(obox, atomptr, 0.4*(sigcut*sigma)));
+    boost::shared_ptr<neighborlist> nl = LJ->nlist();
     // ^ this is the interaction
     
     // Note that NListed is a class template; its an interaction that
@@ -45,6 +50,8 @@ int main(){
     // Now we run through all the atoms, set their positions / velocities,
     // and add them to the LJ interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
+        if((i+1) % 50 == 0) cout << (Natoms - (i+1)) / 50 << ", "; cout.flush();
+        
         // we track energy to see if things are overlapping
         flt E0 = LJ->energy(*obox);
         atoms[i].x = obox->randLoc(); // random location in the box
@@ -53,7 +60,7 @@ int main(){
         atoms[i].a = Vec();
         
         // Add it to the Lennard-Jones potential
-        LJ->add(LJatomcut(epsilon, sigma, &atoms[i], sigcut));
+        LJ->add(LJatomcut(epsilon, sigma, atoms.get_id(i), sigcut));
         // force an update the neighborlist, so we can get an accurate energy
         nl->update_list(true);
         // If we're overlapping too much, try a new location
@@ -62,6 +69,9 @@ int main(){
             nl->update_list(true);
         }
     }
+
+    cout << "Starting. Neighborlist contains " << nl->numpairs() << " / " <<
+        (atoms.size()*(atoms.size()-1))/2 << " pairs.\n";
     
     //Now we make our "collection"
     collectionVerlet collec = collectionVerlet(boost::static_pointer_cast<Box>(obox), atomptr, dt);
@@ -93,7 +103,7 @@ int main(){
             collec.timestep();
         }
         writefile(outfile, atoms, *obox);
-        cout << "E: " << collec.energy() << " K: " << collec.kinetic() 
+        cout << (500-i) << " E: " << collec.energy() << " K: " << collec.kinetic() 
             << " U: " << LJ->energy(*obox) << "\n";
     }
     
@@ -112,6 +122,9 @@ int main(){
     // and it will show you the movie and also the bounding box
     // if you have .vmdrc in that same directory, you should also be able
     // to toggle the box with the "b" button
+    
+    cout << "Done. Neighborlist contains " << nl->numpairs() << " / " <<
+        (atoms.size()*(atoms.size()-1))/2 << " pairs.\n";
 };
 
 void writefile(ofstream& outf, atomvec& atoms, Box& bx){

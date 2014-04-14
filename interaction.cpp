@@ -624,7 +624,7 @@ flt LJsimple::energy(Box &box){
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
-        Vec dist = box.diff(pair.atom1.x(), pair.atom2.x());
+        Vec dist = box.diff(pair.atom1->x, pair.atom2->x);
         E += LJrepulsive::energy(dist, pair.sigma, pair.epsilon);
     }
     return E;
@@ -637,10 +637,10 @@ void LJsimple::setForces(Box &box){
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
-        Vec r = box.diff(pair.atom1.x(), pair.atom2.x());
+        Vec r = box.diff(pair.atom1->x, pair.atom2->x);
         Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
-        pair.atom1.f() += f;
-        pair.atom2.f() -= f;
+        pair.atom1->f += f;
+        pair.atom2->f -= f;
     }
 };
 
@@ -652,7 +652,7 @@ flt LJsimple::pressure(Box &box){
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
-        Vec r = box.diff(pair.atom1.x(), pair.atom2.x());
+        Vec r = box.diff(pair.atom1->x, pair.atom2->x);
         Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
         P += r.dot(f);
     }
@@ -682,7 +682,7 @@ flt Charges::energy(Box &box){
     for(it = atoms.begin(); it != atoms.end(); it++)
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
-        Vec dist = box.diff(it->x(), it2->x());
+        Vec dist = box.diff((*it)->x, (*it2)->x);
         E += k*electricScreened::energy(dist.mag(), (it->q) * (it2->q), screen);
     }
     return E;
@@ -694,10 +694,10 @@ void Charges::setForces(Box &box){
     for(it = atoms.begin(); it != atoms.end(); it++)
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
-        Vec r = box.diff(it->x(), it2->x());
+        Vec r = box.diff((*it)->x, (*it2)->x);
         Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
-        it->f() += f;
-        it2->f() -= f;
+        (*it)->f += f;
+        (*it2)->f -= f;
     }
 };
 
@@ -708,7 +708,7 @@ flt Charges::pressure(Box &box){
     for(it = atoms.begin(); it != atoms.end(); it++)
     for(it2 = atoms.begin(); it2 != it; it2++){
         if (ignorepairs.has_pair(*it, *it2)) continue;
-        Vec r = box.diff(it->x(), it2->x());
+        Vec r = box.diff((*it)->x, (*it2)->x);
         Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
         P += r.dot(f);
     }

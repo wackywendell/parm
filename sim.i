@@ -36,7 +36,7 @@
 %shared_ptr(LeesEdwardsBox)
 %ignore AtomIter;
 %shared_ptr(atomgroup)
-%shared_ptr(atomvecRK4)
+%shared_ptr(subgroup)
 %shared_ptr(statetracker)
 %shared_ptr(interaction)
 %shared_ptr(constraint)
@@ -268,13 +268,12 @@ namespace std {
     %template(dvector) vector<double>;
     %template(_ddvector) vector<vector<double> >;
     %template(ldvector) vector<long double>;
-    %template(avector) vector<shared_ptr<atomgroup> >;
+    //%template(avector) vector<shared_ptr<atomgroup> >;
     //%template(aptrvector) vector<shared_ptr<atom> >;
     %template(ivector) vector<shared_ptr<interaction> >;
     %template(ifxvector) vector<shared_ptr<interactionpairsx> >;
     %template(tvector) vector<shared_ptr<statetracker> >;
     %template(constraintvector) vector<shared_ptr<constraint> >;
-    %template(aRK4vector) vector<shared_ptr<atomvecRK4> >;
     #ifdef VEC2D
     %template(wallvector) vector<shared_ptr<SoftWall> >;
     #endif
@@ -394,7 +393,7 @@ namespace std {
   idpair __getitem__(size_t i) {
     if (i >= $self->numpairs()) {
       myErr = 1;
-      return idpair(NULL, NULL);
+      return idpair(atomid(), atomid());
     }
     return $self->get((uint) i);
   }

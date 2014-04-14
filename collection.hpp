@@ -635,7 +635,7 @@ class collectionRK4 : public collection {
                 update_constraints();
                 for(uint i=0; i<atoms->size(); i++){
                     atom& a = (*atoms)[i];
-                    a.a = a.f / atoms->getmass(i);
+                    a.a = a.f / a.m;
                 };
             };
         void timestep();
@@ -803,7 +803,7 @@ flt get_max(vector<flt> v){
 };
 
 /// Collision-Driven Brownian-Dynamics
-class collectionCDBD : public collection {
+class collectionCDBDgrid : public collection {
     public:
         flt T;
         flt dt, curt;
@@ -820,7 +820,7 @@ class collectionCDBD : public collection {
         event next_event(atomid a);
         
     public:
-        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+        collectionCDBDgrid(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T,
                 vector<flt> sizes = vector<flt>(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
@@ -831,7 +831,7 @@ class collectionCDBD : public collection {
             grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0) {
             assert(atomsizes.size() == atoms->size());
         };
-        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
+        collectionCDBDgrid(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
                 flt sizes,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
@@ -852,7 +852,7 @@ class collectionCDBD : public collection {
 };
 
 /// Collision-Driven Brownian-Dynamics
-class collectionCDBDsimple : public collection {
+class collectionCDBD : public collection {
     public:
         flt T;
         flt dt, curt;
@@ -863,7 +863,7 @@ class collectionCDBDsimple : public collection {
         void line_advance(flt deltat);
         
     public:
-        collectionCDBDsimple(sptr<OriginBox> box, sptr<atomgroup> atoms,
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T,
                 vector<flt> sizes = vector<flt>(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
@@ -873,7 +873,7 @@ class collectionCDBDsimple : public collection {
             T(T), dt(dt), curt(0), atomsizes(sizes) {
             assert(atomsizes.size() == atoms->size());
         };
-        collectionCDBDsimple(sptr<OriginBox> box, sptr<atomgroup> atoms,
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T, flt sizes,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),

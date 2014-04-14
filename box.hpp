@@ -148,11 +148,6 @@ class atomref {
         inline atomref(atom *a) : ptr(a){};
         inline atom& operator *() const {return *ptr;};
         inline atom *operator->() const{ return ptr;}
-        inline Vec& x(){return ptr->x;};
-        inline Vec& v(){return ptr->v;};
-        inline Vec& f(){return ptr->f;};
-        inline Vec& a(){return ptr->a;};
-        inline flt& m(){return ptr->m;};
         inline bool operator==(const atomref &other) const {return other.ptr == ptr;};
         inline bool operator==(const atom* other) const {return other == ptr;};
         inline bool operator!=(const atomref &other) const {return other.ptr != ptr;};
@@ -160,6 +155,7 @@ class atomref {
         inline bool operator<=(const atomref &other) const {return ptr <= other.ptr;};
         inline bool operator>=(const atomref &other) const {return ptr >= other.ptr;};
         inline bool operator>(const atomref &other) const {return ptr > other.ptr;};
+        inline bool is_null(){return ptr==NULL;};
 };
 
 class atomid : public atomref {
@@ -168,7 +164,7 @@ class atomid : public atomref {
                   // a specific atomgroup
     public:
         inline atomid() : atomref(), num(UINT_MAX){};
-        inline atomid(atom *a) : atomref(a), num(UINT_MAX){};
+        // inline atomid(atom *a) : atomref(a), num(UINT_MAX){};
         inline atomid(atom *a, uint n) : atomref(a), num(n){};
         inline uint n() const {return num;};
 };
@@ -211,9 +207,8 @@ class atomgroup {
         virtual atom& operator[](cuint n)=0;
         virtual atom& operator[](cuint n) const=0;
         virtual atom& get(cuint n){return ((*this)[n]);};
-        virtual atomid get_id(cuint n);
+        virtual atomid get_id(cuint n)=0;
         virtual uint size() const=0;
-        virtual flt getmass(const unsigned int n) const {return (*this)[n].m;};
         virtual AtomIter begin(){return AtomIter(*this, 0);};
         virtual AtomIter end(){return AtomIter(*this, size());};
         
@@ -256,7 +251,6 @@ class atomgroup {
         
         // for timestepping
         void resetForces();
-        void setAccel();
         virtual ~atomgroup(){};
 };
 
@@ -284,7 +278,7 @@ class atomvec : public virtual atomgroup {
         inline atom& operator[](cuint n){return atoms[n];};
         inline atom& operator[](cuint n) const {return atoms[n];};
         //atomid get_id(atom *a);
-        inline atomid get_id(uint n) {
+        inline atomid get_id(cuint n) {
             if (n > sz) return atomid(); return atomid(atoms + n,n);};
         //~ inline flt getmass(cuint n) const{return atoms[n].m;};
         //~ inline void setmass(cuint n, flt m){atoms[n].m = m;};
@@ -298,15 +292,15 @@ class subgroup : public atomgroup {
         sptr<atomvec> atoms;
         vector<atomid> ids;
     public:
-        subgroup(){};
+        //subgroup(){};
         //metagroup(vector<atom*> atoms) : atoms(atoms){};
         subgroup(sptr<atomvec> atoms) : atoms(atoms){};
-        atomvec& vec(){return *atoms;};
+        atomvec &vec(){return *atoms;};
         inline atom& operator[](cuint n){return *ids[n];};
         inline atom& operator[](cuint n) const{return *ids[n];};
         inline atom& get(cuint n){return *ids[n];};
         inline void add(atomid a){return ids.push_back(a);};
-        inline atomid get_id(uint n) {return ids[n];};
+        inline atomid get_id(cuint n) {return ids[n];};
         inline uint size() const {return (uint) ids.size();};
 };
 

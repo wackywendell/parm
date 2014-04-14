@@ -89,9 +89,12 @@ int main(){
     // The relaxing stage
     
     // Hertzian interaction, for the relaxing stage
-    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
+    //(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > hertz(
-                        new NListed<HertzianAtom, HertzianPair>(nl));
+        new NListed<HertzianAtom, HertzianPair>(
+            boxptr, atomptr, 0.4*(sigcut*sigma)
+    ));
+    boost::shared_ptr<neighborlist> nl = hertz->nlist();
     // ^ this is the interaction
     
     // A Hertzian interaction has energy 
@@ -118,7 +121,7 @@ int main(){
         flt cursigma = sigma;
         if(i==0) (cursigma = sigma*sizeratio);
         // Add it to the potential
-        hertz->add(HertzianAtom(&atoms[i], epsilon, cursigma, sigcut));
+        hertz->add(HertzianAtom(atoms.get_id(i), epsilon, cursigma, sigcut));
     }
     // force an update the neighborlist, just to make sure
     nl->update_list(true);
@@ -155,7 +158,7 @@ int main(){
     // The equilibration stage
     
     // This is the Brownian motion, hard-sphere collider
-    collectionCDBD collec = collectionCDBD(obox, atomptr, dt, T, atomsizes);
+    collectionCDBDgrid collec = collectionCDBDgrid(obox, atomptr, dt, T, atomsizes);
     
     cout << "Equilibrating... \n";
     for(uint i=0; i<printn; ++i){
@@ -196,7 +199,7 @@ int main(){
     ofstream xyzfile;
     xyzfile.open("hardspheres.xyz", ios::out);
     writefile(xyzfile, atoms, *obox);
-    writetcl("hardspheres-pbc.tcl", *obox, atomsizes); // see below
+    writetcl("hardspheres.tcl", *obox, atomsizes); // see below
                                                        // unnecessary extra
     
     // Now we really start running

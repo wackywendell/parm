@@ -89,20 +89,20 @@ class neighborlist : public statetracker{
         //~ bool checkneighbors(const uint n, const uint m) const;
         // this is a full check
     public:
-        neighborlist(sptr<Box> box, const flt skin);
-        neighborlist(sptr<Box> box, atomgroup &vec, const vector<flt> diameters, 
-        const flt skin, pairlist ignore = pairlist());
+        neighborlist(sptr<Box> box, sptr<atomvec> atoms, const flt skin);
         void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
         bool update_list(bool force = true);
         // if force = false, we check if updating necessary first
         
+        atomvec& vec(){return atoms.vec();};
         inline uint which(){return updatenum;};
         inline uint numpairs(){return (uint) curpairs.size();};
         inline void ignore(atomid a, atomid b){ignorepairs.add_pair(a,b); ignorechanged=true;};
         void add(atomid a, flt diameter){
             atoms.add(a);
+            //assert(diameters.size() == atoms.size() - 1);
             diameters.push_back(diameter);
-            assert(lastlocs.size() == atoms.size() - 1);
+            //assert(lastlocs.size() == atoms.size() - 1);
             lastlocs.push_back(a->x);
             ignorechanged = true;
         }
@@ -112,7 +112,10 @@ class neighborlist : public statetracker{
         inline uint size() const{return atoms.size();};
         inline vector<idpair>::iterator begin(){return curpairs.begin();};
         inline vector<idpair>::iterator end(){return curpairs.end();};
-        inline idpair get(uint i){return curpairs[i];};
+        inline idpair get(uint i){
+            //assert(i<curpairs.size());
+            return curpairs[i];
+        };
         //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
         ~neighborlist(){};
 };

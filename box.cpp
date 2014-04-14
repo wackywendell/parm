@@ -44,7 +44,7 @@ Vec atomgroup::com() const{
     flt curmass = 0;
     Vec v = Vec();
     for(unsigned int i=0; i<size(); i++){
-        curmass = this->getmass(i);
+        curmass = (*this)[i].m;
         v += (*this)[i].x * curmass;
     }
     return v / mass();
@@ -53,7 +53,7 @@ Vec atomgroup::com() const{
 flt atomgroup::mass() const{
     flt m = 0;
     for(uint i=0; i<size(); i++){
-        m += getmass(i);
+        m += (*this)[i].m;
     }
     return m;
 };
@@ -66,7 +66,7 @@ Vec atomgroup::momentum() const{
     flt curmass;
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
-        curmass = this->getmass(i);
+        curmass = (*this)[i].m;
         tot += (*this)[i].v * curmass;
     }
     return tot;
@@ -77,7 +77,7 @@ Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
     flt curmass;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        curmass = this->getmass(i);
+        curmass = (*this)[i].m;
         newloc = box.diff((*this)[i].x, loc);
         tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
@@ -86,12 +86,10 @@ Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
 #elif defined VEC2D
 flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
     flt tot = 0;
-    flt curmass;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        curmass = this->getmass(i);
         newloc = box.diff((*this)[i].x, loc);
-        tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
+        tot += newloc.cross((*this)[i].v) * (*this)[i].m; // r x v m = r x p
     }
     return tot;
 };
@@ -100,13 +98,11 @@ flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
 #ifdef VEC3D
 flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
     if (axis.sq() == 0) return 0;
-    flt curmass;
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        curmass = this->getmass(i);
         newloc = box.diff((*this)[i].x, loc).perpto(axis);
-        tot += newloc.dot(newloc) * curmass;
+        tot += newloc.dot(newloc) * (*this)[i].m;
     }
     return tot;
 };
@@ -116,7 +112,7 @@ Matrix<flt> atomgroup::moment(const Vec &loc, Box &box) const{
     Matrix<flt> I;
     Vec r;
     for(uint i=0; i<size(); i++){
-        curmass = this->getmass(i);
+        curmass = (*this)[i].m;
         r = box.diff((*this)[i].x, loc);
         flt x = r.getx(), y = r.gety(), z = r.getz();
         I[0][0] += curmass * (y*y + z*z);
@@ -145,13 +141,11 @@ void atomgroup::addOmega(Vec w, Vec loc, Box &box){
 };
 #elif defined VEC2D
 flt atomgroup::moment(const Vec &loc, Box &box) const{
-    flt curmass;
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        curmass = this->getmass(i);
         newloc = box.diff((*this)[i].x, loc);
-        tot += newloc.dot(newloc) * curmass;
+        tot += newloc.dot(newloc) * (*this)[i].m;
     }
     return tot;
 };
@@ -165,13 +159,11 @@ void atomgroup::addOmega(flt w, Vec loc, Box &box){
 #endif
 
 flt atomgroup::kinetic(const Vec &originvelocity) const{
-    flt curmass;
     flt totE = 0;
     Vec curv;
     for(uint i=0; i<size(); i++){
-        curmass = getmass(i);
         curv = (*this)[i].v - originvelocity;
-        totE += curmass/2 * curv.dot(curv);
+        totE += (*this)[i].m/2 * curv.dot(curv);
     }
     return totE;
 };
@@ -194,12 +186,6 @@ void atomgroup::resetForces(){
         //~ (*this)[i].v += (*this)[i].a * (dt/2);
     //~ }
 //~ };
-
-void atomgroup::setAccel(){
-    for(uint i=0; i<size(); i++){
-        (*this)[i].a = (*this)[i].f / getmass(i);
-    }
-};
 
 //~ void atomgroup::vverlet2(const flt dt){
     //~ for(uint i=0; i<size(); i++){
