@@ -40,6 +40,42 @@ Vec LeesEdwardsBox::diff(Vec r1, Vec r2, array<int,NDIM> boxes){
     return dr;
 }
 
+SCbox::SCbox(flt L, flt R) : L(L), R(R){};
+
+flt SCbox::V(){
+    #ifdef VEC2D
+    return R*L + R*R*M_PI;
+    #else
+    flt endcap = R*R*M_PI;
+    return endcap*L + endcap*R*4/3;
+    #endif
+};
+
+Vec SCbox::dist(Vec r1){
+    // Vector to nearest point on central line
+    if(r1[0] < -L/2) r1[0] += L/2;
+    else if(r1[0] > L/2) r1[0] -= L/2;
+    else r1[0] = 0;
+    return r1;
+};
+
+Vec SCbox::edgedist(Vec r1){
+    // Vector to nearest edge
+    if(r1[0] < -L/2) r1[0] += L/2;
+    else if(r1[0] > L/2) r1[0] -= L/2;
+    else r1[0] = 0;
+    
+    flt dmag = r1.mag(); // distance to center
+    if(dmag == 0){
+        #ifdef VEC2D
+        return Vec(0, R);
+        #else
+        return Vec(0, R, 0);
+        #endif
+    }
+    return r1 * ((R-dmag)/dmag);
+}
+
 Vec atomgroup::com() const{
     flt curmass = 0;
     Vec v = Vec();

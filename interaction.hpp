@@ -1250,6 +1250,23 @@ class LJsimple : public interaction {
 };
 
 template <class A, class P>
+class SCboxed : public interaction {
+    protected:
+        sptr<SCbox> box;
+        sptr<atomvec> atoms;
+        vector<A> group; // data on which atoms interact with the wall
+    public:
+        SCboxed(sptr<atomvec> atomv, sptr<SCbox> box)
+            : atoms(atomv), box(box){};
+        inline void add(A atm){group.push_back(atm);};
+        flt energy(Box &box);
+        flt pressure(Box &box);
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box);
+        inline vector<A> &atom_list(){return atoms;};
+};
+
+template <class A, class P>
 class SimpleListed : public interaction {
     protected:
         vector<A> atoms;
@@ -1286,7 +1303,10 @@ class NListed : public interaction {
     // so we can make a new A with all the same properties as before,
     // but with the n() referring to the neighborlist maintained atomgroup.
     protected:
-        vector<A> atoms;
+        vector<A> atoms; // NOT all full. 
+                         // This is the length of the atomvec, and if 
+                         // atom i has been added, then atoms[i] is 
+                         // filled in this vector
         vector<P> pairs;
         sptr<neighborlist> neighbors;
         uint lastupdate;
@@ -1335,6 +1355,75 @@ class NListedVirial : public interactionpairsx {
         virtual inline flt energy(Box &box){return nlisted.energy(box);};
         virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
         inline sptr<neighborlist> nlist(){return nlisted.nlist();};
+};
+
+template <class A, class P>
+flt SCboxed<A, P>::energy(Box &newbox){
+    flt E = 0;
+    atom wallatom;
+    wallatom.m = NAN;
+    atomid wallid = atomid(&wallatom, atoms->size());
+    typename vector<A>::iterator it;
+    for(it = group.begin(); it != group.end(); it++){
+        Vec r0 = (*it)->x;
+        Vec edger = box->edgedist(r0);
+        wallatom.x = r0 + (edger*2);
+        E += P(*it, wallatom).energy(newbox) / 2; // no energy from fake atom
+    }
+    return E;
+};
+
+template <class A, class P>
+void SCboxed<A, P>::setForces(Box &newbox){
+    atom wallatom;
+    wallatom.m = NAN;
+    atomid wallid = atomid(&wallatom, atoms->size());
+    typename vector<A>::iterator it;
+    for(it = group.begin(); it != group.end(); it++){
+        Vec r0 = (*it)->x;
+        Vec edger = box->edgedist(r0);
+        wallatom.x = r0 + (edger*2);
+        P pair = P(*it, wallatom);
+        Vec f = pair.forces(box);
+        (*it)->f += f;
+    }
+};
+
+template <class A, class P>
+flt SCboxed<A, P>::setForcesGetPressure(Box &newbox){
+    flt p = 0;
+    atom wallatom;
+    wallatom.m = NAN;
+    atomid wallid = atomid(&wallatom, atoms->size());
+    typename vector<A>::iterator it;
+    for(it = group.begin(); it != group.end(); it++){
+        Vec r0 = (*it)->x;
+        Vec dr = box->edgedist(r0) * 2;
+        wallatom.x = r0 + dr;
+        P pair = P(*it, wallatom);
+        Vec f = pair.forces(box);
+        (*it)->f += f;
+        p += f.dot(dr);
+    }
+    return p;
+};
+
+template <class A, class P>
+flt SCboxed<A, P>::pressure(Box &newbox){
+    flt p = 0;
+    atom wallatom;
+    wallatom.m = NAN;
+    atomid wallid = atomid(&wallatom, atoms->size());
+    typename vector<A>::iterator it;
+    for(it = group.begin(); it != group.end(); it++){
+        Vec r0 = (*it)->x;
+        Vec dr = box->edgedist(r0) * 2;
+        wallatom.x = r0 + dr;
+        P pair = P(*it, wallatom);
+        Vec f = pair.forces(box);
+        p += f.dot(dr);
+    }
+    return p;
 };
 
 template <class A, class P>

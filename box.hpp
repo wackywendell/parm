@@ -129,6 +129,18 @@ class LeesEdwardsBox : public OriginBox {
         }
 };
 
+class SCbox : public Box {
+    // Along the x-axis, centered at origin
+    protected:
+        flt L, R;
+    public:
+        SCbox(flt L, flt R);
+        Vec diff(Vec r1, Vec r2){return r1-r2;};
+        flt V();
+        Vec dist(Vec r1);
+        Vec edgedist(Vec r1);
+};
+
 /***********************************************************************
  * Atoms
  */
