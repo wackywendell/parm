@@ -333,10 +333,10 @@ namespace std {
             return self.size()
         
         def __getitem__(self, obj):
-            return self.get(obj)
+            return self.get_id(obj)
         
-        def __setitem__(self, obj, val):
-            return self.set(obj, val)
+        #def __setitem__(self, obj, val):
+        #    return self.set(obj, val)
         
         def __getstate__(self):
             return ([self.getmass(i) for i in range(self.N())],

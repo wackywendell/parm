@@ -131,6 +131,7 @@ class LeesEdwardsBox : public OriginBox {
 
 class SCbox : public Box {
     // Along the x-axis, centered at origin
+    // L is length of the cylinder, so L=0 is a sphere
     protected:
         flt L, R;
     public:
@@ -139,6 +140,9 @@ class SCbox : public Box {
         flt V();
         Vec dist(Vec r1);
         Vec edgedist(Vec r1);
+        Vec randLoc(flt min_dist_to_wall=0.0);
+        flt length(){return L;};
+        flt radius(){return R;};
 };
 
 /***********************************************************************

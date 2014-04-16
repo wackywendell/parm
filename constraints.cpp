@@ -76,8 +76,8 @@ void EnergyTracker::setU0(Box &box){
 
 
 RsqTracker1::RsqTracker1(atomgroup& atoms, uint skip, Vec com) :
-            pastlocs(atoms.size(), Vec()), rsqsums(atoms.size(), 0.0),
-            rsqsqsums(atoms.size(), 0.0), skip(skip), count(0){
+            pastlocs(atoms.size(), Vec()), rsqsums(atoms.size(), Vec()),
+            rsqsqsums(atoms.size(), Vec()), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); i++){
         pastlocs[i] = atoms[i].x - com;
     };
@@ -85,8 +85,8 @@ RsqTracker1::RsqTracker1(atomgroup& atoms, uint skip, Vec com) :
         
 void RsqTracker1::reset(atomgroup& atoms, Vec com){
     pastlocs.resize(atoms.size());
-    rsqsums.assign(atoms.size(), 0);
-    rsqsqsums.assign(atoms.size(), 0);
+    rsqsums.assign(atoms.size(), Vec());
+    rsqsqsums.assign(atoms.size(), Vec());
     for(uint i = 0; i<atoms.size(); i++){
         pastlocs[i] = atoms[i].x - com;
     };
@@ -99,30 +99,36 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, uint t, Vec com){
     for(uint i = 0; i<atoms.size(); i++){
         //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
         Vec r = atoms[i].x - com;
-        flt dist = (r - pastlocs[i]).sq();
+        Vec distsq = r - pastlocs[i];
+        Vec distsqsq = Vec();
+        for(uint j=0; j<NDIM; j++){
+            distsq[j] *= distsq[j];
+            distsqsq[j] = distsq[j]*distsq[j];
+        };
         // We don't want the boxed distance - we want the actual distance moved!
-        rsqsums[i] += dist;
-        rsqsqsums[i] += dist*dist;
+        rsqsums[i] += distsq;
+        rsqsqsums[i] += distsq;
         pastlocs[i] = r;
     };
     count += 1;
     return true;
 };
 
-vector<flt> RsqTracker1::rsq_mean(){
-    vector<flt> means(rsqsums.size(), 0.0);
+vector<Vec> RsqTracker1::rsq_mean(){
+    vector<Vec> means(rsqsums.size(), Vec());
     for(uint i=0; i<rsqsums.size(); i++){
         means[i] = rsqsums[i] / count;
     }
     return means;
 };
 
-vector<flt> RsqTracker1::rsq_var(){
-    vector<flt> vars(rsqsums.size(), 0.0);
+vector<Vec> RsqTracker1::rsq_var(){
+    vector<Vec> vars(rsqsums.size(), Vec());
     for(uint i=0; i<rsqsums.size(); i++){
-        flt mn = (rsqsums[i])/count;
-        flt sqmn = (rsqsqsums[i])/count;
-        vars[i] = sqmn - mn*mn;
+        Vec mnsq = (rsqsums[i])/count;
+        for(uint j=0; j<NDIM; j++) mnsq[j] *= mnsq[j];
+        Vec sqmn = (rsqsqsums[i])/count;
+        vars[i] = sqmn - mnsq;
     }
     return vars;
 };
@@ -152,8 +158,8 @@ void RsqTracker::reset(){
     }
 };
 
-vector<vector<flt> > RsqTracker::means(){
-    vector<vector<flt> > vals;
+vector<vector<Vec> > RsqTracker::means(){
+    vector<vector<Vec> > vals;
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
         vals.push_back(it->rsq_mean());
@@ -161,8 +167,8 @@ vector<vector<flt> > RsqTracker::means(){
     return vals;
 };
 
-vector<vector<flt> > RsqTracker::vars(){
-    vector<vector<flt> > vals;
+vector<vector<Vec> > RsqTracker::vars(){
+    vector<vector<Vec> > vals;
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
         vals.push_back(it->rsq_var());

@@ -76,6 +76,37 @@ Vec SCbox::edgedist(Vec r1){
     return r1 * ((R-dmag)/dmag);
 }
 
+Vec SCbox::randLoc(flt min_dist_to_wall){
+    if(min_dist_to_wall >= R) return Vec();
+    Vec v;
+    flt Rmin = R - min_dist_to_wall;
+    flt Rminsq = powflt(Rmin, 2.0);
+    while(true){
+        v = randVecBoxed();
+        v[0] -= 0.5;
+        v[0] *= (L + 2*Rmin);
+        
+        v[1] -= 0.5;
+        v[1] *= 2*Rmin;
+        
+        #ifndef VEC2D
+        v[2] -= 0.5;
+        v[2] *= 2*Rmin;
+        #endif
+        
+        flt distsq = powflt(v[1],2);
+        if(abs(v[0]) >= L/2.0) distsq += powflt(abs(v[0]) - L/2.0, 2.0);
+        
+        
+        #ifndef VEC2D
+        distsq += powflt(v[2],2);
+        #endif
+        
+        if(distsq <= Rminsq) break;
+    };
+    return v;
+};
+
 Vec atomgroup::com() const{
     flt curmass = 0;
     Vec v = Vec();

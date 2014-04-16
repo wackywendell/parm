@@ -312,8 +312,8 @@ class RsqTracker1 {
     // Tracks only a single dt (skip)
     public:
         vector<Vec> pastlocs;
-        vector<flt> rsqsums;
-        vector<flt> rsqsqsums;
+        vector<Vec> rsqsums;
+        vector<Vec> rsqsqsums;
         uint skip, count;
     public:
         RsqTracker1(atomgroup& atoms, uint skip, Vec com);
@@ -321,8 +321,8 @@ class RsqTracker1 {
         void reset(atomgroup& atoms, Vec com);
             
         bool update(Box& box, atomgroup& atoms, uint t, Vec com); // updates if necessary.
-        vector<flt> rsq_mean();
-        vector<flt> rsq_var();
+        vector<Vec> rsq_mean();
+        vector<Vec> rsq_var();
         
         uint get_skip(){return skip;};
         uint get_count(){return count;};
@@ -361,8 +361,8 @@ class RsqTracker : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<flt> > means();
-        vector<vector<flt> > vars();
+        vector<vector<Vec> > means();
+        vector<vector<Vec> > vars();
         vector<flt> counts();
         
 };
