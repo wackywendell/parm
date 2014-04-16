@@ -1257,13 +1257,13 @@ class SCboxed : public interaction {
         vector<A> group; // data on which atoms interact with the wall
     public:
         SCboxed(sptr<atomvec> atomv, sptr<SCbox> box)
-            : atoms(atomv), box(box){};
+            : box(box), atoms(atomv){};
         inline void add(A atm){group.push_back(atm);};
         flt energy(Box &box);
         flt pressure(Box &box);
         void setForces(Box &box);
         flt setForcesGetPressure(Box &box);
-        inline vector<A> &atom_list(){return atoms;};
+        inline vector<A> &atom_list(){return group;};
 };
 
 template <class A, class P>
@@ -1368,7 +1368,7 @@ flt SCboxed<A, P>::energy(Box &newbox){
         Vec r0 = (*it)->x;
         Vec edger = box->edgedist(r0);
         wallatom.x = r0 + (edger*2);
-        E += P(*it, wallatom).energy(newbox) / 2; // no energy from fake atom
+        E += P(*it, HertzianAtom(wallid, *it)).energy(newbox) / 2; // no energy from fake atom
     }
     return E;
 };
@@ -1383,8 +1383,8 @@ void SCboxed<A, P>::setForces(Box &newbox){
         Vec r0 = (*it)->x;
         Vec edger = box->edgedist(r0);
         wallatom.x = r0 + (edger*2);
-        P pair = P(*it, wallatom);
-        Vec f = pair.forces(box);
+        P pair = P(*it, HertzianAtom(wallid, *it));
+        Vec f = pair.forces(*box);
         (*it)->f += f;
     }
 };
@@ -1400,8 +1400,8 @@ flt SCboxed<A, P>::setForcesGetPressure(Box &newbox){
         Vec r0 = (*it)->x;
         Vec dr = box->edgedist(r0) * 2;
         wallatom.x = r0 + dr;
-        P pair = P(*it, wallatom);
-        Vec f = pair.forces(box);
+        P pair = P(*it, HertzianAtom(wallid, *it));
+        Vec f = pair.forces(*box);
         (*it)->f += f;
         p += f.dot(dr);
     }
@@ -1419,8 +1419,8 @@ flt SCboxed<A, P>::pressure(Box &newbox){
         Vec r0 = (*it)->x;
         Vec dr = box->edgedist(r0) * 2;
         wallatom.x = r0 + dr;
-        P pair = P(*it, wallatom);
-        Vec f = pair.forces(box);
+        P pair = P(*it, HertzianAtom(wallid, *it));
+        Vec f = pair.forces(*box);
         p += f.dot(dr);
     }
     return p;

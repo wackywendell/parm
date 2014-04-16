@@ -68,6 +68,7 @@
 %shared_ptr(NPHGaussianConstraint)
 %shared_ptr(SimpleListed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListed< LJatom,LJpair >)
+%shared_ptr(NListed< LJatom,LJpair >)
 %shared_ptr(NListed< LJatomcut,LJAttractPair >)
 %shared_ptr(NListed< HydroAtom,HydroPair >)
 %shared_ptr(NListed< LJAtomIndexed,LJFullPair >)
@@ -78,6 +79,7 @@
 %shared_ptr(NListed< LJishAtom,LJishPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
 %shared_ptr(NListed< HertzianAtom,HertzianPair >)
+%shared_ptr(SCboxed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
 
 %{
@@ -379,6 +381,7 @@ namespace std {
 %template(LJish) NListed<LJishAtom, LJishPair>;
 %template(HertzianSimple) SimpleListed<HertzianAtom, HertzianPair>;
 %template(Hertzian) NListed<HertzianAtom, HertzianPair>;
+%template(HertzianSC) SCboxed<HertzianAtom, HertzianPair>;
 %template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
 //%rename(__lt__) jamminglist::operator<;
