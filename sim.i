@@ -434,5 +434,21 @@ namespace std {
     %};
 }
 
+%extend RsqTracker {
+    %insert("python") %{
+        def mean_array(self):
+            import numpy as np
+            l = self.means()
+            l = [[list(v) for v in innerl] for innerl in l]
+            return np.array(l)
+        
+        def var_array(self):
+            import numpy as np
+            l = self.vars()
+            l = [[list(v) for v in innerl] for innerl in l]
+            return np.array(l)
+    %};
+}
+
 %include "collection.hpp"
 %include "collection.cpp"
