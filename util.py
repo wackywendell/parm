@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from decimal import Decimal
+from datetime import datetime, timedelta
 
 def printlist(lst, name, **kw):
     mean = float(np.mean(lst,0))
@@ -17,22 +18,39 @@ def to_dhms(tdelta):
     mn, sec = divmod(sec, 60)
     return (days, hr, mn, sec)
 
-def get_eta(cur, tot, starttime):
-    from datetime import datetime, timedelta
-    now = datetime.now()
-    tused = now - starttime
-    
-    # timedeltas cannot be multiplied by floats (?), so we get out the 
-    #seconds, use that, and make it back into a dt
-    usedsecs = 24*60*60 * tused.days + tused.seconds + (1e-6 * tused.microseconds)
-    tleft = (timedelta(0, (usedsecs) * ((tot - cur) / cur)) if cur > 0
-            else timedelta(0, 0))
-    
-    endtime = now + tleft
-    return endtime, to_dhms(tleft)
-
 def interval_str(days, hr, mn, sec):
-    return (('%dd ' % days) if days else '') + ('%d:%02d:%02d'% (hr, mn, sec))
+    return (('%2dd ' % days) if days else '') + ('%2d:%02d:%02d'% (hr, mn, sec))
+    
+class Progress:
+    def __init__(self, total):
+        self.start = datetime.now()
+        self.total = total
+        
+    def get_eta(self, i):
+        """Returns (end time, time left) as datetime, timedelta objects."""
+        now = datetime.now()
+        tused = now - self.start
+        
+        # timedeltas cannot be multiplied by floats (?), so we get out the 
+        #seconds, use that, and make it back into a dt
+        usedsecs = 24*60*60 * tused.days + tused.seconds + (1e-6 * tused.microseconds)
+        tleft = (timedelta(0, (usedsecs) * ((self.total - i) / i)) if i > 0
+                else timedelta(0, 0))
+        
+        return now + tleft, tleft
+    
+    def eta_strs(self, i, timefmt = '(%a %b %d, %H:%M:%S)'):
+        """Returns (time left, total time, endtime) as strs"""
+        endtime, tleft = self.get_eta(i)
+        interval = to_dhms(tleft)
+        totinterval = to_dhms(endtime - self.start)
+        
+        return (interval_str(*interval), interval_str(*totinterval),
+                    endtime.strftime(timefmt))
+    
+    def eta_str(self, i, timefmt = '(%a %b %d, %H:%M:%S)'):
+        ss = self.eta_strs(i, timefmt=timefmt)
+        return 'Ends in ({} / {}) on {}'.format(*ss)
 
 def errprint(*args, **kw):
     kwargs = {'file':sys.stderr}
