@@ -241,6 +241,12 @@ void atomgroup::addv(Vec v){
     }
 };
 
+void atomgroup::randomize_velocities(flt T){
+    for(uint i=0; i<size(); i++){
+        (*this)[i].v = randVec() * sqrtflt(T*2.0/(*this)[i].m);
+    }
+};
+
 void atomgroup::resetForces(){
     for(uint i=0; i<size(); i++){
         (*this)[i].f = Vec();

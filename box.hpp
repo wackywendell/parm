@@ -259,11 +259,10 @@ class atomgroup {
         }
         #endif
         
-        
         // for resetting
         void addv(Vec v);
         void resetcomv(){addv(-comv());};
-        
+        void randomize_velocities(flt T);
         
         // for timestepping
         void resetForces();
