@@ -102,7 +102,7 @@ def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'ts
     return [Namespace(d) for d in pdicts]
 
 def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv.gz', **args):
-    import re, fpath
+    import re, pathlib
     from namespace import Namespace
     
     try:
@@ -110,12 +110,12 @@ def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv
     except TypeError:
         types = [types] * len(names)
     
-    dir = fpath.Dir(dir)
-    children = [f for f in dir.children() if f[-1][(-len(ext)-1):] == '.' + ext]
+    dir = pathlib.Path(dir)
+    children = [f for f in dir.iterdir() if f.name[(-len(ext)-1):] == '.' + ext]
     #print(len(children), [f[-1][(-len(ext)-1):] for f in dir.children()])
     
     def handlechild(c):
-        cutf = c[-1][:(-len(ext)-1)]
+        cutf = c.name[:(-len(ext)-1)]
         splits = cutf.split(delim)
         if not len(splits) == len(names):
             raise ValueError("%r splits into %d instead of %d" % 
@@ -124,8 +124,8 @@ def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv
         m=0
         
         nspace = Namespace()
-        nspace['f'] = nspace['fname'] = c
-        nspace['cutf'] = cutf
+        nspace['fname'] = c
+        #nspace['cutf'] = cutf
         for n,v,n0,t in zip(ns, valstrs, names, types):
             m += 1
             if not n == n0:

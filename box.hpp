@@ -140,6 +140,7 @@ class SCbox : public Box {
         flt V();
         Vec dist(Vec r1);
         Vec edgedist(Vec r1);
+        bool inside(Vec r1, flt buffer=0.0);
         Vec randLoc(flt min_dist_to_wall=0.0);
         flt length(){return L;};
         flt radius(){return R;};

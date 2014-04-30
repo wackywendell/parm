@@ -76,6 +76,14 @@ Vec SCbox::edgedist(Vec r1){
     return r1 * ((R-dmag)/dmag);
 }
 
+bool SCbox::inside(Vec r1, flt buffer){
+    if(r1[0] < -L/2) r1[0] += L/2;
+    else if(r1[0] > L/2) r1[0] -= L/2;
+    else r1[0] = 0;
+    flt newR = R - buffer;
+    return r1.sq() < newR*newR;
+};
+
 Vec SCbox::randLoc(flt min_dist_to_wall){
     if(min_dist_to_wall >= R) return Vec();
     Vec v;
