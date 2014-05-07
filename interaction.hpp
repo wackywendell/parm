@@ -310,7 +310,7 @@ struct fixedForceAtom {
     void setForce(Box &box){a->f += F;};
 };
 
-class fixedForce : public interaction{
+class fixedForce : public interaction {
     protected:
         vector<fixedForceAtom> atoms;
     public:
@@ -336,6 +336,43 @@ class fixedForce : public interaction{
         flt pressure(Box &box){return NAN;};
 };
 
+
+struct fixedForceRegionAtom : public atomid {
+    Vec direction;          // will be normalized
+    vector<flt> boundaries; // should be 1 smaller than Fs
+                            // each boundary is at (direction * b), 
+                            // where b is in boundaries
+    vector<flt> Fs;
+    fixedForceRegionAtom(atomid a, Vec direction, vector<flt> boundaries, vector<flt> Fs);
+    flt energy(Box &box);
+    void setForce(Box &box);
+};
+
+class fixedForceRegion : public interaction {
+    
+    protected:
+        vector<fixedForceRegionAtom> atoms;
+    public:
+        fixedForceRegion(vector<fixedForceRegionAtom> atoms = vector<fixedForceRegionAtom>()) 
+            : atoms(atoms){};
+        
+        void add(fixedForceRegionAtom a){atoms.push_back(a);};
+        void add(atomid a, Vec dir, vector<flt> bound, vector<flt> F){
+            add(fixedForceRegionAtom(a, dir, bound, F));};
+        uint size() const{ return (uint) atoms.size();};
+        
+        flt energy(Box &box){
+            flt E=0;
+            for(vector<fixedForceRegionAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
+                E += it->energy(box);
+            return E;
+        };
+        void setForces(Box &box){
+            for(vector<fixedForceRegionAtom>::iterator it = atoms.begin(); it < atoms.end(); it++)
+                it->setForce(box);
+        };
+        flt pressure(Box &box){return NAN;};
+};
 
 struct fixedSpringAtom {
     Vec loc;

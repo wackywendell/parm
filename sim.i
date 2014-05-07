@@ -50,6 +50,7 @@
 %shared_ptr(SCatomvec)
 %shared_ptr(coordConstraint)
 %shared_ptr(fixedForce)
+%shared_ptr(fixedForceRegion)
 %shared_ptr(fixedSpring)
 %shared_ptr(SoftWall)
 %shared_ptr(WalledBox2D)
@@ -98,6 +99,22 @@
 #include "collection.cpp"
 static int myErr = 0;
 %}
+
+%exception {
+    try {
+        $action
+    } catch(std::range_error &e) {
+        SWIG_exception(SWIG_ValueError, e.what());
+    //~ } catch(DivisionByZero) {
+    //~     SWIG_exception(SWIG_DivisionByZero, "Division by zero");
+    //~ } catch(OutOfMemory) {
+    //~     SWIG_exception(SWIG_MemoryError, "Out of memory");
+    } catch(std::invalid_argument &e) {
+        SWIG_exception(SWIG_ValueError, e.what());
+    } catch(...) {
+        SWIG_exception(SWIG_RuntimeError,"Unknown exception");
+    }
+}
 
 %typemap(in) bool value[3] (bool temp[3]) {
   int i;

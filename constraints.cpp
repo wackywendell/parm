@@ -176,6 +176,16 @@ vector<vector<Vec> > RsqTracker::vars(){
     return vals;
 };
 
+vector<vector<Vec> > RsqTracker::std(){
+    vector<vector<Vec> > vals = vars();
+    for(vector<vector<Vec> >::iterator it=vals.begin(); it!=vals.end(); it++){
+        for(vector<Vec>::iterator jit=it->begin(); jit!=it->end(); jit++){
+            for(uint i=0; i<NDIM; i++) (*jit)[i] = sqrtflt((*jit)[i]);
+        }
+    }
+    return vals;
+};
+
 vector<flt> RsqTracker::counts(){
     vector<flt> vals;
     vals.reserve(singles.size());

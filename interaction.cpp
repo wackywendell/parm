@@ -30,6 +30,42 @@ Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, cons
     return r * (fmag/d);
 };
 
+fixedForceRegionAtom::fixedForceRegionAtom(atomid a, Vec dir, vector<flt> bound, vector<flt> Fs) : 
+        atomid(a), direction(dir.norm()), boundaries(bound), Fs(Fs){
+    if(boundaries.size() != Fs.size() - 1){
+        throw std::invalid_argument("fixedForceRegionAtom: boundaries.size() != Fs.size() - 1");
+    } else if(boundaries.size() <= 0){
+        throw std::invalid_argument("fixedForceRegionAtom: boundaries.size() == 0, use fixedForceAtom");
+    }
+};
+
+flt fixedForceRegionAtom::energy(Box &box){
+    flt dist = (*this)->x.dot(direction);
+    if(dist < boundaries[0]) return (boundaries[0] - dist) * Fs[0];
+    flt E = 0;
+    for(uint i=0; i < boundaries.size(); i++){
+        if((i + 1 >= boundaries.size()) or (dist < boundaries[i+1])){
+            E -= Fs[i+1] * (dist - boundaries[i]);
+            break;
+        }
+        E -= Fs[i+1] * (boundaries[i+1] - boundaries[i]);
+    }
+    
+    return E;
+};
+
+void fixedForceRegionAtom::setForce(Box &box){
+    flt dist = (*this)->x.dot(direction);
+    flt F = Fs[Fs.size() - 1];
+    for(uint i=0; i < boundaries.size(); i++){
+        if(dist < boundaries[i]){
+            F = Fs[i];
+            break;
+        }
+    }
+    (*this)->f += direction * F;
+};
+
 flt bondangle::energy(const Vec& r1, const Vec& r2){
     flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
     if(costheta > 1){

@@ -363,6 +363,7 @@ class RsqTracker : public statetracker {
         
         vector<vector<Vec> > means();
         vector<vector<Vec> > vars();
+        vector<vector<Vec> > std();
         vector<flt> counts();
         
 };
