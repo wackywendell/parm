@@ -255,11 +255,13 @@ static int myErr = 0;
 namespace std {
     %template(vecptrvector) vector<Vector2<double>*>;
     %template(vecvector) vector<Vector2<double> >;
+    %template(_vvecvector) vector<vector<Vector2<double> > >;
     %template(_jamminglist) list<jamminglist>;
     %template(_jamminglistrot) list<jamminglistrot>;
     
     %template(vecptrvectorL) vector<Vector2<long double>*>;
     %template(vecvectorL) vector<Vector2<long double> >;
+    %template(_vvecvectorL) vector<vector<Vector2<long double> > >;
 }
 #else
 %template(Vec) Vector3<double>;
@@ -269,8 +271,10 @@ namespace std {
 namespace std {
     %template(vecptrvector) vector<Vector3<double>*>;
     %template(vecvector) vector<Vector3<double> >;
+    %template(_vvecvector) vector<vector<Vector3<double> > >;
     %template(vecptrvectorL) vector<Vector3<long double>*>;
     %template(vecvectorL) vector<Vector3<long double> >;
+    %template(_vvecvectorL) vector<vector<Vector3<long double> > >;
 }
 #endif
 %template(Pair) Numvector<double, 2>;
@@ -299,7 +303,8 @@ namespace std {
     #endif
     %template(idvector) vector<atomid>;
     %template(idpairvector) vector<idpair>;
-    %template(_uintvector) vector<unsigned int>;
+    %template(uintvector) vector<unsigned int>;
+    %template(ulongvector) vector<unsigned long>;
     %template(_eventset) set<event>;
 }
 

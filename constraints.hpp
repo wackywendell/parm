@@ -314,18 +314,19 @@ class RsqTracker1 {
         vector<Vec> pastlocs;
         vector<Vec> rsqsums;
         vector<Vec> rsqsqsums;
-        uint skip, count;
+        unsigned long skip, count;
     public:
-        RsqTracker1(atomgroup& atoms, uint skip, Vec com);
+        RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com);
         
         void reset(atomgroup& atoms, Vec com);
             
-        bool update(Box& box, atomgroup& atoms, uint t, Vec com); // updates if necessary.
+        bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<Vec> rsq_mean();
         vector<Vec> rsq_var();
+        vector<Vec> rsq_sq();
         
-        uint get_skip(){return skip;};
-        uint get_count(){return count;};
+        unsigned long get_skip(){return skip;};
+        unsigned long get_count(){return count;};
 };
 
 //~ class RsqTrackerN {
@@ -352,18 +353,19 @@ class RsqTracker : public statetracker {
     public:
         sptr<atomgroup> atoms;
         vector<RsqTracker1> singles;
-        uint curt;
+        unsigned long curt;
         bool usecom;
         
     public:
-        RsqTracker(sptr<atomgroup> atoms, vector<uint> ns, bool usecom=true);
+        RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool usecom=true);
         
         void reset();
         void update(Box &box);
         
         vector<vector<Vec> > means();
         vector<vector<Vec> > vars();
-        vector<vector<Vec> > std();
+        vector<vector<Vec> > stds();
+        vector<vector<Vec> > sqs();
         vector<flt> counts();
         
 };

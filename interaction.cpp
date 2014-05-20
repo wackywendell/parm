@@ -753,7 +753,7 @@ flt Charges::pressure(Box &box){
 
 flt SoftWall::energy(Box &box){
     flt E=0;
-    typename vector<WallAtom>::iterator it;
+    vector<WallAtom>::iterator it;
     for(it = group.begin(); it != group.end(); it++){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
@@ -770,7 +770,7 @@ flt SoftWall::energy(Box &box){
 
 void SoftWall::setForces(Box &box){
     lastf = 0;
-    typename vector<WallAtom>::iterator it;
+    vector<WallAtom>::iterator it;
     for(it = group.begin(); it != group.end(); it++){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
@@ -785,7 +785,7 @@ void SoftWall::setForces(Box &box){
 flt SoftWall::setForcesGetPressure(Box &box){
     flt p=0;
     lastf = 0;
-    typename vector<WallAtom>::iterator it;
+    vector<WallAtom>::iterator it;
     for(it = group.begin(); it != group.end(); it++){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
@@ -801,7 +801,7 @@ flt SoftWall::setForcesGetPressure(Box &box){
 
 flt SoftWall::pressure(Box &box){
     flt p = 0;
-    typename vector<WallAtom>::iterator it;
+    vector<WallAtom>::iterator it;
     for(it = group.begin(); it != group.end(); it++){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);

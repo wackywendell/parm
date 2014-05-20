@@ -75,7 +75,7 @@ void EnergyTracker::setU0(Box &box){
 };
 
 
-RsqTracker1::RsqTracker1(atomgroup& atoms, uint skip, Vec com) :
+RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
             pastlocs(atoms.size(), Vec()), rsqsums(atoms.size(), Vec()),
             rsqsqsums(atoms.size(), Vec()), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); i++){
@@ -93,21 +93,22 @@ void RsqTracker1::reset(atomgroup& atoms, Vec com){
     count = 0;
 };
 
-bool RsqTracker1::update(Box& box, atomgroup& atoms, uint t, Vec com){
+bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); i++){
         //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
         Vec r = atoms[i].x - com;
+        // We don't want the boxed distance - we want the actual distance moved!
         Vec distsq = r - pastlocs[i];
         Vec distsqsq = Vec();
         for(uint j=0; j<NDIM; j++){
             distsq[j] *= distsq[j];
             distsqsq[j] = distsq[j]*distsq[j];
         };
-        // We don't want the boxed distance - we want the actual distance moved!
+        
         rsqsums[i] += distsq;
-        rsqsqsums[i] += distsq;
+        rsqsqsums[i] += distsqsq;
         pastlocs[i] = r;
     };
     count += 1;
@@ -132,12 +133,20 @@ vector<Vec> RsqTracker1::rsq_var(){
     }
     return vars;
 };
+
+vector<Vec> RsqTracker1::rsq_sq(){
+    vector<Vec> means(rsqsqsums.size(), Vec());
+    for(uint i=0; i<rsqsqsums.size(); i++){
+        means[i] = rsqsqsums[i] / count;
+    }
+    return means;
+};
     
 
-RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<uint> ns, bool usecom) : 
+RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool usecom) : 
             atoms(atoms), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec();
-    for(vector<uint>::iterator n=ns.begin(); n!=ns.end(); n++){
+    for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); n++){
         singles.push_back(RsqTracker1(*atoms, *n, com));
     }
 };
@@ -176,7 +185,16 @@ vector<vector<Vec> > RsqTracker::vars(){
     return vals;
 };
 
-vector<vector<Vec> > RsqTracker::std(){
+vector<vector<Vec> > RsqTracker::sqs(){
+    vector<vector<Vec> > vals;
+    vals.reserve(singles.size());
+    for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        vals.push_back(it->rsq_sq());
+    }
+    return vals;
+};
+
+vector<vector<Vec> > RsqTracker::stds(){
     vector<vector<Vec> > vals = vars();
     for(vector<vector<Vec> >::iterator it=vals.begin(); it!=vals.end(); it++){
         for(vector<Vec>::iterator jit=it->begin(); jit!=it->end(); jit++){
