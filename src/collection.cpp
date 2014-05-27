@@ -1773,15 +1773,17 @@ void collectionVerletNPT::timestep(){
     update_trackers();
 };
 
-void collectionCDBDgrid::reset_velocities(){
+void collectionCDBD::reset_velocities(){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
         (*atoms)[i].v = randVec() * sqrtflt(T/mi);
     }
+    cout << "reset_velocities\n";
     reset_events();
+    cout << "reset_velocities done\n";
 };
 
-void collectionCDBDgrid::line_advance(flt deltat){
+void collectionCDBD::line_advance(flt deltat){
     if(deltat == 0) return;
     
     //~ assert(deltat > 0);
@@ -1790,9 +1792,11 @@ void collectionCDBDgrid::line_advance(flt deltat){
     }
     
     curt += deltat;
-    update_grid();
+    update_pairs();
 };
 
+/// Finds the collision between two atoms, makes the corresponding event,
+/// and puts it in e. If the two do not collide, returns False.
 bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
     Vec rij = box.diff(a->x, b->x);
     Vec vij = a->v - b->v;
@@ -1819,47 +1823,72 @@ bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
     return true;
 }
 
-void collectionCDBDgrid::update_grid(bool force){
-    if(!force && (gridt == curt)) return;
-    grid.optimize_widths();
-    grid.make_grid();
-};
-
-event collectionCDBDgrid::next_event(atomid a){
+event collectionCDBD::base_event(atomid a){
     event e;
     flt vmag = a->v.mag();
     if(!isfinite(vmag) or vmag <= 0) vmag = sqrtflt(T/a->m) * edge_epsilon;
     flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
     assert(epsilon_t > 0);
     
-    e.t = curt + grid.time_to_edge(*a) + epsilon_t;
+    cout << "Static casting..." << endl;
+    Vec bsize = boost::static_pointer_cast<OriginBox>(box)->boxshape();
+    cout << "Static casting done." << endl;
+    Vec r = vecmod(a->x - bsize/2., bsize) + bsize/2;
+    flt time_to_edge = 0;
+    for(uint i=0; i<NDIM; i++){
+        if(a->v[i] == 0) continue;
+        flt dist;
+        if(a->v[i] < 0) dist = r[i];
+        else dist = bsize[i] - r[i];
+        if(dist < 1e-14) dist += bsize[i];
+        flt newt = dist / abs(a->v[i]);
+        if(time_to_edge == 0 or newt < time_to_edge) time_to_edge = newt;
+    };
+    
+    // current time + time to reach edge + ε, where we use
+    // an ε to make sure we don't get in an infinite loop at the box
+    // edge
+    e.t = curt + time_to_edge + epsilon_t;
     e.a = a;
     e.b = a;
-        
-    for(Grid::pair_iter j=grid.pairs(a); j!=j.end(); ++j){
+    
+    return e;
+};
+
+event collectionCDBD::next_event(atomid a){
+    cout << "next_event\n";
+    event e = base_event(a);
+        cout << "next_event 2\n";
+    for(uint i=0; i<atoms->size(); i++){
         event e2;
-        flt sigma = (atomsizes[a.n()] + atomsizes[(*j).n()])/2.0;
-        if(make_event(*box, e2, *j, a, sigma, curt)
-                and e2 < e){
+        flt sigma = (atomsizes[a.n()] + atomsizes[i])/2.0;
+        bool eventmade = make_event(*box, e2, atoms->get_id(i), a, sigma, curt);
+        if(eventmade and e2 < e){
             e = e2;
         };
     }
+    cout << "next_event 3\n";
     assert(e.t >= curt);
     return e;
 }
 
-void collectionCDBDgrid::reset_events(bool force){
-    //~ std::cerr << "CDBD::reset_events...\n";
+void collectionCDBD::reset_events(bool force){
+    cout << "reset_events\n";
     events.clear();
-    //~ std::cerr << "CDBD::reset_events cleared...\n";
-    update_grid(force);
-    //~ std::cerr << "CDBD::reset_events updated grid...\n";
+    cout << "reset_events 1\n";
+    update_pairs(force);
+    cout << "reset_events2\n";
     
     for(uint i=0; i<atoms->size(); i++){
-        //~ std::cerr << "CDBD::reset_events" << i << "\n";
-        events.insert(next_event(atoms->get_id(i)));
+        cout << "reset_events: i=" << i << "\n";
+        atomid a = atoms->get_id(i);
+        cout << "reset_events: i=" << i << " 2\n";
+        event e = next_event(a);
+        cout << "reset_events: i=" << i << " 3\n";
+        events.insert(e);
+        cout << "reset_events: i=" << i << " done\n";
     };
-    //~ std::cerr << "CDBD::reset_events done.\n";
+    cout << "reset_events done\n";
 };
 
 inline void collide(Box &box, atom& a, atom &b){
@@ -1876,11 +1905,13 @@ inline void collide(Box &box, atom& a, atom &b){
     b.v -= p / b.m;
 };
 
-bool collectionCDBDgrid::take_step(flt tlim){
+bool collectionCDBD::take_step(flt tlim){
     // TODO: more efficient looping and merging
     
     // If we have a limit, and we've already passed it, stop.
+     cout << "take_step\n";
     if((tlim > 0) && (tlim <= curt)) return false;
+    cout << "take_step 1\n";
     
     if(events.size() <= 0) reset_events();
     
@@ -1893,6 +1924,9 @@ bool collectionCDBDgrid::take_step(flt tlim){
         //~ curt = tlim;
         //~ return false;
     }
+    
+    cout << "take_step 2\n";
+    
     event e = *(events.begin());
     if ((tlim > 0) & (e.t > tlim)){
         // if we have a limit, and the next event is farther in the 
@@ -1903,6 +1937,7 @@ bool collectionCDBDgrid::take_step(flt tlim){
     };
     events.erase(e);
     
+    cout << "take_step 3\n";
     // move everyone forward
     line_advance(e.t - curt);
     
@@ -1947,164 +1982,51 @@ bool collectionCDBDgrid::take_step(flt tlim){
     return true;
 };
 
-void collectionCDBDgrid::timestep() {
-    reset_velocities();
-    flt newt = curt + dt;
-    while(take_step(newt)){};
-    update_trackers();
-};
-
-void collectionCDBD::reset_velocities(){
-    for(uint i=0; i<atoms->size(); i++){
-        flt mi = (*atoms)[i].m;
-        (*atoms)[i].v = randVec() * sqrtflt(T/mi);
-    }
-    reset_events();
-};
-
-void collectionCDBD::line_advance(flt deltat){
-    for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].x += (*atoms)[i].v * deltat;
-    }
-    
-    curt += deltat;
-};
-
-void collectionCDBD::reset_events(){
-    events.clear();
-    
-    for(uint i=1; i<atoms->size(); i++){
-        for(uint j=0; j<i; j++){
-            flt sigma = (atomsizes[i] + atomsizes[j]) / 2;
-            
-            //~ std::cerr << i << "-" << j;
-            event e;
-            if(make_event(*box, e, atoms->get_id(j), atoms->get_id(i), sigma, curt)){
-                events.insert(e);
-                //~ std::cerr << " MADE!";
-            };
-            //~ std::cerr << ", ";
-        }
-    };
-    //~ std::cerr << " Done, events " << events.size() << "\n";
-};
-
-bool collectionCDBD::take_step(flt tlim){
-    // TODO: more efficient looping and merging
-    
-    // If we have a limit, and we've already passed it, stop.
-    if((tlim > 0) && (tlim <= curt)) return false;
-    
-    //~ std::cerr << "take_step: events " << events.size() << "\n";
-    if(events.size() <= 0) reset_events();
-    
-    assert(atoms->size() > 0);
-    assert(atomsizes.size() > 0);
-    if(events.size() == 0){
-        // TODO: this should check time to leave box, and only go that far
-        line_advance(tlim - curt);
-        curt = tlim;
-        return false;
-    }
-    //~ std::cerr << "take_step: started, events " << events.size() << "\n";
-    event e = *(events.begin());
-    if ((tlim > 0) & (e.t > tlim)){
-        // if we have a limit, and the next event is farther in the 
-        // future than that limit, then we just move everyone forward and
-        // no collisions happen
-        line_advance(tlim - curt);
-        curt = tlim;
-        return false;
-    };
-    events.erase(e);
-    
-    // move everyone forward
-    line_advance(e.t - curt);
-    curt = e.t;
-    //~ std::cerr << "take_step: advanced.\n";
-    
-    // collide our two atoms (i.e. have them bounce)
-    //~ std::cerr << "take_step: colliding " << e.a.n() << " - " << e.b.n() << "\n";
-    collide(*box, *(e.a), *(e.b));
-    //~ std::cerr << "take_step: collided " << e.a.n() << " - " << e.b.n() << "\n";
-    
-    // Remove all "bad" scheduled events (involving these two atoms),
-    // and mark which atoms need rescheduling
-    set<atomid> badatoms;
-    set<atomid>::iterator ait;
-    badatoms.insert(e.a);
-    badatoms.insert(e.b);
-    
-    set<event>::iterator eit, eit2;
-    eit = events.begin();
-    while (eit != events.end()){
-        if((eit->a == e.a) || (eit->a == e.b)){
-            badatoms.insert(eit->b);
-        } else if((eit->b == e.a) || (eit->b == e.b)){
-            badatoms.insert(eit->a);
-        } else {
-            // no matches, carry on
-            eit++;
-            continue;
-        }
-        
-        
-        //~ std::cerr << "take_step: removing event...";
-        // need to remove that event
-        eit2 = eit;
-        eit++;
-        events.erase(eit2);
-        //~ std::cerr << "Removed.\n";
-    };
-    
-    
-    //~ std::cerr << "take_step: new events (" << badatoms.size() << ")...";
-    // Make new events, add them to the list
-    vector<event> newevents(badatoms.size());
-    //~ std::cerr << "made events vector...";
-    vector<bool> new_filled(badatoms.size(), false);
-    //~ std::cerr << "made new_filled.\n";
-    //~ std::cerr << "Starting loop.\n";
-    for(uint i=0; i<atoms->size(); i++){
-        uint bi=0;
-        //~ std::cerr << "Starting badatoms loop.\n";
-        for(ait=badatoms.begin(); ait!=badatoms.end(); ait++){
-            //~ cerr << "Testing " << ait->n() << " - " << n  << "(" << bi << "), ";
-            flt sigma = (atomsizes[ait->n()] + atomsizes[i])/2.;
-            //~ cerr << "sigma " << sigma << "\n";
-            event testevent;
-            if(make_event(*box, testevent, *ait, atoms->get_id(i), sigma, curt)){
-                //~ cerr << "Made good event\n";
-                if(!new_filled[bi] || (testevent < newevents[bi])){
-                    newevents[bi] = testevent;
-                    new_filled[bi] = true;
-                    //~ cerr << "Its the best event\n";
-                } else {
-                    //~ cerr << "event ignored\n";
-                }
-            } else {
-                //~ cerr << "event not made.\n";
-            };
-            bi++;
-        }
-    };
-    
-    //~ std::cerr << "take_step: made new events\n";
-    
-    for(uint bi=0; bi<newevents.size(); bi++){
-        if(new_filled[bi]){
-            //~ std::cerr << "take_step: inserting collision between " << 
-                //~ newevents[bi].a.n() << " - " << newevents[bi].b.n() << "\n";
-            events.insert(newevents[bi]);
-        }
-    };
-    //~ std::cerr << "take_step: Done.\n";
-    return true;
-};
-
 void collectionCDBD::timestep() {
+    cout << "timestep\n";
     reset_velocities();
+    cout << "timestep 2\n";
     flt newt = curt + dt;
+    cout << "timestep 3\n";
     while(take_step(newt)){};
+    cout << "update\n";
     update_trackers();
 };
+
+event collectionCDBDgrid::base_event(atomid a){
+    event e;
+    flt vmag = a->v.mag();
+    if(!isfinite(vmag) or vmag <= 0) vmag = sqrtflt(T/a->m) * edge_epsilon;
+    flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
+    assert(epsilon_t > 0);
+    
+    // current time + time to reach edge + ε, where we use
+    // an ε to make sure we don't get in an infinite loop at the box
+    // edge
+    e.t = curt + grid.time_to_edge(*a) + epsilon_t;
+    e.a = a;
+    e.b = a;
+    
+    return e;
+};
+
+event collectionCDBDgrid::next_event(atomid a){
+    cout << "CDBDgrid::next_event\n";
+    event e = base_event(a);
+        
+    cout << "CDBDgrid::next_event 2\n";
+    Grid::pair_iter j=grid.pairs(a);
+    cout << "CDBDgrid::next_event 3\n";
+    for(; j!=j.end(); ++j){
+        cout << "CDBDgrid::next_event: " << (*j).n() << "\n";
+        event e2;
+        flt sigma = (atomsizes[a.n()] + atomsizes[(*j).n()])/2.0;
+        cout << "CDBDgrid::next_event: " << (*j).n() << "sig: " << sigma << "\n";
+        if(make_event(*box, e2, *j, a, sigma, curt)
+                and e2 < e){
+            e = e2;
+        };
+    }
+    assert(e.t >= curt);
+    return e;
+}

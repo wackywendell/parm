@@ -803,7 +803,7 @@ flt get_max(vector<flt> v){
 };
 
 /// Collision-Driven Brownian-Dynamics
-class collectionCDBDgrid : public collection {
+class collectionCDBD : public collection {
     public:
         flt T;
         flt dt, curt;
@@ -814,9 +814,47 @@ class collectionCDBDgrid : public collection {
         void reset_events(bool force=true);
         void line_advance(flt deltat);
         
+        virtual event base_event(atomid a);
+        virtual event next_event(atomid a);
+        
+    public:
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
+                const flt dt, const flt T,
+                vector<flt> sizes = vector<flt>(),
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collection(box, atoms, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(sizes), edge_epsilon(1e-8) {
+            assert(atomsizes.size() == atoms->size());
+        };
+        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
+                flt sizes,
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collection(box, atoms, interactions, trackers, constraints), 
+            T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes) {
+            assert(atomsizes.size() == atoms->size());
+        };
+    
+        void update_pairs(bool force=true){};
+        flt get_epsilon(){return edge_epsilon;};
+        void set_epsilon(flt eps){edge_epsilon = eps;};
+        void reset_velocities();
+        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
+        void timestep();
+        
+        virtual ~collectionCDBD(){};
+};
+
+/// Collision-Driven Brownian-Dynamics
+class collectionCDBDgrid : public collectionCDBD {
+    public:
         Grid grid;
         flt gridt; // when it was updated
         
+        event base_event(atomid a);
         event next_event(atomid a);
         
     public:
@@ -826,65 +864,17 @@ class collectionCDBDgrid : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
-            T(T), dt(dt), curt(0), atomsizes(sizes), edge_epsilon(1e-8),
-            grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0) {
-            assert(atomsizes.size() == atoms->size());
-        };
+            collectionCDBD(box, atoms, dt, T, sizes, interactions, trackers, constraints), 
+            grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0) {};
         collectionCDBDgrid(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
                 flt sizes,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
-            T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes),
-            grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0) {
-            assert(atomsizes.size() == atoms->size());
-        };
+            collectionCDBD(box, atoms, dt, T, sizes, interactions, trackers, constraints), 
+            grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0) {};
     
-        void update_grid(bool force=true);
-        Grid &get_grid(){return grid;};
-        flt get_epsilon(){return edge_epsilon;};
-        void set_epsilon(flt eps){edge_epsilon = eps;};
-        void reset_velocities();
-        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
-        void timestep();
-};
-
-/// Collision-Driven Brownian-Dynamics
-class collectionCDBD : public collection {
-    public:
-        flt T;
-        flt dt, curt;
-        set<event> events; // note that this a sorted binary tree
-        vector<flt> atomsizes; /// diameters
-        
-        void reset_events();
-        void line_advance(flt deltat);
-        
-    public:
-        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
-                const flt dt, const flt T,
-                vector<flt> sizes = vector<flt>(),
-                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
-                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
-                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
-            T(T), dt(dt), curt(0), atomsizes(sizes) {
-            assert(atomsizes.size() == atoms->size());
-        };
-        collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
-                const flt dt, const flt T, flt sizes,
-                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
-                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
-                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
-            T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes) {
-            assert(atomsizes.size() == atoms->size());
-        };
-    
-        void reset_velocities();
-        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
-        void timestep();
+        void update_pairs(bool force=true);
+        virtual ~collectionCDBDgrid(){};
 };
 #endif
