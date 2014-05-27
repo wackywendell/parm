@@ -6,6 +6,7 @@
 core
 core.*
 out
+bin
 sim.py*
 sim2d.py*
 sim2dlong.py*
