@@ -18,47 +18,47 @@ INC=`python3-config --includes`
 all: 2d 2dlong 3d 3dlong
 	@echo "making all."
 
-2d: _sim2d.so
+2d: lib/_sim2d.so
 
-3d: _sim.so
+3d: lib/_sim3d.so
 
-2dlong: _sim2dlong.so
+2dlong: lib/_sim2dlong.so
 
-3dlong: _sim3dlong.so
+3dlong: lib/_sim3dlong.so
 
-wraps: sim_wrap2d.cxx sim_wrap2dlong.cxx sim_wrap3d.cxx sim_wrap3dlong.cxx
+wraps: lib/sim_wrap2d.cxx lib/sim_wrap2dlong.cxx lib/sim_wrap3d.cxx lib/sim_wrap3dlong.cxx
 
 printout:
 	@echo Running on \"$(UNAME)\"
 
 clean:
-	rm -f *.o *.so *.gch sim_wrap*.cxx
+	cd lib; rm -f *.o *.so *.gch sim_wrap*.cxx
 
-sim_wrap2d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
-	$(SWIG) -DVEC2D sim.i
-	mv sim_wrap.cxx sim_wrap2d.cxx
+lib/sim_wrap2d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+	cd src ; $(SWIG) -DVEC2D sim.i
+	mv src/sim_wrap.cxx lib/sim_wrap2d.cxx
 
-sim_wrap3d.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
-	$(SWIG) -DVEC3D sim.i
-	mv sim_wrap.cxx sim_wrap3d.cxx
+lib/sim_wrap3d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+	cd src ; $(SWIG) -DVEC3D sim.i
+	mv src/sim_wrap.cxx lib/sim_wrap3d.cxx
 
-sim_wrap2d.o: sim_wrap2d.cxx
-	$(CXX) $(CCOPTS) -DVEC2D -c sim_wrap2d.cxx $(INC)
+lib/sim_wrap2d.o: lib/sim_wrap2d.cxx
+	$(CXX) $(CCOPTS) -DVEC2D -c lib/sim_wrap2d.cxx $(INC)
 
-sim_wrap3d.o: sim_wrap3d.cxx
-	$(CXX) $(CCOPTS) -DVEC3D -c sim_wrap3d.cxx $(INC)
+lib/sim_wrap3d.o: lib/sim_wrap3d.cxx
+	$(CXX) $(CCOPTS) -DVEC3D -c lib/sim_wrap3d.cxx $(INC)
 
-_sim2d.so: sim_wrap2d.o
-	$(CXX) $(CCOPTS) -DVEC2D -shared sim_wrap2d.o -o _sim2d.so $(LIB)
+lib/_sim2d.so: lib/sim_wrap2d.o
+	$(CXX) $(CCOPTS) -DVEC2D -shared lib/sim_wrap2d.o -o lib/_sim2d.so $(LIB)
 	
-_sim.so: sim_wrap3d.o
-	$(CXX) $(CCOPTS) -DVEC3D -shared sim_wrap3d.o -o _sim.so $(LIB)
+lib/_sim.so: lib/sim_wrap3d.o
+	$(CXX) $(CCOPTS) -DVEC3D -shared lib/sim_wrap3d.o -o lib/_sim.so $(LIB)
 
-sim_wrap2dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
+lib/sim_wrap2dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
 	$(SWIG) -DVEC2D -DLONGFLOAT sim.i
 	mv sim_wrap.cxx sim_wrap2dlong.cxx
 
-sim_wrap3dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
+lib/sim_wrap3dlong.cxx: sim.i collection.hpp constraints.hpp interaction.hpp trackers.hpp box.hpp vecrand.hpp collection.cpp constraints.cpp interaction.cpp trackers.cpp box.cpp vecrand.cpp vec.hpp
 	$(SWIG) -DVEC3D -DLONGFLOAT sim.i
 	mv sim_wrap.cxx sim_wrap3dlong.cxx
 
