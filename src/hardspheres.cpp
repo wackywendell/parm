@@ -82,6 +82,7 @@ int main(){
     boost::shared_ptr<OriginBox> obox(new OriginBox(L));
     boost::shared_ptr<Box> boxptr = boost::static_pointer_cast<Box>(obox);
     boost::shared_ptr<atomvec> atomptr(new atomvec(atommasses));
+    boost::shared_ptr<atomgroup> group(atomptr);
     atomvec & atoms = *atomptr;
     
     
@@ -187,7 +188,7 @@ int main(){
         nset.insert(newn);
     }
     
-    vector<uint> MSDns(nset.begin(), nset.end());
+    vector<long unsigned int> MSDns(nset.begin(), nset.end());
     cout << "Using " << MSDns.size() << " MSDns, [" << MSDns.front() << "-" << MSDns.back() << "]\n";
     
     boost::shared_ptr<RsqTracker> rsqtracker(new RsqTracker(atomptr, MSDns));
@@ -216,7 +217,7 @@ int main(){
     ofstream msdfile;
     msdfile.open("hardspheres.msd", ios::out);
     // Retrieve the time-averaged r^2 values for each atom for each Δt
-    vector<vector<flt> > MSDmeans = rsqtracker->means();
+    vector<vector<Vec> > MSDmeans = rsqtracker->means();
     
     // This will be a tab-separated file, with the first column being 
     // Δt in time units (not timesteps),
@@ -228,8 +229,9 @@ int main(){
     
     for(uint i=0; i<MSDns.size(); i++){
         msdfile << (MSDns[i] * dt);
-        for(vector<flt>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); it++){
-            msdfile << '\t' << *it;
+        for(vector<Vec>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); it++){
+            Vec v = *it;
+            msdfile << '\t' << (v[0] + v[1] + v[2]);
         }
         msdfile << "\n";
     } 

@@ -43,7 +43,7 @@ lib/sim_wrap3d.o: lib/sim_wrap3d.cxx
 
 lib/_sim2d.so: lib/sim_wrap2d.o
 	$(CXX) $(CCOPTS) -DVEC2D -shared lib/sim_wrap2d.o -o lib/_sim2d.so $(LIB)
-	
+
 lib/_sim3d.so: lib/sim_wrap3d.o
 	$(CXX) $(CCOPTS) -DVEC3D -shared lib/sim_wrap3d.o -o lib/_sim3d.so $(LIB)
 
@@ -63,7 +63,7 @@ lib/sim_wrap3dlong.o: lib/sim_wrap3dlong.cxx
 
 lib/_sim2dlong.so: lib/sim_wrap2dlong.o
 	$(CXX) $(CCOPTS) -Wconversion -DVEC2D -DLONGFLOAT -shared lib/sim_wrap2dlong.o -o lib/_sim2dlong.so $(LIB)
-	
+
 lib/_sim3dlong.so: lib/sim_wrap3dlong.o
 	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -shared lib/sim_wrap3dlong.o -o lib/_sim3dlong.so $(LIB)
 
@@ -88,18 +88,21 @@ lib/constraints$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp 
 lib/collection$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/collection.cpp -o lib/collection$(1).o
 
-lib/libsim$(1).so: lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o 
+lib/libsim$(1).so: lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
 	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o lib/libsim$(1).so lib/box$(1).o lib/trackers$(1).o lib/vecrand$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
+
+#lib/libsim$(1).a: lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
+#	ar rcs lib/libsim$(1).a lib/box$(1).o lib/trackers$(1).o lib/vecrand$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
 
 endef
 
 $(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
 
 bin/LJatoms: lib/libsim3D.so src/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/LJatoms.cpp -Llib -lsim3D -Wl,-rpath=. -o bin/LJatoms
+	$(CXX) $(CCOPTS) -DVEC3D src/LJatoms.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/LJatoms
 
 bin/LJatoms2d: lib/libsim2D.so src/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC2D src/LJatoms.cpp -Llib -lsim2D -Wl,-rpath=. -o bin/LJatoms2d
+	$(CXX) $(CCOPTS) -DVEC2D src/LJatoms.cpp -Llib -lsim2D -Wl,-rpath=lib -o bin/LJatoms2d
 
 bin/hardspheres: lib/libsim3D.so src/hardspheres.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath=. -o bin/hardspheres
+	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres
