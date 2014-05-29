@@ -70,7 +70,7 @@ int main(int argc, char **argv){
     flt sizeratio=2.0;
     flt dt=0.02;
     int Natoms=40;
-    int tottime=20000;
+    int tottime=200000;
     string outname = "hardspheres.msd";
 
     opterr = 0;
@@ -251,10 +251,6 @@ int main(int argc, char **argv){
     boost::shared_ptr<RsqTracker> rsqtracker(new RsqTracker(atomptr, MSDns));
     boost::shared_ptr<statetracker> rsqptr = boost::static_pointer_cast<statetracker>(rsqtracker);
     collec.add(rsqptr);
-
-    boost::shared_ptr<RfrTracker> rfrtracker(new RfrTracker(atomptr, MSDns));
-    boost::shared_ptr<statetracker> rfrptr = boost::static_pointer_cast<statetracker>(rfrtracker);
-    collec.add(rsqptr);
     
     // VMD is good for 3D visualization purposes, and it can read .xyz files
     // see 'writefile' function
@@ -296,7 +292,7 @@ int main(int argc, char **argv){
         msdfile << "\n";
     } 
 
-    // Save the MFDs to a file so that we can compute alpha
+// Save the MFDs to a file so that we can compute alpha
     ofstream mfdfile;
     mfdfile.open("hardspheres.mfd", ios::out);
     // Retrieve the time-averaged r^4 values for each atom for each Δt

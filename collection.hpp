@@ -116,8 +116,9 @@ class collectionSol : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
-        void changeT(const flt newdt, const flt damp, const flt desiredT){
-            dt = newdt; damping = damp; desT = desiredT; setCs();};
+        void changeT(const flt damp, const flt desiredT){
+            damping = damp; desT = desiredT; setCs();};
+        void setdt(const flt newdt){dt = newdt; setCs();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};
         //void seed(){gauss.seed();};
@@ -299,8 +300,8 @@ class collectionNLCG : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
-                const flt kappa=1, const flt kmax=1000,
-                const uint secmax=10, const flt seceps = 0.0001);
+                const flt kappa=10.0, const flt kmax=1000,
+                const uint secmax=40, const flt seceps = 1e-20);
         
         flt kinetic();  // Note: masses are ignored
         flt pressure();
@@ -490,8 +491,8 @@ class collectionGaussianT : public collection {
         flt setxi();
         
     public:
-        collectionGaussianT(sptr<Box> box, const flt dt, const flt Q, 
-                sptr<atomgroup> atoms,
+        collectionGaussianT(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, const flt Q, 
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
@@ -828,7 +829,7 @@ struct event {
 flt get_max(vector<flt> v){
     flt mx = 0.0;
     for(vector<flt>::iterator it=v.begin(); it != v.end(); it++){
-        if(*it < mx) mx = *it;
+        if(*it > mx) mx = *it;
     }
     return mx;
 };
@@ -869,7 +870,7 @@ class collectionCDBD : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints), 
             T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes),
-            grid(box, atoms, sizes, 1.0) {
+            grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0) {
             assert(atomsizes.size() == atoms->size());
         };
     

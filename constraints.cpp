@@ -178,6 +178,111 @@ vector<flt> RsqTracker::counts(){
     }
     return vals;
 };
+//Replicate for R^4
+RfrTracker1::RfrTracker1(atomgroup& atoms, uint skip, Vec com) :
+            pastlocs(atoms.size(), Vec()), rfrsums(atoms.size(), 0.0),
+            rfrfrsums(atoms.size(), 0.0), skip(skip), count(0){
+    for(uint i = 0; i<atoms.size(); i++){
+        pastlocs[i] = atoms[i].x - com;
+    };
+};
+        
+void RfrTracker1::reset(atomgroup& atoms, Vec com){
+    pastlocs.resize(atoms.size());
+    rfrsums.assign(atoms.size(), 0);
+    rfrfrsums.assign(atoms.size(), 0);
+    for(uint i = 0; i<atoms.size(); i++){
+        pastlocs[i] = atoms[i].x - com;
+    };
+    count = 0;
+};
+
+bool RfrTracker1::update(Box& box, atomgroup& atoms, uint t, Vec com){
+    if(t % skip != 0) return false;
+    
+    for(uint i = 0; i<atoms.size(); i++){
+        //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
+        Vec r = atoms[i].x - com;
+        flt dist = (r - pastlocs[i]).sq();
+        // We don't want the boxed distance - we want the actual distance moved!
+        rfrsums[i] += dist;
+        rfrfrsums[i] += dist*dist*dist*dist;
+        pastlocs[i] = r;
+    };
+    count += 1;
+    return true;
+};
+
+vector<flt> RfrTracker1::rfr_mean(){
+    vector<flt> means(rfrsums.size(), 0.0);
+    for(uint i=0; i<rfrsums.size(); i++){
+        means[i] = rfrsums[i] / count;
+    }
+    return means;
+};
+
+vector<flt> RfrTracker1::rfr_var(){
+    vector<flt> vars(rfrsums.size(), 0.0);
+    for(uint i=0; i<rfrsums.size(); i++){
+        flt mn = (rfrsums[i])/count;
+        flt sqmn = (rfrfrsums[i])/count;
+        vars[i] = sqmn - mn*mn;
+    }
+    return vars;
+};
+    
+
+RfrTracker::RfrTracker(sptr<atomgroup> atoms, vector<uint> ns, bool usecom) : 
+            atoms(atoms), curt(0), usecom(usecom){
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<uint>::iterator n=ns.begin(); n!=ns.end(); n++){
+        singles.push_back(RfrTracker1(*atoms, *n, com));
+    }
+};
+
+void RfrTracker::update(Box &box){
+    curt++;
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<RfrTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        it->update(box, *atoms, curt, com);
+    }
+};
+
+void RfrTracker::reset(){
+    curt = 0;
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<RfrTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        it->reset(*atoms, com);
+    }
+};
+
+vector<vector<flt> > RfrTracker::means(){
+    vector<vector<flt> > vals;
+    vals.reserve(singles.size());
+    for(vector<RfrTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        vals.push_back(it->rfr_mean());
+    }
+    return vals;
+};
+
+vector<vector<flt> > RfrTracker::vars(){
+    vector<vector<flt> > vals;
+    vals.reserve(singles.size());
+    for(vector<RfrTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        vals.push_back(it->rfr_var());
+    }
+    return vals;
+};
+
+vector<flt> RfrTracker::counts(){
+    vector<flt> vals;
+    vals.reserve(singles.size());
+    for(vector<RfrTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        vals.push_back(it->get_count());
+    }
+    return vals;
+};
+// End of Replication
 
 bool jamminglist::operator<(const jamminglist& other ){
     //return distsq < other.distsq;

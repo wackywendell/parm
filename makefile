@@ -111,5 +111,11 @@ LJatoms2D: libsim2D.so LJatoms.cpp
 hardspheres: libsim3D.so hardspheres.cpp
 	$(CXX) $(CCOPTS) -DVEC3D hardspheres.cpp -L. -lsim3D -Wl,-rpath=. -o hardspheres
 
+hardspheres2: libsim3D.so hardspheres2.cpp
+	$(CXX) $(CCOPTS) -DVEC3D hardspheres2.cpp -L. -lsim3D -Wl,-rpath=. -o hardspheres2
+
+hardspheres3: libsim3D.so hardspheres3.cpp
+	$(CXX) $(CCOPTS) -DVEC3D hardspheres3.cpp -L. -lsim3D -Wl,-rpath=. -o hardspheres3
+
 basicsim.zip: box.cpp box.hpp collection.cpp collection.hpp constraints.cpp constraints.hpp hardspheres.cpp interaction.cpp interaction.hpp LJatoms.cpp makefile trackers.cpp trackers.hpp vec.hpp vecrand.cpp vecrand.hpp .vmdrc
 	zip -r $@ $^

@@ -119,7 +119,7 @@ Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, vector<uint> width)
 };
 
 Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, 
-                            const flt goalwidth, const flt minwidth) :
+                            const flt minwidth, const flt goalwidth) :
         box(box), atoms(atoms), minwidth(minwidth), goalwidth(goalwidth){
     widths[0] = 0;
     widths[1] = 0;
