@@ -70,7 +70,7 @@ int main(int argc, char **argv){
     flt sizeratio=2.0;
     flt dt=0.02;
     int Natoms=40;
-    int tottime=20000;
+    int tottime=2000000;
     string outname = "hardspheres.msd";
 
     opterr = 0;

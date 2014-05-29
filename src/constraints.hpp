@@ -331,27 +331,6 @@ class RsqTracker1 {
         unsigned long get_count(){return count;};
 };
 
-//Try to Replicate for R^4
-class RfrTracker1 {
-    // Tracks only a single dt (skip)
-    public:
-        vector<Vec> pastlocs;
-        vector<flt> rfrsums;
-        vector<flt> rfrfrsums;
-        uint skip, count;
-    public:
-        RfrTracker1(atomgroup& atoms, uint skip, Vec com);
-        
-        void reset(atomgroup& atoms, Vec com);
-            
-        bool update(Box& box, atomgroup& atoms, uint t, Vec com); // updates if necessary.
-        vector<flt> rfr_mean();
-        vector<flt> rfr_var();
-        
-        uint get_skip(){return skip;};
-        uint get_count(){return count;};
-};
-
 //~ class RsqTrackerN {
     //~ // Tracks only a single dt (skip)
     //~ public:
@@ -390,25 +369,6 @@ class RsqTracker : public statetracker {
         vector<vector<Vec> > xyz4();
         vector<vector<flt> > r4();
         vector<flt> counts();
-};
-// Try to Replicate RsqTracker for R^4
-class RfrTracker : public statetracker {
-    public:
-        sptr<atomgroup> atoms;
-        vector<RfrTracker1> singles;
-        uint curt;
-        bool usecom;
-        
-    public:
-        RfrTracker(sptr<atomgroup> atoms, vector<uint> ns, bool usecom=true);
-        
-        void reset();
-        void update(Box &box);
-        
-        vector<vector<flt> > means();
-        vector<vector<flt> > vars();
-        vector<flt> counts();
-        
 };
 
 //~ class DividedBox : public statetracker {
