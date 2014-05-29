@@ -314,7 +314,9 @@ class RsqTracker1 {
         vector<Vec> pastlocs;
         vector<Vec> rsqsums;
         vector<Vec> rsqsqsums;
+        vector<flt> r4sums;
         unsigned long skip, count;
+        
     public:
         RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com);
         
@@ -324,6 +326,7 @@ class RsqTracker1 {
         vector<Vec> rsq_mean();
         vector<Vec> rsq_var();
         vector<Vec> rsq_sq();
+        vector<flt> r4();
         
         unsigned long get_skip(){return skip;};
         unsigned long get_count(){return count;};
@@ -366,6 +369,7 @@ class RsqTracker : public statetracker {
         vector<vector<Vec> > vars();
         vector<vector<Vec> > stds();
         vector<vector<Vec> > sqs();
+        vector<vector<flt> > r4s();
         vector<flt> counts();
         
 };

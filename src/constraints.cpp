@@ -102,13 +102,18 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
         // We don't want the boxed distance - we want the actual distance moved!
         Vec distsq = r - pastlocs[i];
         Vec distsqsq = Vec();
+        flt dist4 = 0;
         for(uint j=0; j<NDIM; j++){
             distsq[j] *= distsq[j];
             distsqsq[j] = distsq[j]*distsq[j];
+            dist4 += distsq[j];
         };
+        
+        dist4 *= dist4;
         
         rsqsums[i] += distsq;
         rsqsqsums[i] += distsqsq;
+        r4sums[i] += dist4;
         pastlocs[i] = r;
     };
     count += 1;
@@ -138,6 +143,14 @@ vector<Vec> RsqTracker1::rsq_sq(){
     vector<Vec> means(rsqsqsums.size(), Vec());
     for(uint i=0; i<rsqsqsums.size(); i++){
         means[i] = rsqsqsums[i] / count;
+    }
+    return means;
+};
+
+vector<flt> RsqTracker1::r4(){
+    vector<flt> means(r4sums.size(), 0);
+    for(uint i=0; i<r4sums.size(); i++){
+        means[i] = r4sums[i] / count;
     }
     return means;
 };
@@ -190,6 +203,15 @@ vector<vector<Vec> > RsqTracker::sqs(){
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
         vals.push_back(it->rsq_sq());
+    }
+    return vals;
+};
+
+vector<vector<flt> > RsqTracker::r4s(){
+    vector<vector<flt> > vals;
+    vals.reserve(singles.size());
+    for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); it++){
+        vals.push_back(it->r4());
     }
     return vals;
 };
