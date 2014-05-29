@@ -255,10 +255,6 @@ int main(int argc, char **argv){
     boost::shared_ptr<RsqTracker> rsqtracker(new RsqTracker(atomptr, MSDns));
     boost::shared_ptr<statetracker> rsqptr = boost::static_pointer_cast<statetracker>(rsqtracker);
     collec.add(rsqptr);
-
-    boost::shared_ptr<RfrTracker> rfrtracker(new RfrTracker(atomptr, MSDns));
-    boost::shared_ptr<statetracker> rfrptr = boost::static_pointer_cast<statetracker>(rfrtracker);
-    collec.add(rsqptr);
     
     // VMD is good for 3D visualization purposes, and it can read .xyz files
     // see 'writefile' function
@@ -299,27 +295,6 @@ int main(int argc, char **argv){
             msdfile << '\t' << (v[0] + v[1] + v[2]);
         }
         msdfile << "\n";
-    } 
-
-    // Save the MFDs to a file so that we can compute alpha
-    ofstream mfdfile;
-    mfdfile.open("hardspheres.mfd", ios::out);
-    // Retrieve the time-averaged r^4 values for each atom for each Δt
-    vector<vector<flt> > MFDmeans = rfrtracker->means();  
-
-    // This will be a tab-separated file, with the first column being 
-    // Δt in time units (not timesteps),
-    // second column <r(t) - r(t-Δt)>^4 for the large particle 
-    // in units of the small particle diameters,
-    // third column <r(t) - r(t-Δt)>^4 for the first small particle,
-    // 4th column <r(t) - r(t-Δt)>^4 for the second small particle, etc.
-
-    for(uint i=0; i<MSDns.size(); i++){
-        mfdfile << (MSDns[i] * dt);
-        for(vector<flt>::iterator it=MFDmeans[i].begin(); it<MFDmeans[i].end(); it++){
-            mfdfile << '\t' << *it;
-        }
-        mfdfile << "\n";
     } 
     
     // Now you should be able to run "vmd -e hardspheres-pbc.tcl hardspheres.xyz"
