@@ -1,1 +1,0 @@
-/home/wendell/scripts/namespace.py
