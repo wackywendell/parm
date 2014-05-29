@@ -1,9 +1,9 @@
 import sys
-import numpy as np
 from decimal import Decimal
 from datetime import datetime, timedelta
 
 def printlist(lst, name, **kw):
+    import numpy as np
     mean = float(np.mean(lst,0))
     std = np.std(lst)
     stdstr = '%8.3f' % std if std < 10000 else '%8.5g' % std

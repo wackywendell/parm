@@ -5,20 +5,22 @@ CCOPTS=-Wall -O2 -fPIC #-std=c++11
 
 INC=`python3-config --includes`
 
-.PHONY: all 2d 3d 2dlong 3dlong printout clean wraps
+.PHONY: all 2d 3d 2dlong 3dlong printout clean wraps py
 
-all: 2d 2dlong 3d 3dlong
+all: bin/LJatoms bin/LJatoms2d bin/hardspheres
 	@echo "making all."
 
-2d: lib/_sim2d.so
+py: 2d 3d 2dlong 3dlong
 
-3d: lib/_sim3d.so
+2d: pyparm/_sim2d.so
 
-2dlong: lib/_sim2dlong.so
+3d: pyparm/_sim3d.so
 
-3dlong: lib/_sim3dlong.so
+2dlong: pyparm/_sim2dlong.so
 
-wraps: lib/sim_wrap2d.cxx lib/sim_wrap2dlong.cxx lib/sim_wrap3d.cxx lib/sim_wrap3dlong.cxx
+3dlong: pyparm/_sim3dlong.so
+
+wraps: pyparm/sim_wrap2d.cxx pyparm/sim_wrap2dlong.cxx pyparm/sim_wrap3d.cxx pyparm/sim_wrap3dlong.cxx
 
 printout:
 	@echo Running on \"$(UNAME)\"
@@ -26,46 +28,52 @@ printout:
 clean:
 	rm -f bin/LJatoms bin/LJatom2d bin/hardspheres
 	cd lib; rm -f *.o *.so *.gch sim_wrap*.cxx
+	cd pyparm; rm -f *.o *.so *.gch sim_wrap*.cxx
+	rm -f src/sim.py
 
-lib/sim_wrap2d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+pyparm/sim_wrap2d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) -DVEC2D sim.i
-	mv src/sim_wrap.cxx lib/sim_wrap2d.cxx
+	mv src/sim_wrap.cxx pyparm/sim_wrap2d.cxx
+	mv src/sim2d.py pyparm/d2.py
 
-lib/sim_wrap3d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+pyparm/sim_wrap3d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) -DVEC3D sim.i
-	mv src/sim_wrap.cxx lib/sim_wrap3d.cxx
+	mv src/sim_wrap.cxx pyparm/sim_wrap3d.cxx
+	mv src/sim3d.py pyparm/d3.py
 
-lib/sim_wrap2d.o: lib/sim_wrap2d.cxx
-	$(CXX) $(CCOPTS) -DVEC2D -I src/ -c lib/sim_wrap2d.cxx -o lib/sim_wrap2d.o $(INC)
+pyparm/sim_wrap2d.o: pyparm/sim_wrap2d.cxx
+	$(CXX) $(CCOPTS) -DVEC2D -I src/ -c pyparm/sim_wrap2d.cxx -o pyparm/sim_wrap2d.o $(INC)
 
-lib/sim_wrap3d.o: lib/sim_wrap3d.cxx
-	$(CXX) $(CCOPTS) -DVEC3D -I src/ -c lib/sim_wrap3d.cxx -o lib/sim_wrap3d.o $(INC)
+pyparm/sim_wrap3d.o: pyparm/sim_wrap3d.cxx
+	$(CXX) $(CCOPTS) -DVEC3D -I src/ -c pyparm/sim_wrap3d.cxx -o pyparm/sim_wrap3d.o $(INC)
 
-lib/_sim2d.so: lib/sim_wrap2d.o
-	$(CXX) $(CCOPTS) -DVEC2D -shared lib/sim_wrap2d.o -o lib/_sim2d.so $(LIB)
+pyparm/_sim2d.so: pyparm/sim_wrap2d.o
+	$(CXX) $(CCOPTS) -DVEC2D -shared pyparm/sim_wrap2d.o -o pyparm/_sim2d.so $(LIB)
 
-lib/_sim3d.so: lib/sim_wrap3d.o
-	$(CXX) $(CCOPTS) -DVEC3D -shared lib/sim_wrap3d.o -o lib/_sim3d.so $(LIB)
+pyparm/_sim3d.so: pyparm/sim_wrap3d.o
+	$(CXX) $(CCOPTS) -DVEC3D -shared pyparm/sim_wrap3d.o -o pyparm/_sim3d.so $(LIB)
 
-lib/sim_wrap2dlong.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+pyparm/sim_wrap2dlong.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) -DVEC2D -DLONGFLOAT sim.i
-	mv src/sim_wrap.cxx lib/sim_wrap2dlong.cxx
+	mv src/sim_wrap.cxx pyparm/sim_wrap2dlong.cxx
+	mv src/sim2dlong.py pyparm/d2long.py
 
-lib/sim_wrap3dlong.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+pyparm/sim_wrap3dlong.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) -DVEC3D -DLONGFLOAT sim.i
-	mv src/sim_wrap.cxx lib/sim_wrap3dlong.cxx
+	mv src/sim_wrap.cxx pyparm/sim_wrap3dlong.cxx
+	mv src/sim3dlong.py pyparm/d3long.py
 
-lib/sim_wrap2dlong.o: lib/sim_wrap2dlong.cxx
-	$(CXX) $(CCOPTS)  -Wconversion -DVEC2D -DLONGFLOAT -I src/ -c lib/sim_wrap2dlong.cxx  -o lib/sim_wrap2dlong.o $(INC)
+pyparm/sim_wrap2dlong.o: pyparm/sim_wrap2dlong.cxx
+	$(CXX) $(CCOPTS)  -Wconversion -DVEC2D -DLONGFLOAT -I src/ -c pyparm/sim_wrap2dlong.cxx  -o pyparm/sim_wrap2dlong.o $(INC)
 
-lib/sim_wrap3dlong.o: lib/sim_wrap3dlong.cxx
-	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -I src/ -c lib/sim_wrap3dlong.cxx  -o lib/sim_wrap3dlong.o $(INC)
+pyparm/sim_wrap3dlong.o: pyparm/sim_wrap3dlong.cxx
+	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -I src/ -c pyparm/sim_wrap3dlong.cxx  -o pyparm/sim_wrap3dlong.o $(INC)
 
-lib/_sim2dlong.so: lib/sim_wrap2dlong.o
-	$(CXX) $(CCOPTS) -Wconversion -DVEC2D -DLONGFLOAT -shared lib/sim_wrap2dlong.o -o lib/_sim2dlong.so $(LIB)
+pyparm/_sim2dlong.so: pyparm/sim_wrap2dlong.o
+	$(CXX) $(CCOPTS) -Wconversion -DVEC2D -DLONGFLOAT -shared pyparm/sim_wrap2dlong.o -o pyparm/_sim2dlong.so $(LIB)
 
-lib/_sim3dlong.so: lib/sim_wrap3dlong.o
-	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -shared lib/sim_wrap3dlong.o -o lib/_sim3dlong.so $(LIB)
+pyparm/_sim3dlong.so: pyparm/sim_wrap3dlong.o
+	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -shared pyparm/sim_wrap3dlong.o -o pyparm/_sim3dlong.so $(LIB)
 
 VECOPTS := 2D 3D
 

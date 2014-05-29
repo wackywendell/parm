@@ -9,7 +9,7 @@
 #ifdef LONGFLOAT
 %module sim3dlong
 #else
-%module sim
+%module sim3d
 #endif
 #endif
 #pragma SWIG nowarn=302,321,389
