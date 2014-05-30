@@ -73,9 +73,6 @@ class neighborlist : public statetracker{
     // any two molecules might conceivably overlap by more than a critical
     // distance, and if so, it updates all the neighbor lists.
     
-    // the <bool areneighbors()> function returns whether two molecules
-    // are neighbors, and the begin(n), end(n) allow for iterating over
-    // the neighbor lists
     protected:
         sptr<Box> box;
         flt skin;
@@ -86,9 +83,12 @@ class neighborlist : public statetracker{
         vector<Vec> lastlocs;
         uint updatenum;
         bool ignorechanged; // if true, forces a full check on next update
-        //~ bool checkneighbors(const uint n, const uint m) const;
-        // this is a full check
+        
+        // TODO: find a way to get just neighbors of atom n
+        // without iterating over the whole list
     public:
+        typedef vector<idpair>::iterator iterator;
+        
         neighborlist(sptr<Box> box, sptr<atomvec> atoms, const flt skin);
         void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
         bool update_list(bool force = true);

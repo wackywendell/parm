@@ -802,6 +802,14 @@ flt get_max(vector<flt> v){
     return mx;
 };
 
+flt get_min(vector<flt> v){
+    flt mn = 0.0;
+    for(vector<flt>::iterator it=v.begin(); it != v.end(); it++){
+        if(*it < mn) mn = *it;
+    }
+    return mn;
+};
+
 /// Collision-Driven Brownian-Dynamics
 class collectionCDBD : public collection {
     public:
@@ -838,7 +846,7 @@ class collectionCDBD : public collection {
             assert(atomsizes.size() == atoms->size());
         };
     
-        void update_pairs(bool force=true){};
+        virtual void update_pairs(bool force=true){};
         flt get_epsilon(){return edge_epsilon;};
         void set_epsilon(flt eps){edge_epsilon = eps;};
         void reset_velocities();
@@ -876,5 +884,37 @@ class collectionCDBDgrid : public collectionCDBD {
     
         void update_pairs(bool force=true);
         virtual ~collectionCDBDgrid(){};
+};
+
+/// Uses a neighborlist
+class collectionCDBDnl : public collectionCDBD {
+    public:
+        neighborlist nlist;
+        flt nlist_time; // when it was updated
+        
+        void add_atoms(){
+             for(uint i=0; i<(atoms->size()); i++) nlist.add(atoms->get_id(i), atomsizes[i]);
+         }
+        event next_event(atomid a);
+        
+    public:
+        collectionCDBDnl(sptr<OriginBox> box, sptr<atomvec> atoms,
+                const flt dt, const flt T,
+                vector<flt> sizes = vector<flt>(),
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collectionCDBD(box, atoms, dt, T, sizes, interactions, trackers, constraints), 
+            nlist(box, atoms, get_min(sizes) * (0.4)) { add_atoms();};
+        collectionCDBDnl(sptr<OriginBox> box, sptr<atomvec> atoms, const flt dt, const flt T,
+                flt sizes,
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
+            collectionCDBD(box, atoms, dt, T, sizes, interactions, trackers, constraints), 
+            nlist(box, atoms, sizes * 0.4) { add_atoms();};
+    
+        void update_pairs(bool force=true);
+        virtual ~collectionCDBDnl(){};
 };
 #endif

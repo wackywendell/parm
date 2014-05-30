@@ -1778,9 +1778,7 @@ void collectionCDBD::reset_velocities(){
         flt mi = (*atoms)[i].m;
         (*atoms)[i].v = randVec() * sqrtflt(T/mi);
     }
-    cout << "reset_velocities\n";
     reset_events();
-    cout << "reset_velocities done\n";
 };
 
 void collectionCDBD::line_advance(flt deltat){
@@ -1830,9 +1828,7 @@ event collectionCDBD::base_event(atomid a){
     flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
     assert(epsilon_t > 0);
     
-    cout << "Static casting..." << endl;
     Vec bsize = boost::static_pointer_cast<OriginBox>(box)->boxshape();
-    cout << "Static casting done." << endl;
     Vec r = vecmod(a->x - bsize/2., bsize) + bsize/2;
     flt time_to_edge = 0;
     for(uint i=0; i<NDIM; i++){
@@ -1856,9 +1852,7 @@ event collectionCDBD::base_event(atomid a){
 };
 
 event collectionCDBD::next_event(atomid a){
-    cout << "next_event\n";
     event e = base_event(a);
-        cout << "next_event 2\n";
     for(uint i=0; i<atoms->size(); i++){
         event e2;
         flt sigma = (atomsizes[a.n()] + atomsizes[i])/2.0;
@@ -1867,28 +1861,19 @@ event collectionCDBD::next_event(atomid a){
             e = e2;
         };
     }
-    cout << "next_event 3\n";
     assert(e.t >= curt);
     return e;
 }
 
 void collectionCDBD::reset_events(bool force){
-    cout << "reset_events\n";
     events.clear();
-    cout << "reset_events 1\n";
     update_pairs(force);
-    cout << "reset_events2\n";
     
     for(uint i=0; i<atoms->size(); i++){
-        cout << "reset_events: i=" << i << "\n";
         atomid a = atoms->get_id(i);
-        cout << "reset_events: i=" << i << " 2\n";
         event e = next_event(a);
-        cout << "reset_events: i=" << i << " 3\n";
         events.insert(e);
-        cout << "reset_events: i=" << i << " done\n";
     };
-    cout << "reset_events done\n";
 };
 
 inline void collide(Box &box, atom& a, atom &b){
@@ -1909,9 +1894,7 @@ bool collectionCDBD::take_step(flt tlim){
     // TODO: more efficient looping and merging
     
     // If we have a limit, and we've already passed it, stop.
-     cout << "take_step\n";
     if((tlim > 0) && (tlim <= curt)) return false;
-    cout << "take_step 1\n";
     
     if(events.size() <= 0) reset_events();
     
@@ -1925,8 +1908,6 @@ bool collectionCDBD::take_step(flt tlim){
         //~ return false;
     }
     
-    cout << "take_step 2\n";
-    
     event e = *(events.begin());
     if ((tlim > 0) & (e.t > tlim)){
         // if we have a limit, and the next event is farther in the 
@@ -1937,7 +1918,6 @@ bool collectionCDBD::take_step(flt tlim){
     };
     events.erase(e);
     
-    cout << "take_step 3\n";
     // move everyone forward
     line_advance(e.t - curt);
     
@@ -1983,14 +1963,16 @@ bool collectionCDBD::take_step(flt tlim){
 };
 
 void collectionCDBD::timestep() {
-    cout << "timestep\n";
     reset_velocities();
-    cout << "timestep 2\n";
     flt newt = curt + dt;
-    cout << "timestep 3\n";
     while(take_step(newt)){};
-    cout << "update\n";
     update_trackers();
+};
+
+void collectionCDBDgrid::update_pairs(bool force){
+    if(!force && (gridt == curt)) return;
+    grid.optimize_widths();
+    grid.make_grid();
 };
 
 event collectionCDBDgrid::base_event(atomid a){
@@ -2011,18 +1993,38 @@ event collectionCDBDgrid::base_event(atomid a){
 };
 
 event collectionCDBDgrid::next_event(atomid a){
-    cout << "CDBDgrid::next_event\n";
     event e = base_event(a);
         
-    cout << "CDBDgrid::next_event 2\n";
     Grid::pair_iter j=grid.pairs(a);
-    cout << "CDBDgrid::next_event 3\n";
     for(; j!=j.end(); ++j){
-        cout << "CDBDgrid::next_event: " << (*j).n() << "\n";
         event e2;
         flt sigma = (atomsizes[a.n()] + atomsizes[(*j).n()])/2.0;
-        cout << "CDBDgrid::next_event: " << (*j).n() << "sig: " << sigma << "\n";
         if(make_event(*box, e2, *j, a, sigma, curt)
+                and e2 < e){
+            e = e2;
+        };
+    }
+    assert(e.t >= curt);
+    return e;
+}
+
+
+void collectionCDBDnl::update_pairs(bool force){
+    if(!force && (nlist_time == curt)) return;
+    nlist.update_list(force);
+};
+
+event collectionCDBDnl::next_event(atomid a){
+    event e = base_event(a);
+        
+    for(neighborlist::iterator it=nlist.begin(); it!=nlist.end(); ++it){
+        event e2;
+        atomid a2 = it->last();
+        if(a2 == a) a2 = it->first();
+        else if (it->first() != a) continue;
+        
+        flt sigma = (atomsizes[a.n()] + atomsizes[a2.n()])/2.0;
+        if(make_event(*box, e2, a2, a, sigma, curt)
                 and e2 < e){
             e = e2;
         };
