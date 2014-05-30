@@ -217,7 +217,7 @@ int main(){
     ofstream msdfile;
     msdfile.open("hardspheres.msd", ios::out);
     // Retrieve the time-averaged r^2 values for each atom for each Δt
-    vector<vector<Vec> > MSDmeans = rsqtracker->means();
+    vector<vector<Vec> > MSDmeans = rsqtracker->xyz2();
     
     // This will be a tab-separated file, with the first column being 
     // Δt in time units (not timesteps),
