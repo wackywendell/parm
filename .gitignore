@@ -9,15 +9,6 @@ core.*
 out
 /bin
 /lib
-sim.py*
-sim2d.py*
-sim2dlong.py*
-sim3d.py*
-sim3dlong.py*
-pyparm/d2.py*
-pyparm/d3.py*
-pyparm/d2long.py*
-pyparm/d3long.py*
 *.sublime*
 *.tsv
 *.png
@@ -34,7 +25,6 @@ pyparm/d3long.py*
 *.tga
 *.ps
 *.svg
-sim_wrap*.*
 LJatoms
 LJatoms2D
 LJatoms-pbc.tcl

@@ -1,26 +1,25 @@
 UNAME := $(shell uname)
-#CXX=${CXX}
-SWIG=swig -Wextra -shadow -python -py3 -c++
-CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
+CXX=icpc
+SWIG=swig
+CCOPTS=-I src -Wall -O2 -fPIC -std=c++98
 
 INC=`python3-config --includes`
+LIB=`python3-config --ldflags`
 
 .PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py
 
-all: bin/LJatoms2d bin/LJatoms3dlong bin/hardspheres
-	@echo "making all."
+all: py2d py3d
+	@echo "making 2d and 3d."
 
 py: py2d py3d py2dlong py3dlong
 
-wraps: pyparm/sim_wrap2d.cxx pyparm/sim_wrap2dlong.cxx pyparm/sim_wrap3d.cxx pyparm/sim_wrap3dlong.cxx
-
 printout:
-	@echo Running on \"$(UNAME)\"
+	@echo Running \"$(CXX)\" on \"$(UNAME)\"
 
 clean:
 	rm -f bin/* lib/*
-	cd src; rm -f *.o *.so *.gch sim_wrap*.cxx
-	cd pyparm; rm -f *.o *.so *.gch sim_wrap*.cxx
+	cd src; rm -f *.o *.so *.gch
+	cd pyparm; rm -f *.o *.so *.gch
 	rm -f src/sim.py
 
 lib:
@@ -49,9 +48,7 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 
 #-------------------------------------------------------------------------------
 # The python modules
-
 py$(SFX): pyparm/_sim$(SFX).so
-
 pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) $(OPTSET) sim.i
 	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
