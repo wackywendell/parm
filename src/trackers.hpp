@@ -107,7 +107,6 @@ class neighborlist : public statetracker{
             ignorechanged = true;
         }
         
-        
         inline uint ignore_size() const{return ignorepairs.size();};
         inline uint size() const{return atoms.size();};
         inline vector<idpair>::iterator begin(){return curpairs.begin();};
@@ -116,7 +115,12 @@ class neighborlist : public statetracker{
             //assert(i<curpairs.size());
             return curpairs[i];
         };
-        //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
+        
+        flt dist_to_half_skin(atomid a){
+            TODO
+            
+        };
+        
         ~neighborlist(){};
 };
 

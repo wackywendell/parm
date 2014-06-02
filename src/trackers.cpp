@@ -2,7 +2,9 @@
 
 neighborlist::neighborlist(sptr<Box> box, sptr<atomvec> atomv, const flt skin) :
                 box(box), skin(skin), atoms(atomv), diameters(),
-                lastlocs(){};
+                lastlocs(){
+        assert(skin > 0);
+};
 
 bool neighborlist::update_list(bool force){
     flt curdist = 0, bigdist = 0, biggestdist = 0;

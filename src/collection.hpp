@@ -803,9 +803,9 @@ flt get_max(vector<flt> v){
 };
 
 flt get_min(vector<flt> v){
-    flt mn = 0.0;
+    flt mn = NAN;
     for(vector<flt>::iterator it=v.begin(); it != v.end(); it++){
-        if(*it < mn) mn = *it;
+        if(*it < mn or isnanflt(mn)) mn = *it;
     }
     return mn;
 };
@@ -893,27 +893,28 @@ class collectionCDBDnl : public collectionCDBD {
         flt nlist_time; // when it was updated
         
         void add_atoms(){
-             for(uint i=0; i<(atoms->size()); i++) nlist.add(atoms->get_id(i), atomsizes[i]);
-         }
+            for(uint i=0; i<(atoms->size()); i++) nlist.add(atoms->get_id(i), atomsizes[i]);
+        }
+        event base_event(atomid a){TODO};
         event next_event(atomid a);
         
     public:
         collectionCDBDnl(sptr<OriginBox> box, sptr<atomvec> atoms,
-                const flt dt, const flt T,
+                const flt dt, const flt T, const flt skin,
                 vector<flt> sizes = vector<flt>(),
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collectionCDBD(box, atoms, dt, T, sizes, interactions, trackers, constraints), 
-            nlist(box, atoms, get_min(sizes) * (0.4)) { add_atoms();};
+            nlist(box, atoms, skin) { add_atoms();};
         collectionCDBDnl(sptr<OriginBox> box, sptr<atomvec> atoms, const flt dt, const flt T,
-                flt sizes,
+                const flt sizes, const flt skin,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collectionCDBD(box, atoms, dt, T, sizes, interactions, trackers, constraints), 
-            nlist(box, atoms, sizes * 0.4) { add_atoms();};
-    
+            nlist(box, atoms, skin) { add_atoms();};
+        
         void update_pairs(bool force=true);
         virtual ~collectionCDBDnl(){};
 };

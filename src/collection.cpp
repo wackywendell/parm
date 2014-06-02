@@ -1790,7 +1790,7 @@ void collectionCDBD::line_advance(flt deltat){
     }
     
     curt += deltat;
-    update_pairs();
+    update_pairs(false);
 };
 
 /// Finds the collision between two atoms, makes the corresponding event,
@@ -1973,6 +1973,7 @@ void collectionCDBDgrid::update_pairs(bool force){
     if(!force && (gridt == curt)) return;
     grid.optimize_widths();
     grid.make_grid();
+    gridt = curt;
 };
 
 event collectionCDBDgrid::base_event(atomid a){
@@ -2008,10 +2009,10 @@ event collectionCDBDgrid::next_event(atomid a){
     return e;
 }
 
-
 void collectionCDBDnl::update_pairs(bool force){
     if(!force && (nlist_time == curt)) return;
     nlist.update_list(force);
+    nlist_time = curt;
 };
 
 event collectionCDBDnl::next_event(atomid a){
