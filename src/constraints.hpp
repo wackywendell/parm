@@ -369,7 +369,6 @@ class RsqTracker : public statetracker {
         vector<vector<Vec> > xyz4();
         vector<vector<flt> > r4();
         vector<flt> counts();
-        
 };
 
 //~ class DividedBox : public statetracker {

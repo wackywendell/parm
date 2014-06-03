@@ -70,7 +70,7 @@ int main(int argc, char **argv){
     flt sizeratio=2.0;
     flt dt=0.02;
     int Natoms=40;
-    int tottime=2000000;
+    int tottime=200000;
     string outname = "hardspheres.msd";
 
     opterr = 0;
@@ -130,7 +130,6 @@ int main(int argc, char **argv){
     boost::shared_ptr<OriginBox> obox(new OriginBox(L));
     boost::shared_ptr<Box> boxptr = boost::static_pointer_cast<Box>(obox);
     boost::shared_ptr<atomvec> atomptr(new atomvec(atommasses));
-    boost::shared_ptr<atomgroup> group(atomptr);
     atomvec & atoms = *atomptr;
     
     
@@ -138,12 +137,9 @@ int main(int argc, char **argv){
     // The relaxing stage
     
     // Hertzian interaction, for the relaxing stage
-    //(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
+    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > hertz(
-        new NListed<HertzianAtom, HertzianPair>(
-            boxptr, atomptr, 0.4*(sigcut*sigma)
-    ));
-    boost::shared_ptr<neighborlist> nl = hertz->nlist();
+                        new NListed<HertzianAtom, HertzianPair>(nl));
     // ^ this is the interaction
     
     // A Hertzian interaction has energy 
@@ -170,7 +166,7 @@ int main(int argc, char **argv){
         flt cursigma = sigma;
         if(i==0) (cursigma = sigma*sizeratio);
         // Add it to the potential
-        hertz->add(HertzianAtom(atoms.get_id(i), epsilon, cursigma, sigcut));
+        hertz->add(HertzianAtom(&atoms[i], epsilon, cursigma, sigcut));
     }
     // force an update the neighborlist, just to make sure
     nl->update_list(true);
@@ -220,7 +216,7 @@ int main(int argc, char **argv){
     // The equilibration stage
     
     // This is the Brownian motion, hard-sphere collider
-    collectionCDBDgrid collec = collectionCDBDgrid(obox, atomptr, dt, T, atomsizes);
+    collectionCDBD collec = collectionCDBD(obox, atomptr, dt, T, atomsizes);
     
     cout << "Equilibrating... \n";
     for(uint i=0; i<printn; ++i){
@@ -249,7 +245,7 @@ int main(int argc, char **argv){
         nset.insert(newn);
     }
     
-    vector<long unsigned int> MSDns(nset.begin(), nset.end());
+    vector<uint> MSDns(nset.begin(), nset.end());
     cout << "Using " << MSDns.size() << " MSDns, [" << MSDns.front() << "-" << MSDns.back() << "]\n";
     
     boost::shared_ptr<RsqTracker> rsqtracker(new RsqTracker(atomptr, MSDns));
@@ -278,7 +274,7 @@ int main(int argc, char **argv){
     ofstream msdfile;
     msdfile.open(outname.c_str(), ios::out);
     // Retrieve the time-averaged r^2 values for each atom for each Δt
-    vector<vector<Vec> > MSDmeans = rsqtracker->xyz2();
+    vector<vector<flt> > MSDmeans = rsqtracker->means();
     
     // This will be a tab-separated file, with the first column being 
     // Δt in time units (not timesteps),
@@ -290,11 +286,31 @@ int main(int argc, char **argv){
     
     for(uint i=0; i<MSDns.size(); i++){
         msdfile << (MSDns[i] * dt);
-        for(vector<Vec>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); it++){
-            Vec v = *it;
-            msdfile << '\t' << (v[0] + v[1] + v[2]);
+        for(vector<flt>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); it++){
+            msdfile << '\t' << *it;
         }
         msdfile << "\n";
+    } 
+
+// Save the MFDs to a file so that we can compute alpha
+    ofstream mfdfile;
+    mfdfile.open("hardspheres.mfd", ios::out);
+    // Retrieve the time-averaged r^4 values for each atom for each Δt
+    vector<vector<flt> > MFDmeans = rfrtracker->means();  
+
+    // This will be a tab-separated file, with the first column being 
+    // Δt in time units (not timesteps),
+    // second column <r(t) - r(t-Δt)>^4 for the large particle 
+    // in units of the small particle diameters,
+    // third column <r(t) - r(t-Δt)>^4 for the first small particle,
+    // 4th column <r(t) - r(t-Δt)>^4 for the second small particle, etc.
+
+    for(uint i=0; i<MSDns.size(); i++){
+        mfdfile << (MSDns[i] * dt);
+        for(vector<flt>::iterator it=MFDmeans[i].begin(); it<MFDmeans[i].end(); it++){
+            mfdfile << '\t' << *it;
+        }
+        mfdfile << "\n";
     } 
     
     // Now you should be able to run "vmd -e hardspheres-pbc.tcl hardspheres.xyz"

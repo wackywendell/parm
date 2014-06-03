@@ -114,3 +114,9 @@ bin/LJatoms2d: lib/libsim2D.so src/LJatoms.cpp
 
 bin/hardspheres: lib/libsim3D.so src/hardspheres.cpp
 	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres
+
+bin/hardspheres2: lib/libsim3D.so src/hardspheres2.cpp
+	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres2
+
+bin/hardspheres3: lib/libsim3D.so src/hardspheres3.cpp
+	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres3

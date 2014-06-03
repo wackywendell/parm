@@ -227,6 +227,7 @@ vector<flt> RsqTracker::counts(){
     return vals;
 };
 
+
 bool jamminglist::operator<(const jamminglist& other ){
     //return distsq < other.distsq;
     if(other.distsq  - distsq > 1e-8) return true;
