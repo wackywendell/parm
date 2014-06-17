@@ -11,7 +11,6 @@ collection::collection(sptr<Box> box, sptr<atomgroup> atoms, vector<sptr<interac
 }
 
 void collection::scaleVs(flt scaleby){
-    vector<sptr<atomgroup> >::iterator git;
     for(uint i = 0; i<atoms->size(); i++){
         (*atoms)[i].v *= scaleby;
     }
@@ -33,14 +32,14 @@ void collection::scaleVelocitiesE(flt E){
 
 void collection::update_trackers(){
     vector<sptr<statetracker> >::iterator git;
-    for(git = trackers.begin(); git<trackers.end(); git++){
+    for(git = trackers.begin(); git<trackers.end(); ++git){
         (*git)->update(*box);
     }
 }
 
 void collection::update_constraints(){
     vector<sptr<constraint> >::iterator git;
-    for(git = constraints.begin(); git<constraints.end(); git++){
+    for(git = constraints.begin(); git<constraints.end(); ++git){
         (*git)->apply(*box);
     }
 }
@@ -49,7 +48,7 @@ void collection::update_constraints(){
 flt collection::virial(){
     flt E = 0;
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
     }
     return E;
@@ -64,7 +63,7 @@ flt collection::pressure(){
     flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;
     //flt E = (ndof - nc) * temp();
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
         assert(not isnanflt(E));
     }
@@ -74,7 +73,7 @@ flt collection::pressure(){
 flt collection::potentialenergy(){
     flt E=0;
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         interaction &inter = **it;
         E += inter.energy(*box);
         //~ cout << "potential energy: " << E << endl;
@@ -92,7 +91,7 @@ flt collection::energy(){
 flt collection::dof(){
     int ndof = 0;
     vector<sptr<constraint> >::iterator cit;
-    for(cit = constraints.begin(); cit<constraints.end(); cit++){
+    for(cit = constraints.begin(); cit<constraints.end(); ++cit){
         ndof -= (*cit)->ndof();
     }
     
@@ -127,7 +126,7 @@ void collection::setForces(bool seta){
     atoms->resetForces();
     
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         interaction &inter = **it;
         inter.setForces(*box);
     }
@@ -143,7 +142,7 @@ flt collection::setForcesGetPressure(bool seta){
     
     flt p=0;
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         interaction &inter = **it;
         p += inter.setForcesGetPressure(*box);
     }
@@ -207,7 +206,6 @@ void collectionSol::setCs(){
 }
 
 void collectionSol::timestep(){
-    vector<sptr<atomgroup> >::iterator git;
     // From Allen and Tildesley 263, Verlet-like, our equations are
     // r(t+dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + drG
     // v(t+dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t+dt) + dvG
@@ -271,7 +269,6 @@ void collectionSolHT::timestep(){
     // includes the random term / damping term.
     // atom.f includes only the forces from other particles.
     
-    vector<sptr<atomgroup> >::iterator git;
     flt keepv = 1-(damping*dt);
     flt xpartfromv = dt - (dt*dt*damping/2);
     
@@ -665,7 +662,7 @@ flt collectionNLCG::pressure(){
     
     flt E = 0;
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
         assert(not isnanflt(E));
     }
@@ -750,8 +747,6 @@ void collectionNLCG::timestep(){
     // Where m[i].a/L = -f', m[i].v/L = d, σ0 = dt
     // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
     // and while its called 'a', its actually 'v'
-    
-    vector<sptr<atomgroup> >::iterator git;
     
     //~ flt V0 = box->V();
     stepx(dt);
@@ -973,7 +968,7 @@ flt collectionNLCGV::pressure(){
     
     flt E = 0;
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
         assert(not isnanflt(E));
     }
@@ -998,8 +993,6 @@ void collectionNLCGV::timestep(){
     
     // Where m[i].a = -f', m[i].v = d, σ0 = dt
     
-    
-    vector<sptr<atomgroup> >::iterator git;
     stepx(dt);
     setForces(false);
     update_constraints();
@@ -1603,7 +1596,7 @@ void collectionGear4NPH::timestep(){
 vector<sptr<interaction> > collectionGear4NPT::tointerpair(vector<sptr<interactionpairsx> > &v){
     vector<sptr<interaction> > newv = vector<sptr<interaction> >();
     vector<sptr<interactionpairsx> >::iterator it;
-    for(it = v.begin(); it<v.end(); it++){
+    for(it = v.begin(); it<v.end(); ++it){
         newv.push_back((sptr<interaction>) *it);
     }
     return newv;
@@ -1623,7 +1616,7 @@ void collectionGear4NPT::setForces(bool seta){
     atoms->resetForces();
     
     vector<sptr<interaction> >::iterator it;
-    for(it = interactions.begin(); it<interactions.end(); it++){
+    for(it = interactions.begin(); it<interactions.end(); ++it){
         sptr<interactionpairsx> inter = boost::dynamic_pointer_cast<interactionpairsx>(*it);
         inter->setForces(*box, &xrpsums);
     }
@@ -1642,7 +1635,6 @@ void collectionGear4NPT::timestep(){
     const flt c1 = dt, c2 = dt*dt/2, c3 = dt*dt*dt/6;
     
     /// Prediction
-    vector<sptr<atomgroup> >::iterator git;
     for(uint i=0; i<g.size(); i++){
         g[i].x += xs1[n]*c1 + xs2[n]*c2 + xs3[n]*c3;
         xs1[n] += xs2[n]*c1 + xs3[n]*c2;
@@ -1880,12 +1872,12 @@ bool collectionCDBDgrid::take_step(flt tlim){
     // If we have a limit, and we've already passed it, stop.
     if((tlim > 0) && (tlim <= curt)) return false;
     
-    if(events.size() <= 0) reset_events();
+    if(events.empty()) reset_events();
     
     assert(atoms->size() > 0);
     assert(atomsizes.size() > 0);
-    if(events.size() == 0){
-        assert(events.size() > 0);
+    if(events.empty()){
+        assert(!events.empty());
         //~ // TODO: this should check time to leave box, and only go that far
         //~ line_advance(tlim - curt);
         //~ curt = tlim;
@@ -1927,13 +1919,13 @@ bool collectionCDBDgrid::take_step(flt tlim){
                 badatoms.push_back(eit->a);
             } else {
                 // no matches, carry on
-                eit++;
+                ++eit;
                 continue;
             }
             
             // need to remove that event
             eit2 = eit;
-            eit++;
+            ++eit;
             events.erase(eit2);
         };
     }
@@ -1994,11 +1986,11 @@ bool collectionCDBD::take_step(flt tlim){
     if((tlim > 0) && (tlim <= curt)) return false;
     
     //~ std::cerr << "take_step: events " << events.size() << "\n";
-    if(events.size() <= 0) reset_events();
+    if(events.empty()) reset_events();
     
     assert(atoms->size() > 0);
     assert(atomsizes.size() > 0);
-    if(events.size() == 0){
+    if(events.empty() == 0){
         // TODO: this should check time to leave box, and only go that far
         line_advance(tlim - curt);
         curt = tlim;
@@ -2042,7 +2034,7 @@ bool collectionCDBD::take_step(flt tlim){
             badatoms.insert(eit->a);
         } else {
             // no matches, carry on
-            eit++;
+            ++eit;
             continue;
         }
         
@@ -2050,7 +2042,7 @@ bool collectionCDBD::take_step(flt tlim){
         //~ std::cerr << "take_step: removing event...";
         // need to remove that event
         eit2 = eit;
-        eit++;
+        ++eit;
         events.erase(eit2);
         //~ std::cerr << "Removed.\n";
     };
@@ -2066,7 +2058,7 @@ bool collectionCDBD::take_step(flt tlim){
     for(uint i=0; i<atoms->size(); i++){
         uint bi=0;
         //~ std::cerr << "Starting badatoms loop.\n";
-        for(ait=badatoms.begin(); ait!=badatoms.end(); ait++){
+        for(ait=badatoms.begin(); ait!=badatoms.end(); ++ait){
             //~ cerr << "Testing " << ait->n() << " - " << n  << "(" << bi << "), ";
             flt sigma = (atomsizes[ait->n()] + atomsizes[i])/2.;
             //~ cerr << "sigma " << sigma << "\n";

@@ -25,7 +25,7 @@ class pairlist {
         }
         inline void ensure(vector<atomid> ps){
             vector<atomid>::iterator it;
-            for(it=ps.begin(); it != ps.end(); it++) ensure(*it);
+            for(it=ps.begin(); it != ps.end(); ++it) ensure(*it);
         }
         inline void ensure(atomgroup &group){
             for(uint i=0; i<group.size(); i++) ensure(group.get_id(i));
@@ -55,7 +55,7 @@ class pairlist {
         
         inline uint size() const { uint N=0; for(
             map<const atomid, set<atomid> >::const_iterator it=pairs.begin();
-            it != pairs.end(); it++) N+= (uint) it->second.size();
+            it != pairs.end(); ++it) N+= (uint) it->second.size();
             return N;
         };
         

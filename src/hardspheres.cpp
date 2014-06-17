@@ -290,7 +290,7 @@ int main(int argc, char **argv){
     
     for(uint i=0; i<MSDns.size(); i++){
         msdfile << (MSDns[i] * dt);
-        for(vector<Vec>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); it++){
+        for(vector<Vec>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); ++it){
             Vec v = *it;
             msdfile << '\t' << (v[0] + v[1] + v[2]);
         }

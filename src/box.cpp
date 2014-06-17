@@ -116,10 +116,9 @@ Vec SCbox::randLoc(flt min_dist_to_wall){
 };
 
 Vec atomgroup::com() const{
-    flt curmass = 0;
     Vec v = Vec();
     for(unsigned int i=0; i<size(); i++){
-        curmass = (*this)[i].m;
+        flt curmass = (*this)[i].m;
         v += (*this)[i].x * curmass;
     }
     return v / mass();
@@ -138,10 +137,9 @@ Vec atomgroup::comv() const {
 };
 
 Vec atomgroup::momentum() const{
-    flt curmass;
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
-        curmass = (*this)[i].m;
+        flt curmass = (*this)[i].m;
         tot += (*this)[i].v * curmass;
     }
     return tot;
@@ -164,11 +162,9 @@ flt atomgroup::gyradius() const{
 #ifdef VEC3D
 Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
     Vec tot = Vec();
-    flt curmass;
-    Vec newloc;
     for(uint i=0; i<size(); i++){
-        curmass = (*this)[i].m;
-        newloc = box.diff((*this)[i].x, loc);
+        flt curmass = (*this)[i].m;
+        Vec newloc = box.diff((*this)[i].x, loc);
         tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
     return tot;
@@ -198,12 +194,10 @@ flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
 };
 
 Matrix<flt> atomgroup::moment(const Vec &loc, Box &box) const{
-    flt curmass;
     Matrix<flt> I;
-    Vec r;
     for(uint i=0; i<size(); i++){
-        curmass = (*this)[i].m;
-        r = box.diff((*this)[i].x, loc);
+        flt curmass = (*this)[i].m;
+        Vec r = box.diff((*this)[i].x, loc);
         flt x = r.getx(), y = r.gety(), z = r.getz();
         I[0][0] += curmass * (y*y + z*z);
         I[1][1] += curmass * (x*x + z*z);

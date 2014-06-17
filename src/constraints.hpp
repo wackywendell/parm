@@ -226,7 +226,7 @@ class NPHGaussianConstraint : public constraint {
         int ndof(){return 0;};
         void apply(Box &box2){
             //~ flt V = box->V();
-            assert((Box*) box.get() == &box2);
+            assert(boost::static_pointer_cast<Box>(box).get() == &box2);
             //~ vector<atomgroup*>::iterator git;
             //~ for(git = groups.begin(); git<groups.end(); git++){
                 //~ atomgroup &m = **git;
@@ -462,7 +462,7 @@ class jammingtree {
                 //~ cout << "Made " << i << "\n";
             }
             
-            if(newlists.size() <= 0){
+            if(newlists.empty()){
                 //~ cout << "No lists made\n";
                 return false;
             }
@@ -556,7 +556,7 @@ class jammingtree2 {
         
         
         jamminglistrot curbest(){
-            if(jlists.size() <= 0){
+            if(jlists.empty()){
                 jamminglistrot bad_list = jamminglistrot();
                 bad_list.distsq = -1;
                 return bad_list;

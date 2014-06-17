@@ -360,7 +360,7 @@ Nvector<T,N>& Nvector<T,N>::operator/=(const U rhs) {
 }
 
 template <class U, unsigned int M>
-ostream& operator<< (ostream& out, const Nvector<U,M> v){
+ostream& operator<< (ostream& out, const Nvector<U,M> &v){
     out << "[" << v.get(0);
     for(unsigned int i = 1; i < M; i++)
         out << ',' << v.get(i);
@@ -463,7 +463,7 @@ inline long double Numvector<long double,3>::mag() const{
 }
 
 template <class U, unsigned int M>
-ostream& operator<< (ostream& out, const Numvector<U,M> v){
+ostream& operator<< (ostream& out, const Numvector<U,M> &v){
     out << "[" << v.get(0);
     for(int i = 1; i < M; i++)
         out << ',' << v.get(i);

@@ -15,12 +15,13 @@ Vec spring::forces(const Vec r){
 
 electricScreened::electricScreened(const flt screenLength, const flt q1, 
             const flt q2, const flt cutoff) : screen(screenLength), 
-            q1(q1), q2(q2), cutoff(cutoff){};
+            q1(q1), q2(q2), cutoff(cutoff), 
+            cutoffE(exp(-cutoff/screenLength) * q1 * q2 / cutoff){};
 
 flt electricScreened::energy(const flt r, const flt qaqb, const flt screen, const flt cutoff){
     if(cutoff <= 0) return exp(-r/screen) * qaqb / r;
     if(r > cutoff) return 0;
-    return exp(-r/screen) * qaqb / r - energy(r, qaqb, screen, 0);
+    return exp(-r/screen) * qaqb / r - energy(cutoff, qaqb, screen, 0);
 };
 
 Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, const flt cutoff){
@@ -43,7 +44,7 @@ flt fixedForceRegionAtom::energy(Box &box){
     flt dist = (*this)->x.dot(direction);
     if(dist < boundaries[0]) return (boundaries[0] - dist) * Fs[0];
     flt E = 0;
-    for(uint i=0; i < boundaries.size(); i++){
+    for(uint i=0; i < boundaries.size(); ++i){
         if((i + 1 >= boundaries.size()) or (dist < boundaries[i+1])){
             E -= Fs[i+1] * (dist - boundaries[i]);
             break;
@@ -57,7 +58,7 @@ flt fixedForceRegionAtom::energy(Box &box){
 void fixedForceRegionAtom::setForce(Box &box){
     flt dist = (*this)->x.dot(direction);
     flt F = Fs[Fs.size() - 1];
-    for(uint i=0; i < boundaries.size(); i++){
+    for(uint i=0; i < boundaries.size(); ++i){
         if(dist < boundaries[i]){
             F = Fs[i];
             break;
@@ -254,7 +255,7 @@ flt dihedral::dudcosthetaCOS(const flt costheta) const{
     assert(!usepow);
     flt tot = 0;
     unsigned int cosmx = (unsigned int)(coscoeffs.size());
-    for(unsigned int i=1; i < cosmx; i++){
+    for(unsigned int i=1; i < cosmx; ++i){
         tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
     }
     //~ cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
@@ -270,14 +271,14 @@ flt dihedral::dudcostheta(const flt theta) const{
     if(usepow) {
         flt costheta = cos(theta), sintheta = sin(theta);
         flt cottheta = -costheta / sintheta;
-        for(unsigned int i=1; i < mx; i++){
+        for(unsigned int i=1; i < mx; ++i){
             if (i < cosmx) tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
             if (i < sinmx) tot += sincoeffs[i] * i * cottheta
                                     * powflt(sintheta, flt(i-1));
         }
     } else {
         flt csctheta = 1 / sin(theta);
-        for(unsigned int i=1; i < mx; i++){
+        for(unsigned int i=1; i < mx; ++i){
             flt cositheta = cos(i*theta), sinitheta = sin(i*theta);
             if (i < cosmx) tot += coscoeffs[i] * csctheta * i * sinitheta;
             if (i < sinmx) tot -= sincoeffs[i] * csctheta * i * cositheta;
@@ -318,7 +319,7 @@ flt dihedral::energy(const flt ang) const{
     unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
     
     flt tot = 0;
-    for(unsigned int i=0; i < mx; i++){
+    for(unsigned int i=0; i < mx; ++i){
         if(usepow) {
             if(i < cosmx) tot += coscoeffs[i] * powflt(costheta, flt(i));
             if(i < sinmx) tot += sincoeffs[i] * powflt(sintheta, flt(i));
@@ -334,7 +335,7 @@ flt dihedral::energy(const flt ang) const{
 //~ flt interactgroup::energy(Box &box){
     //~ flt E=0;
     //~ vector<interaction*>::iterator it;
-    //~ for(it = inters.begin(); it < inters.end(); it++){
+    //~ for(it = inters.begin(); it < inters.end(); ++it){
         //~ E += (*it)->energy(box);
     //~ }
     //~ return E;
@@ -342,7 +343,7 @@ flt dihedral::energy(const flt ang) const{
 
 //~ void interactgroup::setForces(Box &box){
     //~ vector<interaction*>::iterator it;
-    //~ for(it = inters.begin(); it < inters.end(); it++){
+    //~ for(it = inters.begin(); it < inters.end(); ++it){
         //~ (*it)->setForces(box);
     //~ }
 //~ };
@@ -377,7 +378,7 @@ bondpairs::bondpairs(bool zeropressure) :
 
 bool bondpairs::add_or_replace(bondgrouping b){
     vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         if(((b.a1 == it->a1) and (b.a2 == it->a2)) or
             ((b.a1 == it->a2) and (b.a2 == it->a1))){
                 *it = b;
@@ -390,7 +391,7 @@ bool bondpairs::add_or_replace(bondgrouping b){
 
 bool bondpairs::replace(flt k, flt x0, atom* a1, atom* a2){
     vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         if(((a1 == it->a1) and (a2 == it->a2)) or
             ((a1 == it->a2) and (a2 == it->a1))){
                 it->k = k;
@@ -404,7 +405,7 @@ bool bondpairs::replace(flt k, flt x0, atom* a1, atom* a2){
 flt bondpairs::energy(Box &box){
     flt E=0;
     vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         Vec r = it->diff(box);
         E += spring(it->k, it->x0).energy(r);
     }
@@ -413,7 +414,7 @@ flt bondpairs::energy(Box &box){
 
 void bondpairs::setForces(Box &box){
     vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         Vec r = it->diff(box);
@@ -431,7 +432,7 @@ flt bondpairs::setForcesGetPressure(Box &box){
     }
     flt P=0;
     vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         Vec r = it->diff(box);
@@ -449,7 +450,7 @@ flt bondpairs::pressure(Box &box){
     if(zeropressure) return 0;
     vector<bondgrouping>::iterator it;
     flt P=0;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         if(it->diff_type == UNBOXED) continue;
         Vec r = it->diff(box);
         Vec f = spring(it->k, it->x0).forces(r);
@@ -462,7 +463,7 @@ flt bondpairs::mean_dists(Box &box) const{
     flt dist=0;
     uint N=0;
     vector<bondgrouping>::const_iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         Vec r = it->diff(box);
         dist += abs(r.mag() - it->x0);
         N++;
@@ -474,7 +475,7 @@ flt bondpairs::std_dists(Box &box) const{
     flt stds=0;
     uint N=0;
     vector<bondgrouping>::const_iterator it;
-    for(it = pairs.begin(); it < pairs.end(); it++){
+    for(it = pairs.begin(); it < pairs.end(); ++it){
         Vec r = it->diff(box);
         flt curdist = r.mag() - it->x0;
         stds += curdist*curdist;
@@ -488,7 +489,7 @@ angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
 flt angletriples::energy(Box &box){
     flt E=0;
     vector<anglegrouping>::iterator it;
-    for(it = triples.begin(); it < triples.end(); it++){
+    for(it = triples.begin(); it < triples.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
@@ -501,7 +502,7 @@ flt angletriples::energy(Box &box){
 
 void angletriples::setForces(Box &box){
     vector<anglegrouping>::iterator it;
-    for(it = triples.begin(); it < triples.end(); it++){
+    for(it = triples.begin(); it < triples.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
@@ -526,7 +527,7 @@ flt angletriples::mean_dists() const{
     vector<anglegrouping>::const_iterator it;
     //~ cout << "angle diffs: ";
     cout.precision(3);
-    for(it = triples.begin(); it < triples.end(); it++){
+    for(it = triples.begin(); it < triples.end(); ++it){
         Vec r1 = diff(it->a1->x, it->a2->x);
         Vec r2 = diff(it->a3->x, it->a2->x);
         flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
@@ -549,7 +550,7 @@ flt angletriples::std_dists() const{
     flt stds=0;
     uint N=0;
     vector<anglegrouping>::const_iterator it;
-    for(it = triples.begin(); it < triples.end(); it++){
+    for(it = triples.begin(); it < triples.end(); ++it){
         Vec r1 = diff(it->a1->x, it->a2->x);
         Vec r2 = diff(it->a3->x, it->a2->x);
         flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
@@ -568,7 +569,7 @@ dihedrals::dihedrals(vector<dihedralgrouping> ds) : groups(ds){};
 flt dihedrals::energy(Box &box){
     flt E=0;
     vector<dihedralgrouping>::iterator it;
-    for(it = groups.begin(); it < groups.end(); it++){
+    for(it = groups.begin(); it < groups.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
@@ -583,7 +584,7 @@ flt dihedrals::energy(Box &box){
 
 void dihedrals::setForces(Box &box){
     vector<dihedralgrouping>::iterator it;
-    for(it = groups.begin(); it < groups.end(); it++){
+    for(it = groups.begin(); it < groups.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
@@ -610,7 +611,7 @@ flt dihedrals::mean_dists() const{
     flt dist=0;
     uint N=0;
     vector<dihedralgrouping>::const_iterator it;
-    for(it = groups.begin(); it < groups.end(); it++){
+    for(it = groups.begin(); it < groups.end(); ++it){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         atom & atom3 = *it->a3;
@@ -629,7 +630,7 @@ flt dihedrals::mean_dists() const{
     //~ flt stds=0;
     //~ uint N=0;
     //~ vector<anglegrouping>::const_iterator it;
-    //~ for(it = triples.begin(); it < triples.end(); it++){
+    //~ for(it = triples.begin(); it < triples.end(); ++it){
         //~ Vec r1 = diff(it->a1->x, it->a2->x);
         //~ Vec r2 = diff(it->a3->x, it->a2->x);
         //~ flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
@@ -645,7 +646,7 @@ flt dihedrals::mean_dists() const{
 
 void pairlist::clear(){
     map<const atomid, set<atomid> >::iterator mapiter;
-    for(mapiter = pairs.begin(); mapiter != pairs.end(); mapiter++){
+    for(mapiter = pairs.begin(); mapiter != pairs.end(); ++mapiter){
         mapiter->second.clear();
     }
 };
@@ -656,8 +657,8 @@ flt LJsimple::energy(Box &box){
     flt E = 0;
     vector<LJatom>::iterator it;
     vector<LJatom>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); it++)
-    for(it2 = atoms.begin(); it2 != it; it2++){
+    for(it = atoms.begin(); it != atoms.end(); ++it)
+    for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
         Vec dist = box.diff(pair.atom1->x, pair.atom2->x);
@@ -669,8 +670,8 @@ flt LJsimple::energy(Box &box){
 void LJsimple::setForces(Box &box){
     vector<LJatom>::iterator it;
     vector<LJatom>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); it++)
-    for(it2 = atoms.begin(); it2 != it; it2++){
+    for(it = atoms.begin(); it != atoms.end(); ++it)
+    for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
         Vec r = box.diff(pair.atom1->x, pair.atom2->x);
@@ -684,8 +685,8 @@ flt LJsimple::pressure(Box &box){
     flt P=0;
     vector<LJatom>::iterator it;
     vector<LJatom>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); it++)
-    for(it2 = atoms.begin(); it2 != it; it2++){
+    for(it = atoms.begin(); it != atoms.end(); ++it)
+    for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
         Vec r = box.diff(pair.atom1->x, pair.atom2->x);
@@ -696,7 +697,7 @@ flt LJsimple::pressure(Box &box){
 };
 
 atomid LJsimple::get_id(atom* a){
-    for(vector<LJatom>::iterator it=atoms.begin(); it!=atoms.end(); it++)
+    for(vector<LJatom>::iterator it=atoms.begin(); it!=atoms.end(); ++it)
         if((*it) == a) return *it;
     return atomid();
 };
@@ -706,7 +707,7 @@ Charges::Charges(flt screen, flt k, vector<Charged> atms) : atoms(atms),
                 screen(screen), k(k){};
 
 atomid Charges::get_id(atom* a){
-    for(vector<Charged>::iterator it=atoms.begin(); it!=atoms.end(); it++)
+    for(vector<Charged>::iterator it=atoms.begin(); it!=atoms.end(); ++it)
         if((*it) == a) return *it;
     return atomid();
 };
@@ -715,8 +716,8 @@ flt Charges::energy(Box &box){
     flt E = 0;
     vector<Charged>::iterator it;
     vector<Charged>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); it++)
-    for(it2 = atoms.begin(); it2 != it; it2++){
+    for(it = atoms.begin(); it != atoms.end(); ++it)
+    for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         Vec dist = box.diff((*it)->x, (*it2)->x);
         E += k*electricScreened::energy(dist.mag(), (it->q) * (it2->q), screen);
@@ -727,8 +728,8 @@ flt Charges::energy(Box &box){
 void Charges::setForces(Box &box){
     vector<Charged>::iterator it;
     vector<Charged>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); it++)
-    for(it2 = atoms.begin(); it2 != it; it2++){
+    for(it = atoms.begin(); it != atoms.end(); ++it)
+    for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         Vec r = box.diff((*it)->x, (*it2)->x);
         Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
@@ -741,8 +742,8 @@ flt Charges::pressure(Box &box){
     flt P=0;
     vector<Charged>::iterator it;
     vector<Charged>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); it++)
-    for(it2 = atoms.begin(); it2 != it; it2++){
+    for(it = atoms.begin(); it != atoms.end(); ++it)
+    for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         Vec r = box.diff((*it)->x, (*it2)->x);
         Vec f = electricScreened::forces(r, (it->q) * (it2->q), screen)*k;
@@ -754,7 +755,7 @@ flt Charges::pressure(Box &box){
 flt SoftWall::energy(Box &box){
     flt E=0;
     vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
+    for(it = group.begin(); it != group.end(); ++it){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
@@ -771,7 +772,7 @@ flt SoftWall::energy(Box &box){
 void SoftWall::setForces(Box &box){
     lastf = 0;
     vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
+    for(it = group.begin(); it != group.end(); ++it){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
@@ -786,7 +787,7 @@ flt SoftWall::setForcesGetPressure(Box &box){
     flt p=0;
     lastf = 0;
     vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
+    for(it = group.begin(); it != group.end(); ++it){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
@@ -802,7 +803,7 @@ flt SoftWall::setForcesGetPressure(Box &box){
 flt SoftWall::pressure(Box &box){
     flt p = 0;
     vector<WallAtom>::iterator it;
-    for(it = group.begin(); it != group.end(); it++){
+    for(it = group.begin(); it != group.end(); ++it){
         atom &a = **it;
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
@@ -914,9 +915,9 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
 
 flt SCSpringList::energy(Box &box){
     flt E = 0;
-    for(uint i = 0; i < scs->pairs() - 1; i++){
+    for(uint i = 0; i < scs->pairs() - 1; ++i){
         atompair pi = scs->pair(i);
-        for(uint j = i+1; j < scs->pairs(); j++){
+        for(uint j = i+1; j < scs->pairs(); ++j){
             atompair pj = scs->pair(j);
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
@@ -930,10 +931,10 @@ flt SCSpringList::energy(Box &box){
 };
 
 void SCSpringList::setForces(Box &box){
-    for(uint i = 0; i < scs->pairs() - 1; i++){
+    for(uint i = 0; i < scs->pairs() - 1; ++i){
         atompair pi = scs->pair(i);
         flt l1 = ls[i];
-        for(uint j = i+1; j < scs->pairs(); j++){
+        for(uint j = i+1; j < scs->pairs(); ++j){
             atompair pj = scs->pair(j);
             flt l2 = ls[j];
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);

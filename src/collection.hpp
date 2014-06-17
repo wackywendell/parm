@@ -243,7 +243,7 @@ class collectionConjGradientBox : public collection {
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints),
-                dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0),
+                dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0), dV(0),
                 maxdV(-1){};
         
         flt kinetic();
@@ -497,7 +497,7 @@ class collectionGaussianT : public collection {
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints), 
-            dt(dt), Q(Q){};
+            dt(dt), Q(Q), xi(0){};
         void setdt(flt newdt){dt=newdt;};
         void setQ(flt newQ){Q=newQ;};
         void setForces(bool seta=true){setForces(true,true);};
@@ -633,7 +633,7 @@ class collectionRK4 : public collection {
                         trackers, constraints), dt(dt), data(ratoms->vec().size()){
                 setForces();
                 update_constraints();
-                for(uint i=0; i<atoms->size(); i++){
+                for(uint i=0; i<atoms->size(); ++i){
                     atom& a = (*atoms)[i];
                     a.a = a.f / a.m;
                 };
@@ -678,7 +678,7 @@ class collectionGear4NPH : public collection {
         flt kinetic();
         flt temp(bool minuscomv=true);
         flt Hamiltonian(){
-            return kinetic() + (Q/2*dV*dV) + potentialenergy() + P*(((OriginBox*) box.get())->V());
+            return kinetic() + (Q/2*dV*dV) + potentialenergy() + P*(boost::static_pointer_cast<OriginBox>(box)->V());
         }
         flt getdV(){return dV;};
         flt getddV(){return ddV;};
@@ -724,7 +724,7 @@ class collectionGear4NPT : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, tointerpair(interactions), trackers, 
                         constraints), dt(dt), xrpsums(box),
-                        ncorrec(ncorrectionsteps){
+                        ncorrec(ncorrectionsteps), chi(0), chixi(0){
                 resetbs();
             };
         collectionGear4NPT(sptr<OriginBox> box, const flt dt, 
@@ -734,7 +734,7 @@ class collectionGear4NPT : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, tointerpair(interactions),
                             trackers, constraints),
-                    dt(dt), xrpsums(box), ncorrec(1) {
+                    dt(dt), xrpsums(box), ncorrec(1), chi(0), chixi(0) {
                 resetbs();
             };
         void setForces(bool seta=true);
@@ -796,7 +796,7 @@ struct event {
 
 flt get_max(vector<flt> v){
     flt mx = 0.0;
-    for(vector<flt>::iterator it=v.begin(); it != v.end(); it++){
+    for(vector<flt>::iterator it=v.begin(); it != v.end(); ++it){
         if(*it > mx) mx = *it;
     }
     return mx;
@@ -828,7 +828,8 @@ class collectionCDBDgrid : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints), 
             T(T), dt(dt), curt(0), atomsizes(sizes), edge_epsilon(1e-8),
-            grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0) {
+            grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0),
+            gridt(0) {
             assert(atomsizes.size() == atoms->size());
         };
         collectionCDBDgrid(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt dt, const flt T,
@@ -838,7 +839,8 @@ class collectionCDBDgrid : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints), 
             T(T), dt(dt), curt(0), atomsizes(atoms->size(), sizes),
-            grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0) {
+            edge_epsilon(1e-8),
+            grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0), gridt(0) {
             assert(atomsizes.size() == atoms->size());
         };
     
