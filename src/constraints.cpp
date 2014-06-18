@@ -184,7 +184,7 @@ vector<vector<flt> > RsqTracker::r2(){
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         vector<flt> val;
-        vector<Vec> xyz2 = it->xyz2sums;
+        vector<Vec> xyz2 = it->xyz2();
         val.reserve(xyz2.size());
         
         for(vector<Vec>::iterator it2=xyz2.begin(); it2!=xyz2.end(); ++it2){
