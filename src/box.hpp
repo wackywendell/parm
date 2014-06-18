@@ -236,6 +236,7 @@ class atomgroup {
         flt mass() const;
         flt kinetic(const Vec &originvelocity=Vec()) const;
         Vec momentum() const;
+        flt gyradius() const;
         #ifdef VEC3D
         flt moment(const Vec &loc, const Vec &axis, Box &box) const;
         Vec angmomentum(const Vec &loc, Box &box) const;

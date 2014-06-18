@@ -146,6 +146,21 @@ Vec atomgroup::momentum() const{
     }
     return tot;
 };
+
+flt atomgroup::gyradius() const{
+    Vec avgr = Vec();
+    for(uint i = 0; i<size(); i++){
+        avgr += (*this)[i].x;
+    }
+    avgr /= size(); // now avgr is the average location, akin to c.o.m.
+    flt Rgsq = 0;
+    for(uint i = 0; i<size(); i++){
+        Rgsq += ((*this)[i].x - avgr).sq();
+    }
+    
+    return sqrtflt(Rgsq/size());
+};
+
 #ifdef VEC3D
 Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
     Vec tot = Vec();

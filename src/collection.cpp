@@ -109,12 +109,10 @@ flt collection::temp(bool minuscomv){
 }
 
 flt collection::gyradius(){
-    vector<sptr<atomgroup> >::iterator git;
     Vec avgr = Vec();
     flt N = atoms->size();
-    for(uint i = 0; i<atoms->size(); i++){
+    for(uint i = 0; i<N; i++){
         avgr += (*atoms)[i].x;
-        N++;
     }
     avgr /= N; // now avgr is the average location, akin to c.o.m.
     flt Rgsq = 0;
