@@ -304,8 +304,8 @@ class electricScreened : public interactpair {
 
 struct fixedForceAtom {
     Vec F;
-    atom *a;
-    fixedForceAtom(Vec F, atom *a) : F(F), a(a) {};
+    atomid a;
+    fixedForceAtom(Vec F, atomid a) : F(F), a(a) {};
     flt energy(Box &box){return -F.dot(a->x);};
     void setForce(Box &box){a->f += F;};
 };
@@ -316,11 +316,11 @@ class fixedForce : public interaction {
     public:
         fixedForce(vector<fixedForceAtom> atoms = vector<fixedForceAtom>()) : atoms(atoms){};
         void add(fixedForceAtom a){atoms.push_back(a);};
-        void add(Vec F, atom* a){add(fixedForceAtom(F,a));};
+        void add(Vec F, atomid a){add(fixedForceAtom(F,a));};
         #ifdef VEC3D
-        void add(flt x, flt y, flt z, atom* a){add(fixedForceAtom(Vec(x,y,z),a));};
+        void add(flt x, flt y, flt z, atomid a){add(fixedForceAtom(Vec(x,y,z),a));};
         #elif defined VEC2D
-        void add(flt x, flt y, atom* a){add(fixedForceAtom(Vec(x,y),a));};
+        void add(flt x, flt y, atomid a){add(fixedForceAtom(Vec(x,y),a));};
         #endif
         uint size() const{ return (uint) atoms.size();};
         flt energy(Box &box){
@@ -378,8 +378,8 @@ struct fixedSpringAtom {
     Vec loc;
     flt k;
     bool usecoord[3];
-    atom *a;
-    fixedSpringAtom(atom *a, Vec loc, flt k, bool usex=true, bool usey=true, bool usez=true) : 
+    atomid a;
+    fixedSpringAtom(atomid a, Vec loc, flt k, bool usex=true, bool usey=true, bool usez=true) : 
             loc(loc), k(k), a(a) {
                 usecoord[0] = usex;
                 usecoord[1] = usey;
@@ -407,10 +407,10 @@ class fixedSpring : public interaction{
     public:
         fixedSpring(vector<fixedSpringAtom> atoms = vector<fixedSpringAtom>()) : atoms(atoms){};
         void add(fixedSpringAtom a){atoms.push_back(a);};
-        void add(atom *a, Vec loc, flt k, bool usex=true, bool usey=true, bool usez=true){
+        void add(atomid a, Vec loc, flt k, bool usex=true, bool usey=true, bool usez=true){
             add(fixedSpringAtom(a, loc, k, usex, usey, usez));};
-        //void add(Vec F, atom* a){add(fixedForceAtom(F,a));};
-        //void add(flt x, flt y, flt z, atom* a){add(fixedForceAtom(Vec(x,y,z),a));};
+        //void add(Vec F, atomid a){add(fixedForceAtom(F,a));};
+        //void add(flt x, flt y, flt z, atomid a){add(fixedForceAtom(Vec(x,y,z),a));};
         uint size() const{ return (uint) atoms.size();};
         flt energy(Box &box){
             flt E=0;
@@ -485,10 +485,10 @@ enum BondDiffType {
 
 struct bondgrouping {
     flt k, x0;
-    atom *a1, *a2;
+    atomid a1, a2;
     BondDiffType diff_type;
     array<int,NDIM> fixed_box;
-    bondgrouping(flt k, flt x0, atom* a1, atom* a2, 
+    bondgrouping(flt k, flt x0, atomid a1, atomid a2, 
             BondDiffType diff=UNBOXED, OriginBox *box=NULL);
     Vec diff(Box &box) const;
     int get_fixed(uint i){return fixed_box[i];};
@@ -504,10 +504,10 @@ class bondpairs : public interaction {
         bondpairs(vector<bondgrouping> pairs, bool zeropressure=true);
         bondpairs(bool zeropressure=true);
         void add(bondgrouping b){pairs.push_back(b);};
-        inline void add(flt k, flt x0, atom* a1, atom* a2){
+        inline void add(flt k, flt x0, atomid a1, atomid a2){
             add(bondgrouping(k,x0,a1,a2));};
         bool add_or_replace(bondgrouping b); // true means replaced
-        bool replace(flt k, flt x0, atom* a1, atom* a2);
+        bool replace(flt k, flt x0, atomid a1, atomid a2);
         uint size() const{ return (uint) pairs.size();};
         bondgrouping get(uint i) const{ return pairs[i];};
         flt mean_dists(Box &box) const;
@@ -520,8 +520,8 @@ class bondpairs : public interaction {
 
 struct anglegrouping {
     flt k, x0;
-    atom *a1, *a2, *a3;
-    anglegrouping(flt k, flt x0, atom* a1, atom* a2, atom *a3) : 
+    atomid a1, a2, a3;
+    anglegrouping(flt k, flt x0, atomid a1, atomid a2, atomid a3) : 
                 k(k),x0(x0), a1(a1), a2(a2), a3(a3){};
 };
 
@@ -532,7 +532,7 @@ class angletriples : public interaction {
     public:
         angletriples(vector<anglegrouping> triples = vector<anglegrouping>());
         void add(anglegrouping b){triples.push_back(b);};
-        void add(flt k, flt x0, atom* a1, atom* a2, atom* a3){
+        void add(flt k, flt x0, atomid a1, atomid a2, atomid a3){
                                 add(anglegrouping(k,x0,a1,a2,a3));};
         inline flt energy(Box &box);
         inline flt pressure(Box &box){return 0;};
@@ -546,9 +546,9 @@ class angletriples : public interaction {
 struct dihedralgrouping {
     inline static Vec diff(Vec r1, Vec r2){return r1-r2;};
     dihedral dih;
-    atom *a1, *a2, *a3, *a4;
+    atomid a1, a2, a3, a4;
     dihedralgrouping(vector<flt> coscoeffs, vector<flt> sincoeffs,
-                atom* a1, atom* a2, atom* a3, atom *a4, bool usepow=true) : 
+                atomid a1, atomid a2, atomid a3, atomid a4, bool usepow=true) : 
                 dih(coscoeffs, sincoeffs, usepow), a1(a1), 
                 a2(a2), a3(a3), a4(a4){};
 };
@@ -559,10 +559,10 @@ class dihedrals : public interaction {
     public:
         dihedrals(vector<dihedralgrouping> pairs = vector<dihedralgrouping>());
         void add(dihedralgrouping b){groups.push_back(b);};
-        inline void add(vector<flt> nums, atom* a1, atom* a2, atom* a3, atom *a4){
+        inline void add(vector<flt> nums, atomid a1, atomid a2, atomid a3, atomid a4){
             add(dihedralgrouping(nums, vector<flt>(), a1,a2,a3,a4));};
         inline void add(vector<flt> coscoeffs, vector<flt> sincoeffs, 
-                            atom* a1, atom* a2, atom* a3, atom *a4, bool usepow=true){
+                            atomid a1, atomid a2, atomid a3, atomid a4, bool usepow=true){
             add(dihedralgrouping(coscoeffs, sincoeffs,a1,a2,a3,a4, usepow));};
         uint size() const{ return uint(groups.size());};
         flt mean_dists() const;
@@ -574,7 +574,7 @@ class dihedrals : public interaction {
 //~ class LJgroup : private vector<LJdata>, public atomgroup {
     //~ public:
         //~ LJgroup() : vector<LJdata>(){};
-        //~ add(flt sigma, flt epsilon, atom *a){ 
+        //~ add(flt sigma, flt epsilon, atomid a){ 
 //~ };
 #endif
 

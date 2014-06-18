@@ -348,7 +348,7 @@ flt dihedral::energy(const flt ang) const{
     //~ }
 //~ };
 
-bondgrouping::bondgrouping(flt k, flt x0, atom* a1, atom* a2, 
+bondgrouping::bondgrouping(flt k, flt x0, atomid a1, atomid a2, 
         BondDiffType diff, OriginBox *box) :
             k(k), x0(x0), a1(a1), a2(a2), diff_type(diff){
     if(diff == FIXEDBOX){
@@ -389,7 +389,7 @@ bool bondpairs::add_or_replace(bondgrouping b){
     return false;
 };
 
-bool bondpairs::replace(flt k, flt x0, atom* a1, atom* a2){
+bool bondpairs::replace(flt k, flt x0, atomid a1, atomid a2){
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
         if(((a1 == it->a1) and (a2 == it->a2)) or

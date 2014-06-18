@@ -1,6 +1,5 @@
 #include "constraints.hpp"
 
-
 ContactTracker::ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists) :
     atoms(atoms), dists(dists), contacts(), breaks(0), formations(0),
         incontact(0){
