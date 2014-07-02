@@ -1206,6 +1206,17 @@ U\left(r\right)=\begin{cases}
 -\frac{Y\sigma}{2}\left(C\left(C+\ell\right)-\left(\frac{r}{\sigma}-1\right)^{2}\right) & \frac{r}{\sigma}<1+C\\
 -\frac{CY\sigma}{2\ell}\left(C+\ell+1-\frac{r}{\sigma}\right)^{2} & 1+C\leq\frac{r}{\sigma}\leq1+C+\ell
 \end{cases}
+
+The minimum is at σ, its normal harmonic from 0 to (1+C)σ, and is then
+"rounded" between (1+C)σ < r < (1+C+l)σ.
+* With l = 0, its a harmonic potential, depth C²σ/2, minimum at σ, attractive
+* out to (1+C)σ.
+
+Parameters:
+* C: how wide the "first half" of the well is
+* l: how wide the "second half" of the well is
+* l/C: how steep the "second half" of the well is; l == C means perfectly harmonic
+* C(C+l)σ/2: depth of the well
  
 */
 
@@ -1229,9 +1240,11 @@ struct LoisOhernPair {
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
-        if(dsq > sigcut*sigcut) return 0.0;
+         // using >= to prevent NaNs when l = 0
+        if(dsq >= sigcut*sigcut) return 0.0;
         flt R = sqrtflt(dsq)/sig;
-        if(R < 1 + C){
+         // using <= to prevent NaNs when l = 0
+        if(R <= 1 + C){
             flt dR = R-1;
             return -eps*sig/2*(C*(C+l) - dR*dR);
         }
