@@ -3,18 +3,18 @@
 Vec LeesEdwardsBox::diff(Vec r1, Vec r2){
     flt Ly = boxsize[1];
     flt dy = r1[1]-r2[1];
-    int im = (int) roundflt(dy / Ly);
+    int im = (int) round(dy / Ly);
     dy = dy - (im*Ly);
     
     flt Lx = boxsize[0];
     flt dx = r1[0] - r2[0];
-    dx = dx - roundflt((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
+    dx = dx - round((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
     
     #ifdef VEC2D
     return Vec(dx, dy);
     #endif
     #ifdef VEC3D
-    flt dz = remflt(r1[2] - r2[2], boxsize[2]);
+    flt dz = remainder(r1[2] - r2[2], boxsize[2]);
     return Vec(dx, dy, dz);
     #endif
 };
@@ -22,10 +22,10 @@ Vec LeesEdwardsBox::diff(Vec r1, Vec r2){
 array<int,NDIM> LeesEdwardsBox::box_round(Vec r1, Vec r2){
     Vec dr = r1 - r2;
     array<int,NDIM> boxes;
-    boxes[1] = (int) roundflt(dr[1] / boxsize[1]);
-    boxes[0] = (int) roundflt((dr[0]/boxsize[0])-boxes[1]*gamma);
+    boxes[1] = (int) round(dr[1] / boxsize[1]);
+    boxes[0] = (int) round((dr[0]/boxsize[0])-boxes[1]*gamma);
     #ifdef VEC3D
-    boxes[2] = (int) roundflt(dr[2] / boxsize[2]);
+    boxes[2] = (int) round(dr[2] / boxsize[2]);
     #endif
     return boxes;
 };
@@ -88,7 +88,7 @@ Vec SCbox::randLoc(flt min_dist_to_wall){
     if(min_dist_to_wall >= R) return Vec();
     Vec v;
     flt Rmin = R - min_dist_to_wall;
-    flt Rminsq = powflt(Rmin, 2.0);
+    flt Rminsq = pow(Rmin, 2.0);
     while(true){
         v = randVecBoxed();
         v[0] -= 0.5;
@@ -102,12 +102,12 @@ Vec SCbox::randLoc(flt min_dist_to_wall){
         v[2] *= 2*Rmin;
         #endif
         
-        flt distsq = powflt(v[1],2);
-        if(abs(v[0]) >= L/2.0) distsq += powflt(abs(v[0]) - L/2.0, 2.0);
+        flt distsq = pow(v[1],2);
+        if(abs(v[0]) >= L/2.0) distsq += pow(abs(v[0]) - L/2.0, 2.0);
         
         
         #ifndef VEC2D
-        distsq += powflt(v[2],2);
+        distsq += pow(v[2],2);
         #endif
         
         if(distsq <= Rminsq) break;
@@ -156,7 +156,7 @@ flt atomgroup::gyradius() const{
         Rgsq += ((*this)[i].x - avgr).sq();
     }
     
-    return sqrtflt(Rgsq/size());
+    return sqrt(Rgsq/size());
 };
 
 #ifdef VEC3D
@@ -260,7 +260,7 @@ void atomgroup::addv(Vec v){
 
 void atomgroup::randomize_velocities(flt T){
     for(uint i=0; i<size(); i++){
-        (*this)[i].v = randVec() * sqrtflt(T*2.0/(*this)[i].m);
+        (*this)[i].v = randVec() * sqrt(T*2.0/(*this)[i].m);
     }
 };
 
@@ -287,7 +287,7 @@ void LeesEdwardsBox::shear(flt dgamma, atomgroup &atoms){
     // TODO: is this right for non-square boxes?
     // Is gamma Δx / Lx or Δx / Ly?
     for(uint i=0; i<atoms.size(); i++){
-        //flt dy = remflt(atoms[i].x[1], boxsize[1]);
+        //flt dy = remainder(atoms[i].x[1], boxsize[1]);
         flt dy = atoms[i].x[1];
         atoms[i].x[0] += dy * dgamma;
     }

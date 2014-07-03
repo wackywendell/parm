@@ -23,8 +23,8 @@ int main(){
     // new random seed each time, for velocities and placement
     seed();
     
-    const flt Vs = Natoms * powflt(sigma, NDIM) * M_PI_2 / NDIM;
-    const flt L = powflt(Vs / phi, OVERNDIM);
+    const flt Vs = Natoms * pow(sigma, NDIM) * M_PI_2 / NDIM;
+    const flt L = pow(Vs / phi, OVERNDIM);
     cout << "Using L = " << L << "\n";
     
     // Create the bounding box (sides of length L), and a "vector" of Natoms atoms

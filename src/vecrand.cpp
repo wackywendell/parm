@@ -57,7 +57,7 @@ void bivariateGauss::set(const flt s1, const flt s2, const flt corr){
     assert(corr <= 1);
     x11 = s1;
     x21 = s2 * corr;
-    x22 = s2 * sqrtflt(1 - corr*corr);
+    x22 = s2 * sqrt(1 - corr*corr);
 }
 
 Pair bivariateGauss::generate(){
@@ -84,3 +84,13 @@ VecPair bivariateGauss::genVecs(){
     p[1] = x1*x21 + x2*x22;
     return p;
 }
+
+long double toLD(double e){return (long double) e;};
+double fromLD(long double e){return (double) e;};
+vector<long double> LDVector(vector<double> dists){
+    vector<long double> newdists = vector<long double>();
+    for(uint i=0; i<dists.size(); i++){
+        newdists.push_back((long double) dists[i]);
+    }
+    return newdists;
+};

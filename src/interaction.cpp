@@ -77,8 +77,8 @@ flt bondangle::energy(const Vec& r1, const Vec& r2){
         //~ cout << "resetting! " << costheta << endl;
         costheta = -1;
     }
-    if(!usecos) return springk*powflt(acos(costheta) - theta0,2)/2;
-    else return springk*powflt(costheta - cos(theta0),2)/2;
+    if(!usecos) return springk*pow(acos(costheta) - theta0,2)/2;
+    else return springk*pow(costheta - cos(theta0),2)/2;
 }
 
 Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
@@ -171,7 +171,7 @@ sides of the bond. */
     flt qa = c[0][0]*c[1][1] - c[0][1] * c[0][1];
     flt qb = c[1][1]*c[2][2] - c[1][2] * c[1][2];
     flt q = qa * qb;
-    flt sqq = sqrtflt(q);
+    flt sqq = sqrt(q);
     
     flt t1 = p;
     flt t2 = c[0][0] * c[1][2] - c[0][1] * c[0][2];
@@ -210,7 +210,7 @@ sides of the bond. */
                             derivs[3] * (1 + c[1][2]/c[1][1]);
     
      /*
-     Rapaport says costheta = p/sqrtflt(q); we add a negative for the cosine.
+     Rapaport says costheta = p/sqrt(q); we add a negative for the cosine.
      */
     
     flt dcostheta;
@@ -236,7 +236,7 @@ sides of the bond. */
     //~ assert(derivs[3].sq() < 1e8);
         
     
-    //~ flt mag = sqrtflt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
+    //~ flt mag = sqrt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
                     //~ derivs[3].sq());
     //~ 
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
@@ -256,7 +256,7 @@ flt dihedral::dudcosthetaCOS(const flt costheta) const{
     flt tot = 0;
     unsigned int cosmx = (unsigned int)(coscoeffs.size());
     for(unsigned int i=1; i < cosmx; ++i){
-        tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
+        tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
     }
     //~ cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
@@ -272,9 +272,9 @@ flt dihedral::dudcostheta(const flt theta) const{
         flt costheta = cos(theta), sintheta = sin(theta);
         flt cottheta = -costheta / sintheta;
         for(unsigned int i=1; i < mx; ++i){
-            if (i < cosmx) tot += coscoeffs[i] * i * powflt(costheta, flt(i-1));
+            if (i < cosmx) tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
             if (i < sinmx) tot += sincoeffs[i] * i * cottheta
-                                    * powflt(sintheta, flt(i-1));
+                                    * pow(sintheta, flt(i-1));
         }
     } else {
         flt csctheta = 1 / sin(theta);
@@ -321,8 +321,8 @@ flt dihedral::energy(const flt ang) const{
     flt tot = 0;
     for(unsigned int i=0; i < mx; ++i){
         if(usepow) {
-            if(i < cosmx) tot += coscoeffs[i] * powflt(costheta, flt(i));
-            if(i < sinmx) tot += sincoeffs[i] * powflt(sintheta, flt(i));
+            if(i < cosmx) tot += coscoeffs[i] * pow(costheta, flt(i));
+            if(i < sinmx) tot += sincoeffs[i] * pow(sintheta, flt(i));
         } else {
             if(i < cosmx) tot += coscoeffs[i] * cos(i * ang);
             if(i < sinmx) tot += sincoeffs[i] * sin(i * ang);
@@ -481,7 +481,7 @@ flt bondpairs::std_dists(Box &box) const{
         stds += curdist*curdist;
         N++;
     }
-    return sqrtflt(stds/N);
+    return sqrt(stds/N);
 }
 
 angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
@@ -560,7 +560,7 @@ flt angletriples::std_dists() const{
         stds += curdist*curdist;
         N++;
     }
-    return sqrtflt(stds/N);
+    return sqrt(stds/N);
 };
 
 #ifdef VEC3D
@@ -640,7 +640,7 @@ flt dihedrals::mean_dists() const{
         //~ stds += curdist*curdist;
         //~ N++;
     //~ }
-    //~ return sqrtflt(stds/N);
+    //~ return sqrt(stds/N);
 //~ };
 #endif
 
@@ -760,7 +760,7 @@ flt SoftWall::energy(Box &box){
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
         if(dist > it->sigma) continue;
-        E += it->epsilon * powflt(1 - (dist/(it->sigma)), expt)/expt/2.0;
+        E += it->epsilon * pow(1 - (dist/(it->sigma)), expt)/expt/2.0;
         // Note that normally you have ε(1-r/σ)^n for 2 particles.
         // We divide by 2 because now there is only one particle, pushing
         // on its mirror image; the force should be the same as if the 
@@ -777,7 +777,7 @@ void SoftWall::setForces(Box &box){
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
         if(dist > it->sigma) continue;
-        flt f = it->epsilon * powflt(1 - (dist/(it->sigma)), expt - 1.0);
+        flt f = it->epsilon * pow(1 - (dist/(it->sigma)), expt - 1.0);
         lastf += -f;
         a.f += norm*f;
     }
@@ -792,7 +792,7 @@ flt SoftWall::setForcesGetPressure(Box &box){
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
         if(dist > it->sigma) continue;
-        flt f = it->epsilon * powflt(1 - (dist/(it->sigma)), expt - 1.0);
+        flt f = it->epsilon * pow(1 - (dist/(it->sigma)), expt - 1.0);
         p += dist*f/2;
         lastf += -f;
         a.f += norm*f;
@@ -808,7 +808,7 @@ flt SoftWall::pressure(Box &box){
         Vec r = box.diff(a.x, loc);
         flt dist = r.dot(norm)*2;
         if(dist > it->sigma) continue;
-        flt f = it->epsilon * powflt(1 - (dist/(it->sigma)), expt - 1.0);
+        flt f = it->epsilon * pow(1 - (dist/(it->sigma)), expt - 1.0);
         p += dist*f/2;
     }
     return p;
@@ -860,13 +860,13 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     flt L2 = abs(lambda2p) - (l2/2);
     if(L1 > 0 or L2 > 0){
         if(L2 > L1){
-            lambda2s = copysignflt(l2/2, lambda2p);
+            lambda2s = copysign(l2/2, lambda2p);
             lambda1s = u1r12 + (lambda2s*u1u2);
             //~ cout << "new l2s: " << lambda2s << "  l1s: " << lambda1s;
             lambda1s = confineRange(-l1/2, lambda1s, l1/2);
             //~ cout << " -> " << lambda1s << "\n";
         } else {
-            lambda1s = copysignflt(l1/2, lambda1p);
+            lambda1s = copysign(l1/2, lambda1p);
             lambda2s = -u2r12 + (lambda1s*u1u2);
             //~ cout << "new l1s: " << lambda1s << "  l2s: " << lambda2s;
             lambda2s = confineRange(-l2/2, lambda2s, l2/2);

@@ -10,6 +10,8 @@
 #endif
 #include <iostream>
 #include <ctime>
+#include <vector>
+#include <cmath>
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/variate_generator.hpp>
@@ -17,42 +19,17 @@
 
 #include "vec.hpp"
 
+using namespace std;
+
 #ifdef LONGFLOAT
 typedef long double flt;
-long double toLD(double e){return (long double) e;};
-double fromLD(long double e){return (double) e;};
-vector<flt> LDVector(vector<double> dists){
-    vector<flt> newdists = vector<flt>();
-    for(uint i=0; i<dists.size(); i++){
-        newdists.push_back((flt) dists[i]);
-    }
-    return newdists;
-};
-
-inline bool isinfflt(long double n){return isinfl(n);};
-inline bool isnanflt(long double n){return isnanl(n);};
-inline flt powflt(flt n, flt m){return powl(n,m);};
-inline flt sqrtflt(flt n){return sqrtl(n);};
-inline flt cbrtflt(flt n){return cbrtl(n);};
-inline flt expm1flt(flt n){return expm1l(n);};
-inline flt copysignflt(flt n, flt m){return copysignl(n,m);};
-inline flt remflt(flt n, flt m){return remainderl(n,m);};
-inline flt roundflt(flt n){return roundl(n);};
-inline flt ceilflt(flt n){return ceill(n);};
-inline flt floorflt(flt n){return floorl(n);};
+inline flt cbrt(flt n){return cbrtl(n);};
+inline flt expm1(flt n){return expm1l(n);};
+inline flt copysign(flt n, flt m){return copysignl(n,m);};
+inline flt remainder(flt n, flt m){return remainderl(n,m);};
+inline flt round(flt n){return roundl(n);};
 #else
 typedef double flt;
-inline bool isinfflt(double n){return isinf(n);};
-inline bool isnanflt(double n){return isnan(n);};
-inline flt powflt(flt n, flt m){return pow(n,m);};
-inline flt sqrtflt(flt n){return sqrt(n);};
-inline flt cbrtflt(flt n){return cbrt(n);};
-inline flt expm1flt(flt n){return expm1(n);};
-inline flt copysignflt(flt n, flt m){return copysign(n,m);};
-inline flt remflt(flt n, flt m){return remainder(n,m);};
-inline flt roundflt(flt n){return round(n);};
-inline flt ceilflt(flt n){return ceil(n);};
-inline flt floorflt(flt n){return floor(n);};
 #endif
 
 #ifdef VEC2D
@@ -122,5 +99,9 @@ class bivariateGauss {
 #endif
         VecPair genVecs();
 };
+
+long double toLD(double e);
+double fromLD(long double e);
+vector<long double> LDVector(vector<double> dists);
 
 #endif

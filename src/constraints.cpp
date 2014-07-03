@@ -124,7 +124,7 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
 vector<Vec> RsqTracker1::xyz2(){
     vector<Vec> means(xyz2sums.size(), Vec());
     for(uint i=0; i<xyz2sums.size(); ++i){
-        means[i] = xyz2sums[i] / count;
+        means[i] = xyz2sums[i] / ((flt) count);
     }
     return means;
 };
@@ -132,7 +132,7 @@ vector<Vec> RsqTracker1::xyz2(){
 vector<Vec> RsqTracker1::xyz4(){
     vector<Vec> means(xyz4sums.size(), Vec());
     for(uint i=0; i<xyz4sums.size(); ++i){
-        means[i] = xyz4sums[i] / count;
+        means[i] = xyz4sums[i] / ((flt) count);
     }
     return means;
 };
@@ -140,7 +140,7 @@ vector<Vec> RsqTracker1::xyz4(){
 vector<flt> RsqTracker1::r4(){
     vector<flt> means(r4sums.size(), 0);
     for(uint i=0; i<r4sums.size(); ++i){
-        means[i] = r4sums[i] / count;
+        means[i] = r4sums[i] / ((flt) count);
     }
     return means;
 };
@@ -221,7 +221,7 @@ vector<flt> RsqTracker::counts(){
     vector<flt> vals;
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
-        vals.push_back(it->get_count());
+        vals.push_back((flt) it->get_count());
     }
     return vals;
 };

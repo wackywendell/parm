@@ -382,7 +382,7 @@ class RsqTracker : public statetracker {
     //~ public:
         //~ DividedBox(sptr<OriginBox> box, sptr<atomgroup> atoms, flt mindist,
             //~ uint cellcount) : box(box), atoms(atoms), mindist(mindist){
-                //~ Nperside = (uint) ceill(powflt(cellcount, OVERNDIM));
+                //~ Nperside = (uint) ceill(pow(cellcount, OVERNDIM));
                 //~ 
                 //~ Vec shape = box->boxshape();
                 //~ flt Lmin = shape[0];

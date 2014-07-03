@@ -38,12 +38,12 @@ class Box {
 
 #ifdef VEC3D
 inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remflt(r1[0], r2[0]), remflt(r1[1], r2[1]), remflt(r1[2], r2[2]));
+    return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]), remainder(r1[2], r2[2]));
 };
 #endif
 #ifdef VEC2D
 inline Vec vecmod(Vec r1, Vec r2){
-    return Vec(remflt(r1[0], r2[0]), remflt(r1[1], r2[1]));
+    return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]));
 };
 #endif
 
@@ -70,7 +70,7 @@ class OriginBox : public Box {
         virtual array<int,NDIM> box_round(Vec r1, Vec r2){
             array<int,NDIM> boxes;
             Vec dr = r1 - r2;
-            for(uint i=0; i<NDIM; i++) boxes[i] = (int) roundflt(dr[i] / boxsize[i]);
+            for(uint i=0; i<NDIM; i++) boxes[i] = (int) round(dr[i] / boxsize[i]);
             return boxes;
         };
         #ifdef VEC3D
@@ -87,11 +87,11 @@ class OriginBox : public Box {
         flt resize(Vec newsize){boxsize = newsize; return V();}
         flt resizeV(flt newV){
             flt curV = V();
-            boxsize *= powflt(newV/curV, OVERNDIM);
+            boxsize *= pow(newV/curV, OVERNDIM);
             return V();
         }
         flt resizeL(flt newL){
-            flt curL = powflt(V(), OVERNDIM);
+            flt curL = pow(V(), OVERNDIM);
             boxsize *= newL/curL;
             return V();
         }
@@ -227,7 +227,7 @@ class atomgroup {
         virtual atomid get_id(cuint n)=0;
         virtual uint size() const=0;
         virtual AtomIter begin(){return AtomIter(*this, 0);};
-        virtual AtomIter end(){return AtomIter(*this, size());};
+        virtual AtomIter end(){return AtomIter(*this, (uint) size());};
         
         Vec com() const; //center of mass
         Vec comv() const; //center of mass velocity
