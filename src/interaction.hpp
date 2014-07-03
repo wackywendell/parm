@@ -1237,6 +1237,9 @@ struct LoisOhernPair {
         eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         C((a1.C + a2.C)/2.0), l((a1.l + a2.l)/2.0), sigcut(sig*(1+C+l)),
         atom1(a1), atom2(a2){};
+    LoisOhernPair(LoisOhernAtom a1, LoisOhernAtom a2, flt eps, flt sig, flt C, flt l) : 
+        eps(eps), sig(sig), C(C), l(l), sigcut(sig*(1+C+l)),
+        atom1(a1), atom2(a2){};
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
@@ -1268,6 +1271,16 @@ struct LoisOhernPair {
         flt dR2 = rsig-(C+l+1);
         return rij*(C*eps/l*dR2/R);
     }
+};
+
+
+
+struct LoisOhernPairMinCLs : public LoisOhernPair {
+    LoisOhernPairMinCLs(LoisOhernAtom a1, LoisOhernAtom a2) : 
+        LoisOhernPair(a1, a2, sqrt(a1.eps * a2.eps), 
+        (a1.sigma + a2.sigma)/2.0,
+        (a1.C < a2.C ? a1.C : a2.C),
+        (a1.l < a2.l ? a1.l : a2.l)){};
 };
 
 ////////////////////////////////////////////////////////////////////////

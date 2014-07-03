@@ -19,6 +19,7 @@
 %include typemaps.i
 %include exception.i
 %include carrays.i
+%include complex.i
 %include std_vector.i
 %include std_list.i
 %include std_set.i
@@ -47,6 +48,7 @@
 %shared_ptr(ContactTracker)
 %shared_ptr(EnergyTracker)
 %shared_ptr(RsqTracker)
+%shared_ptr(ISFTracker)
 %shared_ptr(SCatomvec)
 %shared_ptr(coordConstraint)
 %shared_ptr(fixedForce)
@@ -79,6 +81,7 @@
 %shared_ptr(NListed< EisMclachlanAtom,EisMclachlanPair >)
 %shared_ptr(NListed< LJishAtom,LJishPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
+%shared_ptr(NListed< LoisOhernAtom,LoisOhernPairMinCLs >)
 %shared_ptr(NListed< HertzianAtom,HertzianPair >)
 %shared_ptr(SCboxed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
@@ -208,6 +211,31 @@ static int myErr = 0;
     %}
 };
 
+%extend Array {
+    T __getitem__(const unsigned int n) const{
+        return $self->get(n);
+    };
+    
+    void __setitem__(const unsigned int n, const T val){
+        $self->set(n, val);
+    };
+    
+    unsigned int __len__(){ return N;};
+    
+        
+    %insert("python") %{
+        #~ def __setitem__(self, n, val):
+            #~ return self.set(n, val)
+        
+        def __iter__(self):
+            for i in range(len(self)):
+                yield self.get(i)
+        
+        #~ def __len__(self):
+            #~ return self.len()
+    %};
+};
+
 %extend Nvector {
     %template() operator*<double>;
     %template() operator/<double>;
@@ -252,10 +280,16 @@ static int myErr = 0;
 #ifdef VEC2D
 %template(Vec) Vector2<double>;
 %template(VecL) Vector2<long double>;
+%template(Veci) Array<std::complex<double>, 2>;
+%template(VecLi) Array<std::complex<long double>, 2>;
 namespace std {
     %template(vecptrvector) vector<Vector2<double>*>;
     %template(vecvector) vector<Vector2<double> >;
     %template(_vvecvector) vector<vector<Vector2<double> > >;
+    %template(_vvvecvector) vector<vector<vector<Vector2<double> > > >;
+    %template(cvecvector) vector<Array<std::complex<double>, 2> >;
+    %template(_cvvecvector) vector<vector<Array<std::complex<double>, 2> > >;
+    %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 2> > > >;
     %template(_jamminglist) list<jamminglist>;
     %template(_jamminglistrot) list<jamminglistrot>;
     
@@ -266,12 +300,18 @@ namespace std {
 #else
 %template(Vec) Vector3<double>;
 %template(VecL) Vector3<long double>;
+%template(Veci) Array<std::complex<double>, 3>;
+%template(VecLi) Array<std::complex<long double>, 3>;
 %template(_MatrixBase) Nvector<Vector3<double>, 3>;
 %template(Matr) Matrix<double>;
 namespace std {
     %template(vecptrvector) vector<Vector3<double>*>;
     %template(vecvector) vector<Vector3<double> >;
     %template(_vvecvector) vector<vector<Vector3<double> > >;
+    %template(_vvvecvector) vector<vector<vector<Vector3<double> > > >;
+    %template(cvecvector) vector<Array<std::complex<double>, 3> >;
+    %template(_cvvecvector) vector<vector<Array<std::complex<double>, 3> > >;
+    %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 3> > > >;
     %template(vecptrvectorL) vector<Vector3<long double>*>;
     %template(vecvectorL) vector<Vector3<long double> >;
     %template(_vvecvectorL) vector<vector<Vector3<long double> > >;
@@ -291,6 +331,10 @@ namespace std {
     %template(_ffvector) vector<vector<float> >;
     %template(dvector) vector<double>;
     %template(_ddvector) vector<vector<double> >;
+    %template(_dddvector) vector<vector<vector<double> > >;
+    %template(cvector) vector<std::complex<double> >;
+    %template(_ccvector) vector<vector<std::complex<double> > >;
+    %template(_cccvector) vector<vector<vector<std::complex<double> > > >;
     %template(ldvector) vector<long double>;
     //%template(avector) vector<shared_ptr<atomgroup> >;
     //%template(aptrvector) vector<shared_ptr<atom> >;
@@ -406,6 +450,7 @@ namespace std {
 %template(HertzianSC) SCboxed<HertzianAtom, HertzianPair>;
 %template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
+%template(LoisOhernMin) NListed<LoisOhernAtom, LoisOhernPairMinCLs>;
 //%rename(__lt__) jamminglist::operator<;
 
 //%{
