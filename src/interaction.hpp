@@ -1259,11 +1259,11 @@ struct LoisOhernPair {
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
-        if(dsq > sigcut*sigcut) return Vec();
+        if(dsq >= sigcut*sigcut) return Vec();
         flt R = sqrt(dsq);
         flt rsig = R/sig;
         
-        if(rsig < 1 + C){
+        if(rsig <= 1 + C){
             flt dR = rsig-1;
             return rij*(-eps*dR/R);
         }
