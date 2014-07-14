@@ -316,7 +316,12 @@ class subgroup : public atomgroup {
         inline atom& operator[](cuint n){return *ids[n];};
         inline atom& operator[](cuint n) const{return *ids[n];};
         inline atom& get(cuint n){return *ids[n];};
-        inline void add(atomid a){return ids.push_back(a);};
+        inline void add(atomid a){
+			std::vector<atomid>::iterator it = std::find(ids.begin(), ids.end(), a);
+			if(it != ids.end())
+				throw std::invalid_argument("Cannot add atomid to subgroup: it already exists.");
+			return ids.push_back(a);
+		};
         inline atomid get_id(cuint n) {return ids[n];};
         inline uint size() const {return (uint) ids.size();};
 };
