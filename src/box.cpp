@@ -285,3 +285,23 @@ void LeesEdwardsBox::shear(flt dgamma, atomgroup &atoms){
     
     gamma += dgamma;
 };
+
+void SubgroupBool::add(atomid a){
+	ingroup.resize(atoms->size(), false);
+	if(ingroup[a.n()]) return;
+	ingroup[a.n()] = true;
+	total++;
+};
+
+void SubgroupBoolIter::advance_to_true() {
+	uint N = group.atoms->size();
+	while((n < N) && (!group.ingroup[n])) n++;
+};
+
+SubgroupBoolIter SubgroupBool::begin() {
+	return SubgroupBoolIter(*this);
+};
+
+SubgroupBoolIter SubgroupBool::end() {
+	return SubgroupBoolIter(*this, atoms->size());
+};

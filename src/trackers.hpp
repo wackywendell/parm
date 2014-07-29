@@ -62,6 +62,8 @@ class pairlist {
         void clear();
 };
 
+class NLPairIter;
+
 class neighborlist : public statetracker{
     //maintains a Verlet list of "neighbors": molecules within a 
     // 'skin radius' of each other.
@@ -76,18 +78,16 @@ class neighborlist : public statetracker{
     protected:
         sptr<Box> box;
         flt skin;
-        subgroup atoms;
+        SubgroupBool atoms;
         vector<flt> diameters;
-        vector<idpair> curpairs;
+        vector<vector<atomid> > curpairs;
         pairlist ignorepairs;
         vector<Vec> lastlocs;
         uint updatenum;
         bool ignorechanged; // if true, forces a full check on next update
-        
-        // TODO: find a way to get just neighbors of atom n
-        // without iterating over the whole list
     public:
-        typedef vector<idpair>::iterator iterator;
+        typedef NLPairIter iterator;
+        friend class NLPairIter;
         
         neighborlist(sptr<Box> box, sptr<atomvec> atoms, const flt skin);
         void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
@@ -96,32 +96,68 @@ class neighborlist : public statetracker{
         
         atomvec& vec(){return atoms.vec();};
         inline uint which(){return updatenum;};
-        inline uint numpairs(){return (uint) curpairs.size();};
+        //~ inline uint numpairs(){return (uint) curpairs.size();};
         inline void ignore(atomid a, atomid b){ignorepairs.add_pair(a,b); ignorechanged=true;};
         void add(atomid a, flt diameter){
             atoms.add(a);
             //assert(diameters.size() == atoms.size() - 1);
-            diameters.push_back(diameter);
-            //assert(lastlocs.size() == atoms.size() - 1);
-            lastlocs.push_back(a->x);
+            uint avsize = atoms.vec().size();
+            if(diameters.size() < avsize) diameters.resize(avsize, -1);
+            if(lastlocs.size() < avsize) lastlocs.resize(avsize);
+            diameters[a.n()] = diameter;
+            lastlocs[a.n()] = a->x;
             ignorechanged = true;
         }
         
         inline uint ignore_size() const{return ignorepairs.size();};
         inline uint size() const{return atoms.size();};
-        inline vector<idpair>::iterator begin(){return curpairs.begin();};
-        inline vector<idpair>::iterator end(){return curpairs.end();};
-        inline idpair get(uint i){
-            //assert(i<curpairs.size());
-            return curpairs[i];
+        
+        flt dist_to_half_edge(atomid a){
+            flt curdist = (a->x - lastlocs[a.n()]).mag();
+            return skin/2 - curdist;
         };
         
-        flt dist_to_half_skin(atomid a){
-            TODO
-            
-        };
+        iterator begin();
+        iterator end();
+        
+        vector<idpair> pair_list();
+        vector<vector<atomid> > pair_lists(){return curpairs;};
+        
+        vector<atomid>& near(atomid a){
+			assert(a.n() < curpairs.size());
+			return curpairs[a.n()];
+		};
         
         ~neighborlist(){};
+};
+
+class NLPairIter {
+	protected:
+		neighborlist& nlist;
+		vector<vector<atomid> >::iterator curlist;
+        vector<atomid>::iterator curloc;
+        uint n1;
+        
+        // move to the next (including current) location which is not empty
+        void find_pair(bool force_advance=false);
+        
+    public:
+		NLPairIter(neighborlist& nlist) :
+			nlist(nlist), curlist(nlist.curpairs.begin()), 
+			curloc(curlist->begin()), n1(0){find_pair(false);};
+		NLPairIter(neighborlist& nlist,
+			vector<vector<atomid> >::iterator curlist,
+			vector<atomid>::iterator curloc, uint n1) :
+			nlist(nlist), curlist(curlist), 
+			curloc(curloc), n1(n1){};
+		
+		NLPairIter& operator++(){find_pair(true); return *this;};
+        idpair operator*(){return idpair(nlist.atoms.get_id(n1), *curloc);};
+        bool operator==(const NLPairIter &other);
+        
+        bool operator!=(const NLPairIter &other){
+            return !(*this == other);
+        };
 };
 
 class GridIterator;

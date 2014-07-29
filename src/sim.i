@@ -38,6 +38,7 @@
 %ignore AtomIter;
 %shared_ptr(atomgroup)
 %shared_ptr(subgroup)
+%shared_ptr(SubgroupBool)
 %shared_ptr(statetracker)
 %shared_ptr(interaction)
 %shared_ptr(constraint)
@@ -97,7 +98,6 @@
 #include "constraints.cpp"
 #include "collection.hpp"
 #include "collection.cpp"
-static int myErr = 0;
 %}
 
 %exception {
@@ -302,6 +302,7 @@ namespace std {
     %template(wallvector) vector<shared_ptr<SoftWall> >;
     #endif
     %template(idvector) vector<atomid>;
+    %template(idvecvector) vector<vector<atomid> >;
     %template(idpairvector) vector<idpair>;
     %template(uintvector) vector<unsigned int>;
     %template(ulongvector) vector<unsigned long>;
@@ -374,16 +375,6 @@ namespace std {
     %};
 };
 
-%exception neighborlist::__getitem__ {
-  assert(!myErr);
-  $action
-  if (myErr) {
-    myErr = 0; // clear flag for next time
-    // You could also check the value in $result, but it's a PyObject here
-    SWIG_exception(SWIG_IndexError, "Index out of bounds");
-  }
-};
-
 %include "vecrand.hpp"
 %include "box.hpp"
 %include "trackers.hpp"
@@ -406,41 +397,13 @@ namespace std {
 %template(HertzianSC) SCboxed<HertzianAtom, HertzianPair>;
 %template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
-//%rename(__lt__) jamminglist::operator<;
-
-//%{
-//    shared_ptr<NListedVirial<HertzianAtom, HertzianPair> > Hertzian(neighborlist *neighbors){
-//        NListedVirial<HertzianAtom, HertzianPair> *h = new NListedVirial<HertzianAtom, HertzianPair>(neighbors);
-//        return shared_ptr<NListedVirial<HertzianAtom, HertzianPair> >(h);
-//    };
-//%}
 
 %extend neighborlist {
-  idpair __getitem__(size_t i) {
-    if (i >= $self->numpairs()) {
-      myErr = 1;
-      return idpair(atomid(), atomid());
-    }
-    return $self->get((uint) i);
-  }
-  
-  %insert("python") %{
-    def __iter__(self):
-        for i in range(self.numpairs()):
-            yield self[i]
-  %}
-};
-
-// %extend collection {
-//     %insert("python") %{
-//         def __init__(self, box, groups, interactions=None, trackers=None, constraints=None):
-//             self.box = box
-//             self.groups  = groups
-//             self.interactions = interactions
-//             self.trackers = trackers
-//             self.constraints = constraints
-//     %};
-// }
+    %insert("python") %{
+        def __iter__(self):
+            return iter(list(self.pair_list()))
+	%};
+}
 
 %extend NListed<LJatom, LJpair> {
     %insert("python") %{

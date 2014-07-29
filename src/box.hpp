@@ -203,16 +203,16 @@ class idpair : public Array<atomid, 2> {
 
 class atomgroup;
 
-class AtomIter{
-    private:
-        uint i;
-        atomgroup &g;
-    public:
-        AtomIter (atomgroup& g, uint i): i(i), g(g){};
-        bool operator!=(const AtomIter& other) const{return i != other.i;};
-        atom& operator* () const;
-        inline const AtomIter& operator++(){++i; return *this;};
-};
+//~ class AtomIter{
+    //~ private:
+        //~ uint i;
+        //~ atomgroup &g;
+    //~ public:
+        //~ AtomIter (atomgroup& g, uint i): i(i), g(g){};
+        //~ bool operator!=(const AtomIter& other) const{return i != other.i;};
+        //~ atom& operator* () const;
+        //~ inline const AtomIter& operator++(){++i; return *this;};
+//~ };
 
 class atomvec;
 
@@ -226,8 +226,8 @@ class atomgroup {
         virtual atom& get(cuint n){return ((*this)[n]);};
         virtual atomid get_id(cuint n)=0;
         virtual uint size() const=0;
-        virtual AtomIter begin(){return AtomIter(*this, 0);};
-        virtual AtomIter end(){return AtomIter(*this, size());};
+        //~ virtual AtomIter begin(){return AtomIter(*this, 0);};
+        //~ virtual AtomIter end(){return AtomIter(*this, size());};
         
         Vec com() const; //center of mass
         Vec comv() const; //center of mass velocity
@@ -270,7 +270,7 @@ class atomgroup {
         virtual ~atomgroup(){};
 };
 
-inline atom& AtomIter::operator*() const{return g[i];};
+//~ inline atom& AtomIter::operator*() const{return g[i];};
 
 class atomvec : public virtual atomgroup {
     // this is an atomgroup which actually owns the atoms.
@@ -304,6 +304,8 @@ class atomvec : public virtual atomgroup {
 };
 
 class subgroup : public atomgroup {
+	// A subgroup of atomids. Note that the "n" here is not the same
+	// as the "n" in the atomid.
     protected:
         sptr<atomvec> atoms;
         vector<atomid> ids;
@@ -318,6 +320,52 @@ class subgroup : public atomgroup {
         inline void add(atomid a){return ids.push_back(a);};
         inline atomid get_id(cuint n) {return ids[n];};
         inline uint size() const {return (uint) ids.size();};
+};
+
+class SubgroupBoolIter;
+
+class SubgroupBool : public atomgroup {
+	friend class SubIter;
+	
+	protected:
+        sptr<atomvec> atoms;
+		vector<bool> ingroup;
+		uint total;
+	public:
+		typedef SubgroupBoolIter iterator;
+		friend class SubgroupBoolIter;
+	
+		SubgroupBool(sptr<atomvec> atoms) : atoms(atoms), 
+			ingroup(atoms->size(), false), total(0){};
+		atomvec &vec(){return *atoms;};
+        inline atom& operator[](cuint n){return atoms->get(n);};
+        inline atom& operator[](cuint n) const{return atoms->get(n);};
+        inline atom& get(cuint n){return atoms->get(n);};
+        void add(atomid a);
+        inline atomid get_id(cuint n) {return atoms->get_id(n);};
+        inline uint size() const{return total;};
+        
+        iterator begin();
+        iterator end();
+        
+        ~SubgroupBool(){};
+};
+
+class SubgroupBoolIter {
+	protected:
+		uint n;
+		SubgroupBool& group;
+		
+		void advance_to_true(); //advance to first true, including current
+		inline void advance_to_next(){n++; advance_to_true();} //advance to next true, not including current
+	
+	public:
+		SubgroupBoolIter(SubgroupBool& group) : n(0), group(group){};
+		SubgroupBoolIter(SubgroupBool& group, uint n) : n(n), group(group){};
+		bool operator==(const SubgroupBoolIter &other){return (n == other.n) && (&group == &other.group);}
+		bool operator!=(const SubgroupBoolIter &other){return (n != other.n) || (&group != &other.group);}
+		SubgroupBoolIter& operator++(){advance_to_true(); return *this;};
+        atomid operator*(){return group.atoms->get_id(n);};
 };
 
 #endif

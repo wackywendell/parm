@@ -46,8 +46,9 @@ bool neighborlist::update_list(bool force){
     // time to update
     updatenum++;
     ignorechanged = false;
-    curpairs.clear();
+    curpairs.resize(atoms.size());
     for(uint i=0; i<atoms.size(); i++){
+		curpairs[i].clear();
         atomid a1=atoms.get_id(i);
         lastlocs[i] = a1->x;
         for(uint j=0; j<i; j++){
@@ -55,7 +56,7 @@ bool neighborlist::update_list(bool force){
             if (ignorepairs.has_pair(a1, a2)) continue;
             flt diam = (diameters[i] + diameters[j])/2;
             if(box->diff(a1->x, a2->x).mag() < (diam + skin))
-                curpairs.push_back(idpair(a1, a2));
+                curpairs[j].push_back(a1);
         }
     }
     //~ cout << "neighborlist::update_list:: done.\n";
@@ -72,7 +73,42 @@ bool neighborlist::update_list(bool force){
     //~ cout << '\n';
     
     return true;
-}
+};
+
+neighborlist::iterator neighborlist::begin(){
+	return neighborlist::iterator(*this);
+};
+
+neighborlist::iterator neighborlist::end(){
+	return neighborlist::iterator(*this, 
+			curpairs.end(), curpairs.back().end(), atoms.size());
+};
+
+vector<idpair> neighborlist::pair_list(){
+	vector<idpair> v = vector<idpair>();
+	for(iterator it = begin(); it != end(); ++it){
+		v.push_back(*it);
+	}
+	return v;
+};
+
+bool NLPairIter::operator==(const NLPairIter &other){
+	if(curlist != other.curlist) return false;
+	if(curlist == nlist.curpairs.end()) return true;
+	return curloc == other.curloc;
+};
+
+void NLPairIter::find_pair(bool force_advance){
+	vector<vector<atomid> >::iterator pend = nlist.curpairs.end();
+	if(curlist == pend) return;
+	if(force_advance) curloc++;
+	while(curloc == curlist->end()){
+		curlist++;
+		n1++;
+		if(curlist == pend) return;
+		curloc = curlist->begin();
+	}
+};
 
 Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const uint width)
         : box(box), atoms(atoms), minwidth(-1), goalwidth(-1){

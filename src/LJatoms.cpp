@@ -32,6 +32,9 @@ int main(){
     boost::shared_ptr<atomvec> atomptr(new atomvec(Natoms, 1.0));
     atomvec & atoms = *atomptr;
     
+    SubgroupBool sg = SubgroupBool(atomptr);
+    sg.add(atoms.get_id(0));
+    
     // LJ interaction
     // We'll cut it off at 2.5σ, and have a neighborlist out to 1.4 times that
     boost::shared_ptr<NListed<LJatomcut, LJCutPair> > 
@@ -70,8 +73,8 @@ int main(){
         }
     }
 
-    cout << "Starting. Neighborlist contains " << nl->numpairs() << " / " <<
-        (atoms.size()*(atoms.size()-1))/2 << " pairs.\n";
+    //~ cout << "Starting. Neighborlist contains " << nl->numpairs() << " / " <<
+        //~ (atoms.size()*(atoms.size()-1))/2 << " pairs.\n";
     
     //Now we make our "collection"
     collectionVerlet collec = collectionVerlet(boost::static_pointer_cast<Box>(obox), atomptr, dt);
@@ -123,8 +126,8 @@ int main(){
     // if you have .vmdrc in that same directory, you should also be able
     // to toggle the box with the "b" button
     
-    cout << "Done. Neighborlist contains " << nl->numpairs() << " / " <<
-        (atoms.size()*(atoms.size()-1))/2 << " pairs.\n";
+    //~ cout << "Done. Neighborlist contains " << nl->numpairs() << " / " <<
+        //~ (atoms.size()*(atoms.size()-1))/2 << " pairs.\n";
 };
 
 void writefile(ofstream& outf, atomvec& atoms, Box& bx){

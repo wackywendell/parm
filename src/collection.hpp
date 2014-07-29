@@ -895,7 +895,7 @@ class collectionCDBDnl : public collectionCDBD {
         void add_atoms(){
             for(uint i=0; i<(atoms->size()); i++) nlist.add(atoms->get_id(i), atomsizes[i]);
         }
-        event base_event(atomid a){TODO};
+        event base_event(atomid a);
         event next_event(atomid a);
         
     public:

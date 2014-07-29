@@ -2009,6 +2009,23 @@ event collectionCDBDgrid::next_event(atomid a){
     return e;
 }
 
+event collectionCDBDnl::base_event(atomid a){
+    event e;
+    flt vmag = a->v.mag();
+    if(!isfinite(vmag) or vmag <= 0) vmag = sqrtflt(T/a->m) * edge_epsilon;
+    flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
+    assert(epsilon_t > 0);
+    
+    flt dist_to_half_edge = nlist.dist_to_half_edge(a);
+    
+    e.t = curt + (dist_to_half_edge / vmag) + epsilon_t;
+    if(e.t <= 0) e.t = epsilon_t;
+    e.a = a;
+    e.b = a;
+    
+    return e;
+};
+
 void collectionCDBDnl::update_pairs(bool force){
     if(!force && (nlist_time == curt)) return;
     nlist.update_list(force);
@@ -2017,12 +2034,11 @@ void collectionCDBDnl::update_pairs(bool force){
 
 event collectionCDBDnl::next_event(atomid a){
     event e = base_event(a);
-        
-    for(neighborlist::iterator it=nlist.begin(); it!=nlist.end(); ++it){
+    
+    vector<atomid> &near = nlist.near(a);
+    for(vector<atomid>::iterator it=near.begin(); it!=near.end(); ++it){
         event e2;
-        atomid a2 = it->last();
-        if(a2 == a) a2 = it->first();
-        else if (it->first() != a) continue;
+        atomid a2 = *it;
         
         flt sigma = (atomsizes[a.n()] + atomsizes[a2.n()])/2.0;
         if(make_event(*box, e2, a2, a, sigma, curt)
@@ -2032,4 +2048,4 @@ event collectionCDBDnl::next_event(atomid a){
     }
     assert(e.t >= curt);
     return e;
-}
+};

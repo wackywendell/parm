@@ -1332,13 +1332,6 @@ class NListed : public interaction {
     // method A(atomid a, A other)
     // you also need to implement a couple methods below
     
-    // Implementation detail:
-    // note that neighborlist maintains its own metagroup, so that when
-    // a member of A is created and passed to this group, the atomid in that
-    // member has an A.n() value referring to its place in the *original*
-    // atomgroup, not this one. This is why we need an A(atomid, A) method;
-    // so we can make a new A with all the same properties as before,
-    // but with the n() referring to the neighborlist maintained atomgroup.
     protected:
         vector<A> atoms; // NOT all full. 
                          // This is the length of the atomvec, and if 
@@ -1531,12 +1524,15 @@ void NListed<A, P>::update_pairs(){
     
     lastupdate = neighbors->which();
     pairs.clear();
-    vector<idpair>::iterator pairit;
-    for(pairit = neighbors->begin(); pairit != neighbors->end(); pairit++){
+    for(neighborlist::iterator pairit = neighbors->begin(); pairit != neighbors->end(); ++pairit){
         // assert(atoms.size() > pairit->first().n());
         // assert(atoms.size() > pairit->last().n());
-        A firstatom = atoms[pairit->first().n()];
-        A secondatom = atoms[pairit->last().n()];
+        // TODO: need to have atoms match the 'n'
+        // i.e., `atoms` needs to be the full length of the atomvec
+        // Does this work?
+        idpair pair = *pairit;
+        A firstatom = atoms[pair.first().n()];
+        A secondatom = atoms[pair.last().n()];
         pairs.push_back(P(firstatom, secondatom));
     }
 }
