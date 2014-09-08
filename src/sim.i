@@ -83,6 +83,7 @@
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPairMinCLs >)
 %shared_ptr(NListed< HertzianAtom,HertzianPair >)
+%shared_ptr(NListed< HertzianDragAtom,HertzianDragPair >)
 %shared_ptr(SCboxed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
 
@@ -447,6 +448,7 @@ namespace std {
 %template(LJish) NListed<LJishAtom, LJishPair>;
 %template(HertzianSimple) SimpleListed<HertzianAtom, HertzianPair>;
 %template(Hertzian) NListed<HertzianAtom, HertzianPair>;
+%template(HertzianDrag) NListed<HertzianDragAtom, HertzianDragPair>;
 %template(HertzianSC) SCboxed<HertzianAtom, HertzianPair>;
 %template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;

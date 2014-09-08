@@ -626,6 +626,7 @@ struct ChargePair {
 
 ////////////////////////////////////////////////////////////////////////
 // Repulsive LJ, with ε = √(ε₁ ε₂) and σ = (σ₁+σ₂)/2
+// Potential is V(r) = ε (σ⁶/r⁶ - 1)²
 // cutoff at sigma
 struct LJatom : public atomid {
     flt epsilon, sigma;
@@ -1184,6 +1185,48 @@ struct HertzianPair {
         fpair.fij = rij * (eps*pow(1.0 - (R/sig), exponent-1) /sig/R);
         flt Rs = R / sig;
         fpair.xij = -Rs*eps*pow(1.0 - (R/sig), exponent-2)*(1-exponent*Rs);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+// Hertzian potential with drag, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
+// Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
+// cutoff at r = σ
+// drag is f = -γv in the normal direction
+
+struct HertzianDragAtom : public atomid {
+    flt eps, sigma, exponent, gamma;
+    HertzianDragAtom(){};
+    HertzianDragAtom(atomid a, flt eps, flt sigma, flt gamma, flt exponent=2.5) : atomid(a),
+            eps(eps), sigma(sigma), exponent(exponent), gamma(gamma){};
+    HertzianDragAtom(atomid a, HertzianDragAtom other) : atomid(a), 
+        eps(other.eps), sigma(other.sigma), exponent(other.exponent), gamma(other.gamma){};
+    flt maxsize(){return sigma;};
+};
+
+struct HertzianDragPair {
+    flt eps, sig, exponent, gamma;
+    atomid atom1, atom2;
+    HertzianDragPair(HertzianDragAtom a1, HertzianDragAtom a2) : 
+        eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
+        exponent((a1.exponent + a2.exponent)/2.0), 
+        gamma((a1.gamma + a2.gamma)/2), atom1(a1), atom2(a2){};
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt dsq = rij.sq();
+        if(dsq > sig*sig) return 0.0;
+        flt R = sqrt(dsq);
+        return eps * pow(1.0 - (R/sig), exponent) / exponent;
+    }
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1->x, atom2->x);
+        Vec vij = atom1->v - atom2->v;
+        flt dsq = rij.sq();
+        if(dsq > sig*sig) return Vec();
+        flt R = sqrt(dsq);
+        Vec v_perp = rij * (vij.dot(rij)) / dsq;
+        return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R) +
+				(v_perp * gamma);
     }
 };
 
