@@ -392,17 +392,17 @@ class collectionNLCGV : public collection {
 
 flt solveCubic1(flt b, flt c, flt d){
     // from Wikipedia
-    flt determ = (powflt(2*powflt(b,2) - 9*b*c + 27*d,2) - 4*powflt(b*b - 3*c,3));
+    flt determ = (pow(2*pow(b,2) - 9*b*c + 27*d,2) - 4*pow(b*b - 3*c,3));
     if (determ < 0)
         printf("bad determ: %.4f\n", (double) determ);
-    flt firstpartundercube = (2*powflt(b,3) - 9*b*c + 27*d)/2;
-    flt secondpartundercube = sqrtflt(determ)/2;
+    flt firstpartundercube = (2*pow(b,3) - 9*b*c + 27*d)/2;
+    flt secondpartundercube = sqrt(determ)/2;
     if (firstpartundercube < secondpartundercube) 
         printf("bad pairs under cube: %.4f < %.4f (%.4f)\n", 
                     (double) firstpartundercube, (double) secondpartundercube,
                     (double) (firstpartundercube - secondpartundercube));
-    flt cuberoot1=cbrtflt(firstpartundercube + secondpartundercube);
-    flt cuberoot2=cbrtflt(firstpartundercube - secondpartundercube);
+    flt cuberoot1=cbrt(firstpartundercube + secondpartundercube);
+    flt cuberoot2=cbrt(firstpartundercube - secondpartundercube);
     return (-b/3) - (cuberoot1/3) - (cuberoot2/3);
 }
 
@@ -420,8 +420,8 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
     if (determ){
         printf("Multiple Answers: %.4f, %.4f\n", (double) Q,(double) R);
         assert(!determ);
-        flt theta = acos(R / sqrtflt(Q3));
-        flt sqQ = -2*sqrtflt(Q);
+        flt theta = acos(R / sqrt(Q3));
+        flt sqQ = -2*sqrt(Q);
         flt x1 = sqQ*cos(theta/3) - (a1/3);
         flt x2 = sqQ*cos((theta + (2*M_PI))/3) - (a1/3);
         flt x3 = sqQ*cos((theta + (4*M_PI))/3) - (a1/3);
@@ -452,7 +452,7 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
         }
         return x;
     }
-    flt R2Q3 = cbrtflt(sqrtflt(R2 - Q3) + fabs(R));
+    flt R2Q3 = cbrt(sqrt(R2 - Q3) + fabs(R));
     return -(sgn(R)*(R2Q3 + (Q/R2Q3))) - (a1/3);
 }
 

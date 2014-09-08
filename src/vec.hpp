@@ -89,7 +89,7 @@ class Numvector : public Nvector<T, N> {
                     for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=rhs[i];}
         T dot (const Numvector &other) const;
         inline T sq() const {return dot(*this);};
-        inline T mag() const {return sqrtl(sq());};
+        inline T mag() const {return sqrt(sq());};
         inline T distance(const Numvector &rhs) const;
         Numvector perpto(const Numvector &other) const;
         //returns the component of this perpendicular to other
@@ -400,9 +400,9 @@ template <class T, unsigned int N>
 inline T Numvector<T,N>::distance(const Numvector<T,N> &rhs) const{
     T sum = 0;
     for(unsigned int i=0; i<N; i++){
-        sum += powl(Nvector<T,N>::get(i) - rhs.get(i), 2);
+        sum += pow(Nvector<T,N>::get(i) - rhs.get(i), 2);
     }
-    return sqrtl(sum);
+    return sqrt(sum);
     // return Numvector<T,N>(*this - rhs).mag();
 }
 

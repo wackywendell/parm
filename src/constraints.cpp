@@ -124,7 +124,7 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
 vector<Vec> RsqTracker1::xyz2(){
     vector<Vec> means(xyz2sums.size(), Vec());
     for(uint i=0; i<xyz2sums.size(); ++i){
-        means[i] = xyz2sums[i] / count;
+        means[i] = xyz2sums[i] / ((flt) count);
     }
     return means;
 };
@@ -132,7 +132,7 @@ vector<Vec> RsqTracker1::xyz2(){
 vector<Vec> RsqTracker1::xyz4(){
     vector<Vec> means(xyz4sums.size(), Vec());
     for(uint i=0; i<xyz4sums.size(); ++i){
-        means[i] = xyz4sums[i] / count;
+        means[i] = xyz4sums[i] / ((flt) count);
     }
     return means;
 };
@@ -140,7 +140,7 @@ vector<Vec> RsqTracker1::xyz4(){
 vector<flt> RsqTracker1::r4(){
     vector<flt> means(r4sums.size(), 0);
     for(uint i=0; i<r4sums.size(); ++i){
-        means[i] = r4sums[i] / count;
+        means[i] = r4sums[i] / ((flt) count);
     }
     return means;
 };
@@ -221,11 +221,143 @@ vector<flt> RsqTracker::counts(){
     vector<flt> vals;
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
-        vals.push_back(it->get_count());
+        vals.push_back((flt) it->get_count());
     }
     return vals;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
+            pastlocs(atoms.size(), Vec()), ISFsums(ks.size(), vector<Array<cmplx, NDIM> >()),
+            ks(ks), skip(skip), count(0){
+    for(uint i = 0; i<atoms.size(); ++i){
+        pastlocs[i] = atoms[i].x - com;
+    };
+    
+    for(uint ki=0; ki<ks.size(); ++ki){
+        ISFsums[ki] = vector<Array<cmplx, NDIM> >(atoms.size(), Array<cmplx, NDIM>());
+    };
+};
+        
+void ISFTracker1::reset(atomgroup& atoms, Vec com){
+    pastlocs.resize(atoms.size());
+    for(uint ki=0; ki<ks.size(); ki++){
+        ISFsums[ki].assign(atoms.size(), Array<cmplx, NDIM>());
+    }
+    for(uint i = 0; i<atoms.size(); ++i){
+        pastlocs[i] = atoms[i].x - com;
+    };
+    count = 0;
+};
+
+bool ISFTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
+    if(t % skip != 0) return false;
+    
+    for(uint i = 0; i<atoms.size(); ++i){
+        //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
+        Vec r = atoms[i].x - com;
+        // We don't want the boxed distance - we want the actual distance moved!
+        Vec dr = r - pastlocs[i];
+        for(uint ki=0; ki<ks.size(); ++ki){
+            for(uint j=0; j<NDIM; ++j){
+                //~ cout << "i: " << i << "  ki: " << ki << "  j: " << j;
+                //~ cout << "  dr[j]: " << dr[j];
+                //~ cout << "  ks[ki]: " << ks[ki];
+                //~ cout << endl; 
+                
+                ISFsums[ki][i][j] += exp(cmplx(0, ks[ki]*dr[j]));
+            }
+        }
+        
+        pastlocs[i] = r;
+    };
+    count += 1;
+    return true;
+};
+
+vector<vector<cmplx> > ISFTracker1::ISFs() {
+    vector<vector<cmplx> > means(ks.size(), vector<cmplx>());
+    for(uint ki=0; ki<ks.size(); ++ki){
+        means[ki].assign(ISFsums[ki].size(), 0);
+        for(uint i = 0; i<ISFsums[ki].size(); ++i){
+            for(uint j=0; j<NDIM; ++j){
+                means[ki][i] += ISFsums[ki][i][j];
+            }
+            means[ki][i] /= NDIM;
+            means[ki][i] /= (flt) count;
+        }
+    }
+    
+    return means;
+};
+
+vector<vector<Array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
+    vector<vector<Array<cmplx, NDIM> > > means(ks.size(), vector<Array<cmplx, NDIM> >());
+    for(uint ki=0; ki<ks.size(); ++ki){
+        means[ki].assign(ISFsums[ki].size(), Array<cmplx, NDIM>());
+        for(uint i = 0; i<ISFsums[ki].size(); ++i){
+            for(uint j = 0; j<NDIM; ++j)
+                means[ki][i][j] = ISFsums[ki][i][j] / (cmplx((flt) count, 0));
+        }
+    }
+    
+    return means;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ISFTracker::ISFTracker(sptr<atomgroup> atoms, vector<flt> ks, 
+                    vector<unsigned long> ns, bool usecom) : atoms(atoms), curt(0), usecom(usecom){
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
+        singles.push_back(ISFTracker1(*atoms, *n, ks, com));
+    }
+};
+
+void ISFTracker::update(Box &box){
+    curt++;
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
+        it->update(box, *atoms, curt, com);
+    }
+};
+
+void ISFTracker::reset(){
+    curt = 0;
+    Vec com = usecom ? atoms->com() : Vec();
+    for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
+        it->reset(*atoms, com);
+    }
+};
+
+vector<vector<vector<cmplx> > > ISFTracker::ISFs(){
+    vector<vector<vector<cmplx> > > vals;
+    vals.reserve(singles.size());
+    for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
+        vals.push_back(it->ISFs());
+    }
+    return vals;
+};
+
+vector<vector<vector<Array<cmplx, NDIM> > > > ISFTracker::ISFxyz(){
+    vector<vector<vector<Array<cmplx, NDIM> > > > vals;
+    vals.reserve(singles.size());
+    for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
+        vals.push_back(it->ISFxyz());
+    }
+    return vals;
+};
+
+vector<flt> ISFTracker::counts(){
+    vector<flt> vals;
+    vals.reserve(singles.size());
+    for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
+        vals.push_back((flt) it->get_count());
+    }
+    return vals;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool jamminglist::operator<(const jamminglist& other ){
     //return distsq < other.distsq;

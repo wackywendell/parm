@@ -70,8 +70,8 @@ class interactpair {
         virtual ~interactpair(){};
 };
 
-static const flt LJr0 = powflt(2.0, 1.0/6.0);
-static const flt LJr0sq = powflt(2.0, 1.0/3.0);
+static const flt LJr0 = pow(2.0, 1.0/6.0);
+static const flt LJr0sq = pow(2.0, 1.0/3.0);
 
 class LJrepulsive {
     protected:
@@ -195,7 +195,7 @@ class LJFullCut {
     public:
         LJFullCut(const flt epsilon, const flt sigma, const flt cutsig):
             epsilon(epsilon), sigma(sigma), cutR(cutsig){
-                flt rsix = powflt(cutR, 6);
+                flt rsix = pow(cutR, 6);
                 flt mid = (1-1/rsix);
                 cutE = epsilon*(mid*mid-1);
             };
@@ -641,7 +641,7 @@ struct LJpair {
     flt epsilon, sigma;
     atomid atom1, atom2;
     LJpair(LJatom LJ1, LJatom LJ2) :
-            epsilon(sqrtflt(LJ1.epsilon * LJ2.epsilon)),
+            epsilon(sqrt(LJ1.epsilon * LJ2.epsilon)),
             sigma((LJ1.sigma + LJ2.sigma) / 2),
             atom1(LJ1), atom2(LJ2){};
     inline flt energy(Box &box){
@@ -668,7 +668,7 @@ struct LJCutPair {
     LJFullCut inter;
     atomid atom1, atom2;
     LJCutPair(LJatomcut a1, LJatomcut a2) : 
-        inter(sqrtflt(a1.epsilon * a2.epsilon),
+        inter(sqrt(a1.epsilon * a2.epsilon),
               (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
@@ -680,7 +680,7 @@ struct LJAttractPair {
     LJattractCut inter;
     atomid atom1, atom2;
     LJAttractPair(LJatomcut a1, LJatomcut a2) : 
-        inter(sqrtflt(a1.epsilon * a2.epsilon),
+        inter(sqrt(a1.epsilon * a2.epsilon),
               (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
@@ -828,7 +828,7 @@ struct LJishPair {
     atomid atom1, atom2;
     LJishPair(LJishAtom LJ1, LJishAtom LJ2) :
             epsilon(LJ1.getEpsilon(LJ2)),
-            repeps(sqrtflt(LJ1.repeps * LJ2.repeps)),
+            repeps(sqrt(LJ1.repeps * LJ2.repeps)),
             sigma(LJ1.getSigma(LJ2)),
             n((LJ1.exponent + LJ2.exponent) / 2),
             cutR(max(LJ1.sigcut,  LJ2.sigcut)),
@@ -839,7 +839,7 @@ struct LJishPair {
             epsilon = 0;
             return;
         }
-        flt mid = (1-powflt(cutR,-n));
+        flt mid = (1-pow(cutR,-n));
         cutE = epsilon*(mid*mid);
     };
     inline flt energy(Box &box){
@@ -850,7 +850,7 @@ struct LJishPair {
             return 0;
         }
         
-        flt mid = (1-powflt(rsq,-n/2));
+        flt mid = (1-pow(rsq,-n/2));
         //~ printf("LJish: rsq=%.2f, mid %.2f, epsilon %.2f, repeps %.2f\n", rsq, mid, epsilon, repeps);
         if (rsq > 1) return epsilon*(mid*mid) - cutE;
         return repeps*(mid*mid) - cutE;
@@ -860,7 +860,7 @@ struct LJishPair {
         flt dsq = rij.sq();
         flt rsq = dsq/(sigma*sigma);
         if(rsq > cutR * cutR) return Vec();
-        flt rmid = powflt(rsq,-n/2); // σ^n/r^n
+        flt rmid = pow(rsq,-n/2); // σ^n/r^n
         flt fmagTimesR = 2*n*rmid*(rmid - 1); // 2 n r^-n(r^-n - 1)
         if (rsq < 1) return rij * (repeps * fmagTimesR / dsq);
         return rij * (epsilon * fmagTimesR / dsq); // r⃗ * 2 n * r^-n(r^-n - 1) / r² = 2 n r^-(n-1) * (r^-n - 1) r̂
@@ -910,7 +910,7 @@ struct LJAttractRepulsePair {
                 eps = abs(eps);
                 return;
             }
-            flt mid = (1-powflt(cutR,-6));
+            flt mid = (1-pow(cutR,-6));
             cutE = eps*(mid*mid);
         };
     inline flt energy(Box &box){
@@ -918,10 +918,10 @@ struct LJAttractRepulsePair {
         flt rsq = rij.sq()/(sig*sig);
         if(rsq > cutR*cutR) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
-                    //~ sqrtflt(rij.sq()), 0.0, eps, sig, cutR, cutE);
+                    //~ sqrt(rij.sq()), 0.0, eps, sig, cutR, cutE);
             return 0;
         }
-        flt mid = (1-powflt(rsq,-3));
+        flt mid = (1-pow(rsq,-3));
         //~ if(eps*(mid*mid) - cutE < 0) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
                 //~ rij.mag(), eps*(mid*mid) - cutE, eps, sig, cutR, cutE);
@@ -934,7 +934,7 @@ struct LJAttractRepulsePair {
         flt dsq = rij.sq();
         flt rsq = dsq/(sig*sig);
         if(rsq > (cutR*cutR)) return Vec();
-        flt rsix = powflt(rsq,-3); // σ⁶/r⁶
+        flt rsix = pow(rsq,-3); // σ⁶/r⁶
         flt fmagTimesR = 12*eps*rsix*(rsix - 1);
         return rij * (fmagTimesR / dsq);
     };
@@ -981,7 +981,7 @@ struct LJAttractFixedRepulsePair {
     atomid atom1, atom2;
     LJAttractFixedRepulsePair(){};
     LJAttractFixedRepulsePair(LJAttractFixedRepulseAtom a1, LJAttractFixedRepulseAtom a2) : 
-        eps(abs(a1.getEpsilon(a2))), repeps(sqrtflt(a1.repeps * a2.repeps)), 
+        eps(abs(a1.getEpsilon(a2))), repeps(sqrt(a1.repeps * a2.repeps)), 
         sig((a1.sig + a2.sig)/2.0),
         cutR(max(a1.sigcut, a2.sigcut)), attract(a1.getEpsilon(a2) > 0),
         atom1(a1), atom2(a2){
@@ -992,7 +992,7 @@ struct LJAttractFixedRepulsePair {
                 attract = false;
                 return;
             }
-            flt mid = (1-powflt(cutR,-6.0));
+            flt mid = (1-pow(cutR,-6.0));
             cutE = eps*(mid*mid);
         };
     inline flt energy(Box &box){
@@ -1000,12 +1000,12 @@ struct LJAttractFixedRepulsePair {
         flt rsq = rij.sq()/(sig*sig);
         if(rsq > cutR*cutR) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
-                    //~ sqrtflt(rij.sq()), 0.0, eps, sig, cutR, cutE);
+                    //~ sqrt(rij.sq()), 0.0, eps, sig, cutR, cutE);
             return 0;
         }
-        flt mid = (1-powflt(rsq,-3)); // # 1 - σ⁶/r⁶
+        flt mid = (1-pow(rsq,-3)); // # 1 - σ⁶/r⁶
         //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
-                    //~ sqrtflt(rij.sq()), eps*(mid*mid) - cutE, eps, sig, cutR, cutE);
+                    //~ sqrt(rij.sq()), eps*(mid*mid) - cutE, eps, sig, cutR, cutE);
         if (rsq > 1) return eps*(mid*mid) - cutE;
         return repeps*(mid*mid) - cutE;
         //~ flt E;
@@ -1013,7 +1013,7 @@ struct LJAttractFixedRepulsePair {
         //~ else E = repeps*(mid*mid) - cutE;
         //~ if(E > 1e4)
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f,%.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
-                    //~ sqrtflt(rij.sq()), E, eps, repeps, sig, cutR, cutE);
+                    //~ sqrt(rij.sq()), E, eps, repeps, sig, cutR, cutE);
         //~ return E;
     };
     inline Vec forces(Box &box){
@@ -1021,7 +1021,7 @@ struct LJAttractFixedRepulsePair {
         flt dsq = rij.sq();
         flt rsq = dsq/(sig*sig);
         if(rsq > (cutR*cutR)) return Vec();
-        flt rsix = powflt(rsq,-3); // σ⁶/r⁶
+        flt rsix = pow(rsq,-3); // σ⁶/r⁶
         flt fmagTimesR = 12*rsix*(rsix - 1);
         if (rsq < 1) return rij * (repeps * fmagTimesR / dsq);
         return rij * (eps * fmagTimesR / dsq);
@@ -1030,7 +1030,7 @@ struct LJAttractFixedRepulsePair {
         //~ else fmag = eps * fmagTimesR / dsq;
         //~ if(fmag * rij.mag() > 1e4)
             //~ printf("Distance: %.2f Force: %.2f (ε: %.2f,%.2f σ: %.2f cut: %.2f cutE: %.2f)\n", 
-                    //~ sqrtflt(rij.sq()), fmag * rij.mag(), eps, repeps, sig, cutR, cutE);
+                    //~ sqrt(rij.sq()), fmag * rij.mag(), eps, repeps, sig, cutR, cutE);
         //~ return rij * fmag;
     };
 };
@@ -1052,8 +1052,8 @@ struct LJDoubleAtom : public LJatom {
 
 struct LJDoublePair : public LJAttractFixedRepulsePair {
     LJDoublePair(LJDoubleAtom a1, LJDoubleAtom a2) {
-        eps = sqrtflt(a1.epsilon * a2.epsilon);
-        repeps = sqrtflt(a1.epsrep * a2.epsrep); 
+        eps = sqrt(a1.epsilon * a2.epsilon);
+        repeps = sqrt(a1.epsrep * a2.epsrep); 
         sig = (a1.sigma + a2.sigma)/2.0;
         cutR = max(a1.sigcut, a2.sigcut);
         attract = a1.epsilon * a2.epsilon > 0;
@@ -1066,7 +1066,7 @@ struct LJDoublePair : public LJAttractFixedRepulsePair {
             attract = false;
             return;
         }
-        flt mid = (1-powflt(cutR,-6));
+        flt mid = (1-pow(cutR,-6));
         cutE = eps*(mid*mid);
     };
 };
@@ -1103,7 +1103,7 @@ struct EisMclachlanPair {
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
         if(dsq > (cutoff*cutoff)) return Vec();
-        flt R = sqrtflt(dsq);
+        flt R = sqrt(dsq);
         return rij * ((c0/dsq-c2)/R);
     }
 };
@@ -1137,38 +1137,38 @@ struct HertzianPair {
     flt eps, sig, exponent;
     atomid atom1, atom2;
     HertzianPair(HertzianAtom a1, HertzianAtom a2) : 
-        eps(sqrtflt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
+        eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         exponent((a1.exponent + a2.exponent)/2.0), atom1(a1), atom2(a2){};
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
         if(dsq > sig*sig) return 0.0;
-        flt R = sqrtflt(dsq);
-        return eps * powflt(1.0 - (R/sig), exponent) / exponent;
+        flt R = sqrt(dsq);
+        return eps * pow(1.0 - (R/sig), exponent) / exponent;
     }
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
         if(dsq > sig*sig) return Vec();
-        flt R = sqrtflt(dsq);
-        return rij * (eps * powflt(1.0 - (R/sig), exponent-1) /sig/R);
+        flt R = sqrt(dsq);
+        return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
     }
     inline EnergyForce EnergyForces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
         if(dsq > sig*sig) return EnergyForce(Vec(),0);
-        flt R = sqrtflt(dsq);
+        flt R = sqrt(dsq);
         
-        Vec f = rij * (eps * powflt(1.0 - (R/sig), exponent-1) /sig/R);
-        flt E = eps * powflt(1.0 - (R/sig), exponent) / exponent;
+        Vec f = rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
+        flt E = eps * pow(1.0 - (R/sig), exponent) / exponent;
         return EnergyForce(f, E);
     }
     //~ inline flt xrij(Box &box){
         //~ Vec rij = box.diff(atom1->x, atom2->x);
         //~ flt dsq = rij.sq();
         //~ if(dsq > sig*sig) return 0.0;
-        //~ flt R = sqrtflt(dsq);
-        //~ return (R*eps*(exponent-1)/sig/sig) * powflt(1.0 - (R/sig), exponent-2);
+        //~ flt R = sqrt(dsq);
+        //~ return (R*eps*(exponent-1)/sig/sig) * pow(1.0 - (R/sig), exponent-2);
     //~ }
     inline void fill(Box &box, forcepairx &fpair){
         fpair.a1 = atom1;
@@ -1180,10 +1180,10 @@ struct HertzianPair {
             fpair.xij = 0.0;
             return;
         }
-        flt R = sqrtflt(dsq);
-        fpair.fij = rij * (eps*powflt(1.0 - (R/sig), exponent-1) /sig/R);
+        flt R = sqrt(dsq);
+        fpair.fij = rij * (eps*pow(1.0 - (R/sig), exponent-1) /sig/R);
         flt Rs = R / sig;
-        fpair.xij = -Rs*eps*powflt(1.0 - (R/sig), exponent-2)*(1-exponent*Rs);
+        fpair.xij = -Rs*eps*pow(1.0 - (R/sig), exponent-2)*(1-exponent*Rs);
     }
 };
 
@@ -1234,15 +1234,18 @@ struct LoisOhernPair {
     flt eps, sig, C, l, sigcut;
     atomid atom1, atom2;
     LoisOhernPair(LoisOhernAtom a1, LoisOhernAtom a2) : 
-        eps(sqrtflt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
+        eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         C((a1.C + a2.C)/2.0), l((a1.l + a2.l)/2.0), sigcut(sig*(1+C+l)),
+        atom1(a1), atom2(a2){};
+    LoisOhernPair(LoisOhernAtom a1, LoisOhernAtom a2, flt eps, flt sig, flt C, flt l) : 
+        eps(eps), sig(sig), C(C), l(l), sigcut(sig*(1+C+l)),
         atom1(a1), atom2(a2){};
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
          // using >= to prevent NaNs when l = 0
         if(dsq >= sigcut*sigcut) return 0.0;
-        flt R = sqrtflt(dsq)/sig;
+        flt R = sqrt(dsq)/sig;
          // using <= to prevent NaNs when l = 0
         if(R <= 1 + C){
             flt dR = R-1;
@@ -1256,11 +1259,11 @@ struct LoisOhernPair {
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.sq();
-        if(dsq > sigcut*sigcut) return Vec();
-        flt R = sqrtflt(dsq);
+        if(dsq >= sigcut*sigcut) return Vec();
+        flt R = sqrt(dsq);
         flt rsig = R/sig;
         
-        if(rsig < 1 + C){
+        if(rsig <= 1 + C){
             flt dR = rsig-1;
             return rij*(-eps*dR/R);
         }
@@ -1268,6 +1271,16 @@ struct LoisOhernPair {
         flt dR2 = rsig-(C+l+1);
         return rij*(C*eps/l*dR2/R);
     }
+};
+
+
+
+struct LoisOhernPairMinCLs : public LoisOhernPair {
+    LoisOhernPairMinCLs(LoisOhernAtom a1, LoisOhernAtom a2) : 
+        LoisOhernPair(a1, a2, sqrt(a1.eps * a2.eps), 
+        (a1.sigma + a2.sigma)/2.0,
+        (a1.C < a2.C ? a1.C : a2.C),
+        (a1.l < a2.l ? a1.l : a2.l)){};
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -1749,8 +1762,8 @@ class WalledBox2D : public OriginBox {
             };
         Vec diff(Vec r1, Vec r2){
             Vec dr = r1 - r2;
-            if(!xwalls) dr[0] = remflt(r1[0], boxsize[0]);
-            if(!ywalls) dr[1] = remflt(r1[1], boxsize[1]);
+            if(!xwalls) dr[0] = remainder(r1[0], boxsize[0]);
+            if(!ywalls) dr[1] = remainder(r1[1], boxsize[1]);
             return dr;
         }
         Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes){
@@ -1772,7 +1785,7 @@ class WalledBox2D : public OriginBox {
         }
         flt resizeV(flt newV){
             flt curV = V();
-            return resize(powflt(newV/curV, OVERNDIM));
+            return resize(pow(newV/curV, OVERNDIM));
         }
         Vec randLoc(flt walldist){
             Vec bxvec = boxsize;
@@ -1814,7 +1827,7 @@ class SCatomvec : public virtual atomgroup {
     private:
         atomvec atoms;
     public:
-        SCatomvec(vector<double> masses) : atoms(masses.size()*2, 0.0){
+        SCatomvec(vector<double> masses) : atoms((uint) masses.size()*2, 0.0){
             for(uint i=0; i < masses.size(); ++i){
                 atoms[2*i].m = masses[i]/2;
                 atoms[2*i+1].m = masses[i]/2;
@@ -1885,7 +1898,7 @@ struct SCSpringPair : public SCPair {
         //~ SpheroCylinderDiff diff = SCNearestLoc(a1.x, a1p.x, a2.x, a2p.x);
         flt dsq = diff.delta.sq();
         if(dsq > sig*sig) return 0;
-        flt d = sqrtflt(dsq);
+        flt d = sqrt(dsq);
         flt dsig = d-sig;
         //~ cout << "SCSpringPair d: " << d << "  sig: " 
                 //~ << sig << "  dsig: " << dsig << "  eps: " << eps << '\n';
@@ -1895,7 +1908,7 @@ struct SCSpringPair : public SCPair {
     Vec forces(Box &box, SpheroCylinderDiff diff){
         flt dsq = diff.delta.sq();
         if(dsq > sig*sig) return Vec();
-        flt dmag = sqrtflt(dsq);
+        flt dmag = sqrt(dsq);
         Vec dhat = diff.delta / dmag;
         
         return dhat * (eps * (sig - dmag));

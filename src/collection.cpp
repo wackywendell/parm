@@ -18,7 +18,7 @@ void collection::scaleVs(flt scaleby){
 
 void collection::scaleVelocitiesT(flt T){
     flt t = temp();
-    flt scaleby = sqrtflt(T/t);
+    flt scaleby = sqrt(T/t);
     scaleVs(scaleby);
 }
 
@@ -26,7 +26,7 @@ void collection::scaleVelocitiesE(flt E){
     flt E0 = energy();
     flt k0 = kinetic();
     flt goalkinetic = k0 + (E - E0);
-    flt scaleby = sqrtflt(goalkinetic/k0);
+    flt scaleby = sqrt(goalkinetic/k0);
     scaleVs(scaleby);
 }
 
@@ -65,7 +65,7 @@ flt collection::pressure(){
     vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
-        assert(not isnanflt(E));
+        assert(not isnan(E));
     }
     return E / V / flt(NDIM);
 }
@@ -77,14 +77,14 @@ flt collection::potentialenergy(){
         interaction &inter = **it;
         E += inter.energy(*box);
         //~ cout << "potential energy: " << E << endl;
-        assert(not isnanflt(E));
+        assert(not isnan(E));
     }
     return E;
 }
 
 flt collection::energy(){
     flt E = potentialenergy() - E0 + kinetic();
-    assert(not isnanflt(E));
+    assert(not isnan(E));
     return E;
 };
 
@@ -119,7 +119,7 @@ flt collection::gyradius(){
         Rgsq += ((*atoms)[i].x - avgr).sq();
     }
     
-    return sqrtflt(Rgsq/N);
+    return sqrt(Rgsq/N);
 }
 
 void collection::setForces(bool seta){
@@ -146,13 +146,13 @@ flt collection::setForcesGetPressure(bool seta){
         interaction &inter = **it;
         p += inter.setForcesGetPressure(*box);
     }
-    assert(!isnanflt(p));
+    assert(!isnan(p));
     if(!seta) return p;
     
     for(uint i=0; i<atoms->size(); i++){
             (*atoms)[i].a = (*atoms)[i].f / (*atoms)[i].m;
     }
-    assert(!isnanflt(p));
+    assert(!isnan(p));
     return p;
 }
 
@@ -179,7 +179,7 @@ void collectionSol::setCs(){
     // from Allen and Tildesley, 262
     flt dampdt = damping * dt;
     c0 = exp(-dampdt);
-    c1 = (-expm1flt(-dampdt))/dampdt;
+    c1 = (-expm1(-dampdt))/dampdt;
     c2 = (1-c1)/dampdt;
     
     // note that for sigmar, sigmav, and corr, we have taken the
@@ -188,16 +188,16 @@ void collectionSol::setCs(){
     // so sigmar has a dt*sqrt(k T/m) removed, and sigmav has a sqrt(k T/m)
     // removed
     if(dampdt > 1e-4)
-        sigmar = sqrtflt((1/dampdt) * (
-            2-(-4*expm1flt(-dampdt) + expm1flt(-2*dampdt))/dampdt
+        sigmar = sqrt((1/dampdt) * (
+            2-(-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
             ));
     else
-        sigmar = sqrtflt(2*dampdt/3 - dampdt*dampdt/2 + 7*dampdt*dampdt*dampdt/30);
+        sigmar = sqrt(2*dampdt/3 - dampdt*dampdt/2 + 7*dampdt*dampdt*dampdt/30);
     //~ cout << "setCs: " << -4*expm1(-dampdt) << ',' << expm1(-2*dampdt)
          //~ << ", (...): " << (-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
          //~ << ", sigmar:" << sigmar << '\n';
-    sigmav = sqrtflt(-expm1flt(-2*dampdt));
-    flt exdpdt = (-expm1flt(-dampdt));
+    sigmav = sqrt(-expm1(-2*dampdt));
+    flt exdpdt = (-expm1(-dampdt));
     corr = exdpdt*exdpdt/dampdt/sigmar/sigmav;
     //~ cout << "vals: " << c0 << ',' << c1 << ',' << c2 << "; T=" <<desT
          //~ << ", sigmas: (" << sigmar << ',' << sigmav << ',' << corr << ')'
@@ -218,7 +218,7 @@ void collectionSol::timestep(){
     //Step 1: set atom.x = r(t+dt) and atom.v = vp(t)
         atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
-        flt v0 = sqrtflt(desT/m[i].m);
+        flt v0 = sqrt(desT/m[i].m);
         flt r0 = dt * v0;
         VecPair vecpair;
         if (damping > 0) vecpair = gauss.genVecs();
@@ -251,7 +251,7 @@ collectionSolHT::collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
         vector<sptr<interaction> > interactions,
         vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
             collection(box, atoms, interactions, trackers, constraints), 
-            dt(dt), damping(damp), desT(T), gauss(sqrtflt(2.0*desT*damping/dt)){
+            dt(dt), damping(damp), desT(T), gauss(sqrt(2.0*desT*damping/dt)){
     setGauss();
     update_trackers();
     setForces(true);
@@ -260,7 +260,7 @@ collectionSolHT::collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
 };
 
 void collectionSolHT::setGauss(){
-    gauss.set(sqrtflt(2.0*desT*damping/dt)); // TODO: Is that correct?
+    gauss.set(sqrt(2.0*desT*damping/dt)); // TODO: Is that correct?
 }
 
 void collectionSolHT::timestep(){
@@ -407,10 +407,10 @@ void collectionConjGradientBox::resize(flt V){
     OriginBox& obox = (OriginBox&) *box;
     flt oldV = obox.V();
     #ifdef VEC3D
-    flt Vfac = powflt(V/oldV, 1.0/3.0);
+    flt Vfac = pow(V/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Vfac = sqrtflt(V/oldV);
+    flt Vfac = sqrt(V/oldV);
     #endif
     
     for(uint i=0; i<atoms->size(); i++){
@@ -442,10 +442,10 @@ void collectionConjGradientBox::timestep(){
     flt newV = oldV + (dV*dt);
     //flt Vfac = dV/((oldV + newV)/2)/NDIM;
     #ifdef VEC3D
-    flt Vfac = powflt(newV/oldV, 1.0/3.0);
+    flt Vfac = pow(newV/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Vfac = sqrtflt(newV/oldV);
+    flt Vfac = sqrt(newV/oldV);
     #endif
     
     for(uint i=0; i<g.size(); i++){
@@ -459,13 +459,13 @@ void collectionConjGradientBox::timestep(){
     
     flt gammaV = 0;
     if(FV*FV > 0) gammaV = newFV * (newFV-FV) / (FV*FV);
-    if(gammaV < 0 or isnanflt(gammaV) or isinfflt(gammaV)) gammaV = 0;
+    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
     if(gammaV > 1) gammaV = 1;
     
-    if(isnanflt(oldV) or isnanflt(newV) or isnanflt(dV)){
+    if(isnan(oldV) or isnan(newV) or isnan(dV)){
         cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
         cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
-        assert(!isnanflt(oldV));
+        assert(!isnan(oldV));
     }
     hV = newFV + (gammaV*hV);
     FV = newFV;
@@ -479,7 +479,7 @@ void collectionConjGradientBox::timestep(){
             // gamma = newa.sq() / asq; // Fletcher-Reeves
         }
         //if(gamma > 100) gamma = 0;
-        if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
+        if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
         g[i].v = newa + (g[i].v * gamma);
         g[i].a = newa;
         
@@ -501,10 +501,10 @@ void collectionConjGradientBox::timestepBox(){
     flt newV = oldV + (dV*dt);
     
     #ifdef VEC3D
-    flt Vfac = powflt(newV/oldV, 1.0/3.0);
+    flt Vfac = pow(newV/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Vfac = sqrtflt(newV/oldV);
+    flt Vfac = sqrt(newV/oldV);
     #endif
     
     for(uint i=0; i<atoms->size(); i++){
@@ -518,13 +518,13 @@ void collectionConjGradientBox::timestepBox(){
     
     flt gammaV = 0;
     if(FV*FV > 0) gammaV = newFV * (newFV) / (FV*FV);
-    if(gammaV < 0 or isnanflt(gammaV) or isinfflt(gammaV)) gammaV = 0;
+    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
     if(gammaV > 1) gammaV = 1;
     
-    if(isnanflt(oldV) or isnanflt(newV) or isnanflt(dV)){
+    if(isnan(oldV) or isnan(newV) or isnan(dV)){
         cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
         cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
-        assert(!isnanflt(oldV));
+        assert(!isnan(oldV));
     }
     hV = newFV + (gammaV*hV);
     FV = newFV;
@@ -559,7 +559,7 @@ void collectionConjGradientBox::timestepAtoms(){
             // gamma = newa.sq() / asq; // Fletcher-Reeves
         }
         //if(gamma > 100) gamma = 0;
-        if(gamma < 0 or isnanflt(gamma) or isinfflt(gamma)) gamma = 0;
+        if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
         m[i].v = newa + (m[i].v * gamma);
         m[i].a = newa;            
     }
@@ -598,10 +598,10 @@ void collectionNLCG::setForces(bool seta, bool setV){
         flt interacP = collection::setForcesGetPressure(false);
         fl = ((interacP/NDIM) - (P0*V))/kappa;
         assert(kappa > 0);
-        assert(!isnanflt(interacP));
-        assert(!isnanflt(V));
-        assert(!isnanflt(P0));
-        assert(!isnanflt(fl));
+        assert(!isnan(interacP));
+        assert(!isnan(V));
+        assert(!isnan(P0));
+        assert(!isnan(fl));
         if(seta){
             al = fl;
             vl = fl;
@@ -631,10 +631,10 @@ void collectionNLCG::resize(flt V){
     OriginBox& obox = (OriginBox&) *box;
     flt oldV = obox.V();
     #ifdef VEC3D
-    flt Lfac = powflt(V/oldV, 1.0/3.0);
+    flt Lfac = pow(V/oldV, 1.0/3.0);
     #endif
     #ifdef VEC2D
-    flt Lfac = sqrtflt(V/oldV);
+    flt Lfac = sqrt(V/oldV);
     #endif
     
     for(uint i=0; i<atoms->size(); i++){
@@ -664,7 +664,7 @@ flt collectionNLCG::pressure(){
     vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
-        assert(not isnanflt(E));
+        assert(not isnan(E));
     }
     return E / V / flt(NDIM);
 }
@@ -687,7 +687,7 @@ void collectionNLCG::stepx(flt dx){
 flt collectionNLCG::getLsq(){
     OriginBox& obox = (OriginBox&) *box;
     #ifdef VEC3D
-    return powflt(obox.V(), 2.0/3.0);
+    return pow(obox.V(), 2.0/3.0);
     #endif
     #ifdef VEC2D
     return obox.V();
@@ -805,11 +805,11 @@ void collectionNLCG::timestep(){
         
         flt newdxsum = abs(dxsum + alpha);
         if(dxmax > 0 and newdxsum > dxmax){
-            //~ cout << "dxmaxed: " << newdxsum << "  step: " << sqrtflt(dxsum*dxsum*vdv) << '\n';
+            //~ cout << "dxmaxed: " << newdxsum << "  step: " << sqrt(dxsum*dxsum*vdv) << '\n';
             k = 0;
             break;
         }
-        flt dVoverV = expm1flt(abs(dxsum + alpha) * vl / (kappa*NDIM));
+        flt dVoverV = expm1(abs(dxsum + alpha) * vl / (kappa*NDIM));
         if(maxdV > 0 and dVoverV > maxdV){
             k = 0;
             //~ flt V1 = box->V();
@@ -828,7 +828,7 @@ void collectionNLCG::timestep(){
                 and (abs(alpha) / abs(dxsum) < afrac)) break;
         if(stepmax > 0 and dxsum*dxsum*vdv > stepmax*stepmax){
             k = 0;
-            //~ cout << "stepmaxed: " << sqrtflt(dxsum*dxsum*vdv)
+            //~ cout << "stepmaxed: " << sqrt(dxsum*dxsum*vdv)
                 //~ << "  alpha: " << alpha
                 //~ << "  dx: " << dxsum
                 //~ << "  eta: " << eta
@@ -837,7 +837,7 @@ void collectionNLCG::timestep(){
         }
     }
     
-    alphavmax = sqrtflt(alpha*alpha*vdv);
+    alphavmax = sqrt(alpha*alpha*vdv);
     
     flt Kold = Knew;
     flt Kmid = fdota();
@@ -851,7 +851,7 @@ void collectionNLCG::timestep(){
     beta = (Knew - Kmid) / Kold;
     betaused = beta;
     k++;
-    if(k >= kmax or isinfflt(betaused) or isnanflt(betaused) or betaused <= 0){
+    if(k >= kmax or isinf(betaused) or isnan(betaused) or betaused <= 0){
         k = 0;
         betaused = 0;
     } else if(betaused > 1){
@@ -921,7 +921,7 @@ flt collectionNLCGV::fdotv(){
     flt returnvalue = 0;
     for(uint i=0; i<atoms->size(); i++){
         returnvalue += (*atoms)[i].f.dot((*atoms)[i].v);
-        //~ if(isnanflt(returnvalue)){
+        //~ if(isnan(returnvalue)){
             //~ cout << "collectionNLCGV::fdotv : Got nan on atom " << i;
             //~ cout << " f: " << (*atoms)[i].f;
             //~ cout << " v: " << (*atoms)[i].v;
@@ -970,7 +970,7 @@ flt collectionNLCGV::pressure(){
     vector<sptr<interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); ++it){
         E += (*it)->pressure(*box);
-        assert(not isnanflt(E));
+        assert(not isnan(E));
     }
     return E / V / flt(NDIM);
 }
@@ -1058,7 +1058,7 @@ void collectionNLCGV::timestep(){
         
         flt newdxsum = abs(dxsum + alpha);
         if(dxmax > 0 and newdxsum > dxmax){
-            //~ cout << "dxmaxed: " << newdxsum << "  step: " << sqrtflt(dxsum*dxsum*vdv) << '\n';
+            //~ cout << "dxmaxed: " << newdxsum << "  step: " << sqrt(dxsum*dxsum*vdv) << '\n';
             k = 0;
             break;
         }
@@ -1084,7 +1084,7 @@ void collectionNLCGV::timestep(){
                 and (abs(alpha) / abs(dxsum) < afrac)) break;
         if(stepmax > 0 and dxsum*dxsum*vdv > stepmax*stepmax){
             k = 0;
-            //~ cout << "stepmaxed: " << sqrtflt(dxsum*dxsum*vdv)
+            //~ cout << "stepmaxed: " << sqrt(dxsum*dxsum*vdv)
                 //~ << "  alpha: " << alpha
                 //~ << "  dx: " << dxsum
                 //~ << "  eta: " << eta
@@ -1093,7 +1093,7 @@ void collectionNLCGV::timestep(){
         }
     }
     
-    alphavmax = sqrtflt(alpha*alpha*vdv);
+    alphavmax = sqrt(alpha*alpha*vdv);
     
     flt Kold = Knew;
     flt Kmid = fdota();
@@ -1108,7 +1108,7 @@ void collectionNLCGV::timestep(){
     beta = (Knew - Kmid) / Kold;
     betaused = beta;
     k++;
-    if(k >= kmax or isinfflt(betaused) or isnanflt(betaused) or betaused <= 0){
+    if(k >= kmax or isinf(betaused) or isnan(betaused) or betaused <= 0){
         k = 0;
         betaused = 0;
     } else if(betaused > 1){
@@ -1202,7 +1202,7 @@ void collectionNoseHoover::timestep(){
 flt collectionNoseHoover::Hamiltonian(){
     flt H = (kinetic() + potentialenergy() + 
                 (xi*xi*Q/2) + (dof() * lns * T));
-    assert(not isnanflt(H));
+    assert(not isnan(H));
     return H;
 }
 
@@ -1754,7 +1754,7 @@ void collectionVerletNPT::timestep(){
     assert(Verr > 0.999);
     
     n=0;
-    flt Vfac1=powflt(newV/V, OVERNDIM), Vfac2 = powflt(2*newV/(newV+V), OVERNDIM);
+    flt Vfac1=pow(newV/V, OVERNDIM), Vfac2 = pow(2*newV/(newV+V), OVERNDIM);
     for(uint i=0; i<g.size(); i++){
         g[i].x = g[i].x*Vfac1 + vhalf[n]*dt*Vfac2;
         n++;
@@ -1766,7 +1766,7 @@ void collectionVerletNPT::timestep(){
 void collectionCDBDgrid::reset_velocities(){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
-        (*atoms)[i].v = randVec() * sqrtflt(T/mi);
+        (*atoms)[i].v = randVec() * sqrt(T/mi);
     }
     reset_events();
 };
@@ -1794,7 +1794,7 @@ bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
     flt underroot = bijsq - vijsq*(rij.sq() - sigma*sigma);
     if(underroot < 0) return false;
     
-    flt tau_ij = -(bij + sqrtflt(underroot))/vijsq;
+    flt tau_ij = -(bij + sqrt(underroot))/vijsq;
     // collide immediately if the event already happened (its overlapping)
     if(tau_ij < 0) tau_ij = 0;
     
@@ -1818,7 +1818,7 @@ void collectionCDBDgrid::update_grid(bool force){
 event collectionCDBDgrid::next_event(atomid a){
     event e;
     flt vmag = a->v.mag();
-    if(!isfinite(vmag) or vmag <= 0) vmag = sqrtflt(T/a->m) * edge_epsilon;
+    if(!isfinite(vmag) or vmag <= 0) vmag = sqrt(T/a->m) * edge_epsilon;
     flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
     assert(epsilon_t > 0);
     
@@ -1947,7 +1947,7 @@ void collectionCDBDgrid::timestep() {
 void collectionCDBD::reset_velocities(){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
-        (*atoms)[i].v = randVec() * sqrtflt(T/mi);
+        (*atoms)[i].v = randVec() * sqrt(T/mi);
     }
     reset_events();
 };

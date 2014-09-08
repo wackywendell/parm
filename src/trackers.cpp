@@ -163,15 +163,15 @@ void Grid::optimize_widths(){
     flt width_per_atom = pow(box->V() * goalwidth / atoms->size(), OVERNDIM);
     if (width_per_atom < minwidth) width_per_atom = minwidth;
     Vec bshape = box->boxshape();
-    widths[0] = (uint) floorflt(bshape[0] / width_per_atom);
-    widths[1] = (uint) floorflt(bshape[1] / width_per_atom);
+    widths[0] = (uint) floor(bshape[0] / width_per_atom);
+    widths[1] = (uint) floor(bshape[1] / width_per_atom);
     #ifdef VEC2D
     if(widths[0] < 3 or widths[1] < 3){
         widths[0] = 1;
         widths[1] = 1;
     }
     #else
-    widths[2] = (uint) floorflt(bshape[2] / width_per_atom);
+    widths[2] = (uint) floor(bshape[2] / width_per_atom);
     if(widths[0] < 3 or widths[1] < 3 or widths[2] < 3){
         widths[0] = 1;
         widths[1] = 1;
@@ -182,14 +182,14 @@ void Grid::optimize_widths(){
 
 uint Grid::get_loc(Vec v, Vec bsize){
     v = vecmod(v - bsize/2., bsize) + bsize/2;
-    uint x = (uint)floorflt(v[0] * widths[0] / bsize[0]);
+    uint x = (uint)floor(v[0] * widths[0] / bsize[0]);
     if(x == widths[0]) x = 0;
-    uint y = (uint)floorflt(v[1] * widths[1] / bsize[1]);
+    uint y = (uint)floor(v[1] * widths[1] / bsize[1]);
     if(y == widths[1]) y = 0;
     #ifdef VEC2D
     return y * widths[0] + x;
     #else
-    uint z = (uint)floorflt(v[2] * widths[2] / bsize[2]);
+    uint z = (uint)floor(v[2] * widths[2] / bsize[2]);
     if(z == widths[2]) z = 0;
     return (z * widths[1] + y) * widths[0] + x;
     #endif
@@ -229,7 +229,7 @@ flt Grid::time_to_edge(atom &a){
     for(uint i=0; i<NDIM; ++i){
         if(a.v[i] == 0) continue;
         flt cellwidth = bsize[i] / widths[i];
-        uint xd = (uint)floorflt(v[i] / cellwidth + 1.0);
+        uint xd = (uint)floor(v[i] / cellwidth + 1.0);
         if(a.v[i] < 0) --xd;
         flt dist = abs(xd*cellwidth - v[i]);
         if(dist < 1e-14) dist += cellwidth;

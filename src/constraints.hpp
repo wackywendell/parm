@@ -5,6 +5,11 @@
 
 #include <vector>
 #include <list>
+#include <complex>
+
+using namespace std;
+
+typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure why
 
 class constraint {
     public:
@@ -331,26 +336,6 @@ class RsqTracker1 {
         unsigned long get_count(){return count;};
 };
 
-//~ class RsqTrackerN {
-    //~ // Tracks only a single dt (skip)
-    //~ public:
-        //~ vector<Vec> pastlocs;
-        //~ vector<flt> rsqsums;
-        //~ vector<flt> rsqsqsums;
-        //~ uint skip, count;
-    //~ public:
-        //~ RsqTracker1(atomgroup& atoms, uint skip);
-        //~ 
-        //~ void reset(atomgroup& atoms);
-            //~ 
-        //~ bool update(Box& box, atomgroup& atoms, uint t); // updates if necessary.
-        //~ vector<flt> rsq_mean();
-        //~ vector<flt> rsq_var();
-        //~ 
-        //~ uint get_skip(){return skip;};
-        //~ uint get_count(){return count;};
-//~ };
-
 class RsqTracker : public statetracker {
     public:
         sptr<atomgroup> atoms;
@@ -371,32 +356,52 @@ class RsqTracker : public statetracker {
         vector<flt> counts();
 };
 
-//~ class DividedBox : public statetracker {
-    //~ protected:
-        //~ sptr<OriginBox> box;
-        //~ sptr<atomgroup> atoms;
-        //~ flt mindist;
-        //~ uint Nperside;
-        //~ Vec cellshape;
-        //~ 
-    //~ public:
-        //~ DividedBox(sptr<OriginBox> box, sptr<atomgroup> atoms, flt mindist,
-            //~ uint cellcount) : box(box), atoms(atoms), mindist(mindist){
-                //~ Nperside = (uint) ceill(powflt(cellcount, OVERNDIM));
-                //~ 
-                //~ Vec shape = box->boxshape();
-                //~ flt Lmin = shape[0];
-                //~ for(uint i=1; i<NDIM; i++) Lmin = shape[i] < Lmin ? shape[i] : Lmin;
-                //~ 
-                //~ uint maxperside = (uint) floorl(Lmin / mindist);
-                //~ 
-                //~ if(maxperside < Nperside) Nperside = maxperside;
-                //~ cellshape = shape / Nperside;
-            //~ };
-        //~ 
-        //~ 
-    //~ 
-//~ };
+////////////////////////////////////////////////////////////////////////
+// ISF tracking
+// code is similar to Rsqtracker.
+// It tracks ISF(k, Δt) with one ISFTracker1 per Δt.
+// k is of type 'flt', representing a length; it will average over 
+// k(x hat), k(y hat), k(z hat).
+
+class ISFTracker1 {
+    // Tracks only a single dt (skip)
+    public:
+        vector<Vec> pastlocs;
+        vector<vector<Array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
+        vector<flt> ks;
+        unsigned long skip, count;
+        
+    public:
+        ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com);
+        
+        void reset(atomgroup& atoms, Vec com);
+            
+        bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
+        vector<vector<cmplx> > ISFs();
+        vector<vector<Array<cmplx, NDIM> > > ISFxyz();
+        
+        unsigned long get_skip(){return skip;};
+        unsigned long get_count(){return count;};
+};
+
+class ISFTracker : public statetracker {
+    public:
+        sptr<atomgroup> atoms;
+        vector<ISFTracker1> singles;
+        unsigned long curt;
+        bool usecom;
+        
+    public:
+        ISFTracker(sptr<atomgroup> atoms, vector<flt> ks, 
+                    vector<unsigned long> ns, bool usecom=false);
+        
+        void reset();
+        void update(Box &box);
+        
+        vector<vector<vector<Array<cmplx, NDIM> > > > ISFxyz();
+        vector<vector<vector<cmplx> > > ISFs();
+        vector<flt> counts();
+};
 
 ////////////////////////////////////////////////////////////////////////
 // For comparing two jammed structures
