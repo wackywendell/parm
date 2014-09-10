@@ -69,7 +69,10 @@ def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'ts
     args            : Like names, but add some constants (such as T=1) for all fs
     """
     import re, fpath
-    from namespace import Namespace
+    from collections import namedtuple
+    
+    names = [(n + '0' if n in 'f' else n) for n in names]
+    FoundFile = namedtuple('FoundFile', names + ['f'])
 
     try:
         iter(types)
@@ -87,7 +90,6 @@ def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'ts
     regex = re.compile(regexp)
     matches = [(list(regex.finditer(f[-1])), f) for f in children]
     badmatches = [f for ms,f in matches if len(ms) == 0]
-    names = [(n + '0' if n in 'f' else n) for n in names]
     
     if badmatches and matchall:
         raise ValueError('%s could not match %s' % (regexp, badmatches[0][-1]))
@@ -99,11 +101,12 @@ def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'ts
     pdicts = [dict(lst) for lst in groups]
     for p in pdicts:
         p.update(args)
-    return [Namespace(d) for d in pdicts]
+    return [FoundFile(**d) for d in pdicts]
 
-def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv.gz', **args):
+def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv.gz'):
     import re, pathlib
-    from namespace import Namespace
+    from collections import namedtuple
+    FoundFile = namedtuple('FoundFile', list(names) + ['fname'])
     
     try:
         iter(types)
@@ -123,7 +126,7 @@ def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv
         ns, valstrs = zip(*[(v[:len(n)], v[len(n):]) for v,n in zip(splits,names)])
         m=0
         
-        nspace = Namespace()
+        nspace = dict()
         nspace['fname'] = c
         #nspace['cutf'] = cutf
         for n,v,n0,t in zip(ns, valstrs, names, types):
@@ -137,7 +140,7 @@ def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv
                 raise ValueError("%r not converted by %r in %dth arg %r in %r" % (
                 v, t, m, n+v, cutf))
             nspace[n0] = value
-        return nspace
+        return FoundFile(**nspace)
     
     def trycatch(c):
         try:
@@ -151,19 +154,19 @@ def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv
         nspaces = [trycatch(c) for c in children]
         nspaces = [n for n in nspaces if n is not None]
         
-    def sortkey(d):
-        return tuple([d[k] for k in names])
-    return sorted(nspaces, key=sortkey)
+    return sorted(nspaces)
 
-def groupdicts(dlst, key):
+def groupfiles(dlst, key):
     bigdict = dict()
     for d in dlst:
-        curval = d[key]
+        curval = getattr(d, key)
         keylist = bigdict.get(curval, [])
         keylist.append(d)
         bigdict[curval] = keylist
     return bigdict
 
 def groupby(dlst, groupkey, sortby=None):
-    if sortby is None: return sorted(groupdicts(dlst, groupkey).items())
-    return sorted(groupdicts(dlst, groupkey).items(), key=sortby)
+    if sortby is None:
+        return sorted(groupfiles(dlst, groupkey).items())
+    else:
+        return sorted(groupfiles(dlst, groupkey).items(), key=sortby)
