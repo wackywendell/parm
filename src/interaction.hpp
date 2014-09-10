@@ -1225,7 +1225,7 @@ struct HertzianDragPair {
         if(dsq > sig*sig) return Vec();
         flt R = sqrt(dsq);
         Vec v_perp = rij * (vij.dot(rij)) / dsq;
-        return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R) +
+        return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R) -
 				(v_perp * gamma);
     }
 };
