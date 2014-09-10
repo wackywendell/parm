@@ -32,7 +32,10 @@ class collection {
             sptr<atomgroup> atoms,
             vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
             vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
-            vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
+            vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
+            bool should_initialize=true);
+        
+        virtual void initialize();
         
         //Timestepping
         virtual void setForces(bool seta=true);

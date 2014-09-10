@@ -51,10 +51,15 @@ bivariateGauss::bivariateGauss(const flt s1, const flt s2,
 
 void bivariateGauss::set(const flt s1, const flt s2, const flt corr){
     // Taken from Allen and Tildesley, 348
-    assert(s1 >= 0);
-    assert(s2 >= 0);
-    assert(corr >= 0);
-    assert(corr <= 1);
+    if(!(s1 >= 0)){
+		throw std::invalid_argument("bivariateGauss::set: s1 >= 0");
+	} else if(!(s2 >= 0)){
+		throw std::invalid_argument("bivariateGauss::set: s2 >= 0");
+	} else if(!(corr >= 0)){
+		throw std::invalid_argument("bivariateGauss::set: corr >= 0");
+	} else if(!(corr <= 1)){
+		throw std::invalid_argument("bivariateGauss::set: corr <= 1");
+	};
     x11 = s1;
     x21 = s2 * corr;
     x22 = s2 * sqrt(1 - corr*corr);

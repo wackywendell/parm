@@ -1,9 +1,16 @@
 #include "collection.hpp"
 
 collection::collection(sptr<Box> box, sptr<atomgroup> atoms, vector<sptr<interaction> > is,
-              vector<sptr<statetracker> > ts, vector<sptr<constraint> > cs)
+              vector<sptr<statetracker> > ts, vector<sptr<constraint> > cs,
+            bool should_initialize)
         : box(box), atoms(atoms), interactions(is), trackers(ts), constraints(cs),
                 E0(0){
+    if(should_initialize){
+        initialize();
+    }
+}
+
+void collection::initialize(){
     update_trackers();
     setForces(true);
     update_constraints();
@@ -159,18 +166,20 @@ flt collection::setForcesGetPressure(bool seta){
 collectionSol::collectionSol(sptr<Box> box, sptr<atomgroup> atoms,
         const flt dt, const flt damp, const flt T,
         vector<sptr<interaction> > interactions,
-        vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
-            collection(box, atoms, interactions, trackers, constraints), 
+        vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) : 
+            collection::collection(box, atoms, interactions, trackers, constraints, false),
             dt(dt), damping(damp), desT(T){
+    // because that should be done *after* setCs()
+    if(dt <= 0){
+		throw std::invalid_argument("collection::collectionSol: dt >= 0");
+	};
+   
     setCs();
-    update_trackers();
-    setForces(true);
-    update_constraints();
-    update_trackers();
+    initialize();
 };
 
 void collectionSol::setCs(){
-    if(damping == 0){
+    if(damping <= 0.0){
         c0 = 1; c1 = 1; c2 = .5;
         sigmar = 0; sigmav = 0; corr = 1;
         gauss.set(sigmar, sigmav, corr);
@@ -193,15 +202,9 @@ void collectionSol::setCs(){
             ));
     else
         sigmar = sqrt(2*dampdt/3 - dampdt*dampdt/2 + 7*dampdt*dampdt*dampdt/30);
-    //~ cout << "setCs: " << -4*expm1(-dampdt) << ',' << expm1(-2*dampdt)
-         //~ << ", (...): " << (-4*expm1(-dampdt) + expm1(-2*dampdt))/dampdt
-         //~ << ", sigmar:" << sigmar << '\n';
     sigmav = sqrt(-expm1(-2*dampdt));
     flt exdpdt = (-expm1(-dampdt));
     corr = exdpdt*exdpdt/dampdt/sigmar/sigmav;
-    //~ cout << "vals: " << c0 << ',' << c1 << ',' << c2 << "; T=" <<desT
-         //~ << ", sigmas: (" << sigmar << ',' << sigmav << ',' << corr << ')'
-         //~ << ", dt=" << dt << ", damping=" << damping << "\n";
     gauss.set(sigmar, sigmav, corr);
 }
 
@@ -250,13 +253,10 @@ collectionSolHT::collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
         const flt dt, const flt damp,const flt T,
         vector<sptr<interaction> > interactions,
         vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints, false), 
             dt(dt), damping(damp), desT(T), gauss(sqrt(2.0*desT*damping/dt)){
     setGauss();
-    update_trackers();
-    setForces(true);
-    update_constraints();
-    update_trackers();
+    initialize();
 };
 
 void collectionSolHT::setGauss(){
