@@ -65,7 +65,7 @@ class collection {
         void resetcomv(){atoms->resetcomv();};
         void resetL(){atoms->resetL(*box);};
         void scaleVs(flt scaleby);
-        void scaleVelocitiesT(flt T);
+        void scaleVelocitiesT(flt T, bool minuscomv=true);
         void scaleVelocitiesE(flt E);
         
         void addInteraction(sptr<interaction> inter){

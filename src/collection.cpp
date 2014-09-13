@@ -23,8 +23,8 @@ void collection::scaleVs(flt scaleby){
     }
 }
 
-void collection::scaleVelocitiesT(flt T){
-    flt t = temp();
+void collection::scaleVelocitiesT(flt T, bool minuscomv){
+    flt t = temp(minuscomv);
     flt scaleby = sqrt(T/t);
     scaleVs(scaleby);
 }
