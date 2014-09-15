@@ -1327,6 +1327,65 @@ struct LoisOhernPairMinCLs : public LoisOhernPair {
 };
 
 ////////////////////////////////////////////////////////////////////////
+/***********************************************************************
+ * LoisLin atoms
+ * Harmonic repulsive, fixed-force attractive
+ * epsilon is the strength of the harmonic interaction
+ * f is the fixed-force amount (real units)
+ * l is the width of the fixed-force region (real units)
+ * To combine, we use a geometric average of epsilon, and everything else
+ * is averaged.
+ */
+
+struct LoisLinAtom : public atomid {
+    flt eps, sigma, f, l;
+    LoisLinAtom(){};
+    LoisLinAtom(atomid a, flt eps, flt sigma, flt depth, flt width) : atomid(a),
+            eps(eps), sigma(sigma), f(depth/width), l(width){};
+    LoisLinAtom(atomid a, LoisLinAtom other) : atomid(a), 
+        eps(other.eps), sigma(other.sigma), f(other.f), l(other.l){};
+    flt maxsize(){return sigma*(1+l);};
+};
+
+struct LoisLinPair {
+    flt eps, sig, f, l, sigcut;
+    atomid atom1, atom2;
+    LoisLinPair(LoisLinAtom a1, LoisLinAtom a2) : 
+        eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
+        f((a1.f + a2.f)/2.0), l((a1.l + a2.l)/2.0), sigcut(sig +l),
+        atom1(a1), atom2(a2){};
+    inline flt energy(Box &box){
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt dsq = rij.sq();
+         // using >= to prevent NaNs when l = 0
+        if(dsq >= sigcut*sigcut) return 0.0;
+        flt R = sqrt(dsq);
+         // using <= to prevent NaNs when l = 0
+        if(R <= sig){
+			flt dR = 1.0 - (R/sig);
+            return eps/2 * dR*dR - f*l;
+        }
+        
+        return -f*(sig + l - R);
+    }
+    
+    inline Vec forces(Box &box){
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt dsq = rij.sq();
+        if(dsq >= sigcut*sigcut) return Vec();
+        flt R = sqrt(dsq);
+        
+        if(R <= sig){
+			flt dR = 1.0 - (R/sig);
+			return rij * (eps * dR /sig/R);
+        }
+        
+        return -rij*(f/R);
+    }
+};
+
+
+////////////////////////////////////////////////////////////////////////
 class LJsimple : public interaction {
     protected:
         vector<LJatom> atoms;
