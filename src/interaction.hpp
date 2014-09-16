@@ -1341,7 +1341,7 @@ struct LoisLinAtom : public atomid {
     flt eps, sigma, f, l;
     LoisLinAtom(){};
     LoisLinAtom(atomid a, flt eps, flt sigma, flt depth, flt width) : atomid(a),
-            eps(eps), sigma(sigma), f(depth/width), l(width){};
+            eps(eps), sigma(sigma), f(width > 0 ? depth/width : 0), l(width){};
     LoisLinAtom(atomid a, LoisLinAtom other) : atomid(a), 
         eps(other.eps), sigma(other.sigma), f(other.f), l(other.l){};
     flt maxsize(){return sigma*(1+l);};
@@ -1353,6 +1353,9 @@ struct LoisLinPair {
     LoisLinPair(LoisLinAtom a1, LoisLinAtom a2) : 
         eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         f((a1.f + a2.f)/2.0), l((a1.l + a2.l)/2.0), sigcut(sig +l),
+        atom1(a1), atom2(a2){};
+    LoisLinPair(LoisLinAtom a1, LoisLinAtom a2, flt eps, flt sig, flt f, flt l) : 
+        eps(eps), sig(sig), f(f), l(l), sigcut(sig+l),
         atom1(a1), atom2(a2){};
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
@@ -1384,6 +1387,13 @@ struct LoisLinPair {
     }
 };
 
+struct LoisLinPairMin : public LoisLinPair {
+    LoisLinPairMin(LoisLinAtom a1, LoisLinAtom a2) : 
+        LoisLinPair(a1, a2, sqrt(a1.eps * a2.eps), 
+        (a1.sigma + a2.sigma)/2.0,
+        (a1.f < a2.f ? a1.f : a2.f),
+        (a1.l < a2.l ? a1.l : a2.l)){};
+};
 
 ////////////////////////////////////////////////////////////////////////
 class LJsimple : public interaction {

@@ -83,6 +83,7 @@
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPairMinCLs >)
 %shared_ptr(NListed< LoisLinAtom,LoisLinPair >)
+%shared_ptr(NListed< LoisLinAtom,LoisLinPairMin >)
 %shared_ptr(NListed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListed< HertzianDragAtom,HertzianDragPair >)
 %shared_ptr(SCboxed< HertzianAtom,HertzianPair >)
@@ -454,6 +455,7 @@ namespace std {
 %template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
 %template(LoisLin) NListed<LoisLinAtom, LoisLinPair>;
+%template(LoisLinMin) NListed<LoisLinAtom, LoisLinPairMin>;
 %template(LoisOhernMin) NListed<LoisOhernAtom, LoisOhernPairMinCLs>;
 //%rename(__lt__) jamminglist::operator<;
 
