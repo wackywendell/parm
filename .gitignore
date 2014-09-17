@@ -42,3 +42,4 @@ hardspheres.tcl
 hardspheres.msd
 *.orig
 *.ipynb
+.DS_Store
