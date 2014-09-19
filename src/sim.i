@@ -118,7 +118,11 @@ static int myErr = 0;
     //~     SWIG_exception(SWIG_MemoryError, "Out of memory");
     } catch(std::invalid_argument &e) {
         SWIG_exception(SWIG_ValueError, e.what());
-    } catch(...) {
+    } catch(std::overflow_error &e) {
+        SWIG_exception(SWIG_OverflowError, e.what());
+    } catch(std::exception &e) {
+        SWIG_exception(SWIG_RuntimeError,e.what());
+    }catch(...) {
         SWIG_exception(SWIG_RuntimeError,"Unknown exception");
     }
 }

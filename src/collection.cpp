@@ -1732,26 +1732,32 @@ void collectionVerletNPT::timestep(){
         Ktot2 += vhalf[n].sq() / mi;
         n++;
     }
-    
-    eta += dt*(Ktot2 - ndof*T)/QT;
+    if(QT > 0){
+        etasum += eta*dt;
+        eta += dt*(Ktot2 - ndof*T)/QT;
+    }
     
     flt V = box->V();
-    flt newV = obox.resizeV(lastV + (dt*xidot*V));
-    flt Verr = newV / (lastV + (dt*xidot*V));
-    
-    lastV = V;
-    curP = ((Ktot2 + lastKtot2)/2 + virial()) / NDIM / V;
-    flt xidott = xidot;
-    xidot = lastxidot + (2*dt*(curP - P)*V)/QP;
-    lastxidot = xidott;
+    flt wantedV = lastV + (dt*xidot*V);
+    flt newV = obox.resizeV(wantedV);
+    flt Verr = newV / wantedV;
     
     if((not (Verr < 1.001)) or (not (Verr > 0.999))){
-        cout << "lastV: " << V << ", Set to: " <<  newV / Verr 
-             << ", got: " << newV << ", Verr: " << Verr << '\n';
+        cout << "lastV: " << lastV << ", adding: " <<  dt*xidot*V 
+             << ", got: " << newV << " instead of: " << wantedV << ", Verr: " << Verr << '\n';
+        cout << "xidot: " << xidot << ", V:" << lastV << endl;
+        throw std::overflow_error("Volume resizing failed.");
     }
     
     assert(Verr < 1.001);
     assert(Verr > 0.999);
+    
+    lastV = V;
+    curP = ((Ktot2 + lastKtot2)/2 + virial()) / NDIM / V;
+    flt xidott = xidot;
+    if(QP > 0)
+        xidot = lastxidot + (2*dt*(curP - P)*V)/QP;
+    lastxidot = xidott;
     
     n=0;
     flt Vfac1=pow(newV/V, OVERNDIM), Vfac2 = pow(2*newV/(newV+V), OVERNDIM);

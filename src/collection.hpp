@@ -747,10 +747,15 @@ class collectionGear4NPT : public collection {
 
 
 class collectionVerletNPT : public collection {
-    // From Toxvaerd 1993, PRE Vol. 47, No. 1
+    // From Toxvaerd 1993, PRE Vol. 47, No. 1, http://link.aps.org/doi/10.103/PhysRevE.47.343
+    // Parameter equivalences (in the form code: paper):
+    // dof() or ndof: g
+    // QT: gkT t_\eta^2
+    // QP: gkT t_\xi^2
     protected:
         flt dt;
         flt eta, xidot, lastxidot, lastV;
+        flt etasum; // for calculating the "hamiltonian"
         vector<Vec> vhalf;
         flt P, QP, T, QT, curP;
         void resetvhalf();
@@ -763,7 +768,7 @@ class collectionVerletNPT : public collection {
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, atoms, interactions, trackers, constraints), 
-            dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), P(P), 
+            dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), etasum(0), P(P), 
             QP(QP), T(T), QT(QT), curP(0){resetvhalf();};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
@@ -779,6 +784,18 @@ class collectionVerletNPT : public collection {
         flt getxidot(){return xidot;};
         flt getP(){return curP;};
         Vec getvhalf(uint n){return vhalf[n];};
+        
+        flt Hamiltonian(){
+			// regular energy
+			flt H = kinetic() + potentialenergy();
+			
+			if(QT > 0){
+				flt gkT = dof()*T;
+				H +=gkT*etasum;
+				H+= eta*eta*QT*QT/gkT/2;
+			}
+			return H;
+		}
 };
 
 struct event {
