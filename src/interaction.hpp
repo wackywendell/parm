@@ -56,7 +56,7 @@ class interaction {
         virtual flt energy(Box &box)=0;
         virtual void setForces(Box &box)=0;
         virtual flt setForcesGetPressure(Box &box){return NAN;};
-        virtual flt pressure(Box &box)=0;
+        virtual flt pressure(Box &box)=0; // sum_{<i,j>} of r_{ij} \cdot F_{ij}, or equivalently // sum of r_{i} \cdot F_{i}
         virtual ~interaction(){};
 };
 
@@ -1528,6 +1528,7 @@ class NListedVirial : public interactionpairsx {
         virtual flt setForcesGetEnergy(Box &box);
         virtual inline flt energy(Box &box){return nlisted.energy(box);};
         virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
+        inline void add(A atm){nlisted.add(atm);}
         inline sptr<neighborlist> nlist(){return nlisted.nlist();};
 };
 

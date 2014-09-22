@@ -1720,52 +1720,53 @@ void collectionVerletNPT::timestep(){
     flt xieta = (xidot + eta) * dt/2.0;
     flt Ktot2 = 0, lastKtot2 = 0;
     
-    uint n=0;
     for(uint i=0; i<g.size(); i++){
         flt mi = g[i].m;
         g[i].a = g[i].f / mi;
-        lastKtot2 += vhalf[n].sq() / mi;
-        Vec lastvhalf = vhalf[n];
-        vhalf[n] = (vhalf[n]*(1-xieta) + g[i].a*dt)/(1+xieta);
+        lastKtot2 += vhalf[i].sq() * mi;
+        Vec lastvhalf = vhalf[i];
+        vhalf[i] = (vhalf[i]*(1-xieta) + g[i].a*dt)/(1+xieta);
         
-        g[i].v = (lastvhalf + vhalf[n])/2.0;
-        Ktot2 += vhalf[n].sq() / mi;
-        n++;
+        g[i].v = (lastvhalf + vhalf[i])/2.0;
+        Ktot2 += vhalf[i].sq() * mi;
     }
     if(QT > 0){
         etasum += eta*dt;
         eta += dt*(Ktot2 - ndof*T)/QT;
     }
     
-    flt V = box->V();
-    flt wantedV = lastV + (dt*xidot*V);
-    flt newV = obox.resizeV(wantedV);
-    flt Verr = newV / wantedV;
-    
-    if((not (Verr < 1.001)) or (not (Verr > 0.999))){
-        cout << "lastV: " << lastV << ", adding: " <<  dt*xidot*V 
-             << ", got: " << newV << " instead of: " << wantedV << ", Verr: " << Verr << '\n';
-        cout << "xidot: " << xidot << ", V:" << lastV << endl;
-        throw std::overflow_error("Volume resizing failed.");
-    }
-    
-    assert(Verr < 1.001);
-    assert(Verr > 0.999);
-    
-    lastV = V;
-    curP = ((Ktot2 + lastKtot2)/2 + virial()) / NDIM / V;
-    flt xidott = xidot;
-    if(QP > 0)
+    if(QP > 0) {
+        flt V = box->V();
+        flt wantedV = lastV + (2*dt*xidot*V);
+        flt newV = obox.resizeV(wantedV);
+        flt Verr = newV / wantedV;
+        
+        if((not (Verr < 1.001)) or (not (Verr > 0.999))){
+            cout << "lastV: " << lastV << ", adding: " <<  dt*xidot*V 
+                 << ", got: " << newV << " instead of: " << wantedV << ", Verr: " << Verr << '\n';
+            cout << "xidot: " << xidot << ", V:" << lastV << endl;
+            throw std::overflow_error("Volume resizing failed.");
+        }
+        
+        assert(Verr < 1.001);
+        assert(Verr > 0.999);
+        
+        lastV = V;
+        curP = ((Ktot2 + lastKtot2)/2 + virial()) / NDIM / V;
+        flt xidott = xidot;
         xidot = lastxidot + (2*dt*(curP - P)*V)/QP;
-    lastxidot = xidott;
-    
-    n=0;
-    flt Vfac1=pow(newV/V, OVERNDIM), Vfac2 = pow(2*newV/(newV+V), OVERNDIM);
-    for(uint i=0; i<g.size(); i++){
-        g[i].x = g[i].x*Vfac1 + vhalf[n]*dt*Vfac2;
-        n++;
+        lastxidot = xidott;
+        
+        flt Vfac1=pow(newV/V, OVERNDIM), Vfac2 = pow(2*newV/(newV+V), OVERNDIM);
+        for(uint i=0; i<g.size(); i++){
+            g[i].x = g[i].x*Vfac1 + vhalf[i]*dt*Vfac2;
+        }
+    } else {
+        for(uint i=0; i<g.size(); i++){
+            g[i].x += vhalf[i]*dt;
+        }
     }
-    
+        
     update_trackers();
 };
 

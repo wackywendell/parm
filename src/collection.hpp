@@ -747,12 +747,13 @@ class collectionGear4NPT : public collection {
 
 
 class collectionVerletNPT : public collection {
-    // From Toxvaerd 1993, PRE Vol. 47, No. 1, http://link.aps.org/doi/10.103/PhysRevE.47.343
+    // From Toxvaerd 1993, PRE Vol. 47, No. 1, http://dx.doi.org/10.1103/PhysRevE.47.343
     // Parameter equivalences (in the form code: paper):
     // dof() or ndof: g
-    // QT: gkT t_\eta^2
-    // QP: gkT t_\xi^2
-    protected:
+    // QT: g k T t_\eta^2
+    // QP: N k T t_\xi^2
+    // where N is the number of particles
+    public:
         flt dt;
         flt eta, xidot, lastxidot, lastV;
         flt etasum; // for calculating the "hamiltonian"
@@ -785,6 +786,8 @@ class collectionVerletNPT : public collection {
         flt getP(){return curP;};
         Vec getvhalf(uint n){return vhalf[n];};
         
+        // note that this is a constant of the motion, but not a real hamiltonian
+        // and also only such at constant T
         flt Hamiltonian(){
 			// regular energy
 			flt H = kinetic() + potentialenergy();
@@ -792,7 +795,7 @@ class collectionVerletNPT : public collection {
 			if(QT > 0){
 				flt gkT = dof()*T;
 				H +=gkT*etasum;
-				H+= eta*eta*QT*QT/gkT/2;
+				H+= eta*eta*QT/2;
 			}
 			return H;
 		}
