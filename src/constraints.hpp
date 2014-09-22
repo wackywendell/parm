@@ -5,6 +5,8 @@
 
 #include <vector>
 #include <list>
+#include <set>
+#include <map>
 #include <complex>
 
 using namespace std;
@@ -618,5 +620,65 @@ class jammingtreeBD : public jammingtree2 {
         bool expand(uint n){return jammingtree2::expand(n);};
 };
 #endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/* Finding Percolation
+ * 
+ * Plan:
+ * struct Node {
+ *      uint n;
+ *      Vec x;
+ * }
+ * 
+ * struct Connectivity {
+ *      sptr<OriginBox>;
+ *      vector<Node> nodes;
+ *      set<Node, vector<Node> > neighbors; # with both directions in
+ * }
+ * 
+ * make_connectivity(sptr<OriginBox>, NListed<A,P>) {
+ *      # for each pair, if energy != 0, add it to the Connectivity
+ * }
+ * 
+ * or 
+ * 
+ * make_connectivity(sptr<OriginBox>, neighborlist, ... sigmas) {
+ *      # for each pair, if box.diff(a1.x, a2.x) < (sigma1 < sigma2)/2, add it to the list
+ * }
+ * 
+ * struct path {
+ *      Vec<uint> distance          # Euclidean distance from first node to last. Note this is not
+ *                                  #   the same as box.diff(last - first), because it might go 
+ *                                  #   a longer way around the box
+ *      vector<uint> nodes          # nodes visited
+ * }
+ * 
+ * Maybe implement <, ==, > by using length of nodes first and what the nodes are second
+ * 
+ * Implement ... circular_from(uint n, check_all=true):
+ *  -   Do a breadth-first search starting from n, including only nodes > n.
+ *  -   While searching, build map<node, path>, which is the Euclidean distance from the start node
+ *      to the current node via the path traveled
+ *  -   If you get to an already visited node, compare the current Vec path to the previous one. If
+ *      the same:
+ *      -   either replace the old path (if new_path < old_path) or don't
+ *      -   Do not follow connections
+ *      If different, we've found a percolation:
+ *      -   Mark percolations with "map<uint, path> cycles"; the key is the dimension, and 
+ *          the value (vector<uint>) is the path.
+ *      -   If(check_all && cycles.size() >= 1) return cycles
+ *      -   else if cycles.size() >= NDIM return cycles
+ *  -   If you finish without finding any (or enough), return cycles
+ *
+ * Implement ... find_percolation(...):
+ *  -   for each n, run circular_from(uint n, false)
+ *  -   if any have a cycle, return it!
+ * 
+ * Implement ... find_percolations(...):
+ *  -   for each n, run circular_from(uint n, true)
+ *  -   keep merging results
+ *  -   if cycles.size() >= NDIM return cycles
+ *  -   if you get to the end, return cycles
+ */
 
 #endif
