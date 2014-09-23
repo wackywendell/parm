@@ -665,7 +665,7 @@ CNodePath Connectivity::make_cycle(CNodePath forward, CNodePath backward){
     return cycle;
 };
 
-pair<map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
+map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
     map<uint, CNodePath> full_paths; // complete roots around the box. key is DIMENSION
     map<uint, CNodePath> prev_paths; // other ways we've found to get to any node
     queue<CNodePath> paths;
@@ -686,38 +686,20 @@ pair<map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all
             CNodePath newpath = CNodePath(path, nextnode, *box);
             map<uint, CNodePath>::iterator found_path_it = prev_paths.find(nextnode.n);
             if(found_path_it != prev_paths.end()){
-                cout << "Been to node " << nextnode.n << "before.\n";
-                
-                cout << "New path:" << ": [";
-                for(vector<CNode>::iterator it=newpath.nodes.begin(); it!=newpath.nodes.end(); it++)
-                    cout << it->n << ", ";
-                cout << "]" << "Distance:" << newpath.distance << endl;
-                
                 // We've been to this node before.
                 // But have we found a circle (around the box), or just another route?
                 bool found_nonzero = false;
                 CNodePath& found_path = found_path_it->second;
                 
-                cout << "Old path:" << ": [";
-                for(vector<CNode>::iterator it=found_path.nodes.begin(); it!=found_path.nodes.end(); it++)
-                    cout << it->n << ", ";
-                cout << "]" << "Distance:" << found_path.distance << endl;
-                
                 Vec pathdiff = found_path.distance - newpath.distance;
-                
-                cout << "Path difference:" << pathdiff << "nonzeros: ";
-                
                 array<bool, NDIM> nonzeros = nonzero(pathdiff);
                 for(uint i=0; i<NDIM; i++){
-                    cout << nonzeros[i] << " ";
                     if(nonzeros[i]){
-                        cout << "TRUE ";
                         found_nonzero = true;
                         // We've found a cycle around the whole box!
                         map<uint, CNodePath>::iterator found_cycle = full_paths.find(i);
                         CNodePath cycle_path = make_cycle(found_path, newpath);
                         if(found_cycle == full_paths.end()){
-                            cout << "NEW ";
                             // And its along a dimension we've never found before
                             // Note that now both *found_path and newpath
                             // begin with CNode "node" and end with "nextnode"
@@ -729,14 +711,12 @@ pair<map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all
                             if(!check_all) return full_paths;
                             else if(full_paths.size() >= NDIM) return full_paths;
                         } else {
-                            cout << "OLD ";
                             // Already found a cycle in this dimension, maybe replace it
                             if(full_paths[i].nodes.size() > cycle_path.nodes.size())
                                 full_paths[i] = cycle_path;
                         }
                     }
                 }
-                cout << endl;
                 
                 if(!found_nonzero) {
                     // Different route to the same node, but through the same box.
@@ -750,10 +730,6 @@ pair<map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all
                 // we've never been to this node before
                 prev_paths[nextnode.n] = newpath;
                 paths.push(newpath);
-                cout << "Found path to" << nextnode.n << ": [";
-                for(vector<CNode>::iterator it=newpath.nodes.begin(); it!=newpath.nodes.end(); it++)
-                    cout << it->n << ", ";
-                cout << "]" << ", paths size:" << paths.size() << " empty:" << paths.empty() << endl;
                 continue;
             }
             // Now same path, new neighbor to add to it
