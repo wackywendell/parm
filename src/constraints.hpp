@@ -7,6 +7,7 @@
 #include <list>
 #include <set>
 #include <map>
+#include <queue>
 #include <complex>
 
 using namespace std;
@@ -681,4 +682,51 @@ class jammingtreeBD : public jammingtree2 {
  *  -   if you get to the end, return cycles
  */
 
+class CNode {
+    public:
+        int n;
+        Vec x;
+        
+        CNode() : n(-1){};
+        CNode(int n, Vec x) : n(n), x(x){};
+        
+        bool operator!=(const CNode& other)  const { return n != other.n;};
+        bool operator==(const CNode& other) const { return n == other.n;};
+        bool operator<(const CNode& other) const { return n < other.n;};
+        bool operator>(const CNode& other) const { return n > other.n;};
+};
+
+class CNodePath {
+    public:
+        Vec distance;
+        vector<CNode> nodes;
+        
+    public:
+        CNodePath(){};
+        CNodePath(CNode node){nodes.push_back(node);};
+        CNodePath(CNodePath other, CNode node, OriginBox& box) : 
+            distance(other.distance), nodes(other.nodes){add(node, box);};
+        void add(CNode node, OriginBox& box);
+        uint size(){return (uint) nodes.size();};
+};
+
+class Connectivity {
+    public:
+        sptr<OriginBox> box;
+        set<CNode> nodes;
+        map<int, vector<CNode> > neighbors;
+        
+        array<bool, NDIM> nonzero(Vec diff_vec); // is it nonzero. Specifically, is any dimension >  L/2?
+        CNodePath make_cycle(CNodePath forward, CNodePath backward);
+        
+        map<uint, CNodePath> circular_from(CNode node, bool check_all=true);
+        
+    public:
+        Connectivity(sptr<OriginBox> box) : box(box){};
+        void add_edge(CNode node1, CNode node2);
+        
+        map<uint, CNodePath> find_percolation(bool check_all_dims=true);
+};
+
 #endif
+

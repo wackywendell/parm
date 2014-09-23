@@ -24,6 +24,7 @@
 %include std_list.i
 %include std_set.i
 %include boost_shared_ptr.i
+%include std_map.i
 %include "vec.hpp"
 
 %apply double { long double } 
@@ -350,9 +351,15 @@ namespace std {
     #endif
     %template(idvector) vector<atomid>;
     %template(idpairvector) vector<idpair>;
+    %template(intvector) vector<int>;
     %template(uintvector) vector<unsigned int>;
     %template(ulongvector) vector<unsigned long>;
     %template(_eventset) set<event>;
+    %template(pair_uint_CNodePath) pair<uint, CNodePath>;
+    %template(map_uint_CNodePath) map<uint, CNodePath>;
+    %template(vector_CNode) vector<CNode>;
+    %template(pair_int_CNode) pair<int, vector<CNode> >;
+    %template(map_int_CNode) map<int, vector<CNode> >;
 }
 
 %extend atom {

@@ -608,4 +608,183 @@ flt jammingtree2::straight_distsq(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
     return dist / N;
 };
 
+
+
 #endif
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CNodePath::add(CNode node, OriginBox& box){
+    if(size() > 0){
+        distance += box.diff(node.x, nodes.back().x);
+    }
+    nodes.push_back(node);
+};
+
+void Connectivity::add_edge(CNode node1, CNode node2){
+    if(node1.n < 0 || node2.n < 0){
+        throw invalid_argument("Got node with negative n");
+    }
+    nodes.insert(node1);
+    nodes.insert(node2);
+    
+    neighbors[node1.n].push_back(node2);
+    std::sort(neighbors[node1.n].begin(), neighbors[node1.n].end());
+    neighbors[node2.n].push_back(node1);
+    std::sort(neighbors[node2.n].begin(), neighbors[node2.n].end());
+};
+
+array<bool, NDIM> Connectivity::nonzero(Vec diff_vec){
+    array<bool, NDIM> nonzeros;
+    Vec half_shape = box->boxshape() / 2;
+    for(uint i=0; i<NDIM; i++){
+        nonzeros[i] = (abs(diff_vec[i]) > half_shape[i]);
+    }
+    return nonzeros;
+};
+
+CNodePath Connectivity::make_cycle(CNodePath forward, CNodePath backward){
+    //forward and backward should both start and end in the same place
+    //and vice versa
+    
+    if(forward.size() == 0)
+        throw invalid_argument("make_cycle got an empty forward path. This should not happen.");
+    else if(backward.size() == 0)
+        throw invalid_argument("make_cycle got an empty forward path. This should not happen.");
+    
+    if(forward.nodes.front() != backward.nodes.front())
+        throw invalid_argument("make_cycle: forward.front() != backward.front()");
+    if(backward.nodes.back() != forward.nodes.back())
+        throw invalid_argument("make_cycle: backward.back() != forward.back()");
+    
+    CNodePath cycle = forward;
+    
+    for(vector<CNode>::reverse_iterator it=++(backward.nodes.rbegin()); it != backward.nodes.rend(); it++){
+        cycle.add(*it, *box);
+    }
+    return cycle;
+};
+
+pair<map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
+    map<uint, CNodePath> full_paths; // complete roots around the box. key is DIMENSION
+    map<uint, CNodePath> prev_paths; // other ways we've found to get to any node
+    queue<CNodePath> paths;
+    
+    CNodePath path0 = CNodePath(node);
+    paths.push(path0);
+    prev_paths[node.n] = path0;
+    
+    while(!paths.empty()){
+        CNodePath path = paths.front();
+        paths.pop();
+        assert(path.size() > 0);
+        CNode lastnode = path.nodes.back();
+        vector<CNode>& nextnodes = neighbors[lastnode.n];
+        for(vector<CNode>::iterator it=nextnodes.begin(); it < nextnodes.end(); ++it){
+            if(it->n < node.n) continue;
+            CNode nextnode = *it;
+            CNodePath newpath = CNodePath(path, nextnode, *box);
+            map<uint, CNodePath>::iterator found_path_it = prev_paths.find(nextnode.n);
+            if(found_path_it != prev_paths.end()){
+                cout << "Been to node " << nextnode.n << "before.\n";
+                
+                cout << "New path:" << ": [";
+                for(vector<CNode>::iterator it=newpath.nodes.begin(); it!=newpath.nodes.end(); it++)
+                    cout << it->n << ", ";
+                cout << "]" << "Distance:" << newpath.distance << endl;
+                
+                // We've been to this node before.
+                // But have we found a circle (around the box), or just another route?
+                bool found_nonzero = false;
+                CNodePath& found_path = found_path_it->second;
+                
+                cout << "Old path:" << ": [";
+                for(vector<CNode>::iterator it=found_path.nodes.begin(); it!=found_path.nodes.end(); it++)
+                    cout << it->n << ", ";
+                cout << "]" << "Distance:" << found_path.distance << endl;
+                
+                Vec pathdiff = found_path.distance - newpath.distance;
+                
+                cout << "Path difference:" << pathdiff << "nonzeros: ";
+                
+                array<bool, NDIM> nonzeros = nonzero(pathdiff);
+                for(uint i=0; i<NDIM; i++){
+                    cout << nonzeros[i] << " ";
+                    if(nonzeros[i]){
+                        cout << "TRUE ";
+                        found_nonzero = true;
+                        // We've found a cycle around the whole box!
+                        map<uint, CNodePath>::iterator found_cycle = full_paths.find(i);
+                        CNodePath cycle_path = make_cycle(found_path, newpath);
+                        if(found_cycle == full_paths.end()){
+                            cout << "NEW ";
+                            // And its along a dimension we've never found before
+                            // Note that now both *found_path and newpath
+                            // begin with CNode "node" and end with "nextnode"
+                            
+                            full_paths[i] = cycle_path;
+                            // Have we found enough paths?
+                            // If so, we're done. We're not trying to find the "best" cycle,
+                            // just any cycle (or any NDIM cycles)
+                            if(!check_all) return full_paths;
+                            else if(full_paths.size() >= NDIM) return full_paths;
+                        } else {
+                            cout << "OLD ";
+                            // Already found a cycle in this dimension, maybe replace it
+                            if(full_paths[i].nodes.size() > cycle_path.nodes.size())
+                                full_paths[i] = cycle_path;
+                        }
+                    }
+                }
+                cout << endl;
+                
+                if(!found_nonzero) {
+                    // Different route to the same node, but through the same box.
+                    // If this is a shorter route, might as well hold onto it...
+                    if(newpath.size() < found_path.size()){
+                        prev_paths[nextnode.n] = newpath;
+                    }
+                    continue;
+                }
+            } else {
+                // we've never been to this node before
+                prev_paths[nextnode.n] = newpath;
+                paths.push(newpath);
+                cout << "Found path to" << nextnode.n << ": [";
+                for(vector<CNode>::iterator it=newpath.nodes.begin(); it!=newpath.nodes.end(); it++)
+                    cout << it->n << ", ";
+                cout << "]" << ", paths size:" << paths.size() << " empty:" << paths.empty() << endl;
+                continue;
+            }
+            // Now same path, new neighbor to add to it
+        }
+        // We're done, move on to the next incomplete path
+    };
+    
+    return full_paths;
+};
+
+map<uint, CNodePath> Connectivity::find_percolation(bool check_all){
+    map<uint, CNodePath> full_paths;
+    for(set<CNode>::iterator it=nodes.begin(); it!=nodes.end(); ++it){
+        map<uint, CNodePath> new_paths = circular_from(*it, check_all);
+        for(map<uint, CNodePath>::iterator fit=new_paths.begin(); fit!=new_paths.end(); ++fit){
+            uint dim = fit->first;
+            CNodePath& new_path = fit->second;
+            if(full_paths.find(dim) == full_paths.end()){
+                // never been along this dimension before
+                full_paths[dim] = new_path;
+            } else {
+                // found one along this dimension before. If the new one is shorter, might as
+                // well take it instead
+                CNodePath& old_path = full_paths[dim];
+                if(new_path.nodes.size() < old_path.nodes.size()){
+                    full_paths[dim] = new_path;
+                }
+            }
+        }
+        if(!check_all and !full_paths.empty()) return full_paths;
+        else if(full_paths.size() >= NDIM) return full_paths;
+    }
+    return full_paths;
+};
