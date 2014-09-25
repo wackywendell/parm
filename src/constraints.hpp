@@ -710,6 +710,12 @@ class CNodePath {
         uint size(){return (uint) nodes.size();};
 };
 
+// The class that actually finds percolation.
+
+// TODO:
+/*
+ * add a way to work with a neighborlist for initial construction
+ */
 class Connectivity {
     public:
         sptr<OriginBox> box;
@@ -719,11 +725,15 @@ class Connectivity {
         array<bool, NDIM> nonzero(Vec diff_vec); // is it nonzero. Specifically, is any dimension >  L/2?
         CNodePath make_cycle(CNodePath forward, CNodePath backward);
         
-        map<uint, CNodePath> circular_from(CNode node, bool check_all=true);
+        map<uint, CNodePath> circular_from(CNode node, set<uint>& visited, bool check_all);
         
     public:
         Connectivity(sptr<OriginBox> box) : box(box){};
         void add_edge(CNode node1, CNode node2);
+        
+        // assumes diameters are additive
+        // Note that "diameter" should generally be the attractive diameter
+        void add(vector<Vec> locs, vector<flt> diameters);
         
         map<uint, CNodePath> find_percolation(bool check_all_dims=true);
 };

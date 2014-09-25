@@ -643,6 +643,31 @@ array<bool, NDIM> Connectivity::nonzero(Vec diff_vec){
     return nonzeros;
 };
 
+void Connectivity::add(vector<Vec> locs, vector<flt> diameters){
+    vector<CNode> cnodes;
+    
+    uint n=0;
+    for(vector<Vec>::const_iterator it=locs.begin(); it!=locs.end(); it++){
+        CNode cn = CNode(n, *it);
+        
+        uint n2=0;
+        for(vector<CNode>::const_iterator cit=cnodes.begin(); cit!=cnodes.end(); cit++){
+            Vec dx = box->diff(cn.x, cit->x);
+            if(dx.mag() <= (diameters[n] + diameters[n2])/2.0){
+                neighbors[n].push_back(*cit);
+                std::sort(neighbors[n].begin(), neighbors[n].end());
+                neighbors[n2].push_back(cn);
+                std::sort(neighbors[n2].begin(), neighbors[n2].end());
+            }
+            n2++;
+        }
+        nodes.insert(cn);
+        cnodes.push_back(cn);
+        
+        n++;
+    }
+};
+
 CNodePath Connectivity::make_cycle(CNodePath forward, CNodePath backward){
     //forward and backward should both start and end in the same place
     //and vice versa
@@ -665,7 +690,7 @@ CNodePath Connectivity::make_cycle(CNodePath forward, CNodePath backward){
     return cycle;
 };
 
-map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
+map<uint, CNodePath> Connectivity::circular_from(CNode node, set<uint>& visited, bool check_all){
     map<uint, CNodePath> full_paths; // complete roots around the box. key is DIMENSION
     map<uint, CNodePath> prev_paths; // other ways we've found to get to any node
     queue<CNodePath> paths;
@@ -673,6 +698,7 @@ map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
     CNodePath path0 = CNodePath(node);
     paths.push(path0);
     prev_paths[node.n] = path0;
+    visited.insert(node.n);
     
     while(!paths.empty()){
         CNodePath path = paths.front();
@@ -707,7 +733,7 @@ map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
                             full_paths[i] = cycle_path;
                             // Have we found enough paths?
                             // If so, we're done. We're not trying to find the "best" cycle,
-                            // just any cycle (or any NDIM cycles)
+                            // just any cycle (or any NDIM cycles if check_all)
                             if(!check_all) return full_paths;
                             else if(full_paths.size() >= NDIM) return full_paths;
                         } else {
@@ -728,6 +754,7 @@ map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
                 }
             } else {
                 // we've never been to this node before
+                visited.insert(nextnode.n);
                 prev_paths[nextnode.n] = newpath;
                 paths.push(newpath);
                 continue;
@@ -742,8 +769,12 @@ map<uint, CNodePath> Connectivity::circular_from(CNode node, bool check_all){
 
 map<uint, CNodePath> Connectivity::find_percolation(bool check_all){
     map<uint, CNodePath> full_paths;
+    set<uint> visited;
     for(set<CNode>::iterator it=nodes.begin(); it!=nodes.end(); ++it){
-        map<uint, CNodePath> new_paths = circular_from(*it, check_all);
+        if(visited.count(it->n) > 0) continue; 
+        // we've already been to this node, no need to start there
+        
+        map<uint, CNodePath> new_paths = circular_from(*it, visited, check_all);
         for(map<uint, CNodePath>::iterator fit=new_paths.begin(); fit!=new_paths.end(); ++fit){
             uint dim = fit->first;
             CNodePath& new_path = fit->second;
