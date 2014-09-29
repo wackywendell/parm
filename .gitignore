@@ -40,6 +40,8 @@ LJatoms-pbc.tcl
 hardspheres
 hardspheres.tcl
 hardspheres.msd
+pyparm/examples/*.npz
+pyparm/examples/*.tcl
 *.orig
 *.ipynb
 .DS_Store
