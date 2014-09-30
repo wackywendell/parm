@@ -70,25 +70,33 @@ Dependencies
  - (optional) Python: for generating Python bindings
     - Known to compile for python 3.2-3.4, and probably with 2.6-2.7
 
-Examples
-----
-
-See `src/hardspheres.cpp` or `src/LJatoms.cpp` for examples of C++ 
-programs. Both are well documented, much more so than the rest of this 
-code, unfortunately.
-
 Python
 ----
 
 This library includes a `sim.i` file for use with SWIG for generating 
 Python bindings.
 
-##### To Generate Python module
+#### To Generate Python module
 
 Run `make 2d` or `make 3d` to generate bindings for a 2D or 3D library;
 run `make pyparm` to generate bindings for both.
 
-##### Using the Python module
+#### Using the Python module
 
 Use `import pyparm.d2 as sim` or `import pyparm.d3 as sim` to import
 the module. Then use it freely.
+
+
+Examples
+----
+
+#### C++
+
+See `src/hardspheres.cpp` or `src/LJatoms.cpp` for examples of C++ 
+programs. Both are well documented, much more so than the rest of this 
+code, unfortunately.
+
+#### Python
+
+See `pyparm/examples/LJ.py` for an example of a simple Lennard-Jones 
+simulation, with data analysis included.
