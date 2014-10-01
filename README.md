@@ -48,34 +48,27 @@ to a full protein simulation.
 Standard Steps
 ----
 
-1.   Make a `Box`
-
-2.   Make an `atomvec`, setting masses, positions, and velocities to 0
-
-3.   Make `interaction`s. For neighborlisted interactions, make 
+1.  Make a `Box`
+2.  Make an `atomvec`, setting masses, positions, and velocities to 0
+3.  Make `interaction`s. For neighborlisted interactions, make 
 `neighborlist` first, then make interactions.
-
     1.   Add atoms / pairs to interaction
-
-4.   Make a `collection`. Note that the neighborlist has to be added to 
+4.  Make a `collection`. Note that the neighborlist has to be added to 
 `trackers`
-
-5.   Run `collection.timestep()` many, many times
-
+5.  Run `collection.timestep()` many, many times
     1.   Use methods such as `collection.kinetic()` or 
     `collection.temp()` to get statistics
-
     2. Or use `tracker`s like `RsqTracker` to track running statistics
-
-6.   Write output to files
+6.  Write output to files
 
 Dependencies
 ----
 
-This library makes use of several Boost libraries, as well as standard 
-C++ template libraries.
-
-Optionally, this library can be compiled for use as a Python 3.x module.
+ - STL
+ - Boost: primarily for random numbers, also a few odds and ends
+ - (optional) SWIG: for generating Python bindings
+ - (optional) Python: for generating Python bindings
+    - Known to compile for python 3.2-3.4, and probably with 2.6-2.7
 
 Examples
 ----
