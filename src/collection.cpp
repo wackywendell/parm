@@ -1906,6 +1906,7 @@ bool collectionCDBDgrid::take_step(flt tlim){
     // if e.a == e.b, that just means that e.a is entering a new box,
     // and we don't need to worry about any other atoms
     if(!fakecollision){
+        numevents++;
         // collide our two atoms (i.e. have them bounce)
         collide(*box, *(e.a), *(e.b));
         badatoms.push_back(e.b);
@@ -2010,6 +2011,7 @@ bool collectionCDBD::take_step(flt tlim){
     
     // move everyone forward
     line_advance(e.t - curt);
+    numevents++;
     curt = e.t;
     //~ std::cerr << "take_step: advanced.\n";
     
