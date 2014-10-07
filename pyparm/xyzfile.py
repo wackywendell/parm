@@ -264,6 +264,9 @@ class Frame:
     def __iter__(self):
         return iter(self.locs)
     
+    def __len__(self):
+        return len(self.locs)
+    
     def _setx(self, atom, loc):
         x,y,z = loc
         atom.x.set(float(x), float(y),float(z))
