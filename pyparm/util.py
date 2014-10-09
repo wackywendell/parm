@@ -104,6 +104,16 @@ def filefinder(dir, *names, regexp=None, matchall=True, types=Decimal, ext = 'ts
     return [FoundFile(**d) for d in pdicts]
 
 def filefinder2(dir, *names, delim='_', matchall=True, types=Decimal, ext = 'tsv.gz'):
+    """
+    Find files based on a standard naming scheme of name value [delim name value...] (literal .) ext
+    
+    dir             : Directory to look in
+    names           : keywords to look for / store into
+    delim           : Delimiter separating file names
+    matchall        : Match every file with the given extension
+    types           : What types to apply (default: all Decimal). May be a single type or list of types
+    ext             : File extension (ignores everything else) (default: 'tsv.gz')
+    """
     import re, pathlib
     from collections import namedtuple
     FoundFile = namedtuple('FoundFile', list(names) + ['fname'])
