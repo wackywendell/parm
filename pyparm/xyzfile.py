@@ -176,14 +176,11 @@ class XYZreader:
         else:
             raise ValueError
             
-        if 'time' not in commentdict and 'stage' not in commentdict:
-            raise AssertionError('Comment %s does not include time' 
-                                                    % str(commentdict))
         if 'time' in commentdict:
             f = Frame(lines, float(commentdict['time']))
             del commentdict['time']
         else:
-            f = Frame(lines, float('nan'))
+            f = Frame(lines, t=None)
         f.comment = comment
         f.values = commentdict
         return f
