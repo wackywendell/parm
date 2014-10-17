@@ -153,7 +153,7 @@ class XYZreader:
         else:
             commentdict = dict()
 
-        lines = [self.file.readline().strip().split(' ') for i in range(num)]
+        lines = [self.file.readline().strip().replace('\t',' ').split(' ') for i in range(num)]
         
         
         len0 = len(lines[0])
