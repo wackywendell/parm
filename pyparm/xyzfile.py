@@ -145,8 +145,13 @@ class XYZreader:
         elif ' ' in comment:
             key,time = comment.split(' ')
             commentdict = {key:time}
+        elif comment.strip() != '':
+            try:
+                commentdict = {'time':float(comment.strip())}
+            except ValueError:
+                commentdict = {'comment':comment}
         else:
-            commentdict = {'time':float(comment.strip())}
+            commentdict = dict()
 
         lines = [self.file.readline().strip().split(' ') for i in range(num)]
         
