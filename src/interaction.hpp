@@ -241,9 +241,16 @@ class bondangle {
         flt springk;
         flt theta0;
         bool usecos;
+        
     public:
         bondangle(const flt k, const flt theta, const bool cosine=false)
                         :springk(k), theta0(theta), usecos(cosine){};
+        inline static flt get_angle(const Vec& r1, const Vec& r2){
+            flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
+            if(costheta > 1) costheta = 1;
+            else if(costheta < -1) costheta = -1;
+            return acos(costheta);
+        };
         flt energy(const Vec& diff1, const Vec& diff2);
         Nvector<Vec,3> forces(const Vec& diff1, const Vec& diff2);
         ~bondangle(){};
@@ -492,6 +499,9 @@ struct bondgrouping {
             BondDiffType diff=UNBOXED, OriginBox *box=NULL);
     Vec diff(Box &box) const;
     int get_fixed(uint i){return fixed_box[i];};
+    inline bool same_atoms(bondgrouping &other){
+        return ((a1 == other.a1) and (a2 == other.a2)) or ((a1 == other.a2) and (a2 == other.a1));
+    };
 };
 
 class bondpairs : public interaction {
@@ -503,11 +513,19 @@ class bondpairs : public interaction {
     public:
         bondpairs(vector<bondgrouping> pairs, bool zeropressure=true);
         bondpairs(bool zeropressure=true);
-        void add(bondgrouping b){pairs.push_back(b);};
-        inline void add(flt k, flt x0, atomid a1, atomid a2){
-            add(bondgrouping(k,x0,a1,a2));};
-        bool add_or_replace(bondgrouping b); // true means replaced
-        bool replace(flt k, flt x0, atomid a1, atomid a2);
+        /// Add a pair of atoms.
+        /// If "replace", a previous pair found will be replaced by the new pair.
+        /// If not "replace" and that pair of atoms is already inserted, an error will be thrown.
+        bool add(bondgrouping b, bool replace=true);
+        inline bool add(flt k, flt x0, atomid a1, atomid a2, bool replace=true){
+            return add(bondgrouping(k,x0,a1,a2), replace);};
+        void add_forced(bondgrouping b){pairs.push_back(b);};
+        /// Add a pair of atoms with the current distance.
+        inline bool add(flt k, atomid a1, atomid a2, bool replace=true){
+            flt x0 = (a1->x - a2->x).mag();
+            return add(bondgrouping(k,x0,a1,a2), replace);
+        };
+        
         uint size() const{ return (uint) pairs.size();};
         bondgrouping get(uint i) const{ return pairs[i];};
         flt mean_dists(Box &box) const;
@@ -523,6 +541,10 @@ struct anglegrouping {
     atomid a1, a2, a3;
     anglegrouping(flt k, flt x0, atomid a1, atomid a2, atomid a3) : 
                 k(k),x0(x0), a1(a1), a2(a2), a3(a3){};
+    inline bool same_atoms(anglegrouping &other){
+        if(a2 != other.a2) return false;
+        return ((a1 == other.a1) and (a3 == other.a3)) or ((a1 == other.a3) and (a3 == other.a1));
+    };
 };
 
 class angletriples : public interaction {
@@ -531,12 +553,19 @@ class angletriples : public interaction {
         inline static Vec diff(Vec r1, Vec r2){return r1-r2;};
     public:
         angletriples(vector<anglegrouping> triples = vector<anglegrouping>());
-        void add(anglegrouping b){triples.push_back(b);};
-        void add(flt k, flt x0, atomid a1, atomid a2, atomid a3){
-                                add(anglegrouping(k,x0,a1,a2,a3));};
-        inline flt energy(Box &box);
+        /// Add a triple of atoms.
+        /// If "replace", a previous triple found will be replaced by the new triple.
+        /// If not "replace" and that triple of atoms is already inserted, an error will be thrown.
+        bool add(anglegrouping b, bool replace=true);
+        inline bool add(flt k, flt x0, atomid a1, atomid a2, atomid a3, bool replace=true){
+            return add(anglegrouping(k,x0,a1,a2,a3), replace);};
+        /// Add a triple of atoms with the current angle.
+        bool add(flt k, atomid a1, atomid a2, atomid a3, bool replace=true);
+        void add_forced(anglegrouping b){triples.push_back(b);};
+        
+        flt energy(Box &box);
         inline flt pressure(Box &box){return 0;};
-        inline void setForces(Box &box);
+        void setForces(Box &box);
         uint size() const {return (uint) triples.size();};
         flt mean_dists() const;
         flt std_dists() const;
@@ -564,6 +593,18 @@ class dihedrals : public interaction {
         inline void add(vector<flt> coscoeffs, vector<flt> sincoeffs, 
                             atomid a1, atomid a2, atomid a3, atomid a4, bool usepow=true){
             add(dihedralgrouping(coscoeffs, sincoeffs,a1,a2,a3,a4, usepow));};
+        /// Add 4 atoms with the potential $V(\theta) = k (1 + \cos(\theta - \theta_0))$
+        inline void add(flt k, flt theta0, atomid a1, atomid a2, atomid a3, atomid a4){
+            add(dihedralgrouping(vector<flt>(2, k*cos(theta0)), vector<flt>(2, k*sin(theta0)), a1,a2,a3,a4, true));
+        }
+        /// Add 4 atoms with the potential $V(\theta) = k (1 + \cos(\theta - \theta_0))$, where
+        /// \theta_0 is set to the current one
+        inline void add(flt k, atomid a1, atomid a2, atomid a3, atomid a4){
+            Vec r1 = dihedralgrouping::diff(a2->x, a1->x);
+            Vec r2 = dihedralgrouping::diff(a3->x, a2->x);
+            Vec r3 = dihedralgrouping::diff(a4->x, a3->x);
+            add(k,  dihedral::getang(r1, r2, r3), a1, a2, a3, a4);
+        };
         uint size() const{ return uint(groups.size());};
         flt mean_dists() const;
         //~ flt std_dists() const;
@@ -1952,14 +1993,6 @@ class SCatomvec : public virtual atomgroup {
         inline atom& operator[](cuint n) const {return atoms[n];};
         inline atomid get_id(cuint n){return atoms.get_id(n);};
         inline atompair pair(cuint n){return atompair(atoms.get_id(n*2), atoms.get_id(n*2 + 1));};
-        //inline atompair& pair(cuint n) const {return atoms[n / 2];};
-        //~ atomid get_id(atom *a){
-            //~ uint n = (uint) (a - atoms); WON'T WORK
-            //~ if (n >= sz or a < atoms) return atomid();
-            //~ return get_id(n);
-        //~ }
-        //~ inline atomid get_id(uint n) {
-            //~ if (n > sz*2) return atomid(); return atomid(&(atoms[n/2][n%2]),n);};
         inline uint size() const {return atoms.size();};
         inline uint pairs() const {return atoms.size()/2;};
         ~SCatomvec(){};
@@ -1988,6 +2021,7 @@ struct SCPair {
 };
 
 struct SCSpringPair : public SCPair {
+    /// Harmonic repulsive interactions between spherocylinders.
     flt eps, sig;
     
     SCSpringPair(atompair &p1, atompair &p2, flt eps, flt sig, flt l1, flt l2) : 
@@ -1999,23 +2033,10 @@ struct SCSpringPair : public SCPair {
     inline flt maxdelta(){return sig;};
     
     flt energy(Box &box, SpheroCylinderDiff diff){
-        //~ atom &a1 = p1.first();
-        //~ atom &a1p = p1.last();
-        //~ atom &a2 = p2.first();
-        //~ atom &a2p = p2.last();
-        //~ Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
-        //~ Vec r12 = r2 - r1;
-        //~ flt rsq = r12.sq();
-        //~ if(rsq > pow(sig+l, 2)) return 0.0;
-        
-        //~ SpheroCylinderDiff diff = SCNearestLoc(a1.x, a1p.x, a2.x, a2p.x);
         flt dsq = diff.delta.sq();
         if(dsq > sig*sig) return 0;
         flt d = sqrt(dsq);
         flt dsig = d-sig;
-        //~ cout << "SCSpringPair d: " << d << "  sig: " 
-                //~ << sig << "  dsig: " << dsig << "  eps: " << eps << '\n';
-        //~ cout << "SCSpringPair energy: " << (dsig*dsig*eps/2.0) << '\n';
         return dsig*dsig*eps/2;
     }
     Vec forces(Box &box, SpheroCylinderDiff diff){
@@ -2029,6 +2050,7 @@ struct SCSpringPair : public SCPair {
 };
 
 class SCSpringList : public interaction {
+    /// Harmonic repulsive interactions between spherocylinders.
     private:
         SCatomvec *scs;
         flt eps, sig;

@@ -69,14 +69,8 @@ void fixedForceRegionAtom::setForce(Box &box){
 
 flt bondangle::energy(const Vec& r1, const Vec& r2){
     flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
-    if(costheta > 1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = 1;
-    }
-    else if(costheta < -1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = -1;
-    }
+    if(costheta > 1) costheta = 1;
+    else if(costheta < -1) costheta = -1;
     if(!usecos) return springk*pow(acos(costheta) - theta0,2)/2;
     else return springk*pow(costheta - cos(theta0),2)/2;
 }
@@ -84,16 +78,9 @@ flt bondangle::energy(const Vec& r1, const Vec& r2){
 Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     flt r1mag = r1.mag();
     flt r2mag = r2.mag();
-    
     flt costheta = r1.dot(r2) / r1mag / r2mag;
-    if(costheta > 1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = 1;
-    }
-    else if(costheta < -1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = -1;
-    }
+    if(costheta > 1) costheta = 1;
+    else if(costheta < -1) costheta = -1;
     flt theta = acos(costheta);
     //theta is now the angle between x1 and x2
     
@@ -376,29 +363,19 @@ bondpairs::bondpairs(vector<bondgrouping> pairs, bool zeropressure) :
 bondpairs::bondpairs(bool zeropressure) : 
         zeropressure(zeropressure){};
 
-bool bondpairs::add_or_replace(bondgrouping b){
+bool bondpairs::add(bondgrouping b, bool replace){
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
-        if(((b.a1 == it->a1) and (b.a2 == it->a2)) or
-            ((b.a1 == it->a2) and (b.a2 == it->a1))){
+        if(b.same_atoms(*it)){
+            if(replace){
                 *it = b;
                 return true;
+            } else {
+                throw std::invalid_argument("Atoms already inserted.");
             }
         }
+    }
     pairs.push_back(b);
-    return false;
-};
-
-bool bondpairs::replace(flt k, flt x0, atomid a1, atomid a2){
-    vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); ++it){
-        if(((a1 == it->a1) and (a2 == it->a2)) or
-            ((a1 == it->a2) and (a2 == it->a1))){
-                it->k = k;
-                it->x0 = x0;
-                return true;
-            }
-        }
     return false;
 };
 
@@ -485,6 +462,29 @@ flt bondpairs::std_dists(Box &box) const{
 }
 
 angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
+
+bool angletriples::add(anglegrouping a, bool replace){
+    vector<anglegrouping>::iterator it;
+    for(it = triples.begin(); it < triples.end(); ++it){
+        if(a.same_atoms(*it)){
+            if(replace){
+                *it = a;
+                return true;
+            } else {
+                throw std::invalid_argument("Atoms already inserted.");
+            }
+        }
+    }
+    triples.push_back(a);
+    return false;
+};
+
+bool angletriples::add(flt k, atomid a1, atomid a2, atomid a3, bool replace){
+    Vec r1 = diff(a2->x, a1->x);
+    Vec r2 = diff(a2->x, a3->x);
+    flt x0 = bondangle::get_angle(r1, r2);
+    return add(anglegrouping(k,x0,a1,a2,a3), replace);
+};
 
 flt angletriples::energy(Box &box){
     flt E=0;
