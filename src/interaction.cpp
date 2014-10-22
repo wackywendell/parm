@@ -819,10 +819,10 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
     SpheroCylinderDiff diff;
     
-    atom &a1 = p1.first();
-    atom &a1p = p1.last();
-    atom &a2 = p2.first();
-    atom &a2p = p2.last();
+    atom &a1 = *p1.first();
+    atom &a1p = *p1.last();
+    atom &a2 = *p2.first();
+    atom &a2p = *p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1p.x - a1.x), s2 = (a2p.x - a2.x);
     //flt myl1 = s1.mag(), myl2 = s2.mag();
@@ -882,10 +882,10 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
 };
 
 void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, flt IoverM2){
-    atom &a1 = p1.first();
-    atom &a1p = p1.last();
-    atom &a2 = p2.first();
-    atom &a2p = p2.last();
+    atom &a1 = *p1.first();
+    atom &a1p = *p1.last();
+    atom &a2 = *p2.first();
+    atom &a2p = *p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     flt M1 = a1.m + a1p.m;
@@ -916,9 +916,9 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
 flt SCSpringList::energy(Box &box){
     flt E = 0;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
-        atompair pi = scs->pair(i);
+        idpair pi = scs->pair(i);
         for(uint j = i+1; j < scs->pairs(); ++j){
-            atompair pj = scs->pair(j);
+            idpair pj = scs->pair(j);
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
             //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
@@ -932,10 +932,10 @@ flt SCSpringList::energy(Box &box){
 
 void SCSpringList::setForces(Box &box){
     for(uint i = 0; i < scs->pairs() - 1; ++i){
-        atompair pi = scs->pair(i);
+        idpair pi = scs->pair(i);
         flt l1 = ls[i];
         for(uint j = i+1; j < scs->pairs(); ++j){
-            atompair pj = scs->pair(j);
+            idpair pj = scs->pair(j);
             flt l2 = ls[j];
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
             SpheroCylinderDiff diff = scp.NearestLoc(box);

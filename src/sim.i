@@ -394,11 +394,27 @@ namespace std {
     %};
 }
 
+%extend atomid {
+    %insert("python") %{
+        def __str__(self):
+            return "<atomid %s>" % self.n()
+        
+        def __repr__(self):
+            #ifdef VEC2D
+            x,y = tuple(self.x)
+            return "<atomid %s at (%.2f,%.2f)>" % (self.n(),x,y)
+            #else
+            x,y,z = tuple(self.x)
+            return "<atomid %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
+            #endif
+    %};
+}
+
 %extend atomgroup {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
-                yield self.get(i)
+                yield self.get_id(i)
     %};
 };
 
@@ -429,6 +445,31 @@ namespace std {
                 #~ print "i:",i
                 a = self.get(i)
                 a.__setstate__(atomstate)
+    %};
+};
+
+%extend SCatomvec {
+    %insert("python") %{
+        def __iter__(self):
+            for i in range(self.size()):
+                yield self[i]
+        
+        def all_pairs(self):
+            for i in range(self.pairs()):
+                yield self.pair(i)
+        
+        def __len__(self):
+            return self.size()
+        
+        def __getitem__(self, obj):
+            return self.get_id(obj)
+    %};
+};
+
+%extend idpair {
+    %insert("python") %{
+        def __iter__(self):
+            return iter((self.first(), self.last()))
     %};
 };
 

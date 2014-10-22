@@ -1966,15 +1966,6 @@ inline flt confineRange(flt minimum, flt val, flt maximum){
     return val;
 }
 
-class atompair {
-    private:
-        atomid vals[2];
-    public:
-        atompair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
-        inline atom& first() {return *vals[0];};
-        inline atom& last() {return *vals[1];};
-};
-
 class SCatomvec : public virtual atomgroup {
     // this is an atomgroup which actually owns the atoms, which are
     // arranged in pairs.
@@ -1992,7 +1983,7 @@ class SCatomvec : public virtual atomgroup {
         inline atom& operator[](cuint n){return atoms[n];};
         inline atom& operator[](cuint n) const {return atoms[n];};
         inline atomid get_id(cuint n){return atoms.get_id(n);};
-        inline atompair pair(cuint n){return atompair(atoms.get_id(n*2), atoms.get_id(n*2 + 1));};
+        inline idpair pair(cuint n){return idpair(atoms.get_id(n*2), atoms.get_id(n*2 + 1));};
         inline uint size() const {return atoms.size();};
         inline uint pairs() const {return atoms.size()/2;};
         ~SCatomvec(){};
@@ -2004,12 +1995,12 @@ struct SpheroCylinderDiff{
 };
 
 struct SCPair {
-    atompair &p1;
-    atompair &p2;
+    idpair &p1;
+    idpair &p2;
     flt l1, l2;
-    SCPair(atompair &p1, atompair &p2, flt l1, flt l2) : 
+    SCPair(idpair &p1, idpair &p2, flt l1, flt l2) : 
         p1(p1), p2(p2), l1(l1), l2(l2){};
-    SCPair(atompair &p1, atompair &p2, flt l) : 
+    SCPair(idpair &p1, idpair &p2, flt l) : 
         p1(p1), p2(p2), l1(l), l2(l){};
     SCPair(const SCPair &other) : p1(other.p1), p2(other.p2),
             l1(other.l1), l2(other.l2){}
@@ -2024,9 +2015,9 @@ struct SCSpringPair : public SCPair {
     /// Harmonic repulsive interactions between spherocylinders.
     flt eps, sig;
     
-    SCSpringPair(atompair &p1, atompair &p2, flt eps, flt sig, flt l1, flt l2) : 
+    SCSpringPair(idpair &p1, idpair &p2, flt eps, flt sig, flt l1, flt l2) : 
         SCPair(p1, p2, l1, l2), eps(eps), sig(sig){};
-    SCSpringPair(atompair &p1, atompair &p2, flt eps, flt sig, flt l) : 
+    SCSpringPair(idpair &p1, idpair &p2, flt eps, flt sig, flt l) : 
         SCPair(p1, p2, l), eps(eps), sig(sig){};
     
     inline flt maxdist(){return sig + (l1+l2)/2;};
