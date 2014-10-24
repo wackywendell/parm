@@ -595,7 +595,11 @@ class dihedrals : public interaction {
             add(dihedralgrouping(coscoeffs, sincoeffs,a1,a2,a3,a4, usepow));};
         /// Add 4 atoms with the potential $V(\theta) = k (1 + \cos(\theta - \theta_0))$
         inline void add(flt k, flt theta0, atomid a1, atomid a2, atomid a3, atomid a4){
-            add(dihedralgrouping(vector<flt>(2, k*cos(theta0)), vector<flt>(2, k*sin(theta0)), a1,a2,a3,a4, true));
+            vector<flt> coscoeffs(2,k);
+            coscoeffs[1] = -k*cos(theta0);
+            vector<flt> sincoeffs(2,0);
+            sincoeffs[1] = -k*sin(theta0);
+            add(dihedralgrouping(coscoeffs, sincoeffs, a1,a2,a3,a4, true));
         }
         /// Add 4 atoms with the potential $V(\theta) = k (1 + \cos(\theta - \theta_0))$, where
         /// \theta_0 is set to the current one
@@ -2046,6 +2050,7 @@ class SCSpringList : public interaction {
         SCatomvec *scs;
         flt eps, sig;
         vector<flt> ls;
+        set<array<uint, 2> > ignore_list;
     public:
         SCSpringList(SCatomvec *scs, flt eps, flt sig, flt l) : 
             scs(scs), eps(eps), sig(sig), ls(scs->pairs(), l){};
@@ -2055,6 +2060,15 @@ class SCSpringList : public interaction {
         void setForces(Box &box);
         flt setForcesGetPressure(Box &box){setForces(box); return NAN;};
         flt pressure(Box &box){return NAN;};
+        void ignore(uint n1, uint n2){
+            if(n1 > n2){uint n3=n1; n1=n2; n2=n3;}
+            array<uint, 2> pair;
+            pair[0] = n1;
+            pair[1] = n2;
+            ignore_list.insert(pair);
+        }
+        void ignore(atomid a1, atomid a2){ignore(a1.n() / 2, a2.n() / 2);}
+        
         ~SCSpringList(){};
 };
 
