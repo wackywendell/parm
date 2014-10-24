@@ -113,7 +113,7 @@ def md5_file(f, block_size = None):
 #~ fileparse = parse.OneOrMore(fullframe)
 
 class XYZreader:
-    firstline = re.compile("([0-9]*)")
+    firstline = re.compile("^([0-9]*)$")
     commentline = re.compile("time[= ][0-9.]*|[\w-]+=.?( [\w-]+=.?)*|[0-9.]*")
     regline = re.compile("(\w{1,2})\s+([\-0-9.]+)\s+([\-0-9.]+)\s+([\-0-9.]+)")
     
@@ -121,6 +121,7 @@ class XYZreader:
         self.file = f
         self._size = None
         self._md5 = None
+        self.lineno = 1
     
     def __match__(self, regex, *types):
         line = self.file.readline()
@@ -129,7 +130,13 @@ class XYZreader:
         line = line.strip()
         match = regex.match(line)
         if match is None:
-            raise XYZError("Failed to parse at line " + repr(line))
+            rname = "regex '{}'".format(repr(regex.pattern))
+            if regex == self.firstline:
+                rname = "first frame line"
+            elif regex == self.commentline:
+                rname = "comment line" 
+            raise XYZError("Failed to parse {} at line {}: {}".format(rname, self.lineno, repr(line)))
+        self.lineno += 1
         groups = match.groups()
         if len(types) != 0 and len(groups) != len(types):
             raise XYZError("Wrong number of types given.")
@@ -153,26 +160,35 @@ class XYZreader:
         else:
             commentdict = dict()
 
-        lines = [self.file.readline().strip().replace('\t',' ').split(' ') for i in range(num)]
+        lines = [(i,self.file.readline().strip().replace('\t',' ').split(' ')) for i in range(num)]
         
-        
-        len0 = len(lines[0])
-        badlines = [l for l in lines if len(l) not in (4,5,7,8) or len(l) != len0]
+        firstn, firstline = lines[0]
+        len0 = len(firstline)
+        badlines = [(n,l) for (n,l) in lines if len(l) not in (4,5,7,8) or len(l) != len0]
         if len(badlines) > 0:
-            raise ValueError("bad coordinate line: %s" % str(badlines[0]))
+            badn, badline = badlines[0]
+            if badline == ['']:
+                e = "Coordinate line expected at end of file, line {} (Frame started at {})" .format(
+                    self.lineno + badn, self.lineno-2)
+            else:
+                e = "bad coordinate line {} (Frame started at {}): {}" .format(
+                        self.lineno + badn, self.lineno-2, str(badline))
+            raise ValueError(e)
+            
+        self.lineno += num
         
         if len0 == 4:
-            lines = [(e,(float(x),float(y),float(z))) for e,x,y,z in lines]
+            lines = [(e,(float(x),float(y),float(z))) for n,(e,x,y,z) in lines]
         elif len0 == 5:
-            lines = [(e,(float(x),float(y),float(z))) for e,x,y,z,name in lines]
+            lines = [(e,(float(x),float(y),float(z))) for n,(e,x,y,z,name) in lines]
         elif len0 == 7:
             lines = [(e,(float(x),float(y),float(z)),
                             (float(vx),float(vy),float(vz))) 
-                    for e,x,y,z,vx,vy,vz in lines]
+                    for n,(e,x,y,z,vx,vy,vz) in lines]
         elif len0 == 8:
             lines = [(e,(float(x),float(y),float(z)),
                             (float(vx),float(vy),float(vz))) 
-                    for e,x,y,z,vx,vy,vz, name in lines]
+                    for n,(e,x,y,z,vx,vy,vz, name) in lines]
         else:
             raise ValueError
             
