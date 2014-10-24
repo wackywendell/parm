@@ -56,6 +56,7 @@
 %shared_ptr(fixedForceRegion)
 %shared_ptr(fixedSpring)
 %shared_ptr(SoftWall)
+%shared_ptr(SoftWallCylinder)
 %shared_ptr(WalledBox2D)
 %shared_ptr(COMSpring)
 %shared_ptr(bondpairs)

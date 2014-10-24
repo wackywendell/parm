@@ -1895,6 +1895,36 @@ class SoftWall : public interaction {
         Vec getLoc(){return loc;};
         void setNorm(Vec newNorm){norm = newNorm.norm();};
         Vec getNorm(){return norm;};
+        
+        flt get_last_f(){return lastf;};
+};
+
+class SoftWallCylinder : public interaction {
+    protected:
+        flt lastf;
+        Vec loc;
+        Vec axis;
+        flt radius;
+        flt expt;
+        vector<WallAtom> group;
+    public:
+        SoftWallCylinder(Vec loc, Vec axis, flt radius, flt expt=2.0) : 
+            loc(loc), axis(axis.norm()), radius(radius), expt(expt), lastf(NAN){};
+        void add(WallAtom a){
+            if(a.sigma > radius*2) 
+                throw std::invalid_argument("SoftWallCylinder::add: sigma must be less than cylinder diameter");
+            group.push_back(a);
+        };
+        flt energy(Box &box);
+        void setForces(Box &box);
+        flt setForcesGetPressure(Box &box);
+        flt pressure(Box &box);
+        
+        void setLoc(Vec new_loc){loc = new_loc;};
+        Vec getLoc(){return loc;};
+        void setAxis(Vec new_axis){axis = new_axis.norm();};
+        Vec getAxis(){return axis;};
+        flt get_last_f(){return lastf;};
 };
 
 #ifdef VEC2D

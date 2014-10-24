@@ -813,6 +813,49 @@ flt SoftWall::pressure(Box &box){
     }
     return p;
 };
+flt SoftWallCylinder::energy(Box &box){
+    flt E=0;
+    vector<WallAtom>::iterator it;
+    for(it = group.begin(); it != group.end(); ++it){
+        atom &a = **it;
+        Vec r = box.diff(a.x, loc);
+        r -= axis * (r.dot(axis));
+        flt dist = (radius - r.mag())*2;
+        if(dist > it->sigma) continue;
+        E += it->epsilon * pow(1 - (dist/(it->sigma)), expt)/expt/2.0;
+        // Note that normally you have ε(1-r/σ)^n for 2 particles.
+        // We divide by 2 because now there is only one particle, pushing
+        // on its mirror image; the force should be the same as if the 
+        // mirror image was there, so the energy needs to be half
+    }
+    return E;
+};
+
+void SoftWallCylinder::setForces(Box &box){
+    lastf = 0;
+    vector<WallAtom>::iterator it;
+    for(it = group.begin(); it != group.end(); ++it){
+        atom &a = **it;
+        Vec r = box.diff(a.x, loc);
+        r -= axis * (r.dot(axis));
+        flt rmag = r.mag();
+        flt dist = (radius - rmag)*2;
+        if(dist > it->sigma) continue;
+        flt f = it->epsilon * pow(1 - (dist/(it->sigma)), expt - 1.0);
+        a.f -= r * (f/rmag); // equal to a.f += (-r.norm()) * f;
+        lastf += f;
+    }
+};
+
+flt SoftWallCylinder::setForcesGetPressure(Box &box){
+    throw std::runtime_error("SoftWallCylinder::setForcesGetPressure not implemented");
+    return 0;
+};
+
+flt SoftWallCylinder::pressure(Box &box){
+    throw std::runtime_error("SoftWallCylinder::pressure not implemented");
+    return 0;
+};
 
 SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
