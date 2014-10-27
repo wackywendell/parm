@@ -1901,11 +1901,11 @@ class SoftWall : public interaction {
 
 class SoftWallCylinder : public interaction {
     protected:
-        flt lastf;
         Vec loc;
         Vec axis;
         flt radius;
         flt expt;
+        flt lastf;
         vector<WallAtom> group;
     public:
         SoftWallCylinder(Vec loc, Vec axis, flt radius, flt expt=2.0) : 

@@ -150,7 +150,7 @@ class collectionDamped : public collection {
     /** Based on CollectionSol, above.
      * From Allen and Tildesley, p. 263:
      * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
-     * v(t + dt) = c0 v(t) + c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
+     * v(t + dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
      * 
      * where c0 = exp(- h dt)
      *       c1 = (h dt)^-1 (1 - c0)
