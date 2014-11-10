@@ -117,11 +117,13 @@ class relativeConstraint : public constraint {
 
 class distConstraint : public constraint {
     private:
-        atom *a1, *a2;
+        atomid a1, a2;
         flt dist;
     public:
-        distConstraint(atom* atm1, atom* atm2, flt dist) :
+        distConstraint(atomid atm1, atomid atm2, flt dist) :
             a1(atm1), a2(atm2), dist(dist) {};
+        distConstraint(atomid atm1, atomid atm2) :
+            a1(atm1), a2(atm2), dist((a1->x - a2->x).mag()){};
         int ndof(){return 1;};
         void apply(Box &box){
             flt M = (a1->m + a2->m);
@@ -147,13 +149,20 @@ class distConstraint : public constraint {
             // (newv2 - newv1) • u = (v2 - v1 - (2*baddv)) • u
             //                     = ((v2 - v1)•u - (2*baddv)•u)
             //                     = (|baddv|*2 - |baddv|*2) = 0
-            assert((a2->v - a1->v).dot(dxnorm) < 1e-8);
+            // assert((a2->v - a1->v).dot(dxnorm) < 1e-8);
+            if((a2->v - a1->v).dot(dxnorm) > 1e-8){
+                throw std::overflow_error("Velocities are not minimal.");
+            }
             
             // TODO: Fix mass ratio stuff
             Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
             a1->f += baddf;
             a2->f -= baddf;
-            assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
+            // assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
+            if((a2->f - a1->f).dot(dxnorm) > 1e-8){
+                throw std::overflow_error("Forces are not minimal.");
+            }
+            
         }
 };
 

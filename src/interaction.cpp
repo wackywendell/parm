@@ -69,14 +69,8 @@ void fixedForceRegionAtom::setForce(Box &box){
 
 flt bondangle::energy(const Vec& r1, const Vec& r2){
     flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
-    if(costheta > 1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = 1;
-    }
-    else if(costheta < -1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = -1;
-    }
+    if(costheta > 1) costheta = 1;
+    else if(costheta < -1) costheta = -1;
     if(!usecos) return springk*pow(acos(costheta) - theta0,2)/2;
     else return springk*pow(costheta - cos(theta0),2)/2;
 }
@@ -84,16 +78,9 @@ flt bondangle::energy(const Vec& r1, const Vec& r2){
 Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     flt r1mag = r1.mag();
     flt r2mag = r2.mag();
-    
     flt costheta = r1.dot(r2) / r1mag / r2mag;
-    if(costheta > 1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = 1;
-    }
-    else if(costheta < -1){
-        //~ cout << "resetting! " << costheta << endl;
-        costheta = -1;
-    }
+    if(costheta > 1) costheta = 1;
+    else if(costheta < -1) costheta = -1;
     flt theta = acos(costheta);
     //theta is now the angle between x1 and x2
     
@@ -376,29 +363,19 @@ bondpairs::bondpairs(vector<bondgrouping> pairs, bool zeropressure) :
 bondpairs::bondpairs(bool zeropressure) : 
         zeropressure(zeropressure){};
 
-bool bondpairs::add_or_replace(bondgrouping b){
+bool bondpairs::add(bondgrouping b, bool replace){
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
-        if(((b.a1 == it->a1) and (b.a2 == it->a2)) or
-            ((b.a1 == it->a2) and (b.a2 == it->a1))){
+        if(b.same_atoms(*it)){
+            if(replace){
                 *it = b;
                 return true;
+            } else {
+                throw std::invalid_argument("Atoms already inserted.");
             }
         }
+    }
     pairs.push_back(b);
-    return false;
-};
-
-bool bondpairs::replace(flt k, flt x0, atomid a1, atomid a2){
-    vector<bondgrouping>::iterator it;
-    for(it = pairs.begin(); it < pairs.end(); ++it){
-        if(((a1 == it->a1) and (a2 == it->a2)) or
-            ((a1 == it->a2) and (a2 == it->a1))){
-                it->k = k;
-                it->x0 = x0;
-                return true;
-            }
-        }
     return false;
 };
 
@@ -485,6 +462,29 @@ flt bondpairs::std_dists(Box &box) const{
 }
 
 angletriples::angletriples(vector<anglegrouping> triples) : triples(triples){};
+
+bool angletriples::add(anglegrouping a, bool replace){
+    vector<anglegrouping>::iterator it;
+    for(it = triples.begin(); it < triples.end(); ++it){
+        if(a.same_atoms(*it)){
+            if(replace){
+                *it = a;
+                return true;
+            } else {
+                throw std::invalid_argument("Atoms already inserted.");
+            }
+        }
+    }
+    triples.push_back(a);
+    return false;
+};
+
+bool angletriples::add(flt k, atomid a1, atomid a2, atomid a3, bool replace){
+    Vec r1 = diff(a2->x, a1->x);
+    Vec r2 = diff(a2->x, a3->x);
+    flt x0 = bondangle::get_angle(r1, r2);
+    return add(anglegrouping(k,x0,a1,a2,a3), replace);
+};
 
 flt angletriples::energy(Box &box){
     flt E=0;
@@ -813,16 +813,59 @@ flt SoftWall::pressure(Box &box){
     }
     return p;
 };
+flt SoftWallCylinder::energy(Box &box){
+    flt E=0;
+    vector<WallAtom>::iterator it;
+    for(it = group.begin(); it != group.end(); ++it){
+        atom &a = **it;
+        Vec r = box.diff(a.x, loc);
+        r -= axis * (r.dot(axis));
+        flt dist = (radius - r.mag())*2;
+        if(dist > it->sigma) continue;
+        E += it->epsilon * pow(1 - (dist/(it->sigma)), expt)/expt/2.0;
+        // Note that normally you have ε(1-r/σ)^n for 2 particles.
+        // We divide by 2 because now there is only one particle, pushing
+        // on its mirror image; the force should be the same as if the 
+        // mirror image was there, so the energy needs to be half
+    }
+    return E;
+};
+
+void SoftWallCylinder::setForces(Box &box){
+    lastf = 0;
+    vector<WallAtom>::iterator it;
+    for(it = group.begin(); it != group.end(); ++it){
+        atom &a = **it;
+        Vec r = box.diff(a.x, loc);
+        r -= axis * (r.dot(axis));
+        flt rmag = r.mag();
+        flt dist = (radius - rmag)*2;
+        if(dist > it->sigma) continue;
+        flt f = it->epsilon * pow(1 - (dist/(it->sigma)), expt - 1.0);
+        a.f -= r * (f/rmag); // equal to a.f += (-r.norm()) * f;
+        lastf += f;
+    }
+};
+
+flt SoftWallCylinder::setForcesGetPressure(Box &box){
+    throw std::runtime_error("SoftWallCylinder::setForcesGetPressure not implemented");
+    return 0;
+};
+
+flt SoftWallCylinder::pressure(Box &box){
+    throw std::runtime_error("SoftWallCylinder::pressure not implemented");
+    return 0;
+};
 
 SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
     SpheroCylinderDiff diff;
     
-    atom &a1 = p1.first();
-    atom &a1p = p1.last();
-    atom &a2 = p2.first();
-    atom &a2p = p2.last();
+    atom &a1 = *p1.first();
+    atom &a1p = *p1.last();
+    atom &a2 = *p2.first();
+    atom &a2p = *p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1p.x - a1.x), s2 = (a2p.x - a2.x);
     //flt myl1 = s1.mag(), myl2 = s2.mag();
@@ -882,10 +925,10 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
 };
 
 void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, flt IoverM2){
-    atom &a1 = p1.first();
-    atom &a1p = p1.last();
-    atom &a2 = p2.first();
-    atom &a2p = p2.last();
+    atom &a1 = *p1.first();
+    atom &a1p = *p1.last();
+    atom &a2 = *p2.first();
+    atom &a2p = *p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     flt M1 = a1.m + a1p.m;
@@ -915,10 +958,14 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
 
 flt SCSpringList::energy(Box &box){
     flt E = 0;
+    array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
-        atompair pi = scs->pair(i);
+        idpair pi = scs->pair(i);
+        pair[0] = i;
         for(uint j = i+1; j < scs->pairs(); ++j){
-            atompair pj = scs->pair(j);
+            pair[1] = j;
+            if(ignore_list.count(pair) > 0) continue;
+            idpair pj = scs->pair(j);
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
             //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
@@ -931,11 +978,15 @@ flt SCSpringList::energy(Box &box){
 };
 
 void SCSpringList::setForces(Box &box){
+    array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
-        atompair pi = scs->pair(i);
+        idpair pi = scs->pair(i);
         flt l1 = ls[i];
+        pair[0] = i;
         for(uint j = i+1; j < scs->pairs(); ++j){
-            atompair pj = scs->pair(j);
+            pair[1] = j;
+            if(ignore_list.count(pair) > 0) continue;
+            idpair pj = scs->pair(j);
             flt l2 = ls[j];
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
             SpheroCylinderDiff diff = scp.NearestLoc(box);

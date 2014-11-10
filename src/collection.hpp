@@ -103,6 +103,25 @@ class StaticCollec : public collection {
 };
 
 class collectionSol : public collection {
+    /** From Allen and Tildesley, p. 263:
+     * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
+     * v(t + dt) = c0 v(t) + c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
+     * 
+     * where c0 = exp(- h dt)
+     *       c1 = (h dt)^-1 (1 - c0)
+     *       c2 = (h dt)^-1 (1 - c1)
+     * There are expansions for all 3
+     *
+     * dr_G and dv_G are drawn from correlated Gaussian distributions, with
+     *
+     * sigma_r^2 = (h dt)^-1 (2 - (h dt)^-1 (3 - 4 exp(-h dt) + exp(-2 h dt))
+     * sigma_v^2 = 1 - exp(-2 h dt)
+     * c_{rv} = (h dt)^-1 (1 - exp(-h dt))^2 / sigma_r / sigma_v
+     *
+     * Those are the unitless versions, multiply by dt^2 kB T/m, kB T/m, and dt kB T/m respectively
+     * to get the unit-full versions in the book
+    **/
+    
     protected:
         bivariateGauss gauss;
         flt dt;
@@ -125,6 +144,38 @@ class collectionSol : public collection {
         void timestep();
         //void seed(uint n){gauss.seed(n);};
         //void seed(){gauss.seed();};
+};
+
+class collectionDamped : public collection {
+    /** Based on CollectionSol, above.
+     * From Allen and Tildesley, p. 263:
+     * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
+     * v(t + dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
+     * 
+     * where c0 = exp(- h dt)
+     *       c1 = (h dt)^-1 (1 - c0)
+     *       c2 = (h dt)^-1 (1 - c1)
+     * There are expansions for all 3
+     *
+     * dr_G and dv_G are drawn from correlated Gaussian distributions, which we drop for this one.
+    **/
+    
+    protected:
+        flt dt;
+        flt damping;
+        flt c0, c1, c2;
+        void setCs();
+    
+    public:
+        collectionDamped(sptr<Box> box, sptr<atomgroup> atoms,
+                const flt dt, const flt damping,
+                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
+                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
+                vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
+        void changeDamp(const flt damp){
+            damping = damp; setCs();};
+        void setdt(const flt newdt){dt = newdt; setCs();};
+        void timestep();
 };
 
 class collectionSolHT : public collection {

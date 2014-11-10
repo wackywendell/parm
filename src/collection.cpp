@@ -249,6 +249,54 @@ void collectionSol::timestep(){
     update_trackers();
 };
 
+collectionDamped::collectionDamped(sptr<Box> box, sptr<atomgroup> atoms,
+        const flt dt, const flt damp,
+        vector<sptr<interaction> > interactions,
+        vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) : 
+            collection::collection(box, atoms, interactions, trackers, constraints, false),
+            dt(dt), damping(damp){
+    // because that should be done *after* setCs()
+    if(dt <= 0){
+		throw std::invalid_argument("collection::collectionSol: dt >= 0");
+	};
+   
+    setCs();
+    initialize();
+};
+
+void collectionDamped::setCs(){
+    if(damping <= 0.0){
+        c0 = 1; c1 = 1; c2 = .5;
+        return;
+    }
+    // from Allen and Tildesley, 262
+    flt dampdt = damping * dt;
+    c0 = exp(-dampdt);
+    c1 = (-expm1(-dampdt))/dampdt;
+    c2 = (1-c1)/dampdt;
+}
+
+void collectionDamped::timestep(){
+    atomgroup &m = *atoms;
+    for(uint i=0; i<m.size(); i++){
+        m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt);
+        m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2));
+    }
+    // Now we set forces and accelerations
+    setForces(false);
+    update_constraints();
+    for(uint i=0; i<m.size(); i++){
+        m[i].a = m[i].f / m[i].m;
+    }
+    
+    // And finish m[i].v
+    for(uint i=0; i<m.size(); i++){
+    m[i].v += m[i].a * (dt*c2);
+    }
+    
+    update_trackers();
+};
+
 collectionSolHT::collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
         const flt dt, const flt damp,const flt T,
         vector<sptr<interaction> > interactions,
