@@ -2,46 +2,42 @@ import re, math, numpy as np
 import hashlib, logging
 import pyparm.d3 as sim
 
-defaultpairs = [(9,130),(33,130),(54,130),(72,130),(92,130),(33,72),
-                 (9,54),(72,92),(54,72), (9,72), (9,33), (54,92)]
-
 class XYZwriter:
-    def __init__(self, f, usevels = True, printnames=False, rijpairs = defaultpairs):
+    def __init__(self, f, usevels = True):
         self.file = f
         self.usevels = usevels
-        self.printnames = printnames
-        self.rijpairs = rijpairs
     
-    def writeframe(self, reslist, com=None, **kwargs):
-        Natoms = sum(len(r) for r in reslist)
+    def writeframe(self, atoms, com=None, box=None, **kwargs):
+        if 'time' not in kwargs:
+            raise ValueError("Time must be in keyword arguments, or .xyz will not be readable")
+        Natoms = len(atoms)
         print(Natoms, file=self.file)
         comment = " ".join(["=".join((k,str(v))) for k,v in list(kwargs.items())])
         print(comment, file=self.file)
         
         lines = []
-        for r in reslist:
-            for atom in r:
-                elem = atom.element
-                if com is None:
-                    x,y,z = tuple(atom.x)
-                else:
-                    x,y,z = tuple(atom.x - com)
-                
-                line = [elem] + ['%.3f' % coord for coord in (x,y,z)]
-                if self.usevels:
-                    vx,vy,vz = tuple(atom.v)
-                    line.extend(['%.3f' % coord for coord in (vx,vy,vz)])
-                if self.printnames:
-                    line.append(atom.name)
-                
-                print(' '.join(line), file=self.file)
+        for atom in atoms:
+            elem = atom.element
+            if com is None:
+                x,y,z = tuple(atom.x) if box is None else tuple(box.diff(atom.x, sim.Vec()))
+            else:
+                x,y,z = tuple(atom.x - com)  if box is None else tuple(box.diff(atom.x, com))
+            
+            line = [elem] + ['%.4f' % coord for coord in (x,y,z)]
+            if self.usevels:
+                vx,vy,vz = tuple(atom.v)
+                line.extend(['%.4f' % coord for coord in (vx,vy,vz)])
+            if hasattr(atom, 'sigma'):
+                line.append('%.6f' % atom.sigma)
+            
+            print(' '.join(line), file=self.file)
                 
         
         # do all the writing at once
         #print('\n'.join(lines), file=self.file)
         self.file.flush()
     
-    def writefull(self, t, reslist, collec, com=None):
+    def writefull(self, t, atoms, collec, com=None):
         cdict = {
             'time':t,
             'E':collec.energy(),
@@ -49,13 +45,8 @@ class XYZwriter:
             'K':collec.kinetic(),
             'L':collec.angmomentum().mag(),
             'v':collec.comv().mag(),
-            'Rg':sim.calc_Rg(reslist),
             }
         
-        for i,j in self.rijpairs:
-            if i >= len(reslist) or j >= len(reslist): continue
-            key = 'Rij%d-%d' % (i,j)
-            cdict[key] = sim.Rij(reslist, i, j)
         if hasattr(collec, 'interactions'):
             for name,interaction in list(collec.interactions.items()):
                 cdict[name + 'E'] = interaction.energy(collec.getbox())
@@ -68,7 +59,7 @@ class XYZwriter:
                     cdict[name + 'std'] = i.std_dists()
                 
         if com is None: com = collec.com()
-        self.writeframe(reslist, com, **cdict)
+        self.writeframe(atoms, com, **cdict)
         return cdict
     
     def size(self):
@@ -180,15 +171,16 @@ class XYZreader:
         if len0 == 4:
             lines = [(e,(float(x),float(y),float(z))) for n,(e,x,y,z) in lines]
         elif len0 == 5:
-            lines = [(e,(float(x),float(y),float(z))) for n,(e,x,y,z,name) in lines]
+            lines = [(e,(float(x),float(y),float(z)), float(s)) for n,(e,x,y,z,s) in lines]
         elif len0 == 7:
             lines = [(e,(float(x),float(y),float(z)),
                             (float(vx),float(vy),float(vz))) 
                     for n,(e,x,y,z,vx,vy,vz) in lines]
         elif len0 == 8:
             lines = [(e,(float(x),float(y),float(z)),
-                            (float(vx),float(vy),float(vz))) 
-                    for n,(e,x,y,z,vx,vy,vz, name) in lines]
+                            (float(vx),float(vy),float(vz)),
+                            float(s)) 
+                    for n,(e,x,y,z,vx,vy,vz, s) in lines]
         else:
             raise ValueError
             
@@ -210,7 +202,13 @@ class XYZreader:
     def into(self, atoms, check=True):
         for f in self:
             f.into(atoms, check)
-            yield f.time, f.values
+            vals = f.values
+            if f.sigmas is not None:
+                vals = dict(f.values)
+                if 'sigmas' in f.values:
+                    raise ValueError("sigmas already in f.values, don't know what to do")
+                vals['sigmas'] = f.sigmas
+            yield f.time, vals
     
     def _convert_time_line(self, line):
         if '=' not in line:
@@ -268,16 +266,27 @@ class Frame:
         if len(resized) == 2:
             self.elems, self.locs = resized
             self.vels = None
+            self.sigmas = None
         elif len(resized) == 3:
-            self.elems, self.locs, self.vels = resized
+            self.elems, self.locs, vels = resized
+            try:
+                iter(vels[0])
+                self.vels = vels
+                self.sigmas = None
+            except TypeError:
+                self.vels = None
+                self.sigmas = vels
+        elif len(resized) == 4:
+            self.elems, self.locs, self.vels, self.sigmas = resized
+                
         else:
             raise ValueError("Resized wrong length (%d)" % len(resized))
         
-        #~ self.__locarray = None
-        #~ self.__velarray = None   
         if self.vels is not None:
-            self.__velarray = self.vels = np.array(self.vels, dtype=self.dtype)
-        self.__locarray = self.locs = np.array(self.locs, dtype=self.dtype)
+            self.vels = np.array(self.vels, dtype=self.dtype)
+        if self.sigmas is not None:
+            self.sigmas = np.array(self.sigmas, dtype=self.dtype)
+        self.locs = np.array(self.locs, dtype=self.dtype)
     
     def __iter__(self):
         return iter(self.locs)
@@ -295,14 +304,14 @@ class Frame:
     def into(self, atoms, check=True):
         if self.vels is not None:
             for a, elem, loc, vel in zip(atoms, self.elems, self.locs, self.vels):
-                if check and a.element != elem:
+                if check and hasattr(a, 'element') and a.element != elem:
                     raise TypeError("Element mismatch for atom %s at %s: %s is not %s" 
                                         % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
                 self._setv(a, vel)
         else:
             for a, elem, loc in zip(atoms, self.elems, self.locs):
-                if check and a.element != elem:
+                if check and hasattr(a, 'element') and a.element != elem:
                     raise TypeError("Element mismatch for atom %s at %s: %s is not %s" 
                                         % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
@@ -310,24 +319,6 @@ class Frame:
     @property
     def time(self):
         return self.t
-    
-    @property
-    def locarray(self):
-        if self.__locarray is None:
-            #~ self.__constructed += 1
-            #~ print("constructing", self.time, self.__constructed)
-            self.__locarray = np.array(list(self.locs), dtype=self.dtype)
-        #~ else:
-            #~ print("FOUND")
-        return self.__locarray
-    
-    @property
-    def velarray(self):
-        if (not hasattr(self, '__velarray') or self.__velarray is None) and self.vels is not None:
-            self.__velarray = np.array(list(self.vels), dtype=self.dtype)
-        elif self.vels is None:
-            return None
-        return self.__velarray
 
 class Frames(list):
     def into(self, atoms, check=True):
