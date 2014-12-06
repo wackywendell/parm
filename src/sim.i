@@ -50,6 +50,8 @@
 %shared_ptr(EnergyTracker)
 %shared_ptr(RsqTracker)
 %shared_ptr(ISFTracker)
+%shared_ptr(SmoothLocs)
+%shared_ptr(RDiffs)
 %shared_ptr(SCatomvec)
 %shared_ptr(coordConstraint)
 %shared_ptr(fixedForce)

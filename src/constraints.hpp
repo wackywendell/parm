@@ -415,7 +415,51 @@ class ISFTracker : public statetracker {
         vector<flt> counts();
 };
 
-////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Get the "smoothed" version of each particles location, "smoothed" over windows of a given size
+
+class SmoothLocs : public statetracker {
+    public:
+        sptr<atomgroup> atoms;
+        uint smoothn; // number of skipns to "smooth" over
+        uint skipn; // number of dts to skip
+        vector<Vec> curlocs;
+        uint numincur;
+        vector<vector<Vec> > locs;
+        unsigned long curt;
+        bool usecom;
+    
+    public:
+        SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn=1, bool usecom=false);
+        
+        void reset();
+        void update(Box &box);
+        
+        vector<vector<Vec> > smooth_locs(){return locs;};
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class RDiffs : public statetracker {
+    // Tracks only a single dt (skip)
+    public:
+        sptr<atomgroup> atoms;
+        vector<Vec> pastlocs;
+        vector<vector<flt> > dists;
+        unsigned long skip;
+        unsigned long curt;
+        bool usecom;
+    public:
+        RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom=false);
+        
+        void reset();
+            
+        void update(Box& box); // updates if necessary.
+        vector<vector<flt> > rdiffs(){return dists;};
+        
+        unsigned long get_skip(){return skip;};
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // For comparing two jammed structures
 
 /* We have two packings, A and B, and want to know the sequence {A1, A2, A3...}

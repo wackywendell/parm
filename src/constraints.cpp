@@ -359,6 +359,81 @@ vector<flt> ISFTracker::counts(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+SmoothLocs::SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn, bool usecom) : 
+        atoms(atoms), smoothn(smoothn), skipn(skipn), curlocs(atoms->size()), numincur(0), locs(),
+        curt(0), usecom(usecom){
+    update(box);
+};
+
+
+void SmoothLocs::reset(){
+    curlocs.assign(atoms->size(), Vec());
+    numincur = 0;
+    curt = 0;
+    locs.clear();
+};
+
+void SmoothLocs::update(Box &box){
+    if(curt % skipn != 0){
+        curt++;
+        return;
+    };
+    
+    numincur++;
+    bool smooth_time = (numincur >= smoothn);
+    
+    Vec com = usecom ? atoms->com() : Vec();
+    for(uint i = 0; i<atoms->size(); ++i){
+        Vec curloc = (*atoms)[i].x - com;
+        curlocs[i] += curloc;
+        if(smooth_time) {
+            curlocs[i] /= numincur;
+        }
+    };
+    
+    if(smooth_time){
+        locs.push_back(curlocs);
+        curlocs.assign(atoms->size(), Vec());
+        numincur = 0;
+    };
+    
+    curt++;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
+        atoms(atoms), pastlocs(atoms->size(), Vec()), dists(), skip(skip), curt(0), usecom(usecom){
+    Vec com = usecom ? atoms->com() : Vec();
+    for(uint i = 0; i<atoms->size(); ++i){
+        pastlocs[i] = (*atoms)[i].x;
+    }
+}
+
+void RDiffs::reset(){
+    curt = 0;
+    for(uint i = 0; i<atoms->size(); ++i){
+        pastlocs[i] = (*atoms)[i].x;
+    }
+    dists.clear();
+}
+
+void RDiffs::update(Box &box){
+    curt++;
+    if(curt < skip) return;
+    vector<flt> rdiff = vector<flt>(atoms->size(), 0.0);
+    for(uint i = 0; i<atoms->size(); ++i){
+        Vec loc = (*atoms)[i].x;
+        rdiff[i] = (loc - pastlocs[i]).mag();
+        pastlocs[i] = loc;
+    }
+    
+    dists.push_back(rdiff);
+    
+    curt = 0;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 bool jamminglist::operator<(const jamminglist& other ){
     //return distsq < other.distsq;
     if(other.distsq  - distsq > 1e-8) return true;
