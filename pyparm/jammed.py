@@ -314,3 +314,40 @@ class Packing2d:
         tree = self.dist_tree(other, tol=tol)
         tree.expand(maxt)
         return sqrt(tree.curbest().distsq)
+
+class Packing3d:
+    def __init__(self, rs, sigmas, gamma = 0.0, L=1.0):
+        self.rs = np.array(rs) / float(L)
+        self.N, ndim = self.rs.shape
+        assert(ndim == 3)
+        self.sigmas = np.array(sigmas) / float(L)
+    
+    def neighbors3d(self, tol=1e-8):
+        """
+        The adjacency matrix.
+        """
+        xs,ys,zs = self.rs.T
+        N = len(self.sigmas)
+        arr = np.zeros((N,N), dtype=bool)
+        for n,((x,y,z),s) in enumerate(zip(self.rs, self.sigmas)):
+            xdiff = np.remainder(xs-x+.5, 1)-.5
+            ydiff = np.remainder(ys-y+.5, 1)-.5
+            zdiff = np.remainder(zs-z+.5, 1)-.5
+            sigmadists = (self.sigmas + s)/2
+            dists = np.sqrt((xdiff**2) + (ydiff**2) + (zdiff**2))
+            arr[n] = dists - sigmadists < tol
+        return arr
+        
+    def floater_indices(self, tol=1e-8):
+        areneighbors = self.neighbors3d(tol)
+        notfloaters = np.sum(areneighbors, axis=0) >= 5
+        
+        oldNpack = -1
+        Npack = np.sum(notfloaters)
+        while Npack != oldNpack:
+            areneighbors[~notfloaters] = 0
+            areneighbors[:, ~notfloaters] = 0
+            notfloaters = np.sum(areneighbors, axis=0) >= 5 # 4 + itself
+            oldNpack, Npack = Npack, np.sum(notfloaters)
+        
+        return ~notfloaters
