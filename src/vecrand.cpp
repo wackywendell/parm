@@ -27,6 +27,10 @@ Vec randVec(){
 Vec randVecBoxed(){
     return Vec(uniformrand(), uniformrand(), uniformrand());
 }
+
+Vec randVecSphere(flt radius){
+    return randVec().norm() * (cbrt(uniformrand()) * radius);
+}
 #endif
 
 unsigned int seed(unsigned int n){
