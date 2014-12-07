@@ -373,9 +373,9 @@ class Packing3d:
             pts = pts[goodix, :]
         return pts
 
-    def cage_sizes(self, M=10000, R=None, Rfactor = 1.2, padding=0.1, Mfactor=0.1):
+    def cages(self, M=10000, R=None, Rfactor = 1.2, padding=0.1, Mfactor=0.1):
         """
-        Find the radii (V^(1/3)) of all cages in the current "packing".
+        Find all cages in the current "packing". 
         
         The algorithm uses Monte Carlo: it finds M random points within a sphere of radius R from
         each particle, and sees if that particle could sit there without conflicting with other particles.
@@ -395,11 +395,18 @@ class Packing3d:
                     expanded)
         Mfactor : Mfactor * M is the minimum number of points to find per cage. If they aren't 
                     found, more points are tested.
+        
+        Returns
+        -------
+        points : a list of (A x 3) lists, A indeterminate (but larger than M * Mfactor), with each 
+                    list corresponding to the points within one cage.
+        Vs : The approximate volumes of each cage.
         """
         if R is None: R = min(self.sigmas) * 0.2
         neighbordict = {}
         
-        rs = []
+        psets = []
+        Vs = []
         for n, (xyz, s) in enumerate(zip(self.rs, self.sigmas)):
             curR = R
             curpow = -1
@@ -435,8 +442,12 @@ class Packing3d:
                     pts = np.concatenate((pts, pts2))
                     curM += M
                     if maxdist * (1. + padding) > curR: break
+                if maxdist > 0.5:
+                    raise ValueError('Cage size filling entire space, cannot continue.')
             
             fracgood = len(pts) / curM
             r = fracgood**(1./3.) * curR
-            rs.append(r)
-        return np.array(rs)
+            V = fracgood * 4 * np.pi / 3 * (curR**3)
+            psets.append(pts)
+            Vs.append(V)
+        return psets, np.array(Vs)
