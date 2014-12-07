@@ -3,6 +3,16 @@ sys.path.append(os.path.expanduser('~/idp/src'))
 import numpy as np
 from math import sqrt
 
+def rand_sphere(d0):
+    """
+    Get random points within a sphere. Returns array of shape (d0, 3).
+    """
+    p1 = np.random.randn(d0, 3)
+    m = np.sqrt(np.sum(p1**2, axis=1))
+    
+    rad = pow(np.random.rand(d0), 1.0/3.0)
+    return (p1.T * (rad/m)).T
+
 def DM(rs, d):
     """Dynamical matrix for array rs, size ds. Assumes epsilon is the
     same for all.
@@ -351,3 +361,82 @@ class Packing3d:
             oldNpack, Npack = Npack, np.sum(notfloaters)
         
         return ~notfloaters
+    
+    @staticmethod
+    def _cage_pts(xyz, neighbor_xyzs, sigma, neighbor_sigmas, L, M, R):
+        """Finds points within a distance R of point xyz that do not conflict with neigbors"""
+        pts = rand_sphere(M)*R + xyz
+        for nxyz, nsig in zip(neighbor_xyzs, neighbor_sigmas):
+            dpts = np.remainder(pts - nxyz + L/2.0, L) - L/2.0
+            dists_sq = np.sum(dpts**2, axis=1)
+            goodix = dists_sq >= ((nsig + sigma)/2.0)**2
+            pts = pts[goodix, :]
+        return pts
+
+    def cage_sizes(self, M=10000, R=None, Rfactor = 1.2, padding=0.1, Mfactor=0.1):
+        """
+        Find the radii (V^(1/3)) of all cages in the current "packing".
+        
+        The algorithm uses Monte Carlo: it finds M random points within a sphere of radius R from
+        each particle, and sees if that particle could sit there without conflicting with other particles.
+        Then (number of accepted points) / (number of test points) * (volume of sphere) is the
+        volume of the cage.
+        
+        The algorithm is adaptive: if not enough test points are accepted (n < M * Mfactor), it tries
+        more test points. If any test points are within `padding` of the edge, `R` is (temporarily)
+        expanded.
+        
+        Parameters
+        ----------
+        M : Number of points in the sphere to test
+        R : Size of sphere to test (will be expanded if necessary)
+        Rfactor : How much to increase R by when the cage doesn't fit
+        padding : How much larger the sphere should be than the cage (if it isn't, the sphere is 
+                    expanded)
+        Mfactor : Mfactor * M is the minimum number of points to find per cage. If they aren't 
+                    found, more points are tested.
+        """
+        if R is None: R = min(self.sigmas) * 0.2
+        neighbordict = {}
+        
+        rs = []
+        for n, (xyz, s) in enumerate(zip(self.rs, self.sigmas)):
+            curR = R
+            curpow = -1
+            nxyzs = nsigs = None
+            
+            def get_pts():
+                pts = self._cage_pts(xyz, nxyzs, s, nsigs, 1.0, M, curR)
+                maxdist = np.max(np.sqrt(np.sum((pts-xyz)**2, axis=1))) if len(pts) > 0 else 0
+                return pts, maxdist
+            
+            pts, maxdist = [], curR
+            while maxdist * (1. + padding) > curR:
+                # print(n, curpow, maxdist * (1. + padding), curR)
+                curpow += 1
+                curR = R * pow(Rfactor, curpow)
+                curM = M
+                if curpow not in neighbordict:
+                    pack = Packing3d(self.rs, self.sigmas + curR)
+                    cur_neighbors = pack.neighbors3d(tol=0)
+                    cur_neighbors[np.diag_indices_from(cur_neighbors)] = False
+                    neighbordict[curpow] = cur_neighbors
+                cur_neighbors = neighbordict[curpow]
+                nix = cur_neighbors[n]
+                nxyzs = self.rs[nix, :]
+                nsigs = self.sigmas[nix]
+                pts, maxdist = get_pts()
+                if maxdist * (1. + padding) > curR: continue
+            
+                while len(pts) < Mfactor * M:
+                    # print(curM, len(pts), Mfactor * M, len(pts) < Mfactor * M)
+                    pts2, maxdist2 = get_pts()
+                    maxdist = max((maxdist, maxdist2))
+                    pts = np.concatenate((pts, pts2))
+                    curM += M
+                    if maxdist * (1. + padding) > curR: break
+            
+            fracgood = len(pts) / curM
+            r = fracgood**(1./3.) * curR
+            rs.append(r)
+        return np.array(rs)
