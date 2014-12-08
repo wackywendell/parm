@@ -62,7 +62,7 @@ typedef boost::variate_generator<engine&, lindistribution > lingenerator;
 flt rand01();
 Vec randVec();
 Vec randVecBoxed();
-#ifndef VEC3D
+#ifdef VEC3D
 Vec randVecSphere(flt radius=1);
 #endif
 
