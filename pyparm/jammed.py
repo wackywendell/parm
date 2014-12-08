@@ -248,51 +248,64 @@ def Vec2_diff(r1, r2, gamma=0.0, Lx = 1.0, Ly = 1.0):
     dx = dx-np.round(dx/Lx-im*gamma)*Lx-im*gamma*Lx
     return np.array((dx,dy)).T
 
-class Packing2d:
+class Packing:
     def __init__(self, rs, sigmas, gamma = 0.0, L=1.0):
         self.rs = np.array(rs) / float(L)
         self.sigmas = np.array(sigmas) / float(L)
         self.gamma = gamma
+        
+        self.N = len(self.sigmas)
+        n, self.ndim = np.shape(self.rs)
+        if n != self.N:
+            raise ValueError("Need shape N for sigmas, Nx2 or Nx3 for rs; got {} and {}x{}".format(
+                self.N, n, self.ndim))
+        if self.ndim == 3:
+            if self.gamma != 0:
+                raise NotImplementedError("Can't do shearing for 3D")
+        elif self.ndim != 2:
+            raise ValueError("Number of dimensions must be 2 or 3; got {}".format(self.ndim))
     
     def neighbors(self, tol=1e-8):
         """
         For a set of particles at xs,ys with diameters sigmas, finds the 
-        distance vector matrix (xdiff,ydiff) and the adjacency matrix.
+        distance vector matrix (d x N x N) and the adjacency matrix.
         
-        Assumes box size 1, returns (adjacency matrix, xdiff, ydiff)
+        Assumes box size 1, returns (adjacency matrix, diffs)
         """
-        xs, ys = self.rs.T
-        xdiff = np.subtract.outer(xs, xs)
-        ydiff = np.subtract.outer(ys, ys)
-        im = np.round(ydiff)
-        xdiff -= im*self.gamma
-        ydiff = ydiff - im
-        xdiff -= np.round(xdiff)
+        diffs = np.remainder(np.array([np.subtract.outer(xs, xs) for xs in self.rs.T])+.5, 1) -.5
         
-        sigmadists = np.add.outer(self.sigmas, self.sigmas)/2
-        dists = np.sqrt((xdiff**2) + (ydiff**2))
+        if self.gamma != 0:
+            xdiff, ydiff = diffs[:2]
+            im = np.round(ydiff)
+            xdiff -= im*self.gamma
+            ydiff = ydiff - im
+            xdiff -= np.round(xdiff)
+            diffs[:2] = xdiff, ydiff
         
-        return dists - sigmadists < tol, xdiff, ydiff
+        sigmadists = np.add.outer(self.sigmas, self.sigmas)/2.
+        dists = np.sqrt(np.sum(diffs**2, axis=0))
+        
+        return dists - sigmadists < tol, diffs
     
     def backbone(self, tol=1e-8):
         """Returns (backbone indices, neighbor matrix)"""
-        areneighbors, _,_ = self.neighbors(tol)
-        notfloaters = np.sum(areneighbors, axis=0) >= 4 # 3 + itself
+        areneighbors, _ = self.neighbors(tol)
+        notfloaters = np.sum(areneighbors, axis=0) >= self.ndim + 2 # self.ndim + 1 for stability, +1 for itself
         
         oldNpack = -1
         Npack = np.sum(notfloaters)
         while Npack != oldNpack:
             areneighbors[~notfloaters] = 0
             areneighbors[:, ~notfloaters] = 0
-            notfloaters = np.sum(areneighbors, axis=0) >= 4  # 3 + itself
+            notfloaters = np.sum(areneighbors, axis=0) >= self.ndim + 2
             oldNpack, Npack = Npack, np.sum(notfloaters)
         
         return notfloaters, areneighbors
     
     def contacts(self, tol=1e-8):
-        """Returns (number of backbone contacts, stable number)"""
+        """Returns (number of backbone contacts, stable number, number of floaters)"""
         idx, nbor = self.backbone(tol=tol)
-        return np.sum(np.triu(nbor)), np.sum(idx) * 2 - 1
+        return np.sum(np.triu(nbor, 1)), (np.sum(idx)-1) * self.ndim + 1, np.sum(~idx)
     
     def size_indices(self, tol=1e-8):
         """Returns [idx of sigma1, idx of sigma2, ...]"""
@@ -301,8 +314,19 @@ class Packing2d:
         return [sigs == s for s in sorted(sigset)]
     
     def dist_tree(self, other, tol=1e-8):
-        assert np.abs(self.gamma - other.gamma) <= tol
-        gamma = (self.gamma + other.gamma) / 2.0
+        if self.ndim == 2:
+            from . import d2 as sim
+        else:
+            from . import d3 as sim
+            
+        assert self.ndim == other.ndim
+        
+        if self.gamma != 0 or other.gamma != 0:
+            assert np.abs(self.gamma - other.gamma) <= tol
+            gamma = (self.gamma + other.gamma) / 2.0
+            box = sim.LeesEdwardsBox(sim.Vec(1,1), gamma)
+        else:
+            box = sim.OriginBox(1.0)
         
         sz1 = self.size_indices()
         assert(len(sz1) == 2)
@@ -312,10 +336,8 @@ class Packing2d:
         assert(len(sz2) == 2)
         cutoff2 = int(np.sum(sz2[0]))
         
-        import sim2d as sim
-        vs1 = [sim.vec(x,y) for idx in sz1 for (x,y) in self.rs[idx]]
-        vs2 = [sim.vec(x,y) for idx in sz2 for (x,y) in other.rs[idx]]
-        box = sim.LeesEdwardsBox(sim.vec(1,1), gamma)
+        vs1 = [sim.Vec(*xy) for idx in sz1 for xy in self.rs[idx]]
+        vs2 = [sim.Vec(*xy) for idx in sz2 for xy in other.rs[idx]]
         
         tree = sim.jammingtreeBD(box, sim.vecvector(vs1), sim.vecvector(vs2), cutoff1, cutoff2)
         return tree
@@ -332,7 +354,7 @@ class Packing3d:
         assert(ndim == 3)
         self.sigmas = np.array(sigmas) / float(L)
     
-    def neighbors3d(self, tol=1e-8):
+    def neighbors(self, tol=1e-8):
         """
         The adjacency matrix.
         """
@@ -348,19 +370,25 @@ class Packing3d:
             arr[n] = dists - sigmadists < tol
         return arr
         
-    def floater_indices(self, tol=1e-8):
-        areneighbors = self.neighbors3d(tol)
-        notfloaters = np.sum(areneighbors, axis=0) >= 5
+    def backbone(self, tol=1e-8):
+        """Returns (backbone indices, neighbor matrix)"""
+        areneighbors = self.neighbors(tol)
+        notfloaters = np.sum(areneighbors, axis=0) >= 5 # 4 + itself
         
         oldNpack = -1
         Npack = np.sum(notfloaters)
         while Npack != oldNpack:
             areneighbors[~notfloaters] = 0
             areneighbors[:, ~notfloaters] = 0
-            notfloaters = np.sum(areneighbors, axis=0) >= 5 # 4 + itself
+            notfloaters = np.sum(areneighbors, axis=0) >= 5  # 4 + itself
             oldNpack, Npack = Npack, np.sum(notfloaters)
         
-        return ~notfloaters
+        return notfloaters, areneighbors
+    
+    def contacts(self, tol=1e-8):
+        """Returns (number of backbone contacts, stable number)"""
+        idx, nbor = self.backbone(tol=tol)
+        return np.sum(np.triu(nbor)), np.sum(idx) * 3 - 2
     
     @staticmethod
     def _cage_pts(xyz, neighbor_xyzs, sigma, neighbor_sigmas, L, M, R):
