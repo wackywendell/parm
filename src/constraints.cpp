@@ -405,7 +405,7 @@ RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
         atoms(atoms), pastlocs(atoms->size(), Vec()), dists(), skip(skip), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec();
     for(uint i = 0; i<atoms->size(); ++i){
-        pastlocs[i] = (*atoms)[i].x;
+        pastlocs[i] = (*atoms)[i].x - com;
     }
 }
 
@@ -420,9 +420,10 @@ void RDiffs::reset(){
 void RDiffs::update(Box &box){
     curt++;
     if(curt < skip) return;
+    Vec com = usecom ? atoms->com() : Vec();
     vector<flt> rdiff = vector<flt>(atoms->size(), 0.0);
     for(uint i = 0; i<atoms->size(); ++i){
-        Vec loc = (*atoms)[i].x;
+        Vec loc = (*atoms)[i].x - com;
         rdiff[i] = (loc - pastlocs[i]).mag();
         pastlocs[i] = loc;
     }
