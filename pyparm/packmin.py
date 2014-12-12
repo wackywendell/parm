@@ -1,7 +1,8 @@
 import numpy as np
 
 class Minimizer:
-    def __init__(self, locs, sigmas, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
+    def __init__(self, locs, sigmas, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
+                    need_contacts=False,
                     kappa=10.0, kmax=1000, secmax=40, 
                     seceps=1e-20, amax=2.0, dxmax=100, stepmax=1e-3,
                     itersteps=1000):
@@ -13,8 +14,11 @@ class Minimizer:
         itersteps : number of timesteps to take when using iter()
         CGerr : Maximum force magnitude allowed
         Pfrac : Allowed deviation from given pressure
+        need_contacts : Require Nc >= Nc_exp to finish
+        masses : mass of the particles; if None, will be sigmas**3
         """
         self.itersteps = itersteps
+        self.need_contacts = need_contacts
         self.CGerr = CGerr
         self.Pfrac = Pfrac
         self._L = L
@@ -36,9 +40,9 @@ class Minimizer:
         
         self.box = self.sim.OriginBox(L)
         
-        self.masses = self.sigmas**self.ndim
+        self.masses = self.sigmas**self.ndim if masses is None else masses
         self.atoms = self.sim.atomvec([float(n) for n in self.masses])
-        self.neighbors = self.sim.neighborlist(self.box, self.atoms, 1.4)
+        self.neighbors = self.sim.neighborlist(self.box, self.atoms, 0.4)
         self.hertz = self.sim.Hertzian(self.atoms, self.neighbors)
 
         for a, s, loc in zip(self.atoms, self.sigmas, locs):
@@ -90,7 +94,14 @@ class Minimizer:
     
     def done(self):
         Perr, CGerr = self.err()
-        return abs(Perr) < self.Pfrac  and CGerr < self.CGerr
+        errs = [abs(Perr) < self.Pfrac, CGerr < self.CGerr]
+        if self.need_contacts:
+            Nc, Nc_min, fl = self.pack_stats()
+            errs.append(Nc > Nc_min and Nc_min > 4)
+        
+        return all(errs)
+        
+        
     
     def __iter__(self):
         while not self.done():
@@ -156,3 +167,10 @@ class Minimizer:
         """Returns (number of backbone contacts, stable number, number of floaters)"""
         
         return self.as_packing().contacts()
+    
+    def status_str(self):
+        Pdiff, CGerr = self.err()
+        Nc, Nc_min, fl = self.pack_stats()
+        Nc_min = max(Nc_min, 1)
+        return 'dP: {:8.2g}, CGerr: {:7.2g}, phi: {:6.4f}. {:4d} Floaters, {:4d} / {:4d}'.format(
+            Pdiff, CGerr, self.phi, fl, Nc, Nc_min)
