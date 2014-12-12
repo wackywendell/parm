@@ -523,9 +523,13 @@ class Packing:
          
         return vapory.Scene( camera, objects= lights + spheres + cyls + caps + [vapory.Background( "color", [1,1,1] )])
     
-    def DM(self):
+    def DM(self, masses=None):
         """Dynamical matrix for array rs, size ds. Assumes epsilon is the
         same for all.
+        
+        Parameters
+        ----------
+        masses : an array of length N of the masses of the particles.
         """
         N = len(self.sigmas)
         rs = self.rs
@@ -543,18 +547,48 @@ class Packing:
                 if rijsq < dijsq:
                     rij=np.sqrt(rijsq)
                     rijouter = np.outer(rijvec,rijvec)
+                    # U(r) = ½(1 - r/d)²	
+                    # d²U/dxdy = (dr/dx)(dr/dy)/d² - (1 - r/d)(d²r/dxdy)/d
+                    # dr/dx = x/r
+                    # d²r/dxdy = -(x y) / r³
+                    # d²U/dxdy = -(x y)/(r² d²) + (1 - r/d)((x y)/r²)/(d r)
+                    # d²U/dx² = (dr/dx)²/d² - (1 - r/d)(d²r/dx²)/d
+                    # d²r/dx² = -x² / r³ + 1/r
+                    # d²U/dxᵢdxⱼ = -(xᵢ xⱼ)/(r² d²) + (1 - r/d)((xᵢ xⱼ)/r² - δᵢⱼ)/(d r)
+                    
                     Mij1=-rijouter/rijsq/dijsq
-                    Mij2=(1-rij/dij)*(rijouter/rijsq-np.eye(2))/rij/dij
+                    Mij2=(1-rij/dij)*(rijouter/rijsq-np.eye(d))/rij/dij
                     Mij=Mij1+Mij2
                     
                     M[d*i:d*i+d,d*j:d*j+d]=Mij
                     M[d*j:d*j+d,d*i:d*i+d]=Mij
                     M[d*i:d*i+d,d*i:d*i+d]-=Mij
                     M[d*j:d*j+d,d*j:d*j+d]-=Mij
-        return M / self.L**2
+        
+        np.divide(M, self.L**2, out=M)
+        if masses is None:
+            return M
+        
+        # TODO: is the mass part of this really part of this?
+        marr = np.array(masses)
+        assert np.shape(masses) == np.shape(self.sigmas)
+        marr = np.array([masses]*d)
+        marr = marr.T.flatten()
+        # marr is now [m1,m1,m2,m2,...] (in 2D)
+        mm = np.eye(d*N)
+        np.multiply(mm, marr**-.5, out=mm)
+        # mm is now M^-½, where M is the mass matrix
+        
+        mm.dot(M, out=M)
+        M.dot(mm, out=M)
+        return M
     
-    def DM_freqs(self):
-        ew, ev = np.linalg.eig(self.DM())
+    def DM_freqs(self, masses=None):
+        """Find the frequencies corresponding to the eigenvalues of the dynamical matrix.
+        
+        This is just a short wrapper around DM()."""
+        ew, ev = np.linalg.eig(self.DM(masses=masses))
+        # this used to be over 2pi; I don't know where the 2 went, but it seems to be gone now...
         return np.sqrt(np.abs(ew)) / (np.pi)
 
 class Packing3d:
