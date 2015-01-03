@@ -1,7 +1,7 @@
 import numpy as np
 
 class Minimizer:
-    def __init__(self, locs, sigmas, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
+    def __init__(self, locs, diameters, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
                     need_contacts=False,
                     kappa=10.0, kmax=1000, secmax=40, 
                     seceps=1e-20, amax=2.0, dxmax=100, stepmax=1e-3,
@@ -15,7 +15,7 @@ class Minimizer:
         CGerr : Maximum force magnitude allowed
         Pfrac : Allowed deviation from given pressure
         need_contacts : Require Nc >= Nc_exp to finish
-        masses : mass of the particles; if None, will be sigmas**3
+        masses : mass of the particles; if None, will be diameters**3
         """
         self.itersteps = itersteps
         self.need_contacts = need_contacts
@@ -23,11 +23,11 @@ class Minimizer:
         self.Pfrac = Pfrac
         self._L = L
         locs = np.array(locs)
-        self._sigmas = np.array(sigmas)
-        Ns, = self.sigmas.shape
+        self._diameters = np.array(diameters)
+        Ns, = self.diameters.shape
         Nl, ndim = np.shape(locs)
         if Nl != Ns:
-            raise ValueError("Need shape N for sigmas, Nx2 or Nx3 for locs; got {} and {}x{}".format(
+            raise ValueError("Need shape N for diameters, Nx2 or Nx3 for locs; got {} and {}x{}".format(
                 Ns, Nl, ndim))
         if ndim == 2:
             from . import d2 as sim
@@ -40,12 +40,12 @@ class Minimizer:
         
         self.box = self.sim.OriginBox(L)
         
-        self.masses = self.sigmas**self.ndim if masses is None else masses
+        self.masses = self.diameters**self.ndim if masses is None else masses
         self.atoms = self.sim.atomvec([float(n) for n in self.masses])
         self.neighbors = self.sim.neighborlist(self.box, self.atoms, 0.4)
         self.hertz = self.sim.Hertzian(self.atoms, self.neighbors)
 
-        for a, s, loc in zip(self.atoms, self.sigmas, locs):
+        for a, s, loc in zip(self.atoms, self.diameters, locs):
             a.x = self.sim.Vec(*loc)
             self.hertz.add(self.sim.HertzianAtom(a, 1.0, float(s), 2.0))
             
@@ -58,10 +58,56 @@ class Minimizer:
         self.collec.setForces(True, True)
         
         self.timesteps = 0
+    
+    @staticmethod
+    def equal_mass(diameters, ndim):
+        return [1] * len(diameters)
+    
+    @staticmethod
+    def proportionate_mass(diameters, ndim):
+        return np.array(diameters)**ndim
+    
+    @classmethod
+    def randomized(cls, N=10, sizes=[1.0,1.4], ratios=None, ndim=3, phi0=0.01, 
+                   mass_func=None, **kw):
+        if mass_func is None:
+            mass_func = cls.proportionate_mass
+        if ratios == None:
+            ratios = [1.] * len(sizes)
+        if len(ratios) != len(sizes):
+            raise ValueError("`ratios` list must be same length as `sizes` list")
+        if ndim not in (2,3):
+            raise ValueError("`ndim` must be 2 or 3")
+        if not 0. < phi0 < 1.:
+            raise ValueError("`phi0` must be 2 or 3")
+        
+        rmul = N / np.sum(ratios)
+
+        ratios = np.array([r*rmul for r in ratios])
+        rints, rfrac = np.array(np.floor(ratios), dtype=int), ratios % 1
+        while np.sum(rints) < N:
+            ix = np.argmax(rfrac)
+            rints[ix] += 1
+            rfrac[ix] = 0
+        ratios = np.array(rints, dtype=int)
+        assert sum(ratios) == N
+
+        diameters = np.array([s for s,r in zip(sizes, ratios) for _ in range(r)])
+        assert diameters.shape == (N,)
+        
+        masses = np.array(mass_func(diameters, ndim), dtype=float)
+        assert masses.shape == (N,)
+        
+        Vs = np.sum(np.array(diameters)**ndim) * np.pi / (ndim*2)
+        L = (Vs / phi0)**(1.0 / ndim)
+        
+        locs = np.random.rand(N, ndim) * L
+        
+        return cls(locs, diameters, masses, L=L, **kw)
         
     @property
-    def sigmas(self):
-        return self._sigmas
+    def diameters(self):
+        return self._diameters
     
     @property
     def ndim(self):
@@ -100,8 +146,6 @@ class Minimizer:
             errs.append(Nc > Nc_min and Nc_min > 4)
         
         return all(errs)
-        
-        
     
     def __iter__(self):
         while not self.done():
@@ -121,7 +165,7 @@ class Minimizer:
     
     @property
     def Vspheres(self):
-        return np.sum(self.sigmas**self.sim.NDIM)*np.pi/(2*self.sim.NDIM*self.N)
+        return np.sum(self.diameters**self.sim.NDIM)*np.pi/(2*self.sim.NDIM*self.N)
     
     @property
     def V(self):
@@ -161,7 +205,7 @@ class Minimizer:
         L = self.L
         locs = np.remainder(self.locs + L/2., L) - L/2.
         
-        return jammed.Packing(locs, self.sigmas, L=L)
+        return jammed.Packing(locs, self.diameters, L=L)
         
     def pack_stats(self):
         """Returns (number of backbone contacts, stable number, number of floaters)"""
