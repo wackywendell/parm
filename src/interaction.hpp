@@ -710,68 +710,7 @@ struct LJatomcut : public LJatom {
     flt maxsize(){return sigma*sigcut;};
 };
 
-struct LJCutPair {
-    LJFullCut inter;
-    atomid atom1, atom2;
-    LJCutPair(LJatomcut a1, LJatomcut a2) : 
-        inter(sqrt(a1.epsilon * a2.epsilon),
-              (a1.sigma + a2.sigma) / 2, 
-              max(a1.sigcut, a2.sigcut)),
-        atom1(a1), atom2(a2){};
-    inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
-    inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
-};
 
-struct LJAttractPair {
-    LJattractCut inter;
-    atomid atom1, atom2;
-    LJAttractPair(LJatomcut a1, LJatomcut a2) : 
-        inter(sqrt(a1.epsilon * a2.epsilon),
-              (a1.sigma + a2.sigma) / 2, 
-              max(a1.sigcut, a2.sigcut)),
-        atom1(a1), atom2(a2){};
-    inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
-    inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
-};
-
-////////////////////////////////////////////////////////////////////////
-// Purely attractive LJ, with ε = ε₁₂ (indexed) and σ = (σ₁+σ₂)/2
-// cutoff at some sigcut (and r < σ)
-
-struct HydroAtom : public atomid {
-    vector<flt> epsilons; // for finding epsilons 
-    uint indx; // for finding this one in other atoms' epsilon lists
-    // note that for two HydroAtoms a1, a2, the epsilon for the pair
-    // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]
-    flt sigma;
-    flt sigcut; // sigma units
-    HydroAtom(){};
-    HydroAtom(vector<flt> epsilons, uint indx, flt sigma, atomid a, flt cut) : 
-            atomid(a), epsilons(epsilons), indx(indx), sigma(sigma),
-             sigcut(cut){};
-    HydroAtom(atomid a, HydroAtom other) : atomid(a), epsilons(other.epsilons),
-        indx(other.indx), sigma(other.sigma), sigcut(other.sigcut){};
-    flt getEpsilon(HydroAtom &other){
-        assert(other.indx < epsilons.size());
-        flt myeps = epsilons[other.indx];
-        assert(indx < other.epsilons.size());
-        assert(other.epsilons[indx] == myeps);
-        return myeps;
-    }
-    flt maxsize(){return sigma*sigcut;};
-};
-
-struct HydroPair {
-    LJattractCut inter;
-    atomid atom1, atom2;
-    HydroPair(HydroAtom a1, HydroAtom a2) : 
-        inter(a1.getEpsilon(a2),
-              (a1.sigma + a2.sigma) / 2, 
-              max(a1.sigcut, a2.sigcut)),
-        atom1(a1), atom2(a2){};
-    inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
-    inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
-};
 
 ////////////////////////////////////////////////////////////////////////
 // Purely attractive LJ, with ε = ε₁₂ and σ = σ₁₂ (both indexed)
@@ -815,12 +754,74 @@ struct LJAtomIndexed : public atomid {
     };
 };
 
-struct LJFullPair {
-    LJattractCut inter;
+struct LJCutPair {
+    LJFullCut inter;
     atomid atom1, atom2;
-    LJFullPair(LJAtomIndexed a1, LJAtomIndexed a2) : 
+    LJCutPair(LJatomcut a1, LJatomcut a2) : 
+        inter(sqrt(a1.epsilon * a2.epsilon),
+              (a1.sigma + a2.sigma) / 2, 
+              max(a1.sigcut, a2.sigcut)),
+        atom1(a1), atom2(a2){};
+    LJCutPair(LJAtomIndexed a1, LJAtomIndexed a2) : 
         inter(a1.getEpsilon(a2),
               a1.getSigma(a2),
+              max(a1.sigcut, a2.sigcut)),
+        atom1(a1), atom2(a2){};
+
+    inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
+    inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
+};
+
+struct LJAttractPair {
+    LJattractCut inter;
+    atomid atom1, atom2;
+    LJAttractPair(LJatomcut a1, LJatomcut a2) : 
+        inter(sqrt(a1.epsilon * a2.epsilon),
+              (a1.sigma + a2.sigma) / 2, 
+              max(a1.sigcut, a2.sigcut)),
+        atom1(a1), atom2(a2){};
+    LJAttractPair(LJAtomIndexed a1, LJAtomIndexed a2) : 
+        inter(a1.getEpsilon(a2),
+              a1.getSigma(a2),
+              max(a1.sigcut, a2.sigcut)),
+        atom1(a1), atom2(a2){};
+    inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
+    inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
+};
+
+////////////////////////////////////////////////////////////////////////
+// Purely attractive LJ, with ε = ε₁₂ (indexed) and σ = (σ₁+σ₂)/2
+// cutoff at some sigcut (and r < σ)
+
+struct HydroAtom : public atomid {
+    vector<flt> epsilons; // for finding epsilons 
+    uint indx; // for finding this one in other atoms' epsilon lists
+    // note that for two HydroAtoms a1, a2, the epsilon for the pair
+    // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]
+    flt sigma;
+    flt sigcut; // sigma units
+    HydroAtom(){};
+    HydroAtom(vector<flt> epsilons, uint indx, flt sigma, atomid a, flt cut) : 
+            atomid(a), epsilons(epsilons), indx(indx), sigma(sigma),
+             sigcut(cut){};
+    HydroAtom(atomid a, HydroAtom other) : atomid(a), epsilons(other.epsilons),
+        indx(other.indx), sigma(other.sigma), sigcut(other.sigcut){};
+    flt getEpsilon(HydroAtom &other){
+        assert(other.indx < epsilons.size());
+        flt myeps = epsilons[other.indx];
+        assert(indx < other.epsilons.size());
+        assert(other.epsilons[indx] == myeps);
+        return myeps;
+    }
+    flt maxsize(){return sigma*sigcut;};
+};
+
+struct HydroPair {
+    LJattractCut inter;
+    atomid atom1, atom2;
+    HydroPair(HydroAtom a1, HydroAtom a2) : 
+        inter(a1.getEpsilon(a2),
+              (a1.sigma + a2.sigma) / 2, 
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
     inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};

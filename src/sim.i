@@ -78,7 +78,8 @@
 %shared_ptr(NListed< LJatom,LJpair >)
 %shared_ptr(NListed< LJatomcut,LJAttractPair >)
 %shared_ptr(NListed< HydroAtom,HydroPair >)
-%shared_ptr(NListed< LJAtomIndexed,LJFullPair >)
+%shared_ptr(NListed< LJAtomIndexed,LJAttractPair >)
+%shared_ptr(NListed< LJAtomIndexed,LJCutPair >)
 %shared_ptr(NListed< LJAttractRepulseAtom,LJAttractRepulsePair >)
 %shared_ptr(NListed< LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair >)
 %shared_ptr(NListed< LJDoubleAtom,LJDoublePair >)
@@ -492,9 +493,10 @@ namespace std {
 %include "interaction.hpp"
 %include "constraints.hpp"
 %template(LJgroup) NListed<LJatom, LJpair>; // Pure repulsive
-%template(LJfull) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive
+%template(LJattract) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive
 %template(Hydrophobicity) NListed<HydroAtom, HydroPair>;  // Pure attractive
-%template(LJdetailed) NListed<LJAtomIndexed, LJFullPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
+%template(LJattractix) NListed<LJAtomIndexed, LJAttractPair>;  // Pure attractive, with indices for sigma and epsilon
+%template(LJfullix) NListed<LJAtomIndexed, LJCutPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
 
 // Both repulsive and attractive, with indices for epsilon, sigma fixed per atom.
 // Positive epsilon -> Attractive + repulsive, negative for pure repulsive.
