@@ -25,7 +25,6 @@ class collection {
         void update_trackers();
         void update_constraints();
         virtual flt setForcesGetPressure(bool seta=true);
-        flt E0;
         
     public:
         collection(sptr<Box> box, 
@@ -87,8 +86,6 @@ class collection {
         vector<sptr<interaction> > getInteractions(){return interactions;};
         
         uint numInteraction(){ return (uint) interactions.size();};
-        
-        void setE0(flt newE0){E0=newE0;};
 };
 
 class StaticCollec : public collection {

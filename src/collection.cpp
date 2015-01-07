@@ -3,8 +3,7 @@
 collection::collection(sptr<Box> box, sptr<atomgroup> atoms, vector<sptr<interaction> > is,
               vector<sptr<statetracker> > ts, vector<sptr<constraint> > cs,
             bool should_initialize)
-        : box(box), atoms(atoms), interactions(is), trackers(ts), constraints(cs),
-                E0(0){
+        : box(box), atoms(atoms), interactions(is), trackers(ts), constraints(cs){
     if(should_initialize){
         initialize();
     }
@@ -90,7 +89,7 @@ flt collection::potentialenergy(){
 }
 
 flt collection::energy(){
-    flt E = potentialenergy() - E0 + kinetic();
+    flt E = potentialenergy() + kinetic();
     assert(not isnan(E));
     return E;
 };
