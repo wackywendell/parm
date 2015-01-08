@@ -93,6 +93,7 @@ class StatSet(OrderedDict):
         self.fname = fname
         self.writen = 0
         self.writestep = writestep
+        self.print_on_write = False
 
     def add(self, stat):
         assert stat.name not in self
@@ -108,7 +109,7 @@ class StatSet(OrderedDict):
         self.add(s)
         return s
 
-    def add_fixed(self, dtype=float, **kw):
+    def add_fixed(self, dtype=None, **kw):
         stats = {}
         for k,v in kw.items():
             stat = stats[k] = ReturnStat(lambda: np.array(v, dtype=dtype), name=k)
@@ -162,6 +163,8 @@ class StatSet(OrderedDict):
         return {name:s.stats() for name,s in self.items()}
 
     def safe_write(self):
+        if self.print_on_write:
+            print('Writing to', self.fname)
         try:
             np.savez_compressed(str(self.fname), **self.get_statistics())
         except:

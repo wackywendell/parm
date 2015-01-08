@@ -20,6 +20,18 @@ def to_dhms(tdelta):
 
 def interval_str(days, hr, mn, sec):
     return (('%2dd ' % days) if days else '') + ('%2d:%02d:%02d'% (hr, mn, sec))
+
+def roll(arr, axis):
+    """'Roll' axis n to the front, so if it was A x B x C x D before, and axis was 3, its now C x A x B x D"""
+    import numpy as np
+    return np.rollaxis(arr, axis, 0)
+
+def unroll(arr, axis):
+    """Undo roll(arr, axis)"""
+    import numpy as np
+    arr = np.array(arr)
+    axis = arr.ndim + axis + 1 if axis < 0 else axis+1
+    return np.rollaxis(arr, 0, axis)
     
 class Progress:
     def __init__(self, total):

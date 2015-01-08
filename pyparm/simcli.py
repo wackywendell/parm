@@ -8,7 +8,7 @@ from .statistics import StatSet
 from . import util
 
 class Simulation:
-    def __init__(self, atoms, box, collec, dt, time, printsteps=1000, cut=0.0):
+    def __init__(self, collec, dt, time, printn=100, cut=0.0):
         """
         cut is expected to be a fraction (e.g., 0.5), or (if larger than 1) assumed to be
         the amount of time to cut.
@@ -23,25 +23,16 @@ class Simulation:
         else:
             raise NotImplementedError("Unknown number of dimensions")
 
-        self.atoms = atoms
-        self.box = box
         self.collec = collec
-        self.interactions = []
-        self.trackers = []
         self.statsets = []
 
         self.dt = dt
         self.steps_done = 0 # steps completed
         self.steps_total = int(np.round(time / dt)) # total steps
 
-        self.printsteps = printsteps
+        self.print_tot = printn
         self.printn = 0
-        if cut <= 0:
-            self.cut = 0
-        elif cut <= 1: 
-            self.cut = int(np.round(cut * self.steps_total)) # total steps
-        else:
-            self.cut = int(np.round(cut))
+        self.cut = cut
 
         self._progress = None
 
@@ -51,18 +42,32 @@ class Simulation:
             self._progress = util.Progress(self.steps_total)
         return self._progress
 
+    @property
+    def cut(self):
+        return self._cut
+    
+    @cut.setter
+    def cut(self, value):
+        if value <= 0:
+            value = 0
+        elif value <= 1: 
+            value = int(np.round(value * self.steps_total)) # total steps
+        else:
+            value = int(np.round(value))
+        self._cut = value
+
     def add_interaction(self, inter):
         self.collec.addInteraction(inter)
-        self.interactions.append(inter)
     
     def add_tracker(self, tracker):
         self.collec.addTracker(tracker)
-        self.trackers.append(tracker)
-
+    
     def add_stats(self, statset, statdt=None):
-        if statdt is None:
-            statdt = statset.statdt
-        self.statsets.append((statdt, statset))
+        if statdt is not None:
+            statset.statdt = statdt 
+        else:
+            assert statset.statdt != None
+        self.statsets.append(statset)
 
     def output(self, *args, **kwargs):
         print(*args, **kwargs)
@@ -71,29 +76,27 @@ class Simulation:
 
     def equilibrate(self, progress=True):
         prog = self.progress # this initializes self._progress
-        printt = float(self.steps_total) * self.printn / self.printsteps
         for t in range(self.steps_done, self.cut):
             if t > 0: collec.timestep()
             self.steps_done = t
             if progress: self.progress_out()
-
             
 
     def progress_out(self, force=False):
+        if self.print_tot <= 0: return
         t = self.steps_done
-        printt = float(self.steps_total) * self.printn / self.printsteps
+        printt = float(self.steps_total) * self.printn / self.print_tot
         if force or t >= printt:
             self.output('{9:.6g} ---- '.format(t * self.dt), prog.eta_str(t))
             while t >= printt:
                 self.printn += 1
-                printt = float(self.steps_total) * self.printn / self.printsteps
+                printt = float(self.steps_total) * self.printn / self.print_tot
 
     def progress_str(self, time):
         return '{9:.6g} ---- '.format(time)
 
-    def run(self, progress=True):
+    def run(self, progress=True, print_updates=False):
         self.equilibrate(progress=progress)
-        printt = float(self.steps_total) * self.printn / self.printsteps
         statts = [self.steps_done for _ in self.statsets]
         
         for t in range(self.steps_done, self.steps_total):
@@ -102,10 +105,15 @@ class Simulation:
 
             for n, stime in enumerate(statts):
                 if t >= stime:
-                    sdt, statset = self.statsets[n]
+                    statset = self.statsets[n]
+                    if statset.statdt <= 0:
+                        # ignore these
+                        statts[n] = stime = self.steps_total
+                        continue
                     while t >= stime:
-                        stime += sdt
+                        stime += statset.statdt
                         statts[n] = stime
+                    if print_updates: print('Updating', statset)
                     statset.update(t * self.dt)
 
             if progress: self.progress_out()
@@ -128,4 +136,3 @@ class Simulation:
 
         group.add_argument('-O', '--outfilename', default='test/t{time}', help='base path name for output files')
         return parser
-
