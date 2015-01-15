@@ -20,7 +20,7 @@ def get_order(atoms, box, local=True, weighted=True):
     cntr = tess.Container(locs, limits, radii=sigmas/2., periodic=True)
     return cntr.order(local=local, weighted=weighted)
 
-class simpleStat(Statistic):
+class SimpleStat(Statistic):
     """A statistic that is a simple function of time. This class calls a given function
     at each `gather()` time, and manages the array of previous values."""
     def __init__(self, func, name=None):
@@ -74,45 +74,61 @@ class ReturnStat(Statistic):
     Any `statetracker`, for example, probably falls into this category."""
     def __init__(self, func, name=None):
         """
-        func: a function that returns a simple Statistic when run as func(time)
+        func: a function that returns a simple Statistic when run as func()
         name: the name of the statistic; defaults to function name"""
         self.func = func
-        self.arr = []
         self.name = func.__name__ if name is None else name
 
     def gather(self, time):
         """This statistic does not need to be told to gather; it does it on its own."""
         pass
 
-    def stats(time):
-        return self.func(time)
+    def stats(self):
+        return self.func()
+
+class FixedStat(Statistic):
+    """
+    A class that simply returns the same thing every time.
+    """
+    def __init__(self, val, name):
+        self.val = np.array(val)
+        self.name = name
+
+    def gather(self, time):
+        """This statistic does not change."""
+        pass
+
+    def stats(self):
+        return self.val
 
 class StatSet(OrderedDict):
-    def __init__(self, fname, writestep=20):
+    def __init__(self, fname, statdt, writestep=20):
         OrderedDict.__init__(self)
         self.fname = fname
         self.writen = 0
         self.writestep = writestep
         self.print_on_write = False
+        self.statdt = statdt
+        self.writes = 0
 
     def add(self, stat):
         assert stat.name not in self
         self[stat.name] = stat
 
     def add_func(self, func, name=None):
-        s = simpleStat(func, name=name)
+        s = SimpleStat(func, name=name)
         self.add(s)
-        return s
+        return func
 
     def add_return(self, func, name=None):
-        s = returnStat(func, name=name)
+        s = ReturnStat(func, name=name)
         self.add(s)
-        return s
+        return func
 
     def add_fixed(self, dtype=None, **kw):
         stats = {}
         for k,v in kw.items():
-            stat = stats[k] = ReturnStat(lambda: np.array(v, dtype=dtype), name=k)
+            stat = stats[k] = FixedStat(np.array(v, dtype=dtype), name=k)
             self.add(stat)
         return stats
 
@@ -123,6 +139,7 @@ class StatSet(OrderedDict):
         self.writen += 1
         self.writen %= max(self.writestep, 1)
         if write or (write is None and self.writen == 0):
+            print('Writing at', time)
             self.safe_write()
 
     def add_basics(self, atoms, box, collec):
@@ -167,9 +184,11 @@ class StatSet(OrderedDict):
             print('Writing to', self.fname)
         try:
             np.savez_compressed(str(self.fname), **self.get_statistics())
+            self.writes += 1
         except:
             print("Interrupted in save, retrying...")
             np.savez_compressed(str(self.fname), **self.get_statistics())
+            self.writes += 1
             raise
 
     @staticmethod

@@ -13,16 +13,6 @@ class Simulation:
         cut is expected to be a fraction (e.g., 0.5), or (if larger than 1) assumed to be
         the amount of time to cut.
         """
-        ndim = len(box.boxshape())
-        if ndim == 2:
-            import pyparm.d2 as sim
-            self.sim = sim
-        elif ndim == 3:
-            import pyparm.d3 as sim
-            self.sim = sim
-        else:
-            raise NotImplementedError("Unknown number of dimensions")
-
         self.collec = collec
         self.statsets = []
 
@@ -62,11 +52,8 @@ class Simulation:
     def add_tracker(self, tracker):
         self.collec.addTracker(tracker)
     
-    def add_stats(self, statset, statdt=None):
-        if statdt is not None:
-            statset.statdt = statdt 
-        else:
-            assert statset.statdt != None
+    def add_stats(self, statset):
+        assert statset.statdt != None
         self.statsets.append(statset)
 
     def output(self, *args, **kwargs):
@@ -77,7 +64,7 @@ class Simulation:
     def equilibrate(self, progress=True):
         prog = self.progress # this initializes self._progress
         for t in range(self.steps_done, self.cut):
-            if t > 0: collec.timestep()
+            if t > 0: self.collec.timestep()
             self.steps_done = t
             if progress: self.progress_out()
             
@@ -87,20 +74,21 @@ class Simulation:
         t = self.steps_done
         printt = float(self.steps_total) * self.printn / self.print_tot
         if force or t >= printt:
-            self.output('{9:.6g} ---- '.format(t * self.dt), prog.eta_str(t))
+            self.output(self.progress_str(t * self.dt), self.progress.eta_str(t))
             while t >= printt:
                 self.printn += 1
                 printt = float(self.steps_total) * self.printn / self.print_tot
 
     def progress_str(self, time):
-        return '{9:.6g} ---- '.format(time)
+        return '{:9.6g} ---- '.format(time)
 
     def run(self, progress=True, print_updates=False):
         self.equilibrate(progress=progress)
+        # t, statts, stime are all in units of steps
         statts = [self.steps_done for _ in self.statsets]
         
         for t in range(self.steps_done, self.steps_total):
-            if t > 0: collec.timestep()
+            if t > 0: self.collec.timestep()
             self.steps_done = t
 
             for n, stime in enumerate(statts):
@@ -111,14 +99,14 @@ class Simulation:
                         statts[n] = stime = self.steps_total
                         continue
                     while t >= stime:
-                        stime += statset.statdt
+                        stime += statset.statdt / self.dt
                         statts[n] = stime
-                    if print_updates: print('Updating', statset)
+                    if print_updates: self.output('Updating', statset, 'time', t, 'dt', statset.statdt)
                     statset.update(t * self.dt)
 
             if progress: self.progress_out()
-
-        for _, statset in self.statsets:
+            
+        for statset in self.statsets:
             statset.safe_write()
 
     @staticmethod
