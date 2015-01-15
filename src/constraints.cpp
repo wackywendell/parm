@@ -411,8 +411,9 @@ RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
 
 void RDiffs::reset(){
     curt = 0;
+    Vec com = usecom ? atoms->com() : Vec();
     for(uint i = 0; i<atoms->size(); ++i){
-        pastlocs[i] = (*atoms)[i].x;
+        pastlocs[i] = (*atoms)[i].x - com;
     }
     dists.clear();
 }
