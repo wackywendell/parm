@@ -436,7 +436,7 @@ void RDiffs::update(Box &box){
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool jamminglist::operator<(const jamminglist& other ){
+bool jamminglist::operator<(const jamminglist& other ) const{
     //return distsq < other.distsq;
     if(other.distsq  - distsq > 1e-8) return true;
     if(distsq  - other.distsq > 1e-8) return false;
@@ -478,7 +478,7 @@ bool jamminglist::operator<(const jamminglist& other ){
  * We'll go with method 3.
 */
 
-bool jamminglistrot::operator<(const jamminglistrot& other ){
+bool jamminglistrot::operator<(const jamminglistrot& other ) const {
     //return distsq < other.distsq;
     if(other.distsq  - distsq > 1e-8) return true;
     if(distsq  - other.distsq > 1e-8) return false;

@@ -484,7 +484,7 @@ class jamminglist {
         }
         inline uint size() const {return (uint) assigned.size();};
         
-        bool operator<(const jamminglist& other);
+        bool operator<(const jamminglist& other) const;
 };
 
 class jammingtree {
@@ -570,7 +570,7 @@ class jamminglistrot : public jamminglist {
         jamminglistrot(const jamminglistrot& other, uint expand, flt addeddist)
             : jamminglist(other, expand, addeddist), rotation(other.rotation){};
         
-        bool operator<(const jamminglistrot& other);
+        bool operator<(const jamminglistrot& other) const;
 };
 
 // Includes rotations, flips, and translations.

@@ -26,7 +26,7 @@ printout:
 	@echo Running on \"$(UNAME)\"
 
 clean:
-	rm -f bin/LJatoms bin/LJatom2d bin/hardspheres
+	rm -f bin/LJatoms bin/LJatoms2d bin/hardspheres
 	cd src; rm -f *.o *.so *.gch sim_wrap*.cxx
 	cd lib; rm -f *.o *.so *.gch sim_wrap*.cxx
 	cd pyparm; rm -f *.o *.so *.gch sim_wrap*.cxx
