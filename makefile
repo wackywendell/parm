@@ -32,6 +32,12 @@ clean:
 	cd pyparm; rm -f *.o *.so *.gch sim_wrap*.cxx
 	rm -f src/sim.py
 
+lib:
+	mkdir -p lib
+
+bin:
+	mkdir -p bin
+
 pyparm/sim_wrap2d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) -DVEC2D sim.i
 	mv src/sim_wrap.cxx pyparm/sim_wrap2d.cxx
@@ -79,45 +85,42 @@ pyparm/_sim3dlong.so: pyparm/sim_wrap3dlong.o
 VECOPTS := 2D 3D
 
 define VEC_TARGET_RULE
-lib/vecrand$(1).o: src/vec.hpp src/vecrand.hpp src/vecrand.cpp
+lib/vecrand$(1).o: lib src/vec.hpp src/vecrand.hpp src/vecrand.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/vecrand.cpp -o lib/vecrand$(1).o
 
-lib/box$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/box.cpp
+lib/box$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/box.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/box.cpp -o lib/box$(1).o
 
-lib/trackers$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp
+lib/trackers$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/trackers.cpp -o lib/trackers$(1).o
 
-lib/interaction$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp
+lib/interaction$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/interaction.cpp -o lib/interaction$(1).o
 
-lib/constraints$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp
+lib/constraints$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/constraints.cpp -o lib/constraints$(1).o
 
-lib/collection$(1).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp
+lib/collection$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp
 	$(CXX) $(CCOPTS) -DVEC$(1) -c src/collection.cpp -o lib/collection$(1).o
 
-lib/libsim$(1).so: lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
+lib/libsim$(1).so: lib lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
 	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o lib/libsim$(1).so lib/box$(1).o lib/trackers$(1).o lib/vecrand$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
-
-#lib/libsim$(1).a: lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
-#	ar rcs lib/libsim$(1).a lib/box$(1).o lib/trackers$(1).o lib/vecrand$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
 
 endef
 
 $(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
 
-bin/LJatoms: lib/libsim3D.so src/LJatoms.cpp
+bin/LJatoms: bin lib/libsim3D.so src/LJatoms.cpp
 	$(CXX) $(CCOPTS) -DVEC3D src/LJatoms.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/LJatoms
 
-bin/LJatoms2d: lib/libsim2D.so src/LJatoms.cpp
+bin/LJatoms2d: bin lib/libsim2D.so src/LJatoms.cpp
 	$(CXX) $(CCOPTS) -DVEC2D src/LJatoms.cpp -Llib -lsim2D -Wl,-rpath "lib" -o bin/LJatoms2d
 
-bin/hardspheres: lib/libsim3D.so src/hardspheres.cpp
+bin/hardspheres: bin lib/libsim3D.so src/hardspheres.cpp
 	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres
 
-bin/hardspheres2: lib/libsim3D.so src/hardspheres2.cpp
+bin/hardspheres2: bin lib/libsim3D.so src/hardspheres2.cpp
 	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres2
 
-bin/hardspheres3: lib/libsim3D.so src/hardspheres3.cpp
+bin/hardspheres3: bin lib/libsim3D.so src/hardspheres3.cpp
 	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres3
