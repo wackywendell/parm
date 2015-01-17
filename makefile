@@ -108,16 +108,16 @@ endef
 $(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
 
 bin/LJatoms: lib/libsim3D.so src/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/LJatoms.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/LJatoms
+	$(CXX) $(CCOPTS) -DVEC3D src/LJatoms.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/LJatoms
 
 bin/LJatoms2d: lib/libsim2D.so src/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC2D src/LJatoms.cpp -Llib -lsim2D -Wl,-rpath=lib -o bin/LJatoms2d
+	$(CXX) $(CCOPTS) -DVEC2D src/LJatoms.cpp -Llib -lsim2D -Wl,-rpath "lib" -o bin/LJatoms2d
 
 bin/hardspheres: lib/libsim3D.so src/hardspheres.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres
+	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres
 
 bin/hardspheres2: lib/libsim3D.so src/hardspheres2.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres2
+	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres2
 
 bin/hardspheres3: lib/libsim3D.so src/hardspheres3.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath=lib -o bin/hardspheres3
+	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres3
