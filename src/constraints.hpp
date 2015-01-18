@@ -232,30 +232,6 @@ class linearConstraint : public constraint {
         }
 };
 
-class NPHGaussianConstraint : public constraint {
-    private:
-        sptr<OriginBox> box;
-        flt ddV, dV; // that's dV²/dt², dV/dt
-        vector<sptr<atomgroup> > groups;
-    public:
-        NPHGaussianConstraint(sptr<OriginBox> box, vector<sptr<atomgroup> > groups) : 
-                box(box), ddV(0), dV(0), groups(groups){};
-        int ndof(){return 0;};
-        void apply(Box &box2){
-            //~ flt V = box->V();
-            assert(boost::static_pointer_cast<Box>(box).get() == &box2);
-            //~ vector<atomgroup*>::iterator git;
-            //~ for(git = groups.begin(); git<groups.end(); git++){
-                //~ atomgroup &m = **git;
-                //~ for(uint i=0; i<m.size(); i++){
-                    //~ m[i].v += 
-                //~ }
-            //~ }
-        };
-};
-
-
-
 class ContactTracker : public statetracker{
     protected:
         sptr<atomgroup> atoms;
