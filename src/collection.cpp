@@ -101,7 +101,7 @@ flt collection::dof(){
         ndof -= (*cit)->ndof();
     }
     
-    return ndof + NDIM*(atoms->size());
+    return ndof + NDIM*((int)atoms->size());
 }
 
 flt collection::temp(bool minuscomv){

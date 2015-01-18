@@ -134,12 +134,12 @@ vector<uint> Grid::neighbors(uint i){
     
     return v;
     #else
-    int yrow = widths[0];
-    int zrow = widths[0]*widths[1];
+    uint yrow = widths[0];
+    uint zrow = widths[0]*widths[1];
     
-    int x = i % yrow + widths[0];
-    int y = (i % zrow) / yrow + widths[1];
-    int z = (i / zrow) % zrow + widths[2];
+    uint x = (i % yrow + widths[0]);
+    uint y = ((i % zrow) / yrow + widths[1]);
+    uint z = ((i / zrow) % zrow + widths[2]);
     
     vector<uint> v(27);
     uint n=0;
@@ -148,9 +148,9 @@ vector<uint> Grid::neighbors(uint i){
     for(int dx=-1; dx<=1; dx++){
         assert(n < v.size());
         v[n] = (
-            ((z + dz) % widths[2]) * zrow + 
-            ((y + dy) % widths[1]) * yrow + 
-            ((x + dx) % widths[0])
+            ((uint)((int)z + dz) % widths[2]) * zrow + 
+            ((uint)((int)y + dy) % widths[1]) * yrow + 
+            ((uint)((int)x + dx) % widths[0])
             );
         n++;
     }

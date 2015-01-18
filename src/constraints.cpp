@@ -725,7 +725,7 @@ void Connectivity::add(vector<Vec> locs, vector<flt> diameters){
     
     uint n=0;
     for(vector<Vec>::const_iterator it=locs.begin(); it!=locs.end(); it++){
-        CNode cn = CNode(n, *it);
+        CNode cn = CNode((int)n, *it);
         
         uint n2=0;
         for(vector<CNode>::const_iterator cit=cnodes.begin(); cit!=cnodes.end(); cit++){

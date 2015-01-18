@@ -186,7 +186,7 @@ class linearConstraint : public constraint {
                 I += (*atms)[i].m * dx * dx;
             }
         };
-        int ndof(){return atms->size()-1;};
+        int ndof(){return (int)atms->size()-1;};
         
         void apply(Box &box){
             Vec com = atms->com();
