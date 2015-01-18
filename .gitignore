@@ -7,7 +7,8 @@
 core
 core.*
 out
-bin
+/bin
+/lib
 sim.py*
 sim2d.py*
 sim2dlong.py*
