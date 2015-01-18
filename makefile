@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
-CCOPTS=-Wall -O2 -fPIC -Wconversion -Wno-sign-conversion #-std=c++11
+CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion #-std=c++11
 
 INC=`python3-config --includes`
 
@@ -110,17 +110,17 @@ endef
 
 $(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
 
-bin/LJatoms: bin lib/libsim3D.so src/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/LJatoms.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/LJatoms
+bin/LJatoms: bin lib/libsim3D.so src/bin/LJatoms.cpp
+	$(CXX) $(CCOPTS) -DVEC3D src/bin/LJatoms.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/LJatoms
 
-bin/LJatoms2d: bin lib/libsim2D.so src/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC2D src/LJatoms.cpp -Llib -lsim2D -Wl,-rpath "lib" -o bin/LJatoms2d
+bin/LJatoms2d: bin lib/libsim2D.so src/bin/LJatoms.cpp
+	$(CXX) $(CCOPTS) -DVEC2D src/bin/LJatoms.cpp -Llib -lsim2D -Wl,-rpath "lib" -o bin/LJatoms2d
 
-bin/hardspheres: bin lib/libsim3D.so src/hardspheres.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres
+bin/hardspheres: bin lib/libsim3D.so src/bin/hardspheres.cpp
+	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres
 
-bin/hardspheres2: bin lib/libsim3D.so src/hardspheres2.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres2
+bin/hardspheres2: bin lib/libsim3D.so src/bin/hardspheres2.cpp
+	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres2
 
-bin/hardspheres3: bin lib/libsim3D.so src/hardspheres3.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres3
+bin/hardspheres3: bin lib/libsim3D.so src/bin/hardspheres3.cpp
+	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres3
