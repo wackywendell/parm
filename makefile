@@ -5,20 +5,12 @@ CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion #-std=c++11
 
 INC=`python3-config --includes`
 
-.PHONY: all 2d 3d 2dlong 3dlong printout clean wraps py
+.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py
 
-all: bin/LJatoms bin/LJatoms2d bin/hardspheres
+all: bin/LJatoms2d bin/LJatoms3dlong bin/hardspheres
 	@echo "making all."
 
-py: 2d 3d 2dlong 3dlong
-
-2d: pyparm/_sim2d.so
-
-3d: pyparm/_sim3d.so
-
-2dlong: pyparm/_sim2dlong.so
-
-3dlong: pyparm/_sim3dlong.so
+py: py2d py3d py2dlong py3dlong
 
 wraps: pyparm/sim_wrap2d.cxx pyparm/sim_wrap2dlong.cxx pyparm/sim_wrap3d.cxx pyparm/sim_wrap3dlong.cxx
 
@@ -26,9 +18,8 @@ printout:
 	@echo Running on \"$(UNAME)\"
 
 clean:
-	rm -f bin/LJatoms bin/LJatoms2d bin/hardspheres
+	rm -f bin/* lib/*
 	cd src; rm -f *.o *.so *.gch sim_wrap*.cxx
-	cd lib; rm -f *.o *.so *.gch sim_wrap*.cxx
 	cd pyparm; rm -f *.o *.so *.gch sim_wrap*.cxx
 	rm -f src/sim.py
 
@@ -38,92 +29,77 @@ lib:
 bin:
 	mkdir -p bin
 
-pyparm/sim_wrap2d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
-	cd src ; $(SWIG) -DVEC2D sim.i
-	mv src/sim_wrap.cxx pyparm/sim_wrap2d.cxx
-	mv src/sim2d.py pyparm/d2.py
+# We now define the four options: (2d or 3d) + (doubles or long doubles)
+# SFX is the suffix for object files, and MODNAME is the module name for the python modules
+# OPTSET is the appropriate option set for each version
 
-pyparm/sim_wrap3d.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
-	cd src ; $(SWIG) -DVEC3D sim.i
-	mv src/sim_wrap.cxx pyparm/sim_wrap3d.cxx
-	mv src/sim3d.py pyparm/d3.py
+VECOPTS := 2 3
 
-pyparm/sim_wrap2d.o: pyparm/sim_wrap2d.cxx
-	$(CXX) $(CCOPTS) -DVEC2D -I src/ -c pyparm/sim_wrap2d.cxx -o pyparm/sim_wrap2d.o $(INC)
+FLOATOPTS := long notlong
 
-pyparm/sim_wrap3d.o: pyparm/sim_wrap3d.cxx
-	$(CXX) $(CCOPTS) -DVEC3D -I src/ -c pyparm/sim_wrap3d.cxx -o pyparm/sim_wrap3d.o $(INC)
+define TARGET_RULES
 
-pyparm/_sim2d.so: pyparm/sim_wrap2d.o
-	$(CXX) $(CCOPTS) -DVEC2D -shared pyparm/sim_wrap2d.o -o pyparm/_sim2d.so $(LIB)
+ifeq ($(2),long)
+	OPTSET=-DVEC$(1)D -DLONGFLOAT
+	SFX=$(1)dlong
+	MODNAME=d$(1)long
+else
+	OPTSET=-DVEC$(1)D
+	SFX=$(1)d
+	MODNAME=d$(1)
+endif
 
-pyparm/_sim3d.so: pyparm/sim_wrap3d.o
-	$(CXX) $(CCOPTS) -DVEC3D -shared pyparm/sim_wrap3d.o -o pyparm/_sim3d.so $(LIB)
+#-------------------------------------------------------------------------------
+# The python modules
 
-pyparm/sim_wrap2dlong.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
-	cd src ; $(SWIG) -DVEC2D -DLONGFLOAT sim.i
-	mv src/sim_wrap.cxx pyparm/sim_wrap2dlong.cxx
-	mv src/sim2dlong.py pyparm/d2long.py
+py$(SFX): pyparm/_sim$(SFX).so
 
-pyparm/sim_wrap3dlong.cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
-	cd src ; $(SWIG) -DVEC3D -DLONGFLOAT sim.i
-	mv src/sim_wrap.cxx pyparm/sim_wrap3dlong.cxx
-	mv src/sim3dlong.py pyparm/d3long.py
+pyparm/sim_wrap$(SFX).cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+	cd src ; $(SWIG) $(OPTSET) sim.i
+	mv src/sim_wrap.cxx pyparm/sim_wrap$(SFX).cxx
+	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
-pyparm/sim_wrap2dlong.o: pyparm/sim_wrap2dlong.cxx
-	$(CXX) $(CCOPTS)  -Wconversion -DVEC2D -DLONGFLOAT -I src/ -c pyparm/sim_wrap2dlong.cxx  -o pyparm/sim_wrap2dlong.o $(INC)
+pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
+	$(CXX) $(CCOPTS) $(OPTSET) -I src/ -c pyparm/sim_wrap$(SFX).cxx -o pyparm/sim_wrap$(SFX).o $(INC)
 
-pyparm/sim_wrap3dlong.o: pyparm/sim_wrap3dlong.cxx
-	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -I src/ -c pyparm/sim_wrap3dlong.cxx  -o pyparm/sim_wrap3dlong.o $(INC)
+pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
+	$(CXX) $(CCOPTS) $(OPTSET) -shared pyparm/sim_wrap$(SFX).o -o pyparm/_sim$(SDX).so $(LIB)
 
-pyparm/_sim2dlong.so: pyparm/sim_wrap2dlong.o
-	$(CXX) $(CCOPTS) -Wconversion -DVEC2D -DLONGFLOAT -shared pyparm/sim_wrap2dlong.o -o pyparm/_sim2dlong.so $(LIB)
+#-------------------------------------------------------------------------------
+# The C++ modules
+lib/vecrand$(SFX).o: src/vec.hpp src/vecrand.hpp src/vecrand.cpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c src/vecrand.cpp -o lib/vecrand$(SFX).o
 
-pyparm/_sim3dlong.so: pyparm/sim_wrap3dlong.o
-	$(CXX) $(CCOPTS) -Wconversion -DVEC3D -DLONGFLOAT -shared pyparm/sim_wrap3dlong.o -o pyparm/_sim3dlong.so $(LIB)
+lib/box$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/box.cpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c src/box.cpp -o lib/box$(SFX).o
 
-VECOPTS := 2D 3D
+lib/trackers$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c src/trackers.cpp -o lib/trackers$(SFX).o
 
-define VEC_TARGET_RULE
-lib/vecrand$(1).o: lib src/vec.hpp src/vecrand.hpp src/vecrand.cpp
-	$(CXX) $(CCOPTS) -DVEC$(1) -c src/vecrand.cpp -o lib/vecrand$(1).o
+lib/interaction$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c src/interaction.cpp -o lib/interaction$(SFX).o
 
-lib/box$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/box.cpp
-	$(CXX) $(CCOPTS) -DVEC$(1) -c src/box.cpp -o lib/box$(1).o
+lib/constraints$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c src/constraints.cpp -o lib/constraints$(SFX).o
 
-lib/trackers$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp
-	$(CXX) $(CCOPTS) -DVEC$(1) -c src/trackers.cpp -o lib/trackers$(1).o
+lib/collection$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c src/collection.cpp -o lib/collection$(SFX).o
 
-lib/interaction$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp
-	$(CXX) $(CCOPTS) -DVEC$(1) -c src/interaction.cpp -o lib/interaction$(1).o
+lib/libsim$(SFX).so: lib/vecrand$(SFX).o lib/box$(SFX).o lib/trackers$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -shared -o lib/libsim$(SFX).so lib/box$(SFX).o lib/trackers$(SFX).o lib/vecrand$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o
 
-lib/constraints$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp
-	$(CXX) $(CCOPTS) -DVEC$(1) -c src/constraints.cpp -o lib/constraints$(1).o
-
-lib/collection$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp
-	$(CXX) $(CCOPTS) -DVEC$(1) -c src/collection.cpp -o lib/collection$(1).o
-
-lib/libsim$(1).so: lib lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
-	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o lib/libsim$(1).so lib/box$(1).o lib/trackers$(1).o lib/vecrand$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
+bin/LJatoms$(SFX): lib/libsim$(SFX).so src/bin/LJatoms.cpp | bin
+	$(CXX) $(CCOPTS) $(OPTSET) src/bin/LJatoms.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/LJatoms$(SFX)
 
 bin/packer$(SFX): lib/libsim$(SFX).so src/bin/packer.cpp | bin
 	$(CXX) $(CCOPTS) $(OPTSET) src/bin/packer.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/packer$(SFX)
 
 endef
 
-$(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
+$(foreach target1,$(VECOPTS),$(foreach target2,$(FLOATOPTS),$(eval $(call TARGET_RULES,$(target1),$(target2)))))
 
-bin/LJatoms: bin lib/libsim3D.so src/bin/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/LJatoms.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/LJatoms
+bin/hardspheres: dirs lib/libsim3d.so src/bin/hardspheres.cpp | bin
+	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres
 
-bin/LJatoms2d: bin lib/libsim2D.so src/bin/LJatoms.cpp
-	$(CXX) $(CCOPTS) -DVEC2D src/bin/LJatoms.cpp -Llib -lsim2D -Wl,-rpath "lib" -o bin/LJatoms2d
-
-bin/hardspheres: bin lib/libsim3D.so src/bin/hardspheres.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres
-
-bin/hardspheres2: bin lib/libsim3D.so src/bin/hardspheres2.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres2.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres2
-
-bin/hardspheres3: bin lib/libsim3D.so src/bin/hardspheres3.cpp
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres3.cpp -Llib -lsim3D -Wl,-rpath "lib" -o bin/hardspheres3
+bin/hardspheres2: dirs lib/libsim3d.so src/bin/hardspheres2.cpp | bin
+	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres2.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres2
