@@ -21,21 +21,27 @@
 
 using namespace std;
 
+
 #ifdef LONGFLOAT
-typedef long double flt;
-inline flt cbrt(flt n){return cbrtl(n);};
-inline flt expm1(flt n){return expm1l(n);};
-inline flt copysign(flt n, flt m){return copysignl(n,m);};
-inline flt remainder(flt n, flt m){return remainderl(n,m);};
-inline flt round(flt n){return roundl(n);};
+    typedef long double flt;
+
+    // on MAC OS, g++ is short for clang, and they already define the following functions pretty much
+    // the same way I do
+    #ifndef __clang__
+        inline flt cbrt(flt n){return cbrtl(n);};
+        inline flt expm1(flt n){return expm1l(n);};
+        inline flt copysign(flt n, flt m){return copysignl(n,m);};
+        inline flt remainder(flt n, flt m){return remainderl(n,m);};
+        inline flt round(flt n){return roundl(n);};
+    #endif
 #else
-typedef double flt;
+    typedef double flt;
 #endif
 
 #ifdef VEC2D
-typedef Vector2<flt> Vec;
+    typedef Vector2<flt> Vec;
 #else
-typedef Vector3<flt> Vec;
+    typedef Vector3<flt> Vec;
 #endif
 typedef Numvector<flt, 2> Pair;
 typedef Nvector<Vec, 2> VecPair;
