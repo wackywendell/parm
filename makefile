@@ -1,7 +1,7 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
-CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion #-std=c++11
+CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
 
 INC=`python3-config --includes`
 
@@ -39,15 +39,13 @@ FLOATOPTS := long notlong
 
 define TARGET_RULES
 
-ifeq ($(2),long)
-	OPTSET=-DVEC$(1)D -DLONGFLOAT
-	SFX=$(1)dlong
-	MODNAME=d$(1)long
-else
-	OPTSET=-DVEC$(1)D
-	SFX=$(1)d
-	MODNAME=d$(1)
-endif
+$(eval NDIM=$(1))
+$(if $(findstring notlong,$(2)), $(eval FLT=), $(eval FLT=long))
+$(if $(findstring notlong,$(2)), $(eval FLTOPT=), $(eval FLTOPT=-DLONGFLOAT))
+
+$(eval OPTSET=-DVEC$(NDIM)D $(FLTOPT))
+$(eval SFX:=$(NDIM)d$(FLT))
+$(eval MODNAME:=d$(NDIM)$(FLT))
 
 #-------------------------------------------------------------------------------
 # The python modules
@@ -96,10 +94,10 @@ bin/packer$(SFX): lib/libsim$(SFX).so src/bin/packer.cpp | bin
 
 endef
 
-$(foreach target1,$(VECOPTS),$(foreach target2,$(FLOATOPTS),$(eval $(call TARGET_RULES,$(target1),$(target2)))))
+$(foreach target1,$(VECOPTS), $(foreach target2,$(FLOATOPTS),$(eval $(call TARGET_RULES,$(target1),$(target2)))))
 
-bin/hardspheres: dirs lib/libsim3d.so src/bin/hardspheres.cpp | bin
+bin/hardspheres: lib/libsim3d.so src/bin/hardspheres.cpp | bin
 	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres
 
-bin/hardspheres2: dirs lib/libsim3d.so src/bin/hardspheres2.cpp | bin
+bin/hardspheres2: lib/libsim3d.so src/bin/hardspheres2.cpp | bin
 	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres2.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres2
