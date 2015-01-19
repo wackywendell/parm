@@ -106,6 +106,9 @@ lib/collection$(1).o: lib src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.h
 lib/libsim$(1).so: lib lib/vecrand$(1).o lib/box$(1).o lib/trackers$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
 	$(CXX) $(CCOPTS) -DVEC$(1) -shared -o lib/libsim$(1).so lib/box$(1).o lib/trackers$(1).o lib/vecrand$(1).o lib/interaction$(1).o lib/constraints$(1).o lib/collection$(1).o
 
+bin/packer$(SFX): lib/libsim$(SFX).so src/bin/packer.cpp | bin
+	$(CXX) $(CCOPTS) $(OPTSET) src/bin/packer.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/packer$(SFX)
+
 endef
 
 $(foreach target,$(VECOPTS),$(eval $(call VEC_TARGET_RULE,$(target))))
