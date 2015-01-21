@@ -61,7 +61,7 @@ pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
 	$(CXX) $(CCOPTS) $(OPTSET) -I src/ -c pyparm/sim_wrap$(SFX).cxx -o pyparm/sim_wrap$(SFX).o $(INC)
 
 pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
-	$(CXX) $(CCOPTS) $(OPTSET) -shared pyparm/sim_wrap$(SFX).o -o pyparm/_sim$(SDX).so $(LIB)
+	$(CXX) $(CCOPTS) $(OPTSET) -shared pyparm/sim_wrap$(SFX).o -o pyparm/_sim$(SFX).so $(LIB)
 
 #-------------------------------------------------------------------------------
 # The C++ modules
