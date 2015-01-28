@@ -52,7 +52,6 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 #-------------------------------------------------------------------------------
 # The python modules
 py$(SFX): pyparm/_sim$(SFX).so
-	rm src/sim_wrap.cxx
 
 wrap$(SFX):
 	cd src ; $(SWIG) $(OPTSET) sim.i
