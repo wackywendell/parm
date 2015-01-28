@@ -33,6 +33,7 @@ class SimpleStat(Statistic):
 
     def gather(self, time):
         values = self.func(time)
+        if values is None: return
         if len(self.arr) == 0:
             if np.shape(values) != ():
                 self.arr = [pyarray('d') for _ in values]
@@ -139,7 +140,6 @@ class StatSet(OrderedDict):
         self.writen += 1
         self.writen %= max(self.writestep, 1)
         if write or (write is None and self.writen == 0):
-            print('Writing at', time)
             self.safe_write()
 
     def add_basics(self, atoms, box, collec):

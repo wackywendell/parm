@@ -40,7 +40,7 @@ class Simulation:
     def cut(self, value):
         if value <= 0:
             value = 0
-        elif value <= 1: 
+        elif value <= 1:
             value = int(np.round(value * self.steps_total)) # total steps
         else:
             value = int(np.round(value))
@@ -56,6 +56,10 @@ class Simulation:
         assert statset.statdt != None
         self.statsets.append(statset)
 
+    @property
+    def time(self):
+        return self.dt * self.steps_done
+    
     def output(self, *args, **kwargs):
         print(*args, **kwargs)
         f = kwargs.get('file', sys.stdout)
@@ -63,7 +67,7 @@ class Simulation:
 
     def equilibrate(self, progress=True):
         prog = self.progress # this initializes self._progress
-        for t in range(self.steps_done, self.cut):
+        for t in range(self.steps_done, self.cut+1):
             if t > 0: self.collec.timestep()
             self.steps_done = t
             if progress: self.progress_out()
@@ -87,8 +91,9 @@ class Simulation:
         # t, statts, stime are all in units of steps
         statts = [self.steps_done for _ in self.statsets]
         
-        for t in range(self.steps_done, self.steps_total):
-            if t > 0: self.collec.timestep()
+        startt = self.steps_done
+        for t in range(self.steps_done, self.steps_total+1):
+            if t > startt: self.collec.timestep()
             self.steps_done = t
 
             for n, stime in enumerate(statts):
