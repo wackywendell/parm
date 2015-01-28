@@ -52,9 +52,10 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 
 py$(SFX): pyparm/_sim$(SFX).so
 
-pyparm/sim_wrap$(SFX).cxx: src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
 	cd src ; $(SWIG) $(OPTSET) sim.i
-	mv src/sim_wrap.cxx pyparm/sim_wrap$(SFX).cxx
+	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
+	rm src/sim_wrap.cxx
 	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
 pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx

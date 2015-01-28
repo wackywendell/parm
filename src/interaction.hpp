@@ -1180,11 +1180,58 @@ struct EnergyForce {
     EnergyForce(Vec f, flt E) : f(f), E(E){};
 };
 
+//----------------------------------------------------------------------
+// Hertzian potential, as above, with ε = ε₁₂ and σ = σ₁₂ (both indexed)
+// exponent is n = (n₁ + n₂)/2
+
+
+struct HertzianAtomIndexed : public atomid {
+    vector<flt> epsilons; // for finding epsilons 
+    vector<flt> sigmas; // for finding epsilons 
+    flt exponent;
+    uint indx; // for finding this one in other atoms' epsilon lists
+    // note that for two HertzianAtomIndexed atoms a1, a2, the epsilon for the pair
+    // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]; same for sigma
+    HertzianAtomIndexed(){};
+    HertzianAtomIndexed(atomid a, vector<flt> epsilons, vector<flt> sigmas, 
+        uint indx, flt exponent=2.5) : 
+            atomid(a), epsilons(epsilons), sigmas(sigmas), exponent(exponent), 
+            indx(indx){
+                 assert(sigmas.size() == epsilons.size());
+            };
+    HertzianAtomIndexed(atomid a, LJAtomIndexed other) : atomid(a), epsilons(other.epsilons),
+        sigmas(other.sigmas), indx(other.indx){};
+    flt getEpsilon(HertzianAtomIndexed &other){
+        assert(other.indx < epsilons.size());
+        flt myeps = epsilons[other.indx];
+        //~ assert(indx < other.epsilons.size());
+        //~ assert(other.epsilons[indx] == myeps);
+        return myeps;
+    }
+    flt getSigma(HertzianAtomIndexed &other){
+        assert(other.indx < sigmas.size());
+        flt myeps = sigmas[other.indx];
+        //~ assert(indx < other.sigmas.size());
+        //~ assert(other.sigmas[indx] == myeps);
+        return myeps;
+    }
+    flt maxsize(){
+        flt sigma = sigmas[0];
+        for(uint i=1; i<sigmas.size(); ++i){
+            if(sigma < sigmas[i]) sigma = sigmas[i];
+        }
+        return sigma;
+    };
+};
+
 struct HertzianPair {
     flt eps, sig, exponent;
     atomid atom1, atom2;
     HertzianPair(HertzianAtom a1, HertzianAtom a2) : 
         eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
+        exponent((a1.exponent + a2.exponent)/2.0), atom1(a1), atom2(a2){};
+    HertzianPair(HertzianAtomIndexed a1, HertzianAtomIndexed a2) : 
+        eps(a1.getEpsilon(a2)), sig(a1.getSigma(a2)),
         exponent((a1.exponent + a2.exponent)/2.0), atom1(a1), atom2(a2){};
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
