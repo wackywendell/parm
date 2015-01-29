@@ -118,6 +118,8 @@ Vec SCbox::randLoc(flt min_dist_to_wall){
 Vec atomgroup::com() const{
     Vec v = Vec();
     for(unsigned int i=0; i<size(); i++){
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
         flt curmass = (*this)[i].m;
         v += (*this)[i].x * curmass;
     }
@@ -127,6 +129,8 @@ Vec atomgroup::com() const{
 flt atomgroup::mass() const{
     flt m = 0;
     for(uint i=0; i<size(); i++){
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
         m += (*this)[i].m;
     }
     return m;
@@ -139,8 +143,10 @@ Vec atomgroup::comv() const {
 Vec atomgroup::momentum() const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
-        flt curmass = (*this)[i].m;
-        tot += (*this)[i].v * curmass;
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
+        flt curmass = a.m;
+        tot += a.v * curmass;
     }
     return tot;
 };
@@ -164,6 +170,7 @@ Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
+        if(curmass <= 0 or curmass) continue;
         Vec newloc = box.diff((*this)[i].x, loc);
         tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
@@ -174,8 +181,10 @@ flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        newloc = box.diff((*this)[i].x, loc);
-        tot += newloc.cross((*this)[i].v) * (*this)[i].m; // r x v m = r x p
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
+        newloc = box.diff(a.x, loc);
+        tot += newloc.cross(a.v) * a.m; // r x v m = r x p
     }
     return tot;
 };
@@ -187,8 +196,10 @@ flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        newloc = box.diff((*this)[i].x, loc).perpto(axis);
-        tot += newloc.dot(newloc) * (*this)[i].m;
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
+        newloc = box.diff(a.x, loc).perpto(axis);
+        tot += newloc.dot(newloc) * a.m;
     }
     return tot;
 };
@@ -197,6 +208,7 @@ Matrix<flt> atomgroup::moment(const Vec &loc, Box &box) const{
     Matrix<flt> I;
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
+        if(curmass <= 0 or isinf(curmass)) continue;
         Vec r = box.diff((*this)[i].x, loc);
         flt x = r.getx(), y = r.gety(), z = r.getz();
         I[0][0] += curmass * (y*y + z*z);
@@ -228,16 +240,20 @@ flt atomgroup::moment(const Vec &loc, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        newloc = box.diff((*this)[i].x, loc);
-        tot += newloc.dot(newloc) * (*this)[i].m;
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
+        newloc = box.diff(a.x, loc);
+        tot += newloc.dot(newloc) * a.m;
     }
     return tot;
 };
 
 void atomgroup::addOmega(flt w, Vec loc, Box &box){
     for(uint i=0; i<size(); i++){
-        Vec r = box.diff((*this)[i].x, loc);
-        (*this)[i].v -= r.perp().norm()*w;
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
+        Vec r = box.diff(a.x, loc);
+        a.v -= r.perp().norm()*w;
     }
 };
 #endif
@@ -246,8 +262,10 @@ flt atomgroup::kinetic(const Vec &originvelocity) const{
     flt totE = 0;
     Vec curv;
     for(uint i=0; i<size(); i++){
-        curv = (*this)[i].v - originvelocity;
-        totE += (*this)[i].m/2 * curv.dot(curv);
+        atom& a = (*this)[i];
+        if(a.m == 0 or isinf(a.m)) continue;
+        curv = a.v - originvelocity;
+        totE += a.m/2 * curv.dot(curv);
     }
     return totE;
 };
@@ -260,7 +278,9 @@ void atomgroup::addv(Vec v){
 
 void atomgroup::randomize_velocities(flt T){
     for(uint i=0; i<size(); i++){
-        (*this)[i].v = randVec() * sqrt(T*2.0/(*this)[i].m);
+        atom& a = (*this)[i];
+        if(a.m == 0 or isinf(a.m)) continue;
+        a.v = randVec() * sqrt(T*NDIM/a.m);
     }
 };
 
