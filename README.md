@@ -117,9 +117,9 @@ Other Notes
 ### Lennard-Jones
 
 This module uses the equation
-$$V\left(r\right)=\varepsilon\left(1-\frac{\sigma^{6}}{r^{6}}\right)^{2}$$
+\f$V\left(r\right)=\varepsilon\left(1-\frac{\sigma^{6}}{r^{6}}\right)^{2}\f$
 
 The other standard form is
-$$V\left(r\right)=4\varepsilon\left(\frac{\sigma^{\prime12}}{r^{12}}-\frac{\sigma^{12}}{r^{6}}\right)$$
+\f$V\left(r\right)=4\varepsilon\left(\frac{\sigma^{\prime12}}{r^{12}}-\frac{\sigma^{12}}{r^{6}}\right)\f$
 
-To convert, use $\sigma=2^{\frac{1}{6}}\sigma^{\prime}$.
+To convert, use \f$\sigma=2^{\frac{1}{6}}\sigma^{\prime}\f$.
