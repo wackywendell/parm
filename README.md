@@ -18,7 +18,7 @@ to a full protein simulation.
 Examples
 ----
 
-#### C++
+### C++
 
 There are several examples in C++ in the `src/bin` folder, all with good comments:
 
@@ -26,14 +26,15 @@ There are several examples in C++ in the `src/bin` folder, all with good comment
 * `packer.cpp`: Generates packings (2D or 3D)
 * `src/hardspheres.cpp` for a more unconventional example of collision-driven dynamics
 
-#### Python
+### Python
 
 See `pyparm/examples/LJ.py` for an example of a simple Lennard-Jones
 simulation, with data analysis included.
 
 See `pyparm/packmin.py` for an example of how to make a packing.
 
-## Basic Concepts
+Basic Concepts
+----
 
  * `Vec`: this is a "vector" in the physics sense, having either 2 or 3
  dimensions.
@@ -109,3 +110,16 @@ run `make pyparm` to generate bindings for both.
 
 Use `import pyparm.d2 as sim` or `import pyparm.d3 as sim` to import
 the module. Then use it freely.
+
+Other Notes
+----
+
+### Lennard-Jones
+
+This module uses the equation
+$$V\left(r\right)=\varepsilon\left(1-\frac{\sigma^{6}}{r^{6}}\right)^{2}$$
+
+The other standard form is
+$$V\left(r\right)=4\varepsilon\left(\frac{\sigma^{\prime12}}{r^{12}}-\frac{\sigma^{12}}{r^{6}}\right)$$
+
+To convert, use $\sigma=2^{\frac{1}{6}}\sigma^{\prime}$.
