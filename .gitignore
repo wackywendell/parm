@@ -9,6 +9,7 @@ core.*
 out
 /bin
 /lib
+/doc
 sim.py*
 sim2d.py*
 sim2dlong.py*
