@@ -290,6 +290,7 @@ class Vector2 : public Numvector<T, 2> {
         template <class U> Vector2& operator/=(const U rhs);
 
         /// Rotate by 90 degrees counter-clockwise.
+        /// \todo TODO: this direction is inconsistent with `cross` and `perp`.
         Vector2 rotate(uint i);
         inline Vector2 flip(){return Vector2(gety(), getx());};
         /** Rotate and flip, for \f$0 \le i < 8 \f$.
