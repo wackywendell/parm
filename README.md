@@ -57,12 +57,12 @@ Basic Concepts
     many potentials; to use it, you create a `neighborlist`, then use
     `NListed<FooAtom, FooPair>` as the interaction
 
-*  `Box`: a box is either infinite (`InfiniteBox`) or periodic
-(`OriginBox`), and takes care of the boundary conditions
+ *  `Box`: a box is either infinite (`InfiniteBox`) or periodic
+ (`OriginBox`), and takes care of the boundary conditions
 
-*  `collection`: a grouping together of a `Box`, `atomgroup`, and
-`interaction`s, with an integrator (such as velocity Verlet,
-`collectionVerlet`, or browian motion, `CollectionSol`).
+ *  `collection`: a grouping together of a `Box`, `atomgroup`, and
+ `interaction`s, with an integrator (such as velocity Verlet,
+ `collectionVerlet`, or browian motion, `CollectionSol`).
 
 Standard Steps
 ----

@@ -25,21 +25,35 @@ inline bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
 
 class atomgroup;
 
-/**
-@defgroup basics The basic classes that almost all simulations will need.
-Basics!
-**/
+/*!
+@defgroup basics Basics
 
-/**
-@ingroup basics
+The basic classes that almost all simulations will need.
+*/
+
+/*!
+@defgroup boxes Boxes
+
+Classes and functions related to the boundary conditions of the simulation.
+*/
+
+/*!
+@defgroup atoms Atoms
+
+Particle related functions.
+*/
+
+
+/*!
+@ingroup basics boxes
 @brief The virtual interface for the shape of the space and its boundaries.
-**/
+*/
 class Box {
     public:
         //! Distance between two points, given boundary conditions.
-        /**
+        /*!
         This is the main function that Box exists for.
-        **/
+        */
         virtual Vec diff(Vec r1, Vec r2)=0;
         //! Volume. Can return NaN.
         virtual flt V()=0;
@@ -51,6 +65,9 @@ class Box {
  */
 
 //! The modulus function for Vec
+/*!
+@ingroup boxes
+*/
 #ifdef VEC3D
 inline Vec vecmod(Vec r1, Vec r2){
     return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]), remainder(r1[2], r2[2]));
@@ -65,7 +82,8 @@ inline Vec vecmod(Vec r1, Vec r2){
 //! An infinite Box, for use with, e.g., sticky conglomerations or proteins.
 /*!
 @ingroup basics
-!*/
+@ingroup boxes
+*/
 class InfiniteBox : public Box {
     public:
         //! Simply `r1-r2`.
@@ -77,7 +95,7 @@ class InfiniteBox : public Box {
 //! A rectilinear Box, with periodic boundary conditions.
 /*!
 @ingroup basics
-!*/
+*/
 class OriginBox : public Box {
     protected:
         Vec boxsize;
@@ -136,6 +154,9 @@ class OriginBox : public Box {
 };
 
 //! Lees-Edwards boundary conditions, with shear in the x-direction, relative to y.
+/*!
+@ingroup boxes
+*/
 class LeesEdwardsBox : public OriginBox {
     protected:
         flt gamma;
@@ -163,6 +184,7 @@ class LeesEdwardsBox : public OriginBox {
 
 //! A spheocylinder box, also known as a capsule.
 /*!
+@ingroup boxes
 Note that this *does not* keep particles inside the box; use an interaction like SCboxed for that.
 
 This class is useful for functions like V(), dist, edgedist, inside, randLoc, etc.
@@ -170,7 +192,7 @@ This class is useful for functions like V(), dist, edgedist, inside, randLoc, et
 The spherocylinder has an axis along the x-axis, centered at origin
 
 L is length of the central axis of the cylinder from 1 sphere center to the other, so L=0 is a sphere.
-!*/
+*/
 class SCbox : public Box {
     protected:
         flt L, R;
@@ -189,8 +211,9 @@ class SCbox : public Box {
 ////////////////////////////////////////////////////////////////////////////////
 //! The basic class for representing each particle.
 /*!
- * Normally instantiated through atomvec.
-!*/
+@ingroup atoms
+Normally instantiated through atomvec.
+*/
 struct atom {
     //! location.
     Vec x;
@@ -228,9 +251,10 @@ class atomref {
 };
 
 //! A pointer to an atom, that also knows its own index in an atomvec.
-/**
+/*!
+@ingroup atoms
 This is used in many interaction classes to compair atoms.
-**/
+*/
 class atomid : public atomref {
     private:
         uint num; // note that these are generally only in reference to
@@ -267,6 +291,9 @@ class AtomIter{
 class atomvec;
 
 //! a group of atoms, such as all of them (atomvec), or a smaller group such as a molecule, sidebranch, etc.
+/*!
+@ingroup atoms
+*/
 class atomgroup {
     public:
         // access individual atoms
@@ -292,7 +319,7 @@ class atomgroup {
         /*!
         This is normally with reference to a "lab" reference frame (velocity (0,0,0)), but
         can optionally take a different origin velocity, e.g. `comv()`.
-        !*/
+        */
         flt kinetic(const Vec &originvelocity=Vec()) const;
         //! Total momentum.
         Vec momentum() const;
@@ -334,11 +361,10 @@ class atomgroup {
 
 inline atom& AtomIter::operator*() const{return g[i];};
 
-
 /*!
-@ingroup basics
-@brief The main class
-!*/
+@ingroup basics atoms
+@brief The main class for representing particles.
+*/
 class atomvec : public virtual atomgroup {
     private:
         atom* atoms;
@@ -359,23 +385,23 @@ class atomvec : public virtual atomgroup {
         atomvec& vec(){return *this;};
         inline atom& operator[](cuint n){return atoms[n];};
         inline atom& operator[](cuint n) const {return atoms[n];};
-        //atomid get_id(atom *a);
         inline atomid get_id(cuint n) {
             if (n > sz) return atomid(); return atomid(atoms + n,n);};
-        //~ inline flt getmass(cuint n) const{return atoms[n].m;};
-        //~ inline void setmass(cuint n, flt m){atoms[n].m = m;};
         inline uint size() const {return sz;};
 
         ~atomvec(){ delete [] atoms;};
 };
 
+/*!
+A class for representing any grouping of atoms that is not the whole set of
+atoms, such as a molecule, a side-chain, etc.
+@ingroup atoms
+*/
 class subgroup : public atomgroup {
     protected:
         sptr<atomvec> atoms;
         vector<atomid> ids;
     public:
-        //subgroup(){};
-        //metagroup(vector<atom*> atoms) : atoms(atoms){};
         subgroup(sptr<atomvec> atoms) : atoms(atoms){};
         atomvec &vec(){return *atoms;};
         inline atom& operator[](cuint n){return *ids[n];};

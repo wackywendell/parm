@@ -21,7 +21,6 @@
 
 using namespace std;
 
-
 #ifdef LONGFLOAT
     typedef long double flt;
 
@@ -40,7 +39,8 @@ using namespace std;
 
 #ifdef VEC2D
     typedef Vector2<flt> Vec;
-#else
+#endif
+#ifdef VEC3D
     typedef Vector3<flt> Vec;
 #endif
 typedef Numvector<flt, 2> Pair;
@@ -96,7 +96,7 @@ class bivariateGauss {
         flt x11;
         flt x21;
         flt x22;
-        
+
     public:
         bivariateGauss(const flt s1=1, const flt s2=1, const flt corr=0);
         void set(const flt s1, const flt s2, const flt corr);

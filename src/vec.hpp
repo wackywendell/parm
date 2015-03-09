@@ -1,9 +1,11 @@
-/* An implementation of a number of vector classes.
- * 
+/** An implementation of a number of vector classes.
+ *
  * Nvector is an n-dimensional vector, allowing addition, subtraction,
  * multiplication by a scalar. You can have Nvectors of Nvectors.
+ *
  * Numvector requires numbers as elements, and allows for calculation of
  * a dot product, magnitude, and normalizing.
+ *
  * Vector is a 3D vector, and adds a cross-product, as well as accessors
  * for x, y, and z components by name.
  */
@@ -17,6 +19,16 @@ using namespace std;
 
 typedef unsigned int uint;
 
+/**
+A fixed size array. This is just a wrapper with some convenience methods,
+and the following is (roughly) equivalent:
+
+    Array<flt, 4> arr;
+    flt[4] arr;
+
+@tparam T a type that can be added and subtracted.
+@tparam N the number of dimensions.
+*/
 template <class T, unsigned int N>
 class Array {
     protected:
@@ -29,20 +41,25 @@ class Array {
         const T& get(const unsigned int n) const {return vals[n];}
         void set(const unsigned int n, const T a){vals[n]=a;}
         unsigned int len() const {return N;};
-        
+
         T& operator[](const unsigned int i){return vals[i];};
         const T& operator[](const unsigned int i) const {return vals[i];};
-        //~ template <class U> bool operator==(const Array<U,N> a) const{
-            //~ for(uint i=0; i<N; i++) if(a[i] != get[i]) return false;
-            //~ return true;};
+
         T* begin(){return vals;};
         T* end(){return vals + N;};
         ~Array(){};
-        
-        //~ template <class U, unsigned int M>
-        //~ friend ostream& operator<<(ostream& out, const Nvector<U, M> v);
 };
 
+/**
+An N-dimensional vector, extending addition and subtraction from the type T to the
+Nvector class.
+
+This is extended by Numvector for things like multiplication and division, but you can use Nvector
+for something like an array of Numvectors.
+
+@tparam T a type that can be added and subtracted.
+@tparam N the number of dimensions.
+*/
 template <class T, unsigned int N>
 class Nvector {
     protected:
@@ -56,7 +73,7 @@ class Nvector {
         const T& get(const unsigned int n) const {return vals[n];}
         void set(const unsigned int n, const T a){vals[n]=a;}
         unsigned int len() const {return N;};
-        
+
         Nvector& operator+=(const Nvector &rhs);
         Nvector& operator-=(const Nvector &rhs);
         template <class U> Nvector& operator*=(const U rhs);
@@ -66,19 +83,26 @@ class Nvector {
         Nvector operator-(const Nvector &rhs) const {return Nvector(*this) -= rhs;}
         T& operator[](const unsigned int i){return vals[i];};
         const T& operator[](const unsigned int i) const{return vals[i];};
+
+        //! Multiplication by a scalar
         template <class U> Nvector operator*(const U rhs) const {return Nvector(*this) *= rhs;}
+        //! Division by a scalar
         template <class U> Nvector operator/(const U rhs) const {return Nvector(*this) /= rhs;}
         T* begin(){return vals;};
         T* end(){return vals + N;};
         ~Nvector(){};
-        
+
         template <class U, unsigned int M>
         friend ostream& operator<<(ostream& out, const Nvector<U, M> v);
 };
 
-//~ typedef typename std::iterator_traits<>::value_type cont;
-//~ typedef typename cont::const_iterator const_iterator;
+/**
+An N-dimensional physics vector, extending Nvector. This extends addition, subtraction, and
+multiplication from the type T to the Nvector class.
 
+@tparam T a numerical type, as as float or double.
+@tparam N the number of dimensions.
+*/
 template <class T, unsigned int N>
 class Numvector : public Nvector<T, N> {
     public:
@@ -87,21 +111,43 @@ class Numvector : public Nvector<T, N> {
                     for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=rhs.get(i);}
         inline Numvector(const T rhs[N]) {
                     for(unsigned int i=0; i<N; i++) Nvector<T,N>::vals[i]=rhs[i];}
-        T dot (const Numvector &other) const;
-        inline T sq() const {return dot(*this);};
-        inline T mag() const {return sqrt(sq());};
+
+        T dot (const Numvector &other) const; //!< Inner product.
+        inline T sq() const {return dot(*this);}; //!< The square of the vector, \f$\vec r^2 \f$.
+        inline T mag() const {return sqrt(sq());}; //!< The magnitude of the vector, \f$ \left| \vec r \right| \f$.
+        /*! The magnitude of the vector distance, \f$ \left| \vec r - \vec s \right| \f$.
+
+        @param rhs The other vector, \f$\vec s \f$
+        */
         inline T distance(const Numvector &rhs) const;
+        /*! returns the component of this perpendicular to other.
+
+        \f$ \vec r - \frac{\vec r \cdot \vec s}{\vec s^2} \vec s  \f$
+
+        where \f$ \vec r \f$ is this vector, and \f$\vec s \f$ is `rhs`.
+
+        @param other The other vector, \f$\vec s\f$
+        */
         Numvector perpto(const Numvector &other) const;
-        //returns the component of this perpendicular to other
-        
-        void normalize();
-        Numvector norm() const;
+
+
+        void normalize(); //!< Normalize in place
+        Numvector norm() const; //!< Return the normalized version
         ~Numvector(){};
-        
+
         template <class U, unsigned int M>
         friend ostream& operator<<(ostream& out, const Numvector<U, M> v);
 };
 
+/**
+A 3D physics vector, with methods for adding, subtracting, dot product, etc.
+
+This is aliased as Vec when compiled with NDIM=3.
+
+@ingroup basics
+
+@tparam T a numerical type, as as float or double.
+*/
 template <class T>
 class Vector3 : public Numvector<T, 3> {
     public:
@@ -112,12 +158,14 @@ class Vector3 : public Numvector<T, 3> {
         inline const T getx() const {return Nvector<T,3>::get(0);}
         inline const T gety() const {return Nvector<T,3>::get(1);}
         inline const T getz() const {return Nvector<T,3>::get(2);}
+        /// Return x as a double. Useful with some versions of Python and long doubles.
         inline double getxd() const {return double(Nvector<T,3>::get(0));}
         inline double getyd() const {return double(Nvector<T,3>::get(1));}
         inline double getzd() const {return double(Nvector<T,3>::get(2));}
         inline void setx(const T a){Nvector<T,3>::vals[0]=a;}
         inline void sety(const T b){Nvector<T,3>::vals[1]=b;}
         inline void setz(const T c){Nvector<T,3>::vals[2]=c;}
+        /// Set x with a double. Useful with some versions of Python and long doubles.
         inline void setxd(const double a){Nvector<T,3>::vals[0]=a;}
         inline void setyd(const double b){Nvector<T,3>::vals[1]=b;}
         inline void setzd(const double c){Nvector<T,3>::vals[2]=c;}
@@ -135,35 +183,65 @@ class Vector3 : public Numvector<T, 3> {
             return Vector3(getx()*rhs,gety()*rhs,getz()*rhs);}
         template <class U> inline Vector3 operator/(const U rhs) const {
             return Vector3(getx()/rhs,gety()/rhs,getz()/rhs);}
-        Vector3 cross (const Vector3 &rhs) const;
+        Vector3 cross (const Vector3 &rhs) const;///< Cross product, \f$\vec r \times \vec s \f$
         inline Vector3 norm() const {return Vector3(Numvector<T,3>::norm());};
         inline Vector3& operator-=(const Vector3 &rhs){Nvector<T,3>::operator-=(rhs); return *this;};
-        inline Vector3& operator+=(const Vector3 &rhs){Nvector<T,3>::operator+=(rhs); return *this;}; 
+        inline Vector3& operator+=(const Vector3 &rhs){Nvector<T,3>::operator+=(rhs); return *this;};
         template <class U> Vector3& operator*=(const U rhs);
         template <class U> Vector3& operator/=(const U rhs);
-        
+
+        /** The angle between two vectors, assuming they start at the same point (i.e.\ the origin).
+
+        Equal to \f$\theta = \arccos \left(\frac{\vec x_1 \cdot \vec x_2}{\left| \vec x_1 \right| \left|  \vec x_2 \right|}\right) \f$
+
+        @param dx1 \f$\vec x_1 \f$
+        @param dx2 \f$\vec x_2 \f$
+        */
         static T angle(const Vector3 &dx1, const Vector3 &dx2){
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
-        
+
+        /** The angle between three points. Equivalent to `angle(x1 - x2, x3 - x2)`.
+
+        @param x1 The first point.
+        @param x2 The middle point, around which we are finding the angle.
+        @param x3 The third point.
+        */
         static T angle(const Vector3 &x1, const Vector3 &x2, const Vector3 &x3){
             Vector3 dx1 = x1 - x2, dx2 = x3 - x2;
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
-        
+
+        /**
+        The dihedral angle between three vectors:
+
+        \f$ \phi=\operatorname{arctan2}\left(
+            \vec{r}_{1}\cdot\left(\vec{r}_{2}\times
+                \vec{r}_{3}\right)\left|\vec{r}_{2}\right|,
+            \left(\vec{r}_{1}\times\vec{r}_{2}\right)\cdot
+                \left(\vec{r}_{2}\times\vec{r}_{3}\right)
+            \right) \f$
+
+        @param dx1 \f$\vec r_1\f$
+        @param dx2 \f$\vec r_2\f$
+        @param dx3 \f$\vec r_3\f$
+        */
         static T dihedral(const Vector3 &dx1, const Vector3 &dx2, const Vector3 &dx3){
-            return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(), 
+            return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(),
                                 (dx1.cross(dx2).dot(dx2.cross(dx3))));
         }
-        
-        static T dihedral(const Vector3 &x1, const Vector3 &x2, 
+
+        /** The dihedral angle between four points.
+
+        Equivalent to `dihedral(x2 - x1, x3 - x2, x4 - x3)`. */
+        static T dihedral(const Vector3 &x1, const Vector3 &x2,
                         const Vector3 &x3, const Vector3 &x4){
             Vector3 dx1 = x2 - x1, dx2 = x3 - x2, dx3 = x4 - x3;
-            return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(), 
+            return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(),
                                 (dx1.cross(dx2).dot(dx2.cross(dx3))));
         }
         ~Vector3(){};
-        
+
         template <class U>
         friend ostream& operator<<(ostream& out, const Vector3<U> v);
 
@@ -198,38 +276,64 @@ class Vector2 : public Numvector<T, 2> {
             return Vector2(getx()*rhs,gety()*rhs);}
         template <class U> inline Vector2 operator/(const U rhs) const {
             return Vector2(getx()/rhs,gety()/rhs);}
+        /// The 2D cross product, returning a scalar.
         T cross (const Vector2 &rhs) const{return getx()*rhs.gety() - rhs.getx()*gety();};
+        /// The 2D cross product with the "missing" third dimension, returning a vector.
         Vector2 cross (const T v) const{return Vector2(gety()*v, -getx()*v);};
-        Vector2 perp() const{return Vector2(-gety(),getx());};
+        /// The vector perpendicular to this one, in the clockwise direction.
+        Vector2 perp() const{return Vector2(gety(),-getx());};
+        /// The normalized version of this vector.
         inline Vector2 norm() const {return Vector2(Numvector<T,2>::norm());};
         inline Vector2& operator-=(const Vector2 &rhs){Nvector<T,2>::operator-=(rhs); return *this;};
-        inline Vector2& operator+=(const Vector2 &rhs){Nvector<T,2>::operator+=(rhs); return *this;}; 
+        inline Vector2& operator+=(const Vector2 &rhs){Nvector<T,2>::operator+=(rhs); return *this;};
         template <class U> Vector2& operator*=(const U rhs);
         template <class U> Vector2& operator/=(const U rhs);
-        
+
+        /// Rotate by 90 degrees counter-clockwise.
         Vector2 rotate(uint i);
         inline Vector2 flip(){return Vector2(gety(), getx());};
+        /** Rotate and flip, for \f$0 \le i < 8 \f$.
+
+        For \f$0 \le i < 4 \f$, equivalent to `rotate(i)`.
+        For \f$4 \le i < 8 \f$, equivalent to `flip().rotate(i % 4)`.
+        For \f$i \ge 8 \f$, equivalent to `rotate_flip(i % 8)`.
+        */
         inline Vector2 rotate_flip(uint i){
             if((i / 4) % 2 == 1) return flip().rotate(i%4);
             return rotate(i%4);
         };
-        
+
+        /**
+        The inverse of `rotate_flip(i)`.
+        */
         inline Vector2 rotate_flip_inv(uint i){
             Vector2 inv = rotate(4-(i%4));
             if((i / 4) % 2 == 0) return inv;
             return inv.flip();
         };
-        
+        /** The angle between two vectors, assuming they start at the same point (i.e.\ the origin).
+
+        Equal to \f$\theta = \arccos \left(\frac{\vec x_1 \cdot \vec x_2}{\left| \vec x_1 \right| \left|  \vec x_2 \right|}\right) \f$
+
+        @param dx1 \f$\vec x_1 \f$
+        @param dx2 \f$\vec x_2 \f$
+        */
         static T angle(const Vector2 &dx1, const Vector2 &dx2){
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
-        
+
+        /** The angle between three points. Equivalent to `angle(x1 - x2, x3 - x2)`.
+
+        @param x1 The first point.
+        @param x2 The middle point, around which we are finding the angle.
+        @param x3 The third point.
+        */
         static T angle(const Vector2 &x1, const Vector2 &x2, const Vector2 &x3){
             Vector2 dx1 = x1 - x2, dx2 = x3 - x2;
             return acos(dx1.dot(dx2) / dx1.mag() / dx2.mag());
         }
         ~Vector2(){};
-        
+
         template <class U>
         friend ostream& operator<<(ostream& out, const Vector2<U> v);
 
