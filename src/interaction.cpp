@@ -13,9 +13,9 @@ Vec spring::forces(const Vec r){
     return r * (fmag / m);
 }
 
-electricScreened::electricScreened(const flt screenLength, const flt q1, 
-            const flt q2, const flt cutoff) : screen(screenLength), 
-            q1(q1), q2(q2), cutoff(cutoff), 
+electricScreened::electricScreened(const flt screenLength, const flt q1,
+            const flt q2, const flt cutoff) : screen(screenLength),
+            q1(q1), q2(q2), cutoff(cutoff),
             cutoffE(exp(-cutoff/screenLength) * q1 * q2 / cutoff){};
 
 flt electricScreened::energy(const flt r, const flt qaqb, const flt screen, const flt cutoff){
@@ -31,7 +31,7 @@ Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, cons
     return r * (fmag/d);
 };
 
-fixedForceRegionAtom::fixedForceRegionAtom(atomid a, Vec dir, vector<flt> bound, vector<flt> Fs) : 
+fixedForceRegionAtom::fixedForceRegionAtom(atomid a, Vec dir, vector<flt> bound, vector<flt> Fs) :
         atomid(a), direction(dir.norm()), boundaries(bound), Fs(Fs){
     if(boundaries.size() != Fs.size() - 1){
         throw std::invalid_argument("fixedForceRegionAtom: boundaries.size() != Fs.size() - 1");
@@ -51,7 +51,7 @@ flt fixedForceRegionAtom::energy(Box &box){
         }
         E -= Fs[i+1] * (boundaries[i+1] - boundaries[i]);
     }
-    
+
     return E;
 };
 
@@ -83,7 +83,7 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     else if(costheta < -1) costheta = -1;
     flt theta = acos(costheta);
     //theta is now the angle between x1 and x2
-    
+
     flt fmag;
     if(usecos) fmag = -springk*(cos(theta0) - costheta)*sin(theta);
     else fmag = springk*(theta0 - theta); // torque magnitude
@@ -99,53 +99,53 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     force[0].normalize();
     force[2] = f2;
     force[2].normalize();
-    
-    // now we get magnitude: 
+
+    // now we get magnitude:
     force[0] *= fmag/r1mag;
     force[2] *= fmag/r2mag;
-    
+
     //~ if(!(force[0].sq() < 1e6)){
         //~ cout << "theta: " << theta << "  theta0: " << theta0 << endl;
         //~ cout << "fmag: " << fmag << "  r1mag: " << r1mag << "  r2mag: " << r2mag << endl;
         //~ cout << "f0: " << f0 << "  force[0]: " << force[0] << endl;
         //~ cout << "f2: " << f2 << "  force[2]: " << force[2] << endl;
     //~ }
-    
+
     //~ cout << force[2] << x2 << "force(2).x2: " << force[2].dot(x2) << endl;
     force[1] = -(force[0] + force[2]);
-    // The direction of the force on the first atom (f0) is 
+    // The direction of the force on the first atom (f0) is
     // perpendicular to x1, and same for f2.
     // **FIXED** its possible that x1 = +/-x2, and then x1.perp(x2) = 0
     // and then we get a divide by zero error.
-    
+
     //~ assert(force[0].sq() <= 1e7);
     //~ assert(force[1].sq() <= 1e7);
     //~ assert(force[2].sq() <= 1e7);
-    
+
     return force;
 }
 
 #ifdef VEC3D
-dihedral::dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow) : 
+dihedral::dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow) :
                     coscoeffs(cvals), sincoeffs(svals), usepow(usepow){
 }
 
-Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2, 
+Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
                    const Vec &r3) const {
     // Taken from Rapaport "Art of Molecular Dynamics Simulation" p.279
     // The expressions and notation are very close to that of the book.
-    
+
     // Note that Rappaport defines it as such:
     /*
      The dihedral angle is defined as the angle between the
 planes formed by atoms 1,2,3 and 2,3,4 measured in the plane normal to the 2–3
 bond; it is zero when all four atoms are coplanar and atoms 1 and 4 are on opposite
 sides of the bond. */
-    
+
     // so we need a negative sign.
-    
+
     // ri corresponds to Rapaport's b_i
-    
+
     flt c[3][3];
     c[0][0] = r1.dot(r1);
     c[0][1] = c[1][0] = r1.dot(r2);
@@ -153,83 +153,83 @@ sides of the bond. */
     c[1][1] = r2.dot(r2);
     c[1][2] = c[2][1] = r2.dot(r3);
     c[2][2] = r3.dot(r3);
-    
+
     flt p = c[0][2] * c[1][1] - c[0][1] * c[1][2];
     flt qa = c[0][0]*c[1][1] - c[0][1] * c[0][1];
     flt qb = c[1][1]*c[2][2] - c[1][2] * c[1][2];
     flt q = qa * qb;
     flt sqq = sqrt(q);
-    
+
     flt t1 = p;
     flt t2 = c[0][0] * c[1][2] - c[0][1] * c[0][2];
     flt t3 = c[0][1] * c[0][1] - c[0][0] * c[1][1];
     flt t4 = c[1][1] * c[2][2] - c[1][2] * c[1][2];
     flt t5 = c[0][2] * c[1][2] - c[0][1] * c[2][2];
     flt t6 = -p;
-    
+
     Nvector<Vec, 4> derivs;
-    
+
     /*
      Rapaport: The dihedral angle is defined as the angle between the
-     planes formed by atoms 1,2,3 and 2,3,4 measured in the plane 
-     normal to the 2–3 bond; it is zero when all four atoms are 
-     coplanar and atoms 1 and 4 are on opposite sides of the bond. 
-     
+     planes formed by atoms 1,2,3 and 2,3,4 measured in the plane
+     normal to the 2–3 bond; it is zero when all four atoms are
+     coplanar and atoms 1 and 4 are on opposite sides of the bond.
+
      Note that this is the *opposite* of the chemical definition.
-     
+
      flt const0 = c[1][1]/(sqq * qa);
      flt const3 = c[1][1]/(sqq * qb);
-     
-     We add a negative in at the beginning of those two to give us the 
+
+     We add a negative in at the beginning of those two to give us the
      chemical definition.
      */
-    
+
     flt const0 = -c[1][1]/(sqq * qa);
     flt const3 = -c[1][1]/(sqq * qb);
-    
-    
+
+
     derivs[0] = (r1 * t1 + r2 * t2 + r3 * t3) * const0;
     derivs[3] = (r1 * t4 + r2 * t5 + r3 * t6) * const3;
-    
+
     derivs[1] = derivs[0] * (-1 - c[0][1]/c[1][1]) +
                             derivs[3] * (c[1][2]/c[1][1]);
     derivs[2] = derivs[0] * (c[0][1]/c[1][1]) -
                             derivs[3] * (1 + c[1][2]/c[1][1]);
-    
+
      /*
      Rapaport says costheta = p/sqrt(q); we add a negative for the cosine.
      */
-    
+
     flt dcostheta;
-    if(sincoeffs.empty() and !usepow){        
+    if(sincoeffs.empty() and !usepow){
         flt costheta = -p/sqq;
         // costheta =-1 corresponds to atoms 1 and 4 on opposite sides of the bond (zigzag)
         // costheta = 1 corresponds to a C shape
 
         dcostheta = dudcosthetaCOS(costheta); // F = -dU/d(costheta)
-        
-    
+
+
         //~ if(abs(costheta) < .7)
             //~ cout << "forces cos: " << costheta << " getcos: " << getcos(r1,r2,r3)
                  //~ << " dcostheta: " << dcostheta << '\n';
     } else {
         dcostheta = dudcostheta(getang(r1, r2, r3));
     }
-        
+
     derivs *= -dcostheta;  // F = -dU/d(costheta)
     //~ assert(derivs[0].sq() < 1e8);
     //~ assert(derivs[1].sq() < 1e8);
     //~ assert(derivs[2].sq() < 1e8);
     //~ assert(derivs[3].sq() < 1e8);
-        
-    
+
+
     //~ flt mag = sqrt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
                     //~ derivs[3].sq());
-    //~ 
+    //~
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
               //~ << " derivs:" << derivs  << " : " << mag << std::endl;
     return derivs;
-    
+
     // pea79, dun92
     // Pear, M. R. and Weiner, J. H., Brownian dynamics study of a polymer chain of linked rigid bodies, J. Chem. Phys. 71 (1979) 212.
     // Dunn, J. H., Lambrakos, S. G., Moore, P. G., and Nagumo, M., An algorithm for calculating intramolecular angle-dependent forces on vector computers, J. Comp. Phys. 100 (1992) 17.
@@ -275,7 +275,7 @@ flt dihedral::dudcostheta(const flt theta) const{
     return tot;
 }
 
-flt dihedral::getcos(const Vec &r1, const Vec &r2, 
+flt dihedral::getcos(const Vec &r1, const Vec &r2,
                    const Vec &r3){
    // The two normals to the planes
     Vec n1 = r1.cross(r2);
@@ -283,28 +283,28 @@ flt dihedral::getcos(const Vec &r1, const Vec &r2,
     //~ cout << r1 << ',' << r2  << ',' << r3 << "\n";
     flt n1mag = n1.mag();
     flt n2mag = n2.mag();
-    
-    if (n1mag == 0 or n2mag == 0) return -100; 
+
+    if (n1mag == 0 or n2mag == 0) return -100;
     // if one plane is ill-defined, then we have no torsion angle
 
     return (n1.dot(n2) / n1mag / n2mag);
 };
 
-flt dihedral::getang(const Vec &r1, const Vec &r2, 
+flt dihedral::getang(const Vec &r1, const Vec &r2,
                    const Vec &r3){
-    
+
     return atan2(r1.dot(r2.cross(r3))*r2.mag(), (r1.cross(r2).dot(r2.cross(r3))));
 };
 
 flt dihedral::energy(const flt ang) const{
-    
+
     flt costheta = (usepow ? cos(ang) : NAN);
     flt sintheta = (usepow ? sin(ang) : NAN);
-    
+
     unsigned int cosmx = (unsigned int)(coscoeffs.size());
     unsigned int sinmx = (unsigned int)(sincoeffs.size());
     unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
-    
+
     flt tot = 0;
     for(unsigned int i=0; i < mx; ++i){
         if(usepow) {
@@ -315,7 +315,7 @@ flt dihedral::energy(const flt ang) const{
             if(i < sinmx) tot += sincoeffs[i] * sin(i * ang);
         }
     }
-    
+
     return tot;
 }
 #endif
@@ -335,7 +335,7 @@ flt dihedral::energy(const flt ang) const{
     //~ }
 //~ };
 
-bondgrouping::bondgrouping(flt k, flt x0, atomid a1, atomid a2, 
+bondgrouping::bondgrouping(flt k, flt x0, atomid a1, atomid a2,
         BondDiffType diff, OriginBox *box) :
             k(k), x0(x0), a1(a1), a2(a2), diff_type(diff){
     if(diff == FIXEDBOX){
@@ -357,10 +357,10 @@ Vec bondgrouping::diff(Box &box) const{
     return Vec()*NAN;
 };
 
-bondpairs::bondpairs(vector<bondgrouping> pairs, bool zeropressure) : 
+bondpairs::bondpairs(vector<bondgrouping> pairs, bool zeropressure) :
         zeropressure(zeropressure), pairs(pairs){};
 
-bondpairs::bondpairs(bool zeropressure) : 
+bondpairs::bondpairs(bool zeropressure) :
         zeropressure(zeropressure){};
 
 bool bondpairs::add(bondgrouping b, bool replace){
@@ -598,7 +598,7 @@ void dihedrals::setForces(Box &box){
         atom3.f += f[2];
         atom4.f += f[3];
         //~ flt maxf = 1000000;
-        //~ if(f[0].sq() > maxf or f[1].sq() > maxf or f[2].sq() > maxf 
+        //~ if(f[0].sq() > maxf or f[1].sq() > maxf or f[2].sq() > maxf
             //~ or f[3].sq() > maxf){
                 //~ cout << "dihedral overload: " << r1 << r2 << r3 << " :: " <<
                 //~ f[0] << f[1] << f[2] << f[3] << "\n";
@@ -625,7 +625,7 @@ flt dihedrals::mean_dists() const{
     }
     return dist/N;
 };
-//~ 
+//~
 //~ flt dihedrals::std_dists() const{
     //~ flt stds=0;
     //~ uint N=0;
@@ -643,13 +643,6 @@ flt dihedrals::mean_dists() const{
     //~ return sqrt(stds/N);
 //~ };
 #endif
-
-void pairlist::clear(){
-    map<const atomid, set<atomid> >::iterator mapiter;
-    for(mapiter = pairs.begin(); mapiter != pairs.end(); ++mapiter){
-        mapiter->second.clear();
-    }
-};
 
 LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
 
@@ -763,7 +756,7 @@ flt SoftWall::energy(Box &box){
         E += it->epsilon * pow(1 - (dist/(it->sigma)), expt)/expt/2.0;
         // Note that normally you have ε(1-r/σ)^n for 2 particles.
         // We divide by 2 because now there is only one particle, pushing
-        // on its mirror image; the force should be the same as if the 
+        // on its mirror image; the force should be the same as if the
         // mirror image was there, so the energy needs to be half
     }
     return E;
@@ -825,7 +818,7 @@ flt SoftWallCylinder::energy(Box &box){
         E += it->epsilon * pow(1 - (dist/(it->sigma)), expt)/expt/2.0;
         // Note that normally you have ε(1-r/σ)^n for 2 particles.
         // We divide by 2 because now there is only one particle, pushing
-        // on its mirror image; the force should be the same as if the 
+        // on its mirror image; the force should be the same as if the
         // mirror image was there, so the energy needs to be half
     }
     return E;
@@ -861,7 +854,7 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
     SpheroCylinderDiff diff;
-    
+
     atom &a1 = *p1.first();
     atom &a1p = *p1.last();
     atom &a2 = *p2.first();
@@ -871,19 +864,19 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     //flt myl1 = s1.mag(), myl2 = s2.mag();
     Vec u1 = s1.norm(), u2=s2.norm();
     diff.r = box.diff(r2, r1);
-    
+
     flt u1u2 = u1.dot(u2);
     //~ cout << "u1: " << u1 << "  u2: " << u2 << "  u1u2:" << u1u2 << "\n";
-    
+
     flt u1u2sq = u1u2*u1u2;
     flt u1r12 = u1.dot(diff.r), u2r12 = u2.dot(diff.r);
     //~ cout << "r: " << diff.r << "  u1r12: " << u1r12 << "  u2r12: " << u2r12 << "\n";
-    
+
     // Where the two lines would intersect
     flt lambda1p, lambda2p;
-    
+
     if(abs(1-u1u2sq) < 1e-8){
-        // They are too close to parallel, so we just say the "middle" 
+        // They are too close to parallel, so we just say the "middle"
         // of the two spherocylinders (r12*l1/(l1+l2)) projected onto their axes (u1)
         lambda1p = u1r12*l1/(l1+l2);
         // symmetry would be u2r21/2, but r21 = -r12
@@ -896,9 +889,9 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     }
 
     //~ cout << "l1p: " << lambda1p << "  l2p: " << lambda2p << "\n";
-    
+
     flt lambda1s=lambda1p, lambda2s=lambda2p;
-    
+
     flt L1 = abs(lambda1p) - (l1/2);
     flt L2 = abs(lambda2p) - (l2/2);
     if(L1 > 0 or L2 > 0){
@@ -916,11 +909,11 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
             //~ cout << " -> " << lambda2s << "\n";
         }
     }
-    
+
     diff.lambda1 = lambda1s;
     diff.lambda2 = lambda2s;
     diff.delta = box.diff(r2 + (u2*lambda2s), r1 + (u1*lambda1s));
-    
+
     return diff;
 };
 
@@ -933,12 +926,12 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     flt M1 = a1.m + a1p.m;
     flt M2 = a2.m + a2p.m;
-    
+
     a1.f -= f/2; // note that the force on a1 is half the total force, this carries through to atau1
     a1p.f -= f/2;
     a2.f += f/2;
     a2p.f += f/2;
-    
+
     Vec t1 = s1*(diff.lambda1/l1);
     Vec atau1 = s1.cross(t1.cross(f)) / (-2*IoverM1*M1);
     //~ cout << "t1: " << t1 << "  atau1: " << atau1 << endl;
@@ -947,12 +940,12 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     // 4 and not 2 because f is the force on the whole thing, we only want half
     a1.f += atau1 * a1.m;
     a1p.f -= atau1 * a1p.m;
-    
+
     Vec t2 = s2*(diff.lambda2/l2);
     Vec atau2 = s2.cross(t2.cross(f)) / (2*IoverM2*M2); // 2 because it should be -f
     a2.f += atau2 * a2.m;
     a2p.f -= atau2 * a2p.m;
-    
+
     //~ cout << "t2: " << t2 << "  atau2: " << atau1 << endl;
 };
 

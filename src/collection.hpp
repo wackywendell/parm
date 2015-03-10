@@ -10,9 +10,9 @@
 #include <boost/shared_ptr.hpp>
 
 class collection {
-    /* A group of atomgroups and interactions, meant to encapsulate an 
+    /* A group of atomgroups and interactions, meant to encapsulate an
      * entire simulation.
-     * 
+     *
      * Adds general simulation time-stepping as well as statistical tracking.
      */
     protected:
@@ -21,26 +21,26 @@ class collection {
         vector<sptr<interaction> > interactions;
         vector<sptr<statetracker> > trackers;
         vector<sptr<constraint> > constraints;
-        
+
         void update_trackers();
         void update_constraints();
         virtual flt setForcesGetPressure(bool seta=true);
-        
+
     public:
-        collection(sptr<Box> box, 
+        collection(sptr<Box> box,
             sptr<atomgroup> atoms,
             vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
             vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
             vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
             bool should_initialize=true);
-        
+
         virtual void initialize();
-        
+
         //Timestepping
         virtual void setForces(bool seta=true);
         virtual void timestep()=0;
         flt dof();
-        
+
         //Stats
         flt potentialenergy();
         flt energy();
@@ -60,13 +60,13 @@ class collection {
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
-        
+
         void resetcomv(){atoms->resetcomv();};
         void resetL(){atoms->resetL(*box);};
         void scaleVs(flt scaleby);
         void scaleVelocitiesT(flt T, bool minuscomv=true);
         void scaleVelocitiesE(flt E);
-        
+
         void addInteraction(sptr<interaction> inter){
             interactions.push_back(inter);
             update_trackers();
@@ -82,9 +82,9 @@ class collection {
         void add(sptr<interaction> a){addInteraction(a);};
         void add(sptr<statetracker> a){addTracker(a);};
         void add(sptr<constraint> a){addConstraint(a);};
-        
+
         vector<sptr<interaction> > getInteractions(){return interactions;};
-        
+
         uint numInteraction(){ return (uint) interactions.size();};
 };
 
@@ -103,7 +103,7 @@ class collectionSol : public collection {
     /** From Allen and Tildesley, p. 263:
      * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
      * v(t + dt) = c0 v(t) + c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
-     * 
+     *
      * where c0 = exp(- h dt)
      *       c1 = (h dt)^-1 (1 - c0)
      *       c2 = (h dt)^-1 (1 - c1)
@@ -118,7 +118,7 @@ class collectionSol : public collection {
      * Those are the unitless versions, multiply by dt^2 kB T/m, kB T/m, and dt kB T/m respectively
      * to get the unit-full versions in the book
     **/
-    
+
     protected:
         bivariateGauss gauss;
         flt dt;
@@ -128,10 +128,10 @@ class collectionSol : public collection {
                                   // corr is unitless, and correct
         flt c0, c1, c2; // from Allen and Tildesley
         void setCs();
-    
+
     public:
         collectionSol(sptr<Box> box, sptr<atomgroup> atoms,
-                const flt dt, const flt damping, const flt desiredT, 
+                const flt dt, const flt damping, const flt desiredT,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
@@ -148,7 +148,7 @@ class collectionDamped : public collection {
      * From Allen and Tildesley, p. 263:
      * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
      * v(t + dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
-     * 
+     *
      * where c0 = exp(- h dt)
      *       c1 = (h dt)^-1 (1 - c0)
      *       c2 = (h dt)^-1 (1 - c1)
@@ -156,13 +156,13 @@ class collectionDamped : public collection {
      *
      * dr_G and dv_G are drawn from correlated Gaussian distributions, which we drop for this one.
     **/
-    
+
     protected:
         flt dt;
         flt damping;
         flt c0, c1, c2;
         void setCs();
-    
+
     public:
         collectionDamped(sptr<Box> box, sptr<atomgroup> atoms,
                 const flt dt, const flt damping,
@@ -177,12 +177,12 @@ class collectionDamped : public collection {
 
 class collectionSolHT : public collection {
     /** for use in solution, with damped forces and random forces
-      * 
+      *
       * Treats atom.f as the "configurational force", and atom.a as
       * the acceleration due to atom.f + random force.
       * Note that d²r/dt² = atom.f + random force (- damping*v), but we
       * don't include that.
-      * 
+      *
       * 1) find positions: (x0,v0,a0,f0) -> (x, v, a, f)
       *         sets atom.x from previous force, velocity, and position
       *         x = x0 + dt v0 + 1/2 dt^2 a0 - damping*dt²/2m * v0
@@ -197,8 +197,8 @@ class collectionSolHT : public collection {
       *         set acceleration given the forces, adding in random pieces, no damping
       * 5) Finish v and a: (v1, f, a1) -> (v, f, a)
       *         v = v1 + dt/2 a1
-      *     
-      
+      *
+
      **/
     protected:
         flt dt;
@@ -206,10 +206,10 @@ class collectionSolHT : public collection {
         flt desT; // desired temperature
         gaussVec gauss;
         void setGauss();
-    
+
     public:
         collectionSolHT(sptr<Box> box, sptr<atomgroup> atoms,
-                const flt dt, const flt damping, const flt desiredT, 
+                const flt dt, const flt damping, const flt desiredT,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
@@ -220,13 +220,16 @@ class collectionSolHT : public collection {
         //void seed(){gauss.seed();};
 };
 
+/**
+\example LJatoms.cpp
+*/
 class collectionVerlet : public collection {
     // for use in fixed-E simulations
     protected:
         flt dt;
-        
+
     public:
-        collectionVerlet(sptr<Box> box, sptr<atomgroup> atoms, const flt dt, 
+        collectionVerlet(sptr<Box> box, sptr<atomgroup> atoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
@@ -239,7 +242,7 @@ class collectionOverdamped : public collection {
     // over-damped simulation, v = gamma * f
     protected:
         flt dt, gamma;
-        
+
     public:
         collectionOverdamped(sptr<Box> box, sptr<atomgroup> atoms,
                 const flt dt, const flt gamma=1.0,
@@ -256,7 +259,7 @@ class collectionConjGradient : public collection {
     // over-damped simulation, v = gamma * f
     protected:
         flt dt;
-        
+
     public:
         collectionConjGradient(sptr<Box> box, sptr<atomgroup> atoms,
                 const flt dt,
@@ -272,7 +275,7 @@ class collectionConjGradient : public collection {
 };
 
 class collectionConjGradientBox : public collection {
-    // Conjugate-Gradient energy minimization, with 
+    // Conjugate-Gradient energy minimization, with
     // H = H0(x₁, x₂, …, L) + P V
     // More specifically, we take the Nose-Hoover NPH hamiltonian,
     // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅓ ⃗sᵢ…) + P₀ V
@@ -286,7 +289,7 @@ class collectionConjGradientBox : public collection {
         flt P0, kappaV;
         flt hV, FV, lastFV, dV;
         flt maxdV;
-        
+
     public:
         collectionConjGradientBox(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt P0, const flt kappaV=1.0,
@@ -296,9 +299,9 @@ class collectionConjGradientBox : public collection {
             collection(box, atoms, interactions, trackers, constraints),
                 dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0), dV(0),
                 maxdV(-1){};
-        
+
         flt kinetic();
-        
+
         void timestep();
         void timestepBox();
         void timestepAtoms();
@@ -309,14 +312,19 @@ class collectionConjGradientBox : public collection {
         void setMaxdV(flt diff){maxdV = diff;};
 };
 
+/**
+Conjugate-Gradient energy minimization.
+
+\example packer.cpp
+*/
 class collectionNLCG : public collection {
-    // Conjugate-Gradient energy minimization, with 
+    // Conjugate-Gradient energy minimization, with
     // H = H0(x₁, x₂, …, L) + P V
     // More specifically, we take the Nose-Hoover NPH hamiltonian,
     // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅔ ⃗sᵢ…) + P₀ V
     // and E = U(V^⅔ ⃗sᵢ…) + P₀ V
     // We minimize using ⃗sᵢ and κ ln V as the dN+1 variables
-    
+
     public:
         // Parameters
         flt dt;
@@ -324,19 +332,19 @@ class collectionNLCG : public collection {
         uint secmax;
         flt kappa;
         flt alphamax, afrac, dxmax, stepmax, kmax;
-        
+
         // Goal pressure
         flt P0;
-        
+
         // To keep between iterations
         flt Knew;
         flt k;
         flt vl, fl, al;
-        
+
         // For tracking purposes
         flt alpha, beta, betaused, dxsum, alphavmax, maxdV;
         uint sec;
-        
+
         void stepx(flt dx);
         flt getLsq();
         flt fdota();
@@ -344,27 +352,27 @@ class collectionNLCG : public collection {
         flt fdotv();
         flt vdotv();
         //~ void resizedl(flt dl);
-        
+
     public:
         collectionNLCG(sptr<OriginBox> box, sptr<atomgroup> atoms,
-                const flt dt, const flt P0, 
+                const flt dt, const flt P0,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
                 const flt kappa=10.0, const flt kmax=1000,
                 const uint secmax=40, const flt seceps = 1e-20);
-        
+
         flt kinetic();  // Note: masses are ignored
         flt pressure();
         flt Hamiltonian();
         void setForces(bool seta=true){setForces(seta,true);};
         void setForces(bool seta, bool setV);
-        
+
         void timestep();
         void descend(); // use steepest descent
         void reset();
         void resize(flt V);
-        
+
         void setdt(flt newdt){dt=newdt; reset();};
         void setP(flt P){P0 = P; reset();};
         void setkappa(flt k){kappa=k; reset();};
@@ -372,21 +380,21 @@ class collectionNLCG : public collection {
         void setafrac(flt a){afrac=a;};
         void setdxmax(flt d){dxmax=d;};
         void setstepmax(flt m){stepmax=m;};
-        
+
 };
 
 
 
 class collectionNLCGV : public collection {
-    // Conjugate-Gradient energy minimization, with 
+    // Conjugate-Gradient energy minimization, with
     // and E = U(⃗rᵢ…)
-    
+
     public:
         // Parameters
         flt dt; // initial step attempt
         flt seceps;
         uint secmax;
-        
+
         // secmax is the max number of iterations within a timestep
         // seceps is the minimum alpha * v before we call it "close enough"
         flt alphamax, afrac, dxmax, stepmax, kmax;
@@ -397,12 +405,12 @@ class collectionNLCGV : public collection {
         //    step is v * dxsum
         // stepmax is the largest v*dxsum allowed
         // We reset after kmax iterations
-        
+
         // To keep between iterations
         flt Knew;
         flt k;
         flt vl, fl, al;
-        
+
         // For tracking purposes
         flt alpha, beta, betaused, dxsum, alphavmax;
         // alpha is how much bigger one iteration is than the previous
@@ -411,29 +419,29 @@ class collectionNLCGV : public collection {
         // dxsum is the total of alphas over a timestep; atoms move v*dxsum in one timestep
         // alphavmax = (last alpha) * sqrt(v dot v)
         uint sec;
-        
+
         void stepx(flt dx);
-        
+
         flt fdota();
         flt fdotf();
         flt fdotv();
         flt vdotv();
         //~ void resizedl(flt dl);
-        
+
     public:
         collectionNLCGV(sptr<Box> box, sptr<atomgroup> atoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >(),
-                const flt kmax=1000, const uint secmax=10, 
+                const flt kmax=1000, const uint secmax=10,
                 const flt seceps = 1e-4);
-        
+
         flt pressure();
-        
+
         void reset();
         void descend(); // use steepest descent
         void timestep();
-        
+
         void setdt(flt newdt){dt=newdt; reset();};
         void setamax(flt a){alphamax=a;};
         void setafrac(flt a){afrac=a;};
@@ -448,8 +456,8 @@ flt solveCubic1(flt b, flt c, flt d){
         printf("bad determ: %.4f\n", (double) determ);
     flt firstpartundercube = (2*pow(b,3) - 9*b*c + 27*d)/2;
     flt secondpartundercube = sqrt(determ)/2;
-    if (firstpartundercube < secondpartundercube) 
-        printf("bad pairs under cube: %.4f < %.4f (%.4f)\n", 
+    if (firstpartundercube < secondpartundercube)
+        printf("bad pairs under cube: %.4f < %.4f (%.4f)\n",
                     (double) firstpartundercube, (double) secondpartundercube,
                     (double) (firstpartundercube - secondpartundercube));
     flt cuberoot1=cbrt(firstpartundercube + secondpartundercube);
@@ -480,10 +488,10 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
         flt d2 = fabs(x2 - closeto);
         flt d3 = fabs(x3 - closeto);
         //~ printf("pi: %.4f\n", M_2_PI);
-        //~ printf("theta %.4f : %.4f, %.4f, %.4f\n", theta, 
+        //~ printf("theta %.4f : %.4f, %.4f, %.4f\n", theta,
                 //~ theta/3, (theta + (2*M_PI))/3, (theta + (4*M_PI))/3);
         //~ printf("%.4f (%.4f), %.4f (%.4f), %.4f (%.4f)\n", x1,d1,x2,d2,x3,d3);
-        
+
         //~ if(d1 < d2 and d1 < d3) return x1;
         //~ if(d2 < d1 and d2 < d3) return x2;
         //~ return x3;
@@ -491,12 +499,12 @@ flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
         if(d1 < d2 and d1 < d3) x=x1;
         else if(d2 < d1 and d2 < d3) x=x2;
         else x=x3;
-        
+
         #define tol 1e-3
         if(d1 > tol and d2 > tol and d3 > tol){
             printf("Multiple Answers: %.4f, %.4f\n", (double) Q,(double) R);
             //~ printf("pi: %.4f\n", M_2_PI);
-            //~ printf("theta %.4f : %.4f, %.4f, %.4f\n", theta, 
+            //~ printf("theta %.4f : %.4f, %.4f, %.4f\n", theta,
                 //~ theta/3, (theta + (2*M_PI))/3, (theta + (4*M_PI))/3);
             printf("%.4f (%.4f), %.4f (%.4f), %.4f (%.4f) : %.4f\n",
                 (double) x1,(double) d1,(double) x2,(double) d2,(double) x3,(double) d3, (double) x);
@@ -512,21 +520,21 @@ class collectionNoseHoover : public collection {
     protected:
         flt dt, Q, T;
         flt xi, lns;
-        
+
     public:
         collectionNoseHoover(sptr<Box> box, sptr<atomgroup> atoms,
-                const flt dt, const flt Q, const flt T, 
+                const flt dt, const flt Q, const flt T,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
             dt(dt), Q(Q), T(T){
-                xi = 0; lns = 0; 
+                xi = 0; lns = 0;
             };
         void setdt(flt newdt){dt=newdt;};
         void setQ(flt newQ){Q=newQ;};
         void resetBath(){xi=0;lns=0;};
-        
+
         void timestep();
         flt Hamiltonian();
         flt getxi(){return xi;};
@@ -540,14 +548,14 @@ class collectionGaussianT : public collection {
         flt dt, Q;
         flt xi;
         flt setxi();
-        
+
     public:
         collectionGaussianT(sptr<Box> box, sptr<atomgroup> atoms,
-                const flt dt, const flt Q, 
+                const flt dt, const flt Q,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
             dt(dt), Q(Q), xi(0){};
         void setdt(flt newdt){dt=newdt;};
         void setQ(flt newQ){Q=newQ;};
@@ -560,9 +568,9 @@ class collectionGear3A : public collection {
     // for use in fixed-E simulations
     protected:
         flt dt;
-        
+
     public:
-        collectionGear3A(sptr<Box> box, sptr<atomgroup> atoms, const flt dt, 
+        collectionGear3A(sptr<Box> box, sptr<atomgroup> atoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
@@ -580,14 +588,14 @@ class collectionGear4A : public collection {
         void resetbs(){
             bs.resize(atoms->size(), Vec());
         }
-        
+
     public:
         collectionGear4A(sptr<Box> box, sptr<atomgroup> atoms,
                 const flt dt, uint ncorrectionsteps,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, 
+            collection(box, atoms, interactions, trackers,
                         constraints), dt(dt), ncorrec(ncorrectionsteps){
                 resetbs();
             };
@@ -613,14 +621,14 @@ class collectionGear5A : public collection {
             bs.resize(Natoms, Vec());
             cs.resize(Natoms, Vec());
         }
-        
+
     public:
         collectionGear5A(sptr<Box> box, sptr<atomgroup> atoms,
                 const flt dt, uint ncorrectionsteps,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(ncorrectionsteps){resetbcs();};
         collectionGear5A(sptr<Box> box, const flt dt,
                 sptr<atomgroup> atoms,
@@ -646,14 +654,14 @@ class collectionGear6A : public collection {
             cs.resize(Natoms, Vec());
             ds.resize(Natoms, Vec());
         }
-        
+
     public:
         collectionGear6A(sptr<Box> box, sptr<atomgroup> atoms,
                 const flt dt, uint ncorrectionsteps,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(ncorrectionsteps){resetbcds();};
         collectionGear6A(sptr<Box> box, sptr<atomgroup> atoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
@@ -674,13 +682,13 @@ class collectionRK4 : public collection {
     protected:
         flt dt;
         vector<RK4data> data;
-        
+
     public:
-        collectionRK4(sptr<Box> box, sptr<atomgroup> ratoms, const flt dt, 
+        collectionRK4(sptr<Box> box, sptr<atomgroup> ratoms, const flt dt,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, ratoms, interactions, 
+            collection(box, ratoms, interactions,
                         trackers, constraints), dt(dt), data(ratoms->vec().size()){
                 setForces();
                 update_constraints();
@@ -705,7 +713,7 @@ class collectionGear4NPH : public collection {
         void resetbs(){
             bs.resize(atoms->size(), Vec());
         }
-        
+
     public:
         collectionGear4NPH(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt P,
@@ -713,13 +721,13 @@ class collectionGear4NPH : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, 
-                        constraints), dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), 
+            collection(box, atoms, interactions, trackers,
+                        constraints), dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0),
                         ncorrec(ncorrectionsteps){
                 resetbs();
             };
         collectionGear4NPH(sptr<OriginBox> box, sptr<atomgroup> atoms,
-                const flt dt, const flt P, const flt Q, 
+                const flt dt, const flt P, const flt Q,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
@@ -766,19 +774,19 @@ class collectionGear4NPT : public collection {
             V1 = V2 = V3 = 0;
         }
         static vector<sptr<interaction> > tointerpair(vector<sptr<interactionpairsx> >&);
-        
+
     public:
         collectionGear4NPT(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, uint ncorrectionsteps,
                 vector<sptr<interactionpairsx> > interactions=vector<sptr<interactionpairsx> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, tointerpair(interactions), trackers, 
+            collection(box, atoms, tointerpair(interactions), trackers,
                         constraints), dt(dt), xrpsums(box),
                         ncorrec(ncorrectionsteps), chi(0), chixi(0){
                 resetbs();
             };
-        collectionGear4NPT(sptr<OriginBox> box, const flt dt, 
+        collectionGear4NPT(sptr<OriginBox> box, const flt dt,
                 sptr<atomgroup> atoms,
                 vector<sptr<interactionpairsx> > interactions=vector<sptr<interactionpairsx> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
@@ -808,38 +816,38 @@ class collectionVerletNPT : public collection {
         vector<Vec> vhalf;
         flt P, QP, T, QT, curP;
         void resetvhalf();
-        
+
     public:
         collectionVerletNPT(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt P,
-                const flt QP, const flt T, const flt QT, 
+                const flt QP, const flt T, const flt QT,
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
-            dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), etasum(0), P(P), 
+            collection(box, atoms, interactions, trackers, constraints),
+            dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), etasum(0), P(P),
             QP(QP), T(T), QT(QT), curP(0){resetvhalf();};
         void timestep();
         void setdt(flt newdt){dt=newdt;};
-        
-        
+
+
         void resetcomv(){collection::resetcomv(); resetvhalf();};
         void resetL(){collection::resetL(); resetvhalf();};
         void scaleVs(flt scaleby){collection::scaleVs(scaleby); resetvhalf();};
         void scaleVelocitiesT(flt T){collection::scaleVelocitiesT(T); resetvhalf();};
         void scaleVelocitiesE(flt E){collection::scaleVelocitiesE(E); resetvhalf();};
-        
+
         flt geteta(){return eta;};
         flt getxidot(){return xidot;};
         flt getP(){return curP;};
         Vec getvhalf(uint n){return vhalf[n];};
-        
+
         // note that this is a constant of the motion, but not a real hamiltonian
         // and also only such at constant T
         flt Hamiltonian(){
 			// regular energy
 			flt H = kinetic() + potentialenergy();
-			
+
 			if(QT > 0){
 				flt gkT = dof()*T;
 				H +=gkT*etasum;
@@ -853,7 +861,7 @@ struct event {
     flt t; // when it will occur
     atomid a; // atom 1
     atomid b; // atom 2
-    
+
     bool operator<(const event& other ) const {
         if (t < other.t) { return true;};
         if (t > other.t) { return false;};
@@ -862,7 +870,7 @@ struct event {
         if (b < other.b) { return true;};
         return false;
     };
-        
+
 };
 
 flt get_max(vector<flt> v){
@@ -873,7 +881,10 @@ flt get_max(vector<flt> v){
     return mx;
 };
 
-/// Collision-Driven Brownian-Dynamics
+/** Collision-Driven Brownian-Dynamics
+
+\example hardspheres.cpp
+*/
 class collectionCDBDgrid : public collection {
     public:
         flt T;
@@ -882,15 +893,15 @@ class collectionCDBDgrid : public collection {
         set<event> events; // note that this a sorted binary tree
         vector<flt> atomsizes; /// diameters
         flt edge_epsilon;
-        
+
         void reset_events(bool force=true);
         void line_advance(flt deltat);
-        
+
         Grid grid;
         flt gridt; // when it was updated
-        
+
         event next_event(atomid a);
-        
+
     public:
         collectionCDBDgrid(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T,
@@ -898,7 +909,7 @@ class collectionCDBDgrid : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
             T(T), dt(dt), curt(0), numevents(0), atomsizes(sizes), edge_epsilon(1e-8),
             grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0),
             gridt(0) {
@@ -909,13 +920,13 @@ class collectionCDBDgrid : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
             T(T), dt(dt), curt(0), numevents(0), atomsizes(atoms->size(), sizes),
             edge_epsilon(1e-8),
             grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0), gridt(0) {
             assert(atomsizes.size() == atoms->size());
         };
-    
+
         void update_grid(bool force=true);
         Grid &get_grid(){return grid;};
         flt get_epsilon(){return edge_epsilon;};
@@ -934,10 +945,10 @@ class collectionCDBD : public collection {
         long long numevents;
         set<event> events; // note that this a sorted binary tree
         vector<flt> atomsizes; /// diameters
-        
+
         void reset_events();
         void line_advance(flt deltat);
-        
+
     public:
         collectionCDBD(sptr<OriginBox> box, sptr<atomgroup> atoms,
                 const flt dt, const flt T,
@@ -945,7 +956,7 @@ class collectionCDBD : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
             T(T), dt(dt), curt(0), numevents(0), atomsizes(sizes) {
             assert(atomsizes.size() == atoms->size());
         };
@@ -954,11 +965,11 @@ class collectionCDBD : public collection {
                 vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints), 
+            collection(box, atoms, interactions, trackers, constraints),
             T(T), dt(dt), curt(0), numevents(0), atomsizes(atoms->size(), sizes) {
             assert(atomsizes.size() == atoms->size());
         };
-    
+
         void reset_velocities();
         bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
         void timestep();

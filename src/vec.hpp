@@ -247,6 +247,15 @@ class Vector3 : public Numvector<T, 3> {
 
 };
 
+/**
+A 2D physics vector, with methods for adding, subtracting, dot product, etc.
+
+This is aliased as Vec when compiled with NDIM=2.
+
+@ingroup basics
+
+@tparam T a numerical type, as as float or double.
+*/
 template <class T>
 class Vector2 : public Numvector<T, 2> {
     public:
@@ -340,14 +349,20 @@ class Vector2 : public Numvector<T, 2> {
 
 };
 
-//~ typedef float C;
+/**
+A 3x3 matrix, with methods for adding, subtracting, dot product, etc. Useful for rotations.
+
+@ingroup basics
+
+@tparam T a numerical type, as as float or double.
+*/
 template<class C>
 class Matrix : public Nvector<Vector3<C>,3> {
     public:
         Vector3<C> dot(Vector3<C> v) const;
         inline Vector3<C> operator *(Vector3<C> v) const{return dot(v);};
-        Matrix<C> SymmetricInverse() const;
-        C det() const;
+        Matrix<C> SymmetricInverse() const; /**<The inverse of a symmetric inverse*/
+        C det() const; /**< The determinant */
 };
 
 template<class C>
