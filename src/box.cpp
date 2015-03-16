@@ -118,7 +118,7 @@ Vec SCBox::randLoc(flt min_dist_to_wall){
 Vec AtomGroup::com() const{
     Vec v = Vec();
     for(unsigned int i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         flt curmass = (*this)[i].m;
         v += (*this)[i].x * curmass;
@@ -129,7 +129,7 @@ Vec AtomGroup::com() const{
 flt AtomGroup::mass() const{
     flt m = 0;
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         m += (*this)[i].m;
     }
@@ -143,7 +143,7 @@ Vec AtomGroup::comv() const {
 Vec AtomGroup::momentum() const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         flt curmass = a.m;
         tot += a.v * curmass;
@@ -181,7 +181,7 @@ flt AtomGroup::angmomentum(const Vec &loc, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         newloc = box.diff(a.x, loc);
         tot += newloc.cross(a.v) * a.m; // r x v m = r x p
@@ -196,7 +196,7 @@ flt AtomGroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         newloc = box.diff(a.x, loc).perpto(axis);
         tot += newloc.dot(newloc) * a.m;
@@ -240,7 +240,7 @@ flt AtomGroup::moment(const Vec &loc, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         newloc = box.diff(a.x, loc);
         tot += newloc.dot(newloc) * a.m;
@@ -250,7 +250,7 @@ flt AtomGroup::moment(const Vec &loc, Box &box) const{
 
 void AtomGroup::addOmega(flt w, Vec loc, Box &box){
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         Vec r = box.diff(a.x, loc);
         a.v += r.perp().norm()*w;
@@ -262,7 +262,7 @@ flt AtomGroup::kinetic(const Vec &originvelocity) const{
     flt totE = 0;
     Vec curv;
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m == 0 or isinf(a.m)) continue;
         curv = a.v - originvelocity;
         totE += a.m/2 * curv.dot(curv);
@@ -278,7 +278,7 @@ void AtomGroup::addv(Vec v){
 
 void AtomGroup::randomize_velocities(flt T){
     for(uint i=0; i<size(); i++){
-        atom& a = (*this)[i];
+        Atom& a = (*this)[i];
         if(a.m == 0 or isinf(a.m)) continue;
         a.v = randVec() * sqrt(T*NDIM/a.m);
     }

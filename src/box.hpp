@@ -214,7 +214,7 @@ class SCBox : public Box {
 @ingroup atoms
 Normally instantiated through AtomVec.
 */
-struct atom {
+struct Atom {
     //! location.
     Vec x;
 
@@ -231,17 +231,17 @@ struct atom {
     flt m;
 };
 
-//! A pointer to an atom.
+//! A pointer to an Atom.
 class AtomRef {
     private:
-        atom *ptr;
+        Atom *ptr;
     public:
         inline AtomRef() : ptr(NULL){};
-        inline AtomRef(atom *a) : ptr(a){};
-        inline atom& operator *() const {return *ptr;};
-        inline atom *operator->() const{ return ptr;}
+        inline AtomRef(Atom *a) : ptr(a){};
+        inline Atom& operator *() const {return *ptr;};
+        inline Atom *operator->() const{ return ptr;}
         inline bool operator==(const AtomRef &other) const {return other.ptr == ptr;};
-        inline bool operator==(const atom* other) const {return other == ptr;};
+        inline bool operator==(const Atom* other) const {return other == ptr;};
         inline bool operator!=(const AtomRef &other) const {return other.ptr != ptr;};
         inline bool operator<(const AtomRef &other) const {return ptr < other.ptr;};
         inline bool operator<=(const AtomRef &other) const {return ptr <= other.ptr;};
@@ -250,7 +250,7 @@ class AtomRef {
         inline bool is_null(){return ptr==NULL;};
 };
 
-//! A pointer to an atom, that also knows its own index in an AtomVec.
+//! A pointer to an Atom, that also knows its own index in an AtomVec.
 /*!
 @ingroup atoms
 This is used in many Interaction classes to compair atoms.
@@ -261,8 +261,8 @@ class AtomID : public AtomRef {
                   // a specific AtomGroup
     public:
         inline AtomID() : AtomRef(), num(UINT_MAX){};
-        // inline AtomID(atom *a) : AtomRef(a), num(UINT_MAX){};
-        inline AtomID(atom *a, uint n) : AtomRef(a), num(n){};
+        // inline AtomID(Atom *a) : AtomRef(a), num(UINT_MAX){};
+        inline AtomID(Atom *a, uint n) : AtomRef(a), num(n){};
         inline uint n() const {return num;};
 };
 
@@ -284,7 +284,7 @@ class AtomIter{
     public:
         AtomIter (AtomGroup& g, uint i): i(i), g(g){};
         bool operator!=(const AtomIter& other) const{return i != other.i;};
-        atom& operator* () const;
+        Atom& operator* () const;
         inline const AtomIter& operator++(){++i; return *this;};
 };
 
@@ -298,9 +298,9 @@ class AtomGroup {
     public:
         // access individual atoms
         virtual AtomVec& vec()=0;
-        virtual atom& operator[](cuint n)=0;
-        virtual atom& operator[](cuint n) const=0;
-        virtual atom& get(cuint n){return ((*this)[n]);};
+        virtual Atom& operator[](cuint n)=0;
+        virtual Atom& operator[](cuint n) const=0;
+        virtual Atom& get(cuint n){return ((*this)[n]);};
         virtual AtomID get_id(cuint n)=0;
         //! Number of atoms in the group
         virtual uint size() const=0;
@@ -359,7 +359,7 @@ class AtomGroup {
         virtual ~AtomGroup(){};
 };
 
-inline atom& AtomIter::operator*() const{return g[i];};
+inline Atom& AtomIter::operator*() const{return g[i];};
 
 /*!
 @ingroup basics atoms
@@ -367,24 +367,24 @@ inline atom& AtomIter::operator*() const{return g[i];};
 */
 class AtomVec : public virtual AtomGroup {
     private:
-        atom* atoms;
+        Atom* atoms;
         uint sz;
     public:
         AtomVec(vector<double> masses) : sz((uint) masses.size()){
-            atoms = new atom[sz];
+            atoms = new Atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
         };
         AtomVec(uint N, flt mass) : sz(N){
-            atoms = new atom[sz];
+            atoms = new Atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = mass;
         };
         AtomVec(AtomVec& other) : sz(other.size()){
-            atoms = new atom[sz];
+            atoms = new Atom[sz];
             for(uint i=0; i < sz; i++) atoms[i] = other.atoms[i];
         };
         AtomVec& vec(){return *this;};
-        inline atom& operator[](cuint n){return atoms[n];};
-        inline atom& operator[](cuint n) const {return atoms[n];};
+        inline Atom& operator[](cuint n){return atoms[n];};
+        inline Atom& operator[](cuint n) const {return atoms[n];};
         inline AtomID get_id(cuint n) {
             if (n > sz) return AtomID(); return AtomID(atoms + n,n);};
         inline uint size() const {return sz;};
@@ -404,9 +404,9 @@ class SubGroup : public AtomGroup {
     public:
         SubGroup(sptr<AtomVec> atoms) : atoms(atoms){};
         AtomVec &vec(){return *atoms;};
-        inline atom& operator[](cuint n){return *ids[n];};
-        inline atom& operator[](cuint n) const{return *ids[n];};
-        inline atom& get(cuint n){return *ids[n];};
+        inline Atom& operator[](cuint n){return *ids[n];};
+        inline Atom& operator[](cuint n) const{return *ids[n];};
+        inline Atom& get(cuint n){return *ids[n];};
         inline void add(AtomID a){
 			std::vector<AtomID>::iterator it = std::find(ids.begin(), ids.end(), a);
 			if(it != ids.end())

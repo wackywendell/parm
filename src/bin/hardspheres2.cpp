@@ -9,8 +9,8 @@
 #include <cstdlib>
 
 #include "vecrand.hpp"
-#include "interaction.hpp"
-#include "collection.hpp"
+#include "Interaction.hpp"
+#include "Collection.hpp"
 using namespace std;
 
 /** Hard-Sphere Simulation
@@ -27,7 +27,7 @@ Several steps:
 
 Several outputs:
 1. A .xyz file, which has locations for the particles, for use with VMD
-2. a .tcl file, with atom sizes, for use with VMD
+2. a .tcl file, with Atom sizes, for use with VMD
 3. a .msd file, with MSDs for the particles
 
 **/
@@ -59,7 +59,7 @@ const flt nMSDs = 400; // this is the goal; duplicates removed, so it will be le
 const uint printn = 100;
 
 // Function for writing a frame to an open file (see below)
-void writefile(ofstream& outf, atomvec& atoms, Box& bx);
+void writefile(ofstream& outf, AtomVec& atoms, Box& bx);
 // Function for writing box size / atomsize to file (see below)
 void writetcl(const char *fname, OriginBox& box, vector<flt> &atomsizes);
 
@@ -129,33 +129,33 @@ int main(int argc, char **argv){
     // Create the bounding box (sides of length L), and a "vector" of Natoms atoms
     boost::shared_ptr<OriginBox> obox(new OriginBox(L));
     boost::shared_ptr<Box> boxptr = boost::static_pointer_cast<Box>(obox);
-    boost::shared_ptr<atomvec> atomptr(new atomvec(atommasses));
-    atomvec & atoms = *atomptr;
+    boost::shared_ptr<AtomVec> atomptr(new AtomVec(atommasses));
+    AtomVec & atoms = *atomptr;
     
     
     ////////////////////////////////////////////////////////////////////
     // The relaxing stage
     
-    // Hertzian interaction, for the relaxing stage
-    boost::shared_ptr<neighborlist> nl(new neighborlist(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
+    // Hertzian Interaction, for the relaxing stage
+    boost::shared_ptr<NeighborList> nl(new NeighborList(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > hertz(
                         new NListed<HertzianAtom, HertzianPair>(nl));
-    // ^ this is the interaction
+    // ^ this is the Interaction
     
-    // A Hertzian interaction has energy 
+    // A Hertzian Interaction has energy 
     //    Uij = {1/2.5 * |sigma_ij - r_ij|^2.5      r_ij < sigma_ij
     //           0                                  r_ij >= sigma_ij
     
-    // Note that NListed is a class template; its an interaction that
+    // Note that NListed is a class template; its an Interaction that
     // takes various structs as template parameters, and turns them into 
-    // a neighbor interaction
-    // See interaction.hpp for a whole bunch of them
-    // Also note that the neighborlist is not the same as the
-    // "neighborlisted" interaction; multiple interactions can use the
-    // same neighborlist
+    // a neighbor Interaction
+    // See Interaction.hpp for a whole bunch of them
+    // Also note that the NeighborList is not the same as the
+    // "neighborlisted" Interaction; multiple interactions can use the
+    // same NeighborList
     
     // Now we run through all the atoms, set their positions / velocities,
-    // and add them to the hertzian interaction (i.e., to the neighbor list)
+    // and add them to the hertzian Interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
         // we track energy to see if things are overlapping
         atoms[i].x = obox->randLoc(); // random location in the box
@@ -168,25 +168,25 @@ int main(int argc, char **argv){
         // Add it to the potential
         hertz->add(HertzianAtom(&atoms[i], epsilon, cursigma, sigcut));
     }
-    // force an update the neighborlist, just to make sure
+    // force an update the NeighborList, just to make sure
     nl->update_list(true);
     
-    //Now we make our "collection"
-    collectionOverdamped collec0 = collectionOverdamped(boxptr, atomptr, 1e-3);
-    // collectionOverdamped uses "overdamped" dynamics, meaning that 
+    //Now we make our "Collection"
+    CollectionOverdamped collec0 = CollectionOverdamped(boxptr, atomptr, 1e-3);
+    // CollectionOverdamped uses "overdamped" dynamics, meaning that 
     // dx/dt = γ f
     // here we use γ = 1, because it doesn't matter
-    // Note that this collection always goes down the potential energy gradient
+    // Note that this Collection always goes down the potential energy gradient
     
-    // This is very important! Otherwise the neighborlist won't update!
+    // This is very important! Otherwise the NeighborList won't update!
     collec0.addTracker(nl);
-    // And add the interaction
+    // And add the Interaction
     collec0.addInteraction(hertz);
     
     // subtract off center of mass velocity, and set a total energy
     collec0.resetcomv();
     
-    // Potential energy per atom
+    // Potential energy per Atom
     int swtch = 0; //Switch to help terminate simulations of unattainable packing fractions
     flt U = collec0.potentialenergy()/Natoms;
     flt U1 = U; //U at prior timestep
@@ -216,7 +216,7 @@ int main(int argc, char **argv){
     // The equilibration stage
     
     // This is the Brownian motion, hard-sphere collider
-    collectionCDBD collec = collectionCDBD(obox, atomptr, dt, T, atomsizes);
+    CollectionCDBD collec = CollectionCDBD(obox, atomptr, dt, T, atomsizes);
     
     cout << "Equilibrating... \n";
     for(uint i=0; i<printn; ++i){
@@ -230,7 +230,7 @@ int main(int argc, char **argv){
     
     // Now we need to make the RsqTracker (which tracks r squared vs. time)
     // we need to tell it which Δts to track, so we do that here.
-    // Note that a set is a collection that is sorted and removes duplicates,
+    // Note that a set is a Collection that is sorted and removes duplicates,
     // so that's why we start with a set.
     // So 
     set<uint> nset;
@@ -249,7 +249,7 @@ int main(int argc, char **argv){
     cout << "Using " << MSDns.size() << " MSDns, [" << MSDns.front() << "-" << MSDns.back() << "]\n";
     
     boost::shared_ptr<RsqTracker> rsqtracker(new RsqTracker(atomptr, MSDns));
-    boost::shared_ptr<statetracker> rsqptr = boost::static_pointer_cast<statetracker>(rsqtracker);
+    boost::shared_ptr<StateTracker> rsqptr = boost::static_pointer_cast<StateTracker>(rsqtracker);
     collec.add(rsqptr);
     
     // VMD is good for 3D visualization purposes, and it can read .xyz files
@@ -273,7 +273,7 @@ int main(int argc, char **argv){
     // Save the MSDs to a file
     ofstream msdfile;
     msdfile.open(outname.c_str(), ios::out);
-    // Retrieve the time-averaged r^2 values for each atom for each Δt
+    // Retrieve the time-averaged r^2 values for each Atom for each Δt
     vector<vector<flt> > MSDmeans = rsqtracker->means();
     
     // This will be a tab-separated file, with the first column being 
@@ -295,7 +295,7 @@ int main(int argc, char **argv){
 // Save the MFDs to a file so that we can compute alpha
     ofstream mfdfile;
     mfdfile.open("hardspheres.mfd", ios::out);
-    // Retrieve the time-averaged r^4 values for each atom for each Δt
+    // Retrieve the time-averaged r^4 values for each Atom for each Δt
     vector<vector<flt> > MFDmeans = rfrtracker->means();  
 
     // This will be a tab-separated file, with the first column being 
@@ -325,14 +325,14 @@ int main(int argc, char **argv){
 
 void writetcl(const char *fname, OriginBox& box, vector<flt> &atomsizes){
     // Unnecessary extra:
-    // Write a "tcl" file with the box boundaries and the atom sizes
+    // Write a "tcl" file with the box boundaries and the Atom sizes
     // the "tcl" file is made specifically for VMD
     ofstream pbcfile;
     pbcfile.open(fname, ios::out);
-    // large atom size
+    // large Atom size
     pbcfile << "set natoms [atomselect 0 \"name O\";];\n";
     pbcfile << "$natoms set radius " << (atomsizes[0]/2.0) << ";\n";
-    // small atom size
+    // small Atom size
     pbcfile << "set natoms [atomselect 0 \"name C\";];\n";
     pbcfile << "$natoms set radius " << (atomsizes[1]/2.0) << ";\n\n";
     
@@ -348,7 +348,7 @@ void writetcl(const char *fname, OriginBox& box, vector<flt> &atomsizes){
     // to toggle the box with the "b" button
 };
 
-void writefile(ofstream& outf, atomvec& atoms, Box& bx){
+void writefile(ofstream& outf, AtomVec& atoms, Box& bx){
     // The .xyz format is simple:
     // Line 1: [Number of atoms]
     // Line 2: [Comment line, whatever you want, left blank here]

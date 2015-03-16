@@ -10,39 +10,39 @@
 /**
 The general interface for a "tracker", a class that needs to be called every timestep.
 
-statetracker is used as a base for some "helper" classes, like neighbor lists (\ref neighborlist),
+StateTracker is used as a base for some "helper" classes, like neighbor lists (\ref NeighborList),
 as well as for many statistics.
 */
-class statetracker {
+class StateTracker {
     public:
         /** This function is called once per timestep, when particles are in their set position.*/
         virtual void update(Box &box) = 0;
-        virtual ~statetracker(){};
+        virtual ~StateTracker(){};
 };
 
-/** A mapping of \ref atom -> [list of \ref atom], used by \ref neighborlist to keep track
+/** A mapping of \ref Atom -> [list of \ref Atom], used by \ref NeighborList to keep track
 of what atoms are near what other atoms.
 
 Pairs are assumed to be symmetric, i.e. either `(a1, a2)` is stored or `(a2, a1)` is stored, and
 only one will be returned through the iterator.
 */
-class pairlist {
+class PairList {
     protected:
         map<const AtomID, set<AtomID> > pairs;
     public:
-        //~ pairlist(AtomGroup *group);
-        pairlist(){};
+        //~ PairList(AtomGroup *group);
+        PairList(){};
 
-        /** Ensure that a given \ref atom is in the overall list. */
+        /** Ensure that a given \ref Atom is in the overall list. */
         inline void ensure(const AtomID a){
             pairs.insert(std::pair<AtomID, set<AtomID> >(a, set<AtomID>()));
         }
-        /** Ensure that every \ref atom in input is in the overall list. */
+        /** Ensure that every \ref Atom in input is in the overall list. */
         inline void ensure(vector<AtomID> ps){
             vector<AtomID>::iterator it;
             for(it=ps.begin(); it != ps.end(); ++it) ensure(*it);
         }
-        /** Ensure that every \ref atom in input is in the overall list. */
+        /** Ensure that every \ref Atom in input is in the overall list. */
         inline void ensure(AtomGroup &group){
             for(uint i=0; i<group.size(); i++) ensure(group.get_id(i));
         }
@@ -59,7 +59,7 @@ class pairlist {
         Add a pair to the list. If already in the list, nothing changes.
         */
         inline void add_pair(AtomID a1, AtomID a2){
-            //~ cout << "pairlist ignore " << a1.n() << '-' << a2.n() << "\n";
+            //~ cout << "PairList ignore " << a1.n() << '-' << a2.n() << "\n";
             if(a1 > a2){pairs[a1].insert(a2);}
             else{pairs[a2].insert(a1);};
         }
@@ -74,10 +74,10 @@ class pairlist {
         }
 
         /**
-        Get all atoms neighboring an atom *that are "lesser"* than the atom.
+        Get all atoms neighboring an Atom *that are "lesser"* than the Atom.
 
         Because of the way neighbors are stored, there is no easy way to actually get *all*
-        neighbors of an atom, but if `get_pairs` is called successively on all atoms, it will return
+        neighbors of an Atom, but if `get_pairs` is called successively on all atoms, it will return
         each and every pair exactly once (including "false positives").
         */
         inline set<AtomID> get_pairs(const AtomID a){ensure(a); return pairs[a];};
@@ -110,31 +110,31 @@ positives.
 any two molecules might conceivably overlap by more than a critical distance, and if so, it updates
 all the neighbor lists.
 
-The neighborlist has an inherent tradeoff, set by the skin radius: If the skin is large, then
+The NeighborList has an inherent tradeoff, set by the skin radius: If the skin is large, then
 full updates (which are slow) will be needed less often, but more particles will be considered
 "neighbors" even when they are not within \f$d_{ij} < r_i + r_j\f$, i.e. there will be more false
 positives.
 */
-class neighborlist : public statetracker{
+class NeighborList : public StateTracker{
     protected:
         sptr<Box> box;
         flt skin;
         SubGroup atoms;
         vector<flt> diameters;
         vector<IDPair> curpairs;
-        pairlist ignorepairs;
+        PairList ignorepairs;
         vector<Vec> lastlocs;
         uint updatenum;
         bool ignorechanged; /*< if true, forces a full check on next update */
     public:
-        neighborlist(sptr<Box> box, sptr<AtomVec> atoms, const flt skin);
+        NeighborList(sptr<Box> box, sptr<AtomVec> atoms, const flt skin);
         /**
-        Calls `update_list(false)`; exists as a requirement of \ref statetracker.
+        Calls `update_list(false)`; exists as a requirement of \ref StateTracker.
         */
         void update(Box &newbox){assert(&newbox == box.get()); update_list(false);};
         /**
         Update the neighbor list based on current positions. If `force`, the list is updated
-        immediately \f$O(N^2)\f$; otherwise, neighborlist checks if an update is necessary
+        immediately \f$O(N^2)\f$; otherwise, NeighborList checks if an update is necessary
         \f$O(N)\f$, and updates the list if so.
         */
         bool update_list(bool force = true);
@@ -164,7 +164,7 @@ class neighborlist : public statetracker{
             return curpairs[i];
         };
         //~ inline vector<IDPair> getpairs(){return vector<IDPair>(curpairs);};
-        ~neighborlist(){};
+        ~NeighborList(){};
 };
 
 class GridIterator;
@@ -173,7 +173,7 @@ class GridPairedIterator;
 /**
 A fast algorithm for finding all pairs of neighboring atoms.
 
-A Grid splits the OriginBox into "cells", where no cell is narrower than any atom. For any given atom,
+A Grid splits the OriginBox into "cells", where no cell is narrower than any Atom. For any given Atom,
 all atoms within the same cell or any neighboring cell are considered "neighbors".
 */
 class Grid {
@@ -217,12 +217,12 @@ class Grid {
         Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms, const flt minwidth, const flt goalwidth);
 
         /**
-        Reshape the grid to optimize number of atom pairs. No-op if `minwidth <= 1` or `goalwidth <=
+        Reshape the grid to optimize number of Atom pairs. No-op if `minwidth <= 1` or `goalwidth <=
         0`.
         */
         void optimize_widths();
         /**
-        Reshape the grid to optimize number of atom pairs
+        Reshape the grid to optimize number of Atom pairs
         */
         void make_grid();
 
@@ -232,15 +232,15 @@ class Grid {
         iterator begin();
         iterator end();
 
-        /** Get all pairs of a specific atom */
+        /** Get all pairs of a specific Atom */
         pair_iter pairs(AtomID a);
-        /** Find the amount of time until an atom leaves its current cell. */
-        flt time_to_edge(atom& a);
+        /** Find the amount of time until an Atom leaves its current cell. */
+        flt time_to_edge(Atom& a);
         flt time_to_edge(uint i){return time_to_edge((*atoms)[i]);}
 
         /** Return a list of all pairs.\ SLOW function, but useful for debugging. */
         vector<IDPair> allpairs();
-        /** Return a list of all neighbors of a given atom.\ SLOW function, but useful for debugging. */
+        /** Return a list of all neighbors of a given Atom.\ SLOW function, but useful for debugging. */
         vector<AtomID> allpairs(AtomID a);
 
         uint numcells(uint i){assert(i<NDIM); return widths[i];}
@@ -251,7 +251,7 @@ class Grid {
         #endif
 };
 
-/** For iterating over all pairs of a single atom */
+/** For iterating over all pairs of a single Atom */
 class GridPairedIterator {
     protected:
         Grid & grid;

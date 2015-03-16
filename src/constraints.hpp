@@ -14,24 +14,24 @@ using namespace std;
 
 typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure why
 
-class constraint {
+class Constraint {
     public:
         virtual void apply(Box &box) = 0;
         virtual int ndof() = 0;
-        virtual ~constraint(){};
+        virtual ~Constraint(){};
 };
 
-class coordConstraint : public constraint {
+class CoordConstraint : public Constraint {
     private:
-        atom* a;
+        Atom* a;
         bool fixed[3];
         Vec loc;
     public:
-        coordConstraint(atom* atm, bool fixx, bool fixy, bool fixz, Vec loc) :
+        CoordConstraint(Atom* atm, bool fixx, bool fixy, bool fixz, Vec loc) :
             a(atm), loc(loc) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordConstraint(atom* atm, bool fixx, bool fixy, bool fixz) :
+        CoordConstraint(Atom* atm, bool fixx, bool fixy, bool fixz) :
             a(atm), loc(a->x) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordConstraint(atom* atm) :
+        CoordConstraint(Atom* atm) :
             a(atm), loc(a->x) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         void apply(Box &box){
@@ -44,17 +44,17 @@ class coordConstraint : public constraint {
         }
 };
 
-class coordCOMConstraint : public constraint {
+class CoordCOMConstraint : public Constraint {
     private:
         sptr<AtomGroup> a;
         bool fixed[3];
         Vec loc;
     public:
-        coordCOMConstraint(sptr<AtomGroup> atm, bool fixx, bool fixy, bool fixz, Vec loc) :
+        CoordCOMConstraint(sptr<AtomGroup> atm, bool fixx, bool fixy, bool fixz, Vec loc) :
             a(atm), loc(loc) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordCOMConstraint(sptr<AtomGroup> atm, bool fixx, bool fixy, bool fixz) :
+        CoordCOMConstraint(sptr<AtomGroup> atm, bool fixx, bool fixy, bool fixz) :
             a(atm), loc(a->com()) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordCOMConstraint(sptr<AtomGroup> atm) :
+        CoordCOMConstraint(sptr<AtomGroup> atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         void apply(Box &box){
@@ -65,9 +65,9 @@ class coordCOMConstraint : public constraint {
                 totf += (*a)[i].f;
             }
             Vec tota = totf / a->mass();
-            
+
             for(uint i=0; i< a->size(); i++){
-                atom &atm = (*a)[i];
+                Atom &atm = (*a)[i];
                 Vec df = (tota * (atm.m));
                 for(uint j=0; j<3; j++){
                     if(not fixed[j]) continue;
@@ -79,19 +79,19 @@ class coordCOMConstraint : public constraint {
         }
 };
 
-class relativeConstraint : public constraint {
+class RelativeConstraint : public Constraint {
     private:
-        atom *a1, *a2;
+        Atom *a1, *a2;
         bool fixed[3];
         Vec loc;
     public:
-        relativeConstraint(atom* atm1, atom* atm2, bool fixx, bool fixy, bool fixz, Vec loc) :
+        RelativeConstraint(Atom* atm1, Atom* atm2, bool fixx, bool fixy, bool fixz, Vec loc) :
             a1(atm1), a2(atm2), loc(loc) {
                 fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        relativeConstraint(atom* atm1, atom* atm2, bool fixx, bool fixy, bool fixz) :
+        RelativeConstraint(Atom* atm1, Atom* atm2, bool fixx, bool fixy, bool fixz) :
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        relativeConstraint(atom* atm1, atom* atm2) :
+        RelativeConstraint(Atom* atm1, Atom* atm2) :
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
@@ -115,35 +115,35 @@ class relativeConstraint : public constraint {
         }
 };
 
-class distConstraint : public constraint {
+class DistConstraint : public Constraint {
     private:
         AtomID a1, a2;
         flt dist;
     public:
-        distConstraint(AtomID atm1, AtomID atm2, flt dist) :
+        DistConstraint(AtomID atm1, AtomID atm2, flt dist) :
             a1(atm1), a2(atm2), dist(dist) {};
-        distConstraint(AtomID atm1, AtomID atm2) :
+        DistConstraint(AtomID atm1, AtomID atm2) :
             a1(atm1), a2(atm2), dist((a1->x - a2->x).mag()){};
         int ndof(){return 1;};
         void apply(Box &box){
             flt M = (a1->m + a2->m);
             flt mratio1 = a1->m / M;
             flt mratio2 = a2->m / M;
-            
+
             Vec dx = a2->x - a1->x;
             flt dxmag = dx.mag();
             Vec dxnorm = dx / dxmag;
-            
+
             a1->x += dx * ((1 - dist/dxmag)*mratio2);
             a2->x -= dx * ((1 - dist/dxmag)*mratio1);
             //~ dx = a2->x - a1->x;
             //~ dxmag = dx.mag();
             //~ dxnorm = dx / dxmag; dxnorm should still be the same
-            
+
             Vec baddv = dxnorm * ((a2->v - a1->v).dot(dxnorm)/2);
             a1->v += baddv;
             a2->v -= baddv;
-            
+
             // newv2 • u = v2 - |baddv|
             // newv1 • u = v1 + |baddv|
             // (newv2 - newv1) • u = (v2 - v1 - (2*baddv)) • u
@@ -153,7 +153,7 @@ class distConstraint : public constraint {
             if((a2->v - a1->v).dot(dxnorm) > 1e-8){
                 throw std::overflow_error("Velocities are not minimal.");
             }
-            
+
             // TODO: Fix mass ratio stuff
             Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
             a1->f += baddf;
@@ -162,37 +162,37 @@ class distConstraint : public constraint {
             if((a2->f - a1->f).dot(dxnorm) > 1e-8){
                 throw std::overflow_error("Forces are not minimal.");
             }
-            
+
         }
 };
 
 
-class linearConstraint : public constraint {
+class LinearConstraint : public Constraint {
     private:
         sptr<AtomGroup> atms;
         flt dist;
         flt lincom, I, M;
     public:
-        linearConstraint(sptr<AtomGroup> atms, flt dist) :
+        LinearConstraint(sptr<AtomGroup> atms, flt dist) :
             atms(atms), dist(dist), lincom(0), I(0), M(0) {
             for(uint i = 0; i < atms->size(); i++){
                 M += (*atms)[i].m;
                 lincom += (dist*i)*(*atms)[i].m;
             }
             lincom /= M;
-            
+
             for(uint i = 0; i < atms->size(); i++){
                 flt dx = (dist*i - lincom);
                 I += (*atms)[i].m * dx * dx;
             }
         };
         int ndof(){return (int)atms->size()-1;};
-        
+
         void apply(Box &box){
             Vec com = atms->com();
             Vec comv = atms->comv();
             Vec comf = Vec();
-            
+
             uint sz = atms->size();
             Vec lvec = Vec();
             #ifdef VEC3D
@@ -206,25 +206,25 @@ class linearConstraint : public constraint {
             flt tau = 0;
             flt alpha = 0;
             #endif
-            
+
             for(uint i = 0; i < sz; i++){
                 flt chaindist = i * dist - lincom;
-                atom& ai = (*atms)[i];
+                Atom& ai = (*atms)[i];
                 Vec dx = ai.x - com;
                 comf += ai.f;
                 lvec += dx.norm() * chaindist;
                 L += dx.cross(ai.v) * ai.m;
                 tau += dx.cross(ai.f);
             }
-            
+
             lvec.normalize();
             omega = L / I;
             alpha = tau / I;
-            
+
             for(uint i = 0; i < sz; i++){
                 flt chaindist = i * dist - lincom;
                 Vec dx = lvec*chaindist;
-                atom& ai = (*atms)[i];
+                Atom& ai = (*atms)[i];
                 ai.x = com + dx;
                 ai.v = comv + dx.cross(omega);
                 ai.f = comf + (dx.cross(alpha)*ai.m);
@@ -232,19 +232,19 @@ class linearConstraint : public constraint {
         }
 };
 
-class ContactTracker : public statetracker{
+class ContactTracker : public StateTracker{
     protected:
         sptr<AtomGroup> atoms;
         vector<flt> dists;
         vector<vector<bool> > contacts;
-        
+
         unsigned long long breaks;
         unsigned long long formations;
         unsigned long long incontact;
     public:
         ContactTracker(sptr<Box> box, sptr<AtomGroup> atoms, vector<flt> dists);
         void update(Box &box);
-        
+
         unsigned long long broken(){return breaks;};
         unsigned long long formed(){return formations;};
         unsigned long long number(){return incontact;};
@@ -258,18 +258,18 @@ inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<AtomGroup> atoms, vec
     return new ContactTracker(box, atoms, newdists);
 }
 
-class EnergyTracker : public statetracker{
+class EnergyTracker : public StateTracker{
     protected:
         sptr<AtomGroup> atoms;
         vector<sptr<Interaction> > interactions;
-        
+
         uint N;
         uint nskip, nskipped;
         flt U0;
         flt Es, Us, Ks;
         flt Esq, Usq, Ksq;
     public:
-        EnergyTracker(sptr<AtomGroup> atoms, 
+        EnergyTracker(sptr<AtomGroup> atoms,
             vector<sptr<Interaction> > interactions, uint nskip=1)
              : atoms(atoms),
             interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
@@ -286,7 +286,7 @@ class EnergyTracker : public statetracker{
         };
         void setU0(Box &box);
         flt getU0(){return U0;};
-            
+
         flt E(){return Es/((flt) N);};
         flt U(){return Us/((flt) N);};
         flt K(){return Ks/((flt) N);};
@@ -309,34 +309,34 @@ class RsqTracker1 {
         vector<Vec> xyz4sums;
         vector<flt> r4sums;
         unsigned long skip, count;
-        
+
     public:
         RsqTracker1(AtomGroup& atoms, unsigned long skip, Vec com);
-        
+
         void reset(AtomGroup& atoms, Vec com);
-            
+
         bool update(Box& box, AtomGroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<Vec> xyz2();
         vector<Vec> xyz4();
         vector<flt> r4();
-        
+
         unsigned long get_skip(){return skip;};
         unsigned long get_count(){return count;};
 };
 
-class RsqTracker : public statetracker {
+class RsqTracker : public StateTracker {
     public:
         sptr<AtomGroup> atoms;
         vector<RsqTracker1> singles;
         unsigned long curt;
         bool usecom;
-        
+
     public:
         RsqTracker(sptr<AtomGroup> atoms, vector<unsigned long> ns, bool usecom=true);
-        
+
         void reset();
         void update(Box &box);
-        
+
         vector<vector<Vec> > xyz2();
         vector<vector<flt> > r2();
         vector<vector<Vec> > xyz4();
@@ -348,7 +348,7 @@ class RsqTracker : public statetracker {
 // ISF tracking
 // code is similar to Rsqtracker.
 // It tracks ISF(k, Δt) with one ISFTracker1 per Δt.
-// k is of type 'flt', representing a length; it will average over 
+// k is of type 'flt', representing a length; it will average over
 // k(x hat), k(y hat), k(z hat).
 
 class ISFTracker1 {
@@ -358,34 +358,34 @@ class ISFTracker1 {
         vector<vector<Array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
         vector<flt> ks;
         unsigned long skip, count;
-        
+
     public:
         ISFTracker1(AtomGroup& atoms, unsigned long skip, vector<flt> ks, Vec com);
-        
+
         void reset(AtomGroup& atoms, Vec com);
-            
+
         bool update(Box& box, AtomGroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<vector<cmplx> > ISFs();
         vector<vector<Array<cmplx, NDIM> > > ISFxyz();
-        
+
         unsigned long get_skip(){return skip;};
         unsigned long get_count(){return count;};
 };
 
-class ISFTracker : public statetracker {
+class ISFTracker : public StateTracker {
     public:
         sptr<AtomGroup> atoms;
         vector<ISFTracker1> singles;
         unsigned long curt;
         bool usecom;
-        
+
     public:
-        ISFTracker(sptr<AtomGroup> atoms, vector<flt> ks, 
+        ISFTracker(sptr<AtomGroup> atoms, vector<flt> ks,
                     vector<unsigned long> ns, bool usecom=false);
-        
+
         void reset();
         void update(Box &box);
-        
+
         vector<vector<vector<Array<cmplx, NDIM> > > > ISFxyz();
         vector<vector<vector<cmplx> > > ISFs();
         vector<flt> counts();
@@ -394,7 +394,7 @@ class ISFTracker : public statetracker {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Get the "smoothed" version of each particles location, "smoothed" over windows of a given size
 
-class SmoothLocs : public statetracker {
+class SmoothLocs : public StateTracker {
     public:
         sptr<AtomGroup> atoms;
         uint smoothn; // number of skipns to "smooth" over
@@ -404,18 +404,18 @@ class SmoothLocs : public statetracker {
         vector<vector<Vec> > locs;
         unsigned long curt;
         bool usecom;
-    
+
     public:
         SmoothLocs(sptr<AtomGroup> atoms, Box &box, uint smoothn, uint skipn=1, bool usecom=false);
-        
+
         void reset();
         void update(Box &box);
-        
+
         vector<vector<Vec> > smooth_locs(){return locs;};
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class RDiffs : public statetracker {
+class RDiffs : public StateTracker {
     // Tracks only a single dt (skip)
     public:
         sptr<AtomGroup> atoms;
@@ -426,12 +426,12 @@ class RDiffs : public statetracker {
         bool usecom;
     public:
         RDiffs(sptr<AtomGroup> atoms, unsigned long skip, bool usecom=false);
-        
+
         void reset();
-            
+
         void update(Box& box); // updates if necessary.
         vector<vector<flt> > rdiffs(){return dists;};
-        
+
         unsigned long get_skip(){return skip;};
 };
 
@@ -440,18 +440,18 @@ class RDiffs : public statetracker {
 
 /* We have two packings, A and B, and want to know the sequence {A1, A2, A3...}
  * such that particle A1 of packing 1 matches particle 1 of packing B.
- * A jamminglist is a partial list; it has a list {A1 .. An}, with n / N
+ * A JammingList is a partial list; it has a list {A1 .. An}, with n / N
  * particles assigned, with a total distance² of distsq.
-*/ 
-class jamminglist {
+*/
+class JammingList {
     public:
         vector<uint> assigned;
         flt distsq;
-        
-        jamminglist() : assigned(), distsq(0){};
-        jamminglist(const jamminglist& other) 
+
+        JammingList() : assigned(), distsq(0){};
+        JammingList(const JammingList& other)
             : assigned(other.assigned), distsq(other.distsq){};
-        jamminglist(const jamminglist& other, uint expand, flt addeddist)
+        JammingList(const JammingList& other, uint expand, flt addeddist)
             : assigned(other.size() + 1, 0), distsq(other.distsq + addeddist){
             for(uint i=0; i < other.size(); i++){
                 assigned[i] = other.assigned[i];
@@ -459,32 +459,32 @@ class jamminglist {
             assigned[assigned.size()-1] = expand;
         }
         inline uint size() const {return (uint) assigned.size();};
-        
-        bool operator<(const jamminglist& other) const;
+
+        bool operator<(const JammingList& other) const;
 };
 
-class jammingtree {
+class JammingTree {
     private:
         sptr<Box> box;
-        list<jamminglist> jlists;
+        list<JammingList> jlists;
         vector<Vec> A;
         vector<Vec> B;
     public:
-        jammingtree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
+        JammingTree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
             : box(box), jlists(), A(A), B(B) {
-            jlists.push_back(jamminglist());
+            jlists.push_back(JammingList());
             assert(A.size() <= B.size());
         };
 
         bool expand(){
-            jamminglist curjlist = jlists.front();
+            JammingList curjlist = jlists.front();
             vector<uint>& curlist = curjlist.assigned;
             if(curlist.size() >= A.size()){
                 //~ cout << "List already too big\n";
                 return false;
             }
-            
-            list<jamminglist> newlists = list<jamminglist>();
+
+            list<JammingList> newlists = list<JammingList>();
             for(uint i=0; i < B.size(); i++){
                 vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
                 //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
@@ -494,11 +494,11 @@ class jammingtree {
                     continue;
                 }
                 flt newdist = box->diff(A[curlist.size()], B[i]).sq();
-                jamminglist newjlist = jamminglist(curjlist, i, newdist);
+                JammingList newjlist = JammingList(curjlist, i, newdist);
                 newlists.push_back(newjlist);
                 //~ cout << "Made " << i << "\n";
             }
-            
+
             if(newlists.empty()){
                 //~ cout << "No lists made\n";
                 return false;
@@ -519,52 +519,52 @@ class jammingtree {
             }
             return retval;
         }
-        list<jamminglist> &mylist(){return jlists;};
-        list<jamminglist> copylist(){return jlists;};
-        
-        jamminglist curbest(){
-            jamminglist j = jamminglist(jlists.front());
+        list<JammingList> &mylist(){return jlists;};
+        list<JammingList> copylist(){return jlists;};
+
+        JammingList curbest(){
+            JammingList j = JammingList(jlists.front());
             //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
             //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
             //~ cout << '\n';
             return j;
-            //return jamminglist(jlists.front());
+            //return JammingList(jlists.front());
             };
         uint size(){return (uint) jlists.size();};
 };
 
 #ifdef VEC2D
 
-class jamminglistrot : public jamminglist {
+class JammingListRot : public JammingList {
     public:
         uint rotation;
-        
-        jamminglistrot() : jamminglist(), rotation(0){};
-        jamminglistrot(uint rot) : jamminglist(), rotation(rot){};
-        jamminglistrot(const jamminglistrot& other) 
-            : jamminglist(other), rotation(other.rotation){};
-        jamminglistrot(const jamminglistrot& other, uint expand, flt addeddist)
-            : jamminglist(other, expand, addeddist), rotation(other.rotation){};
-        
-        bool operator<(const jamminglistrot& other) const;
+
+        JammingListRot() : JammingList(), rotation(0){};
+        JammingListRot(uint rot) : JammingList(), rotation(rot){};
+        JammingListRot(const JammingListRot& other)
+            : JammingList(other), rotation(other.rotation){};
+        JammingListRot(const JammingListRot& other, uint expand, flt addeddist)
+            : JammingList(other, expand, addeddist), rotation(other.rotation){};
+
+        bool operator<(const JammingListRot& other) const;
 };
 
 // Includes rotations, flips, and translations.
-class jammingtree2 {
+class JammingTree2 {
     protected:
         sptr<Box> box;
-        list<jamminglistrot> jlists;
+        list<JammingListRot> jlists;
         vector<Vec> A;
         vector<vector<Vec> > Bs;
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        jammingtree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
-        flt distance(jamminglistrot& jlist);
-        list<jamminglistrot> expand(jamminglistrot curjlist);
-        
+        JammingTree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
+        flt distance(JammingListRot& jlist);
+        list<JammingListRot> expand(JammingListRot curjlist);
+
         virtual bool expand();
-        
+
         bool expand(uint n){
             bool retval=false;
             for(uint i=0; i<n; i++){
@@ -582,51 +582,51 @@ class jammingtree2 {
         }
         static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
         static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
-        
-        list<jamminglistrot> &mylist(){return jlists;};
-        list<jamminglistrot> copylist(){return jlists;};
-        list<jamminglistrot> copylist(uint n){
-            list<jamminglistrot>::iterator last = jlists.begin();
+
+        list<JammingListRot> &mylist(){return jlists;};
+        list<JammingListRot> copylist(){return jlists;};
+        list<JammingListRot> copylist(uint n){
+            list<JammingListRot>::iterator last = jlists.begin();
             advance(last, n);
-            return list<jamminglistrot>(jlists.begin(), last);
+            return list<JammingListRot>(jlists.begin(), last);
         };
-        
-        
-        jamminglistrot curbest(){
+
+
+        JammingListRot curbest(){
             if(jlists.empty()){
-                jamminglistrot bad_list = jamminglistrot();
+                JammingListRot bad_list = JammingListRot();
                 bad_list.distsq = -1;
                 return bad_list;
                 }
-            jamminglistrot j = jamminglistrot(jlists.front());
+            JammingListRot j = JammingListRot(jlists.front());
             //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
             //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
             //~ cout << '\n';
             return j;
-            //return jamminglist(jlists.front());
+            //return JammingList(jlists.front());
             };
-        
-        //jamminglistrot operator[](uint i){
+
+        //JammingListRot operator[](uint i){
         //    assert(i < jlists.size());
-        //    return jamminglistrot(jlists[i]);
+        //    return JammingListRot(jlists[i]);
         //};
-        
+
         uint size(){return (uint) jlists.size();};
-        
-        vector<Vec> locationsB(jamminglistrot jlist);
+
+        vector<Vec> locationsB(JammingListRot jlist);
         vector<Vec> locationsB(){return locationsB(curbest());};
-        vector<Vec> locationsA(jamminglistrot jlist);
+        vector<Vec> locationsA(JammingListRot jlist);
         vector<Vec> locationsA(){return locationsA(curbest());};
-        virtual ~jammingtree2(){};
+        virtual ~JammingTree2(){};
 };
 
 
-class jammingtreeBD : public jammingtree2 {
+class JammingTreeBD : public JammingTree2 {
     /* For a bi-disperse packing.
      * 'cutoff' is the number of particles of the first kind; i.e., the
      * A vector should have A[0]..A[cutoff-1] be of particle type 1,
      * and A[cutoff]..A[N-1] of particle type 2.
-     * This does much the same as jammingtree2, but doesn't check any 
+     * This does much the same as JammingTree2, but doesn't check any
      * reordering in which particles of one type are relabeled as another.
      * For exampe, with 2+2 particles (cutoff 2), we check
      * [0123],[1023],[0132],[1032]
@@ -639,52 +639,52 @@ class jammingtreeBD : public jammingtree2 {
     protected:
         uint cutoff1,cutoff2;
     public:
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
-            jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
+        JammingTreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+            JammingTree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
+        JammingTreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B,
                     uint cutoffA, uint cutoffB);// :
-            //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
-        
-        list<jamminglistrot> expand(jamminglistrot curjlist);
+            //JammingTree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
+
+        list<JammingListRot> expand(JammingListRot curjlist);
         bool expand();
-        bool expand(uint n){return jammingtree2::expand(n);};
+        bool expand(uint n){return JammingTree2::expand(n);};
 };
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Finding Percolation
- * 
+ *
  * Plan:
  * struct Node {
  *      uint n;
  *      Vec x;
  * }
- * 
+ *
  * struct Connectivity {
  *      sptr<OriginBox>;
  *      vector<Node> nodes;
  *      set<Node, vector<Node> > neighbors; # with both directions in
  * }
- * 
+ *
  * make_connectivity(sptr<OriginBox>, NListed<A,P>) {
  *      # for each pair, if energy != 0, add it to the Connectivity
  * }
- * 
- * or 
- * 
- * make_connectivity(sptr<OriginBox>, neighborlist, ... sigmas) {
+ *
+ * or
+ *
+ * make_connectivity(sptr<OriginBox>, NeighborList, ... sigmas) {
  *      # for each pair, if box.diff(a1.x, a2.x) < (sigma1 < sigma2)/2, add it to the list
  * }
- * 
- * struct path {
+ *
+ * struct Path {
  *      Vec<uint> distance          # Euclidean distance from first node to last. Note this is not
- *                                  #   the same as box.diff(last - first), because it might go 
+ *                                  #   the same as box.diff(last - first), because it might go
  *                                  #   a longer way around the box
  *      vector<uint> nodes          # nodes visited
  * }
- * 
+ *
  * Maybe implement <, ==, > by using length of nodes first and what the nodes are second
- * 
+ *
  * Implement ... circular_from(uint n, check_all=true):
  *  -   Do a breadth-first search starting from n, including only nodes > n.
  *  -   While searching, build map<node, path>, which is the Euclidean distance from the start node
@@ -694,7 +694,7 @@ class jammingtreeBD : public jammingtree2 {
  *      -   either replace the old path (if new_path < old_path) or don't
  *      -   Do not follow connections
  *      If different, we've found a percolation:
- *      -   Mark percolations with "map<uint, path> cycles"; the key is the dimension, and 
+ *      -   Mark percolations with "map<uint, path> cycles"; the key is the dimension, and
  *          the value (vector<uint>) is the path.
  *      -   If(check_all && cycles.size() >= 1) return cycles
  *      -   else if cycles.size() >= NDIM return cycles
@@ -703,7 +703,7 @@ class jammingtreeBD : public jammingtree2 {
  * Implement ... find_percolation(...):
  *  -   for each n, run circular_from(uint n, false)
  *  -   if any have a cycle, return it!
- * 
+ *
  * Implement ... find_percolations(...):
  *  -   for each n, run circular_from(uint n, true)
  *  -   keep merging results
@@ -715,10 +715,10 @@ class CNode {
     public:
         int n;
         Vec x;
-        
+
         CNode() : n(-1){};
         CNode(int n, Vec x) : n(n), x(x){};
-        
+
         bool operator!=(const CNode& other)  const { return n != other.n;};
         bool operator==(const CNode& other) const { return n == other.n;};
         bool operator<(const CNode& other) const { return n < other.n;};
@@ -729,11 +729,11 @@ class CNodePath {
     public:
         Vec distance;
         vector<CNode> nodes;
-        
+
     public:
         CNodePath(){};
         CNodePath(CNode node){nodes.push_back(node);};
-        CNodePath(CNodePath other, CNode node, OriginBox& box) : 
+        CNodePath(CNodePath other, CNode node, OriginBox& box) :
             distance(other.distance), nodes(other.nodes){add(node, box);};
         void add(CNode node, OriginBox& box);
         uint size(){return (uint) nodes.size();};
@@ -743,29 +743,28 @@ class CNodePath {
 
 // TODO:
 /*
- * add a way to work with a neighborlist for initial construction
+ * add a way to work with a NeighborList for initial construction
  */
 class Connectivity {
     public:
         sptr<OriginBox> box;
         set<CNode> nodes;
         map<int, vector<CNode> > neighbors;
-        
+
         array<bool, NDIM> nonzero(Vec diff_vec); // is it nonzero. Specifically, is any dimension >  L/2?
         CNodePath make_cycle(CNodePath forward, CNodePath backward);
-        
+
         map<uint, CNodePath> circular_from(CNode node, set<uint>& visited, bool check_all);
-        
+
     public:
         Connectivity(sptr<OriginBox> box) : box(box){};
         void add_edge(CNode node1, CNode node2);
-        
+
         // assumes diameters are additive
         // Note that "diameter" should generally be the attractive diameter
         void add(vector<Vec> locs, vector<flt> diameters);
-        
+
         map<uint, CNodePath> find_percolation(bool check_all_dims=true);
 };
 
 #endif
-

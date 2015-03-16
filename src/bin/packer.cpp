@@ -2,8 +2,8 @@
 #include <fstream>
 
 #include "vecrand.hpp"
-#include "interaction.hpp"
-#include "collection.hpp"
+#include "Interaction.hpp"
+#include "Collection.hpp"
 
 // Some constants
 // Note that "flt" is a "floating point number", defaults to "double"
@@ -35,7 +35,7 @@ const flt force_max = 1e-14;
 const flt force_max = 1e-18;
 #endif
 
-void writefile(atomvec& atoms, OriginBox& obox);
+void writefile(AtomVec& atoms, OriginBox& obox);
 
 int main(){
     cout << "Float size: " << sizeof(flt) << " epsilon: " << std::numeric_limits<flt>::epsilon() << "\n";
@@ -58,27 +58,27 @@ int main(){
 
     // Create a vector of the masses of the atoms
     // We just use all mass 1, because this is a packing
-    boost::shared_ptr<atomvec> atomptr(new atomvec(Nl + Ns, 1.0));
-    atomvec & atoms = *atomptr;
+    boost::shared_ptr<AtomVec> atomptr(new AtomVec(Nl + Ns, 1.0));
+    AtomVec & atoms = *atomptr;
     
-    // Harmonic interaction
+    // Harmonic Interaction
     // Its called "Hertzian" for historical reasons
-    // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the neighborlist
+    // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the NeighborList
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > 
         hertzian(new NListed<HertzianAtom, HertzianPair>(obox, atomptr, 0.1*sigma));
-    boost::shared_ptr<neighborlist> nl = hertzian->nlist();
-    // ^ this is the interaction
+    boost::shared_ptr<NeighborList> nl = hertzian->nlist();
+    // ^ this is the Interaction
     
-    // Note that NListed is a class template; its an interaction that
+    // Note that NListed is a class template; its an Interaction that
     // takes various structs as template parameters, and turns them into 
-    // a neighbor interaction
-    // See interaction.hpp for a whole bunch of them
-    // Also note that the neighborlist is not the same as the
-    // "neighborlisted" interaction; multiple interactions can use the
-    // same neighborlist
+    // a neighbor Interaction
+    // See Interaction.hpp for a whole bunch of them
+    // Also note that the NeighborList is not the same as the
+    // "neighborlisted" Interaction; multiple interactions can use the
+    // same NeighborList
     
     // Now we run through all the atoms, set their positions / velocities,
-    // and add them to the Hertzian interaction (i.e., to the neighbor list)
+    // and add them to the Hertzian Interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
         atoms[i].x = obox->randLoc(); // random location in the box
         atoms[i].v = Vec(); // A zero-vector
@@ -89,21 +89,21 @@ int main(){
         
         // Add it to the Hertzian potential
         hertzian->add(HertzianAtom(atoms.get_id(i), epsilon, sig, 2));
-        //                                                          ^ exponent for the harmonic interaction
+        //                                                          ^ exponent for the harmonic Interaction
     }
 
-    // force an update the neighborlist, so we can get an accurate energy
+    // force an update the NeighborList, so we can get an accurate energy
     nl->update_list(true);
 
     cout << "Starting. Neighborlist contains " << nl->numpairs() << " / " <<
         (atoms.size()*(atoms.size()-1))/2 << " pairs\n";
     
-    //Now we make our "collection"
-    collectionNLCG collec = collectionNLCG(obox, atomptr, dt, P0);
+    //Now we make our "Collection"
+    CollectionNLCG collec = CollectionNLCG(obox, atomptr, dt, P0);
     
-    // This is very important! Otherwise the neighborlist won't update!
+    // This is very important! Otherwise the NeighborList won't update!
     collec.addTracker(nl);
-    // And add the interaction
+    // And add the Interaction
     collec.addInteraction(hertzian);
     
     writefile(atoms, *obox);
@@ -147,7 +147,7 @@ int main(){
     }
 };
 
-void writefile(atomvec& atoms, OriginBox& obox){
+void writefile(AtomVec& atoms, OriginBox& obox){
     // The .xyz format is simple:
     // Line 1: [Number of atoms]
     // Line 2: [Comment line, whatever you want, left blank here]

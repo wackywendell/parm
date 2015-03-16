@@ -1,24 +1,24 @@
 #include "trackers.hpp"
 
-void pairlist::clear(){
+void PairList::clear(){
     map<const AtomID, set<AtomID> >::iterator mapiter;
     for(mapiter = pairs.begin(); mapiter != pairs.end(); ++mapiter){
         mapiter->second.clear();
     }
 };
 
-neighborlist::neighborlist(sptr<Box> box, sptr<AtomVec> atomv, const flt skin) :
+NeighborList::NeighborList(sptr<Box> box, sptr<AtomVec> atomv, const flt skin) :
                 box(box), skin(skin), atoms(atomv), diameters(),
                 lastlocs(), updatenum(0), ignorechanged(true){};
 
-bool neighborlist::update_list(bool force){
-    // biggestdist is the distance the furthest-moving atom has gone
+bool NeighborList::update_list(bool force){
+    // biggestdist is the distance the furthest-moving Atom has gone
     // bigdist is the next furthest
 
     if(not force and not ignorechanged){ // check if we need to update
         flt bigdist = 0, biggestdist = 0;
         for(uint i=0; i < atoms.size(); i++){
-            atom &atm = atoms[i];
+            Atom &atm = atoms[i];
             flt curdist = (atm.x - lastlocs[i]).mag();
             if(curdist > biggestdist){
                 bigdist = biggestdist;
@@ -63,10 +63,10 @@ bool neighborlist::update_list(bool force){
                 curpairs.push_back(IDPair(a1, a2));
         }
     }
-    //~ cout << "neighborlist::update_list:: done.\n";
+    //~ cout << "NeighborList::update_list:: done.\n";
     // print stuff about the current update
     //~ set<AtomID> curset = (ignorepairs.get_pairs(atoms.back()));
-    //~ cout << "neighborlist | atoms: " << atoms.size() <<  "pairs: " << curpairs.size() << " ignored -1: "
+    //~ cout << "NeighborList | atoms: " << atoms.size() <<  "pairs: " << curpairs.size() << " ignored -1: "
          //~ << curset.size() << "\n";
     //~ cout << "ignored -1:";
     //~ for(set<AtomID>::iterator it=curset.begin(); it!=curset.end(); it++)
@@ -228,7 +228,7 @@ Grid::pair_iter Grid::pairs(AtomID a){
     return pair_iter(*this, a);
 };
 
-flt Grid::time_to_edge(atom &a){
+flt Grid::time_to_edge(Atom &a){
     Vec bsize = box->boxshape();
     Vec v = vecmod(a.x - bsize/2., bsize) + bsize/2;
 

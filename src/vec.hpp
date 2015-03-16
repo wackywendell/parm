@@ -213,7 +213,7 @@ class Vector3 : public NumVector<T, 3> {
         }
 
         /**
-        The dihedral angle between three vectors:
+        The Dihedral angle between three vectors:
 
         \f$ \phi=\operatorname{arctan2}\left(
             \vec{r}_{1}\cdot\left(\vec{r}_{2}\times
@@ -226,15 +226,15 @@ class Vector3 : public NumVector<T, 3> {
         @param dx2 \f$\vec r_2\f$
         @param dx3 \f$\vec r_3\f$
         */
-        static T dihedral(const Vector3 &dx1, const Vector3 &dx2, const Vector3 &dx3){
+        static T Dihedral(const Vector3 &dx1, const Vector3 &dx2, const Vector3 &dx3){
             return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(),
                                 (dx1.cross(dx2).dot(dx2.cross(dx3))));
         }
 
-        /** The dihedral angle between four points.
+        /** The Dihedral angle between four points.
 
-        Equivalent to `dihedral(x2 - x1, x3 - x2, x4 - x3)`. */
-        static T dihedral(const Vector3 &x1, const Vector3 &x2,
+        Equivalent to `Dihedral(x2 - x1, x3 - x2, x4 - x3)`. */
+        static T Dihedral(const Vector3 &x1, const Vector3 &x2,
                         const Vector3 &x3, const Vector3 &x4){
             Vector3 dx1 = x2 - x1, dx2 = x3 - x2, dx3 = x4 - x3;
             return atan2(dx1.dot(dx2.cross(dx3))*dx2.mag(),

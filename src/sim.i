@@ -36,42 +36,42 @@
 %shared_ptr(OriginBox)
 %shared_ptr(InfiniteBox)
 %shared_ptr(LeesEdwardsBox)
-%shared_ptr(SCbox)
+%shared_ptr(SCBox)
 %ignore AtomIter;
-%shared_ptr(atomgroup)
-%shared_ptr(subgroup)
-%shared_ptr(statetracker)
-%shared_ptr(interaction)
-%shared_ptr(constraint)
-%shared_ptr(atomvec)
-%shared_ptr(metagroup)
-%shared_ptr(neighborlist)
+%shared_ptr(AtomGroup)
+%shared_ptr(SubGroup)
+%shared_ptr(StateTracker)
+%shared_ptr(Interaction)
+%shared_ptr(Constraint)
+%shared_ptr(AtomVec)
+%shared_ptr(MetaGroup)
+%shared_ptr(NeighborList)
 %shared_ptr(ContactTracker)
 %shared_ptr(EnergyTracker)
 %shared_ptr(RsqTracker)
 %shared_ptr(ISFTracker)
 %shared_ptr(SmoothLocs)
 %shared_ptr(RDiffs)
-%shared_ptr(SCatomvec)
-%shared_ptr(coordConstraint)
-%shared_ptr(fixedForce)
-%shared_ptr(fixedForceRegion)
-%shared_ptr(fixedSpring)
+%shared_ptr(SCAtomVec)
+%shared_ptr(CoordConstraint)
+%shared_ptr(FixedForce)
+%shared_ptr(FixedForceRegion)
+%shared_ptr(FixedSpring)
 %shared_ptr(SoftWall)
 %shared_ptr(SoftWallCylinder)
 %shared_ptr(WalledBox2D)
 %shared_ptr(COMSpring)
-%shared_ptr(bondpairs)
-%shared_ptr(angletriples)
-%shared_ptr(dihedrals)
-%shared_ptr(interactionpairsx)
+%shared_ptr(BondPairs)
+%shared_ptr(AngleTriples)
+%shared_ptr(Dihedrals)
+%shared_ptr(InteractionPairsX)
 %shared_ptr(LJsimple)
 %shared_ptr(Charges)
 %shared_ptr(SCSpringList)
-%shared_ptr(coordCOMConstraint)
-%shared_ptr(relativeConstraint)
-%shared_ptr(distConstraint)
-%shared_ptr(linearConstraint)
+%shared_ptr(CoordCOMConstraint)
+%shared_ptr(RelativeConstraint)
+%shared_ptr(DistConstraint)
+%shared_ptr(LinearConstraint)
 %shared_ptr(NPHGaussianConstraint)
 %shared_ptr(SimpleListed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListed< LJatom,LJpair >)
@@ -92,7 +92,7 @@
 %shared_ptr(NListed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListed< HertzianAtomIndexed,HertzianPair >)
 %shared_ptr(NListed< HertzianDragAtom,HertzianDragPair >)
-%shared_ptr(SCboxed< HertzianAtom,HertzianPair >)
+%shared_ptr(SCBoxed< HertzianAtom,HertzianPair >)
 %shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
 
 %{
@@ -103,12 +103,12 @@
 #include "box.cpp"
 #include "trackers.hpp"
 #include "trackers.cpp"
-#include "interaction.hpp"
-#include "interaction.cpp"
+#include "Interaction.hpp"
+#include "Interaction.cpp"
 #include "constraints.hpp"
 #include "constraints.cpp"
-#include "collection.hpp"
-#include "collection.cpp"
+#include "Collection.hpp"
+#include "Collection.cpp"
 static int myErr = 0;
 %}
 
@@ -249,11 +249,11 @@ static int myErr = 0;
     %};
 };
 
-%extend Nvector {
+%extend NVector {
     %template() operator*<double>;
     %template() operator/<double>;
     
-    Nvector __truediv__(const double n) const{
+    NVector __truediv__(const double n) const{
         return $self->operator/(n);
     };
     
@@ -281,14 +281,14 @@ static int myErr = 0;
     %};
 };
 
-%template(_Nvector3) Nvector<double, 3>;
-%template(_Nvector2) Nvector<double, 2>;
-%template(_Numvector3) Numvector<double, 3>;
-%template(_Numvector2) Numvector<double, 2>;
-%template(_Nvector3L) Nvector<long double, 3>;
-%template(_Nvector2L) Nvector<long double, 2>;
-%template(_Numvector3L) Numvector<long double, 3>;
-%template(_Numvector2L) Numvector<long double, 2>;
+%template(_Nvector3) NVector<double, 3>;
+%template(_Nvector2) NVector<double, 2>;
+%template(_Numvector3) NumVector<double, 3>;
+%template(_Numvector2) NumVector<double, 2>;
+%template(_Nvector3L) NVector<long double, 3>;
+%template(_Nvector2L) NVector<long double, 2>;
+%template(_Numvector3L) NumVector<long double, 3>;
+%template(_Numvector2L) NumVector<long double, 2>;
 
 #ifdef VEC2D
 %template(Vec) Vector2<double>;
@@ -303,8 +303,8 @@ namespace std {
     %template(cvecvector) vector<Array<std::complex<double>, 2> >;
     %template(_cvvecvector) vector<vector<Array<std::complex<double>, 2> > >;
     %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 2> > > >;
-    %template(_jamminglist) list<jamminglist>;
-    %template(_jamminglistrot) list<jamminglistrot>;
+    %template(_jamminglist) list<JammingList>;
+    %template(_jamminglistrot) list<JammingListRot>;
     
     %template(vecptrvectorL) vector<Vector2<long double>*>;
     %template(vecvectorL) vector<Vector2<long double> >;
@@ -315,7 +315,7 @@ namespace std {
 %template(VecL) Vector3<long double>;
 %template(Veci) Array<std::complex<double>, 3>;
 %template(VecLi) Array<std::complex<long double>, 3>;
-%template(_MatrixBase) Nvector<Vector3<double>, 3>;
+%template(_MatrixBase) NVector<Vector3<double>, 3>;
 %template(Matr) Matrix<double>;
 namespace std {
     %template(vecptrvector) vector<Vector3<double>*>;
@@ -330,13 +330,13 @@ namespace std {
     %template(_vvecvectorL) vector<vector<Vector3<long double> > >;
 }
 #endif
-%template(Pair) Numvector<double, 2>;
-%template(VecPair) Nvector<Vec, 2>;
-%template(_atomarray2) Array<atom*, 2>;
-%template(_atompair2) Array<atom, 2>;
-%template(_idarray2) Array<atomid, 2>;
-%template(_atomarray3) Array<atom*, 3>;
-%template(_atomarray4) Array<atom*, 4>;
+%template(Pair) NumVector<double, 2>;
+%template(VecPair) NVector<Vec, 2>;
+%template(_atomarray2) Array<Atom*, 2>;
+%template(_atompair2) Array<Atom, 2>;
+%template(_idarray2) Array<AtomID, 2>;
+%template(_atomarray3) Array<Atom*, 3>;
+%template(_atomarray4) Array<Atom*, 4>;
 
 
 namespace std {
@@ -349,21 +349,21 @@ namespace std {
     %template(_ccvector) vector<vector<std::complex<double> > >;
     %template(_cccvector) vector<vector<vector<std::complex<double> > > >;
     %template(ldvector) vector<long double>;
-    //%template(avector) vector<shared_ptr<atomgroup> >;
-    //%template(aptrvector) vector<shared_ptr<atom> >;
-    %template(ivector) vector<shared_ptr<interaction> >;
-    %template(ifxvector) vector<shared_ptr<interactionpairsx> >;
-    %template(tvector) vector<shared_ptr<statetracker> >;
-    %template(constraintvector) vector<shared_ptr<constraint> >;
+    //%template(avector) vector<shared_ptr<AtomGroup> >;
+    //%template(aptrvector) vector<shared_ptr<Atom> >;
+    %template(ivector) vector<shared_ptr<Interaction> >;
+    %template(ifxvector) vector<shared_ptr<InteractionPairsX> >;
+    %template(tvector) vector<shared_ptr<StateTracker> >;
+    %template(constraintvector) vector<shared_ptr<Constraint> >;
     #ifdef VEC2D
     %template(wallvector) vector<shared_ptr<SoftWall> >;
     #endif
-    %template(idvector) vector<atomid>;
-    %template(idpairvector) vector<idpair>;
+    %template(idvector) vector<AtomID>;
+    %template(idpairvector) vector<IDPair>;
     %template(intvector) vector<int>;
     %template(uintvector) vector<unsigned int>;
     %template(ulongvector) vector<unsigned long>;
-    %template(_eventset) set<event>;
+    %template(_eventset) set<Event>;
     %template(pair_uint_CNodePath) pair<uint, CNodePath>;
     %template(map_uint_CNodePath) map<uint, CNodePath>;
     %template(vector_CNode) vector<CNode>;
@@ -371,7 +371,7 @@ namespace std {
     %template(map_int_CNode) map<int, vector<CNode> >;
 }
 
-%extend atom {
+%extend Atom {
     %insert("python") %{
         def __getstate__(self):
             return (tuple(self.x),tuple(self.v),tuple(self.f), tuple(self.a))
@@ -381,41 +381,41 @@ namespace std {
         
         def __str__(self):
             if hasattr(self, 'name'):
-                return "<atom %s>" % self.name
-            return "<atom>"
+                return "<Atom %s>" % self.name
+            return "<Atom>"
         
         def __repr__(self):
             #ifdef VEC2D
             x,y = tuple(self.x)
             if hasattr(self, 'name'):
-                return "<atom %s at (%.2f,%.2f)>" % (self.name,x,y)
-            return "<atom at (%.2f,%.2f)>" % (x,y)
+                return "<Atom %s at (%.2f,%.2f)>" % (self.name,x,y)
+            return "<Atom at (%.2f,%.2f)>" % (x,y)
             #else
             x,y,z = tuple(self.x)
             if hasattr(self, 'name'):
-                return "<atom %s at (%.2f,%.2f,%.2f)>" % (self.name,x,y,z)
-            return "<atom at (%.2f,%.2f,%.2f)>" % (x,y,z)
+                return "<Atom %s at (%.2f,%.2f,%.2f)>" % (self.name,x,y,z)
+            return "<Atom at (%.2f,%.2f,%.2f)>" % (x,y,z)
             #endif
     %};
 }
 
-%extend atomid {
+%extend AtomID {
     %insert("python") %{
         def __str__(self):
-            return "<atomid %s>" % self.n()
+            return "<AtomID %s>" % self.n()
         
         def __repr__(self):
             #ifdef VEC2D
             x,y = tuple(self.x)
-            return "<atomid %s at (%.2f,%.2f)>" % (self.n(),x,y)
+            return "<AtomID %s at (%.2f,%.2f)>" % (self.n(),x,y)
             #else
             x,y,z = tuple(self.x)
-            return "<atomid %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
+            return "<AtomID %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
             #endif
     %};
 }
 
-%extend atomgroup {
+%extend AtomGroup {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
@@ -424,7 +424,7 @@ namespace std {
 };
 
 
-%extend atomvec {
+%extend AtomVec {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
@@ -453,7 +453,7 @@ namespace std {
     %};
 };
 
-%extend SCatomvec {
+%extend SCAtomVec {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
@@ -471,14 +471,14 @@ namespace std {
     %};
 };
 
-%extend idpair {
+%extend IDPair {
     %insert("python") %{
         def __iter__(self):
             return iter((self.first(), self.last()))
     %};
 };
 
-%exception neighborlist::__getitem__ {
+%exception NeighborList::__getitem__ {
   assert(!myErr);
   $action
   if (myErr) {
@@ -491,7 +491,7 @@ namespace std {
 %include "vecrand.hpp"
 %include "box.hpp"
 %include "trackers.hpp"
-%include "interaction.hpp"
+%include "Interaction.hpp"
 %include "constraints.hpp"
 %template(LJgroup) NListed<LJatom, LJpair>; // Pure repulsive
 %template(LJattract) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive
@@ -499,7 +499,7 @@ namespace std {
 %template(LJattractix) NListed<LJAtomIndexed, LJAttractPair>;  // Pure attractive, with indices for sigma and epsilon
 %template(LJfullix) NListed<LJAtomIndexed, LJCutPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
 
-// Both repulsive and attractive, with indices for epsilon, sigma fixed per atom.
+// Both repulsive and attractive, with indices for epsilon, sigma fixed per Atom.
 // Positive epsilon -> Attractive + repulsive, negative for pure repulsive.
 %template(LJAttractRepulse) NListed<LJAttractRepulseAtom, LJAttractRepulsePair>;
 %template(LJAttractFixedRepulse) NListed<LJAttractFixedRepulseAtom, LJAttractFixedRepulsePair>;
@@ -510,26 +510,26 @@ namespace std {
 %template(Hertzian) NListed<HertzianAtom, HertzianPair>;
 %template(HertzianIdx) NListed<HertzianAtomIndexed, HertzianPair>;
 %template(HertzianDrag) NListed<HertzianDragAtom, HertzianDragPair>;
-%template(HertzianSC) SCboxed<HertzianAtom, HertzianPair>;
+%template(HertzianSC) SCBoxed<HertzianAtom, HertzianPair>;
 %template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
 %template(LoisLin) NListed<LoisLinAtom, LoisLinPair>;
 %template(LoisLinMin) NListed<LoisLinAtom, LoisLinPairMin>;
 %template(LoisOhernMin) NListed<LoisOhernAtom, LoisOhernPairMinCLs>;
-//%rename(__lt__) jamminglist::operator<;
+//%rename(__lt__) JammingList::operator<;
 
 //%{
-//    shared_ptr<NListedVirial<HertzianAtom, HertzianPair> > Hertzian(neighborlist *neighbors){
+//    shared_ptr<NListedVirial<HertzianAtom, HertzianPair> > Hertzian(NeighborList *neighbors){
 //        NListedVirial<HertzianAtom, HertzianPair> *h = new NListedVirial<HertzianAtom, HertzianPair>(neighbors);
 //        return shared_ptr<NListedVirial<HertzianAtom, HertzianPair> >(h);
 //    };
 //%}
 
-%extend neighborlist {
-  idpair __getitem__(size_t i) {
+%extend NeighborList {
+  IDPair __getitem__(size_t i) {
     if (i >= $self->numpairs()) {
       myErr = 1;
-      return idpair(atomid(), atomid());
+      return IDPair(AtomID(), AtomID());
     }
     return $self->get((uint) i);
   }
@@ -541,7 +541,7 @@ namespace std {
   %}
 };
 
-// %extend collection {
+// %extend Collection {
 //     %insert("python") %{
 //         def __init__(self, box, groups, interactions=None, trackers=None, constraints=None):
 //             self.box = box
@@ -582,5 +582,5 @@ namespace std {
     %};
 }
 
-%include "collection.hpp"
-%include "collection.cpp"
+%include "Collection.hpp"
+%include "Collection.cpp"
