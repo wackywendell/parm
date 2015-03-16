@@ -52,8 +52,8 @@ using namespace std;
     */
     typedef Vector3<flt> Vec;
 #endif
-typedef Numvector<flt, 2> Pair;
-typedef Nvector<Vec, 2> VecPair;
+typedef NumVector<flt, 2> Pair;
+typedef NVector<Vec, 2> VecPair;
 using namespace std;
 
 /**
@@ -108,12 +108,12 @@ unsigned int seed(unsigned int n);
 */
 unsigned int seed();
 
-class gaussVec {
+class GaussVec {
     protected:
         normdistribution distro;
         normgenerator gauss;
     public:
-        gaussVec(flt sigma);
+        GaussVec(flt sigma);
         void set(flt sigma){distro = normdistribution(0,sigma);};
 #ifdef VEC2D
         Vec generate(){return Vec(gauss(),gauss());};
@@ -127,7 +127,7 @@ A class for generating two random numbers from a Gaussian distribution, with a g
 
 This is used by some of the integrators.
 */
-class bivariateGauss {
+class BivariateGauss {
     protected:
         normdistribution distro;
         normgenerator gauss;
@@ -139,7 +139,7 @@ class bivariateGauss {
         /**
         See `set()` for parameters.
         */
-        bivariateGauss(const flt s1=1, const flt s2=1, const flt corr=0);
+        BivariateGauss(const flt s1=1, const flt s2=1, const flt corr=0);
         /**
         Set the standard deviations and correlations.
 

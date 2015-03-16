@@ -1,4 +1,4 @@
-#include "interaction.hpp"
+#include "Interaction.hpp"
 
 #ifndef CONSTRAINTS_H
 #define CONSTRAINTS_H
@@ -46,15 +46,15 @@ class coordConstraint : public constraint {
 
 class coordCOMConstraint : public constraint {
     private:
-        sptr<atomgroup> a;
+        sptr<AtomGroup> a;
         bool fixed[3];
         Vec loc;
     public:
-        coordCOMConstraint(sptr<atomgroup> atm, bool fixx, bool fixy, bool fixz, Vec loc) :
+        coordCOMConstraint(sptr<AtomGroup> atm, bool fixx, bool fixy, bool fixz, Vec loc) :
             a(atm), loc(loc) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordCOMConstraint(sptr<atomgroup> atm, bool fixx, bool fixy, bool fixz) :
+        coordCOMConstraint(sptr<AtomGroup> atm, bool fixx, bool fixy, bool fixz) :
             a(atm), loc(a->com()) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
-        coordCOMConstraint(sptr<atomgroup> atm) :
+        coordCOMConstraint(sptr<AtomGroup> atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         void apply(Box &box){
@@ -117,12 +117,12 @@ class relativeConstraint : public constraint {
 
 class distConstraint : public constraint {
     private:
-        atomid a1, a2;
+        AtomID a1, a2;
         flt dist;
     public:
-        distConstraint(atomid atm1, atomid atm2, flt dist) :
+        distConstraint(AtomID atm1, AtomID atm2, flt dist) :
             a1(atm1), a2(atm2), dist(dist) {};
-        distConstraint(atomid atm1, atomid atm2) :
+        distConstraint(AtomID atm1, AtomID atm2) :
             a1(atm1), a2(atm2), dist((a1->x - a2->x).mag()){};
         int ndof(){return 1;};
         void apply(Box &box){
@@ -169,11 +169,11 @@ class distConstraint : public constraint {
 
 class linearConstraint : public constraint {
     private:
-        sptr<atomgroup> atms;
+        sptr<AtomGroup> atms;
         flt dist;
         flt lincom, I, M;
     public:
-        linearConstraint(sptr<atomgroup> atms, flt dist) :
+        linearConstraint(sptr<AtomGroup> atms, flt dist) :
             atms(atms), dist(dist), lincom(0), I(0), M(0) {
             for(uint i = 0; i < atms->size(); i++){
                 M += (*atms)[i].m;
@@ -234,7 +234,7 @@ class linearConstraint : public constraint {
 
 class ContactTracker : public statetracker{
     protected:
-        sptr<atomgroup> atoms;
+        sptr<AtomGroup> atoms;
         vector<flt> dists;
         vector<vector<bool> > contacts;
         
@@ -242,7 +242,7 @@ class ContactTracker : public statetracker{
         unsigned long long formations;
         unsigned long long incontact;
     public:
-        ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists);
+        ContactTracker(sptr<Box> box, sptr<AtomGroup> atoms, vector<flt> dists);
         void update(Box &box);
         
         unsigned long long broken(){return breaks;};
@@ -250,7 +250,7 @@ class ContactTracker : public statetracker{
         unsigned long long number(){return incontact;};
 };
 
-inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<atomgroup> atoms, vector<double> dists){
+inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<AtomGroup> atoms, vector<double> dists){
     vector<flt> newdists = vector<flt>();
     for(uint i=0; i<dists.size(); i++){
         newdists.push_back(dists[i]);
@@ -260,8 +260,8 @@ inline ContactTracker* ContactTrackerD(sptr<Box> box, sptr<atomgroup> atoms, vec
 
 class EnergyTracker : public statetracker{
     protected:
-        sptr<atomgroup> atoms;
-        vector<sptr<interaction> > interactions;
+        sptr<AtomGroup> atoms;
+        vector<sptr<Interaction> > interactions;
         
         uint N;
         uint nskip, nskipped;
@@ -269,8 +269,8 @@ class EnergyTracker : public statetracker{
         flt Es, Us, Ks;
         flt Esq, Usq, Ksq;
     public:
-        EnergyTracker(sptr<atomgroup> atoms, 
-            vector<sptr<interaction> > interactions, uint nskip=1)
+        EnergyTracker(sptr<AtomGroup> atoms, 
+            vector<sptr<Interaction> > interactions, uint nskip=1)
              : atoms(atoms),
             interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
             U0(0),Es(0),Us(0),Ks(0), Esq(0), Usq(0), Ksq(0){};
@@ -311,11 +311,11 @@ class RsqTracker1 {
         unsigned long skip, count;
         
     public:
-        RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com);
+        RsqTracker1(AtomGroup& atoms, unsigned long skip, Vec com);
         
-        void reset(atomgroup& atoms, Vec com);
+        void reset(AtomGroup& atoms, Vec com);
             
-        bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
+        bool update(Box& box, AtomGroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<Vec> xyz2();
         vector<Vec> xyz4();
         vector<flt> r4();
@@ -326,13 +326,13 @@ class RsqTracker1 {
 
 class RsqTracker : public statetracker {
     public:
-        sptr<atomgroup> atoms;
+        sptr<AtomGroup> atoms;
         vector<RsqTracker1> singles;
         unsigned long curt;
         bool usecom;
         
     public:
-        RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool usecom=true);
+        RsqTracker(sptr<AtomGroup> atoms, vector<unsigned long> ns, bool usecom=true);
         
         void reset();
         void update(Box &box);
@@ -360,11 +360,11 @@ class ISFTracker1 {
         unsigned long skip, count;
         
     public:
-        ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com);
+        ISFTracker1(AtomGroup& atoms, unsigned long skip, vector<flt> ks, Vec com);
         
-        void reset(atomgroup& atoms, Vec com);
+        void reset(AtomGroup& atoms, Vec com);
             
-        bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
+        bool update(Box& box, AtomGroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<vector<cmplx> > ISFs();
         vector<vector<Array<cmplx, NDIM> > > ISFxyz();
         
@@ -374,13 +374,13 @@ class ISFTracker1 {
 
 class ISFTracker : public statetracker {
     public:
-        sptr<atomgroup> atoms;
+        sptr<AtomGroup> atoms;
         vector<ISFTracker1> singles;
         unsigned long curt;
         bool usecom;
         
     public:
-        ISFTracker(sptr<atomgroup> atoms, vector<flt> ks, 
+        ISFTracker(sptr<AtomGroup> atoms, vector<flt> ks, 
                     vector<unsigned long> ns, bool usecom=false);
         
         void reset();
@@ -396,7 +396,7 @@ class ISFTracker : public statetracker {
 
 class SmoothLocs : public statetracker {
     public:
-        sptr<atomgroup> atoms;
+        sptr<AtomGroup> atoms;
         uint smoothn; // number of skipns to "smooth" over
         uint skipn; // number of dts to skip
         vector<Vec> curlocs;
@@ -406,7 +406,7 @@ class SmoothLocs : public statetracker {
         bool usecom;
     
     public:
-        SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn=1, bool usecom=false);
+        SmoothLocs(sptr<AtomGroup> atoms, Box &box, uint smoothn, uint skipn=1, bool usecom=false);
         
         void reset();
         void update(Box &box);
@@ -418,14 +418,14 @@ class SmoothLocs : public statetracker {
 class RDiffs : public statetracker {
     // Tracks only a single dt (skip)
     public:
-        sptr<atomgroup> atoms;
+        sptr<AtomGroup> atoms;
         vector<Vec> pastlocs;
         vector<vector<flt> > dists;
         unsigned long skip;
         unsigned long curt;
         bool usecom;
     public:
-        RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom=false);
+        RDiffs(sptr<AtomGroup> atoms, unsigned long skip, bool usecom=false);
         
         void reset();
             

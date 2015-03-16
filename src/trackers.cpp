@@ -1,13 +1,13 @@
 #include "trackers.hpp"
 
 void pairlist::clear(){
-    map<const atomid, set<atomid> >::iterator mapiter;
+    map<const AtomID, set<AtomID> >::iterator mapiter;
     for(mapiter = pairs.begin(); mapiter != pairs.end(); ++mapiter){
         mapiter->second.clear();
     }
 };
 
-neighborlist::neighborlist(sptr<Box> box, sptr<atomvec> atomv, const flt skin) :
+neighborlist::neighborlist(sptr<Box> box, sptr<AtomVec> atomv, const flt skin) :
                 box(box), skin(skin), atoms(atomv), diameters(),
                 lastlocs(), updatenum(0), ignorechanged(true){};
 
@@ -53,33 +53,33 @@ bool neighborlist::update_list(bool force){
     ignorechanged = false;
     curpairs.clear();
     for(uint i=0; i<atoms.size(); i++){
-        atomid a1=atoms.get_id(i);
+        AtomID a1=atoms.get_id(i);
         lastlocs[i] = a1->x;
         for(uint j=0; j<i; j++){
-            atomid a2=atoms.get_id(j);
+            AtomID a2=atoms.get_id(j);
             if (ignorepairs.has_pair(a1, a2)) continue;
             flt diam = (diameters[i] + diameters[j])/2;
             if(box->diff(a1->x, a2->x).mag() < (diam + skin))
-                curpairs.push_back(idpair(a1, a2));
+                curpairs.push_back(IDPair(a1, a2));
         }
     }
     //~ cout << "neighborlist::update_list:: done.\n";
     // print stuff about the current update
-    //~ set<atomid> curset = (ignorepairs.get_pairs(atoms.back()));
+    //~ set<AtomID> curset = (ignorepairs.get_pairs(atoms.back()));
     //~ cout << "neighborlist | atoms: " << atoms.size() <<  "pairs: " << curpairs.size() << " ignored -1: "
          //~ << curset.size() << "\n";
     //~ cout << "ignored -1:";
-    //~ for(set<atomid>::iterator it=curset.begin(); it!=curset.end(); it++)
+    //~ for(set<AtomID>::iterator it=curset.begin(); it!=curset.end(); it++)
         //~ cout << " " << it->n();
     //~ cout << '\n' << "paired:";
-    //~ for(vector<idpair>::iterator it=begin(); it!=end(); it++)
+    //~ for(vector<IDPair>::iterator it=begin(); it!=end(); it++)
         //~ if(it->first() == atoms.back()) cout << " " << it->last().n();
     //~ cout << '\n';
 
     return true;
 }
 
-Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const uint width)
+Grid::Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms, const uint width)
         : box(box), atoms(atoms), minwidth(-1), goalwidth(-1){
     widths[0] = width;
     widths[1] = width;
@@ -88,7 +88,7 @@ Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const uint width)
     #endif
 };
 
-Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, vector<uint> width)
+Grid::Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms, vector<uint> width)
         : box(box), atoms(atoms), minwidth(-1), goalwidth(-1){
     assert(width.size() == NDIM);
     widths[0] = width[0];
@@ -98,7 +98,7 @@ Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, vector<uint> width)
     #endif
 };
 
-Grid::Grid(sptr<OriginBox> box, sptr<atomgroup> atoms,
+Grid::Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
                             const flt minwidth, const flt goalwidth) :
         box(box), atoms(atoms), minwidth(minwidth), goalwidth(goalwidth){
     widths[0] = 0;
@@ -204,12 +204,12 @@ uint Grid::get_loc(Vec v, Vec bsize){
 
 void Grid::make_grid(){
     #ifdef VEC2D
-    gridlocs = vector<set<atomid> >(widths[0] * widths[1]);
+    gridlocs = vector<set<AtomID> >(widths[0] * widths[1]);
     #else
-    gridlocs = vector<set<atomid> >(widths[0] * widths[1] * widths[2]);
+    gridlocs = vector<set<AtomID> >(widths[0] * widths[1] * widths[2]);
     #endif
     Vec bsize = box->boxshape();
-    atomgroup &g = *atoms;
+    AtomGroup &g = *atoms;
     for(uint ai = 0; ai < g.size(); ai++){
         uint i = get_loc(g[ai].x, bsize);
         gridlocs[i].insert(g.get_id(ai));
@@ -224,7 +224,7 @@ Grid::iterator Grid::end(){
     return GridIterator(*this, gridlocs.end());
 };
 
-Grid::pair_iter Grid::pairs(atomid a){
+Grid::pair_iter Grid::pairs(AtomID a){
     return pair_iter(*this, a);
 };
 
@@ -247,10 +247,10 @@ flt Grid::time_to_edge(atom &a){
     return t;
 };
 
-vector<idpair> Grid::allpairs(){
-    vector<idpair> v = vector<idpair>();
+vector<IDPair> Grid::allpairs(){
+    vector<IDPair> v = vector<IDPair>();
     for(iterator p=begin(); p!=end(); ++p){
-        idpair pr = *p;
+        IDPair pr = *p;
         cout << "n1: " << pr.first().n()
                 << "  n2: "  << pr.last().n() << '\n';
         assert(pr.first().n() < atoms->size());
@@ -260,13 +260,13 @@ vector<idpair> Grid::allpairs(){
     return v;
 };
 
-vector<atomid> Grid::allpairs(atomid a){
-    vector<atomid> v = vector<atomid>();
+vector<AtomID> Grid::allpairs(AtomID a){
+    vector<AtomID> v = vector<AtomID>();
     for(pair_iter p=pairs(a); p!=p.end(); ++p) v.push_back(*p);
     return v;
 };
 
-GridPairedIterator::GridPairedIterator(Grid & grid, atomid a) :
+GridPairedIterator::GridPairedIterator(Grid & grid, AtomID a) :
         grid(grid), atom1(a){
     uint cellnum = grid.get_loc(a->x, grid.box->boxshape());
     neighbor_cells = grid.neighbors(cellnum);
@@ -352,7 +352,7 @@ GridIterator::GridIterator(Grid & grid) : grid(grid), cell1(grid.gridlocs.begin(
     };
 };
 
-GridIterator::GridIterator(Grid & grid, vector<set<atomid> >::iterator cell1) :
+GridIterator::GridIterator(Grid & grid, vector<set<AtomID> >::iterator cell1) :
                         grid(grid), cell1(cell1){
     if(cell1 == grid.gridlocs.end()) return;
     atom1 = cell1->begin();

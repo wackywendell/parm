@@ -1,12 +1,12 @@
-#include "interaction.hpp"
+#include "Interaction.hpp"
 
-flt spring::energy(const Vec r){
+flt Spring::energy(const Vec r){
     flt m = r.mag();
     flt l = m - x0;
     return .5 * springk * l*l;
 }
 
-Vec spring::forces(const Vec r){
+Vec Spring::forces(const Vec r){
     flt m = r.mag();
     if(m < 1e-32) return Vec();
     flt fmag = (x0 - m) * springk;
@@ -31,8 +31,8 @@ Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, cons
     return r * (fmag/d);
 };
 
-fixedForceRegionAtom::fixedForceRegionAtom(atomid a, Vec dir, vector<flt> bound, vector<flt> Fs) :
-        atomid(a), direction(dir.norm()), boundaries(bound), Fs(Fs){
+fixedForceRegionAtom::fixedForceRegionAtom(AtomID a, Vec dir, vector<flt> bound, vector<flt> Fs) :
+        AtomID(a), direction(dir.norm()), boundaries(bound), Fs(Fs){
     if(boundaries.size() != Fs.size() - 1){
         throw std::invalid_argument("fixedForceRegionAtom: boundaries.size() != Fs.size() - 1");
     } else if(boundaries.size() <= 0){
@@ -75,7 +75,7 @@ flt bondangle::energy(const Vec& r1, const Vec& r2){
     else return springk*pow(costheta - cos(theta0),2)/2;
 }
 
-Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
+NVector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     flt r1mag = r1.mag();
     flt r2mag = r2.mag();
     flt costheta = r1.dot(r2) / r1mag / r2mag;
@@ -90,7 +90,7 @@ Nvector<Vec, 3> bondangle::forces(const Vec& r1, const Vec& r2){
     // We have V = \frac{1}{2}k(\theta-\theta_{0})^{2}
     // Then -f = grad V = \frac{k}{r}(\theta-\theta_{0})\hat{\theta}
     // first we get the direction:
-    Nvector<Vec, 3> force;
+    NVector<Vec, 3> force;
     if (fmag == 0) {return force;}
     Vec f0 = r2.perpto(r1);
     Vec f2 = r1.perpto(r2);
@@ -130,7 +130,7 @@ dihedral::dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow
                     coscoeffs(cvals), sincoeffs(svals), usepow(usepow){
 }
 
-Nvector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
+NVector<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
                    const Vec &r3) const {
     // Taken from Rapaport "Art of Molecular Dynamics Simulation" p.279
     // The expressions and notation are very close to that of the book.
@@ -167,7 +167,7 @@ sides of the bond. */
     flt t5 = c[0][2] * c[1][2] - c[0][1] * c[2][2];
     flt t6 = -p;
 
-    Nvector<Vec, 4> derivs;
+    NVector<Vec, 4> derivs;
 
     /*
      Rapaport: The dihedral angle is defined as the angle between the
@@ -321,7 +321,7 @@ flt dihedral::energy(const flt ang) const{
 #endif
 //~ flt interactgroup::energy(Box &box){
     //~ flt E=0;
-    //~ vector<interaction*>::iterator it;
+    //~ vector<Interaction*>::iterator it;
     //~ for(it = inters.begin(); it < inters.end(); ++it){
         //~ E += (*it)->energy(box);
     //~ }
@@ -329,13 +329,13 @@ flt dihedral::energy(const flt ang) const{
 //~ };
 
 //~ void interactgroup::setForces(Box &box){
-    //~ vector<interaction*>::iterator it;
+    //~ vector<Interaction*>::iterator it;
     //~ for(it = inters.begin(); it < inters.end(); ++it){
         //~ (*it)->setForces(box);
     //~ }
 //~ };
 
-bondgrouping::bondgrouping(flt k, flt x0, atomid a1, atomid a2,
+bondgrouping::bondgrouping(flt k, flt x0, AtomID a1, AtomID a2,
         BondDiffType diff, OriginBox *box) :
             k(k), x0(x0), a1(a1), a2(a2), diff_type(diff){
     if(diff == FIXEDBOX){
@@ -384,7 +384,7 @@ flt bondpairs::energy(Box &box){
     vector<bondgrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
         Vec r = it->diff(box);
-        E += spring(it->k, it->x0).energy(r);
+        E += Spring(it->k, it->x0).energy(r);
     }
     return E;
 }
@@ -395,7 +395,7 @@ void bondpairs::setForces(Box &box){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         Vec r = it->diff(box);
-        Vec f = spring(it->k, it->x0).forces(r);
+        Vec f = Spring(it->k, it->x0).forces(r);
         //~ assert(f.sq() < 10000000);
         atom1.f += f;
         atom2.f -= f;
@@ -413,7 +413,7 @@ flt bondpairs::setForcesGetPressure(Box &box){
         atom & atom1 = *it->a1;
         atom & atom2 = *it->a2;
         Vec r = it->diff(box);
-        Vec f = spring(it->k, it->x0).forces(r);
+        Vec f = Spring(it->k, it->x0).forces(r);
         //~ assert(f.sq() < 10000000);
         atom1.f += f;
         atom2.f -= f;
@@ -430,7 +430,7 @@ flt bondpairs::pressure(Box &box){
     for(it = pairs.begin(); it < pairs.end(); ++it){
         if(it->diff_type == UNBOXED) continue;
         Vec r = it->diff(box);
-        Vec f = spring(it->k, it->x0).forces(r);
+        Vec f = Spring(it->k, it->x0).forces(r);
         P += f.dot(r);
     }
     return P;
@@ -479,7 +479,7 @@ bool angletriples::add(anglegrouping a, bool replace){
     return false;
 };
 
-bool angletriples::add(flt k, atomid a1, atomid a2, atomid a3, bool replace){
+bool angletriples::add(flt k, AtomID a1, AtomID a2, AtomID a3, bool replace){
     Vec r1 = diff(a2->x, a1->x);
     Vec r2 = diff(a2->x, a3->x);
     flt x0 = bondangle::get_angle(r1, r2);
@@ -508,7 +508,7 @@ void angletriples::setForces(Box &box){
         atom & atom3 = *it->a3;
         Vec r1 = diff(atom2.x, atom1.x);
         Vec r2 = diff(atom2.x, atom3.x);
-        Nvector<Vec,3> f = bondangle(it->k, it->x0).forces(r1, r2);
+        NVector<Vec,3> f = bondangle(it->k, it->x0).forces(r1, r2);
         assert(f[0].sq() < 1e8);
         assert(f[1].sq() < 1e8);
         assert(f[2].sq() < 1e8);
@@ -592,7 +592,7 @@ void dihedrals::setForces(Box &box){
         Vec r1 = dihedralgrouping::diff(atom2.x, atom1.x);
         Vec r2 = dihedralgrouping::diff(atom3.x, atom2.x);
         Vec r3 = dihedralgrouping::diff(atom4.x, atom3.x);
-        Nvector<Vec,4> f = it->dih.forces(r1, r2, r3);
+        NVector<Vec,4> f = it->dih.forces(r1, r2, r3);
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
@@ -655,7 +655,7 @@ flt LJsimple::energy(Box &box){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
         Vec dist = box.diff(pair.atom1->x, pair.atom2->x);
-        E += LJrepulsive::energy(dist, pair.sigma, pair.epsilon);
+        E += LJRepulsive::energy(dist, pair.sigma, pair.epsilon);
     }
     return E;
 };
@@ -668,7 +668,7 @@ void LJsimple::setForces(Box &box){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
         Vec r = box.diff(pair.atom1->x, pair.atom2->x);
-        Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
+        Vec f = LJRepulsive::forces(r, pair.sigma, pair.epsilon);
         pair.atom1->f += f;
         pair.atom2->f -= f;
     }
@@ -683,26 +683,26 @@ flt LJsimple::pressure(Box &box){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         LJpair pair = LJpair(*it, *it2);
         Vec r = box.diff(pair.atom1->x, pair.atom2->x);
-        Vec f = LJrepulsive::forces(r, pair.sigma, pair.epsilon);
+        Vec f = LJRepulsive::forces(r, pair.sigma, pair.epsilon);
         P += r.dot(f);
     }
     return P;
 };
 
-atomid LJsimple::get_id(atom* a){
+AtomID LJsimple::get_id(atom* a){
     for(vector<LJatom>::iterator it=atoms.begin(); it!=atoms.end(); ++it)
         if((*it) == a) return *it;
-    return atomid();
+    return AtomID();
 };
 
 
 Charges::Charges(flt screen, flt k, vector<Charged> atms) : atoms(atms),
                 screen(screen), k(k){};
 
-atomid Charges::get_id(atom* a){
+AtomID Charges::get_id(atom* a){
     for(vector<Charged>::iterator it=atoms.begin(); it!=atoms.end(); ++it)
         if((*it) == a) return *it;
-    return atomid();
+    return AtomID();
 };
 
 flt Charges::energy(Box &box){
@@ -953,12 +953,12 @@ flt SCSpringList::energy(Box &box){
     flt E = 0;
     array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
-        idpair pi = scs->pair(i);
+        IDPair pi = scs->pair(i);
         pair[0] = i;
         for(uint j = i+1; j < scs->pairs(); ++j){
             pair[1] = j;
             if(ignore_list.count(pair) > 0) continue;
-            idpair pj = scs->pair(j);
+            IDPair pj = scs->pair(j);
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
             SpheroCylinderDiff diff = scp.NearestLoc(box);
             //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
@@ -973,13 +973,13 @@ flt SCSpringList::energy(Box &box){
 void SCSpringList::setForces(Box &box){
     array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
-        idpair pi = scs->pair(i);
+        IDPair pi = scs->pair(i);
         flt l1 = ls[i];
         pair[0] = i;
         for(uint j = i+1; j < scs->pairs(); ++j){
             pair[1] = j;
             if(ignore_list.count(pair) > 0) continue;
-            idpair pj = scs->pair(j);
+            IDPair pj = scs->pair(j);
             flt l2 = ls[j];
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
             SpheroCylinderDiff diff = scp.NearestLoc(box);

@@ -40,9 +40,9 @@ Vec LeesEdwardsBox::diff(Vec r1, Vec r2, array<int,NDIM> boxes){
     return dr;
 }
 
-SCbox::SCbox(flt L, flt R) : L(L), R(R){};
+SCBox::SCBox(flt L, flt R) : L(L), R(R){};
 
-flt SCbox::V(){
+flt SCBox::V(){
     #ifdef VEC2D
     return R*L + R*R*M_PI;
     #else
@@ -51,7 +51,7 @@ flt SCbox::V(){
     #endif
 };
 
-Vec SCbox::dist(Vec r1){
+Vec SCBox::dist(Vec r1){
     // Vector to nearest point on central line
     if(r1[0] < -L/2) r1[0] += L/2;
     else if(r1[0] > L/2) r1[0] -= L/2;
@@ -59,7 +59,7 @@ Vec SCbox::dist(Vec r1){
     return r1;
 };
 
-Vec SCbox::edgedist(Vec r1){
+Vec SCBox::edgedist(Vec r1){
     // Vector to nearest edge
     if(r1[0] < -L/2) r1[0] += L/2;
     else if(r1[0] > L/2) r1[0] -= L/2;
@@ -76,7 +76,7 @@ Vec SCbox::edgedist(Vec r1){
     return r1 * ((R-dmag)/dmag);
 }
 
-bool SCbox::inside(Vec r1, flt buffer){
+bool SCBox::inside(Vec r1, flt buffer){
     if(r1[0] < -L/2) r1[0] += L/2;
     else if(r1[0] > L/2) r1[0] -= L/2;
     else r1[0] = 0;
@@ -84,7 +84,7 @@ bool SCbox::inside(Vec r1, flt buffer){
     return r1.sq() < newR*newR;
 };
 
-Vec SCbox::randLoc(flt min_dist_to_wall){
+Vec SCBox::randLoc(flt min_dist_to_wall){
     if(min_dist_to_wall >= R) return Vec();
     Vec v;
     flt Rmin = R - min_dist_to_wall;
@@ -115,7 +115,7 @@ Vec SCbox::randLoc(flt min_dist_to_wall){
     return v;
 };
 
-Vec atomgroup::com() const{
+Vec AtomGroup::com() const{
     Vec v = Vec();
     for(unsigned int i=0; i<size(); i++){
         atom& a = (*this)[i];
@@ -126,7 +126,7 @@ Vec atomgroup::com() const{
     return v / mass();
 };
 
-flt atomgroup::mass() const{
+flt AtomGroup::mass() const{
     flt m = 0;
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
@@ -136,11 +136,11 @@ flt atomgroup::mass() const{
     return m;
 };
 
-Vec atomgroup::comv() const {
+Vec AtomGroup::comv() const {
     return momentum() / mass();
 };
 
-Vec atomgroup::momentum() const{
+Vec AtomGroup::momentum() const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
@@ -151,7 +151,7 @@ Vec atomgroup::momentum() const{
     return tot;
 };
 
-flt atomgroup::gyradius() const{
+flt AtomGroup::gyradius() const{
     Vec avgr = Vec();
     for(uint i = 0; i<size(); i++){
         avgr += (*this)[i].x;
@@ -166,7 +166,7 @@ flt atomgroup::gyradius() const{
 };
 
 #ifdef VEC3D
-Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
+Vec AtomGroup::angmomentum(const Vec &loc, Box &box) const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
@@ -177,7 +177,7 @@ Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
     return tot;
 };
 #elif defined VEC2D
-flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
+flt AtomGroup::angmomentum(const Vec &loc, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
@@ -191,7 +191,7 @@ flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
 #endif
 
 #ifdef VEC3D
-flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
+flt AtomGroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
     if (axis.sq() == 0) return 0;
     flt tot = 0;
     Vec newloc;
@@ -204,7 +204,7 @@ flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
     return tot;
 };
 
-Matrix<flt> atomgroup::moment(const Vec &loc, Box &box) const{
+Matrix<flt> AtomGroup::moment(const Vec &loc, Box &box) const{
     Matrix<flt> I;
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
@@ -224,19 +224,19 @@ Matrix<flt> atomgroup::moment(const Vec &loc, Box &box) const{
     return I;
 };
 
-Vec atomgroup::omega(const Vec &loc, Box &box) const{
+Vec AtomGroup::omega(const Vec &loc, Box &box) const{
     Matrix<flt> Inv = moment(loc, box).SymmetricInverse();
     return Inv * (angmomentum(loc, box));
 };
 
-void atomgroup::addOmega(Vec w, Vec loc, Box &box){
+void AtomGroup::addOmega(Vec w, Vec loc, Box &box){
     for(uint i=0; i<size(); i++){
         Vec r = box.diff((*this)[i].x, loc);
         (*this)[i].v -= r.cross(w);
     }
 };
 #elif defined VEC2D
-flt atomgroup::moment(const Vec &loc, Box &box) const{
+flt AtomGroup::moment(const Vec &loc, Box &box) const{
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
@@ -248,7 +248,7 @@ flt atomgroup::moment(const Vec &loc, Box &box) const{
     return tot;
 };
 
-void atomgroup::addOmega(flt w, Vec loc, Box &box){
+void AtomGroup::addOmega(flt w, Vec loc, Box &box){
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
@@ -258,7 +258,7 @@ void atomgroup::addOmega(flt w, Vec loc, Box &box){
 };
 #endif
 
-flt atomgroup::kinetic(const Vec &originvelocity) const{
+flt AtomGroup::kinetic(const Vec &originvelocity) const{
     flt totE = 0;
     Vec curv;
     for(uint i=0; i<size(); i++){
@@ -270,13 +270,13 @@ flt atomgroup::kinetic(const Vec &originvelocity) const{
     return totE;
 };
 
-void atomgroup::addv(Vec v){
+void AtomGroup::addv(Vec v){
     for(uint i=0; i<size(); i++){
         (*this)[i].v += v;
     }
 };
 
-void atomgroup::randomize_velocities(flt T){
+void AtomGroup::randomize_velocities(flt T){
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
         if(a.m == 0 or isinf(a.m)) continue;
@@ -284,26 +284,26 @@ void atomgroup::randomize_velocities(flt T){
     }
 };
 
-void atomgroup::resetForces(){
+void AtomGroup::resetForces(){
     for(uint i=0; i<size(); i++){
         (*this)[i].f = Vec();
     }
 };
 
-//~ void atomgroup::vverlet1(const flt dt){
+//~ void AtomGroup::vverlet1(const flt dt){
     //~ for(uint i=0; i<size(); i++){
         //~ (*this)[i].x += (*this)[i].v * dt + (*this)[i].a * (dt*dt/2);
         //~ (*this)[i].v += (*this)[i].a * (dt/2);
     //~ }
 //~ };
 
-//~ void atomgroup::vverlet2(const flt dt){
+//~ void AtomGroup::vverlet2(const flt dt){
     //~ for(uint i=0; i<size(); i++){
         //~ (*this)[i].v += (*this)[i].a * (dt/2);
     //~ }
 //~ };
 
-void LeesEdwardsBox::shear(flt dgamma, atomgroup &atoms){
+void LeesEdwardsBox::shear(flt dgamma, AtomGroup &atoms){
     // TODO: is this right for non-square boxes?
     // Is gamma Δx / Lx or Δx / Ly?
     for(uint i=0; i<atoms.size(); i++){

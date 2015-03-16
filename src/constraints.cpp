@@ -1,6 +1,6 @@
 #include "constraints.hpp"
 
-ContactTracker::ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists) :
+ContactTracker::ContactTracker(sptr<Box> box, sptr<AtomGroup> atoms, vector<flt> dists) :
     atoms(atoms), dists(dists), contacts(), breaks(0), formations(0),
         incontact(0){
     //~ cout << "Making contact tracker." << endl;
@@ -49,7 +49,7 @@ void EnergyTracker::update(Box &box){
         curK += curatom.v.sq() * curatom.m / 2;
     }
     
-    vector<sptr<interaction> >::iterator it;
+    vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it != interactions.end(); ++it){
         curU += (*it)->energy(box);
     }
@@ -66,7 +66,7 @@ void EnergyTracker::update(Box &box){
 
 void EnergyTracker::setU0(Box &box){
     flt curU = 0;
-    vector<sptr<interaction> >::iterator it;
+    vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it != interactions.end(); ++it){
         curU += (*it)->energy(box);
     }
@@ -74,7 +74,7 @@ void EnergyTracker::setU0(Box &box){
 };
 
 
-RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
+RsqTracker1::RsqTracker1(AtomGroup& atoms, unsigned long skip, Vec com) :
             pastlocs(atoms.size(), Vec()), xyz2sums(atoms.size(), Vec()),
             xyz4sums(atoms.size(), Vec()), r4sums(atoms.size(), 0),
             skip(skip), count(0){
@@ -83,7 +83,7 @@ RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
     };
 };
         
-void RsqTracker1::reset(atomgroup& atoms, Vec com){
+void RsqTracker1::reset(AtomGroup& atoms, Vec com){
     pastlocs.resize(atoms.size());
     xyz2sums.assign(atoms.size(), Vec());
     xyz4sums.assign(atoms.size(), Vec());
@@ -94,7 +94,7 @@ void RsqTracker1::reset(atomgroup& atoms, Vec com){
     count = 0;
 };
 
-bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
+bool RsqTracker1::update(Box& box, AtomGroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); ++i){
@@ -146,7 +146,7 @@ vector<flt> RsqTracker1::r4(){
 };
     
 
-RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool usecom) : 
+RsqTracker::RsqTracker(sptr<AtomGroup> atoms, vector<unsigned long> ns, bool usecom) : 
             atoms(atoms), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec();
     for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
@@ -227,7 +227,7 @@ vector<flt> RsqTracker::counts(){
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
+ISFTracker1::ISFTracker1(AtomGroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
             pastlocs(atoms.size(), Vec()), ISFsums(ks.size(), vector<Array<cmplx, NDIM> >()),
             ks(ks), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); ++i){
@@ -239,7 +239,7 @@ ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, V
     };
 };
         
-void ISFTracker1::reset(atomgroup& atoms, Vec com){
+void ISFTracker1::reset(AtomGroup& atoms, Vec com){
     pastlocs.resize(atoms.size());
     for(uint ki=0; ki<ks.size(); ki++){
         ISFsums[ki].assign(atoms.size(), Array<cmplx, NDIM>());
@@ -250,7 +250,7 @@ void ISFTracker1::reset(atomgroup& atoms, Vec com){
     count = 0;
 };
 
-bool ISFTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
+bool ISFTracker1::update(Box& box, AtomGroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); ++i){
@@ -306,7 +306,7 @@ vector<vector<Array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ISFTracker::ISFTracker(sptr<atomgroup> atoms, vector<flt> ks, 
+ISFTracker::ISFTracker(sptr<AtomGroup> atoms, vector<flt> ks, 
                     vector<unsigned long> ns, bool usecom) : atoms(atoms), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec();
     for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
@@ -359,7 +359,7 @@ vector<flt> ISFTracker::counts(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SmoothLocs::SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn, bool usecom) : 
+SmoothLocs::SmoothLocs(sptr<AtomGroup> atoms, Box &box, uint smoothn, uint skipn, bool usecom) : 
         atoms(atoms), smoothn(smoothn), skipn(skipn), curlocs(atoms->size()), numincur(0), locs(),
         curt(0), usecom(usecom){
     update(box);
@@ -401,7 +401,7 @@ void SmoothLocs::update(Box &box){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
+RDiffs::RDiffs(sptr<AtomGroup> atoms, unsigned long skip, bool usecom) :
         atoms(atoms), pastlocs(atoms->size(), Vec()), dists(), skip(skip), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec();
     for(uint i = 0; i<atoms->size(); ++i){

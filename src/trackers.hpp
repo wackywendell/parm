@@ -28,29 +28,29 @@ only one will be returned through the iterator.
 */
 class pairlist {
     protected:
-        map<const atomid, set<atomid> > pairs;
+        map<const AtomID, set<AtomID> > pairs;
     public:
-        //~ pairlist(atomgroup *group);
+        //~ pairlist(AtomGroup *group);
         pairlist(){};
 
         /** Ensure that a given \ref atom is in the overall list. */
-        inline void ensure(const atomid a){
-            pairs.insert(std::pair<atomid, set<atomid> >(a, set<atomid>()));
+        inline void ensure(const AtomID a){
+            pairs.insert(std::pair<AtomID, set<AtomID> >(a, set<AtomID>()));
         }
         /** Ensure that every \ref atom in input is in the overall list. */
-        inline void ensure(vector<atomid> ps){
-            vector<atomid>::iterator it;
+        inline void ensure(vector<AtomID> ps){
+            vector<AtomID>::iterator it;
             for(it=ps.begin(); it != ps.end(); ++it) ensure(*it);
         }
         /** Ensure that every \ref atom in input is in the overall list. */
-        inline void ensure(atomgroup &group){
+        inline void ensure(AtomGroup &group){
             for(uint i=0; i<group.size(); i++) ensure(group.get_id(i));
         }
         /** Check if a given pair is is the list.
 
         Note that `has_pair(a1, a2) == has_pair(a2, a1)`.
         */
-        inline bool has_pair(atomid a1, atomid a2){
+        inline bool has_pair(AtomID a1, AtomID a2){
             if(a1 > a2) return pairs[a1].count(a2) > 0;
             else return pairs[a2].count(a1) > 0;
         }
@@ -58,7 +58,7 @@ class pairlist {
         /**
         Add a pair to the list. If already in the list, nothing changes.
         */
-        inline void add_pair(atomid a1, atomid a2){
+        inline void add_pair(AtomID a1, AtomID a2){
             //~ cout << "pairlist ignore " << a1.n() << '-' << a2.n() << "\n";
             if(a1 > a2){pairs[a1].insert(a2);}
             else{pairs[a2].insert(a1);};
@@ -68,7 +68,7 @@ class pairlist {
         /**
         Remove a pair from the list. If not already in the list, nothing changes.
         */
-        inline void erase_pair(atomid a1, atomid a2){
+        inline void erase_pair(AtomID a1, AtomID a2){
             if(a1 > a2){pairs[a1].erase(a2);}
             else{pairs[a2].erase(a1);};
         }
@@ -80,16 +80,16 @@ class pairlist {
         neighbors of an atom, but if `get_pairs` is called successively on all atoms, it will return
         each and every pair exactly once (including "false positives").
         */
-        inline set<atomid> get_pairs(const atomid a){ensure(a); return pairs[a];};
+        inline set<AtomID> get_pairs(const AtomID a){ensure(a); return pairs[a];};
 
         /** for iterating over neighbors */
-        inline set<atomid>::iterator begin(const atomid a){return pairs[a].begin();};
+        inline set<AtomID>::iterator begin(const AtomID a){return pairs[a].begin();};
         /** for iterating over neighbors */
-        inline set<atomid>::iterator end(const atomid a){return pairs[a].end();};
+        inline set<AtomID>::iterator end(const AtomID a){return pairs[a].end();};
 
         /** for iterating over neighbors */
         inline uint size() const { uint N=0; for(
-            map<const atomid, set<atomid> >::const_iterator it=pairs.begin();
+            map<const AtomID, set<AtomID> >::const_iterator it=pairs.begin();
             it != pairs.end(); ++it) N+= (uint) it->second.size();
             return N;
         };
@@ -119,15 +119,15 @@ class neighborlist : public statetracker{
     protected:
         sptr<Box> box;
         flt skin;
-        subgroup atoms;
+        SubGroup atoms;
         vector<flt> diameters;
-        vector<idpair> curpairs;
+        vector<IDPair> curpairs;
         pairlist ignorepairs;
         vector<Vec> lastlocs;
         uint updatenum;
         bool ignorechanged; /*< if true, forces a full check on next update */
     public:
-        neighborlist(sptr<Box> box, sptr<atomvec> atoms, const flt skin);
+        neighborlist(sptr<Box> box, sptr<AtomVec> atoms, const flt skin);
         /**
         Calls `update_list(false)`; exists as a requirement of \ref statetracker.
         */
@@ -140,11 +140,11 @@ class neighborlist : public statetracker{
         bool update_list(bool force = true);
         // if force = false, we check if updating necessary first
 
-        atomvec& vec(){return atoms.vec();};
+        AtomVec& vec(){return atoms.vec();};
         inline uint which(){return updatenum;};
         inline uint numpairs(){return (uint) curpairs.size();};
-        inline void ignore(atomid a, atomid b){ignorepairs.add_pair(a,b); ignorechanged=true;};
-        void add(atomid a, flt diameter){
+        inline void ignore(AtomID a, AtomID b){ignorepairs.add_pair(a,b); ignorechanged=true;};
+        void add(AtomID a, flt diameter){
             atoms.add(a);
             //assert(diameters.size() == atoms.size() - 1);
             diameters.push_back(diameter);
@@ -157,13 +157,13 @@ class neighborlist : public statetracker{
         inline uint ignore_size() const{return ignorepairs.size();};
         /** Number of atoms in list */
         inline uint size() const{return atoms.size();};
-        inline vector<idpair>::iterator begin(){return curpairs.begin();};
-        inline vector<idpair>::iterator end(){return curpairs.end();};
-        inline idpair get(uint i){
+        inline vector<IDPair>::iterator begin(){return curpairs.begin();};
+        inline vector<IDPair>::iterator end(){return curpairs.end();};
+        inline IDPair get(uint i){
             //assert(i<curpairs.size());
             return curpairs[i];
         };
-        //~ inline vector<idpair> getpairs(){return vector<idpair>(curpairs);};
+        //~ inline vector<IDPair> getpairs(){return vector<IDPair>(curpairs);};
         ~neighborlist(){};
 };
 
@@ -179,7 +179,7 @@ all atoms within the same cell or any neighboring cell are considered "neighbors
 class Grid {
     public:
         sptr<OriginBox> box;
-        sptr<atomgroup> atoms;
+        sptr<AtomGroup> atoms;
 
         /**
         minwidth is minimum size of a box, in real units.
@@ -191,7 +191,7 @@ class Grid {
         flt minwidth;
         flt goalwidth; /**< goalwidth is how many atoms per box (goal). See minwidth. */
         uint widths[NDIM]; /**< Number of box divisions per dimension. */
-        vector<set<atomid> > gridlocs; /**< Atoms in each grid location. */
+        vector<set<AtomID> > gridlocs; /**< Atoms in each grid location. */
 
         vector<uint> neighbors(uint i);
         uint get_loc(Vec v, Vec bsize);
@@ -203,18 +203,18 @@ class Grid {
         /**
         /param width Number of divisions along all axes
         */
-        Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const uint width=1);
+        Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms, const uint width=1);
 
         /**
         /param widths Number of divisions along each axis
         */
-        Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, vector<uint> width);
+        Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms, vector<uint> width);
 
         /**
         /param minwidth The minimum size of a box, e.g.\ the widest diameter of a particle.
         /param goalwidth Number of atoms to try and fit per box.
         */
-        Grid(sptr<OriginBox> box, sptr<atomgroup> atoms, const flt minwidth, const flt goalwidth);
+        Grid(sptr<OriginBox> box, sptr<AtomGroup> atoms, const flt minwidth, const flt goalwidth);
 
         /**
         Reshape the grid to optimize number of atom pairs. No-op if `minwidth <= 1` or `goalwidth <=
@@ -233,15 +233,15 @@ class Grid {
         iterator end();
 
         /** Get all pairs of a specific atom */
-        pair_iter pairs(atomid a);
+        pair_iter pairs(AtomID a);
         /** Find the amount of time until an atom leaves its current cell. */
         flt time_to_edge(atom& a);
         flt time_to_edge(uint i){return time_to_edge((*atoms)[i]);}
 
         /** Return a list of all pairs.\ SLOW function, but useful for debugging. */
-        vector<idpair> allpairs();
+        vector<IDPair> allpairs();
         /** Return a list of all neighbors of a given atom.\ SLOW function, but useful for debugging. */
-        vector<atomid> allpairs(atomid a);
+        vector<AtomID> allpairs(AtomID a);
 
         uint numcells(uint i){assert(i<NDIM); return widths[i];}
         #ifdef VEC2D
@@ -255,24 +255,24 @@ class Grid {
 class GridPairedIterator {
     protected:
         Grid & grid;
-        atomid atom1;
+        AtomID atom1;
 
         vector<uint> neighbor_cells;
         vector<uint>::iterator cellnum2;
-        set<atomid> *cell2;
-        set<atomid>::iterator atom2;
+        set<AtomID> *cell2;
+        set<AtomID>::iterator atom2;
 
         /** returns "successful increment", e.g. cell1 points to an element */
         bool increment_cell2();
         bool increment_atom2();
 
     public:
-        typedef set<atomid>::iterator end_type;
+        typedef set<AtomID>::iterator end_type;
 
-        GridPairedIterator(Grid & grid, atomid a);
+        GridPairedIterator(Grid & grid, AtomID a);
 
         GridPairedIterator& operator++();
-        atomid operator*(){return *atom2;};
+        AtomID operator*(){return *atom2;};
         bool operator==(const GridPairedIterator &other);
 
         bool operator!=(const GridPairedIterator &other){
@@ -293,13 +293,13 @@ class GridPairedIterator {
 class GridIterator {
     protected:
         Grid & grid;
-        vector<set<atomid> >::iterator cell1;
-        set<atomid>::iterator atom1;
+        vector<set<AtomID> >::iterator cell1;
+        set<AtomID>::iterator atom1;
 
         vector<uint> neighbor_cells;
         vector<uint>::iterator cellnum2;
-        set<atomid> *cell2;
-        set<atomid>::iterator atom2;
+        set<AtomID> *cell2;
+        set<AtomID>::iterator atom2;
 
         // returns "successful increment", e.g. cell1 points to an element
         bool increment_cell1();
@@ -309,10 +309,10 @@ class GridIterator {
 
     public:
         GridIterator(Grid & grid);
-        GridIterator(Grid & grid, vector<set<atomid> >::iterator cell1);
+        GridIterator(Grid & grid, vector<set<AtomID> >::iterator cell1);
 
         GridIterator& operator++();
-        idpair operator*(){return idpair(*atom1, *atom2);};
+        IDPair operator*(){return IDPair(*atom1, *atom2);};
         bool operator==(const GridIterator &other);
 
         bool operator!=(const GridIterator &other){
