@@ -170,7 +170,7 @@ Vec AtomGroup::angmomentum(const Vec &loc, Box &box) const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
-        if(curmass <= 0 or curmass) continue;
+        if(curmass <= 0 or isinf(curmass)) continue;
         Vec newloc = box.diff((*this)[i].x, loc);
         tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
