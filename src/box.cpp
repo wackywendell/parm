@@ -5,11 +5,11 @@ Vec LeesEdwardsBox::diff(Vec r1, Vec r2){
     flt dy = r1[1]-r2[1];
     int im = (int) round(dy / Ly);
     dy = dy - (im*Ly);
-    
+
     flt Lx = boxsize[0];
     flt dx = r1[0] - r2[0];
     dx = dx - round((dx/Lx)-im*gamma)*Lx-im*gamma*Lx;
-    
+
     #ifdef VEC2D
     return Vec(dx, dy);
     #endif
@@ -64,7 +64,7 @@ Vec SCbox::edgedist(Vec r1){
     if(r1[0] < -L/2) r1[0] += L/2;
     else if(r1[0] > L/2) r1[0] -= L/2;
     else r1[0] = 0;
-    
+
     flt dmag = r1.mag(); // distance to center
     if(dmag == 0){
         #ifdef VEC2D
@@ -93,23 +93,23 @@ Vec SCbox::randLoc(flt min_dist_to_wall){
         v = randVecBoxed();
         v[0] -= 0.5;
         v[0] *= (L + 2*Rmin);
-        
+
         v[1] -= 0.5;
         v[1] *= 2*Rmin;
-        
+
         #ifndef VEC2D
         v[2] -= 0.5;
         v[2] *= 2*Rmin;
         #endif
-        
+
         flt distsq = pow(v[1],2);
         if(abs(v[0]) >= L/2.0) distsq += pow(abs(v[0]) - L/2.0, 2.0);
-        
-        
+
+
         #ifndef VEC2D
         distsq += pow(v[2],2);
         #endif
-        
+
         if(distsq <= Rminsq) break;
     };
     return v;
@@ -161,7 +161,7 @@ flt atomgroup::gyradius() const{
     for(uint i = 0; i<size(); i++){
         Rgsq += ((*this)[i].x - avgr).sq();
     }
-    
+
     return sqrt(Rgsq/size());
 };
 
@@ -170,7 +170,7 @@ Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
     Vec tot = Vec();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
-        if(curmass <= 0 or curmass) continue;
+        if(curmass <= 0 or isinf(curmass)) continue;
         Vec newloc = box.diff((*this)[i].x, loc);
         tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
     }
@@ -311,6 +311,6 @@ void LeesEdwardsBox::shear(flt dgamma, atomgroup &atoms){
         flt dy = atoms[i].x[1];
         atoms[i].x[0] += dy * dgamma;
     }
-    
+
     gamma += dgamma;
 };
