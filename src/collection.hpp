@@ -2,7 +2,7 @@
 #define COLLECTION_H
 
 #include "vecrand.hpp"
-#include "Interaction.hpp"
+#include "interaction.hpp"
 #include "constraints.hpp"
 #include <cstdio>
 #include <vector>

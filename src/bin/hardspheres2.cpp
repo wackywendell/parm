@@ -9,8 +9,8 @@
 #include <cstdlib>
 
 #include "vecrand.hpp"
-#include "Interaction.hpp"
-#include "Collection.hpp"
+#include "interaction.hpp"
+#include "collection.hpp"
 using namespace std;
 
 /** Hard-Sphere Simulation
@@ -149,7 +149,7 @@ int main(int argc, char **argv){
     // Note that NListed is a class template; its an Interaction that
     // takes various structs as template parameters, and turns them into 
     // a neighbor Interaction
-    // See Interaction.hpp for a whole bunch of them
+    // See interaction.hpp for a whole bunch of them
     // Also note that the NeighborList is not the same as the
     // "neighborlisted" Interaction; multiple interactions can use the
     // same NeighborList

@@ -103,12 +103,12 @@
 #include "box.cpp"
 #include "trackers.hpp"
 #include "trackers.cpp"
-#include "Interaction.hpp"
-#include "Interaction.cpp"
+#include "interaction.hpp"
+#include "interaction.cpp"
 #include "constraints.hpp"
 #include "constraints.cpp"
-#include "Collection.hpp"
-#include "Collection.cpp"
+#include "collection.hpp"
+#include "collection.cpp"
 static int myErr = 0;
 %}
 
@@ -491,7 +491,7 @@ namespace std {
 %include "vecrand.hpp"
 %include "box.hpp"
 %include "trackers.hpp"
-%include "Interaction.hpp"
+%include "interaction.hpp"
 %include "constraints.hpp"
 %template(LJgroup) NListed<LJatom, LJpair>; // Pure repulsive
 %template(LJattract) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive
@@ -582,5 +582,5 @@ namespace std {
     %};
 }
 
-%include "Collection.hpp"
-%include "Collection.cpp"
+%include "collection.hpp"
+%include "collection.cpp"

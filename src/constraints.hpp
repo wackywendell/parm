@@ -1,4 +1,4 @@
-#include "Interaction.hpp"
+#include "interaction.hpp"
 
 #ifndef CONSTRAINTS_H
 #define CONSTRAINTS_H

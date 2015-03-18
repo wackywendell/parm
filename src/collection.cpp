@@ -1,4 +1,4 @@
-#include "Collection.hpp"
+#include "collection.hpp"
 
 Collection::Collection(sptr<Box> box, sptr<AtomGroup> atoms, vector<sptr<Interaction> > is,
               vector<sptr<StateTracker> > ts, vector<sptr<Constraint> > cs,

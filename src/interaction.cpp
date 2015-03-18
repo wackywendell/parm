@@ -1,4 +1,4 @@
-#include "Interaction.hpp"
+#include "interaction.hpp"
 
 flt Spring::energy(const Vec r){
     flt m = r.mag();

@@ -2,8 +2,8 @@
 #include <fstream>
 
 #include "vecrand.hpp"
-#include "Interaction.hpp"
-#include "Collection.hpp"
+#include "interaction.hpp"
+#include "collection.hpp"
 
 // Some constants
 // Note that "flt" is a "floating point number", defaults to "double"
