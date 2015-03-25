@@ -48,8 +48,8 @@ class XYZwriter:
             }
         
         if hasattr(collec, 'interactions'):
-            for name,interaction in list(collec.interactions.items()):
-                cdict[name + 'E'] = interaction.energy(collec.getbox())
+            for name,interac in list(collec.interactions.items()):
+                cdict[name + 'E'] = interac.energy(collec.getbox())
             for i in list(collec.interactions.values()):
                 if isinstance(i, sim.bondpairs):
                     cdict[name + 'mean'] = i.mean_dists()
