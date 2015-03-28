@@ -48,6 +48,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
@@ -112,8 +113,8 @@ Inheritance diagram for LeesEdwardsBox:</div>
  <div class="center">
   <img src="class_lees_edwards_box.png" usemap="#LeesEdwardsBox_map" alt=""/>
   <map id="LeesEdwardsBox_map" name="LeesEdwardsBox_map">
-<area href="class_origin_box.html" title="A rectilinear Box, with periodic boundary conditions. " alt="OriginBox" shape="rect" coords="0,56,109,80"/>
-<area href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. " alt="Box" shape="rect" coords="0,0,109,24"/>
+<area href="class_origin_box.html" title="A rectilinear Box, with periodic boundary conditions. " alt="OriginBox" shape="rect" coords="0,112,235,136"/>
+<area href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. " alt="Box" shape="rect" coords="0,56,235,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -132,9 +133,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4989d414f8e2740262f1c8238e9f886c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lees_edwards_box.html#a4989d414f8e2740262f1c8238e9f886c">get_gamma</a> ()</td></tr>
 <tr class="memdesc:a4989d414f8e2740262f1c8238e9f886c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current shear amount.  <a href="#a4989d414f8e2740262f1c8238e9f886c">More...</a><br /></td></tr>
 <tr class="separator:a4989d414f8e2740262f1c8238e9f886c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8fce13d28d418bd1a1e8c5768e951bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lees_edwards_box.html#ad8fce13d28d418bd1a1e8c5768e951bf">shear</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> dgamma, <a class="el" href="classatomgroup.html">atomgroup</a> &amp;atoms)</td></tr>
-<tr class="memdesc:ad8fce13d28d418bd1a1e8c5768e951bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the shear by dgamma, and move the atoms as necessary.  <a href="#ad8fce13d28d418bd1a1e8c5768e951bf">More...</a><br /></td></tr>
-<tr class="separator:ad8fce13d28d418bd1a1e8c5768e951bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82e9c75d2c952f75e794091d620a4c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lees_edwards_box.html#ab82e9c75d2c952f75e794091d620a4c3">shear</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> dgamma, <a class="el" href="class_atom_group.html">AtomGroup</a> &amp;atoms)</td></tr>
+<tr class="memdesc:ab82e9c75d2c952f75e794091d620a4c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the shear by dgamma, and move the atoms as necessary.  <a href="#ab82e9c75d2c952f75e794091d620a4c3">More...</a><br /></td></tr>
+<tr class="separator:ab82e9c75d2c952f75e794091d620a4c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afef6d4986bfa8add0f957c5d212ad5dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lees_edwards_box.html#afef6d4986bfa8add0f957c5d212ad5dc">nonaffine</a> (<a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> v)</td></tr>
 <tr class="separator:afef6d4986bfa8add0f957c5d212ad5dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfa80602b840b775f67c1d193fcb338b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_lees_edwards_box.html#adfa80602b840b775f67c1d193fcb338b">affine</a> (<a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> v)</td></tr>
@@ -415,7 +416,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad8fce13d28d418bd1a1e8c5768e951bf"></a>
+<a class="anchor" id="ab82e9c75d2c952f75e794091d620a4c3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -428,7 +429,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classatomgroup.html">atomgroup</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="class_atom_group.html">AtomGroup</a> &amp;&#160;</td>
           <td class="paramname"><em>atoms</em>&#160;</td>
         </tr>
         <tr>
@@ -471,7 +472,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 10 2015 16:07:51 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 28 2015 12:31:28 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

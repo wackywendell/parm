@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pairlist',['pairlist',['../classpairlist.html',1,'']]]
+  ['pairlist',['PairList',['../class_pair_list.html',1,'']]]
 ];

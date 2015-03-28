@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xrpsummer',['xrpsummer',['../classxrpsummer.html',1,'']]]
+  ['xrpsummer',['XRPSummer',['../class_x_r_p_summer.html',1,'']]]
 ];

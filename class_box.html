@@ -48,6 +48,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
@@ -111,11 +112,11 @@ Inheritance diagram for Box:</div>
  <div class="center">
   <img src="class_box.png" usemap="#Box_map" alt=""/>
   <map id="Box_map" name="Box_map">
-<area href="class_infinite_box.html" title="An infinite Box, for use with, e.g., sticky conglomerations or proteins. " alt="InfiniteBox" shape="rect" coords="0,56,109,80"/>
-<area href="class_origin_box.html" title="A rectilinear Box, with periodic boundary conditions. " alt="OriginBox" shape="rect" coords="119,56,228,80"/>
-<area href="class_s_cbox.html" title="A spheocylinder box, also known as a capsule. " alt="SCbox" shape="rect" coords="238,56,347,80"/>
-<area href="class_lees_edwards_box.html" title="Lees-Edwards boundary conditions, with shear in the x-direction, relative to y. " alt="LeesEdwardsBox" shape="rect" coords="59,112,168,136"/>
-<area href="class_walled_box2_d.html" alt="WalledBox2D" shape="rect" coords="178,112,287,136"/>
+<area href="class_infinite_box.html" title="An infinite Box, for use with, e.g., sticky conglomerations or proteins. " alt="InfiniteBox" shape="rect" coords="0,112,235,136"/>
+<area href="class_origin_box.html" title="A rectilinear Box, with periodic boundary conditions. " alt="OriginBox" shape="rect" coords="245,112,480,136"/>
+<area href="class_s_c_box.html" title="A spheocylinder box, also known as a capsule. " alt="SCBox" shape="rect" coords="490,112,725,136"/>
+<area href="class_lees_edwards_box.html" title="Lees-Edwards boundary conditions, with shear in the x-direction, relative to y. " alt="LeesEdwardsBox" shape="rect" coords="122,168,357,192"/>
+<area href="class_walled_box2_d.html" alt="WalledBox2D" shape="rect" coords="367,168,602,192"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -132,8 +133,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The virtual interface for the shape of the space and its boundaries. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#_a1">hardspheres.cpp</a>, and <a class="el" href="_l_jatoms_8cpp-example.html#_a1">LJatoms.cpp</a>.</dd>
-</dl></div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ac23ac0d46759831591fad524b7c14d8e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -193,9 +193,8 @@ Public Member Functions</h2></td></tr>
 <p>Distance between two points, given boundary conditions. </p>
 <p>This is the main function that <a class="el" href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. ">Box</a> exists for. </p>
 
-<p>Implemented in <a class="el" href="class_walled_box2_d.html#a237e1d4e26807c8ec07f24a8a2ccdd2f">WalledBox2D</a>, <a class="el" href="class_s_cbox.html#a2122233d3ca02e67c74d8c77b527f33e">SCbox</a>, <a class="el" href="class_lees_edwards_box.html#abcb106eefbd57b077c6bd9fb61328f0b">LeesEdwardsBox</a>, <a class="el" href="class_origin_box.html#a2926768c18c2a14ef1742a9be12a8033">OriginBox</a>, and <a class="el" href="class_infinite_box.html#a8c5059e2041fdb7a0d88666d567ceffd">InfiniteBox</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a23">hardspheres.cpp</a>, and <a class="el" href="_l_jatoms_8cpp-example.html#a21">LJatoms.cpp</a>.</dd>
-</dl>
+<p>Implemented in <a class="el" href="class_walled_box2_d.html#a237e1d4e26807c8ec07f24a8a2ccdd2f">WalledBox2D</a>, <a class="el" href="class_s_c_box.html#a5f8764f268a9aa2c82d4144660eeb74b">SCBox</a>, <a class="el" href="class_lees_edwards_box.html#abcb106eefbd57b077c6bd9fb61328f0b">LeesEdwardsBox</a>, <a class="el" href="class_origin_box.html#a2926768c18c2a14ef1742a9be12a8033">OriginBox</a>, and <a class="el" href="class_infinite_box.html#a8c5059e2041fdb7a0d88666d567ceffd">InfiniteBox</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="abcb8676af61d72b3b90e241670935c8e"></a>
@@ -221,7 +220,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Volume. Can return NaN. </p>
 
-<p>Implemented in <a class="el" href="class_walled_box2_d.html#a4488a3327098f3435e97b88664e4756c">WalledBox2D</a>, <a class="el" href="class_s_cbox.html#a1d88ec711ccd05bb05fabfd70ea66a09">SCbox</a>, <a class="el" href="class_origin_box.html#a0001b08ecd7d370ac618f5b1f3288e6c">OriginBox</a>, <a class="el" href="class_origin_box.html#a0001b08ecd7d370ac618f5b1f3288e6c">OriginBox</a>, and <a class="el" href="class_infinite_box.html#a863d451b620a0b507e890f9a17bf13dd">InfiniteBox</a>.</p>
+<p>Implemented in <a class="el" href="class_walled_box2_d.html#a4488a3327098f3435e97b88664e4756c">WalledBox2D</a>, <a class="el" href="class_s_c_box.html#a7b25a224dabc422904b9d1cd068289e2">SCBox</a>, <a class="el" href="class_origin_box.html#a0001b08ecd7d370ac618f5b1f3288e6c">OriginBox</a>, <a class="el" href="class_origin_box.html#a0001b08ecd7d370ac618f5b1f3288e6c">OriginBox</a>, and <a class="el" href="class_infinite_box.html#a863d451b620a0b507e890f9a17bf13dd">InfiniteBox</a>.</p>
 
 </div>
 </div>
@@ -231,7 +230,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 10 2015 16:07:50 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 28 2015 12:31:27 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

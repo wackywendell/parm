@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['bivariategauss',['bivariateGauss',['../classbivariate_gauss.html',1,'']]],
-  ['bondangle',['bondangle',['../classbondangle.html',1,'']]],
-  ['bondgrouping',['bondgrouping',['../structbondgrouping.html',1,'']]],
-  ['bondpairs',['bondpairs',['../classbondpairs.html',1,'']]],
+  ['bivariategauss',['BivariateGauss',['../class_bivariate_gauss.html',1,'']]],
+  ['bondangle',['BondAngle',['../class_bond_angle.html',1,'']]],
+  ['bondgrouping',['BondGrouping',['../struct_bond_grouping.html',1,'']]],
+  ['bondpairs',['BondPairs',['../class_bond_pairs.html',1,'']]],
   ['box',['Box',['../class_box.html',1,'']]]
 ];

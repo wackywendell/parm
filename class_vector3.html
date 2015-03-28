@@ -48,6 +48,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
@@ -113,8 +114,8 @@ Inheritance diagram for Vector3&lt; T &gt;:</div>
  <div class="center">
   <img src="class_vector3.png" usemap="#Vector3&lt; T &gt;_map" alt=""/>
   <map id="Vector3&lt; T &gt;_map" name="Vector3&lt; T &gt;_map">
-<area href="class_numvector.html" alt="Numvector&lt; T, 3 &gt;" shape="rect" coords="0,56,120,80"/>
-<area href="class_nvector.html" title="An N-dimensional vector, extending addition and subtraction from the type T to the Nvector class..." alt="Nvector&lt; T, N &gt;" shape="rect" coords="0,0,120,24"/>
+<area href="class_num_vector.html" alt="NumVector&lt; T, 3 &gt;" shape="rect" coords="0,56,122,80"/>
+<area href="class_n_vector.html" title="An N-dimensional vector, extending addition and subtraction from the type T to the NVector class..." alt="NVector&lt; T, N &gt;" shape="rect" coords="0,0,122,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -124,10 +125,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a54f99f4211298d5245ea578bdd5143cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65e5c07ab508ee02b37776d5cff48cd4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a65e5c07ab508ee02b37776d5cff48cd4">Vector3</a> (const T a, const T b, const T c)</td></tr>
 <tr class="separator:a65e5c07ab508ee02b37776d5cff48cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a985ef6409c977ca3ab96500b57df3c95"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a985ef6409c977ca3ab96500b57df3c95">Vector3</a> (const <a class="el" href="class_numvector.html">Numvector</a>&lt; T, 3 &gt; rhs)</td></tr>
-<tr class="separator:a985ef6409c977ca3ab96500b57df3c95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e22d802a1d2e6eeeaa1c15c9e3bfb1b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a8e22d802a1d2e6eeeaa1c15c9e3bfb1b">Vector3</a> (const <a class="el" href="class_nvector.html">Nvector</a>&lt; T, 3 &gt; rhs)</td></tr>
-<tr class="separator:a8e22d802a1d2e6eeeaa1c15c9e3bfb1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6e8b431467b68c1649ba7d7802ca965"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#ab6e8b431467b68c1649ba7d7802ca965">Vector3</a> (const <a class="el" href="class_num_vector.html">NumVector</a>&lt; T, 3 &gt; rhs)</td></tr>
+<tr class="separator:ab6e8b431467b68c1649ba7d7802ca965"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a966b6dbf9ea6f4eb2722a4bf109857"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a2a966b6dbf9ea6f4eb2722a4bf109857">Vector3</a> (const <a class="el" href="class_n_vector.html">NVector</a>&lt; T, 3 &gt; rhs)</td></tr>
+<tr class="separator:a2a966b6dbf9ea6f4eb2722a4bf109857"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3ac70e74dec50c8218a11bfeb6409ce"><td class="memItemLeft" align="right" valign="top">const T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#ad3ac70e74dec50c8218a11bfeb6409ce">getx</a> () const </td></tr>
 <tr class="separator:ad3ac70e74dec50c8218a11bfeb6409ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a120fa446a64d999946e510e2281a184a"><td class="memItemLeft" align="right" valign="top">const T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a120fa446a64d999946e510e2281a184a">gety</a> () const </td></tr>
@@ -193,90 +194,90 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ace9cea2f20f5e7a7343b1c7c50671c74"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
 <tr class="memitem:ace9cea2f20f5e7a7343b1c7c50671c74"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_vector3.html#ace9cea2f20f5e7a7343b1c7c50671c74">operator/=</a> (const U rhs)</td></tr>
 <tr class="separator:ace9cea2f20f5e7a7343b1c7c50671c74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_class_numvector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_numvector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_numvector.html">Numvector&lt; T, 3 &gt;</a></td></tr>
-<tr class="memitem:a7a4403da50198a5cfd133f39fe31eb2c inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a7a4403da50198a5cfd133f39fe31eb2c">Numvector</a> ()</td></tr>
-<tr class="separator:a7a4403da50198a5cfd133f39fe31eb2c inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01ed117b57cf902ed981320f09f5f2bc inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a01ed117b57cf902ed981320f09f5f2bc">Numvector</a> (const <a class="el" href="class_nvector.html">Nvector</a>&lt; T, N &gt; &amp;rhs)</td></tr>
-<tr class="separator:a01ed117b57cf902ed981320f09f5f2bc inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef56d765d66c817dc81f26f3b6bafe02 inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#aef56d765d66c817dc81f26f3b6bafe02">Numvector</a> (const T rhs[N])</td></tr>
-<tr class="separator:aef56d765d66c817dc81f26f3b6bafe02 inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9980578c7dad6862f3c1de50f468930e inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a9980578c7dad6862f3c1de50f468930e">dot</a> (const <a class="el" href="class_numvector.html">Numvector</a> &amp;other) const</td></tr>
-<tr class="memdesc:a9980578c7dad6862f3c1de50f468930e inherit pub_methods_class_numvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inner product.  <a href="#a9980578c7dad6862f3c1de50f468930e">More...</a><br /></td></tr>
-<tr class="separator:a9980578c7dad6862f3c1de50f468930e inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1420869f8c10e6b7e6b3a52194f407f inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#af1420869f8c10e6b7e6b3a52194f407f">sq</a> () const</td></tr>
-<tr class="separator:af1420869f8c10e6b7e6b3a52194f407f inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76617ddd3f5b77bfa9e98f7c64aaec61 inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a76617ddd3f5b77bfa9e98f7c64aaec61">mag</a> () const</td></tr>
-<tr class="memdesc:a76617ddd3f5b77bfa9e98f7c64aaec61 inherit pub_methods_class_numvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">The square of the vector, \(\vec r^2 \).  <a href="#a76617ddd3f5b77bfa9e98f7c64aaec61">More...</a><br /></td></tr>
-<tr class="separator:a76617ddd3f5b77bfa9e98f7c64aaec61 inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71788d1c57367f8d364f889de167b7dc inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a71788d1c57367f8d364f889de167b7dc">distance</a> (const <a class="el" href="class_numvector.html">Numvector</a> &amp;rhs) const</td></tr>
-<tr class="memdesc:a71788d1c57367f8d364f889de167b7dc inherit pub_methods_class_numvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">The magnitude of the vector, \( \left| \vec r \right| \).  <a href="#a71788d1c57367f8d364f889de167b7dc">More...</a><br /></td></tr>
-<tr class="separator:a71788d1c57367f8d364f889de167b7dc inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08f7f9e2b343dbd39d19ec664800be5d inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_numvector.html">Numvector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a08f7f9e2b343dbd39d19ec664800be5d">perpto</a> (const <a class="el" href="class_numvector.html">Numvector</a> &amp;other) const</td></tr>
-<tr class="separator:a08f7f9e2b343dbd39d19ec664800be5d inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb5091941ecc92b8ad3488ee2525338a inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#abb5091941ecc92b8ad3488ee2525338a">normalize</a> ()</td></tr>
-<tr class="memdesc:abb5091941ecc92b8ad3488ee2525338a inherit pub_methods_class_numvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize in place.  <a href="#abb5091941ecc92b8ad3488ee2525338a">More...</a><br /></td></tr>
-<tr class="separator:abb5091941ecc92b8ad3488ee2525338a inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7faa229c13f0012a2a08b786456d2d3e inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_numvector.html">Numvector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a7faa229c13f0012a2a08b786456d2d3e">norm</a> () const</td></tr>
-<tr class="memdesc:a7faa229c13f0012a2a08b786456d2d3e inherit pub_methods_class_numvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the normalized version.  <a href="#a7faa229c13f0012a2a08b786456d2d3e">More...</a><br /></td></tr>
-<tr class="separator:a7faa229c13f0012a2a08b786456d2d3e inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50f4d459806b02e6e0878685e2262c37 inherit pub_methods_class_numvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_numvector.html#a50f4d459806b02e6e0878685e2262c37">~Numvector</a> ()</td></tr>
-<tr class="separator:a50f4d459806b02e6e0878685e2262c37 inherit pub_methods_class_numvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_class_nvector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_nvector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_nvector.html">Nvector&lt; T, N &gt;</a></td></tr>
-<tr class="memitem:a0ced7e18f1bdee8b34113c011f501809 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a0ced7e18f1bdee8b34113c011f501809">Nvector</a> ()</td></tr>
-<tr class="separator:a0ced7e18f1bdee8b34113c011f501809 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fcc6bf1a62121065bc12de19ad0cc5b inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a7fcc6bf1a62121065bc12de19ad0cc5b">Nvector</a> (const <a class="el" href="class_nvector.html">Nvector</a> &amp;rhs)</td></tr>
-<tr class="separator:a7fcc6bf1a62121065bc12de19ad0cc5b inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c8a7bb2f97c9257d9098149754d1a8e inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:a2c8a7bb2f97c9257d9098149754d1a8e inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#a2c8a7bb2f97c9257d9098149754d1a8e">Nvector</a> (const <a class="el" href="class_nvector.html">Nvector</a>&lt; U, N &gt; &amp;rhs)</td></tr>
-<tr class="separator:a2c8a7bb2f97c9257d9098149754d1a8e inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb37f3ed472298e36aab7c2678b31526 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#adb37f3ed472298e36aab7c2678b31526">Nvector</a> (const T locs[N])</td></tr>
-<tr class="separator:adb37f3ed472298e36aab7c2678b31526 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad74d17c2110a5460d651146f4336a5c2 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#ad74d17c2110a5460d651146f4336a5c2">get</a> (const unsigned int n) const </td></tr>
-<tr class="separator:ad74d17c2110a5460d651146f4336a5c2 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f03a8173746e0370b948105ddec35cb inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a6f03a8173746e0370b948105ddec35cb">set</a> (const unsigned int n, const T a)</td></tr>
-<tr class="separator:a6f03a8173746e0370b948105ddec35cb inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2773fb03078f523dc033c1427601d9a inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#ab2773fb03078f523dc033c1427601d9a">len</a> () const </td></tr>
-<tr class="separator:ab2773fb03078f523dc033c1427601d9a inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa60a206cc32d3d941e4c353d3fc866a9 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#aa60a206cc32d3d941e4c353d3fc866a9">operator+=</a> (const <a class="el" href="class_nvector.html">Nvector</a> &amp;rhs)</td></tr>
-<tr class="separator:aa60a206cc32d3d941e4c353d3fc866a9 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7425f1cb8a796fe9fa16f9947c43a6bb inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a7425f1cb8a796fe9fa16f9947c43a6bb">operator-=</a> (const <a class="el" href="class_nvector.html">Nvector</a> &amp;rhs)</td></tr>
-<tr class="separator:a7425f1cb8a796fe9fa16f9947c43a6bb inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac37676aa30f8372255e08d9b5b7d7fb3 inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:ac37676aa30f8372255e08d9b5b7d7fb3 inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#ac37676aa30f8372255e08d9b5b7d7fb3">operator*=</a> (const U rhs)</td></tr>
-<tr class="separator:ac37676aa30f8372255e08d9b5b7d7fb3 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af75033cc1c64bbaa64ca8dcf6ed3e336 inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:af75033cc1c64bbaa64ca8dcf6ed3e336 inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#af75033cc1c64bbaa64ca8dcf6ed3e336">operator/=</a> (const U rhs)</td></tr>
-<tr class="separator:af75033cc1c64bbaa64ca8dcf6ed3e336 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3bce6dfc7657981295668abeb992220 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#ab3bce6dfc7657981295668abeb992220">operator-</a> () const </td></tr>
-<tr class="separator:ab3bce6dfc7657981295668abeb992220 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5be770ca02cdb8a3029e139fc38fce1 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#ac5be770ca02cdb8a3029e139fc38fce1">operator+</a> (const <a class="el" href="class_nvector.html">Nvector</a> &amp;rhs) const </td></tr>
-<tr class="separator:ac5be770ca02cdb8a3029e139fc38fce1 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95475cf6d1f22ad9b42e4f7bd7303904 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a95475cf6d1f22ad9b42e4f7bd7303904">operator-</a> (const <a class="el" href="class_nvector.html">Nvector</a> &amp;rhs) const </td></tr>
-<tr class="separator:a95475cf6d1f22ad9b42e4f7bd7303904 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed2878894f140bf224beb62b77d5a9e3 inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#aed2878894f140bf224beb62b77d5a9e3">operator[]</a> (const unsigned int i)</td></tr>
-<tr class="separator:aed2878894f140bf224beb62b77d5a9e3 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab371f2be47a917aa3321596599f3ff3d inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#ab371f2be47a917aa3321596599f3ff3d">operator[]</a> (const unsigned int i) const </td></tr>
-<tr class="separator:ab371f2be47a917aa3321596599f3ff3d inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaba730e9033315d083125e1ef0ae6996 inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:aaba730e9033315d083125e1ef0ae6996 inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#aaba730e9033315d083125e1ef0ae6996">operator*</a> (const U rhs) const </td></tr>
-<tr class="memdesc:aaba730e9033315d083125e1ef0ae6996 inherit pub_methods_class_nvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplication by a scalar.  <a href="#aaba730e9033315d083125e1ef0ae6996">More...</a><br /></td></tr>
-<tr class="separator:aaba730e9033315d083125e1ef0ae6996 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8513b25926554917facd614a377d5aee inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:a8513b25926554917facd614a377d5aee inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#a8513b25926554917facd614a377d5aee">operator/</a> (const U rhs) const </td></tr>
-<tr class="memdesc:a8513b25926554917facd614a377d5aee inherit pub_methods_class_nvector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Division by a scalar.  <a href="#a8513b25926554917facd614a377d5aee">More...</a><br /></td></tr>
-<tr class="separator:a8513b25926554917facd614a377d5aee inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebb25dbb650b5b2e4f9cf4af80f645dd inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#aebb25dbb650b5b2e4f9cf4af80f645dd">begin</a> ()</td></tr>
-<tr class="separator:aebb25dbb650b5b2e4f9cf4af80f645dd inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41b33ae8fbe1393d971cce4145e6712f inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a41b33ae8fbe1393d971cce4145e6712f">end</a> ()</td></tr>
-<tr class="separator:a41b33ae8fbe1393d971cce4145e6712f inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37c5507c0f370834fab6286fbf0dfa9d inherit pub_methods_class_nvector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a37c5507c0f370834fab6286fbf0dfa9d">~Nvector</a> ()</td></tr>
-<tr class="separator:a37c5507c0f370834fab6286fbf0dfa9d inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf0ae3ff1e0c329ec333bd6a2250a458 inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:acf0ae3ff1e0c329ec333bd6a2250a458 inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#acf0ae3ff1e0c329ec333bd6a2250a458">operator*=</a> (const U rhs)</td></tr>
-<tr class="separator:acf0ae3ff1e0c329ec333bd6a2250a458 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad11930de560612cd78b0bcae1ca5a188 inherit pub_methods_class_nvector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
-<tr class="memitem:ad11930de560612cd78b0bcae1ca5a188 inherit pub_methods_class_nvector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_nvector.html">Nvector</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_nvector.html#ad11930de560612cd78b0bcae1ca5a188">operator/=</a> (const U rhs)</td></tr>
-<tr class="separator:ad11930de560612cd78b0bcae1ca5a188 inherit pub_methods_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_num_vector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_num_vector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_num_vector.html">NumVector&lt; T, 3 &gt;</a></td></tr>
+<tr class="memitem:a0c2ae91a37b8fb5b3e433bd411310cf0 inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a0c2ae91a37b8fb5b3e433bd411310cf0">NumVector</a> ()</td></tr>
+<tr class="separator:a0c2ae91a37b8fb5b3e433bd411310cf0 inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2024312fd98eb0badfe75399a16f3f2f inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a2024312fd98eb0badfe75399a16f3f2f">NumVector</a> (const <a class="el" href="class_n_vector.html">NVector</a>&lt; T, N &gt; &amp;rhs)</td></tr>
+<tr class="separator:a2024312fd98eb0badfe75399a16f3f2f inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c66af918682563b22a0ad39ac58f2ee inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a7c66af918682563b22a0ad39ac58f2ee">NumVector</a> (const T rhs[N])</td></tr>
+<tr class="separator:a7c66af918682563b22a0ad39ac58f2ee inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bb3cc0460bb4e5761882b6178edb264 inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a8bb3cc0460bb4e5761882b6178edb264">dot</a> (const <a class="el" href="class_num_vector.html">NumVector</a> &amp;other) const</td></tr>
+<tr class="memdesc:a8bb3cc0460bb4e5761882b6178edb264 inherit pub_methods_class_num_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inner product.  <a href="#a8bb3cc0460bb4e5761882b6178edb264">More...</a><br /></td></tr>
+<tr class="separator:a8bb3cc0460bb4e5761882b6178edb264 inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2207c07080432a7a6c70ab49570f86a inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#ae2207c07080432a7a6c70ab49570f86a">sq</a> () const</td></tr>
+<tr class="separator:ae2207c07080432a7a6c70ab49570f86a inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a603fd5ea813e3d650e0321c56fd7681e inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a603fd5ea813e3d650e0321c56fd7681e">mag</a> () const</td></tr>
+<tr class="memdesc:a603fd5ea813e3d650e0321c56fd7681e inherit pub_methods_class_num_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">The square of the vector, \(\vec r^2 \).  <a href="#a603fd5ea813e3d650e0321c56fd7681e">More...</a><br /></td></tr>
+<tr class="separator:a603fd5ea813e3d650e0321c56fd7681e inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a62c472f0983384a8f2e94dd3d77a0f inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a9a62c472f0983384a8f2e94dd3d77a0f">distance</a> (const <a class="el" href="class_num_vector.html">NumVector</a> &amp;rhs) const</td></tr>
+<tr class="memdesc:a9a62c472f0983384a8f2e94dd3d77a0f inherit pub_methods_class_num_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">The magnitude of the vector, \( \left| \vec r \right| \).  <a href="#a9a62c472f0983384a8f2e94dd3d77a0f">More...</a><br /></td></tr>
+<tr class="separator:a9a62c472f0983384a8f2e94dd3d77a0f inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a388d3be2d51dc90f35f243b8d3f143ef inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_num_vector.html">NumVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a388d3be2d51dc90f35f243b8d3f143ef">perpto</a> (const <a class="el" href="class_num_vector.html">NumVector</a> &amp;other) const</td></tr>
+<tr class="separator:a388d3be2d51dc90f35f243b8d3f143ef inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa38ce02c0b5fb65f5a3964e359740541 inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#aa38ce02c0b5fb65f5a3964e359740541">normalize</a> ()</td></tr>
+<tr class="memdesc:aa38ce02c0b5fb65f5a3964e359740541 inherit pub_methods_class_num_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalize in place.  <a href="#aa38ce02c0b5fb65f5a3964e359740541">More...</a><br /></td></tr>
+<tr class="separator:aa38ce02c0b5fb65f5a3964e359740541 inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa65e0e1ae683cb9a0947499a8324726b inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_num_vector.html">NumVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#aa65e0e1ae683cb9a0947499a8324726b">norm</a> () const</td></tr>
+<tr class="memdesc:aa65e0e1ae683cb9a0947499a8324726b inherit pub_methods_class_num_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the normalized version.  <a href="#aa65e0e1ae683cb9a0947499a8324726b">More...</a><br /></td></tr>
+<tr class="separator:aa65e0e1ae683cb9a0947499a8324726b inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54e2044742521861ee415e4846c42e97 inherit pub_methods_class_num_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_num_vector.html#a54e2044742521861ee415e4846c42e97">~NumVector</a> ()</td></tr>
+<tr class="separator:a54e2044742521861ee415e4846c42e97 inherit pub_methods_class_num_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_class_n_vector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_n_vector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_n_vector.html">NVector&lt; T, N &gt;</a></td></tr>
+<tr class="memitem:a147885cdcc8ac68a6be42d2b6e86e75a inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a147885cdcc8ac68a6be42d2b6e86e75a">NVector</a> ()</td></tr>
+<tr class="separator:a147885cdcc8ac68a6be42d2b6e86e75a inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a442cbda9ae6561ce0fc801ab3be577d1 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a442cbda9ae6561ce0fc801ab3be577d1">NVector</a> (const <a class="el" href="class_n_vector.html">NVector</a> &amp;rhs)</td></tr>
+<tr class="separator:a442cbda9ae6561ce0fc801ab3be577d1 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bf6a2ba0230172bb0462cf0751eeac0 inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:a9bf6a2ba0230172bb0462cf0751eeac0 inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a9bf6a2ba0230172bb0462cf0751eeac0">NVector</a> (const <a class="el" href="class_n_vector.html">NVector</a>&lt; U, N &gt; &amp;rhs)</td></tr>
+<tr class="separator:a9bf6a2ba0230172bb0462cf0751eeac0 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a521cf30e93738902071710651b9a4c9f inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a521cf30e93738902071710651b9a4c9f">NVector</a> (const T locs[N])</td></tr>
+<tr class="separator:a521cf30e93738902071710651b9a4c9f inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7340d96a7c1f544fe44fd86a6e38ce45 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a7340d96a7c1f544fe44fd86a6e38ce45">get</a> (const unsigned int n) const </td></tr>
+<tr class="separator:a7340d96a7c1f544fe44fd86a6e38ce45 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad59932f945781ba8a070632cd4f002d0 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#ad59932f945781ba8a070632cd4f002d0">set</a> (const unsigned int n, const T a)</td></tr>
+<tr class="separator:ad59932f945781ba8a070632cd4f002d0 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4e12cb9a4aba58844ceb24d93cb6a0 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#abd4e12cb9a4aba58844ceb24d93cb6a0">len</a> () const </td></tr>
+<tr class="separator:abd4e12cb9a4aba58844ceb24d93cb6a0 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f6814eb44842d516318dcf7825fdcc4 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a7f6814eb44842d516318dcf7825fdcc4">operator+=</a> (const <a class="el" href="class_n_vector.html">NVector</a> &amp;rhs)</td></tr>
+<tr class="separator:a7f6814eb44842d516318dcf7825fdcc4 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8691415198dc8fbd7f4395c1459b4e63 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a8691415198dc8fbd7f4395c1459b4e63">operator-=</a> (const <a class="el" href="class_n_vector.html">NVector</a> &amp;rhs)</td></tr>
+<tr class="separator:a8691415198dc8fbd7f4395c1459b4e63 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a288e85dde9c38f0cb3d6739a1a938bd5 inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:a288e85dde9c38f0cb3d6739a1a938bd5 inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a288e85dde9c38f0cb3d6739a1a938bd5">operator*=</a> (const U rhs)</td></tr>
+<tr class="separator:a288e85dde9c38f0cb3d6739a1a938bd5 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb2221c16b8a7b4c2056eca592737fc4 inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:acb2221c16b8a7b4c2056eca592737fc4 inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#acb2221c16b8a7b4c2056eca592737fc4">operator/=</a> (const U rhs)</td></tr>
+<tr class="separator:acb2221c16b8a7b4c2056eca592737fc4 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb089ccaac13b0a1dd1273ab3cd946d6 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#abb089ccaac13b0a1dd1273ab3cd946d6">operator-</a> () const </td></tr>
+<tr class="separator:abb089ccaac13b0a1dd1273ab3cd946d6 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a811db315472f60c5293fcf2996145e13 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a811db315472f60c5293fcf2996145e13">operator+</a> (const <a class="el" href="class_n_vector.html">NVector</a> &amp;rhs) const </td></tr>
+<tr class="separator:a811db315472f60c5293fcf2996145e13 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a662222abe71a1f50106dbb26d5a6f8f2 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a662222abe71a1f50106dbb26d5a6f8f2">operator-</a> (const <a class="el" href="class_n_vector.html">NVector</a> &amp;rhs) const </td></tr>
+<tr class="separator:a662222abe71a1f50106dbb26d5a6f8f2 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a502690a86d3ccb67de42df93eb59ed92 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a502690a86d3ccb67de42df93eb59ed92">operator[]</a> (const unsigned int i)</td></tr>
+<tr class="separator:a502690a86d3ccb67de42df93eb59ed92 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50e22432680630f45760b3a845433c47 inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a50e22432680630f45760b3a845433c47">operator[]</a> (const unsigned int i) const </td></tr>
+<tr class="separator:a50e22432680630f45760b3a845433c47 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb49a735562048e7e9e4f657e52703a2 inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:aeb49a735562048e7e9e4f657e52703a2 inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#aeb49a735562048e7e9e4f657e52703a2">operator*</a> (const U rhs) const </td></tr>
+<tr class="memdesc:aeb49a735562048e7e9e4f657e52703a2 inherit pub_methods_class_n_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplication by a scalar.  <a href="#aeb49a735562048e7e9e4f657e52703a2">More...</a><br /></td></tr>
+<tr class="separator:aeb49a735562048e7e9e4f657e52703a2 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21c129d5e68cf7c77492e27a2c844b0e inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:a21c129d5e68cf7c77492e27a2c844b0e inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a21c129d5e68cf7c77492e27a2c844b0e">operator/</a> (const U rhs) const </td></tr>
+<tr class="memdesc:a21c129d5e68cf7c77492e27a2c844b0e inherit pub_methods_class_n_vector"><td class="mdescLeft">&#160;</td><td class="mdescRight">Division by a scalar.  <a href="#a21c129d5e68cf7c77492e27a2c844b0e">More...</a><br /></td></tr>
+<tr class="separator:a21c129d5e68cf7c77492e27a2c844b0e inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab062c4f225cb6a29628096151c5997cd inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#ab062c4f225cb6a29628096151c5997cd">begin</a> ()</td></tr>
+<tr class="separator:ab062c4f225cb6a29628096151c5997cd inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac31551bfb42ea1c6904166c5c982c0e inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#aac31551bfb42ea1c6904166c5c982c0e">end</a> ()</td></tr>
+<tr class="separator:aac31551bfb42ea1c6904166c5c982c0e inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a9a4af372c50bfebf0014f9e37ca9d inherit pub_methods_class_n_vector"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#a76a9a4af372c50bfebf0014f9e37ca9d">~NVector</a> ()</td></tr>
+<tr class="separator:a76a9a4af372c50bfebf0014f9e37ca9d inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8f313133e9ff68aa48fb13d224a8824 inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:aa8f313133e9ff68aa48fb13d224a8824 inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#aa8f313133e9ff68aa48fb13d224a8824">operator*=</a> (const U rhs)</td></tr>
+<tr class="separator:aa8f313133e9ff68aa48fb13d224a8824 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb843b39fe7f3fe3b2140dd2ceb9a0f6 inherit pub_methods_class_n_vector"><td class="memTemplParams" colspan="2">template&lt;class U &gt; </td></tr>
+<tr class="memitem:afb843b39fe7f3fe3b2140dd2ceb9a0f6 inherit pub_methods_class_n_vector"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="class_n_vector.html">NVector</a>&lt; T, N &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_n_vector.html#afb843b39fe7f3fe3b2140dd2ceb9a0f6">operator/=</a> (const U rhs)</td></tr>
+<tr class="separator:afb843b39fe7f3fe3b2140dd2ceb9a0f6 inherit pub_methods_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -286,12 +287,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3821741219384392c5b696c486fdd555"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a3821741219384392c5b696c486fdd555">angle</a> (const <a class="el" href="class_vector3.html">Vector3</a> &amp;x1, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x2, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x3)</td></tr>
 <tr class="memdesc:a3821741219384392c5b696c486fdd555"><td class="mdescLeft">&#160;</td><td class="mdescRight">The angle between three points.  <a href="#a3821741219384392c5b696c486fdd555">More...</a><br /></td></tr>
 <tr class="separator:a3821741219384392c5b696c486fdd555"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd1fcd286565fc1bc5abd535b129d960"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#acd1fcd286565fc1bc5abd535b129d960">dihedral</a> (const <a class="el" href="class_vector3.html">Vector3</a> &amp;dx1, const <a class="el" href="class_vector3.html">Vector3</a> &amp;dx2, const <a class="el" href="class_vector3.html">Vector3</a> &amp;dx3)</td></tr>
-<tr class="memdesc:acd1fcd286565fc1bc5abd535b129d960"><td class="mdescLeft">&#160;</td><td class="mdescRight">The dihedral angle between three vectors:  <a href="#acd1fcd286565fc1bc5abd535b129d960">More...</a><br /></td></tr>
-<tr class="separator:acd1fcd286565fc1bc5abd535b129d960"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa44c52820a5eb3aaedd707628b8f327"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#aaa44c52820a5eb3aaedd707628b8f327">dihedral</a> (const <a class="el" href="class_vector3.html">Vector3</a> &amp;x1, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x2, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x3, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x4)</td></tr>
-<tr class="memdesc:aaa44c52820a5eb3aaedd707628b8f327"><td class="mdescLeft">&#160;</td><td class="mdescRight">The dihedral angle between four points.  <a href="#aaa44c52820a5eb3aaedd707628b8f327">More...</a><br /></td></tr>
-<tr class="separator:aaa44c52820a5eb3aaedd707628b8f327"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc8554614868b792336896ceb0ce4610"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#adc8554614868b792336896ceb0ce4610">Dihedral</a> (const <a class="el" href="class_vector3.html">Vector3</a> &amp;dx1, const <a class="el" href="class_vector3.html">Vector3</a> &amp;dx2, const <a class="el" href="class_vector3.html">Vector3</a> &amp;dx3)</td></tr>
+<tr class="memdesc:adc8554614868b792336896ceb0ce4610"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_dihedral.html">Dihedral</a> angle between three vectors:  <a href="#adc8554614868b792336896ceb0ce4610">More...</a><br /></td></tr>
+<tr class="separator:adc8554614868b792336896ceb0ce4610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e4f597eff7c28a105952bef93eddb71"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_vector3.html#a7e4f597eff7c28a105952bef93eddb71">Dihedral</a> (const <a class="el" href="class_vector3.html">Vector3</a> &amp;x1, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x2, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x3, const <a class="el" href="class_vector3.html">Vector3</a> &amp;x4)</td></tr>
+<tr class="memdesc:a7e4f597eff7c28a105952bef93eddb71"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="class_dihedral.html">Dihedral</a> angle between four points.  <a href="#a7e4f597eff7c28a105952bef93eddb71">More...</a><br /></td></tr>
+<tr class="separator:a7e4f597eff7c28a105952bef93eddb71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -301,12 +302,12 @@ Friends</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_class_nvector"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_nvector')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_nvector.html">Nvector&lt; T, N &gt;</a></td></tr>
-<tr class="memitem:aaa1d20179d01752632f084048aeb18d7 inherit pub_types_class_nvector"><td class="memItemLeft" align="right" valign="top">typedef T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#aaa1d20179d01752632f084048aeb18d7">iterator</a></td></tr>
-<tr class="separator:aaa1d20179d01752632f084048aeb18d7 inherit pub_types_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_class_nvector"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_nvector')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_nvector.html">Nvector&lt; T, N &gt;</a></td></tr>
-<tr class="memitem:a94f57cd0b49c6c884d46c2f1ce674537 inherit pro_attribs_class_nvector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nvector.html#a94f57cd0b49c6c884d46c2f1ce674537">vals</a> [N]</td></tr>
-<tr class="separator:a94f57cd0b49c6c884d46c2f1ce674537 inherit pro_attribs_class_nvector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_class_n_vector"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_n_vector')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_n_vector.html">NVector&lt; T, N &gt;</a></td></tr>
+<tr class="memitem:ab4e2bd310dafaf732a62f6bfd0360bd2 inherit pub_types_class_n_vector"><td class="memItemLeft" align="right" valign="top">typedef T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#ab4e2bd310dafaf732a62f6bfd0360bd2">iterator</a></td></tr>
+<tr class="separator:ab4e2bd310dafaf732a62f6bfd0360bd2 inherit pub_types_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_class_n_vector"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_n_vector')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_n_vector.html">NVector&lt; T, N &gt;</a></td></tr>
+<tr class="memitem:aec7ef0eaecfb969a474f3818b4b38912 inherit pro_attribs_class_n_vector"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_vector.html#aec7ef0eaecfb969a474f3818b4b38912">vals</a> [N]</td></tr>
+<tr class="separator:aec7ef0eaecfb969a474f3818b4b38912 inherit pro_attribs_class_n_vector"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;class T&gt;<br />
@@ -388,7 +389,7 @@ template&lt;class T&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a985ef6409c977ca3ab96500b57df3c95"></a>
+<a class="anchor" id="ab6e8b431467b68c1649ba7d7802ca965"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -400,7 +401,7 @@ template&lt;class T&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt;::<a class="el" href="class_vector3.html">Vector3</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_numvector.html">Numvector</a>&lt; T, 3 &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_num_vector.html">NumVector</a>&lt; T, 3 &gt;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -414,7 +415,7 @@ template&lt;class T&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a8e22d802a1d2e6eeeaa1c15c9e3bfb1b"></a>
+<a class="anchor" id="a2a966b6dbf9ea6f4eb2722a4bf109857"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -426,7 +427,7 @@ template&lt;class T&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt;::<a class="el" href="class_vector3.html">Vector3</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="class_nvector.html">Nvector</a>&lt; T, 3 &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_n_vector.html">NVector</a>&lt; T, 3 &gt;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
           <td></td>
         </tr>
@@ -585,7 +586,7 @@ template&lt;class T &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="acd1fcd286565fc1bc5abd535b129d960"></a>
+<a class="anchor" id="adc8554614868b792336896ceb0ce4610"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -595,7 +596,7 @@ template&lt;class T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static T <a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt;::<a class="el" href="classdihedral.html">dihedral</a> </td>
+          <td class="memname">static T <a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt;::<a class="el" href="class_dihedral.html">Dihedral</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>dx1</em>, </td>
@@ -625,7 +626,7 @@ template&lt;class T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>The dihedral angle between three vectors: </p>
+<p>The <a class="el" href="class_dihedral.html">Dihedral</a> angle between three vectors: </p>
 <p>\( \phi=\operatorname{arctan2}\left( \vec{r}_{1}\cdot\left(\vec{r}_{2}\times \vec{r}_{3}\right)\left|\vec{r}_{2}\right|, \left(\vec{r}_{1}\times\vec{r}_{2}\right)\cdot \left(\vec{r}_{2}\times\vec{r}_{3}\right) \right) \)</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -638,7 +639,7 @@ template&lt;class T&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aaa44c52820a5eb3aaedd707628b8f327"></a>
+<a class="anchor" id="a7e4f597eff7c28a105952bef93eddb71"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -648,7 +649,7 @@ template&lt;class T&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static T <a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt;::<a class="el" href="classdihedral.html">dihedral</a> </td>
+          <td class="memname">static T <a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt;::<a class="el" href="class_dihedral.html">Dihedral</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="class_vector3.html">Vector3</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>x1</em>, </td>
@@ -684,8 +685,8 @@ template&lt;class T&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>The dihedral angle between four points. </p>
-<p>Equivalent to <code>dihedral(x2 - x1, x3 - x2, x4 - x3)</code>. </p>
+<p>The <a class="el" href="class_dihedral.html">Dihedral</a> angle between four points. </p>
+<p>Equivalent to <code><a class="el" href="class_dihedral.html">Dihedral</a>(x2 - x1, x3 - x2, x4 - x3)</code>. </p>
 
 </div>
 </div>
@@ -1402,7 +1403,7 @@ template&lt;class U &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 10 2015 16:07:51 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 28 2015 12:31:28 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

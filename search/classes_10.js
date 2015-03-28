@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['scatomvec',['SCatomvec',['../class_s_catomvec.html',1,'']]],
-  ['scbox',['SCbox',['../class_s_cbox.html',1,'']]],
-  ['scboxed',['SCboxed',['../class_s_cboxed.html',1,'']]],
+  ['scatomvec',['SCAtomVec',['../class_s_c_atom_vec.html',1,'']]],
+  ['scbox',['SCBox',['../class_s_c_box.html',1,'']]],
+  ['scboxed',['SCBoxed',['../class_s_c_boxed.html',1,'']]],
   ['scpair',['SCPair',['../struct_s_c_pair.html',1,'']]],
   ['scspringlist',['SCSpringList',['../class_s_c_spring_list.html',1,'']]],
   ['scspringpair',['SCSpringPair',['../struct_s_c_spring_pair.html',1,'']]],
@@ -11,8 +11,8 @@ var searchData=
   ['softwall',['SoftWall',['../class_soft_wall.html',1,'']]],
   ['softwallcylinder',['SoftWallCylinder',['../class_soft_wall_cylinder.html',1,'']]],
   ['spherocylinderdiff',['SpheroCylinderDiff',['../struct_sphero_cylinder_diff.html',1,'']]],
-  ['spring',['spring',['../classspring.html',1,'']]],
-  ['statetracker',['statetracker',['../classstatetracker.html',1,'']]],
+  ['spring',['Spring',['../class_spring.html',1,'']]],
+  ['statetracker',['StateTracker',['../class_state_tracker.html',1,'']]],
   ['staticcollec',['StaticCollec',['../class_static_collec.html',1,'']]],
-  ['subgroup',['subgroup',['../classsubgroup.html',1,'']]]
+  ['subgroup',['SubGroup',['../class_sub_group.html',1,'']]]
 ];

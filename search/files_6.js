@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['vec_2ehpp',['vec.hpp',['../vec_8hpp.html',1,'']]],
-  ['vecrand_2ecpp',['vecrand.cpp',['../vecrand_8cpp.html',1,'']]],
-  ['vecrand_2ehpp',['vecrand.hpp',['../vecrand_8hpp.html',1,'']]]
+  ['quickstart_2emd',['QUICKSTART.md',['../_q_u_i_c_k_s_t_a_r_t_8md.html',1,'']]]
 ];

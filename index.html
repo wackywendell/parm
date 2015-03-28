@@ -48,6 +48,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
@@ -102,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li><code>src/hardspheres.cpp</code> for a more unconventional example of collision-driven dynamics</li>
 </ul>
 <h3>Python</h3>
-<p>See <code>pyparm/examples/LJ.py</code> for an example of a simple Lennard-Jones simulation, with data analysis included.</p>
+<p>See <code><a class="el" href="_l_j_8py.html">pyparm/examples/LJ.py</a></code> for an example of a simple Lennard-Jones simulation, with data analysis included.</p>
 <p>See <code>pyparm/packmin.py</code> for an example of how to make a packing.</p>
 <h2>Basic Concepts </h2>
 <ul>
@@ -117,7 +118,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ul>
 </li>
 <li><code><a class="el" href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. ">Box</a></code>: a box is either infinite (<code><a class="el" href="class_infinite_box.html" title="An infinite Box, for use with, e.g., sticky conglomerations or proteins. ">InfiniteBox</a></code>) or periodic (<code><a class="el" href="class_origin_box.html" title="A rectilinear Box, with periodic boundary conditions. ">OriginBox</a></code>), and takes care of the boundary conditions</li>
-<li><code>collection</code>: a grouping together of a <code><a class="el" href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. ">Box</a></code>, <code>atomgroup</code>, and <code>interaction</code>s, with an integrator (such as velocity Verlet, <code><a class="el" href="classcollection_verlet.html">collectionVerlet</a></code>, or browian motion, <code>CollectionSol</code>).</li>
+<li><code>collection</code>: a grouping together of a <code><a class="el" href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. ">Box</a></code>, <code>atomgroup</code>, and <code>interaction</code>s, with an integrator (such as velocity Verlet, <code>collectionVerlet</code>, or browian motion, <code><a class="el" href="class_collection_sol.html">CollectionSol</a></code>).</li>
 </ul>
 <h2>Standard Steps </h2>
 <ol type="1">
@@ -137,11 +138,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ol>
 </li>
 <li>Make a <code>collection</code>. Note that the neighborlist has to be added to <code>trackers</code><ol type="a">
-<li><code><a class="el" href="classcollection_verlet.html">collectionVerlet</a></code> is a good NVE collection</li>
+<li><code>collectionVerlet</code> is a good NVE collection</li>
 </ol>
 </li>
-<li>Run <code><a class="el" href="classcollection.html#a8cbc08b7516e6b3ed142873058b3da3a">collection.timestep()</a></code> many, many times<ol type="a">
-<li>Use methods such as <code><a class="el" href="classcollection.html#a323500555e9e5757851704905211bd5d">collection.kinetic()</a></code> or <code><a class="el" href="classcollection.html#a76eeba0a2d81d11ec0f9e5df8905e85a">collection.temp()</a></code> to get statistics</li>
+<li>Run <code>collection.timestep()</code> many, many times<ol type="a">
+<li>Use methods such as <code>collection.kinetic()</code> or <code>collection.temp()</code> to get statistics</li>
 <li>Or use <code>tracker</code>s like <code><a class="el" href="class_rsq_tracker.html">RsqTracker</a></code> to track running statistics</li>
 </ol>
 </li>
@@ -171,7 +172,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 10 2015 16:07:51 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 28 2015 12:31:28 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
