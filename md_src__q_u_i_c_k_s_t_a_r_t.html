@@ -100,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">boost::shared_ptr&lt;AtomVec&gt; atomptr(<span class="keyword">new</span> <a class="code" href="class_atom_vec.html">AtomVec</a>(Natoms, 1.0));</div>
 </div><!-- fragment --><p>We use <code>boost::shared_ptr</code> for the major objects, to prevent memory leaks / segmentation faults and integrate more smoothly with Python. If you are not familiar with <code>shared_ptr</code>, its a wrapper around a pointer such that multiple copies can be made, and the object will be deleted when the last <code>shared_ptr</code> to it is deleted. See <a href="http://www.cplusplus.com/reference/memory/shared_ptr/">a reference</a> for more details.</p>
 <h4>Make a <code><a class="el" href="class_box.html" title="The virtual interface for the shape of the space and its boundaries. ">Box</a></code></h4>
-<div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> <a class="code" href="namespace_l_j.html#a1a587ec70716238b501c5fbddae99352">L</a> = 20;</div>
+<div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> L = 20;</div>
 <div class="line">boost::shared_ptr&lt;OriginBox&gt; obox(<span class="keyword">new</span> <a class="code" href="class_origin_box.html">OriginBox</a>(L));</div>
 </div><!-- fragment --><p>Here, we'll use a periodic box with sides of length <code>L</code>.</p>
 <h4>Make at least one <code><a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a></code></h4>
@@ -110,8 +110,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> sigma = 1.;</div>
 <div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> sigcut = 2.5;</div>
 <div class="line">boost::shared_ptr&lt;NListed&lt;LJatomcut, LJCutPair&gt; &gt; </div>
-<div class="line">    <a class="code" href="namespace_l_j.html#afbe265aeb2ec7ce8c1eb683ab85e34ed">LJ</a>(<span class="keyword">new</span> <a class="code" href="class_n_listed.html">NListed&lt;LJatomcut, LJCutPair&gt;</a>(obox, atomptr, 0.4*(sigcut*sigma)));</div>
-<div class="line">boost::shared_ptr&lt;NeighborList&gt; neighbor_list = <a class="code" href="namespace_l_j.html">LJ</a>-&gt;nlist();</div>
+<div class="line">    LJ(<span class="keyword">new</span> <a class="code" href="class_n_listed.html">NListed&lt;LJatomcut, LJCutPair&gt;</a>(obox, atomptr, 0.4*(sigcut*sigma)));</div>
+<div class="line">boost::shared_ptr&lt;NeighborList&gt; neighbor_list = LJ-&gt;nlist();</div>
 <div class="line">~~~{.cpp}</div>
 <div class="line"></div>
 <div class="line">Note the use of templating: `<a class="code" href="class_n_listed.html">NListed&lt;A, P&gt;</a>` is a <span class="keyword">template</span> <span class="keywordflow">for</span> an `<a class="code" href="class_interaction.html">Interaction</a>` that *can* be </div>
@@ -121,13 +121,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"></div>
 <div class="line">~~~{.cpp}</div>
 <div class="line"><span class="keywordflow">for</span> (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i &lt; atomptr-&gt;size(); i++){</div>
-<div class="line">    <a class="code" href="namespace_l_j.html#af0794586efc95917866a3416badd9f5a">atoms</a>[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
-<div class="line">    <a class="code" href="namespace_l_j.html#af0794586efc95917866a3416badd9f5a">atoms</a>[i].v = <a class="code" href="vecrand_8cpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a>(); <span class="comment">// from a Gaussian</span></div>
-<div class="line">    <a class="code" href="namespace_l_j.html#af0794586efc95917866a3416badd9f5a">atoms</a>[i].f = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
-<div class="line">    <a class="code" href="namespace_l_j.html#af0794586efc95917866a3416badd9f5a">atoms</a>[i].a = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line">    atoms[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
+<div class="line">    atoms[i].v = <a class="code" href="vecrand_8cpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a>(); <span class="comment">// from a Gaussian</span></div>
+<div class="line">    atoms[i].f = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line">    atoms[i].a = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// Add it to the Lennard-Jones potential</span></div>
-<div class="line">    <a class="code" href="namespace_l_j.html">LJ</a>-&gt;add(<a class="code" href="struct_l_jatomcut.html">LJatomcut</a>(epsilon, sigma, <a class="code" href="namespace_l_j.html#af0794586efc95917866a3416badd9f5a">atoms</a>.get_id(i), sigcut));</div>
+<div class="line">    LJ-&gt;add(<a class="code" href="struct_l_jatomcut.html">LJatomcut</a>(epsilon, sigma, atoms.get_id(i), sigcut));</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Update the neighbor list</span></div>
@@ -135,27 +135,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --><p>Now we have given every <code><a class="el" href="struct_atom.html" title="The basic class for representing each particle. ">Atom</a></code> a position and a random velocity.</p>
 <h4>Make a <code><a class="el" href="class_collection.html">Collection</a></code></h4>
 <p>A <code><a class="el" href="class_collection.html">Collection</a></code> is a class that represents an integrator. There are various kinds of integrators: constant energy, constant temperature, energy minimization, etc. Here, we choose a Velocity Verlet integrator, which is constant energy:</p>
-<div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> <a class="code" href="namespace_l_j.html#a80e1fb0d97de83115316242613041fe4">dt</a> = 0.0001;</div>
-<div class="line"><a class="code" href="class_collection_verlet.html">CollectionVerlet</a> <a class="code" href="namespace_l_j.html#a5e3e78a764c04a74c5570a93021072a7">collec</a> = <a class="code" href="class_collection_verlet.html">CollectionVerlet</a>(boost::static_pointer_cast&lt;Box&gt;(obox), atomptr, dt);</div>
+<div class="fragment"><div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> dt = 0.0001;</div>
+<div class="line"><a class="code" href="class_collection_verlet.html">CollectionVerlet</a> collec = <a class="code" href="class_collection_verlet.html">CollectionVerlet</a>(boost::static_pointer_cast&lt;Box&gt;(obox), atomptr, dt);</div>
 </div><!-- fragment --><h4>Link the <code><a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a></code>, <code><a class="el" href="class_neighbor_list.html" title="Maintains a Verlet list of &quot;neighbors&quot;: molecules within a &#39;skin radius&#39; of each other. ">NeighborList</a></code>, and <code><a class="el" href="class_collection.html">Collection</a></code></h4>
 <p>We made our collection, but it needs to know what potential to use with the atoms, and that it needs to update the <code><a class="el" href="class_neighbor_list.html" title="Maintains a Verlet list of &quot;neighbors&quot;: molecules within a &#39;skin radius&#39; of each other. ">NeighborList</a></code>:</p>
 <div class="fragment"><div class="line">collec.<a class="code" href="class_collection.html#ae69ca345a2bdfdee8acc3bee7591d023">addTracker</a>(neighbor_list);</div>
-<div class="line">collec.<a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(<a class="code" href="namespace_l_j.html">LJ</a>);</div>
+<div class="line">collec.<a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(LJ);</div>
 </div><!-- fragment --><h3>Running the simulation</h3>
 <p>Let's run it for 500,000 timesteps, outputting the current energy, kinetic energy, and potential energy as we go:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;500; i++){</div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;1000; j++){</div>
 <div class="line">        collec.<a class="code" href="class_collection_verlet.html#a4c45a64c482caa5c74a329d92037ebe9">timestep</a>();</div>
 <div class="line">    }</div>
-<div class="line">    writefile(outfile, <a class="code" href="namespace_l_j.html#af0794586efc95917866a3416badd9f5a">atoms</a>, *obox);</div>
+<div class="line">    writefile(outfile, atoms, *obox);</div>
 <div class="line">    cout &lt;&lt; (500-i) &lt;&lt; <span class="stringliteral">&quot; E: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a991d7217616b6435910f8c0e0c1ff78c">kinetic</a>() </div>
-<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; <a class="code" href="namespace_l_j.html">LJ</a>-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; LJ-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>That's all! To see this example fully fleshed out, see <a class="el" href="_l_jatoms_8cpp-example.html">LJatoms.cpp</a> </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 28 2015 12:31:27 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 28 2015 12:47:48 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

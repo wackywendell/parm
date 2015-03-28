@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['r',['r',['../struct_sphero_cylinder_diff.html#a6c42e7a9aed1f1ff898821e8fcd54519',1,'SpheroCylinderDiff::r()'],['../class_s_c_box.html#acebff7ab591d0fd123679cac898934b9',1,'SCBox::R()']]],
+  ['r',['R',['../class_s_c_box.html#acebff7ab591d0fd123679cac898934b9',1,'SCBox::R()'],['../struct_sphero_cylinder_diff.html#a6c42e7a9aed1f1ff898821e8fcd54519',1,'SpheroCylinderDiff::r()']]],
   ['r4sums',['r4sums',['../class_rsq_tracker1.html#a737f29d07b124998250f4c0e808f760c',1,'RsqTracker1']]],
   ['radius',['radius',['../class_soft_wall_cylinder.html#ae9c3c2aaef67fc7e59253e99a06555ea',1,'SoftWallCylinder']]],
   ['randengine',['randengine',['../vecrand_8cpp.html#abd5b85fd531cff5ccc435c79b982fdf2',1,'vecrand.cpp']]],

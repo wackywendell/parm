@@ -15,9 +15,5 @@ var searchData=
   ['xsum',['xsum',['../class_x_r_p_summer.html#a93970d71c31552f51deda6838944997f',1,'XRPSummer']]],
   ['xwalls',['xwalls',['../class_walled_box2_d.html#a88bdc92c62697c4e90d6a34b530fa3bc',1,'WalledBox2D']]],
   ['xyz2sums',['xyz2sums',['../class_rsq_tracker1.html#a23c3a82bd57672b51bfcf8b2a5a6873b',1,'RsqTracker1']]],
-  ['xyz4sums',['xyz4sums',['../class_rsq_tracker1.html#a414c619226bd107b30fb663b342a7cb7',1,'RsqTracker1']]],
-  ['xyz_5fdt',['xyz_dt',['../namespace_l_j.html#a36173e635968db69898b62eb4d9e84eb',1,'LJ']]],
-  ['xyz_5ffile',['xyz_file',['../namespace_l_j.html#a0a3b88d4b8296f8f90d19fa7921da099',1,'LJ']]],
-  ['xyz_5fm',['xyz_m',['../namespace_l_j.html#af6c2c48a1c7eee2fb1bda248febc7471',1,'LJ.xyz_m()'],['../namespacepolymer.html#addd940bb4006ebb7b13d92287c433a1f',1,'polymer.xyz_m()']]],
-  ['xyz_5fn',['xyz_n',['../namespace_l_j.html#abcbb5a562e8b6ab72239e2d472e2dbee',1,'LJ']]]
+  ['xyz4sums',['xyz4sums',['../class_rsq_tracker1.html#a414c619226bd107b30fb663b342a7cb7',1,'RsqTracker1']]]
 ];

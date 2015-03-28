@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['l',['L',['../class_s_c_box.html#a13b5889bf82fee6292c4e1ba925c7154',1,'SCBox::L()'],['../struct_lois_ohern_atom.html#afabfb1e630024d39c3bd3c1a383bdc23',1,'LoisOhernAtom::l()'],['../struct_lois_ohern_pair.html#a8ea794c67485245323553af73efa71ae',1,'LoisOhernPair::l()'],['../struct_lois_lin_atom.html#a2fab617062564f658a213ea3944bba3e',1,'LoisLinAtom::l()'],['../struct_lois_lin_pair.html#a78deb34188aad82733269ba20a074be2',1,'LoisLinPair::l()'],['../namespace_l_j.html#a1a587ec70716238b501c5fbddae99352',1,'LJ.L()'],['../namespacepolymer.html#ac027b86c2b500894274ec6df0e2071e3',1,'polymer.L()']]],
+  ['l',['L',['../class_s_c_box.html#a13b5889bf82fee6292c4e1ba925c7154',1,'SCBox::L()'],['../struct_lois_ohern_atom.html#afabfb1e630024d39c3bd3c1a383bdc23',1,'LoisOhernAtom::l()'],['../struct_lois_ohern_pair.html#a8ea794c67485245323553af73efa71ae',1,'LoisOhernPair::l()'],['../struct_lois_lin_atom.html#a2fab617062564f658a213ea3944bba3e',1,'LoisLinAtom::l()'],['../struct_lois_lin_pair.html#a78deb34188aad82733269ba20a074be2',1,'LoisLinPair::l()']]],
   ['l1',['l1',['../struct_s_c_pair.html#aff11bf6da55c733824855e258a023d4c',1,'SCPair']]],
   ['l2',['l2',['../struct_s_c_pair.html#a8d3f6f7e73f5e5c69a641a4068eddeaa',1,'SCPair']]],
   ['lambda1',['lambda1',['../struct_sphero_cylinder_diff.html#a581d4dff378a2c08a5f5cac2cc39f905',1,'SpheroCylinderDiff']]],
@@ -12,7 +12,6 @@ var searchData=
   ['lastv',['lastV',['../class_collection_verlet_n_p_t.html#a43cddd74654fb476a17a0fc68a62d269',1,'CollectionVerletNPT']]],
   ['lastxidot',['lastxidot',['../class_collection_verlet_n_p_t.html#a7e805b7882102b996620469b9462462f',1,'CollectionVerletNPT']]],
   ['lines',['lines',['../namespacenamereplacer.html#a80218617cdb6842e7b3229958691ba2b',1,'namereplacer']]],
-  ['lj',['LJ',['../namespace_l_j.html#afbe265aeb2ec7ce8c1eb683ab85e34ed',1,'LJ.LJ()'],['../namespacepolymer.html#a0348df5720aff1236eb5474e45f9c645',1,'polymer.LJ()']]],
   ['lns',['lns',['../class_collection_nose_hoover.html#a839bcadc6367377088d3037a4ee08fe9',1,'CollectionNoseHoover']]],
   ['loc',['loc',['../struct_fixed_spring_atom.html#a74feaf177137ddbfea54f65d6d74e491',1,'FixedSpringAtom::loc()'],['../class_soft_wall.html#acb4622582594b3bd4918cdbda60fe708',1,'SoftWall::loc()'],['../class_soft_wall_cylinder.html#ac5c6825a2e0ab85024faec2e2482eb85',1,'SoftWallCylinder::loc()']]],
   ['locs',['locs',['../class_smooth_locs.html#aedb148dc27a2a603cfb01814d0854ca7',1,'SmoothLocs']]]

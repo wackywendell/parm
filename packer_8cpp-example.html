@@ -91,10 +91,219 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <p>Conjugate-Gradient energy minimization.</p>
-<div class="fragment"></div><!-- fragment --> </div><!-- contents -->
+<div class="fragment"><div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="vecrand_8hpp.html">vecrand.hpp</a>&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="interaction_8hpp.html">interaction.hpp</a>&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="collection_8hpp.html">collection.hpp</a>&quot;</span></div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Some constants</span></div>
+<div class="line"><span class="comment">// Note that &quot;flt&quot; is a &quot;floating point number&quot;, defaults to &quot;double&quot;</span></div>
+<div class="line"><span class="comment">// but can be compiled as &quot;long double&quot; if needed</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> sigma = 1.0;</div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> sigmal = 1.4;</div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> epsilon = 1.0;</div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> Ns = 40;</div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> Nl = 40;</div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> phi0 = 0.001;</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// Some algorithmic constants</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> dt = 0.1;</div>
+<div class="line"><span class="comment">// the final pressure</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> P0 = 1e-8;</div>
+<div class="line"><span class="comment">// The initial pressure</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> startP = 1e-4;</div>
+<div class="line"></div>
+<div class="line"><span class="comment">// The algorithm works by minimizing H = U(x_i...) + PV w.r.t. x_i and κ=log V.</span></div>
+<div class="line"><span class="comment">// The final overlap is thus approximately related to P, and the higher the P, the</span></div>
+<div class="line"><span class="comment">// faster it converges.</span></div>
+<div class="line"><span class="comment">// In this simulation, we start with a high P, and then relax to lower Ps.</span></div>
+<div class="line"></div>
+<div class="line"><span class="comment">// These are the &quot;quitting&quot; parameters, see below for use</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> P_frac = 1e-4;</div>
+<div class="line"><span class="preprocessor">#ifndef LONGFLOAT</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> force_max = 1e-14;</div>
+<div class="line"><span class="preprocessor">#else</span></div>
+<div class="line"><span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> force_max = 1e-18;</div>
+<div class="line"><span class="preprocessor">#endif</span></div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">void</span> writefile(<a name="_a0"></a><a class="code" href="class_atom_vec.html">AtomVec</a>&amp; atoms, <a name="_a1"></a><a class="code" href="class_origin_box.html">OriginBox</a>&amp; obox);</div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">int</span> main(){</div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;Float size: &quot;</span> &lt;&lt; <span class="keyword">sizeof</span>(<a name="a2"></a><a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>) &lt;&lt; <span class="stringliteral">&quot; epsilon: &quot;</span> &lt;&lt; std::numeric_limits&lt;flt&gt;::epsilon() &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">    assert(std::numeric_limits&lt;flt&gt;::epsilon() &lt; force_max*10);</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// new random seed each time, for velocities and placement</span></div>
+<div class="line">    <a name="a3"></a><a class="code" href="vecrand_8cpp.html#aec71d81c835e6d590db0e0ab34c8e2f5">seed</a>();</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Volume of the spheres</span></div>
+<div class="line">    <span class="comment">// Each sphere is σ^d * π/(2d), i.e. π σ^2/4 for 2D, π σ^3/6 for 3D</span></div>
+<div class="line">    <span class="comment">// Total volume of the spheres takes a constant N out front</span></div>
+<div class="line">    <span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> Vs = (Ns * pow(sigma, <a name="a4"></a><a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>) + Nl * pow(sigmal, <a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>)) * M_PI_2 / <a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>;</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Initial length of the box is [(volume of spheres) / phi0]^(1/d)</span></div>
+<div class="line">    <span class="keyword">const</span> <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> L = pow(Vs / phi0, <a name="a5"></a><a class="code" href="vecrand_8hpp.html#aa4c4eddddfed65be9edd9a5d04d9b93e">OVERNDIM</a>);</div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;Using L = &quot;</span> &lt;&lt; L &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Create the bounding box (sides of length L), and a &quot;vector&quot; of Natoms atoms</span></div>
+<div class="line">    boost::shared_ptr&lt;OriginBox&gt; obox(<span class="keyword">new</span> <a class="code" href="class_origin_box.html">OriginBox</a>(L));</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// Create a vector of the masses of the atoms</span></div>
+<div class="line">    <span class="comment">// We just use all mass 1, because this is a packing</span></div>
+<div class="line">    boost::shared_ptr&lt;AtomVec&gt; atomptr(<span class="keyword">new</span> <a class="code" href="class_atom_vec.html">AtomVec</a>(Nl + Ns, 1.0));</div>
+<div class="line">    <a class="code" href="class_atom_vec.html">AtomVec</a> &amp; atoms = *atomptr;</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Harmonic Interaction</span></div>
+<div class="line">    <span class="comment">// Its called &quot;Hertzian&quot; for historical reasons</span></div>
+<div class="line">    <span class="comment">// It takes a pointer to the box, a pointer to the atoms, and a &quot;skin depth&quot; for the NeighborList</span></div>
+<div class="line">    boost::shared_ptr&lt;NListed&lt;HertzianAtom, HertzianPair&gt; &gt; </div>
+<div class="line">        hertzian(<span class="keyword">new</span> <a name="_a6"></a><a class="code" href="class_n_listed.html">NListed&lt;HertzianAtom, HertzianPair&gt;</a>(obox, atomptr, 0.1*sigma));</div>
+<div class="line">    boost::shared_ptr&lt;NeighborList&gt; nl = hertzian-&gt;nlist();</div>
+<div class="line">    <span class="comment">// ^ this is the Interaction</span></div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Note that NListed is a class template; its an Interaction that</span></div>
+<div class="line">    <span class="comment">// takes various structs as template parameters, and turns them into </span></div>
+<div class="line">    <span class="comment">// a neighbor Interaction</span></div>
+<div class="line">    <span class="comment">// See interaction.hpp for a whole bunch of them</span></div>
+<div class="line">    <span class="comment">// Also note that the NeighborList is not the same as the</span></div>
+<div class="line">    <span class="comment">// &quot;neighborlisted&quot; Interaction; multiple interactions can use the</span></div>
+<div class="line">    <span class="comment">// same NeighborList</span></div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Now we run through all the atoms, set their positions / velocities,</span></div>
+<div class="line">    <span class="comment">// and add them to the Hertzian Interaction (i.e., to the neighbor list)</span></div>
+<div class="line">    <span class="keywordflow">for</span> (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i &lt; atoms.<a name="a7"></a><a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
+<div class="line">        atoms[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
+<div class="line">        atoms[i].v = <a name="a8"></a><a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>(); <span class="comment">// A zero-vector</span></div>
+<div class="line">        atoms[i].f = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line">        atoms[i].a = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line"></div>
+<div class="line">        <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> sig = i &lt; Ns ? sigma : sigmal;</div>
+<div class="line">        </div>
+<div class="line">        <span class="comment">// Add it to the Hertzian potential</span></div>
+<div class="line">        hertzian-&gt;add(<a name="_a9"></a><a class="code" href="struct_hertzian_atom.html">HertzianAtom</a>(atoms.<a name="a10"></a><a class="code" href="class_atom_vec.html#acfb688c87a0616c6d76b9faf7e052d4e">get_id</a>(i), epsilon, sig, 2));</div>
+<div class="line">        <span class="comment">//                                                          ^ exponent for the harmonic Interaction</span></div>
+<div class="line">    }</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// force an update the NeighborList, so we can get an accurate energy</span></div>
+<div class="line">    nl-&gt;update_list(<span class="keyword">true</span>);</div>
+<div class="line"></div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;Starting. Neighborlist contains &quot;</span> &lt;&lt; nl-&gt;numpairs() &lt;&lt; <span class="stringliteral">&quot; / &quot;</span> &lt;&lt;</div>
+<div class="line">        (atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>()*(atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>()-1))/2 &lt;&lt; <span class="stringliteral">&quot; pairs\n&quot;</span>;</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">//Now we make our &quot;Collection&quot;</span></div>
+<div class="line">    <a name="_a11"></a><a class="code" href="class_collection_n_l_c_g.html">CollectionNLCG</a> collec = <a class="code" href="class_collection_n_l_c_g.html">CollectionNLCG</a>(obox, atomptr, dt, P0);</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// This is very important! Otherwise the NeighborList won&#39;t update!</span></div>
+<div class="line">    collec.<a name="a12"></a><a class="code" href="class_collection.html#ae69ca345a2bdfdee8acc3bee7591d023">addTracker</a>(nl);</div>
+<div class="line">    <span class="comment">// And add the Interaction</span></div>
+<div class="line">    collec.<a name="a13"></a><a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(hertzian);</div>
+<div class="line">    </div>
+<div class="line">    writefile(atoms, *obox);</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">//Print out total energy, kinetic energy, and potential energy</span></div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;H: &quot;</span> &lt;&lt; collec.<a name="a14"></a><a class="code" href="class_collection_n_l_c_g.html#a0445c23ecab8bde586f44ef978d71390">Hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a15"></a><a class="code" href="class_collection_n_l_c_g.html#a27da2a89a37c841f25950efb550df24a">kinetic</a>() </div>
+<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">    </div>
+<div class="line">    <span class="comment">// Run the simulation! And every _ steps, write a frame to the .xyz</span></div>
+<div class="line">    <span class="comment">// file and print out the energies again</span></div>
+<div class="line">    <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i = 0;</div>
+<div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> curP=startP; curP&gt;P0; curP/=2){</div>
+<div class="line">        cout &lt;&lt; <span class="stringliteral">&quot;P: &quot;</span> &lt;&lt; curP &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">        collec.<a name="a16"></a><a class="code" href="class_collection_n_l_c_g.html#acd778292bca6afe4203d4fff2883ad7c">setP</a>(curP);</div>
+<div class="line">        <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
+<div class="line">            <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;1000; j++){</div>
+<div class="line">                collec.<a name="a17"></a><a class="code" href="class_collection_n_l_c_g.html#a3807eba99b56917461e757e23f5e2fe3">timestep</a>();</div>
+<div class="line">            }</div>
+<div class="line">            i++;</div>
+<div class="line">            writefile(atoms, *obox);</div>
+<div class="line"></div>
+<div class="line">            <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> pdiff = collec.<a name="a18"></a><a class="code" href="class_collection_n_l_c_g.html#a48363f9835a4f180f7caa3c51ff3658c">pressure</a>() / curP - 1.0;</div>
+<div class="line">            <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> force_err = 0;</div>
+<div class="line"></div>
+<div class="line">            <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> k=0; k&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); k++){</div>
+<div class="line">                <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> fmag = atoms[k].f.mag();</div>
+<div class="line">                <span class="keywordflow">if</span>(fmag &gt; force_err) force_err = fmag;</div>
+<div class="line">            }</div>
+<div class="line"></div>
+<div class="line">            cout.precision(<span class="keyword">sizeof</span>(<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>));</div>
+<div class="line">            cout &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; H: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection_n_l_c_g.html#a0445c23ecab8bde586f44ef978d71390">Hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection_n_l_c_g.html#a27da2a89a37c841f25950efb550df24a">kinetic</a>() </div>
+<div class="line">                &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">            cout.precision(6);</div>
+<div class="line">            cout &lt;&lt; <span class="stringliteral">&quot;        Pdiff: &quot;</span> &lt;&lt; pdiff &lt;&lt; <span class="stringliteral">&quot; force_err: &quot;</span> &lt;&lt; force_err &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"></div>
+<div class="line">            <span class="keywordflow">if</span>(abs(pdiff) &lt; P_frac and force_err &lt; force_max){</div>
+<div class="line">                cout &lt;&lt; <span class="stringliteral">&quot;Done!\n&quot;</span>;</div>
+<div class="line">                <span class="keywordflow">break</span>;</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line">    }</div>
+<div class="line">};</div>
+<div class="line"></div>
+<div class="line"><span class="keywordtype">void</span> writefile(<a class="code" href="class_atom_vec.html">AtomVec</a>&amp; atoms, <a class="code" href="class_origin_box.html">OriginBox</a>&amp; obox){</div>
+<div class="line">    <span class="comment">// The .xyz format is simple:</span></div>
+<div class="line">    <span class="comment">// Line 1: [Number of atoms]</span></div>
+<div class="line">    <span class="comment">// Line 2: [Comment line, whatever you want, left blank here]</span></div>
+<div class="line">    <span class="comment">// Line 3: [element type, here C for carbon]\t[x]\t[y]\t[z]</span></div>
+<div class="line">    <span class="comment">// Line 4: [element type, here C for carbon]\t[x]\t[y]\t[z]</span></div>
+<div class="line">    <span class="comment">// ...</span></div>
+<div class="line">    <span class="comment">// Line N+1: [element type, here C for carbon]\t[x]\t[y]\t[z]</span></div>
+<div class="line">    <span class="comment">// Line N+2: [element type, here C for carbon]\t[x]\t[y]\t[z]</span></div>
+<div class="line">    <span class="comment">// Line N+3: [Number of atoms]</span></div>
+<div class="line">    <span class="comment">// Line N+4: [Comment line, whatever you want, left blank here]</span></div>
+<div class="line">    <span class="comment">// Line N+5: [element type, here C for carbon]\t[x]\t[y]\t[z]</span></div>
+<div class="line">    <span class="comment">// ...</span></div>
+<div class="line">    <span class="comment">// And so on. each set of N atoms/coordinates corresponds to a &quot;frame&quot;, </span></div>
+<div class="line">    <span class="comment">// which then make a movie. There must be the same N in each frame for VMD.</span></div>
+<div class="line">    <span class="comment">// Note that if this is compiled as a 2D simulation, it will leave out</span></div>
+<div class="line">    <span class="comment">// the z coordinate, and VMD can&#39;t handle that.</span></div>
+<div class="line">    </div>
+<div class="line">    ofstream outf;</div>
+<div class="line">    outf.open(<span class="stringliteral">&quot;packing.xyz&quot;</span>, ios::out);</div>
+<div class="line">    outf.precision(24);</div>
+<div class="line">    </div>
+<div class="line">    outf &lt;&lt; atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>() &lt;&lt; endl;</div>
+<div class="line">    outf &lt;&lt; <span class="stringliteral">&quot;L=&quot;</span> &lt;&lt; obox.<a name="a19"></a><a class="code" href="class_origin_box.html#ab5bea4538104e31ca940d90b8ffa4c49">L</a>() &lt;&lt; endl; <span class="comment">// blank line for comment</span></div>
+<div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
+<div class="line">        <span class="keywordflow">if</span>(i &lt; Ns){</div>
+<div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;C&quot;</span>;</div>
+<div class="line">        } <span class="keywordflow">else</span> {</div>
+<div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;O&quot;</span>;</div>
+<div class="line">        }</div>
+<div class="line">        <a name="_a20"></a><a class="code" href="class_vector2.html">Vec</a> normloc = obox.<a name="a21"></a><a class="code" href="class_origin_box.html#a2926768c18c2a14ef1742a9be12a8033">diff</a>(<a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>(), atoms[i].x);</div>
+<div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
+<div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; normloc[j];</div>
+<div class="line">        }</div>
+<div class="line">        outf &lt;&lt; endl;</div>
+<div class="line">    };</div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// Unnecessary extra:</span></div>
+<div class="line">    <span class="comment">// Write a &quot;tcl&quot; file with the box boundaries</span></div>
+<div class="line">    <span class="comment">// the &quot;tcl&quot; file is made specifically for VMD</span></div>
+<div class="line">    ofstream pbcfile;</div>
+<div class="line">    pbcfile.open(<span class="stringliteral">&quot;packing.tcl&quot;</span>, ios::out);</div>
+<div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;set cell [pbc set {&quot;</span>;</div>
+<div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
+<div class="line">        pbcfile &lt;&lt; obox.<a name="a22"></a><a class="code" href="class_origin_box.html#acb963435c11ecc41bc4853bd253043d3">boxshape</a>()[j] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line">    }</div>
+<div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;} -all];\n&quot;</span>;</div>
+<div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;pbc box -toggle -center origin -color red;\n&quot;</span>;</div>
+<div class="line"></div>
+<div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;set natoms [atomselect 0 \&quot;name C\&quot;;];\n&quot;</span></div>
+<div class="line">            &lt;&lt; <span class="stringliteral">&quot;$natoms set radius &quot;</span> &lt;&lt; (sigma/2.0) &lt;&lt; <span class="stringliteral">&quot;;\n&quot;</span></div>
+<div class="line">            &lt;&lt; <span class="stringliteral">&quot;set natoms [atomselect 0 \&quot;name O\&quot;;];\n&quot;</span></div>
+<div class="line">            &lt;&lt; <span class="stringliteral">&quot;$natoms set radius &quot;</span> &lt;&lt; (sigmal/2.0) &lt;&lt; <span class="stringliteral">&quot;;\n&quot;</span>;</div>
+<div class="line"></div>
+<div class="line"></div>
+<div class="line">    <span class="comment">// Now you should be able to run &quot;vmd -e LJatoms-pbc.tcl LJatoms.xyz&quot;</span></div>
+<div class="line">    <span class="comment">// and it will show you the movie and also the bounding box</span></div>
+<div class="line">    <span class="comment">// if you have .vmdrc in that same directory, you should also be able</span></div>
+<div class="line">    <span class="comment">// to toggle the box with the &quot;b&quot; button</span></div>
+<div class="line">};</div>
+</div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Mar 28 2015 12:31:27 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Mar 28 2015 12:47:47 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

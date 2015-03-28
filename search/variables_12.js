@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['scigroup',['scigroup',['../namespacepolymer.html#a9b1dfa6b75f4f55e3606018564e37a4f',1,'polymer']]],
   ['screen',['screen',['../class_electric_screened.html#a32bad046040c68e47091d753ee3b5cf7',1,'ElectricScreened::screen()'],['../class_charges.html#aa51d10f3b482dd25bad0de930e6c5a63',1,'Charges::screen()']]],
   ['sec',['sec',['../class_collection_n_l_c_g.html#aa4a2fb0f68da92c7b363232e99f7de16',1,'CollectionNLCG::sec()'],['../class_collection_n_l_c_g_v.html#a5a7d77ef89f0e5f06270afa541a9ac01',1,'CollectionNLCGV::sec()']]],
   ['seceps',['seceps',['../class_collection_n_l_c_g.html#a6a0835d8f780d148f829a1a9652ac6ed',1,'CollectionNLCG::seceps()'],['../class_collection_n_l_c_g_v.html#ad91e1c414ae7411317814a600ea198cc',1,'CollectionNLCGV::seceps()']]],
@@ -10,9 +9,9 @@ var searchData=
   ['sigma',['sigma',['../class_l_j_repulsive.html#a6d2d3108198068aecd902c3ba3efd15f',1,'LJRepulsive::sigma()'],['../class_l_j_attract.html#ace9663430e02e7acc55d9837693ffee7',1,'LJAttract::sigma()'],['../class_l_j_attract_cut.html#aacde0aedb36697981e7d83243afe9add',1,'LJAttractCut::sigma()'],['../class_l_j_full_cut.html#ab591ada05c9b210cd988892384972340',1,'LJFullCut::sigma()'],['../struct_l_jatom.html#ab0d48ed61f434f752e68076486ecc9e6',1,'LJatom::sigma()'],['../struct_l_jpair.html#a31117f1c354504e4c6b47338d057013f',1,'LJpair::sigma()'],['../struct_hydro_atom.html#aed0bf780b9e40cec3e47a53f8e6a56a9',1,'HydroAtom::sigma()'],['../struct_l_jish_atom.html#a005d9c8ac5cd1878323e1c9a040a673d',1,'LJishAtom::sigma()'],['../struct_l_jish_pair.html#ab594f47e7f2dc95b6b5306ebfefd988f',1,'LJishPair::sigma()'],['../struct_hertzian_atom.html#a7c38c753661f31ff22e75cdaac303153',1,'HertzianAtom::sigma()'],['../struct_hertzian_drag_atom.html#a8e21dce32e01fb0a19d34951f2b67e9a',1,'HertzianDragAtom::sigma()'],['../struct_lois_ohern_atom.html#a8aa922e5a22d23731fd11ff439ba62a5',1,'LoisOhernAtom::sigma()'],['../struct_lois_lin_atom.html#a8d13008d3a0cace8f6825afbf903bfd9',1,'LoisLinAtom::sigma()'],['../struct_wall_atom.html#a2d2817db0922f008fa22afc286ccd0a4',1,'WallAtom::sigma()']]],
   ['sigmai',['sigmai',['../struct_eis_mclachlan_atom.html#ad2e2802529b53d35bb0f13de41b93c39',1,'EisMclachlanAtom']]],
   ['sigmar',['sigmar',['../class_collection_sol.html#abcc92c2353c94efcf40aec6cd596d202',1,'CollectionSol']]],
-  ['sigmas',['sigmas',['../struct_l_j_atom_indexed.html#a8d4cd84b7cfdbcde5d8da1525f9c1cde',1,'LJAtomIndexed::sigmas()'],['../struct_hertzian_atom_indexed.html#af8bf8596d295acecf34cc756b1cbdaa8',1,'HertzianAtomIndexed::sigmas()'],['../namespace_l_j.html#a3224408c42849f6acbd923cc2277c4ca',1,'LJ.sigmas()']]],
+  ['sigmas',['sigmas',['../struct_l_j_atom_indexed.html#a8d4cd84b7cfdbcde5d8da1525f9c1cde',1,'LJAtomIndexed::sigmas()'],['../struct_hertzian_atom_indexed.html#af8bf8596d295acecf34cc756b1cbdaa8',1,'HertzianAtomIndexed::sigmas()']]],
   ['sigmav',['sigmav',['../class_collection_sol.html#a073e0cb7d8cf319c43419f096b2be6e1',1,'CollectionSol']]],
-  ['simgroup',['simgroup',['../namespacepolymer.html#aa389b36a0b6c53f4d8bf00acb05d9669',1,'polymer']]],
+  ['sim',['sim',['../classpyparm_1_1packmin_1_1_minimizer.html#ac02027b9303b0f1550049650e648806f',1,'pyparm::packmin::Minimizer']]],
   ['sincoeffs',['sincoeffs',['../class_dihedral.html#adc02fecfba4cd72a188553931f9bc013',1,'Dihedral']]],
   ['singles',['singles',['../class_rsq_tracker.html#a0f124aa083fbb30f654bf845afb135bf',1,'RsqTracker::singles()'],['../class_i_s_f_tracker.html#ab5e5c93998d3df2715208807c02c62f0',1,'ISFTracker::singles()']]],
   ['skin',['skin',['../class_neighbor_list.html#a8d07ba43232e3c8d7c510c7f0e332908',1,'NeighborList']]],
