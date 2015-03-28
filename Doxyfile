@@ -58,7 +58,7 @@ PROJECT_LOGO           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /home/wendell/work/parm/doc
+OUTPUT_DIRECTORY       = doc
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -768,7 +768,7 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = README.md src
+INPUT                  = README.md src pyparm/packmin.py
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -823,13 +823,13 @@ FILE_PATTERNS          = *.c \
                          *.f90 \
                          *.f \
                          *.for \
-                         *.tcl \
                          *.vhd \
                          *.vhdl \
                          *.ucf \
                          *.qsf \
                          *.as \
                          *.js
+#                         *.tcl \
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -878,14 +878,14 @@ EXCLUDE_SYMBOLS        =
 # command).
 
 # EXAMPLE_PATH           =
-EXAMPLE_PATH           = src/bin
+EXAMPLE_PATH           = src/bin pyparm/examples
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
 # *.h) to filter out the source-files in the directories. If left blank all
 # files are included.
 
-EXAMPLE_PATTERNS       = *
+EXAMPLE_PATTERNS       = *.cpp *.py
 
 # If the EXAMPLE_RECURSIVE tag is set to YES then subdirectories will be
 # searched for input files to be used with the \include or \dontinclude commands

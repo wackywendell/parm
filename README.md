@@ -22,13 +22,13 @@ Examples
 
 There are several examples in C++ in the `src/bin` folder, all with good comments:
 
-* `LJatoms.cpp`: a simulation of a  Lennard-Jones simulation (2D, or 3D)
-* `packer.cpp`: Generates packings (2D or 3D)
-* `src/hardspheres.cpp` for a more unconventional example of collision-driven dynamics
+* `LJatoms.cpp` (\ref LJatoms.cpp): a simulation of a  Lennard-Jones simulation (2D, or 3D)
+* `packer.cpp` (\ref packer.cpp): Generates packings (2D or 3D)
+* `hardspheres.cpp` (\ref hardspheres.cpp): for a more unconventional example of collision-driven dynamics
 
 ### Python
 
-See `pyparm/examples/LJ.py` for an example of a simple Lennard-Jones
+See `pyparm/examples/LJ.py` (\ref LJ.py) for an example of a simple Lennard-Jones
 simulation, with data analysis included.
 
 See `pyparm/packmin.py` for an example of how to make a packing.

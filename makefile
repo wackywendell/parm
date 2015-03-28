@@ -5,7 +5,7 @@ CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
 
 INC=`python3-config --includes`
 
-.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py
+.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py doc ghp
 
 all: bin/LJatoms2d bin/LJatoms3dlong bin/hardspheres
 	@echo "making all."
@@ -16,7 +16,15 @@ wraps: pyparm/sim_wrap2d.cxx pyparm/sim_wrap2dlong.cxx pyparm/sim_wrap3d.cxx pyp
 
 printout:
 	@echo Running on \"$(UNAME)\"
-
+	
+ghp: doc
+	ghp-import doc/html
+	
+doc: doc/html/index.html
+	
+doc/html/index.html: src/*.cpp src/*.hpp src/*.md src/bin/*.cpp pyparm/examples/*.py Doxyfile Readme.md
+	doxygen Doxyfile
+	
 clean:
 	rm -f bin/* lib/*
 	cd src; rm -f *.o *.so *.gch sim_wrap*.cxx

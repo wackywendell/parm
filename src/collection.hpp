@@ -222,6 +222,8 @@ class CollectionSolHT : public Collection {
 
 /**
 \example LJatoms.cpp
+\example LJ.py
+\example polymer.py
 */
 class CollectionVerlet : public Collection {
     // for use in fixed-E simulations
