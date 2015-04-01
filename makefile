@@ -18,6 +18,7 @@ printout:
 	@echo Running on \"$(UNAME)\"
 	
 ghp: doc
+	echo 'parm.lostinmy.com' > doc/html/CNAME
 	ghp-import doc/html
 	
 doc: doc/html/index.html
