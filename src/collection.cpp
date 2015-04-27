@@ -62,10 +62,11 @@ flt collection::virial(){
     return E;
 }
 
+//! Returns (1/d V) Σ ri dot fi 
+//! where d is number of dimensions
+//! note that interaction->pressure just returns Σ ri dot fi
+
 flt collection::pressure(){
-    // Returns (1/d V) Σ ri dot fi 
-    // where d is number of dimensions
-    // note that interaction->pressure just returns Σ ri dot fi
     flt V = box->V();
 
     flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;

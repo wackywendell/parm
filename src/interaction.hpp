@@ -1156,9 +1156,9 @@ struct EisMclachlanPair {
 };
 
 ////////////////////////////////////////////////////////////////////////
-// Hertzian potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
-// Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
-// cutoff at r = σ
+//! Hertzian potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
+//! Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
+//! cutoff at r = σ
 
 struct HertzianAtom : public atomid {
     flt eps, sigma, exponent;
