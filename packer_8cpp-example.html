@@ -158,12 +158,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// Its called &quot;Hertzian&quot; for historical reasons</span></div>
 <div class="line">    <span class="comment">// It takes a pointer to the box, a pointer to the atoms, and a &quot;skin depth&quot; for the NeighborList</span></div>
 <div class="line">    boost::shared_ptr&lt;NListed&lt;HertzianAtom, HertzianPair&gt; &gt; </div>
+<div class="line">    boost::shared_ptr&lt;NListed&lt;HertzianAtom, HertzianPair&gt; &gt;</div>
 <div class="line">        hertzian(<span class="keyword">new</span> <a name="_a6"></a><a class="code" href="class_n_listed.html">NListed&lt;HertzianAtom, HertzianPair&gt;</a>(obox, atomptr, 0.1*sigma));</div>
 <div class="line">    boost::shared_ptr&lt;NeighborList&gt; nl = hertzian-&gt;nlist();</div>
 <div class="line">    <span class="comment">// ^ this is the Interaction</span></div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// Note that NListed is a class template; its an Interaction that</span></div>
-<div class="line">    <span class="comment">// takes various structs as template parameters, and turns them into </span></div>
+<div class="line">    <span class="comment">// takes various structs as template parameters, and turns them into</span></div>
 <div class="line">    <span class="comment">// a neighbor Interaction</span></div>
 <div class="line">    <span class="comment">// See interaction.hpp for a whole bunch of them</span></div>
 <div class="line">    <span class="comment">// Also note that the NeighborList is not the same as the</span></div>
@@ -202,13 +203,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    writefile(atoms, *obox);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">//Print out total energy, kinetic energy, and potential energy</span></div>
-<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;H: &quot;</span> &lt;&lt; collec.<a name="a14"></a><a class="code" href="class_collection_n_l_c_g.html#a0445c23ecab8bde586f44ef978d71390">Hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a15"></a><a class="code" href="class_collection_n_l_c_g.html#a27da2a89a37c841f25950efb550df24a">kinetic</a>() </div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;H: &quot;</span> &lt;&lt; collec.<a name="a14"></a><a class="code" href="class_collection_n_l_c_g.html#a0445c23ecab8bde586f44ef978d71390">Hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a15"></a><a class="code" href="class_collection_n_l_c_g.html#a27da2a89a37c841f25950efb550df24a">kinetic</a>()</div>
 <div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// Run the simulation! And every _ steps, write a frame to the .xyz</span></div>
 <div class="line">    <span class="comment">// file and print out the energies again</span></div>
 <div class="line">    <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i = 0;</div>
-<div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> curP=startP; curP&gt;P0; curP/=2){</div>
+<div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> curP=startP; curP&gt;P0; curP/=10){</div>
 <div class="line">        cout &lt;&lt; <span class="stringliteral">&quot;P: &quot;</span> &lt;&lt; curP &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">        collec.<a name="a16"></a><a class="code" href="class_collection_n_l_c_g.html#acd778292bca6afe4203d4fff2883ad7c">setP</a>(curP);</div>
 <div class="line">        <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
@@ -253,7 +254,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// Line N+4: [Comment line, whatever you want, left blank here]</span></div>
 <div class="line">    <span class="comment">// Line N+5: [element type, here C for carbon]\t[x]\t[y]\t[z]</span></div>
 <div class="line">    <span class="comment">// ...</span></div>
-<div class="line">    <span class="comment">// And so on. each set of N atoms/coordinates corresponds to a &quot;frame&quot;, </span></div>
+<div class="line">    <span class="comment">// And so on. each set of N atoms/coordinates corresponds to a &quot;frame&quot;,</span></div>
 <div class="line">    <span class="comment">// which then make a movie. There must be the same N in each frame for VMD.</span></div>
 <div class="line">    <span class="comment">// Note that if this is compiled as a 2D simulation, it will leave out</span></div>
 <div class="line">    <span class="comment">// the z coordinate, and VMD can&#39;t handle that.</span></div>
@@ -303,7 +304,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:42:09 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

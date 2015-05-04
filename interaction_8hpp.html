@@ -146,6 +146,10 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_o_m_spring.html">COMSpring</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_random_force_atom.html">RandomForceAtom</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_random_force.html">RandomForce</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_bond_grouping.html">BondGrouping</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bond_pairs.html">BondPairs</a></td></tr>
@@ -207,6 +211,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_eis_mclachlan_pair.html">EisMclachlanPair</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_hertzian_atom.html">HertzianAtom</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hertzian potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2 Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually cutoff at r = σ  <a href="struct_hertzian_atom.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_energy_force.html">EnergyForce</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,6 +273,11 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ac74e51c6804e0e40809c136e9b96c21d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21d">RandomForceType</a> { <a class="el" href="interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21da9b5eccb7f8f027c46f2018d07c74f384">FIXED</a>, 
+<a class="el" href="interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21da8f44784d154005a214e0fe94119d28ef">UNIFORM</a>, 
+<a class="el" href="interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21dafca8f51c9117fbb492a2184e9df9e412">GAUSSIAN</a>
+ }</td></tr>
+<tr class="separator:ac74e51c6804e0e40809c136e9b96c21d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d8947c85d8e817d3731cc5485f67e2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interaction_8hpp.html#a86d8947c85d8e817d3731cc5485f67e2">BondDiffType</a> { <a class="el" href="interaction_8hpp.html#a86d8947c85d8e817d3731cc5485f67e2ab5fc55caebf00b04f4bb747dfc78e0ce">BOXED</a>, 
 <a class="el" href="interaction_8hpp.html#a86d8947c85d8e817d3731cc5485f67e2a5155e7fdc0ce973ac980511ae390441d">UNBOXED</a>, 
 <a class="el" href="interaction_8hpp.html#a86d8947c85d8e817d3731cc5485f67e2acde26c9ea6a2055e60a878fd538c49a6">FIXEDBOX</a>
@@ -310,6 +320,26 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a86d8947c85d8e817d3731cc5485f67e2a5155e7fdc0ce973ac980511ae390441d"></a>UNBOXED&#160;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><a class="anchor" id="a86d8947c85d8e817d3731cc5485f67e2acde26c9ea6a2055e60a878fd538c49a6"></a>FIXEDBOX&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="ac74e51c6804e0e40809c136e9b96c21d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21d">RandomForceType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ac74e51c6804e0e40809c136e9b96c21da9b5eccb7f8f027c46f2018d07c74f384"></a>FIXED&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac74e51c6804e0e40809c136e9b96c21da8f44784d154005a214e0fe94119d28ef"></a>UNIFORM&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ac74e51c6804e0e40809c136e9b96c21dafca8f51c9117fbb492a2184e9df9e412"></a>GAUSSIAN&#160;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -405,7 +435,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:42:09 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

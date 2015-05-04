@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unboxed',['UNBOXED',['../interaction_8hpp.html#a86d8947c85d8e817d3731cc5485f67e2a5155e7fdc0ce973ac980511ae390441d',1,'interaction.hpp']]]
+  ['gaussian',['GAUSSIAN',['../interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21dafca8f51c9117fbb492a2184e9df9e412',1,'interaction.hpp']]]
 ];
