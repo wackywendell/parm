@@ -24,7 +24,7 @@ ghp: doc
 doc: doc/html/index.html
 	
 doc/html/index.html: src/*.cpp src/*.hpp src/*.md src/bin/*.cpp pyparm/examples/*.py Doxyfile Readme.md
-	doxygen Doxyfile
+	doxygen Doxyfile >/dev/null
 	
 clean:
 	rm -f bin/* lib/*
