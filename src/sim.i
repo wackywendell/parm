@@ -54,6 +54,7 @@
 %shared_ptr(RDiffs)
 %shared_ptr(SCAtomVec)
 %shared_ptr(CoordConstraint)
+%shared_ptr(RandomForce)
 %shared_ptr(FixedForce)
 %shared_ptr(FixedForceRegion)
 %shared_ptr(FixedSpring)

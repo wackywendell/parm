@@ -502,6 +502,61 @@ class COMSpring : public Interaction{
         };
 };
 
+//////////////////////////////////////////////////////////////////////////////
+// Random Force
+
+enum RandomForceType {
+    FIXED, // Always the same magnitude
+    UNIFORM, // uniform probability distribution for magnitude, from 0 to force_mag
+    GAUSSIAN // Gaussian probability distribution for magnitude
+};
+
+struct RandomForceAtom : public AtomRef {
+    public:
+        flt force_mag;
+        flt freq; // in general, how many timesteps on average between kicks
+        RandomForceType force_type;
+    public:
+        RandomForceAtom(AtomID a, flt force_mag, flt freq, RandomForceType force_type=UNIFORM) : 
+            AtomRef(a), force_mag(force_mag), freq(freq), force_type(force_type){};
+};
+
+class RandomForce : public Interaction {
+    public:
+        vector<RandomForceAtom> group;
+    
+    public:
+        RandomForce(){};
+        RandomForce(AtomGroup& agroup, flt force_mag, flt freq, RandomForceType force_type=UNIFORM){
+            for(uint i=0; i<agroup.size(); ++i){
+                group.push_back(RandomForceAtom(agroup.get_id(i), force_mag, freq, force_type));
+            }
+        };
+        
+        uint size() const{ return (uint) group.size();};
+        RandomForceAtom get(uint i) const{ return group[i];};
+        
+        /// If "replace", a previous pair found will be replaced by the new pair.
+        /// If not "replace" and that pair of atoms is already inserted, an error will be thrown.
+        bool add(RandomForceAtom a, bool replace=true);
+        
+        // No potential energy
+        flt energy(Box &box){return 0;};
+        void setForces(Box &box);
+        
+        // no pressure from this interaction
+        //TODO: maybe this should be average pressure
+        flt pressure(Box &box){return 0;};
+        
+        // no pressure from this interaction
+        //TODO: maybe this should actually work; it could
+        flt setForcesGetPressure(Box &box){setForces(box); return 0;};
+        
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// Bonds
+
 enum BondDiffType {
     BOXED, // use box.diff(r1, r2)
     UNBOXED, // use r2 - r1
