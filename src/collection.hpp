@@ -128,71 +128,102 @@ class StaticCollec : public Collection {
         void update(){update_trackers(); update_constraints();};
 };
 
-/*!
-A collection with a "solvent". Uses the Langevin equation:
+//! A collection with a "solvent", using the Langevin equation.
+/*! The Langevin Equation ((modified with \f$\vec{f}\f$):
 
 \f$\dot{\vec{p}} = - \xi \vec{p} + \vec{f} + \overset{\circ}{\vec{p}}\f$
 
 Where \f$- \xi \vec{p}\f$ is a drag term, \f$\overset{\circ}{\vec{p}}\f$ is a "random force"
-term, and \f$\vec{f}\f$ is the standard force term. When \f$\vec{f}\f = \vec{0}\f$, particles undergo
-Brownian motion, with \f$\xi = \frac{\k_B T}{m D}\f$.
+term, and \f$\vec{f}\f$ is the standard force term. When \f$\vec{f} = \vec{0}\f$, particles undergo
+Brownian motion, with \f$\xi = \frac{k_B T}{m D}\f$.
 
 This particular algorithm is from Allen and Tildesley, p. 263:
-\f$\vec{r}(t + \delta t) = \vec{r}(t) + c_1 \delta t \vec{v}(t) + c_2 {\delta t}^2 \vec{a}(t) + \delta{r}_G\f$
-v(t + dt) = c0 v(t) + c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
 
-where c0 = exp(- h dt)
-   c1 = (h dt)^-1 (1 - c0)
-   c2 = (h dt)^-1 (1 - c1)
-There are expansions for all 3
+\f$
+\begin{align*}
+\vec{r}\left(t+\delta t\right)) & =\vec{r}\left(t\right)+c_{1}\delta t\vec{v}\left(t\right)+c_{2}\delta t^{2}\vec{a}\left(t\right)+\delta r^{G}\\
+\vec{v}\left(t+\delta t\right) & =c_{0}v\left(t\right)+\left(c_{1}-c_{2}\right)\delta t\vec{a}\left(t\right)+c_{2}\delta t\vec{a}\left(t+\delta t\right)+\delta v^{G}
+\end{align*}
+\f$
 
-dr_G and dv_G are drawn from correlated Gaussian distributions, with
+where
 
-sigma_r^2 = (h dt)^-1 (2 - (h dt)^-1 (3 - 4 exp(-h dt) + exp(-2 h dt))
-sigma_v^2 = 1 - exp(-2 h dt)
-c_{rv} = (h dt)^-1 (1 - exp(-h dt))^2 / sigma_r / sigma_v
+\f$
+\begin{align*}
+c_0 & = e^{- \xi \delta t} &
+c_1 & = \frac{1 - c_0}{\xi \delta t} &
+c_2 & = \frac{1 - c_1}{\xi \delta t}
+\end{align*}
+\f$
 
-Those are the unitless versions, multiply by dt^2 kB T/m, kB T/m, and dt kB T/m respectively
-to get the unit-full versions in the book
+There are expansions for all 3; see Allen and Tildesley page 261.
+
+\f$\delta r^G\f$ and \f$\delta v^G\f$ are drawn from correlated Gaussian distributions, with
+
+\f$
+\begin{align*}
+\sigma_{r}^{2} & =\left(\xi dt\right)^{-1}\left[2-\left(\xi dt\right)^{-1}\left(3-4e^{-\xi dt}+e^{-2\xi dt}\right)\right]\\
+\sigma_{v}^{2} & =1-e^{-2\xi dt}\\
+c_{rv} & =\frac{\left(1-e^{-\xi dt}\right)^{2}}{\xi dt\sigma_{r}\sigma_{v}}
+\end{align*}
+\f$
+
+Those are the unitless versions, multiply by \f$\frac{\delta t^2 k_B T}{m}\f$, \f$\frac{k_B
+T}{m}\f$, and \f$\frac{\delta t k_B T}{m}\f$ respectively to get the unit-full versions in the book
+
 */
 class CollectionSol : public Collection {
     protected:
+        //! The random number generator
         BivariateGauss gauss;
         flt dt;
+        //! Damping coefficient, \f$\xi\f$
         flt damping;
-        flt desT; // desired temperature
-        flt sigmar, sigmav, corr; // note that this is sigmar/sqrt(T/m), same for sigmav
-                                  // corr is unitless, and correct
-        flt c0, c1, c2; // from Allen and Tildesley
+        //! desired temperature
+        flt desT;
+        //! note that this is sigmar/sqrt(T/m), same for sigmav
+        //! corr is unitless, and correct
+        flt sigmar, sigmav, corr;
+        flt c0, c1, c2;
+        //! Set c0, c1, c2, sigmar, sigmav, corr from desT, dt, and damping
         void setCs();
 
     public:
-        CollectionSol(sptr<Box> box, sptr<AtomGroup> atoms,
-                const flt dt, const flt damping, const flt desiredT,
+        CollectionSol(
+                //! Box for the atoms
+                sptr<Box> box,
+                //! The atoms
+                sptr<AtomGroup> atoms,
+                //! The timestep \f$\delta t\f$
+                const flt dt,
+                //! Damping coefficient, \f$\xi\f$
+                const flt damping, 
+                //! The desired temperature \f$T\f$
+                const flt desiredT,
+                //! The interactions, other than brownian motion. These provide \f$\vec{f}\f$.
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
+                //! Trackers, such as a neighborlist
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
+                //! Constraints
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
+        //! Change the desired damping coefficient \f$\xi\f$ or temperature \f$T\f$.
         void changeT(const flt damp, const flt desiredT){
             damping = damp; desT = desiredT; setCs();};
+        //! Change the timestep \f$\delta t\f$.
         void setdt(const flt newdt){dt = newdt; setCs();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};
         //void seed(){gauss.seed();};
 };
 
+//! A damped collection, equivalent to `CollectionSol` but without the random forces.
+/*! Uses the Langevin Equation (modified with \f$\vec{f}\f$):
+
+\f$\dot{\vec{p}} = - \xi \vec{p} + \vec{f} + \overset{\circ}{\vec{p}}\f$
+
+Except that here, we use \f$\overset{\circ}{\vec{p}} = 0\f$.
+*/
 class CollectionDamped : public Collection {
-    /** Based on CollectionSol, above.
-     * From Allen and Tildesley, p. 263:
-     * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
-     * v(t + dt) = c0 v(t) + (c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
-     *
-     * where c0 = exp(- h dt)
-     *       c1 = (h dt)^-1 (1 - c0)
-     *       c2 = (h dt)^-1 (1 - c1)
-     * There are expansions for all 3
-     *
-     * dr_G and dv_G are drawn from correlated Gaussian distributions, which we drop for this one.
-    **/
 
     protected:
         flt dt;
@@ -212,31 +243,35 @@ class CollectionDamped : public Collection {
         void timestep();
 };
 
-class CollectionSolHT : public Collection {
-    /** for use in solution, with damped forces and random forces
-      *
-      * Treats Atom.f as the "configurational force", and Atom.a as
-      * the acceleration due to Atom.f + random force.
-      * Note that d²r/dt² = Atom.f + random force (- damping*v), but we
-      * don't include that.
-      *
-      * 1) find positions: (x0,v0,a0,f0) -> (x, v, a, f)
-      *         sets Atom.x from previous force, velocity, and position
-      *         x = x0 + dt v0 + 1/2 dt^2 a0 - damping*dt²/2m * v0
-      * 2) intermediate v: (v0,f0) -> (v1, f0)
-      *         v1 = damped(v0) +  dt/2 f0/m
-      *                 where damped(vo) = v0*(1-h*damping/2m + (h*damping/m)²/4)
-      * 3) setForces(): (x, f0) -> (x,f)
-      *         reset and set the forces
-      *         f = grad(V(x))
-      * 4) Acceleration: (f, a0) -> (f, a1)
-      *         a1 = f/m + gaussian
-      *         set acceleration given the forces, adding in random pieces, no damping
-      * 5) Finish v and a: (v1, f, a1) -> (v, f, a)
-      *         v = v1 + dt/2 a1
-      *
+/*! for use in solution, with damped forces and random forces.
+  * 
+  * This uses the same physics as `CollectionSol`, but a different algorithm from Honeycutt and Thirumalai.
+  * 
+  * Note that the Honeycutt and Thirumalai algorithm is flawed, and this fixes it to some degree.
+  *
+  * Treats Atom.f as the "configurational force", and Atom.a as
+  * the acceleration due to Atom.f + random force.
+  * Note that d²r/dt² = Atom.f + random force (- damping*v), but we
+  * don't include that.
+  *
+  * 1) find positions: (x0,v0,a0,f0) -> (x, v, a, f)
+  *         sets Atom.x from previous force, velocity, and position
+  *         x = x0 + dt v0 + 1/2 dt^2 a0 - damping*dt²/2m * v0
+  * 2) intermediate v: (v0,f0) -> (v1, f0)
+  *         v1 = damped(v0) +  dt/2 f0/m
+  *                 where damped(vo) = v0*(1-h*damping/2m + (h*damping/m)²/4)
+  * 3) setForces(): (x, f0) -> (x,f)
+  *         reset and set the forces
+  *         f = grad(V(x))
+  * 4) Acceleration: (f, a0) -> (f, a1)
+  *         a1 = f/m + gaussian
+  *         set acceleration given the forces, adding in random pieces, no damping
+  * 5) Finish v and a: (v1, f, a1) -> (v, f, a)
+  *         v = v1 + dt/2 a1
+  *
 
-     **/
+ **/
+class CollectionSolHT : public Collection {
     protected:
         flt dt;
         flt damping;
