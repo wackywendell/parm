@@ -94,7 +94,7 @@ int main(){
     writefile(outfile, atoms, *obox);
     
     //Print out total energy, kinetic energy, and potential energy
-    cout << "E: " << collec.energy() << " K: " << collec.kinetic() 
+    cout << "E: " << collec.energy() << " K: " << collec.kinetic_energy() 
         << " U: " << LJ->energy(*obox) << "\n";
     // Run the simulation! And every _ steps, write a frame to the .xyz
     // file and print out the energies again
@@ -103,7 +103,7 @@ int main(){
             collec.timestep();
         }
         writefile(outfile, atoms, *obox);
-        cout << (500-i) << " E: " << collec.energy() << " K: " << collec.kinetic() 
+        cout << (500-i) << " E: " << collec.energy() << " K: " << collec.kinetic_energy() 
             << " U: " << LJ->energy(*obox) << "\n";
     }
     

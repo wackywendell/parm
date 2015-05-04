@@ -261,8 +261,9 @@ class AtomID : public AtomRef {
         uint num; // note that these are generally only in reference to
                   // a specific AtomGroup
     public:
+        //! Constructor not recommended: uses UINT_MAX for number, i.e. unknown
         inline AtomID() : AtomRef(), num(UINT_MAX){};
-        // inline AtomID(Atom *a) : AtomRef(a), num(UINT_MAX){};
+        //! Recommended constructor
         inline AtomID(Atom *a, uint n) : AtomRef(a), num(n){};
         inline uint n() const {return num;};
 };
@@ -321,27 +322,38 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         This is normally with reference to a "lab" reference frame (velocity (0,0,0)), but
         can optionally take a different origin velocity, e.g. `comv()`.
         */
-        flt kinetic(const Vec &originvelocity=Vec()) const;
+        flt kinetic_energy(const Vec &originvelocity=Vec()) const;
         //! Total momentum.
         Vec momentum() const;
         //! \f$R_g\f$
         flt gyradius() const;
         #ifdef VEC3D
+        //! Moment of inertia of the atoms as a whole
         flt moment(const Vec &loc, const Vec &axis, Box &box) const;
+        //! Angular momentum
         Vec angmomentum(const Vec &loc, Box &box) const;
+        //! Moment of inertia of the atoms as a whole
         Matrix<flt> moment(const Vec &loc, Box &box) const;
+        //! Angular velocity
         Vec omega(const Vec &loc, Box &box) const;
+        //! Add a given angular velocity to all atoms, by adding to their velocity
         void addOmega(Vec w, Vec origin, Box &box);
+        //! Reset angular momentum to 0
         inline void resetL(Box &box){
             Vec c = com(), w = omega(c, box);
             if (w.sq() == 0) return;
             addOmega(-w, c, box);
         }
         #elif defined VEC2D
+        //! Moment of inertia of the atoms as a whole
         flt moment(const Vec &loc, Box &box) const;
+        //! Angular momentum
         flt angmomentum(const Vec &loc, Box &box) const;
+        //! Angular velocity
         flt omega(const Vec &loc, Box &box) const{return angmomentum(loc, box) / moment(loc, box);};
+        //! Add a given angular velocity to all atoms, by adding to their velocity
         void addOmega(flt w, Vec origin, Box &box);
+        //! Reset angular momentum to 0
         inline void resetL(Box &box){
             Vec c = com();
             flt w = omega(c, box);
@@ -350,9 +362,11 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         }
         #endif
 
-        //! for resetting
+        //! for resetting. Adds a fixed velocity to all atoms
         void addv(Vec v);
+        //! Subtracts the center of mass velocity from all atoms
         void resetcomv(){addv(-comv());};
+        //! Randomize velocities, for a specific temperature
         void randomize_velocities(flt T);
 
         //! for timestepping

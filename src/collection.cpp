@@ -32,7 +32,7 @@ void Collection::scaleVelocitiesT(flt T, bool minuscomv){
 
 void Collection::scaleVelocitiesE(flt E){
     flt E0 = energy();
-    flt k0 = kinetic();
+    flt k0 = kinetic_energy();
     flt goalkinetic = k0 + (E - E0);
     flt scaleby = sqrt(goalkinetic/k0);
     scaleVs(scaleby);
@@ -68,7 +68,7 @@ flt Collection::virial(){
 flt Collection::pressure(){
     flt V = box->V();
 
-    flt E = 2.0 * kinetic();// * (ndof - nc - 3) / ndof;
+    flt E = 2.0 * kinetic_energy();// * (ndof - nc - 3) / ndof;
     //flt E = (ndof - nc) * temp();
     vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); ++it){
@@ -78,7 +78,7 @@ flt Collection::pressure(){
     return E / V / flt(NDIM);
 }
 
-flt Collection::potentialenergy(){
+flt Collection::potential_energy(){
     flt E=0;
     vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it<interactions.end(); ++it){
@@ -91,7 +91,7 @@ flt Collection::potentialenergy(){
 }
 
 flt Collection::energy(){
-    flt E = potentialenergy() + kinetic();
+    flt E = potential_energy() + kinetic_energy();
     assert(not isnan(E));
     return E;
 };
@@ -119,7 +119,7 @@ flt Collection::temp(bool minuscomv){
     
     int ndof = (int) dof();
     if (minuscomv) ndof -= NDIM;
-    return atoms->kinetic(v) * 2 / ndof;
+    return atoms->kinetic_energy(v) * 2 / ndof;
 }
 
 flt Collection::gyradius(){
@@ -499,7 +499,7 @@ void CollectionConjGradient::reset(){
     }
 }
 
-flt CollectionConjGradientBox::kinetic(){
+flt CollectionConjGradientBox::kinetic_energy(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
     for(uint i=0; i<atoms->size(); i++){
@@ -760,7 +760,7 @@ void CollectionNLCG::setForces(bool seta, bool setV){
 
 
 flt CollectionNLCG::Hamiltonian(){
-    return potentialenergy() + P0*(box->V());
+    return potential_energy() + P0*(box->V());
 };
 
 void CollectionNLCG::resize(flt V){
@@ -782,7 +782,7 @@ void CollectionNLCG::resize(flt V){
     obox.resizeV(V);
 }
 
-flt CollectionNLCG::kinetic(){
+flt CollectionNLCG::kinetic_energy(){
     flt E=0;
     flt Lfac = exp(vl / (kappa*NDIM));
     for(uint i=0; i<atoms->size(); i++){
@@ -939,7 +939,7 @@ void CollectionNLCG::timestep(){
             //~ cout << " -- alpha0 = " << oldalpha;
             //~ cout << " -- alphafac = " << alphafac;
             //~ cout << " -- E = " << energy();
-            //~ cout << " -- K = " << kinetic();
+            //~ cout << " -- K = " << kinetic_energy();
             //~ cout << " -- fdv = " << fdotv() << endl;
         //~ }
         
@@ -1174,7 +1174,7 @@ void CollectionNLCGV::timestep(){
     //~ cout << "NLCGV::timestep 1:"
              //~ << " eta0 = " << eta0;
         //~ cout << " -- E = " << energy();
-        //~ cout << " -- K = " << kinetic();
+        //~ cout << " -- K = " << kinetic_energy();
         //~ cout << " -- fdv = " << fdotv() << endl;
     
     stepx(-dt);
@@ -1218,7 +1218,7 @@ void CollectionNLCGV::timestep(){
             //~ cout << " -- alpha0 = " << oldalpha;
             //~ cout << " -- alphafac = " << alphafac;
             //~ cout << " -- E = " << energy();
-            //~ cout << " -- K = " << kinetic();
+            //~ cout << " -- K = " << kinetic_energy();
             //~ cout << " -- fdv = " << fdotv() << endl;
         //~ }
         
@@ -1241,7 +1241,7 @@ void CollectionNLCGV::timestep(){
         //~ cout << "NLCGV::timestep 3: secant " << sec
              //~ << " eta = " << eta << " -- alpha = " << alpha;
         //~ cout << " -- E = " << energy();
-        //~ cout << " -- K = " << kinetic();
+        //~ cout << " -- K = " << kinetic_energy();
         //~ cout << " -- fdv = " << fdotv() << endl;
         
         update_trackers();
@@ -1294,7 +1294,7 @@ void CollectionNLCGV::timestep(){
     
     //~ cout << "NLCGV::timestep 4: beta " << beta;
         //~ cout << " -- E = " << energy();
-        //~ cout << " -- K = " << kinetic();
+        //~ cout << " -- K = " << kinetic_energy();
         //~ cout << " -- fdv = " << fdotv() << endl;
         
 }
@@ -1324,7 +1324,7 @@ void CollectionNoseHoover::timestep(){
     // * xi(t+dt) = solveCubic(dt - z0, dt^2/4 - dt z0, z0 dt^2/4 z0 + z1)
     
     flt ndof = dof();
-    flt Kt = 2*kinetic();
+    flt Kt = 2*kinetic_energy();
     
     //Step 1: set Atom.x = r(t+dt)
     AtomGroup &m = *atoms;
@@ -1348,7 +1348,7 @@ void CollectionNoseHoover::timestep(){
     }
     
     // Now we solve for xi
-    flt Ky = 2*kinetic();
+    flt Ky = 2*kinetic_energy();
     flt z0 = xi + (Kt - 2*ndof*T)*(dt/2/Q);
     flt z1 = Ky*2/dt/Q;
     
@@ -1362,7 +1362,7 @@ void CollectionNoseHoover::timestep(){
         m[i].v /= ytov;
     }
     
-    //~ flt Kt2 = 2*kinetic();
+    //~ flt Kt2 = 2*kinetic_energy();
     //~ flt xicheck = oldxi + (Kt2 - ndof*T + Kt - ndof*T)*(dt/2/Q);
     //~ flt xicheck2 = z0 + z1 / ((2/dt) + xi) / ((2/dt) + xi);
     //~ if (abs(xi-xicheck) > 1e-4){
@@ -1373,7 +1373,7 @@ void CollectionNoseHoover::timestep(){
 }
 
 flt CollectionNoseHoover::Hamiltonian(){
-    flt H = (kinetic() + potentialenergy() + 
+    flt H = (kinetic_energy() + potential_energy() + 
                 (xi*xi*Q/2) + (dof() * lns * T));
     assert(not isnan(H));
     return H;
@@ -1674,7 +1674,7 @@ void CollectionRK4::timestep(){
     update_trackers();
 }
 
-flt CollectionGear4NPH::kinetic(){
+flt CollectionGear4NPH::kinetic_energy(){
     flt E=0;
     flt Vfac = dV/box->V()/flt(NDIM);
     for(uint i=0; i<atoms->size(); i++){
@@ -1725,7 +1725,7 @@ void CollectionGear4NPH::timestep(){
     // Now we set forces and accelerations
     for(uint m=0; m<ncorrec; m++){
         flt interacP = setForcesGetPressure(false);
-        flt newP = (interacP + (kinetic()*2.0))/NDIM/V;
+        flt newP = (interacP + (kinetic_energy()*2.0))/NDIM/V;
         //~ for(git = groups.begin(); git<groups.end(); git++){
             //~ AtomGroup &g = **git;
             //~ for(uint i=0; i<g.size(); i++){
@@ -1838,7 +1838,7 @@ void CollectionGear4NPT::timestep(){
         update_constraints();
         
         /// Correction
-        flt K2 = 2.0 * kinetic();
+        flt K2 = 2.0 * kinetic_energy();
         flt PV = (xrpsums.rfsum + K2)/3.0;
         flt rpx = xrpsums.rpxsum;
         flt xx = xrpsums.xsum;

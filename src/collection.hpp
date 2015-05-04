@@ -9,20 +9,29 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 
+
+/*!
+A "collection" of atoms, the box, and an integrator. Provides general simulation time-stepping as
+well as statistical tracking.
+
+The most useful method is timestep(), which takes one step forward in time; this is defined
+by each subclass separately, as each subclass uses a different integration scheme.
+*/
 class Collection : public boost::enable_shared_from_this<Collection> {
-    /* A group of AtomGroups and interactions, meant to encapsulate an
-     * entire simulation.
-     *
-     * Adds general simulation time-stepping as well as statistical tracking.
-     */
     protected:
         sptr<Box> box;
         sptr<AtomGroup> atoms;
         vector<sptr<Interaction> > interactions;
         vector<sptr<StateTracker> > trackers;
         vector<sptr<Constraint> > constraints;
-
+        
+        //! To be called immediately after setting particle positions and velocities; lets
+        //! `StateTracker` instances stay updated automatically
         void update_trackers();
+        
+        //! To be called approximately after forces have been set. Constraints will typically
+        //! set forces / velocities in some direction to zero, so `update_constraints` should be
+        //! called after all forces have been set, and any external velocity changes have been made.
         void update_constraints();
         virtual flt setForcesGetPressure(bool seta=true);
 
@@ -36,35 +45,52 @@ class Collection : public boost::enable_shared_from_this<Collection> {
 
         virtual void initialize();
 
-        //Timestepping
+        //Timestepping Methods /////////////////////////////////////////////////////////////////////
+        //! Set forces. This should be called at the beginning of the simulation, and will also be
+        //! called by timestep()
         virtual void setForces(bool seta=true);
+        
+        //! Take one step forward in time
         virtual void timestep()=0;
+        
+        //! Total degrees of freedom. This takes into account constraints, and whether the
+        //! center-of-mass is free.
         flt dof();
 
-        //Stats
-        flt potentialenergy();
+        //Statistical Methods //////////////////////////////////////////////////////////////////////
+        flt potential_energy();
+        //! Total energy, including both potential and kinetic
         flt energy();
         virtual flt temp(bool minuscomv=true);
-        virtual flt kinetic(){return atoms->kinetic();};
+        virtual flt kinetic_energy(){return atoms->kinetic_energy();};
         virtual flt virial();
         virtual flt pressure();
         sptr<Box> getbox(){return box;};
         inline Vec com(){return atoms->com();};
         inline Vec comv(){return atoms->comv();};
         #ifdef VEC3D
+        //! Shortcut to `AtomGroup` method of the same name
         inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
+        //! Shortcut to `AtomGroup` method of the same name
         inline Vec angmomentum(){return atoms->angmomentum(com(), *box);};
         #elif defined VEC2D
+        //! Shortcut to `AtomGroup` method of the same name
         inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
+        //! Shortcut to `AtomGroup` method of the same name
         inline flt angmomentum(){return atoms->angmomentum(com(), *box);};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~Collection(){};
-
+        
+        //! Shortcut to `AtomGroup` method of the same name
         void resetcomv(){atoms->resetcomv();};
+        //! Shortcut to `AtomGroup` method of the same name
         void resetL(){atoms->resetL(*box);};
+        //! Scale all velocities by a factor
         void scaleVs(flt scaleby);
+        //! Scale all velocities to get to a specific temperature
         void scaleVelocitiesT(flt T, bool minuscomv=true);
+        //! Scale all velocities to get to a specific total energy
         void scaleVelocitiesE(flt E);
 
         void addInteraction(sptr<Interaction> inter){
@@ -88,6 +114,7 @@ class Collection : public boost::enable_shared_from_this<Collection> {
         uint numInteraction(){ return (uint) interactions.size();};
 };
 
+//! A "static" collection, that doesn't move.
 class StaticCollec : public Collection {
     public:
         StaticCollec(sptr<Box> box, sptr<AtomGroup> atoms,
@@ -95,30 +122,40 @@ class StaticCollec : public Collection {
             vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
             vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >())
                             : Collection(box, atoms, interactions, trackers, constraints){};
+        
+        //! Does nothing; a no-op.
         virtual void timestep(){};
         void update(){update_trackers(); update_constraints();};
 };
 
-class CollectionSol : public Collection {
-    /** From Allen and Tildesley, p. 263:
-     * r(t + dt) = r(t) + c1 dt v(t) + c2 dt^2 a(t) + dr_G
-     * v(t + dt) = c0 v(t) + c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
-     *
-     * where c0 = exp(- h dt)
-     *       c1 = (h dt)^-1 (1 - c0)
-     *       c2 = (h dt)^-1 (1 - c1)
-     * There are expansions for all 3
-     *
-     * dr_G and dv_G are drawn from correlated Gaussian distributions, with
-     *
-     * sigma_r^2 = (h dt)^-1 (2 - (h dt)^-1 (3 - 4 exp(-h dt) + exp(-2 h dt))
-     * sigma_v^2 = 1 - exp(-2 h dt)
-     * c_{rv} = (h dt)^-1 (1 - exp(-h dt))^2 / sigma_r / sigma_v
-     *
-     * Those are the unitless versions, multiply by dt^2 kB T/m, kB T/m, and dt kB T/m respectively
-     * to get the unit-full versions in the book
-    **/
+/*!
+A collection with a "solvent". Uses the Langevin equation:
 
+\f$\dot{\vec{p}} = - \xi \vec{p} + \vec{f} + \overset{\circ}{\vec{p}}\f$
+
+Where \f$- \xi \vec{p}\f$ is a drag term, \f$\overset{\circ}{\vec{p}}\f$ is a "random force"
+term, and \f$\vec{f}\f$ is the standard force term. When \f$\vec{f}\f = \vec{0}\f$, particles undergo
+Brownian motion, with \f$\xi = \frac{\k_B T}{m D}\f$.
+
+This particular algorithm is from Allen and Tildesley, p. 263:
+\f$\vec{r}(t + \delta t) = \vec{r}(t) + c_1 \delta t \vec{v}(t) + c_2 {\delta t}^2 \vec{a}(t) + \delta{r}_G\f$
+v(t + dt) = c0 v(t) + c1 - c2) dt a(t) + c2 dt a(t + dt) + dv_G
+
+where c0 = exp(- h dt)
+   c1 = (h dt)^-1 (1 - c0)
+   c2 = (h dt)^-1 (1 - c1)
+There are expansions for all 3
+
+dr_G and dv_G are drawn from correlated Gaussian distributions, with
+
+sigma_r^2 = (h dt)^-1 (2 - (h dt)^-1 (3 - 4 exp(-h dt) + exp(-2 h dt))
+sigma_v^2 = 1 - exp(-2 h dt)
+c_{rv} = (h dt)^-1 (1 - exp(-h dt))^2 / sigma_r / sigma_v
+
+Those are the unitless versions, multiply by dt^2 kB T/m, kB T/m, and dt kB T/m respectively
+to get the unit-full versions in the book
+*/
+class CollectionSol : public Collection {
     protected:
         BivariateGauss gauss;
         flt dt;
@@ -302,7 +339,7 @@ class CollectionConjGradientBox : public Collection {
                 dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0), dV(0),
                 maxdV(-1){};
 
-        flt kinetic();
+        flt kinetic_energy();
 
         void timestep();
         void timestepBox();
@@ -364,7 +401,7 @@ class CollectionNLCG : public Collection {
                 const flt kappa=10.0, const flt kmax=1000,
                 const uint secmax=40, const flt seceps = 1e-20);
 
-        flt kinetic();  // Note: masses are ignored
+        flt kinetic_energy();  // Note: masses are ignored
         flt pressure();
         flt Hamiltonian();
         void setForces(bool seta=true){setForces(seta,true);};
@@ -736,10 +773,10 @@ class CollectionGear4NPH : public Collection {
                 Collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), P(P), Q(Q), dV(0), ddV(0), dddV(0), ncorrec(1) {resetbs();};
         void timestep();
-        flt kinetic();
+        flt kinetic_energy();
         flt temp(bool minuscomv=true);
         flt Hamiltonian(){
-            return kinetic() + (Q/2*dV*dV) + potentialenergy() + P*(boost::static_pointer_cast<OriginBox>(box)->V());
+            return kinetic_energy() + (Q/2*dV*dV) + potential_energy() + P*(boost::static_pointer_cast<OriginBox>(box)->V());
         }
         flt getdV(){return dV;};
         flt getddV(){return ddV;};
@@ -848,7 +885,7 @@ class CollectionVerletNPT : public Collection {
         // and also only such at constant T
         flt Hamiltonian(){
 			// regular energy
-			flt H = kinetic() + potentialenergy();
+			flt H = kinetic_energy() + potential_energy();
 
 			if(QT > 0){
 				flt gkT = dof()*T;

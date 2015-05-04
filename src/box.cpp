@@ -258,7 +258,7 @@ void AtomGroup::addOmega(flt w, Vec loc, Box &box){
 };
 #endif
 
-flt AtomGroup::kinetic(const Vec &originvelocity) const{
+flt AtomGroup::kinetic_energy(const Vec &originvelocity) const{
     flt totE = 0;
     Vec curv;
     for(uint i=0; i<size(); i++){

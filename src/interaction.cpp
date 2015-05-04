@@ -319,21 +319,6 @@ flt Dihedral::energy(const flt ang) const{
     return tot;
 }
 #endif
-//~ flt InteractGroup::energy(Box &box){
-    //~ flt E=0;
-    //~ vector<Interaction*>::iterator it;
-    //~ for(it = inters.begin(); it < inters.end(); ++it){
-        //~ E += (*it)->energy(box);
-    //~ }
-    //~ return E;
-//~ };
-
-//~ void InteractGroup::setForces(Box &box){
-    //~ vector<Interaction*>::iterator it;
-    //~ for(it = inters.begin(); it < inters.end(); ++it){
-        //~ (*it)->setForces(box);
-    //~ }
-//~ };
 
 bool RandomForce::add(RandomForceAtom a, bool replace){
     vector<RandomForceAtom>::iterator it;
