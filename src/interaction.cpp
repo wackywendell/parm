@@ -335,6 +335,43 @@ flt dihedral::energy(const flt ang) const{
     //~ }
 //~ };
 
+bool RandomForce::add(RandomForceAtom a, bool replace){
+    vector<RandomForceAtom>::iterator it;
+    for(it = group.begin(); it < group.end(); ++it){
+        if((*it) == (atomref)a){
+            if(replace){
+                *it = a;
+                return true;
+            } else {
+                throw std::invalid_argument("Atoms already inserted.");
+            }
+        }
+    }
+    group.push_back(a);
+    return false;
+};
+
+void RandomForce::setForces(Box &box){
+    vector<RandomForceAtom>::iterator it;
+    for(it = group.begin(); it < group.end(); ++it){
+        if(rand01() < 1.0/it->freq){
+            RandomForceAtom &a = *it;
+            Vec v = randVec();
+            switch(a.force_type){
+                case FIXED:
+                    a->f += v * (a.force_mag / v.mag());
+                    continue;
+                case UNIFORM:
+                    a->f += v * (rand01() * a.force_mag / v.mag());
+                    continue;
+                case GAUSSIAN:
+                    a->f += v * a.force_mag;
+                    continue;
+            }
+        }
+    };
+};
+
 bondgrouping::bondgrouping(flt k, flt x0, atomid a1, atomid a2, 
         BondDiffType diff, OriginBox *box) :
             k(k), x0(x0), a1(a1), a2(a2), diff_type(diff){
