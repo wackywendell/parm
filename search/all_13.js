@@ -53,8 +53,6 @@ var searchData=
   ['sigmas',['sigmas',['../struct_l_j_atom_indexed.html#a8d4cd84b7cfdbcde5d8da1525f9c1cde',1,'LJAtomIndexed::sigmas()'],['../struct_hertzian_atom_indexed.html#af8bf8596d295acecf34cc756b1cbdaa8',1,'HertzianAtomIndexed::sigmas()']]],
   ['sigmav',['sigmav',['../class_collection_sol.html#a073e0cb7d8cf319c43419f096b2be6e1',1,'CollectionSol']]],
   ['sim',['sim',['../classpyparm_1_1packmin_1_1_minimizer.html#ac02027b9303b0f1550049650e648806f',1,'pyparm::packmin::Minimizer']]],
-  ['sim2d',['sim2d',['../namespacesim2d.html',1,'']]],
-  ['sim2d_2epy',['sim2d.py',['../sim2d_8py.html',1,'']]],
   ['simplelisted',['SimpleListed',['../class_simple_listed.html',1,'SimpleListed&lt; A, P &gt;'],['../class_simple_listed.html#a70863cd81059ebd1f6c6b140590c0e18',1,'SimpleListed::SimpleListed()']]],
   ['sincoeffs',['sincoeffs',['../class_dihedral.html#adc02fecfba4cd72a188553931f9bc013',1,'Dihedral']]],
   ['singles',['singles',['../class_rsq_tracker.html#a0f124aa083fbb30f654bf845afb135bf',1,'RsqTracker::singles()'],['../class_i_s_f_tracker.html#ab5e5c93998d3df2715208807c02c62f0',1,'ISFTracker::singles()']]],
