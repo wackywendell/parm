@@ -28,7 +28,7 @@ using namespace std;
 
     // on MAC OS, g++ is short for clang, and they already define the following functions pretty much
     // the same way I do
-    #ifndef __clang__
+    #ifndef __APPLE__
         inline flt cbrt(flt n){return cbrtl(n);};
         inline flt expm1(flt n){return expm1l(n);};
         inline flt copysign(flt n, flt m){return copysignl(n,m);};
