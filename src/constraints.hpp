@@ -14,7 +14,7 @@ using namespace std;
 
 typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure why
 
-class Constraint {
+class Constraint : public boost::enable_shared_from_this<Constraint> {
     public:
         virtual void apply(Box &box) = 0;
         virtual int ndof() = 0;

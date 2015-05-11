@@ -9,7 +9,7 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 
-class Collection {
+class Collection : public boost::enable_shared_from_this<Collection> {
     /* A group of AtomGroups and interactions, meant to encapsulate an
      * entire simulation.
      *

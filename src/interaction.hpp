@@ -55,7 +55,7 @@ using namespace boost; // required for SWIG for some reason
 The basic Interaction class, used to represent a potential function. Specific interactions should
 derive from this.
 */
-class Interaction {
+class Interaction : public boost::enable_shared_from_this<Interaction> {
     public:
         /**
         Potential energy due to this Interaction.

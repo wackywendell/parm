@@ -4,6 +4,7 @@
 #define BOX_H
 
 #include <vector>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/array.hpp>
 
@@ -48,7 +49,7 @@ Particle related functions.
 @ingroup basics boxes
 @brief The virtual interface for the shape of the space and its boundaries.
 */
-class Box {
+class Box : public boost::enable_shared_from_this<Box> {
     public:
         //! Distance between two points, given boundary conditions.
         /*!
@@ -294,7 +295,7 @@ class AtomVec;
 /*!
 @ingroup atoms
 */
-class AtomGroup {
+class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
     public:
         // access individual atoms
         virtual AtomVec& vec()=0;
@@ -365,7 +366,7 @@ inline Atom& AtomIter::operator*() const{return g[i];};
 @ingroup basics atoms
 @brief The main class for representing particles.
 */
-class AtomVec : public virtual AtomGroup {
+class AtomVec : public virtual AtomGroup, public boost::enable_shared_from_this<AtomVec> {
     private:
         Atom* atoms;
         uint sz;

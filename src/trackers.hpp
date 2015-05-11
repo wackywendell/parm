@@ -13,7 +13,7 @@ The general interface for a "tracker", a class that needs to be called every tim
 StateTracker is used as a base for some "helper" classes, like neighbor lists (\ref NeighborList),
 as well as for many statistics.
 */
-class StateTracker {
+class StateTracker : public boost::enable_shared_from_this<StateTracker> {
     public:
         /** This function is called once per timestep, when particles are in their set position.*/
         virtual void update(Box &box) = 0;
