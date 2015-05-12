@@ -36,3 +36,4 @@ pyparm/examples/*.tcl
 *.orig
 *.ipynb
 .DS_Store
+/doc
