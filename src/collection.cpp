@@ -190,7 +190,7 @@ collectionSol::collectionSol(sptr<Box> box, sptr<atomgroup> atoms,
         vector<sptr<interaction> > interactions,
         vector<sptr<statetracker> > trackers, vector<sptr<constraint> > constraints) : 
             collection::collection(box, atoms, interactions, trackers, constraints, false),
-            dt(dt), damping(damp), desT(T){
+            dt(dt), damping(damp), forcemag(damp), desT(T){
     // because that should be done *after* setCs()
     if(dt <= 0){
 		throw std::invalid_argument("collection::collectionSol: dt >= 0");
@@ -201,14 +201,14 @@ collectionSol::collectionSol(sptr<Box> box, sptr<atomgroup> atoms,
 };
 
 void collectionSol::setCs(){
-    if(damping <= 0.0){
+    if(forcemag <= 0.0){
         c0 = 1; c1 = 1; c2 = .5;
         sigmar = 0; sigmav = 0; corr = 1;
         gauss.set(sigmar, sigmav, corr);
         return;
     }
     // from Allen and Tildesley, 262
-    flt dampdt = damping * dt;
+    flt dampdt = forcemag * dt;
     c0 = exp(-dampdt);
     c1 = (-expm1(-dampdt))/dampdt;
     c2 = (1-c1)/dampdt;

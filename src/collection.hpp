@@ -123,6 +123,7 @@ class collectionSol : public collection {
         bivariateGauss gauss;
         flt dt;
         flt damping;
+        flt forcemag;
         flt desT; // desired temperature
         flt sigmar, sigmav, corr; // note that this is sigmar/sqrt(T/m), same for sigmav
                                   // corr is unitless, and correct
@@ -136,7 +137,9 @@ class collectionSol : public collection {
                 vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >());
         void changeT(const flt damp, const flt desiredT){
-            damping = damp; desT = desiredT; setCs();};
+            damping = damp; forcemag=damp; desT = desiredT; setCs();};
+        void changeMag(const flt damp, const flt fmag, const flt desiredT){
+            damping = damp; forcemag=fmag; desT = desiredT; setCs();};
         void setdt(const flt newdt){dt = newdt; setCs();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};
