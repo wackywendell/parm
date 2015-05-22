@@ -12,6 +12,9 @@ class Statistic:
 
     def stats(self):
         raise NotImplementedError
+    
+    def __getitem(self, ix):
+        return self.stats()[ix]
 
 def get_order(atoms, box, local=True, weighted=True):
     import tess

@@ -621,6 +621,7 @@ class angletriples : public interaction {
         flt energy(Box &box);
         inline flt pressure(Box &box){return 0;};
         void setForces(Box &box);
+        inline flt setForcesGetPressure(Box &box){setForces(box); return 0;};
         uint size() const {return (uint) triples.size();};
         flt mean_dists() const;
         flt std_dists() const;
