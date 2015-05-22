@@ -11233,6 +11233,11 @@ class angletriples(interaction):
         return _sim3dlong.angletriples_setForces(self, box)
 
 
+    def setForcesGetPressure(self, box: 'Box') -> "flt":
+        """setForcesGetPressure(angletriples self, Box box) -> flt"""
+        return _sim3dlong.angletriples_setForcesGetPressure(self, box)
+
+
     def size(self) -> "uint":
         """size(angletriples self) -> uint"""
         return _sim3dlong.angletriples_size(self)
