@@ -257,13 +257,17 @@ class bondangle {
 };
 
 #ifdef VEC3D
+struct DihedralDerivs {
+    Nvector<Vec,4> derivs;
+    flt costheta;
+};
+
 class dihedral {
     // vectors are from 1 to 2, 2 to 3, 3 to 4
     protected:
         vector<flt> coscoeffs;
         vector<flt> sincoeffs;
         bool usepow;
-        Nvector<Vec,4> derivs(const Vec& diff1, const Vec& diff2, const Vec& diff3) const;
         flt dudcosthetaCOS(const flt costheta) const;
     public:
         dihedral(const vector<flt> cosvals, 
@@ -272,6 +276,9 @@ class dihedral {
         static flt getcos(const Vec& diff1, const Vec& diff2, const Vec& diff3);
         static flt getang(const Vec& diff1, const Vec& diff2, const Vec& diff3);
         
+        /// Returns dr_i / d cos(θ)
+        static DihedralDerivs dr_dcostheta(const Vec& diff1, const Vec& diff2, const Vec& diff3);
+
         flt dudcostheta(const flt theta) const;
         
         inline flt energy(const Vec& diff1, const Vec& diff2, const Vec& diff3) const {
@@ -671,6 +678,7 @@ class dihedrals : public interaction {
         flt energy(Box &box);
         void setForces(Box &box);
         inline flt pressure(Box &box){return 0;};
+        inline flt setForcesGetPressure(Box &box){setForces(box); return 0;};
 };
 //~ class LJgroup : private vector<LJdata>, public atomgroup {
     //~ public:
