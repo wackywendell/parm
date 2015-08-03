@@ -15220,6 +15220,16 @@ class LJgroup(interaction):
         return _sim2d.LJgroup_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJgroup self, Box box) -> unsigned long long"""
+        return _sim2d.LJgroup_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJgroup self, Box box) -> unsigned long long"""
+        return _sim2d.LJgroup_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(LJgroup self, Box box) -> flt"""
         return _sim2d.LJgroup_pressure(self, box)
@@ -15324,6 +15334,16 @@ class Hydrophobicity(interaction):
         return _sim2d.Hydrophobicity_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(Hydrophobicity self, Box box) -> unsigned long long"""
+        return _sim2d.Hydrophobicity_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(Hydrophobicity self, Box box) -> unsigned long long"""
+        return _sim2d.Hydrophobicity_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(Hydrophobicity self, Box box) -> flt"""
         return _sim2d.Hydrophobicity_pressure(self, box)
@@ -15422,6 +15442,16 @@ class LJattractix(interaction):
         energy(LJattractix self, Box box) -> flt
         """
         return _sim2d.LJattractix_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJattractix self, Box box) -> unsigned long long"""
+        return _sim2d.LJattractix_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJattractix self, Box box) -> unsigned long long"""
+        return _sim2d.LJattractix_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -15524,6 +15554,16 @@ class LJfullix(interaction):
         return _sim2d.LJfullix_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJfullix self, Box box) -> unsigned long long"""
+        return _sim2d.LJfullix_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJfullix self, Box box) -> unsigned long long"""
+        return _sim2d.LJfullix_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(LJfullix self, Box box) -> flt"""
         return _sim2d.LJfullix_pressure(self, box)
@@ -15622,6 +15662,16 @@ class LJAttractRepulse(interaction):
         energy(LJAttractRepulse self, Box box) -> flt
         """
         return _sim2d.LJAttractRepulse_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJAttractRepulse self, Box box) -> unsigned long long"""
+        return _sim2d.LJAttractRepulse_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJAttractRepulse self, Box box) -> unsigned long long"""
+        return _sim2d.LJAttractRepulse_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -15724,6 +15774,16 @@ class LJAttractFixedRepulse(interaction):
         return _sim2d.LJAttractFixedRepulse_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJAttractFixedRepulse self, Box box) -> unsigned long long"""
+        return _sim2d.LJAttractFixedRepulse_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJAttractFixedRepulse self, Box box) -> unsigned long long"""
+        return _sim2d.LJAttractFixedRepulse_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(LJAttractFixedRepulse self, Box box) -> flt"""
         return _sim2d.LJAttractFixedRepulse_pressure(self, box)
@@ -15822,6 +15882,16 @@ class LJDouble(interaction):
         energy(LJDouble self, Box box) -> flt
         """
         return _sim2d.LJDouble_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJDouble self, Box box) -> unsigned long long"""
+        return _sim2d.LJDouble_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJDouble self, Box box) -> unsigned long long"""
+        return _sim2d.LJDouble_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -15924,6 +15994,16 @@ class EisMclachlan(interaction):
         return _sim2d.EisMclachlan_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(EisMclachlan self, Box box) -> unsigned long long"""
+        return _sim2d.EisMclachlan_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(EisMclachlan self, Box box) -> unsigned long long"""
+        return _sim2d.EisMclachlan_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(EisMclachlan self, Box box) -> flt"""
         return _sim2d.EisMclachlan_pressure(self, box)
@@ -16022,6 +16102,16 @@ class LJish(interaction):
         energy(LJish self, Box box) -> flt
         """
         return _sim2d.LJish_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJish self, Box box) -> unsigned long long"""
+        return _sim2d.LJish_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJish self, Box box) -> unsigned long long"""
+        return _sim2d.LJish_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -16183,6 +16273,16 @@ class Hertzian(interaction):
         return _sim2d.Hertzian_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(Hertzian self, Box box) -> unsigned long long"""
+        return _sim2d.Hertzian_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(Hertzian self, Box box) -> unsigned long long"""
+        return _sim2d.Hertzian_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(Hertzian self, Box box) -> flt"""
         return _sim2d.Hertzian_pressure(self, box)
@@ -16283,6 +16383,16 @@ class HertzianIdx(interaction):
         return _sim2d.HertzianIdx_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(HertzianIdx self, Box box) -> unsigned long long"""
+        return _sim2d.HertzianIdx_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(HertzianIdx self, Box box) -> unsigned long long"""
+        return _sim2d.HertzianIdx_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(HertzianIdx self, Box box) -> flt"""
         return _sim2d.HertzianIdx_pressure(self, box)
@@ -16381,6 +16491,16 @@ class HertzianDrag(interaction):
         energy(HertzianDrag self, Box box) -> flt
         """
         return _sim2d.HertzianDrag_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(HertzianDrag self, Box box) -> unsigned long long"""
+        return _sim2d.HertzianDrag_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(HertzianDrag self, Box box) -> unsigned long long"""
+        return _sim2d.HertzianDrag_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -16599,6 +16719,16 @@ class LoisOhern(interaction):
         return _sim2d.LoisOhern_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LoisOhern self, Box box) -> unsigned long long"""
+        return _sim2d.LoisOhern_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LoisOhern self, Box box) -> unsigned long long"""
+        return _sim2d.LoisOhern_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(LoisOhern self, Box box) -> flt"""
         return _sim2d.LoisOhern_pressure(self, box)
@@ -16697,6 +16827,16 @@ class LoisLin(interaction):
         energy(LoisLin self, Box box) -> flt
         """
         return _sim2d.LoisLin_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LoisLin self, Box box) -> unsigned long long"""
+        return _sim2d.LoisLin_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LoisLin self, Box box) -> unsigned long long"""
+        return _sim2d.LoisLin_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -16799,6 +16939,16 @@ class LoisLinMin(interaction):
         return _sim2d.LoisLinMin_energy(self, *args)
 
 
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LoisLinMin self, Box box) -> unsigned long long"""
+        return _sim2d.LoisLinMin_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LoisLinMin self, Box box) -> unsigned long long"""
+        return _sim2d.LoisLinMin_overlaps(self, box)
+
+
     def pressure(self, box: 'Box') -> "flt":
         """pressure(LoisLinMin self, Box box) -> flt"""
         return _sim2d.LoisLinMin_pressure(self, box)
@@ -16897,6 +17047,16 @@ class LoisOhernMin(interaction):
         energy(LoisOhernMin self, Box box) -> flt
         """
         return _sim2d.LoisOhernMin_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LoisOhernMin self, Box box) -> unsigned long long"""
+        return _sim2d.LoisOhernMin_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LoisOhernMin self, Box box) -> unsigned long long"""
+        return _sim2d.LoisOhernMin_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
