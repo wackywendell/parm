@@ -13891,6 +13891,11 @@ class ContactTracker(statetracker):
         return _sim3d.ContactTracker_update(self, box)
 
 
+    def reset(self) -> "void":
+        """reset(ContactTracker self)"""
+        return _sim3d.ContactTracker_reset(self)
+
+
     def broken(self) -> "unsigned long long":
         """broken(ContactTracker self) -> unsigned long long"""
         return _sim3d.ContactTracker_broken(self)
