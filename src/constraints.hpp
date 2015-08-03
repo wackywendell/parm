@@ -245,6 +245,16 @@ class ContactTracker : public statetracker{
         ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists);
         void update(Box &box);
         
+        void reset(){
+            breaks=0;
+            formations=0;
+            incontact=0;
+            uint N = atoms->size();
+            contacts.resize(N);
+            for(uint i=0; i<N; ++i){
+                contacts[i].assign(i, false);
+            }
+        };
         unsigned long long broken(){return breaks;};
         unsigned long long formed(){return formations;};
         unsigned long long number(){return incontact;};
@@ -768,4 +778,3 @@ class Connectivity {
 };
 
 #endif
-
