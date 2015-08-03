@@ -1658,6 +1658,11 @@ class NListed : public interaction {
         A& getatom(uint n){return atoms[n];}
         flt energy(Box &box, idpair &pair);
         flt energy(Box &box);
+        
+        /// number of atom pairs with E != 0
+        unsigned long long contacts(Box &box);
+        /// number of atom pairs with E > 0 
+        unsigned long long overlaps(Box &box);
         flt pressure(Box &box);
         inline vector<P> &pairiter(){return pairs;};
         uint size(){return ((uint) (atoms.size()));};
@@ -1842,6 +1847,30 @@ flt NListed<A, P>::energy(Box &box, idpair &pair){
     P Epair = P(atoms[pair.first().n()],atoms[pair.last().n()]);
     //~ Vec dist = box.diff(Epair.atom1->x, Epair.atom2->x);
     return energy_pair(Epair, box);
+};
+
+template <class A, class P>
+unsigned long long NListed<A, P>::contacts(Box &box){
+    unsigned long long Nc = 0;
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        flt E = energy_pair(*it, box);
+        if(E != 0.0){Nc++;};
+    }
+    return Nc;
+};
+
+template <class A, class P>
+unsigned long long NListed<A, P>::overlaps(Box &box){
+    unsigned long long Nc = 0;
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        flt E = energy_pair(*it, box);
+        if(E > 0.0){Nc++;};
+    }
+    return Nc;
 };
 
 template <class A, class P>
