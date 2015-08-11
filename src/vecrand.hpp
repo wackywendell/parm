@@ -16,8 +16,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/normal_distribution.hpp>
-
-#include "vec.hpp"
+#include <Eigen/Dense>
 
 using namespace std;
 
@@ -38,23 +37,21 @@ using namespace std;
     typedef double flt;
 #endif
 
-#ifdef VEC2D
-    typedef Vector2<flt> Vec;
-#else
-    typedef Vector3<flt> Vec;
-#endif
-typedef Numvector<flt, 2> Pair;
-typedef Nvector<Vec, 2> VecPair;
+typedef Eigen::Matrix<flt, NDIM, 1> Vec;
+typedef Eigen::Matrix<flt, 2, 1> Vec2;
+typedef Eigen::Matrix<flt, 3, 1> Vec3;
+typedef Eigen::Matrix<flt, 3, 3> Matrix;
+typedef Eigen::Matrix<flt, NDIM, 2> VecPair;
 using namespace std;
 
 const flt OVERNDIM = ((flt) 1.0)/NDIM;
 
-inline Vector2<flt> vec(double x, double y){
-    return Vector2<flt>(x,y);
+inline Vec2 vec(double x, double y){
+    return Vec(x,y);
 };
 
-inline Vector3<flt> vec(double x, double y, double z){
-    return Vector3<flt>(x,y,z);
+inline Vec3 vec(double x, double y, double z){
+    return Vec(x,y,z);
 };
 
 inline uint vecsize(){return sizeof(Vec);}

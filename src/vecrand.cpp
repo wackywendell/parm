@@ -89,8 +89,8 @@ VecPair bivariateGauss::genVecs(){
 #endif
     // Taken from Allen and Tildesley, 348
     VecPair p;
-    p[0] = x1*x11;
-    p[1] = x1*x21 + x2*x22;
+    p << x1*x11,
+         x1*x21 + x2*x22;
     return p;
 }
 
