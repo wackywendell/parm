@@ -19,7 +19,7 @@
 #include <Eigen/Dense>
 
 using namespace std;
-
+typedef unsigned int uint;
 
 #ifdef LONGFLOAT
     typedef long double flt;

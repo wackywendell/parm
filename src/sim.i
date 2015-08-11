@@ -25,7 +25,6 @@
 %include std_set.i
 %include boost_shared_ptr.i
 %include std_map.i
-%include "/home/wendell/code/numpy/tools/swig/numpy.i"
 
 %apply double { long double } 
 
@@ -220,8 +219,8 @@ namespace std {
     %template(uintvector) vector<unsigned int>;
     %template(ulongvector) vector<unsigned long>;
     %template(_eventset) set<event>;
-    %template(pair_uint_CNodePath) pair<uint, CNodePath>;
-    %template(map_uint_CNodePath) map<uint, CNodePath>;
+    %template(pair_uint_CNodePath) pair<unsigned int, CNodePath>;
+    %template(map_uint_CNodePath) map<unsigned int, CNodePath>;
     %template(vector_CNode) vector<CNode>;
     %template(pair_int_CNode) pair<int, vector<CNode> >;
     %template(map_int_CNode) map<int, vector<CNode> >;
@@ -387,7 +386,7 @@ namespace std {
       myErr = 1;
       return idpair(atomid(), atomid());
     }
-    return $self->get((uint) i);
+    return $self->get((unsigned int) i);
   }
   
   %insert("python") %{
