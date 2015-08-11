@@ -232,6 +232,75 @@ class linearConstraint : public constraint {
         }
 };
 
+// //! A class that enforces rigid-body dynamics
+// class RigidConstraint : public constraint {
+//     private:
+//         sptr<atomgroup> atms;
+//         flt M;
+//         // moment of inertia matrix
+//         Matrix MoI;
+//         // locations relative to center of mass, no rotation
+//         vector<Vec> expected; 
+//     public:
+//         RigidConstraint(sptr<atomgroup> atms) :
+//             atms(atms), M(atms.mass()), inertia(atms.moment()), com( {
+//             for(uint i = 0; i < atms->size(); i++){
+//                 M += (*atms)[i].m;
+//                 lincom += (dist*i)*(*atms)[i].m;
+//             }
+//             lincom /= M;
+//             
+//             for(uint i = 0; i < atms->size(); i++){
+//                 flt dx = (dist*i - lincom);
+//                 I += (*atms)[i].m * dx * dx;
+//             }
+//         };
+//         int ndof(){return (int)atms->size()-1;};
+//         
+//         void apply(Box &box){
+//             Vec com = atms->com();
+//             Vec comv = atms->comv();
+//             Vec comf = Vec();
+//             
+//             uint sz = atms->size();
+//             Vec lvec = Vec();
+//             #ifdef VEC3D
+//             Vec L = Vec();
+//             Vec omega  = Vec();
+//             Vec tau = Vec();
+//             Vec alpha = Vec();
+//             #else
+//             flt L = 0;
+//             flt omega = 0;
+//             flt tau = 0;
+//             flt alpha = 0;
+//             #endif
+//             
+//             for(uint i = 0; i < sz; i++){
+//                 flt chaindist = i * dist - lincom;
+//                 atom& ai = (*atms)[i];
+//                 Vec dx = ai.x - com;
+//                 comf += ai.f;
+//                 lvec += dx.norm() * chaindist;
+//                 L += dx.cross(ai.v) * ai.m;
+//                 tau += dx.cross(ai.f);
+//             }
+//             
+//             lvec.normalize();
+//             omega = L / I;
+//             alpha = tau / I;
+//             
+//             for(uint i = 0; i < sz; i++){
+//                 flt chaindist = i * dist - lincom;
+//                 Vec dx = lvec*chaindist;
+//                 atom& ai = (*atms)[i];
+//                 ai.x = com + dx;
+//                 ai.v = comv + dx.cross(omega);
+//                 ai.f = comf + (dx.cross(alpha)*ai.m);
+//             }
+//         }
+// };
+
 class ContactTracker : public statetracker{
     protected:
         sptr<atomgroup> atoms;
