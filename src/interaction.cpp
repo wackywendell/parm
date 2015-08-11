@@ -966,7 +966,6 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     atom &a1p = *p1.last();
     atom &a2 = *p2.first();
     atom &a2p = *p2.last();
-    Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     flt M1 = a1.m + a1p.m;
     flt M2 = a2.m + a2p.m;
