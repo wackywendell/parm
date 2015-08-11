@@ -65,7 +65,7 @@ Vec SCbox::edgedist(Vec r1){
     else if(r1[0] > L/2) r1[0] -= L/2;
     else r1[0] = 0;
 
-    flt dmag = r1.mag(); // distance to center
+    flt dmag = r1.norm(); // distance to center
     if(dmag == 0){
         #ifdef VEC2D
         return Vec(0, R);
@@ -81,7 +81,7 @@ bool SCbox::inside(Vec r1, flt buffer){
     else if(r1[0] > L/2) r1[0] -= L/2;
     else r1[0] = 0;
     flt newR = R - buffer;
-    return r1.sq() < newR*newR;
+    return r1.squaredNorm() < newR*newR;
 };
 
 Vec SCbox::randLoc(flt min_dist_to_wall){
@@ -159,7 +159,7 @@ flt atomgroup::gyradius() const{
     avgr /= size(); // now avgr is the average location, akin to c.o.m.
     flt Rgsq = 0;
     for(uint i = 0; i<size(); i++){
-        Rgsq += ((*this)[i].x - avgr).sq();
+        Rgsq += ((*this)[i].x - avgr).squaredNorm();
     }
 
     return sqrt(Rgsq/size());
@@ -172,7 +172,7 @@ Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
         flt curmass = (*this)[i].m;
         if(curmass <= 0 or isinf(curmass)) continue;
         Vec newloc = box.diff((*this)[i].x, loc);
-        tot += newloc.cross((*this)[i].v) * curmass; // r x v m = r x p
+        tot += cross(newloc, (*this)[i].v) * curmass; // r x v m = r x p
     }
     return tot;
 };
@@ -184,7 +184,7 @@ flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         newloc = box.diff(a.x, loc);
-        tot += newloc.cross(a.v) * a.m; // r x v m = r x p
+        tot += cross(newloc, a.v) * a.m; // r x v m = r x p
     }
     return tot;
 };
@@ -192,7 +192,7 @@ flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
 
 #ifdef VEC3D
 flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
-    if (axis.sq() == 0) return 0;
+    if (axis.squaredNorm() == 0) return 0;
     flt tot = 0;
     Vec newloc;
     for(uint i=0; i<size(); i++){
@@ -253,7 +253,7 @@ void atomgroup::addOmega(flt w, Vec loc, Box &box){
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
         Vec r = box.diff(a.x, loc);
-        a.v -= r.perp().norm()*w;
+        a.v -= perp(r).normalized()*w;
     }
 };
 #endif

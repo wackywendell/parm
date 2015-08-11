@@ -29,7 +29,7 @@ Vec randVecBoxed(){
 }
 
 Vec randVecSphere(flt radius){
-    return randVec().norm() * (cbrt(uniformrand()) * radius);
+    return randVec().normalized() * (cbrt(uniformrand()) * radius);
 }
 #endif
 
@@ -69,13 +69,13 @@ void bivariateGauss::set(const flt s1, const flt s2, const flt corr){
     x22 = s2 * sqrt(1 - corr*corr);
 }
 
-Pair bivariateGauss::generate(){
+Eigen::Matrix<flt, 1, 2> bivariateGauss::generate(){
     flt x1 = gauss();
     flt x2 = gauss();
     // Taken from Allen and Tildesley, 348
-    Pair p;
-    p[0] = x11*x1;
-    p[1] = x21*x1 + x22*x2;
+    Eigen::Matrix<flt, 1, 2> p;
+    p << x11*x1,
+         (x21*x1 + x22*x2);
     return p;
 }
 

@@ -46,13 +46,16 @@ using namespace std;
 
 const flt OVERNDIM = ((flt) 1.0)/NDIM;
 
-inline Vec2 vec(double x, double y){
-    return Vec(x,y);
-};
+inline Vec2 vec(double x, double y){return Vec2(x,y);};
+inline Vec3 vec(double x, double y, double z){return Vec3(x,y,z);};
 
-inline Vec3 vec(double x, double y, double z){
-    return Vec(x,y,z);
-};
+inline Vec3 cross(Vec3 v1, Vec3 v2){return v1.cross(v2);};
+inline flt cross(Vec2 v1, Vec2 v2){return v1(0)*v2(1) - v2(0)*v1(1);};
+
+inline Vec2 perp(Vec2 v){return Vec2(-v(1),v(0));};
+inline Vec perpto(Vec r, Vec to){
+    return r - to * ((r.dot(to)) / to.squaredNorm());
+}
 
 inline uint vecsize(){return sizeof(Vec);}
 
@@ -97,7 +100,7 @@ class bivariateGauss {
     public:
         bivariateGauss(const flt s1=1, const flt s2=1, const flt corr=0);
         void set(const flt s1, const flt s2, const flt corr);
-        Pair generate();
+        Eigen::Matrix<flt, 1, 2> generate();
 #ifdef VEC2D
         Vec genVec(){return Vec(gauss(), gauss());};
 #else

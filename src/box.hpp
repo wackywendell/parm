@@ -186,12 +186,12 @@ class atomid : public atomref {
         inline uint n() const {return num;};
 };
 
-class idpair : public Array<atomid, 2> {
+class idpair : public array<atomid, 2> {
     public:
-        idpair(){vals[0] = atomid(); vals[1] = atomid();};
-        idpair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
-        inline atomid first() const {return vals[0];};
-        inline atomid last() const {return vals[1];};
+        idpair(){(*this)[0] = atomid(); (*this)[1] = atomid();};
+        idpair(atomid a, atomid b){ (*this)[0] = a; (*this)[1] = b;};
+        inline atomid first() const {return (*this)[0];};
+        inline atomid last() const {return (*this)[1];};
 };
 
 //~ class atompair : public array<atom*, 2> {
