@@ -25,7 +25,7 @@
 %include std_set.i
 %include boost_shared_ptr.i
 %include std_map.i
-%include "vec.hpp"
+%include "/home/wendell/code/numpy/tools/swig/numpy.i"
 
 %apply double { long double } 
 
@@ -97,7 +97,6 @@
 %shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
 
 %{
-#include "vec.hpp"
 #include "vecrand.hpp"
 #include "vecrand.cpp"
 #include "box.hpp"
@@ -110,6 +109,7 @@
 #include "constraints.cpp"
 #include "collection.hpp"
 #include "collection.cpp"
+
 static int myErr = 0;
 %}
 
@@ -155,190 +155,45 @@ static int myErr = 0;
   $1 = temp;
 };
 
-%extend Vector3 {
-    char* __str__() {
-        static char temp[256];
-        sprintf(temp,"(%g, %g, %g)", $self->getxd(),$self->getyd(),$self->getzd());
-        return &temp[0];
-    };
-    char* __repr__() {
-        static char temp[256];
-        sprintf(temp,"Vec(%g, %g, %g)", $self->getxd(),$self->getyd(),$self->getzd());
-        return &temp[0];
-    };
-    
-    Vector3 __truediv__(const double n) const{
-        return Vector3<T>($self->operator/(n));
-    };
-    
-    Vector3 __mul__(const double n) const{
-        return Vector3<T>($self->operator*(n));
-    };
-    
-    %insert("python") %{
-    @property
-    def X(self):
-        return self.getxd()
-    
-    @property
-    def Y(self):
-        return self.getyd()
-    
-    @property
-    def Z(self):
-        return self.getzd()
-    %}
-    #~ %insert("python") %{
-        #~ def __iter__(self):
-            #~ return iter((self.getxd(), self.getyd(), self.getzd()))
-    #~ %};
-};
+%typemap(out) Eigen::VectorXd { 
+    npy_intp dims[1] = {$1.size()}; 
+    PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE); 
+    double* data = ((double *)PyArray_DATA( array )); 
+    for (int i = 0; i != dims[0]; ++i){ 
+        *data++ = $1.data()[i]; 
+    } 
+    $result = array; 
+} 
 
-%extend Vector2 {
-    char* __str__() {
-        static char temp[256];
-        sprintf(temp,"(%g, %g)", $self->getxd(),$self->getyd());
-        return &temp[0];
-    };
-    char* __repr__() {
-        static char temp[256];
-        sprintf(temp,"Vec(%g, %g)", $self->getxd(),$self->getyd());
-        return &temp[0];
-    };
-    
-    Vector2 __truediv__(const double n) const{
-        return Vector2<T>($self->operator/(n));
-    };
-    
-    Vector2 __mul__(const double n) const{
-        return Vector2<T>($self->operator*(n));
-    };
-    
-    %insert("python") %{
-    @property
-    def X(self):
-        return self.getxd()
-    
-    @property
-    def Y(self):
-        return self.getyd()
-    %}
-};
+%typemap(in) Eigen::MatrixXd (Eigen::MatrixXd TEMP) { 
+    int rows = 0; 
+    int cols = 0; 
 
-%extend Array {
-    T __getitem__(const unsigned int n) const{
-        return $self->get(n);
-    };
-    
-    void __setitem__(const unsigned int n, const T val){
-        $self->set(n, val);
-    };
-    
-    unsigned int __len__(){ return N;};
-    
-        
-    %insert("python") %{
-        #~ def __setitem__(self, n, val):
-            #~ return self.set(n, val)
-        
-        def __iter__(self):
-            for i in range(len(self)):
-                yield self.get(i)
-        
-        #~ def __len__(self):
-            #~ return self.len()
-    %};
-};
+    rows = PyArray_DIM($input,0); 
+    cols = PyArray_DIM($input,1); 
 
-%extend Nvector {
-    %template() operator*<double>;
-    %template() operator/<double>;
-    
-    Nvector __truediv__(const double n) const{
-        return $self->operator/(n);
-    };
-    
-    T __getitem__(const unsigned int n) const{
-        return $self->get(n);
-    };
-    
-    void __setitem__(const unsigned int n, const T val){
-        $self->set(n, val);
-    };
-    
-    unsigned int __len__(){ return N;};
-    
-        
-    %insert("python") %{
-        #~ def __setitem__(self, n, val):
-            #~ return self.set(n, val)
-        
-        def __iter__(self):
-            for i in range(len(self)):
-                yield self.get(i)
-        
-        #~ def __len__(self):
-            #~ return self.len()
-    %};
-};
+    PyArrayObject *temp=NULL;
+    if (PyArray_Check($input))
+        temp = (PyArrayObject*)$input;  
 
-%template(_Nvector3) Nvector<double, 3>;
-%template(_Nvector2) Nvector<double, 2>;
-%template(_Numvector3) Numvector<double, 3>;
-%template(_Numvector2) Numvector<double, 2>;
-%template(_Nvector3L) Nvector<long double, 3>;
-%template(_Nvector2L) Nvector<long double, 2>;
-%template(_Numvector3L) Numvector<long double, 3>;
-%template(_Numvector2L) Numvector<long double, 2>;
+    TEMP.resize(rows,cols); 
+    TEMP.fill(0); 
+
+    double *  values = ((double *) PyArray_DATA($input)); 
+    for (long int i = 0; i != rows; ++i){ 
+        for(long int j = 0; j != cols; ++j){ 
+            // std::cout << "data " << data[i] << std::endl; 
+            TEMP(i,j) = values[i*rows+j]; 
+        } 
+    }   
+} 
 
 #ifdef VEC2D
-%template(Vec) Vector2<double>;
-%template(VecL) Vector2<long double>;
-%template(Veci) Array<std::complex<double>, 2>;
-%template(VecLi) Array<std::complex<long double>, 2>;
 namespace std {
-    %template(vecptrvector) vector<Vector2<double>*>;
-    %template(vecvector) vector<Vector2<double> >;
-    %template(_vvecvector) vector<vector<Vector2<double> > >;
-    %template(_vvvecvector) vector<vector<vector<Vector2<double> > > >;
-    %template(cvecvector) vector<Array<std::complex<double>, 2> >;
-    %template(_cvvecvector) vector<vector<Array<std::complex<double>, 2> > >;
-    %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 2> > > >;
     %template(_jamminglist) list<jamminglist>;
     %template(_jamminglistrot) list<jamminglistrot>;
-    
-    %template(vecptrvectorL) vector<Vector2<long double>*>;
-    %template(vecvectorL) vector<Vector2<long double> >;
-    %template(_vvecvectorL) vector<vector<Vector2<long double> > >;
-}
-#else
-%template(Vec) Vector3<double>;
-%template(VecL) Vector3<long double>;
-%template(Veci) Array<std::complex<double>, 3>;
-%template(VecLi) Array<std::complex<long double>, 3>;
-%template(_MatrixBase) Nvector<Vector3<double>, 3>;
-%template(Matr) Matrix<double>;
-namespace std {
-    %template(vecptrvector) vector<Vector3<double>*>;
-    %template(vecvector) vector<Vector3<double> >;
-    %template(_vvecvector) vector<vector<Vector3<double> > >;
-    %template(_vvvecvector) vector<vector<vector<Vector3<double> > > >;
-    %template(cvecvector) vector<Array<std::complex<double>, 3> >;
-    %template(_cvvecvector) vector<vector<Array<std::complex<double>, 3> > >;
-    %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 3> > > >;
-    %template(vecptrvectorL) vector<Vector3<long double>*>;
-    %template(vecvectorL) vector<Vector3<long double> >;
-    %template(_vvecvectorL) vector<vector<Vector3<long double> > >;
 }
 #endif
-%template(Pair) Numvector<double, 2>;
-%template(VecPair) Nvector<Vec, 2>;
-%template(_atomarray2) Array<atom*, 2>;
-%template(_atompair2) Array<atom, 2>;
-%template(_idarray2) Array<atomid, 2>;
-%template(_atomarray3) Array<atom*, 3>;
-%template(_atomarray4) Array<atom*, 4>;
-
 
 namespace std {
     %template(fvector) vector<float>;
