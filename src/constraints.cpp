@@ -24,7 +24,7 @@ void ContactTracker::update(Box &box){
         for(uint j=0; j<i; ++j){
             Vec rj = atoms->get(j).x;
             Vec dr = box.diff(ri,rj);
-            bool curcontact = (dr.mag() <= ((dists[i] + dists[j])/2));
+            bool curcontact = (dr.norm() <= ((dists[i] + dists[j])/2));
             if(curcontact && (!contacts[i][j])) formations++;
             else if(!curcontact && contacts[i][j]) breaks++;
             if(curcontact) incontact++;
@@ -46,7 +46,7 @@ void EnergyTracker::update(Box &box){
     flt curU = 0, curK = 0;
     for(uint i=0; i<Natoms; ++i){
         atom &curatom = atoms->get(i);
-        curK += curatom.v.sq() * curatom.m / 2;
+        curK += curatom.v.squaredNorm() * curatom.m / 2;
     }
     
     vector<sptr<interaction> >::iterator it;
@@ -75,8 +75,8 @@ void EnergyTracker::setU0(Box &box){
 
 
 RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
-            pastlocs(atoms.size(), Vec()), xyz2sums(atoms.size(), Vec()),
-            xyz4sums(atoms.size(), Vec()), r4sums(atoms.size(), 0),
+            pastlocs(atoms.size(), Vec::Zero()), xyz2sums(atoms.size(), Vec::Zero()),
+            xyz4sums(atoms.size(), Vec::Zero()), r4sums(atoms.size(), 0),
             skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); ++i){
         pastlocs[i] = atoms[i].x - com;
@@ -85,8 +85,8 @@ RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
         
 void RsqTracker1::reset(atomgroup& atoms, Vec com){
     pastlocs.resize(atoms.size());
-    xyz2sums.assign(atoms.size(), Vec());
-    xyz4sums.assign(atoms.size(), Vec());
+    xyz2sums.assign(atoms.size(), Vec::Zero());
+    xyz4sums.assign(atoms.size(), Vec::Zero());
     r4sums.assign(atoms.size(), 0);
     for(uint i = 0; i<atoms.size(); ++i){
         pastlocs[i] = atoms[i].x - com;
@@ -98,11 +98,11 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); ++i){
-        //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
+        //flt dist = box.diff(atoms[i].x, pastlocs[i]).squaredNorm();
         Vec r = atoms[i].x - com;
         // We don't want the boxed distance - we want the actual distance moved!
         Vec distsq = r - pastlocs[i];
-        Vec distsqsq = Vec();
+        Vec distsqsq = Vec::Zero();
         flt dist4 = 0;
         for(uint j=0; j<NDIM; ++j){
             distsq[j] *= distsq[j];
@@ -122,7 +122,7 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
 };
 
 vector<Vec> RsqTracker1::xyz2(){
-    vector<Vec> means(xyz2sums.size(), Vec());
+    vector<Vec> means(xyz2sums.size(), Vec::Zero());
     for(uint i=0; i<xyz2sums.size(); ++i){
         means[i] = xyz2sums[i] / ((flt) count);
     }
@@ -130,7 +130,7 @@ vector<Vec> RsqTracker1::xyz2(){
 };
 
 vector<Vec> RsqTracker1::xyz4(){
-    vector<Vec> means(xyz4sums.size(), Vec());
+    vector<Vec> means(xyz4sums.size(), Vec::Zero());
     for(uint i=0; i<xyz4sums.size(); ++i){
         means[i] = xyz4sums[i] / ((flt) count);
     }
@@ -148,7 +148,7 @@ vector<flt> RsqTracker1::r4(){
 
 RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool usecom) : 
             atoms(atoms), curt(0), usecom(usecom){
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
         singles.push_back(RsqTracker1(*atoms, *n, com));
     }
@@ -156,7 +156,7 @@ RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool use
 
 void RsqTracker::update(Box &box){
     curt++;
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         it->update(box, *atoms, curt, com);
     }
@@ -164,7 +164,7 @@ void RsqTracker::update(Box &box){
 
 void RsqTracker::reset(){
     curt = 0;
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         it->reset(*atoms, com);
     }
@@ -228,21 +228,21 @@ vector<flt> RsqTracker::counts(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
-            pastlocs(atoms.size(), Vec()), ISFsums(ks.size(), vector<Array<cmplx, NDIM> >()),
+            pastlocs(atoms.size(), Vec::Zero()), ISFsums(ks.size(), vector<array<cmplx, NDIM> >()),
             ks(ks), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); ++i){
         pastlocs[i] = atoms[i].x - com;
     };
     
     for(uint ki=0; ki<ks.size(); ++ki){
-        ISFsums[ki] = vector<Array<cmplx, NDIM> >(atoms.size(), Array<cmplx, NDIM>());
+        ISFsums[ki] = vector<array<cmplx, NDIM> >(atoms.size(), array<cmplx, NDIM>());
     };
 };
         
 void ISFTracker1::reset(atomgroup& atoms, Vec com){
     pastlocs.resize(atoms.size());
     for(uint ki=0; ki<ks.size(); ki++){
-        ISFsums[ki].assign(atoms.size(), Array<cmplx, NDIM>());
+        ISFsums[ki].assign(atoms.size(), array<cmplx, NDIM>());
     }
     for(uint i = 0; i<atoms.size(); ++i){
         pastlocs[i] = atoms[i].x - com;
@@ -254,7 +254,7 @@ bool ISFTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); ++i){
-        //flt dist = box.diff(atoms[i].x, pastlocs[i]).sq();
+        //flt dist = box.diff(atoms[i].x, pastlocs[i]).squaredNorm();
         Vec r = atoms[i].x - com;
         // We don't want the boxed distance - we want the actual distance moved!
         Vec dr = r - pastlocs[i];
@@ -291,10 +291,10 @@ vector<vector<cmplx> > ISFTracker1::ISFs() {
     return means;
 };
 
-vector<vector<Array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
-    vector<vector<Array<cmplx, NDIM> > > means(ks.size(), vector<Array<cmplx, NDIM> >());
+vector<vector<array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
+    vector<vector<array<cmplx, NDIM> > > means(ks.size(), vector<array<cmplx, NDIM> >());
     for(uint ki=0; ki<ks.size(); ++ki){
-        means[ki].assign(ISFsums[ki].size(), Array<cmplx, NDIM>());
+        means[ki].assign(ISFsums[ki].size(), array<cmplx, NDIM>());
         for(uint i = 0; i<ISFsums[ki].size(); ++i){
             for(uint j = 0; j<NDIM; ++j)
                 means[ki][i][j] = ISFsums[ki][i][j] / (cmplx((flt) count, 0));
@@ -308,7 +308,7 @@ vector<vector<Array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
 
 ISFTracker::ISFTracker(sptr<atomgroup> atoms, vector<flt> ks, 
                     vector<unsigned long> ns, bool usecom) : atoms(atoms), curt(0), usecom(usecom){
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
         singles.push_back(ISFTracker1(*atoms, *n, ks, com));
     }
@@ -316,7 +316,7 @@ ISFTracker::ISFTracker(sptr<atomgroup> atoms, vector<flt> ks,
 
 void ISFTracker::update(Box &box){
     curt++;
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         it->update(box, *atoms, curt, com);
     }
@@ -324,7 +324,7 @@ void ISFTracker::update(Box &box){
 
 void ISFTracker::reset(){
     curt = 0;
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         it->reset(*atoms, com);
     }
@@ -339,8 +339,8 @@ vector<vector<vector<cmplx> > > ISFTracker::ISFs(){
     return vals;
 };
 
-vector<vector<vector<Array<cmplx, NDIM> > > > ISFTracker::ISFxyz(){
-    vector<vector<vector<Array<cmplx, NDIM> > > > vals;
+vector<vector<vector<array<cmplx, NDIM> > > > ISFTracker::ISFxyz(){
+    vector<vector<vector<array<cmplx, NDIM> > > > vals;
     vals.reserve(singles.size());
     for(vector<ISFTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         vals.push_back(it->ISFxyz());
@@ -367,7 +367,7 @@ SmoothLocs::SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn
 
 
 void SmoothLocs::reset(){
-    curlocs.assign(atoms->size(), Vec());
+    curlocs.assign(atoms->size(), Vec::Zero());
     numincur = 0;
     curt = 0;
     locs.clear();
@@ -382,7 +382,7 @@ void SmoothLocs::update(Box &box){
     numincur++;
     bool smooth_time = (numincur >= smoothn);
     
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
         Vec curloc = (*atoms)[i].x - com;
         curlocs[i] += curloc;
@@ -393,7 +393,7 @@ void SmoothLocs::update(Box &box){
     
     if(smooth_time){
         locs.push_back(curlocs);
-        curlocs.assign(atoms->size(), Vec());
+        curlocs.assign(atoms->size(), Vec::Zero());
         numincur = 0;
     };
     
@@ -402,8 +402,8 @@ void SmoothLocs::update(Box &box){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
-        atoms(atoms), pastlocs(atoms->size(), Vec()), dists(), skip(skip), curt(0), usecom(usecom){
-    Vec com = usecom ? atoms->com() : Vec();
+        atoms(atoms), pastlocs(atoms->size(), Vec::Zero()), dists(), skip(skip), curt(0), usecom(usecom){
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
         pastlocs[i] = (*atoms)[i].x - com;
     }
@@ -411,7 +411,7 @@ RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
 
 void RDiffs::reset(){
     curt = 0;
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
         pastlocs[i] = (*atoms)[i].x - com;
     }
@@ -421,11 +421,11 @@ void RDiffs::reset(){
 void RDiffs::update(Box &box){
     curt++;
     if(curt < skip) return;
-    Vec com = usecom ? atoms->com() : Vec();
+    Vec com = usecom ? atoms->com() : Vec::Zero();
     vector<flt> rdiff = vector<flt>(atoms->size(), 0.0);
     for(uint i = 0; i<atoms->size(); ++i){
         Vec loc = (*atoms)[i].x - com;
-        rdiff[i] = (loc - pastlocs[i]).mag();
+        rdiff[i] = (loc - pastlocs[i]).norm();
         pastlocs[i] = loc;
     }
     
@@ -510,7 +510,7 @@ jammingtree2::jammingtree2(sptr<Box>box, vector<Vec>& A0, vector<Vec>& B0)
             : box(box), jlists(), A(A0), Bs(8, B0){
     for(uint rot=0; rot < 8; ++rot){
         for(uint i=0; i<B0.size(); ++i){
-                        Bs[rot][i] = B0[i].rotate_flip(rot); }
+                        Bs[rot][i] = rotate_flip(B0[i], rot); }
         if(A0.size() <= B0.size()) jlists.push_back(jamminglistrot(rot));
         //~ cout << "Created, now size " << jlists.size() << endl;
     }
@@ -526,7 +526,7 @@ flt jammingtree2::distance(jamminglistrot& jlist){
             uint sj = jlist.assigned[j];
             Vec rij = box->diff(A[i], A[j]);
             Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
-            dist += box->diff(rij, sij).sq();
+            dist += box->diff(rij, sij).squaredNorm();
         }
     }
     return dist / ((flt) jlist.assigned.size());
@@ -650,7 +650,7 @@ vector<Vec> jammingtree2::locationsA(jamminglistrot jlist){
         }
         
         // this is an inverse rotateflip
-        locs[si] = locs[si].rotate_flip_inv(rot);
+        locs[si] = rotate_flip_inv(locs[si], rot);
     }
     return locs;
 };
@@ -659,7 +659,7 @@ Vec jammingtree2::straight_diff(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
     uint N = (uint) As.size();
     if(Bs.size() != N) return Vec(NAN,NAN);
     
-    Vec loc = Vec();
+    Vec loc = Vec::Zero();
     for(uint i=0; i<N; ++i){
         for(uint j=0; j<N; ++j){
             Vec rij = bx.diff(As[i], As[j]);
@@ -679,7 +679,7 @@ flt jammingtree2::straight_distsq(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
         for(uint j=0; j<N; ++j){
             Vec rij = bx.diff(As[i], As[j]);
             Vec sij = bx.diff(Bs[i], Bs[j]);
-            dist += bx.diff(rij, sij).sq();
+            dist += bx.diff(rij, sij).squaredNorm();
         }
     }
     return dist / N;
@@ -730,7 +730,7 @@ void Connectivity::add(vector<Vec> locs, vector<flt> diameters){
         uint n2=0;
         for(vector<CNode>::const_iterator cit=cnodes.begin(); cit!=cnodes.end(); cit++){
             Vec dx = box->diff(cn.x, cit->x);
-            if(dx.mag() <= (diameters[n] + diameters[n2])/2.0){
+            if(dx.norm() <= (diameters[n] + diameters[n2])/2.0){
                 neighbors[n].push_back(*cit);
                 std::sort(neighbors[n].begin(), neighbors[n].end());
                 neighbors[n2].push_back(cn);

@@ -51,11 +51,30 @@ inline Vec3 vec(double x, double y, double z){return Vec3(x,y,z);};
 
 inline Vec3 cross(Vec3 v1, Vec3 v2){return v1.cross(v2);};
 inline flt cross(Vec2 v1, Vec2 v2){return v1(0)*v2(1) - v2(0)*v1(1);};
+inline Vec2 cross(Vec2 v, flt n){return Vec2(v(1)*n, -v(0)*n);};
 
 inline Vec2 perp(Vec2 v){return Vec2(-v(1),v(0));};
 inline Vec perpto(Vec r, Vec to){
     return r - to * ((r.dot(to)) / to.squaredNorm());
 }
+
+inline Vec2 rotate(Vec2 v, uint i){
+    if(i % 4 == 0) return v;
+    else if(i % 4 == 3) return Vec2(v(1), -v(0));
+    else if(i % 4 == 2) return Vec2(-v(0), -v(1));
+    else return Vec2(-v(1), v(0));
+}
+inline Vec2 flip(Vec2 v){return Vec2(v(1), v(0));};
+inline Vec2 rotate_flip(Vec2 v, uint i){
+    if((i / 4) % 2 == 1) return rotate(flip(v), i%4);
+    return rotate(v, i%4);
+};
+
+inline Vec2 rotate_flip_inv(Vec2 v, uint i){
+    Vec2 inv = rotate(v, 4-(i%4));
+    if((i / 4) % 2 == 0) return inv;
+    return flip(inv);
+};
 
 inline uint vecsize(){return sizeof(Vec);}
 

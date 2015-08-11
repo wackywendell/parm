@@ -8,7 +8,7 @@ flt spring::energy(const Vec r){
 
 Vec spring::forces(const Vec r){
     flt m = r.norm();
-    if(m < 1e-32) return Vec();
+    if(m < 1e-32) return Vec::Zero();
     flt fmag = (x0 - m) * springk;
     return r * (fmag / m);
 }
@@ -26,7 +26,7 @@ flt electricScreened::energy(const flt r, const flt qaqb, const flt screen, cons
 
 Vec electricScreened::forces(const Vec r, const flt qaqb, const flt screen, const flt cutoff){
     flt d = r.norm();
-    if(cutoff > 0 and d > cutoff) return Vec();
+    if(cutoff > 0 and d > cutoff) return Vec::Zero();
     flt fmag = exp(-d/screen) * (qaqb/d) * (1/d + 1/screen);
     return r * (fmag/d);
 };
@@ -215,8 +215,8 @@ array<Vec,4> dihedral::forces(const Vec &r1, const Vec &r2,
     } else {
         dcostheta = dudcostheta(getang(r1, r2, r3));
     }
-        
-    dd.derivs *= -dcostheta;  // F = -dU/d(costheta)
+    
+    for(uint i=0; i<4; i++) dd.derivs[i] *= -dcostheta;  // F = -dU/d(costheta)
     //~ assert(derivs[0].squaredNorm() < 1e8);
     //~ assert(derivs[1].squaredNorm() < 1e8);
     //~ assert(derivs[2].squaredNorm() < 1e8);
@@ -391,7 +391,7 @@ Vec bondgrouping::diff(Box &box) const{
             OriginBox &obox = (OriginBox &) box;
             return obox.diff(a1->x, a2->x, fixed_box);
     }
-    return Vec()*NAN;
+    return Vec::Zero()*NAN;
 };
 
 bondpairs::bondpairs(vector<bondgrouping> pairs, bool zeropressure) : 
@@ -966,7 +966,6 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     atom &a1p = *p1.last();
     atom &a2 = *p2.first();
     atom &a2p = *p2.last();
-    Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     flt M1 = a1.m + a1p.m;
     flt M2 = a2.m + a2p.m;
@@ -977,7 +976,7 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     a2p.f += f/2;
     
     Vec t1 = s1*(diff.lambda1/l1);
-    Vec atau1 = s1.cross(t1.cross(f)) / (-2*IoverM1*M1);
+    Vec atau1 = cross(s1, cross(t1, f)) / (-2*IoverM1*M1);
     //~ cout << "t1: " << t1 << "  atau1: " << atau1 << endl;
     // Formula says (t1×f)×s1 / 2I
     // -I because it should be (t1×f)×s1, but we wrote s1×(t1×f)
@@ -986,7 +985,7 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     a1p.f -= atau1 * a1p.m;
     
     Vec t2 = s2*(diff.lambda2/l2);
-    Vec atau2 = s2.cross(t2.cross(f)) / (2*IoverM2*M2); // 2 because it should be -f
+    Vec atau2 = cross(s2, cross(t2, f)) / (2*IoverM2*M2); // 2 because it should be -f
     a2.f += atau2 * a2.m;
     a2p.f -= atau2 * a2p.m;
     

@@ -92,7 +92,7 @@ class LJrepulsive {
         inline static Vec forces(const Vec diff, const flt eps, const flt sig){
             flt dsq = diff.squaredNorm();
             flt rsq = dsq/(sig*sig);
-            if(rsq > 1) return Vec();
+            if(rsq > 1) return Vec::Zero();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             //~ flt fmagTimesR = eps*(4*(12/(rsix*rsix) - 6/rsix));
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
@@ -133,7 +133,7 @@ class LJattract {
         inline static Vec forces(const Vec diff, const flt eps, const flt sig){
             flt dsq = diff.squaredNorm();
             flt rsq = dsq/(sig*sig);
-            if(rsq < 1) return Vec();
+            if(rsq < 1) return Vec::Zero();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
             return diff * (fmagTimesR / dsq);
@@ -172,10 +172,10 @@ class LJattractCut {
         };
         inline static Vec forces(const Vec diff, const flt eps, 
                                     const flt sig, const flt cutsig){
-            if(eps == 0) return Vec();
+            if(eps == 0) return Vec::Zero();
             flt dsq = diff.squaredNorm();
             flt rsq = dsq/(sig*sig);
-            if(rsq < 1 or rsq > (cutsig*cutsig)) return Vec();
+            if(rsq < 1 or rsq > (cutsig*cutsig)) return Vec::Zero();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
             return diff * (fmagTimesR / dsq);
@@ -209,7 +209,7 @@ class LJFullCut {
         inline static Vec forces(const Vec diff, const flt eps, const flt sig, const flt cutsig){
             flt dsq = diff.squaredNorm();
             flt rsq = dsq/(sig*sig);
-            if(rsq > (cutsig*cutsig)) return Vec();
+            if(rsq > (cutsig*cutsig)) return Vec::Zero();
             flt rsix = rsq*rsq*rsq; //r^6 / sigma^6
             flt fmagTimesR = 12*eps/rsix*(1/rsix - 1);
             return diff * (fmagTimesR / dsq);
@@ -970,7 +970,7 @@ struct LJishPair {
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
         flt rsq = dsq/(sigma*sigma);
-        if(rsq > cutR * cutR) return Vec();
+        if(rsq > cutR * cutR) return Vec::Zero();
         flt rmid = pow(rsq,-n/2); // σ^n/r^n
         flt fmagTimesR = 2*n*rmid*(rmid - 1); // 2 n r^-n(r^-n - 1)
         if (rsq < 1) return rij * (repeps * fmagTimesR / dsq);
@@ -1040,11 +1040,11 @@ struct LJAttractRepulsePair {
         return eps*(mid*mid) - cutE;
     };
     inline Vec forces(Box &box){
-        if(eps == 0) return Vec();
+        if(eps == 0) return Vec::Zero();
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
         flt rsq = dsq/(sig*sig);
-        if(rsq > (cutR*cutR)) return Vec();
+        if(rsq > (cutR*cutR)) return Vec::Zero();
         flt rsix = pow(rsq,-3); // σ⁶/r⁶
         flt fmagTimesR = 12*eps*rsix*(rsix - 1);
         return rij * (fmagTimesR / dsq);
@@ -1131,7 +1131,7 @@ struct LJAttractFixedRepulsePair {
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
         flt rsq = dsq/(sig*sig);
-        if(rsq > (cutR*cutR)) return Vec();
+        if(rsq > (cutR*cutR)) return Vec::Zero();
         flt rsix = pow(rsq,-3); // σ⁶/r⁶
         flt fmagTimesR = 12*rsix*(rsix - 1);
         if (rsq < 1) return rij * (repeps * fmagTimesR / dsq);
@@ -1213,7 +1213,7 @@ struct EisMclachlanPair {
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
-        if(dsq > (cutoff*cutoff)) return Vec();
+        if(dsq > (cutoff*cutoff)) return Vec::Zero();
         flt R = sqrt(dsq);
         return rij * ((c0/dsq-c2)/R);
     }
@@ -1307,14 +1307,14 @@ struct HertzianPair {
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
-        if(dsq > sig*sig) return Vec();
+        if(dsq > sig*sig) return Vec::Zero();
         flt R = sqrt(dsq);
         return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
     }
     inline EnergyForce EnergyForces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
-        if(dsq > sig*sig) return EnergyForce(Vec(),0);
+        if(dsq > sig*sig) return EnergyForce(Vec::Zero(),0);
         flt R = sqrt(dsq);
         
         Vec f = rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
@@ -1334,7 +1334,7 @@ struct HertzianPair {
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
         if(dsq > sig*sig){
-            fpair.fij = Vec();
+            fpair.fij = Vec::Zero();
             fpair.xij = 0.0;
             return;
         }
@@ -1379,7 +1379,7 @@ struct HertzianDragPair {
         Vec rij = box.diff(atom1->x, atom2->x);
         Vec vij = atom1->v - atom2->v;
         flt dsq = rij.squaredNorm();
-        if(dsq > sig*sig) return Vec();
+        if(dsq > sig*sig) return Vec::Zero();
         flt R = sqrt(dsq);
         Vec v_perp = rij * (vij.dot(rij)) / dsq;
         return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R) -
@@ -1459,7 +1459,7 @@ struct LoisOhernPair {
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
-        if(dsq >= sigcut*sigcut) return Vec();
+        if(dsq >= sigcut*sigcut) return Vec::Zero();
         flt R = sqrt(dsq);
         flt rsig = R/sig;
         
@@ -1532,7 +1532,7 @@ struct LoisLinPair {
     inline Vec forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
-        if(dsq >= sigcut*sigcut) return Vec();
+        if(dsq >= sigcut*sigcut) return Vec::Zero();
         flt R = sqrt(dsq);
         
         if(R <= sig){
@@ -1918,15 +1918,15 @@ flt NListedVirial<A, P>::setForcesGetEnergy(Box &box){
     //~ atom a2 = atom(it->second());
     //~ A atm1 = A(it->first(), &a1);
     //~ A atm2 = A(it->second(), &a1);
-    //~ a1.x = Vec();
-    //~ a1.v = Vec();
-    //~ a1.a = Vec();
-    //~ a1.f = Vec();
+    //~ a1.x = Vec::Zero();
+    //~ a1.v = Vec::Zero();
+    //~ a1.a = Vec::Zero();
+    //~ a1.f = Vec::Zero();
     //~ 
-    //~ a2.x = Vec();
-    //~ a2.v = Vec();
-    //~ a2.a = Vec();
-    //~ a2.f = Vec();
+    //~ a2.x = Vec::Zero();
+    //~ a2.v = Vec::Zero();
+    //~ a2.a = Vec::Zero();
+    //~ a2.f = Vec::Zero();
     //~ a2.x.setx(dist);
     //~ P Epair = P(atm1,atm2);
     //~ return energy_pair(Epair, infbox);
@@ -2124,7 +2124,7 @@ class WalledBox2D : public OriginBox {
             for(uint i=0; i<NDIM; ++i){
                 v[i] *= bxvec[i];
             }
-            return diff(v, Vec());
+            return diff(v, Vec::Zero());
         };
         vector<SoftWall*> getWalls() {return walls;};
         ~WalledBox2D(){
@@ -2207,7 +2207,7 @@ struct SCSpringPair : public SCPair {
     }
     Vec forces(Box &box, SpheroCylinderDiff diff){
         flt dsq = diff.delta.squaredNorm();
-        if(dsq > sig*sig) return Vec();
+        if(dsq > sig*sig) return Vec::Zero();
         flt dmag = sqrt(dsq);
         Vec dhat = diff.delta / dmag;
         

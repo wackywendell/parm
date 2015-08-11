@@ -60,7 +60,7 @@ class coordCOMConstraint : public constraint {
         void apply(Box &box){
             Vec com = a->com() - loc;
             Vec comv = a->comv();
-            Vec totf = Vec();
+            Vec totf = Vec::Zero();
             for(uint i=0; i< a->size(); i++){
                 totf += (*a)[i].f;
             }
@@ -123,7 +123,7 @@ class distConstraint : public constraint {
         distConstraint(atomid atm1, atomid atm2, flt dist) :
             a1(atm1), a2(atm2), dist(dist) {};
         distConstraint(atomid atm1, atomid atm2) :
-            a1(atm1), a2(atm2), dist((a1->x - a2->x).mag()){};
+            a1(atm1), a2(atm2), dist((a1->x - a2->x).norm()){};
         int ndof(){return 1;};
         void apply(Box &box){
             flt M = (a1->m + a2->m);
@@ -131,13 +131,13 @@ class distConstraint : public constraint {
             flt mratio2 = a2->m / M;
             
             Vec dx = a2->x - a1->x;
-            flt dxmag = dx.mag();
+            flt dxmag = dx.norm();
             Vec dxnorm = dx / dxmag;
             
             a1->x += dx * ((1 - dist/dxmag)*mratio2);
             a2->x -= dx * ((1 - dist/dxmag)*mratio1);
             //~ dx = a2->x - a1->x;
-            //~ dxmag = dx.mag();
+            //~ dxmag = dx.norm();
             //~ dxnorm = dx / dxmag; dxnorm should still be the same
             
             Vec baddv = dxnorm * ((a2->v - a1->v).dot(dxnorm)/2);
@@ -191,15 +191,15 @@ class linearConstraint : public constraint {
         void apply(Box &box){
             Vec com = atms->com();
             Vec comv = atms->comv();
-            Vec comf = Vec();
+            Vec comf = Vec::Zero();
             
             uint sz = atms->size();
-            Vec lvec = Vec();
+            Vec lvec = Vec::Zero();
             #ifdef VEC3D
-            Vec L = Vec();
-            Vec omega  = Vec();
-            Vec tau = Vec();
-            Vec alpha = Vec();
+            Vec L = Vec::Zero();
+            Vec omega  = Vec::Zero();
+            Vec tau = Vec::Zero();
+            Vec alpha = Vec::Zero();
             #else
             flt L = 0;
             flt omega = 0;
@@ -212,9 +212,9 @@ class linearConstraint : public constraint {
                 atom& ai = (*atms)[i];
                 Vec dx = ai.x - com;
                 comf += ai.f;
-                lvec += dx.norm() * chaindist;
-                L += dx.cross(ai.v) * ai.m;
-                tau += dx.cross(ai.f);
+                lvec += dx.normalized() * chaindist;
+                L += cross(dx, ai.v) * ai.m;
+                tau += cross(dx, ai.f);
             }
             
             lvec.normalize();
@@ -226,8 +226,8 @@ class linearConstraint : public constraint {
                 Vec dx = lvec*chaindist;
                 atom& ai = (*atms)[i];
                 ai.x = com + dx;
-                ai.v = comv + dx.cross(omega);
-                ai.f = comf + (dx.cross(alpha)*ai.m);
+                ai.v = comv + cross(dx, omega);
+                ai.f = comf + (cross(dx, alpha)*ai.m);
             }
         }
 };
@@ -365,7 +365,7 @@ class ISFTracker1 {
     // Tracks only a single dt (skip)
     public:
         vector<Vec> pastlocs;
-        vector<vector<Array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
+        vector<vector<array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
         vector<flt> ks;
         unsigned long skip, count;
         
@@ -376,7 +376,7 @@ class ISFTracker1 {
             
         bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<vector<cmplx> > ISFs();
-        vector<vector<Array<cmplx, NDIM> > > ISFxyz();
+        vector<vector<array<cmplx, NDIM> > > ISFxyz();
         
         unsigned long get_skip(){return skip;};
         unsigned long get_count(){return count;};
@@ -396,7 +396,7 @@ class ISFTracker : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<vector<Array<cmplx, NDIM> > > > ISFxyz();
+        vector<vector<vector<array<cmplx, NDIM> > > > ISFxyz();
         vector<vector<vector<cmplx> > > ISFs();
         vector<flt> counts();
 };
@@ -503,7 +503,7 @@ class jammingtree {
                     //cout << found << '\n';
                     continue;
                 }
-                flt newdist = box->diff(A[curlist.size()], B[i]).sq();
+                flt newdist = box->diff(A[curlist.size()], B[i]).squaredNorm();
                 jamminglist newjlist = jamminglist(curjlist, i, newdist);
                 newlists.push_back(newjlist);
                 //~ cout << "Made " << i << "\n";

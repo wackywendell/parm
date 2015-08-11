@@ -82,9 +82,9 @@ int main(){
     // and add them to the Hertzian interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
         atoms[i].x = obox->randLoc(); // random location in the box
-        atoms[i].v = Vec(); // A zero-vector
-        atoms[i].f = Vec();
-        atoms[i].a = Vec();
+        atoms[i].v = Vec::Zero(); // A zero-vector
+        atoms[i].f = Vec::Zero();
+        atoms[i].a = Vec::Zero();
 
         flt sig = i < Ns ? sigma : sigmal;
         
@@ -178,7 +178,7 @@ void writefile(atomvec& atoms, OriginBox& obox){
         } else {
             outf << "O";
         }
-        Vec normloc = obox.diff(Vec(), atoms[i].x);
+        Vec normloc = obox.diff(Vec::Zero(), atoms[i].x);
         for(uint j=0; j<NDIM; j++){
             outf << "\t" << normloc[j];
         }

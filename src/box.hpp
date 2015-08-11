@@ -100,7 +100,7 @@ class OriginBox : public Box {
             for(uint i=0; i<NDIM; i++){
                 v[i] *= boxsize[i];
             }
-            return diff(v, Vec());
+            return diff(v, Vec::Zero());
         };
         Vec boxshape(){return boxsize;};
 };
@@ -234,18 +234,18 @@ class atomgroup {
         
         //Stats
         flt mass() const;
-        flt kinetic(const Vec &originvelocity=Vec()) const;
+        flt kinetic(const Vec &originvelocity=Vec::Zero()) const;
         Vec momentum() const;
         flt gyradius() const;
         #ifdef VEC3D
         flt moment(const Vec &loc, const Vec &axis, Box &box) const;
         Vec angmomentum(const Vec &loc, Box &box) const;
-        Matrix<flt> moment(const Vec &loc, Box &box) const;
+        Matrix moment(const Vec &loc, Box &box) const;
         Vec omega(const Vec &loc, Box &box) const;
         void addOmega(Vec w, Vec origin, Box &box);
         inline void resetL(Box &box){
             Vec c = com(), w = omega(c, box);
-            if (w.sq() == 0) return;
+            if (w.squaredNorm() == 0) return;
             addOmega(-w, c, box);
         }
         #elif defined VEC2D
