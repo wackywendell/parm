@@ -46,6 +46,12 @@ using namespace std;
 
 const flt OVERNDIM = ((flt) 1.0)/NDIM;
 
+#ifdef VEC3D
+inline Vec vec(){return Vec(0,0,0);};
+#endif
+#ifdef VEC2D
+inline Vec vec(){return Vec(0,0);};
+#endif
 inline Vec2 vec(double x, double y){return Vec2(x,y);};
 inline Vec3 vec(double x, double y, double z){return Vec3(x,y,z);};
 

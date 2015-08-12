@@ -108,8 +108,20 @@
 #include "constraints.cpp"
 #include "collection.hpp"
 #include "collection.cpp"
+#include <Python.h>
+
+// Part of the numpy initialization sequence.
+// See http://wiki.scipy.org/Cookbook/SWIG_NumPy_examples#head-6c11cb03512f8fd5bfa20f8d8c6f69e7cc1ce494
+#define SWIG_FILE_WITH_INIT
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include <numpy/arrayobject.h>
 
 static int myErr = 0;
+%}
+
+// Part of the numpy initialization sequence.
+%init %{
+    import_array()
 %}
 
 %exception {
@@ -132,60 +144,76 @@ static int myErr = 0;
     }
 }
 
-%typemap(in) bool value[3] (bool temp[3]) {
-  int i;
-  if (!PySequence_Check($input)) {
-    PyErr_SetString(PyExc_ValueError,"Expected a sequence");
-    return NULL;
-  }
-  if (PySequence_Length($input) != 3) {
-    PyErr_SetString(PyExc_ValueError,"Size mismatch. Expected 3 elements");
-    return NULL;
-  }
-  for (i = 0; i < 3; i++) {
-    PyObject *o = PySequence_GetItem($input,i);
-    if (PyNumber_Check(o)) {
-      temp[i] = (bool) PyInt_AsLong(o);
-    } else {
-      PyErr_SetString(PyExc_ValueError,"Sequence elements must be numbers");      
-      return NULL;
-    }
-  }
-  $1 = temp;
+// Convert Vec2, Vec3 output into numpy arrays
+// Taken from
+// http://stackoverflow.com/questions/24375198/error-wrapping-eigen-c-with-python-using-swig
+%typemap(out) Vec2 { 
+    npy_intp dims[1] = {2}; 
+    PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array)); 
+    data[0] = $1(0);
+    data[1] = $1(1);
+    $result = array; 
 };
 
-%typemap(out) Eigen::VectorXd { 
-    npy_intp dims[1] = {$1.size()}; 
-    PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE); 
-    double* data = ((double *)PyArray_DATA( array )); 
-    for (int i = 0; i != dims[0]; ++i){ 
-        *data++ = $1.data()[i]; 
-    } 
+// Written myself, using http://www.swig.org/Doc3.0/Typemaps.html#Typemaps
+%typemap(out) Vec3 { 
+    npy_intp dims[1] = {3}; 
+    PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array)); 
+    data[0] = $1(0);
+    data[1] = $1(1);
+    data[2] = $1(2);
     $result = array; 
-} 
+};
 
-%typemap(in) Eigen::MatrixXd (Eigen::MatrixXd TEMP) { 
-    int rows = 0; 
-    int cols = 0; 
+// Take any sequence as input for a Vec2 (or Vec3, below)
+%typemap(in) Vec2 (Vec2 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"dd", &temp(0), &temp(1))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 2 doubles.");
+      return NULL;
+    }
+    $1 = temp;
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
+};
 
-    rows = PyArray_DIM($input,0); 
-    cols = PyArray_DIM($input,1); 
+%typemap(in) Vec3 (Vec3 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"ddd", &temp(0), &temp(1), &temp(2))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 3 doubles.");
+      return NULL;
+    }
+    $1 = temp;
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
+};
 
-    PyArrayObject *temp=NULL;
-    if (PyArray_Check($input))
-        temp = (PyArrayObject*)$input;  
+// Note that Vec2 has higher precedence than Vec3
+%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Vec2 {
+    $1 = (PySequence_Check($input) && (PySequence_Size($input) == 2)) ? 1 : 0;
+};
 
-    TEMP.resize(rows,cols); 
-    TEMP.fill(0); 
+%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Vec3 {
+    $1 = (PySequence_Check($input) && (PySequence_Size($input) == 3)) ? 1 : 0;
+};
 
-    double *  values = ((double *) PyArray_DATA($input)); 
-    for (long int i = 0; i != rows; ++i){ 
-        for(long int j = 0; j != cols; ++j){ 
-            // std::cout << "data " << data[i] << std::endl; 
-            TEMP(i,j) = values[i*rows+j]; 
-        } 
-    }   
-} 
+#ifdef VEC2D
+%typemap(in) Vec = Vec2;
+%typemap(out) Vec = Vec2;
+%typemap(typecheck) Vec = Vec2;
+#else 
+%typemap(in) Vec = Vec3;
+%typemap(out) Vec = Vec3;
+%typemap(typecheck) Vec = Vec3;
+#endif 
 
 #ifdef VEC2D
 namespace std {
