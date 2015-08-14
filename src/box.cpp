@@ -151,6 +151,16 @@ Vec atomgroup::momentum() const{
     return tot;
 };
 
+Vec atomgroup::comf() const{
+    Vec tot = Vec::Zero();
+    for(uint i=0; i<size(); i++){
+        atom& a = (*this)[i];
+        if(a.m <= 0 or isinf(a.m)) continue;
+        tot += a.f;
+    }
+    return tot;
+};
+
 flt atomgroup::gyradius() const{
     Vec avgr = Vec::Zero();
     for(uint i = 0; i<size(); i++){
@@ -166,50 +176,71 @@ flt atomgroup::gyradius() const{
 };
 
 #ifdef VEC3D
-Vec atomgroup::angmomentum(const Vec &loc, Box &box) const{
+Vec atomgroup::angmomentum(const Vec &loc) const{
     Vec tot = Vec::Zero();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
         if(curmass <= 0 or isinf(curmass)) continue;
-        Vec newloc = box.diff((*this)[i].x, loc);
+        Vec newloc = (*this)[i].x - loc;
         tot += cross(newloc, (*this)[i].v) * curmass; // r x v m = r x p
     }
     return tot;
 };
+
+Vec atomgroup::torque(const Vec &loc) const{
+    Vec tot = Vec::Zero();
+    for(uint i=0; i<size(); i++){
+        flt curmass = (*this)[i].m;
+        if(curmass <= 0 or isinf(curmass)) continue;
+        Vec newloc = (*this)[i].x - loc;
+        tot += cross(newloc, (*this)[i].f); // r x f
+    }
+    return tot;
+};
 #elif defined VEC2D
-flt atomgroup::angmomentum(const Vec &loc, Box &box) const{
+flt atomgroup::angmomentum(const Vec &loc) const{
     flt tot = 0;
-    Vec newloc = Vec::Zero();
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
-        newloc = box.diff(a.x, loc);
+        Vec newloc = a.x - loc;
         tot += cross(newloc, a.v) * a.m; // r x v m = r x p
+    }
+    return tot;
+};
+
+flt atomgroup::torque(const Vec &loc) const{
+    flt tot = 0.;
+    for(uint i=0; i<size(); i++){
+        flt curmass = (*this)[i].m;
+        if(curmass <= 0 or isinf(curmass)) continue;
+        Vec newloc = (*this)[i].x - loc;
+        tot += cross(newloc, (*this)[i].f); // r x f
     }
     return tot;
 };
 #endif
 
 #ifdef VEC3D
-flt atomgroup::moment(const Vec &loc, const Vec &axis, Box &box) const{
+flt atomgroup::moment(const Vec &loc, const Vec &axis) const{
     if (axis.squaredNorm() == 0) return 0;
     flt tot = 0;
     Vec newloc = Vec::Zero();
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
-        newloc = perpto(box.diff(a.x, loc), axis);
+        newloc = perpto(a.x - loc, axis);
         tot += newloc.dot(newloc) * a.m;
     }
     return tot;
 };
 
-Matrix atomgroup::moment(const Vec &loc, Box &box) const{
+Matrix atomgroup::moment(const Vec &loc) const{
     Matrix I = Matrix::Zero();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
         if(curmass <= 0 or isinf(curmass)) continue;
-        Vec r = box.diff((*this)[i].x, loc);
+        Vec r = (*this)[i].x - loc;
         flt x = r(0), y = r(1), z = r(2);
         I(0,0) += curmass * (y*y + z*z);
         I(1,1) += curmass * (x*x + z*z);
@@ -224,36 +255,36 @@ Matrix atomgroup::moment(const Vec &loc, Box &box) const{
     return I;
 };
 
-Vec atomgroup::omega(const Vec &loc, Box &box) const{
-    Matrix Inv = moment(loc, box).inverse();
-    Vec L = angmomentum(loc, box);
+Vec atomgroup::omega(const Vec &loc) const{
+    Matrix Inv = moment(loc).inverse();
+    Vec L = angmomentum(loc);
     return (Inv * L).transpose();
 };
 
-void atomgroup::addOmega(Vec w, Vec loc, Box &box){
+void atomgroup::addOmega(Vec w, Vec loc){
     for(uint i=0; i<size(); i++){
-        Vec r = box.diff((*this)[i].x, loc);
+        Vec r = (*this)[i].x - loc;
         (*this)[i].v -= r.cross(w);
     }
 };
 #elif defined VEC2D
-flt atomgroup::moment(const Vec &loc, Box &box) const{
+flt atomgroup::moment(const Vec &loc) const{
     flt tot = 0;
     Vec newloc = Vec::Zero();
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
-        newloc = box.diff(a.x, loc);
+        newloc = a.x - loc;
         tot += newloc.dot(newloc) * a.m;
     }
     return tot;
 };
 
-void atomgroup::addOmega(flt w, Vec loc, Box &box){
+void atomgroup::addOmega(flt w, Vec loc){
     for(uint i=0; i<size(); i++){
         atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
-        Vec r = box.diff(a.x, loc);
+        Vec r = a.x - loc;
         a.v -= perp(r).normalized()*w;
     }
 };

@@ -233,6 +233,7 @@ class atomgroup {
         
         Vec com() const; //center of mass
         Vec comv() const; //center of mass velocity
+        Vec comf() const; //center of mass velocity
         
         //Stats
         flt mass() const;
@@ -240,26 +241,28 @@ class atomgroup {
         Vec momentum() const;
         flt gyradius() const;
         #ifdef VEC3D
-        flt moment(const Vec &loc, const Vec &axis, Box &box) const;
-        Vec angmomentum(const Vec &loc, Box &box) const;
-        Matrix moment(const Vec &loc, Box &box) const;
-        Vec omega(const Vec &loc, Box &box) const;
-        void addOmega(Vec w, Vec origin, Box &box);
-        inline void resetL(Box &box){
-            Vec c = com(), w = omega(c, box);
+        flt moment(const Vec &loc, const Vec &axis) const;
+        Vec angmomentum(const Vec &loc) const;
+        Vec torque(const Vec &loc) const;
+        Matrix moment(const Vec &loc) const;
+        Vec omega(const Vec &loc) const;
+        void addOmega(Vec w, Vec origin);
+        inline void resetL(){
+            Vec c = com(), w = omega(c);
             if (w.squaredNorm() == 0) return;
-            addOmega(-w, c, box);
+            addOmega(-w, c);
         }
         #elif defined VEC2D
-        flt moment(const Vec &loc, Box &box) const;
-        flt angmomentum(const Vec &loc, Box &box) const;
-        flt omega(const Vec &loc, Box &box) const{return angmomentum(loc, box) / moment(loc, box);};
-        void addOmega(flt w, Vec origin, Box &box);
-        inline void resetL(Box &box){
+        flt moment(const Vec &loc) const;
+        flt angmomentum(const Vec &loc) const;
+        flt torque(const Vec &loc) const;
+        flt omega(const Vec &loc) const{return angmomentum(loc) / moment(loc);};
+        void addOmega(flt w, Vec origin);
+        inline void resetL(){
             Vec c = com();
-            flt w = omega(c, box);
+            flt w = omega(c);
             if (w == 0) return;
-            addOmega(-w, c, box);
+            addOmega(-w, c);
         }
         #endif
         
@@ -280,14 +283,24 @@ class atomvec : public virtual atomgroup {
     private:
         atom* atoms;
         uint sz;
+        void zero() {
+            for(uint i=0; i < sz; i++){
+                atoms[i].x = Vec::Zero();
+                atoms[i].v = Vec::Zero();
+                atoms[i].f = Vec::Zero();
+                atoms[i].a = Vec::Zero();
+            }
+        }
     public:
         atomvec(vector<double> masses) : sz((uint) masses.size()){
             atoms = new atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
+            zero();
         };
         atomvec(uint N, flt mass) : sz(N){
             atoms = new atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = mass;
+            zero();
         };
         atomvec(atomvec& other) : sz(other.size()){
             atoms = new atom[sz];

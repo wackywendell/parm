@@ -52,17 +52,17 @@ class collection {
         inline Vec com(){return atoms->com();};
         inline Vec comv(){return atoms->comv();};
         #ifdef VEC3D
-        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
-        inline Vec angmomentum(){return atoms->angmomentum(com(), *box);};
+        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline Vec angmomentum(){return atoms->angmomentum(com());};
         #elif defined VEC2D
-        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
-        inline flt angmomentum(){return atoms->angmomentum(com(), *box);};
+        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline flt angmomentum(){return atoms->angmomentum(com());};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
         
         void resetcomv(){atoms->resetcomv();};
-        void resetL(){atoms->resetL(*box);};
+        void resetL(){atoms->resetL();};
         void scaleVs(flt scaleby);
         void scaleVelocitiesT(flt T, bool minuscomv=true);
         void scaleVelocitiesE(flt E);

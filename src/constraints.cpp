@@ -1,5 +1,139 @@
 #include "constraints.hpp"
 
+template<typename T>
+void finite_or_throw(T &m){
+    if(!m.allFinite()) {
+        std::cerr << "Matrix !Finite ERROR" << std::endl;
+        std::cerr << m << std::endl;
+        throw std::invalid_argument("Matrix was not finite, cannot continue.");
+    }
+}
+
+#ifdef VEC3D
+Matrix BestRotationMatrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &to) {
+    finite_or_throw(to);
+    finite_or_throw(from);
+    Eigen::JacobiSVD<Matrix> svd(from.adjoint() * to, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    
+    Matrix VWprod(svd.matrixV() * svd.matrixU().adjoint());
+    if(!VWprod.allFinite()) {
+        std::cerr << "BestRotationMatrix ERROR" << std::endl;
+        std::cerr << "from:" << std::endl;
+        std::cerr << from << std:: endl;
+        std::cerr << "to:" << std::endl;
+        std::cerr << to << std:: endl;
+        
+        std::cerr << "U:" << std::endl;
+        std::cerr << svd.matrixU() << std:: endl;
+        std::cerr << "V:" << std::endl;
+        std::cerr << svd.matrixV() << std:: endl;
+        std::cerr << "VWprod:" << std::endl;
+        std::cerr << VWprod << std:: endl;
+    }
+    finite_or_throw(VWprod);
+    double det = VWprod.determinant();
+    double d = (det > 0.) ? 1. : 0.;
+    
+    Vec diagonal_vector;
+    for(uint i=0; i<NDIM-1; i++) diagonal_vector(i) = 1.0;
+    diagonal_vector(NDIM-1) = d;
+    Eigen::DiagonalMatrix<flt, NDIM> diag_d = diagonal_vector.asDiagonal();
+    
+    Matrix rot = (svd.matrixV()) * diag_d * (svd.matrixU().adjoint());
+    finite_or_throw(rot);
+    return rot;
+};
+
+RigidConstraint::RigidConstraint(sptr<Box> box, sptr<atomgroup> atms) :
+    atms(atms), M(atms->mass()), MoI(atms->moment(atms->com())), MoI_inv(MoI.inverse()), expected(atms->size(), NDIM) {
+    finite_or_throw(MoI);
+    finite_or_throw(MoI_inv);
+    Vec com = atms->com();
+    for(uint i = 0; i < atms->size(); i++){
+        expected.row(i) = ((*atms)[i].x - com);
+    };
+};
+
+Matrix RigidConstraint::get_rotation(){
+    Vec com = atms->com();
+    uint sz = atms->size();
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
+    for(uint i = 0; i < sz; i++){
+        atom& ai = (*atms)[i];
+        Vec dx = ai.x - com;
+        locs.row(i) = dx;
+    }
+    finite_or_throw(expected);
+    finite_or_throw(locs);
+    return BestRotationMatrix(expected, locs);
+}
+
+void RigidConstraint::apply(Box &box){
+    Vec com = atms->com();
+    Vec comv = atms->comv();
+    Vec comf = Vec();
+    
+    uint sz = atms->size();
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
+    
+    Vec L = Vec::Zero();
+    Vec tau = Vec::Zero();
+    
+    for(uint i = 0; i < sz; i++){
+        atom& ai = (*atms)[i];
+        Vec dx = ai.x - com;
+        locs.row(i) = dx;
+        comf += ai.f;
+        
+        // L = sum((r - R) × m v)
+        L += cross(dx, ai.v) * ai.m;     // L, L/T, M -> L²M/T 
+        tau += cross(dx, ai.f);          // L, ML/T² -> ML²/T²
+    }
+    
+    
+    finite_or_throw(locs);
+    Matrix rot = BestRotationMatrix(expected, locs);
+    finite_or_throw(rot);
+    
+    Matrix I = atms->moment(com);
+    // We know L = I ω, so we could try ω = I¯¹ L.
+    // However, this often fails badly.
+    // Its better to do ω = I.solve(L), as that is much more precise.
+    Eigen::JacobiSVD<Matrix> svd(I, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    // Matrix I_inv = I.inverse();
+    
+    Vec omega(svd.solve(L));
+    // Vec omega((I_inv * L).transpose());             // 1/ML², L²M/T -> 1/T
+    finite_or_throw(omega);
+    Vec alpha(svd.solve(tau));
+    // Vec alpha((I_inv * tau).transpose());           // 1/ML², ML²/T² -> 1/T²
+    finite_or_throw(alpha);
+    Vec comf_M = comf / M;              // L/T²
+    // std::cout << "rot:" << std::endl;
+    // std::cout << rot << std::endl;
+    
+    for(uint i = 0; i < sz; i++){
+        Vec loc(expected.row(i));
+        finite_or_throw(loc);
+        Vec dx(rot * loc);
+        finite_or_throw(dx);
+        atom& ai = (*atms)[i];
+        ai.x = com + dx;
+        finite_or_throw(ai.x);
+        Vec omega_cross_r = cross(omega, dx);
+        ai.v = comv + omega_cross_r; // L/T + L/T; V + ω × r
+        finite_or_throw(ai.v);
+        
+        // Should we have the ω × (ω × r) term? I don't know.
+        // Why do we divide by 2? I don't know either, but it works really
+        // well with velocity verlet at conserving energy.
+        ai.f = (comf_M + cross(alpha, dx) + cross(omega, omega_cross_r)/2.)*ai.m; // (L/T² + L/T²) M; V + α × r
+        //
+        finite_or_throw(ai.f);
+    }
+}
+#endif
+
 ContactTracker::ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists) :
     atoms(atoms), dists(dists), contacts(), breaks(0), formations(0),
         incontact(0){
