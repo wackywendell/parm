@@ -52,6 +52,7 @@
 %shared_ptr(SmoothLocs)
 %shared_ptr(RDiffs)
 %shared_ptr(SCatomvec)
+%shared_ptr(RigidConstraint)
 %shared_ptr(coordConstraint)
 %shared_ptr(RandomForce)
 %shared_ptr(fixedForce)
@@ -167,6 +168,18 @@ static int myErr = 0;
     $result = array; 
 };
 
+%typemap(out) Matrix { 
+    npy_intp dims[2] = {NDIM,NDIM}; 
+    PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+    for(uint i=0; i<NDIM; i++){
+        for(uint j=0; j<NDIM; j++){
+            data[i*NDIM+j] = $1(i, j);
+        }
+    }
+    $result = array; 
+};
+
 // Take any sequence as input for a Vec2 (or Vec3, below)
 %typemap(in) Vec2 (Vec2 temp) {
   if (PySequence_Check($input)) {
@@ -176,6 +189,21 @@ static int myErr = 0;
       return NULL;
     }
     $1 = temp;
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
+};
+
+%typemap(in) Vec2& (Vec2 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"dd", &temp(0), &temp(1))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 2 doubles.");
+      return NULL;
+    }
+    $1 = &temp;
+
   } else {
     PyErr_SetString(PyExc_TypeError,"expected a sequence.");
     return NULL;
@@ -196,12 +224,27 @@ static int myErr = 0;
   }
 };
 
+%typemap(in) Vec3& (Vec3 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"ddd", &temp(0), &temp(1), &temp(2))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 3 doubles.");
+      return NULL;
+    }
+    $1 = &temp;
+
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
+};
+
 // Note that Vec2 has higher precedence than Vec3
-%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Vec2 {
+%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Vec2, Vec2& {
     $1 = (PySequence_Check($input) && (PySequence_Size($input) == 2)) ? 1 : 0;
 };
 
-%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Vec3 {
+%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Vec3, Vec3& {
     $1 = (PySequence_Check($input) && (PySequence_Size($input) == 3)) ? 1 : 0;
 };
 
@@ -209,10 +252,14 @@ static int myErr = 0;
 %typemap(in) Vec = Vec2;
 %typemap(out) Vec = Vec2;
 %typemap(typecheck) Vec = Vec2;
+%typemap(in) Vec& = Vec2&;
+%typemap(typecheck) Vec& = Vec2&;
 #else 
 %typemap(in) Vec = Vec3;
 %typemap(out) Vec = Vec3;
 %typemap(typecheck) Vec = Vec3;
+%typemap(in) Vec& = Vec3&;
+%typemap(typecheck) Vec& = Vec3&;
 #endif 
 
 #ifdef VEC2D
