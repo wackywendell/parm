@@ -110,7 +110,7 @@ def write_xyz(time):
         print(N, file=f)
         print(time, file=f) # xyz format for VMD requires a line here, and ignores it; I put the time here.
         for e,a in zip(element_names, atoms):
-            x = box.diff(a.x, sim.Vec())
+            x = box.diff(a.x, sim.vec())
             print(e, *x, file=f)
 
 # empty out the file

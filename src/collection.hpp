@@ -52,17 +52,17 @@ class collection {
         inline Vec com(){return atoms->com();};
         inline Vec comv(){return atoms->comv();};
         #ifdef VEC3D
-        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
-        inline Vec angmomentum(){return atoms->angmomentum(com(), *box);};
+        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline Vec angmomentum(){return atoms->angmomentum(com());};
         #elif defined VEC2D
-        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
-        inline flt angmomentum(){return atoms->angmomentum(com(), *box);};
+        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline flt angmomentum(){return atoms->angmomentum(com());};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
         
         void resetcomv(){atoms->resetcomv();};
-        void resetL(){atoms->resetL(*box);};
+        void resetL(){atoms->resetL();};
         void scaleVs(flt scaleby);
         void scaleVelocitiesT(flt T, bool minuscomv=true);
         void scaleVelocitiesE(flt E);
@@ -581,7 +581,7 @@ class collectionGear4A : public collection {
         uint ncorrec;
         vector<Vec> bs;
         void resetbs(){
-            bs.resize(atoms->size(), Vec());
+            bs.resize(atoms->size(), Vec::Zero());
         }
         
     public:
@@ -613,8 +613,8 @@ class collectionGear5A : public collection {
         vector<Vec> bs, cs;
         void resetbcs(){
             uint Natoms = atoms->size();
-            bs.resize(Natoms, Vec());
-            cs.resize(Natoms, Vec());
+            bs.resize(Natoms, Vec::Zero());
+            cs.resize(Natoms, Vec::Zero());
         }
         
     public:
@@ -645,9 +645,9 @@ class collectionGear6A : public collection {
         void resetbcds(){
             uint Natoms = atoms->size();
             bs.clear(); cs.clear(); ds.clear();
-            bs.resize(Natoms, Vec());
-            cs.resize(Natoms, Vec());
-            ds.resize(Natoms, Vec());
+            bs.resize(Natoms, Vec::Zero());
+            cs.resize(Natoms, Vec::Zero());
+            ds.resize(Natoms, Vec::Zero());
         }
         
     public:
@@ -706,7 +706,7 @@ class collectionGear4NPH : public collection {
         uint ncorrec;
         vector<Vec> bs;
         void resetbs(){
-            bs.resize(atoms->size(), Vec());
+            bs.resize(atoms->size(), Vec::Zero());
         }
         
     public:
@@ -761,11 +761,11 @@ class collectionGear4NPT : public collection {
         vector<Vec> vs2, vs3;
         void resetbs(){
             uint Natoms = atoms->size();
-            xs1.resize(Natoms, Vec());
-            xs2.resize(Natoms, Vec());
-            xs3.resize(Natoms, Vec());
-            vs2.resize(Natoms, Vec());
-            vs3.resize(Natoms, Vec());
+            xs1.resize(Natoms, Vec::Zero());
+            xs2.resize(Natoms, Vec::Zero());
+            xs3.resize(Natoms, Vec::Zero());
+            vs2.resize(Natoms, Vec::Zero());
+            vs3.resize(Natoms, Vec::Zero());
             V1 = V2 = V3 = 0;
         }
         static vector<sptr<interaction> > tointerpair(vector<sptr<interactionpairsx> >&);

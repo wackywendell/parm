@@ -115,7 +115,7 @@ flt collection::dof(){
 }
 
 flt collection::temp(bool minuscomv){
-    Vec v = Vec();
+    Vec v = Vec::Zero();
     if(minuscomv) v = comv();
     
     int ndof = (int) dof();
@@ -124,7 +124,7 @@ flt collection::temp(bool minuscomv){
 }
 
 flt collection::gyradius(){
-    Vec avgr = Vec();
+    Vec avgr = Vec::Zero();
     flt N = atoms->size();
     for(uint i = 0; i<N; i++){
         avgr += (*atoms)[i].x;
@@ -132,7 +132,7 @@ flt collection::gyradius(){
     avgr /= N; // now avgr is the average location, akin to c.o.m.
     flt Rgsq = 0;
     for(uint i = 0; i<atoms->size(); i++){
-        Rgsq += ((*atoms)[i].x - avgr).sq();
+        Rgsq += ((*atoms)[i].x - avgr).squaredNorm();
     }
     
     return sqrt(Rgsq/N);
@@ -152,7 +152,7 @@ void collection::setForces(bool seta){
     for(uint i=0; i<atoms->size(); i++){
         atom &a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){
-            a.a = Vec();
+            a.a = Vec::Zero();
             continue;
         }
         a.a = a.f / a.m;
@@ -173,7 +173,7 @@ flt collection::setForcesGetPressure(bool seta){
     for(uint i=0; i<atoms->size(); i++){
         atom &a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){
-            a.a = Vec();
+            a.a = Vec::Zero();
             continue;
         }
         if(seta){
@@ -244,20 +244,20 @@ void collectionSol::timestep(){
         atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec();
+            m[i].v = Vec::Zero();
             continue;
         }
         flt v0 = sqrt(desT/m[i].m);
         flt r0 = dt * v0;
         VecPair vecpair;
         if (damping > 0) vecpair = gauss.genVecs();
-        else vecpair[0] = vecpair[1] = Vec();
+        else vecpair.setZero();
         // vecpair[0] is drG, and vecpair[1] is dvG
-        m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair[0]*r0;
-        m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair[1]*v0;
+        m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair.col(0)*r0;
+        m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2)) + vecpair.col(1)*v0;
         //~ if(i==0 and git == groups.begin()) cout 
-            //~ << "drG: " << vecpair[0].mag() 
-            //~ << ", dvG: " << vecpair[1].mag()
+            //~ << "drG: " << vecpair[0].norm() 
+            //~ << ", dvG: " << vecpair[1].norm()
             //~ << "\n";
     }
     // Now we set forces and accelerations
@@ -265,7 +265,7 @@ void collectionSol::timestep(){
     update_constraints();
     for(uint i=0; i<m.size(); i++){
         if(m[i].m == 0 or isinf(m[i].m)){
-            m[i].a = Vec();
+            m[i].a = Vec::Zero();
             continue;
         }
         m[i].a = m[i].f / m[i].m;
@@ -274,7 +274,7 @@ void collectionSol::timestep(){
     // And finish m[i].v
     for(uint i=0; i<m.size(); i++){
         if(m[i].m == 0 or isinf(m[i].m)){
-            m[i].v = Vec();
+            m[i].v = Vec::Zero();
             continue;
         }
         m[i].v += m[i].a * (dt*c2);
@@ -314,7 +314,7 @@ void collectionDamped::timestep(){
     atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec();
+            m[i].v = Vec::Zero();
             continue;
         }
         m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt);
@@ -325,7 +325,7 @@ void collectionDamped::timestep(){
     update_constraints();
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].a = Vec();
+            m[i].a = Vec::Zero();
             continue;
         }
         m[i].a = m[i].f / m[i].m;
@@ -368,7 +368,7 @@ void collectionSolHT::timestep(){
     atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec();
+            m[i].v = Vec::Zero();
             continue;
         }
         // step 1: get new x
@@ -384,7 +384,7 @@ void collectionSolHT::timestep(){
     // step 4: intermediate acceleration
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].a = Vec();
+            m[i].a = Vec::Zero();
             continue;
         }
         Vec g = gauss.generate();
@@ -401,7 +401,7 @@ void collectionVerlet::timestep(){
     atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec();
+            m[i].v = Vec::Zero();
             continue;
         }
         m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
@@ -412,7 +412,7 @@ void collectionVerlet::timestep(){
     update_constraints();
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].a = Vec();
+            m[i].a = Vec::Zero();
             continue;
         }
         m[i].a = m[i].f / m[i].m;
@@ -429,8 +429,8 @@ void collectionOverdamped::timestep(){
     atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec();
-            m[i].a = Vec();
+            m[i].v = Vec::Zero();
+            m[i].a = Vec::Zero();
             continue;
         }
         m[i].a = m[i].f / m[i].m;
@@ -451,24 +451,24 @@ void collectionConjGradient::timestep(){
     atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec();
-            m[i].a = Vec();
+            m[i].v = Vec::Zero();
+            m[i].a = Vec::Zero();
             continue;
         }
         m[i].x += m[i].v * dt;
         Vec newa = m[i].f / m[i].m;
-        flt asq = m[i].a.sq();
+        flt asq = m[i].a.squaredNorm();
         flt gamma = 0;
         if(asq > 0){// if a was 0, then just set γ = 0
             gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
-            // gamma = newa.sq() / asq; // Fletcher-Reeves
+            // gamma = newa.squaredNorm() / asq; // Fletcher-Reeves
         }
         //if(gamma > 100) gamma = 0;
         if(gamma < 0) gamma = 0;
         m[i].v = newa + (m[i].v * gamma);
         m[i].a = newa;
         //~ if(git == groups.begin() and i == 0){
-            //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.sq() << endl;
+            //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.squaredNorm() << endl;
             //~ //cout << "        " << 
         //~ }
         
@@ -483,8 +483,8 @@ void collectionConjGradient::timestepNewton(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){
-            a.v = Vec();
-            a.a = Vec();
+            a.v = Vec::Zero();
+            a.a = Vec::Zero();
             continue;
         }
         a.v = a.f / a.m;
@@ -496,7 +496,7 @@ void collectionConjGradient::timestepNewton(){
 
 void collectionConjGradient::reset(){
     for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].v = Vec();
+        (*atoms)[i].v = Vec::Zero();
     }
 }
 
@@ -508,7 +508,7 @@ flt collectionConjGradientBox::kinetic(){
         if(a.m <= 0 or isinf(a.m)){continue;}
         //Vec v = g[i].v - (g[i].x * Vfac);
         Vec v = a.v + (a.x * Vfac);
-        E += v.sq() * a.m;
+        E += v.squaredNorm() * a.m;
     }
     return E/2.0;
 }
@@ -520,7 +520,7 @@ void collectionConjGradientBox::reset(){
     lastFV = 0;
     
     for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].v = Vec();
+        (*atoms)[i].v = Vec::Zero();
     }
 }
 
@@ -542,7 +542,7 @@ void collectionConjGradientBox::resize(flt V){
     
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].x *= Vfac;
-        (*atoms)[i].v = Vec();
+        (*atoms)[i].v = Vec::Zero();
     }
     
     obox.resizeV(V);
@@ -599,11 +599,11 @@ void collectionConjGradientBox::timestep(){
     
     for(uint i=0; i<g.size(); i++){
         Vec newa = g[i].f / g[i].m;
-        flt asq = g[i].a.sq();
+        flt asq = g[i].a.squaredNorm();
         flt gamma = 0;
         if(asq > 0){// if a was 0, then just set γ = 0
             gamma = (newa - g[i].a).dot(newa) / asq; // Polak-Ribière
-            // gamma = newa.sq() / asq; // Fletcher-Reeves
+            // gamma = newa.squaredNorm() / asq; // Fletcher-Reeves
         }
         //if(gamma > 100) gamma = 0;
         if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
@@ -636,7 +636,7 @@ void collectionConjGradientBox::timestepBox(){
     
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].x *= Vfac;
-        (*atoms)[i].v = Vec();
+        (*atoms)[i].v = Vec::Zero();
     }
     
     obox.resizeV(newV);
@@ -677,18 +677,18 @@ void collectionConjGradientBox::timestepAtoms(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){
-            a.v = Vec();
-            a.a = Vec();
+            a.v = Vec::Zero();
+            a.a = Vec::Zero();
             continue;
         }
         a.x += a.v * dt;// + (m[i].x * Vfac);
         
         Vec newa = a.f / a.m;
-        flt asq = a.a.sq();
+        flt asq = a.a.squaredNorm();
         flt gamma = 0;
         if(asq > 0){// if a was 0, then just set γ = 0
             gamma = (newa - a.a).dot(newa) / asq; // Polak-Ribière
-            // gamma = newa.sq() / asq; // Fletcher-Reeves
+            // gamma = newa.squaredNorm() / asq; // Fletcher-Reeves
         }
         //if(gamma > 100) gamma = 0;
         if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
@@ -748,8 +748,8 @@ void collectionNLCG::setForces(bool seta, bool setV){
         for(uint i=0; i<atoms->size(); i++){
             atom& a = (*atoms)[i];
             if(a.m <= 0 or isinf(a.m)){
-                a.v = Vec();
-                a.a = Vec();
+                a.v = Vec::Zero();
+                a.a = Vec::Zero();
                 continue;
             }
             a.a = a.f;
@@ -777,7 +777,7 @@ void collectionNLCG::resize(flt V){
     
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].x *= Lfac;
-        (*atoms)[i].v = Vec();
+        (*atoms)[i].v = Vec::Zero();
     }
     
     obox.resizeV(V);
@@ -791,7 +791,7 @@ flt collectionNLCG::kinetic(){
         if(a.m <= 0 or isinf(a.m)){continue;}
         //Vec v = g[i].v - (g[i].x * Vfac);
         Vec v = a.v + (a.x * Lfac);
-        E += v.sq();// * g[i].m;
+        E += v.squaredNorm();// * g[i].m;
     }
     
     return E/2.0;
@@ -839,7 +839,7 @@ flt collectionNLCG::fdotf(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){continue;}
-        returnvalue += a.f.sq();
+        returnvalue += a.f.squaredNorm();
     }
     
     return returnvalue / getLsq() + fl * fl;
@@ -872,7 +872,7 @@ flt collectionNLCG::vdotv(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){continue;}
-        returnvalue += a.v.sq();
+        returnvalue += a.v.squaredNorm();
     }
     
     return returnvalue / getLsq() + vl * vl;
@@ -993,7 +993,7 @@ void collectionNLCG::timestep(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){
-            a.a = Vec();
+            a.a = Vec::Zero();
             continue;
         }
         a.a = a.f;
@@ -1014,7 +1014,7 @@ void collectionNLCG::timestep(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){
-            a.v = Vec();
+            a.v = Vec::Zero();
             continue;
         }
         a.v = a.a + a.v*betaused;
@@ -1066,7 +1066,7 @@ flt collectionNLCGV::fdotf(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){continue;}
-        returnvalue += a.f.sq();
+        returnvalue += a.f.squaredNorm();
     }
     
     return returnvalue;
@@ -1106,7 +1106,7 @@ flt collectionNLCGV::vdotv(){
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){continue;}
-        returnvalue += a.v.sq();
+        returnvalue += a.v.squaredNorm();
     }
     
     return returnvalue;
@@ -1385,7 +1385,7 @@ flt collectionGaussianT::setxi(){
     for(uint i=0; i<atoms->size(); i++){
             flt m = (*atoms)[i].m;
             xiNumerator += (*atoms)[i].f.dot((*atoms)[i].v) * m;
-            xiDenominator += ((*atoms)[i].v.sq()) * m*m;
+            xiDenominator += ((*atoms)[i].v.squaredNorm()) * m*m;
     }
     xi = xiNumerator / xiDenominator;
     return xi;
@@ -1571,16 +1571,16 @@ void collectionGear6A::timestep(){
             bs[n] += correction * c3;
             cs[n] += correction * c4;
             ds[n] += correction * c5;
-            //~ if(correction.mag()*dt2 > .05) cout << "|c[" << i << "]| = " << correction.mag()*dt2 << '\n';
-            //~ if(a.mag()*dt2 > .1) cout << "|a[" << i << "]| = " << a.mag()*dt2 << '\n';
-            //~ if(bs[n].mag()*dt3 > .1) cout << "|bs[" << n << "]| = " << bs[n].mag()*dt3 << '\n';
-            //~ if(cs[n].mag()*dt4 > .1) cout << "|cs[" << n << "]| = " << cs[n].mag()*dt4 << '\n';
-            //~ if(ds[n].mag()*dt5 > .1) cout << "|ds[" << n << "]| = " << ds[n].mag()*dt5 << '\n';
-            //~ assert(correction.mag()*dt2 < 1);
-            //~ assert(a.mag()*dt2 < 3);
-            //~ assert(bs[n].mag()*dt3 < 3);
-            //~ assert(cs[n].mag()*dt4 < 3);
-            //~ assert(ds[n].mag()*dt5 < 3);
+            //~ if(correction.norm()*dt2 > .05) cout << "|c[" << i << "]| = " << correction.norm()*dt2 << '\n';
+            //~ if(a.norm()*dt2 > .1) cout << "|a[" << i << "]| = " << a.norm()*dt2 << '\n';
+            //~ if(bs[n].norm()*dt3 > .1) cout << "|bs[" << n << "]| = " << bs[n].norm()*dt3 << '\n';
+            //~ if(cs[n].norm()*dt4 > .1) cout << "|cs[" << n << "]| = " << cs[n].norm()*dt4 << '\n';
+            //~ if(ds[n].norm()*dt5 > .1) cout << "|ds[" << n << "]| = " << ds[n].norm()*dt5 << '\n';
+            //~ assert(correction.norm()*dt2 < 1);
+            //~ assert(a.norm()*dt2 < 3);
+            //~ assert(bs[n].norm()*dt3 < 3);
+            //~ assert(cs[n].norm()*dt4 < 3);
+            //~ assert(ds[n].norm()*dt5 < 3);
             n++;
         }
         //~ printf("final = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
@@ -1680,19 +1680,19 @@ flt collectionGear4NPH::kinetic(){
     flt Vfac = dV/box->V()/flt(NDIM);
     for(uint i=0; i<atoms->size(); i++){
         Vec v = (*atoms)[i].v - ((*atoms)[i].x * Vfac);
-        E += v.sq() * (*atoms)[i].m;
+        E += v.squaredNorm() * (*atoms)[i].m;
     }
     return E/2.0;
 }
 
 flt collectionGear4NPH::temp(bool minuscomv){
     flt totkinetic2 = 0; // kinetic * 2
-    Vec cv = Vec();
+    Vec cv = Vec::Zero();
     if(minuscomv) cv = comv();
     flt Vfac = dV/box->V()/flt(NDIM);
     for(uint i=0; i<atoms->size(); i++){
             Vec v = (*atoms)[i].v - cv - ((*atoms)[i].x * Vfac);
-            totkinetic2 += v.sq() * (*atoms)[i].m;
+            totkinetic2 += v.squaredNorm() * (*atoms)[i].m;
     }
     
     int ndof = (int) dof();
@@ -1779,7 +1779,7 @@ vector<sptr<interaction> > collectionGear4NPT::tointerpair(vector<sptr<interacti
 void xrpsummer::run(forcepairx *fpairx){
     Vec rij = box->diff(fpairx->a1->x, fpairx->a2->x);
     Vec vij = fpairx->a1->v - fpairx->a2->v;
-    rpxsum += rij.dot(vij) * fpairx->xij / rij.sq();
+    rpxsum += rij.dot(vij) * fpairx->xij / rij.squaredNorm();
     xsum += fpairx->xij;
     vfsum += vij.dot(fpairx->fij);
     rfsum += rij.dot(fpairx->fij);
@@ -1875,7 +1875,7 @@ void collectionGear4NPT::timestep(){
 }
 
 void collectionVerletNPT::resetvhalf(){
-    vhalf.resize(atoms->size(), Vec());
+    vhalf.resize(atoms->size(), Vec::Zero());
     uint n=0;
     for(uint i=0; i<atoms->size(); i++){
         vhalf[n] = (*atoms)[i].v;
@@ -1897,12 +1897,12 @@ void collectionVerletNPT::timestep(){
     for(uint i=0; i<g.size(); i++){
         flt mi = g[i].m;
         g[i].a = g[i].f / mi;
-        lastKtot2 += vhalf[i].sq() * mi;
+        lastKtot2 += vhalf[i].squaredNorm() * mi;
         Vec lastvhalf = vhalf[i];
         vhalf[i] = (vhalf[i]*(1-xieta) + g[i].a*dt)/(1+xieta);
         
         g[i].v = (lastvhalf + vhalf[i])/2.0;
-        Ktot2 += vhalf[i].sq() * mi;
+        Ktot2 += vhalf[i].squaredNorm() * mi;
     }
     if(QT > 0){
         etasum += eta*dt;
@@ -1971,8 +1971,8 @@ bool make_event(Box &box, event& e, atomid a, atomid b, flt sigma, flt curt){
     if(bij >= 0) return false;
     
     flt bijsq = bij*bij;
-    flt vijsq = vij.sq();
-    flt underroot = bijsq - vijsq*(rij.sq() - sigma*sigma);
+    flt vijsq = vij.squaredNorm();
+    flt underroot = bijsq - vijsq*(rij.squaredNorm() - sigma*sigma);
     if(underroot < 0) return false;
     
     flt tau_ij = -(bij + sqrt(underroot))/vijsq;
@@ -1998,7 +1998,7 @@ void collectionCDBDgrid::update_grid(bool force){
 
 event collectionCDBDgrid::next_event(atomid a){
     event e;
-    flt vmag = a->v.mag();
+    flt vmag = a->v.norm();
     if(!isfinite(vmag) or vmag <= 0) vmag = sqrt(T/a->m) * edge_epsilon;
     flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
     assert(epsilon_t > 0);
@@ -2036,7 +2036,7 @@ void collectionCDBDgrid::reset_events(bool force){
 inline void collide(Box &box, atom& a, atom &b){
     assert(&a != &b);
     Vec rij = box.diff(a.x, b.x);
-    flt rmag = rij.mag();
+    flt rmag = rij.norm();
     Vec rhat = rij / rmag;
     
     flt rvi = rhat.dot(a.v);

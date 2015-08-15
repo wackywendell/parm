@@ -12,7 +12,7 @@ bool neighborlist::update_list(bool force){
         flt bigdist = 0, biggestdist = 0;
         for(uint i=0; i < atoms.size(); i++){
             atom &atm = atoms[i];
-            flt curdist = (atm.x - lastlocs[i]).mag();
+            flt curdist = (atm.x - lastlocs[i]).norm();
             if(curdist > biggestdist){
                 bigdist = biggestdist;
                 biggestdist = curdist;
@@ -52,7 +52,7 @@ bool neighborlist::update_list(bool force){
             atomid a2=atoms.get_id(j);
             if (ignorepairs.has_pair(a1, a2)) continue;
             flt diam = (diameters[i] + diameters[j])/2;
-            if(box->diff(a1->x, a2->x).mag() < (diam + skin))
+            if(box->diff(a1->x, a2->x).norm() < (diam + skin))
                 curpairs.push_back(idpair(a1, a2));
         }
     }
@@ -435,4 +435,3 @@ bool GridIterator::operator==(const GridIterator &other){
     if(cellnum2 != other.cellnum2) return false;
     return (atom2 == other.atom2);
 };
-

@@ -100,7 +100,7 @@ class OriginBox : public Box {
             for(uint i=0; i<NDIM; i++){
                 v[i] *= boxsize[i];
             }
-            return diff(v, Vec());
+            return diff(v, Vec::Zero());
         };
         Vec boxshape(){return boxsize;};
 };
@@ -186,12 +186,14 @@ class atomid : public atomref {
         inline uint n() const {return num;};
 };
 
-class idpair : public Array<atomid, 2> {
+class idpair {
+    private:
+        atomid id1, id2;
     public:
-        idpair(){vals[0] = atomid(); vals[1] = atomid();};
-        idpair(atomid a, atomid b){ vals[0] = a; vals[1] = b;};
-        inline atomid first() const {return vals[0];};
-        inline atomid last() const {return vals[1];};
+        idpair() : id1(), id2(){};
+        idpair(atomid a, atomid b) : id1(a), id2(b){};
+        inline atomid first() const {return id1;};
+        inline atomid last() const {return id2;};
 };
 
 //~ class atompair : public array<atom*, 2> {
@@ -231,33 +233,36 @@ class atomgroup {
         
         Vec com() const; //center of mass
         Vec comv() const; //center of mass velocity
+        Vec comf() const; //center of mass velocity
         
         //Stats
         flt mass() const;
-        flt kinetic(const Vec &originvelocity=Vec()) const;
+        flt kinetic(const Vec &originvelocity=Vec::Zero()) const;
         Vec momentum() const;
         flt gyradius() const;
         #ifdef VEC3D
-        flt moment(const Vec &loc, const Vec &axis, Box &box) const;
-        Vec angmomentum(const Vec &loc, Box &box) const;
-        Matrix<flt> moment(const Vec &loc, Box &box) const;
-        Vec omega(const Vec &loc, Box &box) const;
-        void addOmega(Vec w, Vec origin, Box &box);
-        inline void resetL(Box &box){
-            Vec c = com(), w = omega(c, box);
-            if (w.sq() == 0) return;
-            addOmega(-w, c, box);
+        flt moment(const Vec &loc, const Vec &axis) const;
+        Vec angmomentum(const Vec &loc) const;
+        Vec torque(const Vec &loc) const;
+        Matrix moment(const Vec &loc) const;
+        Vec omega(const Vec &loc) const;
+        void addOmega(Vec w, Vec origin);
+        inline void resetL(){
+            Vec c = com(), w = omega(c);
+            if (w.squaredNorm() == 0) return;
+            addOmega(-w, c);
         }
         #elif defined VEC2D
-        flt moment(const Vec &loc, Box &box) const;
-        flt angmomentum(const Vec &loc, Box &box) const;
-        flt omega(const Vec &loc, Box &box) const{return angmomentum(loc, box) / moment(loc, box);};
-        void addOmega(flt w, Vec origin, Box &box);
-        inline void resetL(Box &box){
+        flt moment(const Vec &loc) const;
+        flt angmomentum(const Vec &loc) const;
+        flt torque(const Vec &loc) const;
+        flt omega(const Vec &loc) const{return angmomentum(loc) / moment(loc);};
+        void addOmega(flt w, Vec origin);
+        inline void resetL(){
             Vec c = com();
-            flt w = omega(c, box);
+            flt w = omega(c);
             if (w == 0) return;
-            addOmega(-w, c, box);
+            addOmega(-w, c);
         }
         #endif
         
@@ -278,14 +283,24 @@ class atomvec : public virtual atomgroup {
     private:
         atom* atoms;
         uint sz;
+        void zero() {
+            for(uint i=0; i < sz; i++){
+                atoms[i].x = Vec::Zero();
+                atoms[i].v = Vec::Zero();
+                atoms[i].f = Vec::Zero();
+                atoms[i].a = Vec::Zero();
+            }
+        }
     public:
         atomvec(vector<double> masses) : sz((uint) masses.size()){
             atoms = new atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
+            zero();
         };
         atomvec(uint N, flt mass) : sz(N){
             atoms = new atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = mass;
+            zero();
         };
         atomvec(atomvec& other) : sz(other.size()){
             atoms = new atom[sz];
