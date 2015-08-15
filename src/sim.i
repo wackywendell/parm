@@ -152,8 +152,8 @@ static int myErr = 0;
     npy_intp dims[1] = {2}; 
     PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
     double* data = ((double *)PyArray_DATA((PyArrayObject *) array)); 
-    data[0] = $1(0);
-    data[1] = $1(1);
+    data[0] = (double) $1(0);
+    data[1] = (double) $1(1);
     $result = array; 
 };
 
@@ -162,9 +162,9 @@ static int myErr = 0;
     npy_intp dims[1] = {3}; 
     PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
     double* data = ((double *)PyArray_DATA((PyArrayObject *) array)); 
-    data[0] = $1(0);
-    data[1] = $1(1);
-    data[2] = $1(2);
+    data[0] = (double) $1(0);
+    data[1] = (double) $1(1);
+    data[2] = (double) $1(2);
     $result = array; 
 };
 
@@ -174,7 +174,7 @@ static int myErr = 0;
     double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
     for(uint i=0; i<NDIM; i++){
         for(uint j=0; j<NDIM; j++){
-            data[i*NDIM+j] = $1(i, j);
+            data[i*NDIM+j] = (double) $1(i, j);
         }
     }
     $result = array; 

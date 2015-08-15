@@ -31,8 +31,8 @@ Matrix BestRotationMatrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen:
         std::cerr << VWprod << std:: endl;
     }
     finite_or_throw(VWprod);
-    double det = VWprod.determinant();
-    double d = (det > 0.) ? 1. : 0.;
+    flt det = VWprod.determinant();
+    flt d = (det > 0.) ? 1. : 0.;
     
     Vec diagonal_vector;
     for(uint i=0; i<NDIM-1; i++) diagonal_vector(i) = 1.0;
