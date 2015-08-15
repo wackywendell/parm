@@ -1,1 +1,0 @@
-/home/wendell/code/numpy/tools/swig/numpy.i
