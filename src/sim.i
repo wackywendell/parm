@@ -180,6 +180,44 @@ static int myErr = 0;
     $result = array; 
 };
 
+// from http://stackoverflow.com/questions/24375198/error-wrapping-eigen-c-with-python-using-swig
+%typemap(in) Eigen::Matrix<flt, Eigen::Dynamic, 3> & (Eigen::Matrix<flt, Eigen::Dynamic, 3> temp) {
+    if (!PySequence_Check($input)) {
+        PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+        return NULL;
+    }
+    int len = PySequence_Length($input);
+    if(len == 0){
+        PyErr_SetString(PyExc_TypeError,"expected a sequence of length greather than 0.");
+        return NULL;
+    } else if (len == -1){
+        PyErr_SetString(PyExc_TypeError, "Failure converting.");
+        return NULL;
+    }
+    
+    temp = Eigen::Matrix<flt, Eigen::Dynamic, 3>(len, 3);
+    for(int i=0; i < len; i++){
+        PyObject *obj_i = PySequence_GetItem($input, i);
+        if (obj_i == NULL) {
+            PyErr_SetString(PyExc_TypeError, "Failure parsing sequence.");
+            return NULL;
+        }
+        if (!PySequence_Check(obj_i)) {
+            PyErr_SetString(PyExc_TypeError, "expected a sequence of sequences.");
+            return NULL;
+        }
+        
+        PyObject* tup = PySequence_Tuple(obj_i);
+        if (!PyArg_ParseTuple(tup,"ddd", 
+                &temp(i, 0), &temp(i, 1), &temp(i, 2))){
+            PyErr_SetString(PyExc_TypeError,"inner sequences must have 3 doubles.");
+            return NULL;
+        }
+    }
+    
+    $1 = &temp;
+};
+
 // Take any sequence as input for a Vec2 (or Vec3, below)
 %typemap(in) Vec2 (Vec2 temp) {
   if (PySequence_Check($input)) {
