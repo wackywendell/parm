@@ -1,13 +1,43 @@
 from . import d2 as sim2
 from . import d3 as sim3
 from unittest import TestCase
+import textwrap
 
 from math import sqrt
 import numpy as np
 
 class NPTestCase(TestCase):
-    def assertClose(self, x, y, rtol=1e-05, atol=1e-08):
-        self.assertTrue(np.allclose(x, y, rtol=rtol, atol=atol))
+    def assertClose(self, x, y, rtol=1e-05, atol=1e-08, msg=None):
+        if np.allclose(x, y, rtol=rtol, atol=atol):
+            return
+        
+        standardMsg = ('The following were not within %s rtol or %s atol:\n'
+            '%s\n'
+            '%s\n') % (rtol, atol, self._indent('A:  ', repr(x)), self._indent('B:  ', repr(y)))
+        msg = self._formatMessage(msg, standardMsg)
+        raise self.failureException(msg)
+        
+    def _indent(self, prefix, msg):
+        lines = str(msg).splitlines()
+        subsequent_indent = ' ' * len(prefix)
+        lines =(
+            [textwrap.wrap(l, width=80, 
+                replace_whitespace=False,
+                drop_whitespace=False,
+                initial_indent=prefix,
+                subsequent_indent=subsequent_indent,
+                break_long_words=False,
+                break_on_hyphens=False) for l in lines[:1]] +
+            [textwrap.wrap(l, width=80, 
+                replace_whitespace=False,
+                drop_whitespace=False,
+                initial_indent=subsequent_indent,
+                subsequent_indent=subsequent_indent,
+                break_long_words=False,
+                break_on_hyphens=False) for l in lines[1:]])
+        lines = [l for lset in lines for l in lset]
+        return '\n'.join(lines)
+        
 
 class VecTest(NPTestCase):
     def test_assignment(self):
@@ -74,10 +104,80 @@ class RigidConstraintTest(NPTestCase):
             [ 0.,  0.,  1.]])
         self.assertClose(m, expected_m)
 
-class RandomRigidConstraintTest(NPTestCase):
-    phi_ish = 0.3
+
+class RandomHertzianVerletTest(NPTestCase):
+    phi = 0.3
     N_per_mol = 5
     N_mol = 12
+    N = N_per_mol * N_mol
+    dt = 0.01
+    
+    def setUp(self):
+        # for consistency
+        np.random.seed(131)
+        self.radii = np.random.uniform(1.0, 2.0, size=(self.N,))
+        self.masses = self.radii**3
+        
+        Vs = np.sum(self.radii**3)*4/3*np.pi
+        V = Vs / self.phi
+        self.L = float(V**(1./3.))
+        box = self.box = sim3.OriginBox(self.L)
+        
+        self.atoms = sim3.atomvec(self.masses)
+        self.hertz = sim3.Hertzian(self.box, self.atoms, 0.4)
+
+        for a, radius, mass in zip(self.atoms, self.radii, self.masses):
+            self.hertz.add(sim3.HertzianAtom(a, 100.0, radius*2.0, 2.0))
+        
+        self.reset_positions()
+        
+        collec = self.collec = sim3.collectionVerlet(self.box, self.atoms, self.dt, [self.hertz], [self.hertz.nlist()], [])
+        
+        print('EKUT:', collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
+    
+    def reset_positions(self):
+        np.random.seed(131)
+        for a, radius, mass in zip(self.atoms, self.radii, self.masses):
+            a.x = np.random.uniform(0., self.L, size=(3,))
+            a.v = np.random.normal(size=(3,))
+            a.f = np.random.normal(size=(3,))
+        
+        nl = self.hertz.nlist()
+        nl.update_list(True)
+    
+    def reset(self):
+        self.reset_positions()    
+        self.collec.scaleVelocitiesT(1.0)
+        for _ in range(1000):
+            self.collec.timestep()
+            self.collec.scaleVelocitiesT(1.0)
+    
+    def testEnergy(self):
+        self.reset()
+        collec = self.collec
+        EKUTs = []
+        lastE = collec.energy()
+        for _ in range(1000):
+            for _ in range(10):
+                collec.timestep()
+                self.assertClose(collec.energy(), lastE, rtol=1e-2)
+                lastE = collec.energy()
+            EKUTs.append((collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp()))
+            
+        EKUTs = np.asarray(EKUTs)
+        E,K,U,T = EKUTs.T
+        
+        mean_T = np.mean(T)
+        self.assertClose(mean_T, 1.0, rtol=1e-1)
+        
+        som = np.std(E) / np.mean(E)
+        self.assertClose(som, 0.0, atol=1e-2)
+
+
+class RandomRigidConstraintTest(NPTestCase):
+    phi_ish = 0.3
+    N_per_mol = 4
+    N_mol = 6
     N = N_per_mol * N_mol
     dt = 0.01
     
@@ -126,7 +226,7 @@ class RandomRigidConstraintTest(NPTestCase):
         self.rigids = [sim3.RigidConstraint(self.box, s) for s in self.subgroups]
         collec = self.collec = sim3.collectionVerlet(self.box, self.atoms, self.dt, [self.hertz], [self.hertz.nlist()], self.rigids)
         
-        print(collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
+        print('EKUT:', collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
     
     def reset(self):
         np.random.seed(2460659162+1)
@@ -144,7 +244,7 @@ class RandomRigidConstraintTest(NPTestCase):
             a.f = np.random.normal(size=(3,))
         
         self.collec.scaleVelocitiesT(1.0)
-        for _ in range(1000):
+        for _ in range(10000):
             self.collec.timestep()
             self.collec.scaleVelocitiesT(1.0)
     
@@ -213,9 +313,7 @@ class RandomRigidConstraintTest(NPTestCase):
         E,K,U,T = EKUTs.T
         
         mean_T = np.mean(T)
-        print('T:', mean_T)
         self.assertClose(mean_T, 1.0, rtol=1e-1)
         
         som = np.std(E) / np.mean(E)
-        print('som:', som)
         self.assertClose(som, 0.0, atol=1e-2)
