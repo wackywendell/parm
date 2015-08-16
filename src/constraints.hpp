@@ -233,8 +233,6 @@ class linearConstraint : public constraint {
 };
 
 #ifdef VEC3D
-Matrix BestRotationMatrix(Eigen::Matrix<flt, Eigen::Dynamic, 3> &from, Eigen::Matrix<flt, Eigen::Dynamic, 3> &to);
-
 //! A class that enforces rigid-body dynamics
 class RigidConstraint : public constraint {
     private:

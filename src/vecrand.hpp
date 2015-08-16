@@ -138,4 +138,9 @@ long double toLD(double e);
 double fromLD(long double e);
 vector<long double> LDVector(vector<double> dists);
 
+
+#ifdef VEC3D
+Matrix best_rotation_matrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &to);
+#endif
+
 #endif

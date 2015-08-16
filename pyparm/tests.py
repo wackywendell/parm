@@ -98,7 +98,7 @@ class RigidConstraintCube(NPTestCase):
             a.x = loc
     
     def test_rotation(self):
-        m = sim3.BestRotationMatrix(self.locs, self.locs.dot(self.rotmatrix.T))
+        m = sim3.best_rotation_matrix(self.locs, self.locs.dot(self.rotmatrix.T))
         self.assertClose(m, self.rotmatrix)
     
     def test_rigid_matrix(self):

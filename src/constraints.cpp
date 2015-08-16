@@ -10,40 +10,6 @@ void finite_or_throw(T &m){
 }
 
 #ifdef VEC3D
-Matrix BestRotationMatrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &to) {
-    finite_or_throw(to);
-    finite_or_throw(from);
-    Eigen::JacobiSVD<Matrix> svd(from.adjoint() * to, Eigen::ComputeFullU | Eigen::ComputeFullV);
-    
-    Matrix VWprod(svd.matrixV() * svd.matrixU().adjoint());
-    if(!VWprod.allFinite()) {
-        std::cerr << "BestRotationMatrix ERROR" << std::endl;
-        std::cerr << "from:" << std::endl;
-        std::cerr << from << std:: endl;
-        std::cerr << "to:" << std::endl;
-        std::cerr << to << std:: endl;
-        
-        std::cerr << "U:" << std::endl;
-        std::cerr << svd.matrixU() << std:: endl;
-        std::cerr << "V:" << std::endl;
-        std::cerr << svd.matrixV() << std:: endl;
-        std::cerr << "VWprod:" << std::endl;
-        std::cerr << VWprod << std:: endl;
-    }
-    finite_or_throw(VWprod);
-    flt det = VWprod.determinant();
-    flt d = (det > 0.) ? 1. : 0.;
-    
-    Vec diagonal_vector;
-    for(uint i=0; i<NDIM-1; i++) diagonal_vector(i) = 1.0;
-    diagonal_vector(NDIM-1) = d;
-    Eigen::DiagonalMatrix<flt, NDIM> diag_d = diagonal_vector.asDiagonal();
-    
-    Matrix rot = (svd.matrixV()) * diag_d * (svd.matrixU().adjoint());
-    finite_or_throw(rot);
-    return rot;
-};
-
 RigidConstraint::RigidConstraint(sptr<Box> box, sptr<atomgroup> atms) :
     atms(atms), M(atms->mass()), MoI(atms->moment(atms->com())), MoI_inv(MoI.inverse()), expected(atms->size(), NDIM) {
     finite_or_throw(MoI);
@@ -65,13 +31,13 @@ Matrix RigidConstraint::get_rotation(){
     }
     finite_or_throw(expected);
     finite_or_throw(locs);
-    return BestRotationMatrix(expected, locs);
+    return best_rotation_matrix(expected, locs);
 }
 
 void RigidConstraint::apply(Box &box){
     Vec com = atms->com();
     Vec comv = atms->comv();
-    Vec comf = Vec();
+    Vec comf = Vec::Zero();
     
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
@@ -92,7 +58,7 @@ void RigidConstraint::apply(Box &box){
     
     
     finite_or_throw(locs);
-    Matrix rot = BestRotationMatrix(expected, locs);
+    Matrix rot = best_rotation_matrix(expected, locs);
     finite_or_throw(rot);
     
     Matrix I = atms->moment(com);
