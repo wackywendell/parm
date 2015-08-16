@@ -4941,6 +4941,10 @@ def LDVector(dists: 'dvector') -> "std::vector< long double,std::allocator< long
     """LDVector(dvector dists) -> ldvector"""
     return _sim3d.LDVector(dists)
 
+def best_rotation_matrix(arg1: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &', to: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &') -> "Matrix":
+    """best_rotation_matrix(Eigen::Matrix< flt,Eigen::Dynamic,3 > & arg1, Eigen::Matrix< flt,Eigen::Dynamic,3 > & to) -> Matrix"""
+    return _sim3d.best_rotation_matrix(arg1, to)
+
 def toBuffer(arr: 'std::vector< Vec *,std::allocator< Vec * > >', buffer: 'double *') -> "bool":
     """toBuffer(std::vector< Vec *,std::allocator< Vec * > > arr, double * buffer) -> bool"""
     return _sim3d.toBuffer(arr, buffer)
@@ -9859,10 +9863,6 @@ class linearConstraint(constraint):
 linearConstraint_swigregister = _sim3d.linearConstraint_swigregister
 linearConstraint_swigregister(linearConstraint)
 
-
-def BestRotationMatrix(arg1: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &', to: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &') -> "Matrix":
-    """BestRotationMatrix(Eigen::Matrix< flt,Eigen::Dynamic,3 > & arg1, Eigen::Matrix< flt,Eigen::Dynamic,3 > & to) -> Matrix"""
-    return _sim3d.BestRotationMatrix(arg1, to)
 class RigidConstraint(constraint):
     """Proxy of C++ RigidConstraint class"""
     __swig_setmethods__ = {}
