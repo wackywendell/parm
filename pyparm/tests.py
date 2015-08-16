@@ -98,9 +98,12 @@ class RigidConstraintCube(NPTestCase):
             a.x = loc
     
     def test_rotation(self):
+        m = sim3.BestRotationMatrix(self.locs, self.locs.dot(self.rotmatrix.T))
+        self.assertClose(m, self.rotmatrix)
+    
+    def test_rigid_matrix(self):
         m = self.rigid.get_rotation()
-        expected_m = self.rotmatrix
-        self.assertClose(m, expected_m)
+        self.assertClose(m, self.rotmatrix)
     
     def test_rigid(self):
         com = self.atoms.com()
