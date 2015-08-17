@@ -9664,9 +9664,19 @@ class constraint(_object):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(constraint self, Box box)"""
-        return _sim3d.constraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(constraint self, Box box)"""
+        return _sim3d.constraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(constraint self, Box box)"""
+        return _sim3d.constraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(constraint self, Box box)"""
+        return _sim3d.constraint_apply_forces(self, box)
 
 
     def ndof(self) -> "int":
@@ -9707,9 +9717,19 @@ class coordConstraint(constraint):
         return _sim3d.coordConstraint_ndof(self)
 
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(coordConstraint self, Box box)"""
-        return _sim3d.coordConstraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(coordConstraint self, Box box)"""
+        return _sim3d.coordConstraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(coordConstraint self, Box box)"""
+        return _sim3d.coordConstraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(coordConstraint self, Box box)"""
+        return _sim3d.coordConstraint_apply_forces(self, box)
 
     __swig_destroy__ = _sim3d.delete_coordConstraint
     __del__ = lambda self: None
@@ -9745,9 +9765,19 @@ class coordCOMConstraint(constraint):
         return _sim3d.coordCOMConstraint_ndof(self)
 
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(coordCOMConstraint self, Box box)"""
-        return _sim3d.coordCOMConstraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(coordCOMConstraint self, Box box)"""
+        return _sim3d.coordCOMConstraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(coordCOMConstraint self, Box box)"""
+        return _sim3d.coordCOMConstraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(coordCOMConstraint self, Box box)"""
+        return _sim3d.coordCOMConstraint_apply_forces(self, box)
 
     __swig_destroy__ = _sim3d.delete_coordCOMConstraint
     __del__ = lambda self: None
@@ -9783,9 +9813,19 @@ class relativeConstraint(constraint):
         return _sim3d.relativeConstraint_ndof(self)
 
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(relativeConstraint self, Box box)"""
-        return _sim3d.relativeConstraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(relativeConstraint self, Box box)"""
+        return _sim3d.relativeConstraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(relativeConstraint self, Box box)"""
+        return _sim3d.relativeConstraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(relativeConstraint self, Box box)"""
+        return _sim3d.relativeConstraint_apply_forces(self, box)
 
     __swig_destroy__ = _sim3d.delete_relativeConstraint
     __del__ = lambda self: None
@@ -9820,9 +9860,19 @@ class distConstraint(constraint):
         return _sim3d.distConstraint_ndof(self)
 
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(distConstraint self, Box box)"""
-        return _sim3d.distConstraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(distConstraint self, Box box)"""
+        return _sim3d.distConstraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(distConstraint self, Box box)"""
+        return _sim3d.distConstraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(distConstraint self, Box box)"""
+        return _sim3d.distConstraint_apply_forces(self, box)
 
     __swig_destroy__ = _sim3d.delete_distConstraint
     __del__ = lambda self: None
@@ -9854,9 +9904,19 @@ class linearConstraint(constraint):
         return _sim3d.linearConstraint_ndof(self)
 
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(linearConstraint self, Box box)"""
-        return _sim3d.linearConstraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(linearConstraint self, Box box)"""
+        return _sim3d.linearConstraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(linearConstraint self, Box box)"""
+        return _sim3d.linearConstraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(linearConstraint self, Box box)"""
+        return _sim3d.linearConstraint_apply_forces(self, box)
 
     __swig_destroy__ = _sim3d.delete_linearConstraint
     __del__ = lambda self: None
@@ -9888,9 +9948,19 @@ class RigidConstraint(constraint):
         return _sim3d.RigidConstraint_ndof(self)
 
 
-    def apply(self, box: 'Box') -> "void":
-        """apply(RigidConstraint self, Box box)"""
-        return _sim3d.RigidConstraint_apply(self, box)
+    def apply_positions(self, box: 'Box') -> "void":
+        """apply_positions(RigidConstraint self, Box box)"""
+        return _sim3d.RigidConstraint_apply_positions(self, box)
+
+
+    def apply_velocities(self, box: 'Box') -> "void":
+        """apply_velocities(RigidConstraint self, Box box)"""
+        return _sim3d.RigidConstraint_apply_velocities(self, box)
+
+
+    def apply_forces(self, box: 'Box') -> "void":
+        """apply_forces(RigidConstraint self, Box box)"""
+        return _sim3d.RigidConstraint_apply_forces(self, box)
 
 
     def get_rotation(self) -> "Matrix":
@@ -12717,12 +12787,12 @@ class collection(_object):
         return _sim3d.collection_initialize(self)
 
 
-    def setForces(self, seta: 'bool'=True) -> "void":
+    def setForces(self, constraints_and_a: 'bool'=True) -> "void":
         """
-        setForces(collection self, bool seta=True)
+        setForces(collection self, bool constraints_and_a=True)
         setForces(collection self)
         """
-        return _sim3d.collection_setForces(self, seta)
+        return _sim3d.collection_setForces(self, constraints_and_a)
 
 
     def timestep(self) -> "void":
@@ -13112,130 +13182,6 @@ class collectionOverdamped(collection):
 collectionOverdamped_swigregister = _sim3d.collectionOverdamped_swigregister
 collectionOverdamped_swigregister(collectionOverdamped)
 
-class collectionConjGradient(collection):
-    """Proxy of C++ collectionConjGradient class"""
-    __swig_setmethods__ = {}
-    for _s in [collection]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionConjGradient, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collection]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionConjGradient, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(collectionConjGradient self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionConjGradient
-        __init__(collectionConjGradient self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionConjGradient
-        __init__(collectionConjGradient self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionConjGradient
-        __init__(collectionConjGradient self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionConjGradient
-        """
-        this = _sim3d.new_collectionConjGradient(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def timestep(self) -> "void":
-        """timestep(collectionConjGradient self)"""
-        return _sim3d.collectionConjGradient_timestep(self)
-
-
-    def timestepNewton(self) -> "void":
-        """timestepNewton(collectionConjGradient self)"""
-        return _sim3d.collectionConjGradient_timestepNewton(self)
-
-
-    def reset(self) -> "void":
-        """reset(collectionConjGradient self)"""
-        return _sim3d.collectionConjGradient_reset(self)
-
-
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionConjGradient self, flt newdt)"""
-        return _sim3d.collectionConjGradient_setdt(self, newdt)
-
-    __swig_destroy__ = _sim3d.delete_collectionConjGradient
-    __del__ = lambda self: None
-collectionConjGradient_swigregister = _sim3d.collectionConjGradient_swigregister
-collectionConjGradient_swigregister(collectionConjGradient)
-
-class collectionConjGradientBox(collection):
-    """Proxy of C++ collectionConjGradientBox class"""
-    __swig_setmethods__ = {}
-    for _s in [collection]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionConjGradientBox, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collection]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionConjGradientBox, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(collectionConjGradientBox self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, flt const kappaV=1.0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, flt const kappaV=1.0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, flt const kappaV=1.0, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, flt const kappaV=1.0) -> collectionConjGradientBox
-        __init__(collectionConjGradientBox self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0) -> collectionConjGradientBox
-        """
-        this = _sim3d.new_collectionConjGradientBox(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def kinetic(self) -> "flt":
-        """kinetic(collectionConjGradientBox self) -> flt"""
-        return _sim3d.collectionConjGradientBox_kinetic(self)
-
-
-    def timestep(self) -> "void":
-        """timestep(collectionConjGradientBox self)"""
-        return _sim3d.collectionConjGradientBox_timestep(self)
-
-
-    def timestepBox(self) -> "void":
-        """timestepBox(collectionConjGradientBox self)"""
-        return _sim3d.collectionConjGradientBox_timestepBox(self)
-
-
-    def timestepAtoms(self) -> "void":
-        """timestepAtoms(collectionConjGradientBox self)"""
-        return _sim3d.collectionConjGradientBox_timestepAtoms(self)
-
-
-    def reset(self) -> "void":
-        """reset(collectionConjGradientBox self)"""
-        return _sim3d.collectionConjGradientBox_reset(self)
-
-
-    def resize(self, V: 'flt') -> "void":
-        """resize(collectionConjGradientBox self, flt V)"""
-        return _sim3d.collectionConjGradientBox_resize(self, V)
-
-
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionConjGradientBox self, flt newdt)"""
-        return _sim3d.collectionConjGradientBox_setdt(self, newdt)
-
-
-    def setP(self, P: 'flt') -> "void":
-        """setP(collectionConjGradientBox self, flt P)"""
-        return _sim3d.collectionConjGradientBox_setP(self, P)
-
-
-    def setMaxdV(self, diff: 'flt') -> "void":
-        """setMaxdV(collectionConjGradientBox self, flt diff)"""
-        return _sim3d.collectionConjGradientBox_setMaxdV(self, diff)
-
-    __swig_destroy__ = _sim3d.delete_collectionConjGradientBox
-    __del__ = lambda self: None
-collectionConjGradientBox_swigregister = _sim3d.collectionConjGradientBox_swigregister
-collectionConjGradientBox_swigregister(collectionConjGradientBox)
-
 class collectionNLCG(collection):
     """Proxy of C++ collectionNLCG class"""
     __swig_setmethods__ = {}
@@ -13400,9 +13346,9 @@ class collectionNLCG(collection):
 
     def setForces(self, *args) -> "void":
         """
-        setForces(collectionNLCG self, bool seta=True)
+        setForces(collectionNLCG self, bool constraints_and_a=True)
         setForces(collectionNLCG self)
-        setForces(collectionNLCG self, bool seta, bool setV)
+        setForces(collectionNLCG self, bool constraints_and_a, bool setV)
         """
         return _sim3d.collectionNLCG_setForces(self, *args)
 
@@ -13756,9 +13702,9 @@ class collectionGaussianT(collection):
 
     def setForces(self, *args) -> "void":
         """
-        setForces(collectionGaussianT self, bool seta=True)
+        setForces(collectionGaussianT self, bool constraints_and_a=True)
         setForces(collectionGaussianT self)
-        setForces(collectionGaussianT self, bool seta, bool setxi)
+        setForces(collectionGaussianT self, bool constraints_and_a, bool setxi)
         """
         return _sim3d.collectionGaussianT_setForces(self, *args)
 
@@ -14246,12 +14192,12 @@ class collectionGear4NPT(collection):
         except:
             self.this = this
 
-    def setForces(self, seta: 'bool'=True) -> "void":
+    def setForces(self, constraints_and_a: 'bool'=True) -> "void":
         """
-        setForces(collectionGear4NPT self, bool seta=True)
+        setForces(collectionGear4NPT self, bool constraints_and_a=True)
         setForces(collectionGear4NPT self)
         """
-        return _sim3d.collectionGear4NPT_setForces(self, seta)
+        return _sim3d.collectionGear4NPT_setForces(self, constraints_and_a)
 
 
     def timestep(self) -> "void":
