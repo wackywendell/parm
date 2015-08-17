@@ -9,19 +9,221 @@ void finite_or_throw(T &m){
     }
 }
 
+void coordCOMConstraint::apply_positions(Box &box){
+    Vec com = a->com() - loc;
+    
+    for(uint i=0; i< a->size(); i++){
+        atom &atm = (*a)[i];
+        for(uint j=0; j<3; j++){
+            if(not fixed[j]) continue;
+            atm.x[j] -= com[j];
+        }
+    }
+}
+
+void coordCOMConstraint::apply_velocities(Box &box){
+    Vec comv = a->comv();
+    
+    for(uint i=0; i< a->size(); i++){
+        atom &atm = (*a)[i];
+        for(uint j=0; j<3; j++){
+            if(not fixed[j]) continue;
+            atm.v[j] -= comv[j];
+        }
+    }
+}
+
+void coordCOMConstraint::apply_forces(Box &box){
+    Vec totf = Vec::Zero();
+    for(uint i=0; i< a->size(); i++){
+        totf += (*a)[i].f;
+    }
+    Vec tota = totf / a->mass();
+    
+    for(uint i=0; i< a->size(); i++){
+        atom &atm = (*a)[i];
+        Vec df = (tota * (atm.m));
+        for(uint j=0; j<3; j++){
+            if(not fixed[j]) continue;
+            atm.f[j] -= df[j];
+        }
+    }
+}
+
+void relativeConstraint::apply_positions(Box &box){
+    Vec dx = a2->x - a1->x;
+    for(uint i=0; i<NDIM; i++){
+        if(not fixed[i]) continue;
+        a1->x[i] += dx[i]/2;
+        a2->x[i] -= dx[i]/2;
+        assert(abs(a2->x[i] - a1->x[i]) < 1e-5);
+    }
+}
+
+void relativeConstraint::apply_velocities(Box &box){
+    Vec dv = a2->v - a1->v;
+    for(uint i=0; i<NDIM; i++){
+        if(not fixed[i]) continue;
+        a1->v[i] += dv[i]/2;
+        a2->v[i] -= dv[i]/2;
+        assert(abs(a2->v[i] - a1->v[i]) < 1e-5);
+    }
+}
+
+void relativeConstraint::apply_forces(Box &box){
+    flt mratio1 = a1->m / (a1->m + a2->m);
+    flt mratio2 = a2->m / (a1->m + a2->m);
+    Vec totf = a2->f + a1->f;
+    for(uint i=0; i<NDIM; i++){
+        if(not fixed[i]) continue;
+        a1->f[i] = totf[i]*mratio1;
+        a2->f[i] = totf[i]*mratio2;
+    }
+}
+
+void distConstraint::apply_positions(Box &box){
+    flt M = (a1->m + a2->m);
+    flt mratio1 = a1->m / M;
+    flt mratio2 = a2->m / M;
+    
+    Vec dx = a2->x - a1->x;
+    flt dxmag = dx.norm();
+    
+    a1->x += dx * ((1 - dist/dxmag)*mratio2);
+    a2->x -= dx * ((1 - dist/dxmag)*mratio1);
+}
+
+void distConstraint::apply_velocities(Box &box){
+    Vec dx = a2->x - a1->x;
+    flt dxmag = dx.norm();
+    Vec dxnorm = dx / dxmag;
+    
+    Vec baddv = dxnorm * ((a2->v - a1->v).dot(dxnorm)/2);
+    a1->v += baddv;
+    a2->v -= baddv;
+    if((a2->v - a1->v).dot(dxnorm) > 1e-8){
+        throw std::overflow_error("Velocities are not minimal.");
+    }
+}
+
+void distConstraint::apply_forces(Box &box){
+    flt M = (a1->m + a2->m);
+    flt mratio1 = a1->m / M;
+    flt mratio2 = a2->m / M;
+    
+    Vec dx = a2->x - a1->x;
+    flt dxmag = dx.norm();
+    Vec dxnorm = dx / dxmag;
+    
+    a1->x += dx * ((1 - dist/dxmag)*mratio2);
+    a2->x -= dx * ((1 - dist/dxmag)*mratio1);
+    
+    // TODO: Fix mass ratio stuff
+    Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
+    a1->f += baddf;
+    a2->f -= baddf;
+    // assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
+    if((a2->f - a1->f).dot(dxnorm) > 1e-8){
+        throw std::overflow_error("Forces are not minimal.");
+    }
+}
+
+void linearConstraint::set_lvec_com(){
+    com = atms->com();
+    uint sz = atms->size();
+    lvec = Vec::Zero();
+    
+    for(uint i = 0; i < sz; i++){
+        flt chaindist = i * dist - lincom;
+        atom& ai = (*atms)[i];
+        Vec dx = ai.x - com;
+        lvec += dx.normalized() * chaindist;
+    }
+    
+    lvec.normalize();
+}
+
+void linearConstraint::apply_positions(Box &box){
+    set_lvec_com();
+    uint sz = atms->size();
+    
+    for(uint i = 0; i < sz; i++){
+        flt chaindist = i * dist - lincom;
+        Vec dx = lvec*chaindist;
+        atom& ai = (*atms)[i];
+        ai.x = com + dx;
+    }
+}
+
+void linearConstraint::apply_velocities(Box &box){
+    Vec comv = atms->comv();
+    
+    uint sz = atms->size();
+    #ifdef VEC3D
+    Vec L = Vec::Zero();
+    Vec omega  = Vec::Zero();
+    #else
+    flt L = 0;
+    flt omega = 0;
+    #endif
+    
+    for(uint i = 0; i < sz; i++){
+        atom& ai = (*atms)[i];
+        Vec dx = ai.x - com;
+        L += cross(dx, ai.v) * ai.m;
+    }
+    
+    lvec.normalize();
+    omega = L / I;
+    
+    for(uint i = 0; i < sz; i++){
+        flt chaindist = i * dist - lincom;
+        Vec dx = lvec*chaindist;
+        atom& ai = (*atms)[i];
+        ai.v = comv + cross(dx, omega);
+    }
+}
+
+void linearConstraint::apply_forces(Box &box){
+    Vec comf = Vec::Zero();
+    
+    uint sz = atms->size();
+    #ifdef VEC3D
+    Vec tau = Vec::Zero();
+    Vec alpha = Vec::Zero();
+    #else
+    flt tau = 0;
+    flt alpha = 0;
+    #endif
+    
+    for(uint i = 0; i < sz; i++){
+        flt chaindist = i * dist - lincom;
+        Vec dx = lvec*chaindist;
+        atom& ai = (*atms)[i];
+        comf += ai.f;
+        tau += cross(dx, ai.f);
+    }
+    alpha = tau / I;
+    
+    for(uint i = 0; i < sz; i++){
+        flt chaindist = i * dist - lincom;
+        Vec dx = lvec*chaindist;
+        atom& ai = (*atms)[i];
+        ai.f = comf + (cross(dx, alpha)*ai.m);
+    }
+}
+
 #ifdef VEC3D
 RigidConstraint::RigidConstraint(sptr<Box> box, sptr<atomgroup> atms) :
-    atms(atms), M(atms->mass()), MoI(atms->moment(atms->com())), MoI_inv(MoI.inverse()), expected(atms->size(), NDIM) {
+    atms(atms), M(atms->mass()), MoI(atms->moment(atms->com())), MoI_solver(MoI, Eigen::ComputeFullU | Eigen::ComputeFullV), expected(atms->size(), NDIM), rot(Matrix::Identity()), com(atms->com()), omega(Vec::Zero()), alpha(Vec::Zero()) {
     finite_or_throw(MoI);
-    finite_or_throw(MoI_inv);
-    Vec com = atms->com();
     for(uint i = 0; i < atms->size(); i++){
         expected.row(i) = ((*atms)[i].x - com);
     };
 };
 
 Matrix RigidConstraint::get_rotation(){
-    Vec com = atms->com();
+    com = atms->com();
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
     for(uint i = 0; i < sz; i++){
@@ -34,68 +236,85 @@ Matrix RigidConstraint::get_rotation(){
     return best_rotation_matrix(expected, locs);
 }
 
-void RigidConstraint::apply(Box &box){
-    Vec com = atms->com();
-    Vec comv = atms->comv();
-    Vec comf = Vec::Zero();
+void RigidConstraint::apply_positions(Box &box){
+    com = atms->com();
     
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
-    
-    Vec L = Vec::Zero();
-    Vec tau = Vec::Zero();
     
     for(uint i = 0; i < sz; i++){
         atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
         locs.row(i) = dx;
-        comf += ai.f;
+    }
+    
+    rot = best_rotation_matrix(expected, locs);
+    
+    for(uint i = 0; i < sz; i++){
+        Vec loc(expected.row(i));
+        Vec dx(rot * loc);
+        atom& ai = (*atms)[i];
+        ai.x = com + dx;
+    }
+}
+
+void RigidConstraint::apply_velocities(Box &box){
+    Vec comv = atms->comv();
+    uint sz = atms->size();
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
+    
+    Vec L = Vec::Zero();
+    
+    for(uint i = 0; i < sz; i++){
+        atom& ai = (*atms)[i];
+        Vec dx = ai.x - com;
         
         // L = sum((r - R) × m v)
         L += cross(dx, ai.v) * ai.m;     // L, L/T, M -> L²M/T 
+    }
+    
+    omega = Vec(rot * MoI_solver.solve(rot.adjoint() * L));
+    // Vec omega((I_inv * L).transpose());             // 1/ML², L²M/T -> 1/T
+    
+    for(uint i = 0; i < sz; i++){
+        Vec loc(expected.row(i));
+        Vec dx(rot * loc);
+        atom& ai = (*atms)[i];
+        finite_or_throw(ai.x);
+        Vec omega_cross_r = cross(omega, dx);
+        ai.v = comv + omega_cross_r; // L/T + L/T; V + ω × r
+    }
+}
+
+void RigidConstraint::apply_forces(Box &box){
+    Vec comf = Vec::Zero();
+    
+    uint sz = atms->size();
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
+    
+    Vec tau = Vec::Zero();
+    
+    for(uint i = 0; i < sz; i++){
+        atom& ai = (*atms)[i];
+        Vec dx = ai.x - com;
+        comf += ai.f;
+        
+        // L = sum((r - R) × m v)
         tau += cross(dx, ai.f);          // L, ML/T² -> ML²/T²
     }
     
     
-    finite_or_throw(locs);
-    Matrix rot = best_rotation_matrix(expected, locs);
-    finite_or_throw(rot);
-    
-    Matrix I = atms->moment(com);
-    // We know L = I ω, so we could try ω = I¯¹ L.
-    // However, this often fails badly.
-    // Its better to do ω = I.solve(L), as that is much more precise.
-    Eigen::JacobiSVD<Matrix> svd(I, Eigen::ComputeFullU | Eigen::ComputeFullV);
-    // Matrix I_inv = I.inverse();
-    
-    Vec omega(svd.solve(L));
-    // Vec omega((I_inv * L).transpose());             // 1/ML², L²M/T -> 1/T
-    finite_or_throw(omega);
-    Vec alpha(svd.solve(tau));
+    alpha = Vec(rot * MoI_solver.solve(rot.adjoint() * tau));
     // Vec alpha((I_inv * tau).transpose());           // 1/ML², ML²/T² -> 1/T²
-    finite_or_throw(alpha);
     Vec comf_M = comf / M;              // L/T²
-    // std::cout << "rot:" << std::endl;
-    // std::cout << rot << std::endl;
     
     for(uint i = 0; i < sz; i++){
         Vec loc(expected.row(i));
-        finite_or_throw(loc);
         Vec dx(rot * loc);
-        finite_or_throw(dx);
         atom& ai = (*atms)[i];
         ai.x = com + dx;
-        finite_or_throw(ai.x);
         Vec omega_cross_r = cross(omega, dx);
-        ai.v = comv + omega_cross_r; // L/T + L/T; V + ω × r
-        finite_or_throw(ai.v);
-        
-        // Should we have the ω × (ω × r) term? I don't know.
-        // Why do we divide by 2? I don't know either, but it works really
-        // well with velocity verlet at conserving energy.
-        ai.f = (comf_M + cross(alpha, dx) + cross(omega, omega_cross_r)/2.)*ai.m; // (L/T² + L/T²) M; V + α × r
-        //
-        finite_or_throw(ai.f);
+        ai.f = (comf_M + cross(alpha, dx) + cross(omega, omega_cross_r))*ai.m; // (L/T² + L/T²) M; V + α × r
     }
 }
 #endif

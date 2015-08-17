@@ -84,7 +84,7 @@ class RigidConstraintCube(NPTestCase):
     def setUp(self):
         np.random.seed(self.seed)
         self.locs -= np.sum(self.locs.T*self.masses, axis=1).T/self.M
-        self.infbox = sim3.InfiniteBox()
+        self.box = sim3.InfiniteBox()
         self.atoms = sim3.atomvec(self.masses)
         vs = np.random.normal(size=np.shape(self.locs)) if self.vs is None else self.vs
         fs = np.random.normal(size=np.shape(self.locs)) if self.fs is None else self.fs
@@ -92,7 +92,7 @@ class RigidConstraintCube(NPTestCase):
             a.x = loc
             a.v = v
             a.f = f
-        self.rigid = sim3.RigidConstraint(self.infbox, self.atoms)
+        self.rigid = sim3.RigidConstraint(self.box, self.atoms)
         self.rotmatrix = axangle2mat(self.axis, self.dtheta)
         for a, loc in zip(self.atoms, self.locs.dot(self.rotmatrix.T)):
             a.x = loc
@@ -107,14 +107,16 @@ class RigidConstraintCube(NPTestCase):
     
     def test_rigid(self):
         com = self.atoms.com()
-        comv = self.atoms.comv()
-        comf = self.atoms.comf()
         mom = self.atoms.moment(com)
+        self.rigid.apply_positions(self.box)
+        comv = self.atoms.comv()
         omega = self.atoms.omega(com)
         angm = self.atoms.angmomentum(com)
-        torq = self.atoms.torque(com)
         K = self.atoms.kinetic(comv)
-        self.rigid.apply(self.infbox)
+        self.rigid.apply_velocities(self.box)
+        comf = self.atoms.comf()
+        torq = self.atoms.torque(com)
+        self.rigid.apply_forces(self.box)
 
         com2 = self.atoms.com()
         comv2 = self.atoms.comv()
@@ -348,15 +350,16 @@ class RandomRigidConstraintTest(NPTestCase):
             collec.timestep()
         for s, rigid in zip(self.subgroups, self.rigids):
             com = s.com()
-            comv = s.comv()
-            comf = s.comf()
             mom = s.moment(com)
+            rigid.apply_positions(self.box)
+            comv = s.comv()
             omega = s.omega(com)
             angm = s.angmomentum(com)
-            torq = s.torque(com)
             K = s.kinetic(comv)
-            KU = (collec.kinetic(), collec.potentialenergy())
-            rigid.apply(self.box)
+            rigid.apply_velocities(self.box)
+            comf = s.comf()
+            torq = s.torque(com)
+            rigid.apply_forces(self.box)
 
             com2 = s.com()
             comv2 = s.comv()
@@ -366,18 +369,18 @@ class RandomRigidConstraintTest(NPTestCase):
             omega2 = s.omega(com2)
             torq2 = s.torque(com2)
             K2 = s.kinetic(comv2)
-            KU2 = (collec.kinetic(), collec.potentialenergy())
             
             self.assertClose(com, com2)
             self.assertClose(comv, comv2)
             self.assertClose(comf, comf2)
-            self.assertClose(K, K2)
-            self.assertClose(KU, KU2)
+            # Kinetic energy is not conserved, as velocities away from each other 
+            # are removed.
+            #self.assertClose(K, K2)
             self.assertClose(comf, comf2)
             self.assertClose(angm, angm2)
             self.assertClose(mom, mom2)
             self.assertClose(omega, omega2)
-            # Torque is actually not conserved.
+            # Torque is actually not conserved. Not sure why.
             # self.assertClose(torq, torq2)
     
     def testEnergy(self):

@@ -16,7 +16,9 @@ typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure 
 
 class constraint {
     public:
-        virtual void apply(Box &box) = 0;
+        virtual void apply_positions(Box &box) = 0;
+        virtual void apply_velocities(Box &box) = 0;
+        virtual void apply_forces(Box &box) = 0;
         virtual int ndof() = 0;
         virtual ~constraint(){};
 };
@@ -34,12 +36,22 @@ class coordConstraint : public constraint {
         coordConstraint(atom* atm) :
             a(atm), loc(a->x) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box &box){
+        void apply_positions(Box &box){
+            for(uint i=0; i<3; i++){
+                if(not fixed[i]) continue;
+                a->x[i] = loc[i];
+            }
+        }
+        void apply_velocities(Box &box){
+            for(uint i=0; i<3; i++){
+                if(not fixed[i]) continue;
+                a->v[i] = 0;
+            }
+        }
+        void apply_forces(Box &box){
             for(uint i=0; i<3; i++){
                 if(not fixed[i]) continue;
                 a->f[i] = 0;
-                a->v[i] = 0;
-                a->x[i] = loc[i];
             }
         }
 };
@@ -57,26 +69,9 @@ class coordCOMConstraint : public constraint {
         coordCOMConstraint(sptr<atomgroup> atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box &box){
-            Vec com = a->com() - loc;
-            Vec comv = a->comv();
-            Vec totf = Vec::Zero();
-            for(uint i=0; i< a->size(); i++){
-                totf += (*a)[i].f;
-            }
-            Vec tota = totf / a->mass();
-            
-            for(uint i=0; i< a->size(); i++){
-                atom &atm = (*a)[i];
-                Vec df = (tota * (atm.m));
-                for(uint j=0; j<3; j++){
-                    if(not fixed[j]) continue;
-                    atm.f[j] -= df[j];
-                    atm.v[j] -= comv[j];
-                    atm.x[j] -= com[j];
-                }
-            }
-        }
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 class relativeConstraint : public constraint {
@@ -95,24 +90,10 @@ class relativeConstraint : public constraint {
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box &box){
-            flt mratio1 = a1->m / (a1->m + a2->m);
-            flt mratio2 = a2->m / (a1->m + a2->m);
-            Vec totf = a2->f + a1->f;
-            Vec dv = a2->v - a1->v;
-            Vec dx = a2->x - a1->x;
-            for(uint i=0; i<NDIM; i++){
-                if(not fixed[i]) continue;
-                a1->f[i] = totf[i]*mratio1;
-                a2->f[i] = totf[i]*mratio2;
-                a1->v[i] += dv[i]/2;
-                a2->v[i] -= dv[i]/2;
-                a1->x[i] += dx[i]/2;
-                a2->x[i] -= dx[i]/2;
-                assert(abs(a2->v[i] - a1->v[i]) < 1e-5);
-                assert(abs(a2->x[i] - a1->x[i]) < 1e-5);
-            }
-        }
+        
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 class distConstraint : public constraint {
@@ -125,45 +106,9 @@ class distConstraint : public constraint {
         distConstraint(atomid atm1, atomid atm2) :
             a1(atm1), a2(atm2), dist((a1->x - a2->x).norm()){};
         int ndof(){return 1;};
-        void apply(Box &box){
-            flt M = (a1->m + a2->m);
-            flt mratio1 = a1->m / M;
-            flt mratio2 = a2->m / M;
-            
-            Vec dx = a2->x - a1->x;
-            flt dxmag = dx.norm();
-            Vec dxnorm = dx / dxmag;
-            
-            a1->x += dx * ((1 - dist/dxmag)*mratio2);
-            a2->x -= dx * ((1 - dist/dxmag)*mratio1);
-            //~ dx = a2->x - a1->x;
-            //~ dxmag = dx.norm();
-            //~ dxnorm = dx / dxmag; dxnorm should still be the same
-            
-            Vec baddv = dxnorm * ((a2->v - a1->v).dot(dxnorm)/2);
-            a1->v += baddv;
-            a2->v -= baddv;
-            
-            // newv2 • u = v2 - |baddv|
-            // newv1 • u = v1 + |baddv|
-            // (newv2 - newv1) • u = (v2 - v1 - (2*baddv)) • u
-            //                     = ((v2 - v1)•u - (2*baddv)•u)
-            //                     = (|baddv|*2 - |baddv|*2) = 0
-            // assert((a2->v - a1->v).dot(dxnorm) < 1e-8);
-            if((a2->v - a1->v).dot(dxnorm) > 1e-8){
-                throw std::overflow_error("Velocities are not minimal.");
-            }
-            
-            // TODO: Fix mass ratio stuff
-            Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
-            a1->f += baddf;
-            a2->f -= baddf;
-            // assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
-            if((a2->f - a1->f).dot(dxnorm) > 1e-8){
-                throw std::overflow_error("Forces are not minimal.");
-            }
-            
-        }
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 
@@ -172,9 +117,12 @@ class linearConstraint : public constraint {
         sptr<atomgroup> atms;
         flt dist;
         flt lincom, I, M;
+        Vec lvec, com;
+        
+        void set_lvec_com();
     public:
         linearConstraint(sptr<atomgroup> atms, flt dist) :
-            atms(atms), dist(dist), lincom(0), I(0), M(0) {
+            atms(atms), dist(dist), lincom(0), I(0), M(0), lvec(Vec::Zero()), com(Vec::Zero()) {
             for(uint i = 0; i < atms->size(); i++){
                 M += (*atms)[i].m;
                 lincom += (dist*i)*(*atms)[i].m;
@@ -185,51 +133,13 @@ class linearConstraint : public constraint {
                 flt dx = (dist*i - lincom);
                 I += (*atms)[i].m * dx * dx;
             }
+            
+            set_lvec_com();
         };
         int ndof(){return (int)atms->size()-1;};
-        
-        void apply(Box &box){
-            Vec com = atms->com();
-            Vec comv = atms->comv();
-            Vec comf = Vec::Zero();
-            
-            uint sz = atms->size();
-            Vec lvec = Vec::Zero();
-            #ifdef VEC3D
-            Vec L = Vec::Zero();
-            Vec omega  = Vec::Zero();
-            Vec tau = Vec::Zero();
-            Vec alpha = Vec::Zero();
-            #else
-            flt L = 0;
-            flt omega = 0;
-            flt tau = 0;
-            flt alpha = 0;
-            #endif
-            
-            for(uint i = 0; i < sz; i++){
-                flt chaindist = i * dist - lincom;
-                atom& ai = (*atms)[i];
-                Vec dx = ai.x - com;
-                comf += ai.f;
-                lvec += dx.normalized() * chaindist;
-                L += cross(dx, ai.v) * ai.m;
-                tau += cross(dx, ai.f);
-            }
-            
-            lvec.normalize();
-            omega = L / I;
-            alpha = tau / I;
-            
-            for(uint i = 0; i < sz; i++){
-                flt chaindist = i * dist - lincom;
-                Vec dx = lvec*chaindist;
-                atom& ai = (*atms)[i];
-                ai.x = com + dx;
-                ai.v = comv + cross(dx, omega);
-                ai.f = comf + (cross(dx, alpha)*ai.m);
-            }
-        }
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 #ifdef VEC3D
@@ -238,19 +148,31 @@ class RigidConstraint : public constraint {
     private:
         sptr<atomgroup> atms;
         flt M;
+        
         // moment of inertia matrix
         Matrix MoI;
         // moment of inertia matrix inverse
-        Matrix MoI_inv;
+        Eigen::JacobiSVD<Matrix> MoI_solver;
         // locations relative to center of mass, no rotation
         Eigen::Matrix<flt, Eigen::Dynamic, 3> expected; 
+        
+        // updated at every apply_positions()
+        // Curent rotation matrix
+        Matrix rot;
+        // center of mass
+        Vec com;
+        // Angular velocity, acceleration
+        Vec omega, alpha;
+        
     public:
         RigidConstraint(sptr<Box> box, sptr<atomgroup> atms);
         
         //TODO: should probably handle cases with atms.size() < 3
         int ndof(){return (int)atms->size() * NDIM-6;};
         
-        void apply(Box &box);
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
         Matrix get_rotation();
         Matrix get_MoI(){return MoI;};
 };

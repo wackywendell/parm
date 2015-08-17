@@ -11,8 +11,9 @@ collection::collection(sptr<Box> box, sptr<atomgroup> atoms, vector<sptr<interac
 
 void collection::initialize(){
     update_trackers();
+    update_constraint_positions();
+    update_constraint_velocities();
     setForces(true);
-    update_constraints();
     update_trackers();
 }
 
@@ -45,13 +46,26 @@ void collection::update_trackers(){
     }
 }
 
-void collection::update_constraints(){
+void collection::update_constraint_positions(){
     vector<sptr<constraint> >::iterator git;
     for(git = constraints.begin(); git<constraints.end(); ++git){
-        (*git)->apply(*box);
+        (*git)->apply_positions(*box);
     }
 }
 
+void collection::update_constraint_velocities(){
+    vector<sptr<constraint> >::iterator git;
+    for(git = constraints.begin(); git<constraints.end(); ++git){
+        (*git)->apply_velocities(*box);
+    }
+}
+
+void collection::update_constraint_forces(){
+    vector<sptr<constraint> >::iterator git;
+    for(git = constraints.begin(); git<constraints.end(); ++git){
+        (*git)->apply_forces(*box);
+    }
+}
 
 flt collection::virial(){
     flt E = 0;
@@ -138,7 +152,7 @@ flt collection::gyradius(){
     return sqrt(Rgsq/N);
 }
 
-void collection::setForces(bool seta){
+void collection::setForces(bool constraints_and_a){
     atoms->resetForces();
     
     vector<sptr<interaction> >::iterator it;
@@ -147,7 +161,8 @@ void collection::setForces(bool seta){
         inter.setForces(*box);
     }
 
-    if(!seta) return;
+    if(!constraints_and_a) return;
+    update_constraint_forces();
     
     for(uint i=0; i<atoms->size(); i++){
         atom &a = (*atoms)[i];
@@ -159,7 +174,7 @@ void collection::setForces(bool seta){
     }
 }
 
-flt collection::setForcesGetPressure(bool seta){
+flt collection::setForcesGetPressure(bool constraints_and_a){
     atoms->resetForces();
     
     flt p=0;
@@ -167,6 +182,9 @@ flt collection::setForcesGetPressure(bool seta){
     for(it = interactions.begin(); it<interactions.end(); ++it){
         interaction &inter = **it;
         p += inter.setForcesGetPressure(*box);
+    }
+    if(constraints_and_a){
+        update_constraint_forces();
     }
     assert(!isnan(p));
     
@@ -176,11 +194,11 @@ flt collection::setForcesGetPressure(bool seta){
             a.a = Vec::Zero();
             continue;
         }
-        if(seta){
+        if(constraints_and_a){
             a.a = a.f / a.m;
         }
     }
-
+    
     assert(!isnan(p));
     return p;
 }
@@ -260,9 +278,11 @@ void collectionSol::timestep(){
             //~ << ", dvG: " << vecpair[1].norm()
             //~ << "\n";
     }
+    update_constraint_positions();
+    
     // Now we set forces and accelerations
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     for(uint i=0; i<m.size(); i++){
         if(m[i].m == 0 or isinf(m[i].m)){
             m[i].a = Vec::Zero();
@@ -279,6 +299,7 @@ void collectionSol::timestep(){
         }
         m[i].v += m[i].a * (dt*c2);
     }
+    update_constraint_velocities();
     
     update_trackers();
 };
@@ -320,16 +341,10 @@ void collectionDamped::timestep(){
         m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt);
         m[i].v = m[i].v*c0 + m[i].a * (dt*(c1-c2));
     }
+    
+    update_constraint_positions();
     // Now we set forces and accelerations
-    setForces(false);
-    update_constraints();
-    for(uint i=0; i<m.size(); i++){
-        if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].a = Vec::Zero();
-            continue;
-        }
-        m[i].a = m[i].f / m[i].m;
-    }
+    setForces(true);
     
     // And finish m[i].v
     for(uint i=0; i<m.size(); i++){
@@ -338,6 +353,7 @@ void collectionDamped::timestep(){
         }
     m[i].v += m[i].a * (dt*c2);
     }
+    update_constraint_velocities();
     
     update_trackers();
 };
@@ -407,9 +423,11 @@ void collectionVerlet::timestep(){
         m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
         m[i].v += m[i].a * (dt/2);
     }
+    
+    update_constraint_positions();
     // Now we set forces and accelerations
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
             m[i].a = Vec::Zero();
@@ -420,12 +438,14 @@ void collectionVerlet::timestep(){
         m[i].v += m[i].a * (dt/2);
     }
     
+    
+    update_constraint_velocities();
     update_trackers();
 }
 
 void collectionOverdamped::timestep(){
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     atomgroup &m = *atoms;
     for(uint i=0; i<m.size(); i++){
         if(m[i].m <= 0 or isinf(m[i].m)){
@@ -435,267 +455,14 @@ void collectionOverdamped::timestep(){
         }
         m[i].a = m[i].f / m[i].m;
         m[i].v = m[i].a * gamma;
-        m[i].x += m[i].v * dt;
     }
     
-    update_trackers();
-}
-
-void collectionConjGradient::timestep(){
-    // Algorithm from https://en.wikipedia.org/wiki/Energy_minimization#Nonlinear_conjugate_gradient_method
-    // Where dt = κ, v = h, F = F
-    // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
-    // and while its called 'a', its actually 'v'
-    setForces(false);
-    update_constraints();
-    atomgroup &m = *atoms;
+    update_constraint_velocities();
+    
     for(uint i=0; i<m.size(); i++){
-        if(m[i].m <= 0 or isinf(m[i].m)){
-            m[i].v = Vec::Zero();
-            m[i].a = Vec::Zero();
-            continue;
-        }
         m[i].x += m[i].v * dt;
-        Vec newa = m[i].f / m[i].m;
-        flt asq = m[i].a.squaredNorm();
-        flt gamma = 0;
-        if(asq > 0){// if a was 0, then just set γ = 0
-            gamma = (newa - m[i].a).dot(newa) / asq; // Polak-Ribière
-            // gamma = newa.squaredNorm() / asq; // Fletcher-Reeves
-        }
-        //if(gamma > 100) gamma = 0;
-        if(gamma < 0) gamma = 0;
-        m[i].v = newa + (m[i].v * gamma);
-        m[i].a = newa;
-        //~ if(git == groups.begin() and i == 0){
-            //~ cout << ' ' << i << " :: Gamma: " << gamma << " asq:" << asq << " newasq:" << newa.squaredNorm() << endl;
-            //~ //cout << "        " << 
-        //~ }
-        
     }
-    
-    update_trackers();
-}
-
-void collectionConjGradient::timestepNewton(){
-    setForces(false);
-    update_constraints();
-    for(uint i=0; i<atoms->size(); i++){
-        atom& a = (*atoms)[i];
-        if(a.m <= 0 or isinf(a.m)){
-            a.v = Vec::Zero();
-            a.a = Vec::Zero();
-            continue;
-        }
-        a.v = a.f / a.m;
-        a.x += a.v * dt;
-    }
-    
-    update_trackers();
-}
-
-void collectionConjGradient::reset(){
-    for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].v = Vec::Zero();
-    }
-}
-
-flt collectionConjGradientBox::kinetic(){
-    flt E=0;
-    flt Vfac = dV/box->V()/flt(NDIM);
-    for(uint i=0; i<atoms->size(); i++){
-        atom& a = (*atoms)[i];
-        if(a.m <= 0 or isinf(a.m)){continue;}
-        //Vec v = g[i].v - (g[i].x * Vfac);
-        Vec v = a.v + (a.x * Vfac);
-        E += v.squaredNorm() * a.m;
-    }
-    return E/2.0;
-}
-
-void collectionConjGradientBox::reset(){
-    dV = 0;
-    hV = 0;
-    FV = 0;
-    lastFV = 0;
-    
-    for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].v = Vec::Zero();
-    }
-}
-
-
-void collectionConjGradientBox::resize(flt V){
-    dV = 0;
-    hV = 0;
-    FV = 0;
-    lastFV = 0;
-    
-    OriginBox& obox = (OriginBox&) *box;
-    flt oldV = obox.V();
-    #ifdef VEC3D
-    flt Vfac = pow(V/oldV, 1.0/3.0);
-    #endif
-    #ifdef VEC2D
-    flt Vfac = sqrt(V/oldV);
-    #endif
-    
-    for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].x *= Vfac;
-        (*atoms)[i].v = Vec::Zero();
-    }
-    
-    obox.resizeV(V);
-}
-
-void collectionConjGradientBox::timestep(){
-    // Algorithm from https://en.wikipedia.org/wiki/Energy_minimization#Nonlinear_conjugate_gradient_method
-    // Where dt = κ, v = h, F = F
-    // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
-    // and while its called 'a', its actually 'v'
-    
-    OriginBox& obox = (OriginBox&) *box;
-    atomgroup& g = (*atoms);
-    update_constraints();
-    
-    flt oldV = obox.V();
-    dV = hV * oldV;
-    if(dV*dt > 1/kappaV) dV = 1/kappaV/dt;
-    if(dV < 0) dV *= kappaV;
-    if(maxdV >= 0 and dV > maxdV*oldV) dV = maxdV*oldV;
-    if(maxdV >= 0 and dV < -maxdV*oldV) dV = -maxdV*oldV;
-    if(maxdV == 0) dV = 0;
-
-    flt newV = oldV + (dV*dt);
-    //flt Vfac = dV/((oldV + newV)/2)/NDIM;
-    #ifdef VEC3D
-    flt Vfac = pow(newV/oldV, 1.0/3.0);
-    #endif
-    #ifdef VEC2D
-    flt Vfac = sqrt(newV/oldV);
-    #endif
-    
-    for(uint i=0; i<g.size(); i++){
-        g[i].x *= Vfac;
-        g[i].x += g[i].v * dt;// + (m[i].x * Vfac);
-    }
-    
-    obox.resizeV(newV);
-    flt interacP = setForcesGetPressure();
-    flt newFV = (interacP/NDIM) - (P0*newV);
-    
-    flt gammaV = 0;
-    if(FV*FV > 0) gammaV = newFV * (newFV-FV) / (FV*FV);
-    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
-    if(gammaV > 1) gammaV = 1;
-    
-    if(isnan(oldV) or isnan(newV) or isnan(dV)){
-        cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
-        cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
-        assert(!isnan(oldV));
-    }
-    hV = newFV + (gammaV*hV);
-    FV = newFV;
-    
-    for(uint i=0; i<g.size(); i++){
-        Vec newa = g[i].f / g[i].m;
-        flt asq = g[i].a.squaredNorm();
-        flt gamma = 0;
-        if(asq > 0){// if a was 0, then just set γ = 0
-            gamma = (newa - g[i].a).dot(newa) / asq; // Polak-Ribière
-            // gamma = newa.squaredNorm() / asq; // Fletcher-Reeves
-        }
-        //if(gamma > 100) gamma = 0;
-        if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
-        g[i].v = newa + (g[i].v * gamma);
-        g[i].a = newa;
-        
-    }
-    
-    update_trackers();
-}
-
-void collectionConjGradientBox::timestepBox(){
-    OriginBox& obox = (OriginBox&) *box;
-    update_constraints();
-    
-    flt oldV = obox.V();
-    dV = hV * oldV;
-    if(dV*dt > 1/kappaV) dV = 1/kappaV/dt;
-    if(dV < 0) dV *= kappaV;
-    if(maxdV >= 0 and dV > maxdV*oldV) dV = maxdV*oldV;
-    if(maxdV >= 0 and dV < -maxdV*oldV) dV = -maxdV*oldV;
-    flt newV = oldV + (dV*dt);
-    
-    #ifdef VEC3D
-    flt Vfac = pow(newV/oldV, 1.0/3.0);
-    #endif
-    #ifdef VEC2D
-    flt Vfac = sqrt(newV/oldV);
-    #endif
-    
-    for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].x *= Vfac;
-        (*atoms)[i].v = Vec::Zero();
-    }
-    
-    obox.resizeV(newV);
-    flt interacP = setForcesGetPressure();
-    flt newFV = (interacP/NDIM) - (P0*newV);
-    
-    flt gammaV = 0;
-    if(FV*FV > 0) gammaV = newFV * (newFV) / (FV*FV);
-    if(gammaV < 0 or isnan(gammaV) or isinf(gammaV)) gammaV = 0;
-    if(gammaV > 1) gammaV = 1;
-    
-    if(isnan(oldV) or isnan(newV) or isnan(dV)){
-        cout << "P: " << (interacP/NDIM) << " - " << P0 << " V: " << dV << " / (" << oldV << " -> " << newV << ")\n";
-        cout << "FV: " << FV << " -> " << newFV << " gammaV: " << gammaV << endl;
-        assert(!isnan(oldV));
-    }
-    hV = newFV + (gammaV*hV);
-    FV = newFV;
-    
-    update_trackers();
-    return;
-}
-
-void collectionConjGradientBox::timestepAtoms(){
-    // Algorithm from https://en.wikipedia.org/wiki/Energy_minimization#Nonlinear_conjugate_gradient_method
-    // Where dt = κ, v = h, F = F
-    // Note that in the middle of this loop, a = a(t-1), and newa = a(t)
-    // and while its called 'a', its actually 'v'
-    
-    setForces(false);
-    update_constraints();
-    
-    dV = 0;
-    hV = 0;
-    FV = 0;
-    lastFV = 0;
-    
-    for(uint i=0; i<atoms->size(); i++){
-        atom& a = (*atoms)[i];
-        if(a.m <= 0 or isinf(a.m)){
-            a.v = Vec::Zero();
-            a.a = Vec::Zero();
-            continue;
-        }
-        a.x += a.v * dt;// + (m[i].x * Vfac);
-        
-        Vec newa = a.f / a.m;
-        flt asq = a.a.squaredNorm();
-        flt gamma = 0;
-        if(asq > 0){// if a was 0, then just set γ = 0
-            gamma = (newa - a.a).dot(newa) / asq; // Polak-Ribière
-            // gamma = newa.squaredNorm() / asq; // Fletcher-Reeves
-        }
-        //if(gamma > 100) gamma = 0;
-        if(gamma < 0 or isnan(gamma) or isinf(gamma)) gamma = 0;
-        a.v = newa + (a.v * gamma);
-        a.a = newa;            
-    }
-    
+    update_constraint_positions();
     update_trackers();
 }
 
@@ -724,7 +491,7 @@ void collectionNLCG::reset(){
     vl = al;
 }
 
-void collectionNLCG::setForces(bool seta, bool setV){
+void collectionNLCG::setForces(bool constraints_and_a, bool setV){
     flt V = box->V();
     if(setV){
         flt interacP = collection::setForcesGetPressure(false);
@@ -734,7 +501,7 @@ void collectionNLCG::setForces(bool seta, bool setV){
         assert(!isnan(V));
         assert(!isnan(P0));
         assert(!isnan(fl));
-        if(seta){
+        if(constraints_and_a){
             al = fl;
             vl = fl;
         }
@@ -744,7 +511,8 @@ void collectionNLCG::setForces(bool seta, bool setV){
     } else {
         collection::setForces(false);
     }
-    if(seta){
+    if(constraints_and_a){
+        update_constraint_forces();
         for(uint i=0; i<atoms->size(); i++){
             atom& a = (*atoms)[i];
             if(a.m <= 0 or isinf(a.m)){
@@ -898,15 +666,18 @@ void collectionNLCG::timestep(){
     
     //~ flt V0 = box->V();
     stepx(dt);
+    update_constraint_positions();
     setForces(false, true); // sets both atom.f and fl, but not atom.a or al
-    update_constraints();
+    update_constraint_forces();
     flt eta0 = -fdotv(); // slope at x0 - dt
     flt eta = eta0;
     stepx(-dt);
+    update_constraint_positions();
+
     update_trackers();
     alpha = -dt;
     setForces(false, true); // sets both atom.f and fl, but not atom.a or al
-    update_constraints();
+    update_constraint_forces();
     dxsum = 0;
     flt vdv = vdotv();
     
@@ -966,8 +737,9 @@ void collectionNLCG::timestep(){
         }
         dxsum += alpha;
         stepx(alpha);
+        update_constraint_positions();
         setForces(false, true);
-        update_constraints();
+        update_constraint_forces();
         eta0 = eta;
         if(alpha*alpha*vdv < seceps*seceps) break;
         if((sec > 1)
@@ -1020,11 +792,12 @@ void collectionNLCG::timestep(){
         a.v = a.a + a.v*betaused;
     }
     vl = al + betaused * vl;
+    update_constraint_velocities();
 }
 
 void collectionNLCG::descend(){
     setForces(false, true);
-    update_constraints();
+    update_constraint_forces();
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){continue;}
@@ -1035,6 +808,7 @@ void collectionNLCG::descend(){
     vl = fl;
     
     stepx(dt);
+    update_constraint_positions();
     update_trackers();
 }
 
@@ -1125,7 +899,7 @@ void collectionNLCGV::reset(){
 
 void collectionNLCGV::descend(){
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     for(uint i=0; i<atoms->size(); i++){
         atom& a = (*atoms)[i];
         if(a.m <= 0 or isinf(a.m)){continue;}
@@ -1134,6 +908,7 @@ void collectionNLCGV::descend(){
     }
 
     stepx(dt);
+    update_constraint_positions();
     update_trackers();
 }
 
@@ -1168,8 +943,9 @@ void collectionNLCGV::timestep(){
     // Where m[i].a = -f', m[i].v = d, σ0 = dt
     
     stepx(dt);
+    update_constraint_positions();
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     flt eta0 = -fdotv();
     flt eta = eta0;
     //~ cout << "NLCGV::timestep 1:"
@@ -1179,10 +955,11 @@ void collectionNLCGV::timestep(){
         //~ cout << " -- fdv = " << fdotv() << endl;
     
     stepx(-dt);
+    update_constraint_positions();
     update_trackers();
     alpha = -dt;
     setForces(false); // sets both atom.f and fl, but not atom.a or al
-    update_constraints();
+    update_constraint_forces();
     dxsum = 0;
     flt vdv = vdotv();
     
@@ -1238,6 +1015,7 @@ void collectionNLCGV::timestep(){
         }
         dxsum += alpha;
         stepx(alpha);
+        update_constraint_positions();
         
         //~ cout << "NLCGV::timestep 3: secant " << sec
              //~ << " eta = " << eta << " -- alpha = " << alpha;
@@ -1248,7 +1026,7 @@ void collectionNLCGV::timestep(){
         update_trackers();
         
         setForces(false);
-        update_constraints();
+        update_constraint_forces();
         eta0 = eta;
         
         if(alpha*alpha*vdv < seceps*seceps) break;
@@ -1292,6 +1070,7 @@ void collectionNLCGV::timestep(){
     for(uint i=0; i<m.size(); i++){
         m[i].v = m[i].a + m[i].v*betaused;
     }
+    update_constraint_velocities();
     
     //~ cout << "NLCGV::timestep 4: beta " << beta;
         //~ cout << " -- E = " << energy();
@@ -1335,13 +1114,14 @@ void collectionNoseHoover::timestep(){
         // first half of y
         m[i].v += Ftilde * (dt/2);
     }
+    update_constraint_positions();
     
     lns += xi * dt + (Kt - ndof*T) * (dt*dt/2/Q);
     
     
     // Now we set forces and accelerations
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     for(uint i=0; i<m.size(); i++){
         m[i].a = m[i].f / m[i].m;
         // And finish y
@@ -1362,6 +1142,7 @@ void collectionNoseHoover::timestep(){
     for(uint i=0; i<m.size(); i++){
         m[i].v /= ytov;
     }
+    update_constraint_velocities();
     
     //~ flt Kt2 = 2*kinetic();
     //~ flt xicheck = oldxi + (Kt2 - ndof*T + Kt - ndof*T)*(dt/2/Q);
@@ -1391,8 +1172,8 @@ flt collectionGaussianT::setxi(){
     return xi;
 }
 
-void collectionGaussianT::setForces(bool seta, bool shouldwesetxi){
-    collection::setForces(seta);
+void collectionGaussianT::setForces(bool constraints_and_a, bool shouldwesetxi){
+    collection::setForces(constraints_and_a);
     if(shouldwesetxi) setxi();
 }
 
@@ -1402,9 +1183,10 @@ void collectionGaussianT::timestep(){
         (*atoms)[i].x += (*atoms)[i].v * dt + (*atoms)[i].a * (dt*dt/2);
         (*atoms)[i].v += ((*atoms)[i].a - ((*atoms)[i].v*xi)) * (dt/2);
     }
+    update_constraint_positions();
     // Now we set forces and accelerations
     setForces(false, false);
-    update_constraints();
+    update_constraint_forces();
     
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].a = (*atoms)[i].f / (*atoms)[i].m;
@@ -1422,7 +1204,7 @@ void collectionGaussianT::timestep(){
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].v /= ytov;
     }
-    
+    update_constraint_velocities();
     update_trackers();
 }
 
@@ -1433,9 +1215,10 @@ void collectionGear3A::timestep(){
         m[i].x += m[i].v * dt + m[i].a * (dt*dt/2);
         m[i].v += m[i].a * dt;
     }
+    update_constraint_positions();
     // Now we set forces and accelerations
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     
     // Make correction
     for(uint i=0; i<m.size(); i++){
@@ -1444,6 +1227,7 @@ void collectionGear3A::timestep(){
         m[i].v += correction * (dt/2);
         m[i].a = a;
     }
+    update_constraint_velocities();
     
     update_trackers();
 }
@@ -1461,13 +1245,15 @@ void collectionGear4A::timestep(){
         g[i].a += bs[n] * dt;
         n++;
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     
     //~ cout << "Gear 4A timestep 2, ncorrec = " << ncorrec << "\n";
     // Now we set forces and accelerations
     for(uint m=0; m<ncorrec; m++){
         //~ cout << "Gear 4A setting forces, m = " << m << ", ncorrec = " << ncorrec << "\n";
         setForces(false);
-        update_constraints();
+        update_constraint_forces();
     
         // Make correction
         n=0;
@@ -1480,6 +1266,8 @@ void collectionGear4A::timestep(){
             bs[n] += correction / dt;
             n++;
         }
+        update_constraint_positions();
+        update_constraint_velocities();
     }
     update_trackers();
 }
@@ -1497,6 +1285,8 @@ void collectionGear5A::timestep(){
         bs[n] += cs[n] * dt;
         n++;
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     flt c0 = 19*dt*dt/240, c1 = 3*dt/8;
     //flt c2 = 1
     flt c3 = 3 / (2 * dt), c4 = 1/(dt*dt);
@@ -1504,7 +1294,7 @@ void collectionGear5A::timestep(){
     for(uint m=0; m<ncorrec; m++){
         // Now we set forces and accelerations
         setForces(false);
-        update_constraints();
+        update_constraint_forces();
         
         // Make correction
         n=0;
@@ -1518,6 +1308,8 @@ void collectionGear5A::timestep(){
             cs[n] += correction * c4;
             n++;
         }
+        update_constraint_positions();
+        update_constraint_velocities();
     }
     
     update_trackers();
@@ -1543,6 +1335,8 @@ void collectionGear6A::timestep(){
         cs[n] += ds[n] * dt;
         n++;
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     
     flt c0 = 3*dt*dt/40, c1 = 251*dt/720;
     //flt c2 = 1
@@ -1551,7 +1345,7 @@ void collectionGear6A::timestep(){
     for(uint m=0; m<ncorrec; m++){
         // Now we set forces and accelerations
         setForces(false);
-        update_constraints();
+        update_constraint_forces();
         
         //~ flt correctax = (gbegin[0].f / gbegin[0].m)[0];
         //~ printf("correcta = %.15f\n", correctax);
@@ -1583,6 +1377,8 @@ void collectionGear6A::timestep(){
             //~ assert(ds[n].norm()*dt5 < 3);
             n++;
         }
+        update_constraint_positions();
+        update_constraint_velocities();
         //~ printf("final = {%.15f, %.15f, %.15f, %.15f, %.15f, %.15f}\n",
         //~ gbegin[0].x[0], gbegin[0].v[0], gbegin[0].a[0],
             //~ bs[0][0], cs[0][0], ds[0][0]);
@@ -1619,9 +1415,11 @@ void collectionRK4::timestep(){
         a->v += adat.Kva / 2;
         //~ if(i == 0) cout << "f " << a.f;
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     
     for(uint i=0; i<g.size(); i++){
         atomid a = g.get_id(i);
@@ -1632,6 +1430,8 @@ void collectionRK4::timestep(){
         a->v += adat.Kvb / 2 - adat.Kva / 2;
         //~ if(i == 0) cout << " " << a.f;
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     
     //~ cout << (xold + (a0.Kxb / 2) - a0.x) << "    "
          //~ << (vold + (a0.Kvb / 2) - a0.v) << '\n';
@@ -1640,7 +1440,7 @@ void collectionRK4::timestep(){
     // v = v0 + Kvb/2
     
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     
     for(uint i=0; i<g.size(); i++){
         atomid a = g.get_id(i);
@@ -1650,9 +1450,11 @@ void collectionRK4::timestep(){
         a->x += adat.Kxc - adat.Kxb / 2;
         a->v += adat.Kvc - adat.Kvb / 2;
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     
     
     for(uint i=0; i<g.size(); i++){
@@ -1664,9 +1466,11 @@ void collectionRK4::timestep(){
         a->x += (adat.Kxa + adat.Kxd)/6 + (adat.Kxb)/3 - (adat.Kxc * (2.0/3.0));
         a->v += (adat.Kva + adat.Kvd)/6 + (adat.Kvb)/3 - (adat.Kvc * (2.0/3.0));
     }
+    update_constraint_positions();
+    update_constraint_velocities();
     
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     
     for(uint i=0; i<g.size(); i++){
         g[i].a = g[i].f / g[i].m;
@@ -1718,6 +1522,8 @@ void collectionGear4NPH::timestep(){
     dV += ddV * dt + dddV * (dt*dt/2);
     ddV += dddV * dt;
     V = obox.resizeV(newV);
+    update_constraint_positions();
+    update_constraint_velocities();
     //~ if (abs(V-newV)/abs(newV) > 1e-8){
         //~ printf("V: %.4g; newV: %.4g\n", V, newV);
         //~ assert(abs(V-newV)/abs(newV) < 1e-8);
@@ -1734,7 +1540,7 @@ void collectionGear4NPH::timestep(){
             //~ }
         //~ }
         //~ newP = pressure();
-        update_constraints();
+        update_constraint_forces();
         
         /// Correction
         flt Vfac = (-(2.0/NDIM/NDIM)*(dV/V)*(dV/V)) + (ddV/V/NDIM);
@@ -1763,6 +1569,8 @@ void collectionGear4NPH::timestep(){
             bs[n] += correction / dt;
             n++;
         }
+        update_constraint_positions();
+        update_constraint_velocities();
     }
     update_trackers();
 }
@@ -1795,7 +1603,7 @@ void collectionGear4NPT::setForces(bool seta){
         inter->setForces(*box, &xrpsums);
     }
     if(!seta) return;
-    
+    update_constraint_forces();
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].a = (*atoms)[i].f / (*atoms)[i].m;
     }
@@ -1825,6 +1633,8 @@ void collectionGear4NPT::timestep(){
     V1 += V2*c1 + V3*c2;
     V2 += V3*c1;
     V = obox.resizeV(newV);
+    update_constraint_positions();
+    update_constraint_velocities();
     //~ if (abs(V-newV)/abs(newV) > 1e-8){
         //~ printf("V: %.4g; newV: %.4g\n", V, newV);
         //~ assert(abs(V-newV)/abs(newV) < 1e-8);
@@ -1836,7 +1646,7 @@ void collectionGear4NPT::timestep(){
     
     for(uint m=0; m<ncorrec; m++){
         setForces(false);
-        update_constraints();
+        update_constraint_forces();
         
         /// Correction
         flt K2 = 2.0 * kinetic();
@@ -1870,6 +1680,8 @@ void collectionGear4NPT::timestep(){
             vs3[n] += vcorr*d3;
             n++;
         }
+        update_constraint_positions();
+        update_constraint_velocities();
     }
     update_trackers();
 }
@@ -1887,7 +1699,7 @@ void collectionVerletNPT::timestep(){
     OriginBox& obox = (OriginBox&) *box;
     atomgroup &g = *atoms;
     setForces(false);
-    update_constraints();
+    update_constraint_forces();
     
     //~ vector<Vec> lastvhalf = vhalf; // This does copy, right?
     uint ndof = (uint) dof();
@@ -1940,6 +1752,8 @@ void collectionVerletNPT::timestep(){
             g[i].x += vhalf[i]*dt;
         }
     }
+    update_constraint_positions();
+    update_constraint_velocities();
         
     update_trackers();
 };
