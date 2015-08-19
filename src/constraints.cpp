@@ -394,21 +394,23 @@ void EnergyTracker::setU0(Box &box){
 
 
 RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
-            pastlocs(atoms.size(), Vec::Zero()), xyz2sums(atoms.size(), Vec::Zero()),
-            xyz4sums(atoms.size(), Vec::Zero()), r4sums(atoms.size(), 0),
+            pastlocs(atoms.size(), NDIM), xyz2sums(atoms.size(), NDIM),
+            xyz4sums(atoms.size(), NDIM), r4sums(atoms.size(), 0),
             skip(skip), count(0){
+    xyz2sums.setZero();
+    xyz4sums.setZero();
     for(uint i = 0; i<atoms.size(); ++i){
-        pastlocs[i] = atoms[i].x - com;
+        pastlocs.row(i) = atoms[i].x - com;
     };
 };
         
 void RsqTracker1::reset(atomgroup& atoms, Vec com){
-    pastlocs.resize(atoms.size());
-    xyz2sums.assign(atoms.size(), Vec::Zero());
-    xyz4sums.assign(atoms.size(), Vec::Zero());
+    pastlocs.resize(atoms.size(), NDIM);
+    xyz2sums.setZero();
+    xyz4sums.setZero();
     r4sums.assign(atoms.size(), 0);
     for(uint i = 0; i<atoms.size(); ++i){
-        pastlocs[i] = atoms[i].x - com;
+        pastlocs.row(i) = atoms[i].x - com;
     };
     count = 0;
 };
@@ -420,7 +422,8 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
         //flt dist = box.diff(atoms[i].x, pastlocs[i]).squaredNorm();
         Vec r = atoms[i].x - com;
         // We don't want the boxed distance - we want the actual distance moved!
-        Vec distsq = r - pastlocs[i];
+        Vec pastr = pastlocs.row(i);
+        Vec distsq = r - pastr;
         Vec distsqsq = Vec::Zero();
         flt dist4 = 0;
         for(uint j=0; j<NDIM; ++j){
@@ -431,27 +434,29 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
         
         dist4 *= dist4;
         
-        xyz2sums[i] += distsq;
-        xyz4sums[i] += distsqsq;
+        xyz2sums.row(i) += distsq;
+        xyz4sums.row(i) += distsqsq;
         r4sums[i] += dist4;
-        pastlocs[i] = r;
+        pastlocs.row(i) = r;
     };
     count += 1;
     return true;
 };
 
-vector<Vec> RsqTracker1::xyz2(){
-    vector<Vec> means(xyz2sums.size(), Vec::Zero());
-    for(uint i=0; i<xyz2sums.size(); ++i){
-        means[i] = xyz2sums[i] / ((flt) count);
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> RsqTracker1::xyz2(){
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> means(xyz2sums.rows(), NDIM);
+    means.setZero();
+    for(uint i=0; i<xyz2sums.rows(); ++i){
+        means.row(i) = xyz2sums.row(i) / ((flt) count);
     }
     return means;
 };
 
-vector<Vec> RsqTracker1::xyz4(){
-    vector<Vec> means(xyz4sums.size(), Vec::Zero());
-    for(uint i=0; i<xyz4sums.size(); ++i){
-        means[i] = xyz4sums[i] / ((flt) count);
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> RsqTracker1::xyz4(){
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> means(xyz4sums.rows(), NDIM);
+    means.setZero();
+    for(uint i=0; i<xyz4sums.rows(); ++i){
+        means.row(i) = xyz4sums.row(i) / ((flt) count);
     }
     return means;
 };
@@ -489,8 +494,8 @@ void RsqTracker::reset(){
     }
 };
 
-vector<vector<Vec> > RsqTracker::xyz2(){
-    vector<vector<Vec> > vals;
+vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > RsqTracker::xyz2(){
+    vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > vals;
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         vals.push_back(it->xyz2());
@@ -503,24 +508,19 @@ vector<vector<flt> > RsqTracker::r2(){
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         vector<flt> val;
-        vector<Vec> xyz2 = it->xyz2();
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz2 = it->xyz2();
         val.reserve(xyz2.size());
         
-        for(vector<Vec>::iterator it2=xyz2.begin(); it2!=xyz2.end(); ++it2){
-            Vec v = *it2;
-            flt r2 = 0;
-            for(uint i=0; i<NDIM; ++i){
-                r2 += v[i];
-            }
-            val.push_back(r2);
+        for(uint i=0; i<xyz2.rows(); i++){
+            val.push_back(xyz2.row(i).sum());
         }
         vals.push_back(val);
     }
     return vals;
 };
 
-vector<vector<Vec> > RsqTracker::xyz4(){
-    vector<vector<Vec> > vals;
+vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > RsqTracker::xyz4(){
+    vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > vals;
     vals.reserve(singles.size());
     for(vector<RsqTracker1>::iterator it=singles.begin(); it!=singles.end(); ++it){
         vals.push_back(it->xyz4());
@@ -547,10 +547,10 @@ vector<flt> RsqTracker::counts(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
-            pastlocs(atoms.size(), Vec::Zero()), ISFsums(ks.size(), vector<array<cmplx, NDIM> >()),
+            pastlocs(atoms.size(), NDIM), ISFsums(ks.size(), vector<array<cmplx, NDIM> >()),
             ks(ks), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); ++i){
-        pastlocs[i] = atoms[i].x - com;
+        pastlocs.row(i) = atoms[i].x - com;
     };
     
     for(uint ki=0; ki<ks.size(); ++ki){
@@ -559,12 +559,12 @@ ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, V
 };
         
 void ISFTracker1::reset(atomgroup& atoms, Vec com){
-    pastlocs.resize(atoms.size());
+    pastlocs.resize(atoms.size(), Eigen::NoChange);
     for(uint ki=0; ki<ks.size(); ki++){
         ISFsums[ki].assign(atoms.size(), array<cmplx, NDIM>());
     }
     for(uint i = 0; i<atoms.size(); ++i){
-        pastlocs[i] = atoms[i].x - com;
+        pastlocs.row(i) = atoms[i].x - com;
     };
     count = 0;
 };
@@ -576,7 +576,8 @@ bool ISFTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
         //flt dist = box.diff(atoms[i].x, pastlocs[i]).squaredNorm();
         Vec r = atoms[i].x - com;
         // We don't want the boxed distance - we want the actual distance moved!
-        Vec dr = r - pastlocs[i];
+        Vec pastr = pastlocs.row(i);
+        Vec dr = r - pastr;
         for(uint ki=0; ki<ks.size(); ++ki){
             for(uint j=0; j<NDIM; ++j){
                 //~ cout << "i: " << i << "  ki: " << ki << "  j: " << j;
@@ -588,7 +589,7 @@ bool ISFTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
             }
         }
         
-        pastlocs[i] = r;
+        pastlocs.row(i) = r;
     };
     count += 1;
     return true;
@@ -679,14 +680,15 @@ vector<flt> ISFTracker::counts(){
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SmoothLocs::SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn, bool usecom) : 
-        atoms(atoms), smoothn(smoothn), skipn(skipn), curlocs(atoms->size()), numincur(0), locs(),
+        atoms(atoms), smoothn(smoothn), skipn(skipn), curlocs(atoms->size(), NDIM), numincur(0), locs(),
         curt(0), usecom(usecom){
+            curlocs.setZero();
     update(box);
 };
 
 
 void SmoothLocs::reset(){
-    curlocs.assign(atoms->size(), Vec::Zero());
+    curlocs.setZero();
     numincur = 0;
     curt = 0;
     locs.clear();
@@ -704,15 +706,16 @@ void SmoothLocs::update(Box &box){
     Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
         Vec curloc = (*atoms)[i].x - com;
-        curlocs[i] += curloc;
+        curlocs.row(i) += curloc;
         if(smooth_time) {
-            curlocs[i] /= numincur;
+            curlocs.row(i) /= numincur;
         }
     };
     
     if(smooth_time){
         locs.push_back(curlocs);
-        curlocs.assign(atoms->size(), Vec::Zero());
+        curlocs.resize(atoms->size(), Eigen::NoChange);
+        curlocs.setZero();
         numincur = 0;
     };
     
@@ -721,10 +724,10 @@ void SmoothLocs::update(Box &box){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
-        atoms(atoms), pastlocs(atoms->size(), Vec::Zero()), dists(), skip(skip), curt(0), usecom(usecom){
+        atoms(atoms), pastlocs(atoms->size(), NDIM), dists(), skip(skip), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
-        pastlocs[i] = (*atoms)[i].x - com;
+        pastlocs.row(i) = (*atoms)[i].x - com;
     }
 }
 
@@ -732,7 +735,7 @@ void RDiffs::reset(){
     curt = 0;
     Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
-        pastlocs[i] = (*atoms)[i].x - com;
+        pastlocs.row(i) = (*atoms)[i].x - com;
     }
     dists.clear();
 }
@@ -744,8 +747,9 @@ void RDiffs::update(Box &box){
     vector<flt> rdiff = vector<flt>(atoms->size(), 0.0);
     for(uint i = 0; i<atoms->size(); ++i){
         Vec loc = (*atoms)[i].x - com;
-        rdiff[i] = (loc - pastlocs[i]).norm();
-        pastlocs[i] = loc;
+        Vec pastr = pastlocs.row(i);
+        rdiff[i] = (loc - pastr).norm();
+        pastlocs.row(i) = loc;
     }
     
     dists.push_back(rdiff);
@@ -825,11 +829,11 @@ bool jamminglistrot::operator<(const jamminglistrot& other ) const {
     return false; // consider them equal
 };
 
-jammingtree2::jammingtree2(sptr<Box>box, vector<Vec>& A0, vector<Vec>& B0)
+jammingtree2::jammingtree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A0, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B0)
             : box(box), jlists(), A(A0), Bs(8, B0){
     for(uint rot=0; rot < 8; ++rot){
         for(uint i=0; i<B0.size(); ++i){
-                        Bs[rot][i] = rotate_flip(B0[i], rot); }
+                        Bs[rot].row(i) = rotate_flip(B0.row(i), rot); }
         if(A0.size() <= B0.size()) jlists.push_back(jamminglistrot(rot));
         //~ cout << "Created, now size " << jlists.size() << endl;
     }
@@ -843,8 +847,8 @@ flt jammingtree2::distance(jamminglistrot& jlist){
         uint si = jlist.assigned[i];
         for(uint j=0; j<i; ++j){
             uint sj = jlist.assigned[j];
-            Vec rij = box->diff(A[i], A[j]);
-            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
+            Vec rij = box->diff(A.row(i), A.row(j));
+            Vec sij = box->diff(Bs[rot].row(si), Bs[rot].row(sj));
             dist += box->diff(rij, sij).squaredNorm();
         }
     }
@@ -854,11 +858,11 @@ flt jammingtree2::distance(jamminglistrot& jlist){
 list<jamminglistrot> jammingtree2::expand(jamminglistrot curjlist){
     vector<uint>& curlist = curjlist.assigned;
     list<jamminglistrot> newlists = list<jamminglistrot>();
-    if(curlist.size() >= A.size()){
+    if(curlist.size() >= (uint) A.rows()){
         return newlists;
     }
     
-    uint N = (uint) Bs[curjlist.rotation].size();
+    uint N = (uint) Bs[curjlist.rotation].rows();
     for(uint i=0; i < N; ++i){
         vector<uint>::iterator found = find(curlist.begin(), curlist.end(), i);
         //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
@@ -890,21 +894,21 @@ bool jammingtree2::expand(){
 };
 
 
-jammingtreeBD::jammingtreeBD(sptr<Box> box, vector<Vec>& A, vector<Vec>& B, 
+jammingtreeBD::jammingtreeBD(sptr<Box> box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
                     uint cutoffA, uint cutoffB) :
             jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
     if(cutoffA > cutoffB){jlists.clear();}
-    if(A.size() - cutoffA > B.size() - cutoffB){jlists.clear();}
+    if(A.rows() - cutoffA > B.rows() - cutoffB){jlists.clear();}
 };
 
 list<jamminglistrot> jammingtreeBD::expand(jamminglistrot curjlist){
     vector<uint>& curlist = curjlist.assigned;
     list<jamminglistrot> newlists = list<jamminglistrot>();
-    if(curlist.size() >= A.size()){
+    if(curlist.size() >= (uint) A.rows()){
         return newlists;
     }
     
-    uint N = (uint) Bs[curjlist.rotation].size();
+    uint N = (uint) Bs[curjlist.rotation].rows();
     uint start = 0, end=cutoff2;
     if(curlist.size() >= cutoff1){
         start=cutoff2;
@@ -934,74 +938,74 @@ bool jammingtreeBD::expand(){
 };
 
 
-vector<Vec> jammingtree2::locationsB(jamminglistrot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> jammingtree2::locationsB(jamminglistrot jlist){
     uint rot = jlist.rotation;
-    vector<Vec> locs = vector<Vec>(jlist.size());
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(jlist.size(), NDIM);
     
     uint N = jlist.size();
     for(uint i=0; i<N; ++i){
         uint si = jlist.assigned[i];
-        locs[i] = A[i];
+        locs.row(i) = A.row(i);
         for(uint j=0; j<N; ++j){
             uint sj = jlist.assigned[j];
-            Vec rij = box->diff(A[i], A[j]);
-            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
-            locs[i] -= box->diff(rij, sij)/N;
+            Vec rij = box->diff(A.row(i), A.row(j));
+            Vec sij = box->diff(Bs[rot].row(si), Bs[rot].row(sj));
+            locs.row(i) -= box->diff(rij, sij)/N;
         }
     }
     return locs;
 };
 
 
-vector<Vec> jammingtree2::locationsA(jamminglistrot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> jammingtree2::locationsA(jamminglistrot jlist){
     uint rot = jlist.rotation;
-    vector<Vec> locs = vector<Vec>(Bs[rot].size(), Vec(NAN,NAN));
+    Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(Bs[rot].rows(), NDIM);
     
     uint N = jlist.size();
     for(uint i=0; i<N; ++i){
         uint si = jlist.assigned[i];
-        locs[si] = Bs[rot][si];
+        locs.row(si) = Bs[rot].row(si);
         for(uint j=0; j<N; ++j){
             uint sj = jlist.assigned[j];
-            Vec rij = box->diff(A[i], A[j]);
-            Vec sij = box->diff(Bs[rot][si], Bs[rot][sj]);
-            locs[si] += box->diff(rij, sij)/N;
+            Vec rij = box->diff(A.row(i), A.row(j));
+            Vec sij = box->diff(Bs[rot].row(si), Bs[rot].row(sj));
+            locs.row(si) += box->diff(rij, sij)/N;
         }
         
         // this is an inverse rotateflip
-        locs[si] = rotate_flip_inv(locs[si], rot);
+        locs.row(si) = rotate_flip_inv(locs.row(si), rot);
     }
     return locs;
 };
 
-Vec jammingtree2::straight_diff(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
-    uint N = (uint) As.size();
-    if(Bs.size() != N) return Vec(NAN,NAN);
+Vec jammingtree2::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
+    uint N = (uint) As.rows();
+    if(Bs.rows() != N) return vec(NAN,NAN);
     
     Vec loc = Vec::Zero();
     for(uint i=0; i<N; ++i){
         for(uint j=0; j<N; ++j){
-            Vec rij = bx.diff(As[i], As[j]);
-            Vec sij = bx.diff(Bs[i], Bs[j]);
+            Vec rij = bx.diff(As.row(i), As.row(j));
+            Vec sij = bx.diff(Bs.row(i), Bs.row(j));
             loc += bx.diff(rij, sij);
         }
     }
     return loc / N;
 };
 
-flt jammingtree2::straight_distsq(Box &bx, vector<Vec>& As, vector<Vec>& Bs){
-    uint N = (uint) As.size();
-    if(Bs.size() != N) return NAN;
+flt jammingtree2::straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
+    long int N = As.rows();
+    if(Bs.rows() != N) return NAN;
     
     flt dist = 0;
     for(uint i=0; i<N; ++i){
         for(uint j=0; j<N; ++j){
-            Vec rij = bx.diff(As[i], As[j]);
-            Vec sij = bx.diff(Bs[i], Bs[j]);
+            Vec rij = bx.diff(As.row(i), As.row(j));
+            Vec sij = bx.diff(Bs.row(i), Bs.row(j));
             dist += bx.diff(rij, sij).squaredNorm();
         }
     }
-    return dist / N;
+    return dist / ((flt) N);
 };
 
 
@@ -1039,12 +1043,12 @@ array<bool, NDIM> Connectivity::nonzero(Vec diff_vec){
     return nonzeros;
 };
 
-void Connectivity::add(vector<Vec> locs, vector<flt> diameters){
+void Connectivity::add(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs, vector<flt> diameters){
     vector<CNode> cnodes;
     
     uint n=0;
-    for(vector<Vec>::const_iterator it=locs.begin(); it!=locs.end(); it++){
-        CNode cn = CNode((int)n, *it);
+    for(uint i=0; i<locs.rows(); i++){
+        CNode cn = CNode((int)n, locs.row(i));
         
         uint n2=0;
         for(vector<CNode>::const_iterator cit=cnodes.begin(); cit!=cnodes.end(); cit++){
