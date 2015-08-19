@@ -12,8 +12,6 @@
 
 using namespace std;
 
-typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure why
-
 class constraint {
     public:
         virtual void apply_positions(Box &box) = 0;

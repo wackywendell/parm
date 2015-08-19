@@ -429,6 +429,7 @@ class RSQTest(NPTestCase):
     N = 8
     phi = 0.3
     ns = [1, 2, 4, 8, 16, 32]
+    ks = [1., 0.5]
     dxs = [
         [1, 0, 0],
         [-1, 0, 0],
@@ -451,6 +452,7 @@ class RSQTest(NPTestCase):
         self.box = sim3.OriginBox(self.L)
         self.atoms = sim3.atomvec(self.masses)
         self.rsqs = sim3.RsqTracker(self.atoms, self.ns, False)
+        self.isfs = sim3.ISFTracker(self.atoms, self.ks, self.ns, False)
         
         drs = []
         for t in range(self.ns[-1] * 4):
@@ -459,6 +461,7 @@ class RSQTest(NPTestCase):
                 if t == 0:
                     drs.append(dr)
             self.rsqs.update(self.box)
+            self.isfs.update(self.box)
         self.drs = np.asarray(drs)
     
     def testr2(self):
@@ -488,3 +491,20 @@ class RSQTest(NPTestCase):
         for n, xyz4n in zip(self.ns, xyz4):
             drsq = (np.asarray(self.drs)*n)**4
             self.assertClose(drsq, xyz4n)
+            
+    def test_ISF_shape(self):
+        ISFs = self.isfs.ISFs()
+        ISFs = np.asarray(ISFs, dtype=complex)
+        self.assertEqual(
+            np.shape(ISFs),
+            (len(self.ns), len(self.ks), len(self.atoms))
+        )
+          
+        ISFxyz = self.isfs.ISFxyz()
+        ISFxyz = np.asarray(ISFxyz, dtype=complex)
+        
+        self.assertEqual(
+            np.shape(ISFxyz),
+            (len(self.ns), len(self.ks), len(self.atoms), 3)
+        )
+        
