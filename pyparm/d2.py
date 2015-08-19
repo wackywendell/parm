@@ -10581,13 +10581,13 @@ class RsqTracker1(_object):
         return _sim2d.RsqTracker1_update(self, box, atoms, t, com)
 
 
-    def xyz2(self) -> "std::vector< Vec >":
-        """xyz2(RsqTracker1 self) -> std::vector< Vec >"""
+    def xyz2(self) -> "Eigen::Matrix< flt,Eigen::Dynamic,2 >":
+        """xyz2(RsqTracker1 self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >"""
         return _sim2d.RsqTracker1_xyz2(self)
 
 
-    def xyz4(self) -> "std::vector< Vec >":
-        """xyz4(RsqTracker1 self) -> std::vector< Vec >"""
+    def xyz4(self) -> "Eigen::Matrix< flt,Eigen::Dynamic,2 >":
+        """xyz4(RsqTracker1 self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >"""
         return _sim2d.RsqTracker1_xyz4(self)
 
 
@@ -10659,8 +10659,8 @@ class RsqTracker(statetracker):
         return _sim2d.RsqTracker_update(self, box)
 
 
-    def xyz2(self) -> "std::vector< std::vector< Vec > >":
-        """xyz2(RsqTracker self) -> std::vector< std::vector< Vec > >"""
+    def xyz2(self) -> "std::vector< Eigen::Matrix< flt,Eigen::Dynamic,2 > >":
+        """xyz2(RsqTracker self) -> std::vector< Eigen::Matrix< flt,Eigen::Dynamic,2 > >"""
         return _sim2d.RsqTracker_xyz2(self)
 
 
@@ -10669,8 +10669,8 @@ class RsqTracker(statetracker):
         return _sim2d.RsqTracker_r2(self)
 
 
-    def xyz4(self) -> "std::vector< std::vector< Vec > >":
-        """xyz4(RsqTracker self) -> std::vector< std::vector< Vec > >"""
+    def xyz4(self) -> "std::vector< Eigen::Matrix< flt,Eigen::Dynamic,2 > >":
+        """xyz4(RsqTracker self) -> std::vector< Eigen::Matrix< flt,Eigen::Dynamic,2 > >"""
         return _sim2d.RsqTracker_xyz4(self)
 
 
@@ -10905,8 +10905,8 @@ class SmoothLocs(statetracker):
         return _sim2d.SmoothLocs_update(self, box)
 
 
-    def smooth_locs(self) -> "std::vector< std::vector< Vec > >":
-        """smooth_locs(SmoothLocs self) -> std::vector< std::vector< Vec > >"""
+    def smooth_locs(self) -> "std::vector< Eigen::Matrix< flt,Eigen::Dynamic,2 > >":
+        """smooth_locs(SmoothLocs self) -> std::vector< Eigen::Matrix< flt,Eigen::Dynamic,2 > >"""
         return _sim2d.SmoothLocs_smooth_locs(self)
 
     __swig_destroy__ = _sim2d.delete_SmoothLocs
@@ -11035,8 +11035,8 @@ class jammingtree(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, jammingtree, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &'):
-        """__init__(jammingtree self, boost::shared_ptr< Box > box, std::vector< Vec > & A, std::vector< Vec > & B) -> jammingtree"""
+    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &'):
+        """__init__(jammingtree self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> jammingtree"""
         this = _sim2d.new_jammingtree(box, A, B)
         try:
             self.this.append(this)
@@ -11121,8 +11121,8 @@ class jammingtree2(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, jammingtree2, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &'):
-        """__init__(jammingtree2 self, boost::shared_ptr< Box > box, std::vector< Vec > & A, std::vector< Vec > & B) -> jammingtree2"""
+    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &'):
+        """__init__(jammingtree2 self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> jammingtree2"""
         this = _sim2d.new_jammingtree2(box, A, B)
         try:
             self.this.append(this)
@@ -11148,16 +11148,16 @@ class jammingtree2(_object):
         return _sim2d.jammingtree2_expandto(self, maxdistsq)
 
 
-    def straight_diff(bx: 'Box', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &') -> "Vec":
-        """straight_diff(Box bx, std::vector< Vec > & A, std::vector< Vec > & B) -> Vec"""
+    def straight_diff(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "Vec":
+        """straight_diff(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> Vec"""
         return _sim2d.jammingtree2_straight_diff(bx, A, B)
 
     if _newclass:
         straight_diff = staticmethod(straight_diff)
     __swig_getmethods__["straight_diff"] = lambda x: straight_diff
 
-    def straight_distsq(bx: 'Box', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &') -> "flt":
-        """straight_distsq(Box bx, std::vector< Vec > & A, std::vector< Vec > & B) -> flt"""
+    def straight_distsq(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "flt":
+        """straight_distsq(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> flt"""
         return _sim2d.jammingtree2_straight_distsq(bx, A, B)
 
     if _newclass:
@@ -11187,18 +11187,18 @@ class jammingtree2(_object):
         return _sim2d.jammingtree2_size(self)
 
 
-    def locationsB(self, *args) -> "std::vector< Vec >":
+    def locationsB(self, *args) -> "Eigen::Matrix< flt,Eigen::Dynamic,2 >":
         """
-        locationsB(jammingtree2 self, jamminglistrot jlist) -> std::vector< Vec >
-        locationsB(jammingtree2 self) -> std::vector< Vec >
+        locationsB(jammingtree2 self, jamminglistrot jlist) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
+        locationsB(jammingtree2 self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
         """
         return _sim2d.jammingtree2_locationsB(self, *args)
 
 
-    def locationsA(self, *args) -> "std::vector< Vec >":
+    def locationsA(self, *args) -> "Eigen::Matrix< flt,Eigen::Dynamic,2 >":
         """
-        locationsA(jammingtree2 self, jamminglistrot jlist) -> std::vector< Vec >
-        locationsA(jammingtree2 self) -> std::vector< Vec >
+        locationsA(jammingtree2 self, jamminglistrot jlist) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
+        locationsA(jammingtree2 self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
         """
         return _sim2d.jammingtree2_locationsA(self, *args)
 
@@ -11207,12 +11207,12 @@ class jammingtree2(_object):
 jammingtree2_swigregister = _sim2d.jammingtree2_swigregister
 jammingtree2_swigregister(jammingtree2)
 
-def jammingtree2_straight_diff(bx: 'Box', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &') -> "Vec":
-    """jammingtree2_straight_diff(Box bx, std::vector< Vec > & A, std::vector< Vec > & B) -> Vec"""
+def jammingtree2_straight_diff(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "Vec":
+    """jammingtree2_straight_diff(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> Vec"""
     return _sim2d.jammingtree2_straight_diff(bx, A, B)
 
-def jammingtree2_straight_distsq(bx: 'Box', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &') -> "flt":
-    """jammingtree2_straight_distsq(Box bx, std::vector< Vec > & A, std::vector< Vec > & B) -> flt"""
+def jammingtree2_straight_distsq(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "flt":
+    """jammingtree2_straight_distsq(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> flt"""
     return _sim2d.jammingtree2_straight_distsq(bx, A, B)
 
 class jammingtreeBD(jammingtree2):
@@ -11229,8 +11229,8 @@ class jammingtreeBD(jammingtree2):
 
     def __init__(self, *args):
         """
-        __init__(jammingtreeBD self, boost::shared_ptr< Box > box, std::vector< Vec > & A, std::vector< Vec > & B, uint cutoff) -> jammingtreeBD
-        __init__(jammingtreeBD self, boost::shared_ptr< Box > box, std::vector< Vec > & A, std::vector< Vec > & B, uint cutoffA, uint cutoffB) -> jammingtreeBD
+        __init__(jammingtreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoff) -> jammingtreeBD
+        __init__(jammingtreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoffA, uint cutoffB) -> jammingtreeBD
         """
         this = _sim2d.new_jammingtreeBD(*args)
         try:
@@ -11392,8 +11392,8 @@ class Connectivity(_object):
         return _sim2d.Connectivity_add_edge(self, node1, node2)
 
 
-    def add(self, locs: 'std::vector< Vec >', diameters: 'dvector') -> "void":
-        """add(Connectivity self, std::vector< Vec > locs, dvector diameters)"""
+    def add(self, locs: 'Eigen::Matrix< flt,Eigen::Dynamic,2 >', diameters: 'dvector') -> "void":
+        """add(Connectivity self, Eigen::Matrix< flt,Eigen::Dynamic,2 > locs, dvector diameters)"""
         return _sim2d.Connectivity_add(self, locs, diameters)
 
 

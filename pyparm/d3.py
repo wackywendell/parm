@@ -10180,13 +10180,13 @@ class RsqTracker1(_object):
         return _sim3d.RsqTracker1_update(self, box, atoms, t, com)
 
 
-    def xyz2(self) -> "std::vector< Vec >":
-        """xyz2(RsqTracker1 self) -> std::vector< Vec >"""
+    def xyz2(self) -> "Eigen::Matrix< flt,Eigen::Dynamic,3 >":
+        """xyz2(RsqTracker1 self) -> Eigen::Matrix< flt,Eigen::Dynamic,3 >"""
         return _sim3d.RsqTracker1_xyz2(self)
 
 
-    def xyz4(self) -> "std::vector< Vec >":
-        """xyz4(RsqTracker1 self) -> std::vector< Vec >"""
+    def xyz4(self) -> "Eigen::Matrix< flt,Eigen::Dynamic,3 >":
+        """xyz4(RsqTracker1 self) -> Eigen::Matrix< flt,Eigen::Dynamic,3 >"""
         return _sim3d.RsqTracker1_xyz4(self)
 
 
@@ -10258,8 +10258,8 @@ class RsqTracker(statetracker):
         return _sim3d.RsqTracker_update(self, box)
 
 
-    def xyz2(self) -> "std::vector< std::vector< Vec > >":
-        """xyz2(RsqTracker self) -> std::vector< std::vector< Vec > >"""
+    def xyz2(self) -> "std::vector< Eigen::Matrix< flt,Eigen::Dynamic,3 > >":
+        """xyz2(RsqTracker self) -> std::vector< Eigen::Matrix< flt,Eigen::Dynamic,3 > >"""
         return _sim3d.RsqTracker_xyz2(self)
 
 
@@ -10268,8 +10268,8 @@ class RsqTracker(statetracker):
         return _sim3d.RsqTracker_r2(self)
 
 
-    def xyz4(self) -> "std::vector< std::vector< Vec > >":
-        """xyz4(RsqTracker self) -> std::vector< std::vector< Vec > >"""
+    def xyz4(self) -> "std::vector< Eigen::Matrix< flt,Eigen::Dynamic,3 > >":
+        """xyz4(RsqTracker self) -> std::vector< Eigen::Matrix< flt,Eigen::Dynamic,3 > >"""
         return _sim3d.RsqTracker_xyz4(self)
 
 
@@ -10504,8 +10504,8 @@ class SmoothLocs(statetracker):
         return _sim3d.SmoothLocs_update(self, box)
 
 
-    def smooth_locs(self) -> "std::vector< std::vector< Vec > >":
-        """smooth_locs(SmoothLocs self) -> std::vector< std::vector< Vec > >"""
+    def smooth_locs(self) -> "std::vector< Eigen::Matrix< flt,Eigen::Dynamic,3 > >":
+        """smooth_locs(SmoothLocs self) -> std::vector< Eigen::Matrix< flt,Eigen::Dynamic,3 > >"""
         return _sim3d.SmoothLocs_smooth_locs(self)
 
     __swig_destroy__ = _sim3d.delete_SmoothLocs
@@ -10634,8 +10634,8 @@ class jammingtree(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, jammingtree, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'std::vector< Vec > &', B: 'std::vector< Vec > &'):
-        """__init__(jammingtree self, boost::shared_ptr< Box > box, std::vector< Vec > & A, std::vector< Vec > & B) -> jammingtree"""
+    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &'):
+        """__init__(jammingtree self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,3 > & A, Eigen::Matrix< flt,Eigen::Dynamic,3 > & B) -> jammingtree"""
         this = _sim3d.new_jammingtree(box, A, B)
         try:
             self.this.append(this)
@@ -10815,8 +10815,8 @@ class Connectivity(_object):
         return _sim3d.Connectivity_add_edge(self, node1, node2)
 
 
-    def add(self, locs: 'std::vector< Vec >', diameters: 'dvector') -> "void":
-        """add(Connectivity self, std::vector< Vec > locs, dvector diameters)"""
+    def add(self, locs: 'Eigen::Matrix< flt,Eigen::Dynamic,3 >', diameters: 'dvector') -> "void":
+        """add(Connectivity self, Eigen::Matrix< flt,Eigen::Dynamic,3 > locs, dvector diameters)"""
         return _sim3d.Connectivity_add(self, locs, diameters)
 
 
