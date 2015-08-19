@@ -154,7 +154,7 @@ class RigidConstraint : public constraint {
         // moment of inertia matrix inverse
         Eigen::JacobiSVD<Matrix> MoI_solver;
         // locations relative to center of mass, no rotation
-        Eigen::Matrix<flt, Eigen::Dynamic, 3> expected; 
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> expected; 
         
         // updated at every apply_positions()
         // Curent rotation matrix
@@ -260,9 +260,9 @@ class EnergyTracker : public statetracker{
 class RsqTracker1 {
     // Tracks only a single dt (skip)
     public:
-        vector<Vec> pastlocs;
-        vector<Vec> xyz2sums;
-        vector<Vec> xyz4sums;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz2sums;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz4sums;
         vector<flt> r4sums;
         unsigned long skip, count;
         
@@ -272,8 +272,8 @@ class RsqTracker1 {
         void reset(atomgroup& atoms, Vec com);
             
         bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
-        vector<Vec> xyz2();
-        vector<Vec> xyz4();
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz2();
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz4();
         vector<flt> r4();
         
         unsigned long get_skip(){return skip;};
@@ -293,9 +293,9 @@ class RsqTracker : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<Vec> > xyz2();
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > xyz2();
         vector<vector<flt> > r2();
-        vector<vector<Vec> > xyz4();
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > xyz4();
         vector<vector<flt> > r4();
         vector<flt> counts();
 };
@@ -310,7 +310,7 @@ class RsqTracker : public statetracker {
 class ISFTracker1 {
     // Tracks only a single dt (skip)
     public:
-        vector<Vec> pastlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
         vector<vector<array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
         vector<flt> ks;
         unsigned long skip, count;
@@ -355,9 +355,9 @@ class SmoothLocs : public statetracker {
         sptr<atomgroup> atoms;
         uint smoothn; // number of skipns to "smooth" over
         uint skipn; // number of dts to skip
-        vector<Vec> curlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> curlocs;
         uint numincur;
-        vector<vector<Vec> > locs;
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > locs;
         unsigned long curt;
         bool usecom;
     
@@ -367,7 +367,7 @@ class SmoothLocs : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<Vec> > smooth_locs(){return locs;};
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > smooth_locs(){return locs;};
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -375,7 +375,7 @@ class RDiffs : public statetracker {
     // Tracks only a single dt (skip)
     public:
         sptr<atomgroup> atoms;
-        vector<Vec> pastlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
         vector<vector<flt> > dists;
         unsigned long skip;
         unsigned long curt;
@@ -423,10 +423,10 @@ class jammingtree {
     private:
         sptr<Box> box;
         list<jamminglist> jlists;
-        vector<Vec> A;
-        vector<Vec> B;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> A;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> B;
     public:
-        jammingtree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
+        jammingtree(sptr<Box> box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B)
             : box(box), jlists(), A(A), B(B) {
             jlists.push_back(jamminglist());
             assert(A.size() <= B.size());
@@ -435,7 +435,7 @@ class jammingtree {
         bool expand(){
             jamminglist curjlist = jlists.front();
             vector<uint>& curlist = curjlist.assigned;
-            if(curlist.size() >= A.size()){
+            if(curlist.size() >= (uint) A.rows()){
                 //~ cout << "List already too big\n";
                 return false;
             }
@@ -449,7 +449,7 @@ class jammingtree {
                     //cout << found << '\n';
                     continue;
                 }
-                flt newdist = box->diff(A[curlist.size()], B[i]).squaredNorm();
+                flt newdist = box->diff(A.row(curlist.size()), B.row(i)).squaredNorm();
                 jamminglist newjlist = jamminglist(curjlist, i, newdist);
                 newlists.push_back(newjlist);
                 //~ cout << "Made " << i << "\n";
@@ -510,12 +510,12 @@ class jammingtree2 {
     protected:
         sptr<Box> box;
         list<jamminglistrot> jlists;
-        vector<Vec> A;
-        vector<vector<Vec> > Bs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> A;
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > Bs;
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        jammingtree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
+        jammingtree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
         flt distance(jamminglistrot& jlist);
         list<jamminglistrot> expand(jamminglistrot curjlist);
         
@@ -536,8 +536,8 @@ class jammingtree2 {
             };
             return retval;
         }
-        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
-        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        static Vec straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
+        static flt straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
         
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};
@@ -569,10 +569,10 @@ class jammingtree2 {
         
         uint size(){return (uint) jlists.size();};
         
-        vector<Vec> locationsB(jamminglistrot jlist);
-        vector<Vec> locationsB(){return locationsB(curbest());};
-        vector<Vec> locationsA(jamminglistrot jlist);
-        vector<Vec> locationsA(){return locationsA(curbest());};
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsB(jamminglistrot jlist);
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsB(){return locationsB(curbest());};
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsA(jamminglistrot jlist);
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsA(){return locationsA(curbest());};
         virtual ~jammingtree2(){};
 };
 
@@ -595,9 +595,9 @@ class jammingtreeBD : public jammingtree2 {
     protected:
         uint cutoff1,cutoff2;
     public:
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+        jammingtreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, uint cutoff) :
             jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
+        jammingtreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
                     uint cutoffA, uint cutoffB);// :
             //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
         
@@ -718,7 +718,7 @@ class Connectivity {
         
         // assumes diameters are additive
         // Note that "diameter" should generally be the attractive diameter
-        void add(vector<Vec> locs, vector<flt> diameters);
+        void add(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs, vector<flt> diameters);
         
         map<uint, CNodePath> find_percolation(bool check_all_dims=true);
 };

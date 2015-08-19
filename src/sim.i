@@ -218,6 +218,45 @@ static int myErr = 0;
     $1 = &temp;
 };
 
+%typemap(out) Eigen::Matrix<flt, Eigen::Dynamic, 3> { 
+    unsigned int rows = ($1.rows());
+    npy_intp dims[2] = {rows,NDIM};
+    PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+    for(uint i=0; i<rows; i++){
+        for(uint j=0; j<NDIM; j++){
+            data[i*NDIM+j] = (double) $1(i, j);
+        }
+    }
+    $result = array; 
+};
+
+%typemap(out) vector<Eigen::Matrix<flt, Eigen::Dynamic, 3> > { 
+    unsigned int vlength = $1.size();
+    PyObject* pylist = PyList_New(vlength);
+    if(pylist == NULL){
+        PyErr_SetString(PyExc_TypeError, "Failure creating list.");
+        return NULL;
+    }
+    for(unsigned int i=0; i<vlength; i++){
+        Eigen::Matrix<flt, Eigen::Dynamic, 3> &m = $1.at(i);
+        unsigned int rows = m.rows();
+        npy_intp dims[2] = {rows,NDIM};
+        PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+        double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+        for(uint j=0; j<rows; j++){
+            for(uint k=0; k<NDIM; k++){
+                data[j*NDIM+k] = (double) m(j, k);
+            }
+        }
+        if(PyList_SetItem(pylist, i, array) != 0){
+            PyErr_SetString(PyExc_TypeError, "Failure setting item.");
+            return NULL;
+        }
+    }
+    $result = pylist; 
+};
+
 // Take any sequence as input for a Vec2 (or Vec3, below)
 %typemap(in) Vec2 (Vec2 temp) {
   if (PySequence_Check($input)) {
@@ -278,11 +317,11 @@ static int myErr = 0;
 };
 
 // Note that Vec2 has higher precedence than Vec3
-%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Vec2, Vec2& {
+%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Vec2, Vec2&, Vec2* {
     $1 = (PySequence_Check($input) && (PySequence_Size($input) == 2)) ? 1 : 0;
 };
 
-%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Vec3, Vec3& {
+%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Vec3, Vec3&, Vec3* {
     $1 = (PySequence_Check($input) && (PySequence_Size($input) == 3)) ? 1 : 0;
 };
 
@@ -317,6 +356,15 @@ namespace std {
     %template(_ccvector) vector<vector<std::complex<double> > >;
     %template(_cccvector) vector<vector<vector<std::complex<double> > > >;
     %template(ldvector) vector<long double>;
+    // %template(_vvector) vector<Vec>;
+    // %template(_vvvector) vector<vector<Vec> >;
+    // %template(_vvvvector) vector<vector<vector<Vec> > >;
+    // %template(_vvector2) vector<Vec2>;
+    // %template(_vvvector2) vector<vector<Vec2> >;
+    // %template(_vvvvector2) vector<vector<vector<Vec2> > >;
+    // %template(_vvector3) std::vector<Vec3>;
+    // %template(_vvvector3) vector<vector<Vec3> >;
+    // %template(_vvvvector3) vector<vector<vector<Vec3> > >;
     //%template(avector) vector<shared_ptr<atomgroup> >;
     //%template(aptrvector) vector<shared_ptr<atom> >;
     %template(ivector) vector<shared_ptr<interaction> >;

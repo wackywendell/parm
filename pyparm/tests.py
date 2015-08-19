@@ -2,10 +2,11 @@ from . import d2 as sim2
 from . import d3 as sim3
 from unittest import TestCase
 import textwrap
+import itertools
 from transforms3d.axangles import axangle2mat
 
-from math import sqrt
 import numpy as np
+
 
 class NPTestCase(TestCase):
     def assertClose(self, x, y, rtol=1e-05, atol=1e-08, msg=None):
@@ -21,15 +22,15 @@ class NPTestCase(TestCase):
     def _indent(self, prefix, msg):
         lines = str(msg).splitlines()
         subsequent_indent = ' ' * len(prefix)
-        lines =(
-            [textwrap.wrap(l, width=80, 
+        lines = (
+            [textwrap.wrap(l, width=80,
                 replace_whitespace=False,
                 drop_whitespace=False,
                 initial_indent=prefix,
                 subsequent_indent=subsequent_indent,
                 break_long_words=False,
                 break_on_hyphens=False) for l in lines[:1]] +
-            [textwrap.wrap(l, width=80, 
+            [textwrap.wrap(l, width=80,
                 replace_whitespace=False,
                 drop_whitespace=False,
                 initial_indent=subsequent_indent,
@@ -49,36 +50,38 @@ class VecTest(NPTestCase):
         self.assertAlmostEqual(x, 0.)
         self.assertAlmostEqual(y, 0.)
         a.x = (2.3, 3.6)
-        x,y = a.x
+        x, y = a.x
         self.assertAlmostEqual(x, 2.3)
         self.assertAlmostEqual(y, 3.6)
+    
     def test_cross(self):
-        x,y = sim2.cross((3.,-1.4), 2.)
+        x, y = sim2.cross((3., -1.4), 2.)
         self.assertAlmostEqual(x, -2.8)
         self.assertAlmostEqual(y, -6.)
-        c = sim2.cross((3.,-1.4), (-2., 0.))
+        c = sim2.cross((3., -1.4), (-2., 0.))
         self.assertAlmostEqual(c, -2.8)
-        c = sim2.cross((3.,-1.4), (0., -2.))
+        c = sim2.cross((3., -1.4), (0., -2.))
         self.assertAlmostEqual(c, -6.)
+
 
 class RigidConstraintCube(NPTestCase):
     seed = 28156
     masses = np.asarray([1.]*8)
     M = np.sum(masses)
     locs = np.asarray([
-        [0,0,0],
-        [0,0,1],
-        [0,1,0],
-        [0,1,1],
-        [1,0,0],
-        [1,0,1],
-        [1,1,0],
-        [1,1,1.],
+        [0, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
+        [0, 1, 1],
+        [1, 0, 0],
+        [1, 0, 1],
+        [1, 1, 0],
+        [1, 1, 1.],
     ])
     vs = None
     fs = None
     
-    axis = (1,0,0)
+    axis = (1, 0, 0)
     dtheta = np.pi/2.
     
     def setUp(self):
@@ -130,65 +133,75 @@ class RigidConstraintCube(NPTestCase):
         self.assertClose(com, com2)
         self.assertClose(comv, comv2)
         self.assertClose(comf, comf2)
-        # Kinetic energy is not conserved, as velocities away from each other 
+        # Kinetic energy is not conserved, as velocities away from each other
         # are removed.
-        #self.assertClose(K, K2)
+        # self.assertClose(K, K2)
+        print(K, K2)
         self.assertClose(comf, comf2)
         self.assertClose(angm, angm2)
         self.assertClose(mom, mom2)
         self.assertClose(omega, omega2)
         # Torque is actually not conserved. Not sure why.
         # self.assertClose(torq, torq2)
+        print("torque:", torq, torq2)
+
 
 class RigidConstraintCubeY(RigidConstraintCube):
-    axis = (0,1,0)
-    dtheta = np.pi/2.
+    axis = (0, 1, 0)
+    dtheta = np.pi/2.0
+
 
 class RigidConstraintCubeZ(RigidConstraintCube):
-    axis = (0,0,1)
+    axis = (0, 0, 1)
     dtheta = np.pi/2.
+
     
 class RigidConstraintCubeYC(RigidConstraintCube):
-    axis = (0,1,0)
+    axis = (0, 1, 0)
     dtheta = np.pi*1.28
 
+
 class RigidConstraintCubeZC(RigidConstraintCube):
-    axis = (0,0,1)
+    axis = (0, 0, 1)
     dtheta = np.pi*1.28
     
+
 class RigidConstraintCubeOther(RigidConstraintCube):
-    axis = (.2,.3,.6)
+    axis = (.2, .3, .6)
     dtheta = np.pi*1.28
+
 
 class RigidConstraintExtendedOnce(RigidConstraintCube):
     masses = np.asarray([1.]*4 + [2., 3., 1.4, 1.8])
     locs = np.asarray([
-        [0,0,0],
-        [0,0,3],
-        [0,1,0],
-        [0,1,3],
-        [1,0,0],
-        [1,0,3],
-        [1,1,0],
-        [1,1,3.],
+        [0, 0, 0],
+        [0, 0, 3],
+        [0, 1, 0],
+        [0, 1, 3],
+        [1, 0, 0],
+        [1, 0, 3],
+        [1, 1, 0],
+        [1, 1, 3.],
     ])
-    axis = (.2,.3,.6)
+    axis = (.2, .3, .6)
     dtheta = np.pi*1.28
+
 
 class RigidConstraintExtendedTwce(RigidConstraintCube):
     masses = np.asarray([1.]*4 + [2., 3., 1.4, 1.8])
     locs = np.asarray([
-        [0,0,0],
-        [0,0,3],
-        [0,2,0],
-        [0,2,3],
-        [1,0,0],
-        [1,0,3],
-        [1,2,0],
-        [1,2,3.],
+        [0, 0, 0],
+        [0, 0, 3],
+        [0, 2, 0],
+        [0, 2, 3],
+        [1, 0, 0],
+        [1, 0, 3],
+        [1, 2, 0],
+        [1, 2, 3.],
     ])
-    axis = (.2,.3,.6)
+    axis = (.2, .3, .6)
     dtheta = np.pi*1.28
+
 
 class RandomHertzianVerletTest(NPTestCase):
     phi = 0.3
@@ -206,7 +219,7 @@ class RandomHertzianVerletTest(NPTestCase):
         Vs = np.sum(self.radii**3)*4/3*np.pi
         V = Vs / self.phi
         self.L = float(V**(1./3.))
-        box = self.box = sim3.OriginBox(self.L)
+        self.box = sim3.OriginBox(self.L)
         
         self.atoms = sim3.atomvec(self.masses)
         self.hertz = sim3.Hertzian(self.box, self.atoms, 0.4)
@@ -216,7 +229,9 @@ class RandomHertzianVerletTest(NPTestCase):
         
         self.reset_positions()
         
-        collec = self.collec = sim3.collectionVerlet(self.box, self.atoms, self.dt, [self.hertz], [self.hertz.nlist()], [])
+        collec = self.collec = sim3.collectionVerlet(
+            self.box, self.atoms, self.dt,
+            [self.hertz], [self.hertz.nlist()], [])
         
         print('EKUT:', collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
     
@@ -231,7 +246,7 @@ class RandomHertzianVerletTest(NPTestCase):
         nl.update_list(True)
     
     def reset(self):
-        self.reset_positions()    
+        self.reset_positions()
         self.collec.scaleVelocitiesT(1.0)
         for _ in range(1000):
             self.collec.timestep()
@@ -247,10 +262,11 @@ class RandomHertzianVerletTest(NPTestCase):
                 collec.timestep()
                 self.assertClose(collec.energy(), lastE, rtol=1e-2)
                 lastE = collec.energy()
-            EKUTs.append((collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp()))
+            EKUTs.append((collec.energy(), collec.kinetic(),
+                          collec.potentialenergy(), collec.temp()))
             
         EKUTs = np.asarray(EKUTs)
-        E,K,U,T = EKUTs.T
+        E, K, U, T = EKUTs.T
         
         mean_T = np.mean(T)
         self.assertClose(mean_T, 1.0, rtol=1e-1)
@@ -275,7 +291,7 @@ class RandomRigidConstraintTest(NPTestCase):
         Vs = np.sum(self.radii**3)*4/3*np.pi
         V = Vs / self.phi_ish
         self.L = float(V**(1./3.))
-        box = self.box = sim3.OriginBox(self.L)
+        self.box = sim3.OriginBox(self.L)
         
         self.atoms = sim3.atomvec(self.masses)
 
@@ -301,15 +317,17 @@ class RandomRigidConstraintTest(NPTestCase):
 
         nl = self.hertz.nlist()
         for s in self.subgroups:
-            for n,a in enumerate(s):
+            for n, a in enumerate(s):
                 alist = list(s)
-                for m,a2 in enumerate(alist[:n]):
+                for m, a2 in enumerate(alist[:n]):
                     nl.ignore(a, a2)
 
         nl.update_list(True)
         
         self.rigids = [sim3.RigidConstraint(self.box, s) for s in self.subgroups]
-        collec = self.collec = sim3.collectionVerlet(self.box, self.atoms, self.dt, [self.hertz], [self.hertz.nlist()], self.rigids)
+        collec = self.collec = sim3.collectionVerlet(
+            self.box, self.atoms, self.dt,
+            [self.hertz], [self.hertz.nlist()], self.rigids)
         
         print('EKUT:', collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
     
@@ -318,7 +336,6 @@ class RandomRigidConstraintTest(NPTestCase):
         locs0 = np.array(self.locs0)
         for ix, a, radius, mass in zip(self.ixs, self.atoms, self.radii, self.masses):
             loc0 = locs0[ix]
-            s = self.subgroups[ix]
             
             dx = np.random.normal(size=(3,))
             dx /= np.linalg.norm(dx)
@@ -373,15 +390,17 @@ class RandomRigidConstraintTest(NPTestCase):
             self.assertClose(com, com2)
             self.assertClose(comv, comv2)
             self.assertClose(comf, comf2)
-            # Kinetic energy is not conserved, as velocities away from each other 
+            # Kinetic energy is not conserved, as velocities away from each other
             # are removed.
-            #self.assertClose(K, K2)
+            # self.assertClose(K, K2)
+            print("K:", K, K2)
             self.assertClose(comf, comf2)
             self.assertClose(angm, angm2)
             self.assertClose(mom, mom2)
             self.assertClose(omega, omega2)
             # Torque is actually not conserved. Not sure why.
             # self.assertClose(torq, torq2)
+            print("torque:", torq, torq2)
     
     def testEnergy(self):
         self.reset()
@@ -393,13 +412,79 @@ class RandomRigidConstraintTest(NPTestCase):
                 collec.timestep()
                 self.assertClose(collec.energy(), lastE, rtol=1e-2)
                 lastE = collec.energy()
-            EKUTs.append((collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp()))
+            EKUTs.append((collec.energy(), collec.kinetic(),
+                          collec.potentialenergy(), collec.temp()))
             
         EKUTs = np.asarray(EKUTs)
-        E,K,U,T = EKUTs.T
+        E, K, U, T = EKUTs.T
         
         mean_T = np.mean(T)
         self.assertClose(mean_T, 1.0, rtol=1e-1)
         
         som = np.std(E) / np.mean(E)
         self.assertClose(som, 0.0, atol=1e-2)
+
+
+class RSQTest(NPTestCase):
+    N = 8
+    phi = 0.3
+    ns = [1, 2, 4, 8, 16, 32]
+    dxs = [
+        [1, 0, 0],
+        [-1, 0, 0],
+        [0, 1, 0],
+        [0, -1, 0],
+        [0, 0, 1],
+        [0, 0, -1],
+        [0, 2, 1],
+        [-2.1, 4, 1],
+    ]
+    
+    def setUp(self):
+        np.random.seed(13763)
+        self.radii = np.random.uniform(1.0, 2.0, size=(self.N,))
+        self.masses = self.radii**3
+    
+        Vs = np.sum(self.radii**3)*4/3*np.pi
+        V = Vs / self.phi
+        self.L = float(V**(1./3.))
+        self.box = sim3.OriginBox(self.L)
+        self.atoms = sim3.atomvec(self.masses)
+        self.rsqs = sim3.RsqTracker(self.atoms, self.ns, False)
+        
+        drs = []
+        for t in range(self.ns[-1] * 4):
+            for i, (a, dr) in enumerate(zip(self.atoms, itertools.cycle(self.dxs))):
+                a.x += dr
+                if t == 0:
+                    drs.append(dr)
+            self.rsqs.update(self.box)
+        self.drs = np.asarray(drs)
+    
+    def testr2(self):
+        r2 = np.asarray(self.rsqs.r2())
+        print(np.shape(r2))
+        for n, r2n in zip(self.ns, r2):
+            drsq = np.sum((np.asarray(self.drs)*n)**2, axis=-1)
+            self.assertClose(drsq, r2n)
+        
+    def testxyz2(self):
+        xyz2 = np.asarray(self.rsqs.xyz2())
+        print(np.shape(xyz2))
+        for n, xyz2n in zip(self.ns, xyz2):
+            drsq = (np.asarray(self.drs)*n)**2
+            self.assertClose(drsq, xyz2n)
+        
+    def testr4(self):
+        r4 = np.asarray(self.rsqs.r4())
+        print(np.shape(r4))
+        for n, r4n in zip(self.ns, r4):
+            drsq = np.sum((np.asarray(self.drs)*n)**2, axis=-1)**2
+            self.assertClose(drsq, r4n)
+        
+    def testxyz4(self):
+        xyz4 = np.asarray(self.rsqs.xyz4())
+        print(np.shape(xyz4))
+        for n, xyz4n in zip(self.ns, xyz4):
+            drsq = (np.asarray(self.drs)*n)**4
+            self.assertClose(drsq, xyz4n)
