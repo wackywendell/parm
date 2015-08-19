@@ -2,6 +2,7 @@ from . import d2 as sim2
 from . import d3 as sim3
 from unittest import TestCase
 import textwrap
+import itertools
 from transforms3d.axangles import axangle2mat
 
 import numpy as np
@@ -422,3 +423,68 @@ class RandomRigidConstraintTest(NPTestCase):
         
         som = np.std(E) / np.mean(E)
         self.assertClose(som, 0.0, atol=1e-2)
+
+
+class RSQTest(NPTestCase):
+    N = 8
+    phi = 0.3
+    ns = [1, 2, 4, 8, 16, 32]
+    dxs = [
+        [1, 0, 0],
+        [-1, 0, 0],
+        [0, 1, 0],
+        [0, -1, 0],
+        [0, 0, 1],
+        [0, 0, -1],
+        [0, 2, 1],
+        [-2.1, 4, 1],
+    ]
+    
+    def setUp(self):
+        np.random.seed(13763)
+        self.radii = np.random.uniform(1.0, 2.0, size=(self.N,))
+        self.masses = self.radii**3
+    
+        Vs = np.sum(self.radii**3)*4/3*np.pi
+        V = Vs / self.phi
+        self.L = float(V**(1./3.))
+        self.box = sim3.OriginBox(self.L)
+        self.atoms = sim3.atomvec(self.masses)
+        self.rsqs = sim3.RsqTracker(self.atoms, self.ns, False)
+        
+        drs = []
+        for t in range(self.ns[-1] * 4):
+            for i, (a, dr) in enumerate(zip(self.atoms, itertools.cycle(self.dxs))):
+                a.x += dr
+                if t == 0:
+                    drs.append(dr)
+            self.rsqs.update(self.box)
+        self.drs = np.asarray(drs)
+    
+    def testr2(self):
+        r2 = np.asarray(self.rsqs.r2())
+        print(np.shape(r2))
+        for n, r2n in zip(self.ns, r2):
+            drsq = np.sum((np.asarray(self.drs)*n)**2, axis=-1)
+            self.assertClose(drsq, r2n)
+        
+    def testxyz2(self):
+        xyz2 = np.asarray(self.rsqs.xyz2())
+        print(np.shape(xyz2))
+        for n, xyz2n in zip(self.ns, xyz2):
+            drsq = (np.asarray(self.drs)*n)**2
+            self.assertClose(drsq, xyz2n)
+        
+    def testr4(self):
+        r4 = np.asarray(self.rsqs.r4())
+        print(np.shape(r4))
+        for n, r4n in zip(self.ns, r4):
+            drsq = np.sum((np.asarray(self.drs)*n)**2, axis=-1)**2
+            self.assertClose(drsq, r4n)
+        
+    def testxyz4(self):
+        xyz4 = np.asarray(self.rsqs.xyz4())
+        print(np.shape(xyz4))
+        for n, xyz4n in zip(self.ns, xyz4):
+            drsq = (np.asarray(self.drs)*n)**4
+            self.assertClose(drsq, xyz4n)
