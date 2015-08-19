@@ -16,6 +16,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/normal_distribution.hpp>
+#include <boost/array.hpp>
 #include <Eigen/Dense>
 
 using namespace std;
@@ -36,6 +37,8 @@ typedef unsigned int uint;
 #else
     typedef double flt;
 #endif
+
+typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure why
 
 typedef Eigen::Matrix<flt, NDIM, 1> Vec;
 typedef Eigen::Matrix<flt, 2, 1> Vec2;
@@ -142,5 +145,4 @@ vector<long double> LDVector(vector<double> dists);
 #ifdef VEC3D
 Matrix best_rotation_matrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &to);
 #endif
-
 #endif
