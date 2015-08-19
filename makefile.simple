@@ -1,6 +1,6 @@
 UNAME := $(shell uname)
 #CXX=${CXX}
-SWIG=swig -Wextra -shadow -python -py3 -c++
+SWIG=swig -python -py3 -c++ # -Wextra -shadow
 CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
 
 INC=`python3-config --includes`
@@ -52,10 +52,10 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 
 py$(SFX): pyparm/_sim$(SFX).so
 
-pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/array.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
-	cd src ; $(SWIG) $(OPTSET) sim.i
-	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
-	rm src/sim_wrap.cxx
+pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.simple.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
+	cd src ; $(SWIG) $(OPTSET) sim.simple.i
+	(cat src/swig_header.h ; echo ; echo ; cat src/sim.simple_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
+	rm src/sim.simple_wrap.cxx
 	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
 pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
