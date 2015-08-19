@@ -3,6 +3,16 @@ from decimal import Decimal
 from datetime import datetime, timedelta
 
 
+def norm(vec):
+    from numpy.linalg import norm
+    return norm(vec)
+
+
+def sq(vec):
+    from numpy.linalg import norm
+    return norm(vec)**2
+
+
 def printlist(lst, name, **kw):
     import numpy as np
     mean = float(np.mean(lst, 0))
