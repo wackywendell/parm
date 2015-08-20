@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['pair',['Pair',['../vecrand_8hpp.html#a6df33f24805f36ae92aa340c21c5de76',1,'vecrand.hpp']]],
-  ['pair_5fiter',['pair_iter',['../class_grid.html#a6b3f8e4924932d853cd019f1203a1e2e',1,'Grid']]]
+  ['normdistribution',['normdistribution',['../vecrand_8hpp.html#ae7ae85e8b740093de41f1da4adba7b09',1,'vecrand.hpp']]],
+  ['normgenerator',['normgenerator',['../vecrand_8hpp.html#a6b893b5c3309449eb7645a22af9324a6',1,'vecrand.hpp']]]
 ];

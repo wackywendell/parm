@@ -113,7 +113,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &lt;boost/random/mersenne_twister.hpp&gt;</code><br />
 <code>#include &lt;boost/random/variate_generator.hpp&gt;</code><br />
 <code>#include &lt;boost/random/normal_distribution.hpp&gt;</code><br />
-<code>#include &quot;<a class="el" href="vec_8hpp_source.html">vec.hpp</a>&quot;</code><br />
+<code>#include &lt;boost/array.hpp&gt;</code><br />
+<code>#include &lt;Eigen/Dense&gt;</code><br />
 </div>
 <p><a href="vecrand_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -134,16 +135,24 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a91ad9478d81a7aaf2593e8d9c3d06a14"><td class="memItemLeft" align="right" valign="top">typedef unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a></td></tr>
+<tr class="separator:a91ad9478d81a7aaf2593e8d9c3d06a14"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba18dc05b48d6b6580d8b1b77a876a81"><td class="memItemLeft" align="right" valign="top">typedef double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a></td></tr>
 <tr class="memdesc:aba18dc05b48d6b6580d8b1b77a876a81"><td class="mdescLeft">&#160;</td><td class="mdescRight">The basic floating point type used in the simulations.  <a href="#aba18dc05b48d6b6580d8b1b77a876a81">More...</a><br /></td></tr>
 <tr class="separator:aba18dc05b48d6b6580d8b1b77a876a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f96c19973963f3408a8e6e5b76d8387"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_vector2.html">Vector2</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a></td></tr>
-<tr class="memdesc:a3f96c19973963f3408a8e6e5b76d8387"><td class="mdescLeft">&#160;</td><td class="mdescRight">The basic physics vector.  <a href="#a3f96c19973963f3408a8e6e5b76d8387">More...</a><br /></td></tr>
-<tr class="separator:a3f96c19973963f3408a8e6e5b76d8387"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6df33f24805f36ae92aa340c21c5de76"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_num_vector.html">NumVector</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a6df33f24805f36ae92aa340c21c5de76">Pair</a></td></tr>
-<tr class="separator:a6df33f24805f36ae92aa340c21c5de76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85edee7ff3e626b3ddf0efa865fe4d09"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="class_n_vector.html">NVector</a>&lt; <a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a85edee7ff3e626b3ddf0efa865fe4d09">VecPair</a></td></tr>
-<tr class="separator:a85edee7ff3e626b3ddf0efa865fe4d09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98875dff65ee903f41a7ae62c696f935"><td class="memItemLeft" align="right" valign="top">typedef std::complex&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a98875dff65ee903f41a7ae62c696f935">cmplx</a></td></tr>
+<tr class="separator:a98875dff65ee903f41a7ae62c696f935"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0c2bcbdfaf637fa46ae67b5685ce75c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a></td></tr>
+<tr class="memdesc:aa0c2bcbdfaf637fa46ae67b5685ce75c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The basic physics vector.  <a href="#aa0c2bcbdfaf637fa46ae67b5685ce75c">More...</a><br /></td></tr>
+<tr class="separator:aa0c2bcbdfaf637fa46ae67b5685ce75c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83def35d2587f49081638089789bc786"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 2, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a></td></tr>
+<tr class="separator:a83def35d2587f49081638089789bc786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b317336327f5108afce83449188624b"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 3, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a></td></tr>
+<tr class="separator:a0b317336327f5108afce83449188624b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78509254bd1fca9808a2e88a688df17e"><td class="memItemLeft" align="right" valign="top">typedef Eigen::Matrix&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 3, 3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Matrix</a></td></tr>
+<tr class="separator:a78509254bd1fca9808a2e88a688df17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11984e38f9bc1e7e88e423eeeffbf48f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a11984e38f9bc1e7e88e423eeeffbf48f">VecPair</a></td></tr>
+<tr class="separator:a11984e38f9bc1e7e88e423eeeffbf48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2f0bf395f80c9e60313cddb8160c610"><td class="memItemLeft" align="right" valign="top">typedef boost::mt19937&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ab2f0bf395f80c9e60313cddb8160c610">engine</a></td></tr>
 <tr class="separator:ab2f0bf395f80c9e60313cddb8160c610"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7ae85e8b740093de41f1da4adba7b09"><td class="memItemLeft" align="right" valign="top">typedef boost::normal_distribution&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ae7ae85e8b740093de41f1da4adba7b09">normdistribution</a></td></tr>
@@ -157,23 +166,43 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae049b562e503290f617ff19af8cb6b87"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector2.html">Vector2</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ae049b562e503290f617ff19af8cb6b87">vec</a> (double x, double y)</td></tr>
-<tr class="memdesc:ae049b562e503290f617ff19af8cb6b87"><td class="mdescLeft">&#160;</td><td class="mdescRight">A one-liner for creating a Vec object, occasionally useful from within Python.  <a href="#ae049b562e503290f617ff19af8cb6b87">More...</a><br /></td></tr>
-<tr class="separator:ae049b562e503290f617ff19af8cb6b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ca1b489cff3d8f4934be294809e11d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_vector3.html">Vector3</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a8ca1b489cff3d8f4934be294809e11d2">vec</a> (double x, double y, double z)</td></tr>
-<tr class="separator:a8ca1b489cff3d8f4934be294809e11d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a772479455229b01f9c6d1f39561414d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a772479455229b01f9c6d1f39561414d3">vec</a> ()</td></tr>
+<tr class="memdesc:a772479455229b01f9c6d1f39561414d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">A one-liner for creating a Vec object, occasionally useful from within Python.  <a href="#a772479455229b01f9c6d1f39561414d3">More...</a><br /></td></tr>
+<tr class="separator:a772479455229b01f9c6d1f39561414d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24f0767e52c9796ea00b15700d1ad13f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a24f0767e52c9796ea00b15700d1ad13f">vec</a> (double x, double y)</td></tr>
+<tr class="separator:a24f0767e52c9796ea00b15700d1ad13f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21547661bf06da1be24cd3f97d7e04f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a21547661bf06da1be24cd3f97d7e04f6">vec</a> (double x, double y, double z)</td></tr>
+<tr class="separator:a21547661bf06da1be24cd3f97d7e04f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a665ab08b732e97046d5167e5b8d9cffd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a665ab08b732e97046d5167e5b8d9cffd">cross</a> (<a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a> v1, <a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a> v2)</td></tr>
+<tr class="separator:a665ab08b732e97046d5167e5b8d9cffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5c8b5b783d7d1d0f0b91475f53c541a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#aa5c8b5b783d7d1d0f0b91475f53c541a">cross</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v1, <a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v2)</td></tr>
+<tr class="separator:aa5c8b5b783d7d1d0f0b91475f53c541a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0da717c329b67be9d07f8bd04a984a19"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a0da717c329b67be9d07f8bd04a984a19">cross</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v, <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> n)</td></tr>
+<tr class="separator:a0da717c329b67be9d07f8bd04a984a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa065585a7c2cba8525f9fdae7c17eae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#aaa065585a7c2cba8525f9fdae7c17eae">perp</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v)</td></tr>
+<tr class="separator:aaa065585a7c2cba8525f9fdae7c17eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4be8248b8e26f6640b2002cec8f23c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ab4be8248b8e26f6640b2002cec8f23c1">perpto</a> (<a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> r, <a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> to)</td></tr>
+<tr class="separator:ab4be8248b8e26f6640b2002cec8f23c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54b91c527a91e9e3c835a5547343db92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a54b91c527a91e9e3c835a5547343db92">rotate</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v, <a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i)</td></tr>
+<tr class="separator:a54b91c527a91e9e3c835a5547343db92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a6a8e29996d62460529cd57ec73a97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ae4a6a8e29996d62460529cd57ec73a97">flip</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v)</td></tr>
+<tr class="separator:ae4a6a8e29996d62460529cd57ec73a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc9a14682ac1495679199e9a1eaed5d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#adc9a14682ac1495679199e9a1eaed5d7">rotate_flip</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v, <a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i)</td></tr>
+<tr class="separator:adc9a14682ac1495679199e9a1eaed5d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44f4359b4c093594312c428d8b34436c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a44f4359b4c093594312c428d8b34436c">rotate_flip_inv</a> (<a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> v, <a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i)</td></tr>
+<tr class="separator:a44f4359b4c093594312c428d8b34436c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bcd1e3b6588c3a8b8af48ceb604915f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a6bcd1e3b6588c3a8b8af48ceb604915f">vecsize</a> ()</td></tr>
 <tr class="separator:a6bcd1e3b6588c3a8b8af48ceb604915f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00e601989e706a5df2d443248dadb0fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a00e601989e706a5df2d443248dadb0fc">rand01</a> ()</td></tr>
 <tr class="memdesc:a00e601989e706a5df2d443248dadb0fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random number between 0 and 1, using the "global" random number generator.  <a href="#a00e601989e706a5df2d443248dadb0fc">More...</a><br /></td></tr>
 <tr class="separator:a00e601989e706a5df2d443248dadb0fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f2700f1adbe0f5a574b2eb16cca8453"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a> ()</td></tr>
+<tr class="memitem:a2f2700f1adbe0f5a574b2eb16cca8453"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a> ()</td></tr>
 <tr class="memdesc:a2f2700f1adbe0f5a574b2eb16cca8453"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random vector from a Gaussian distribution, i.e.  <a href="#a2f2700f1adbe0f5a574b2eb16cca8453">More...</a><br /></td></tr>
 <tr class="separator:a2f2700f1adbe0f5a574b2eb16cca8453"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41702d1ad93648042aaf2d9f6014d75e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a41702d1ad93648042aaf2d9f6014d75e">randVecBoxed</a> ()</td></tr>
+<tr class="memitem:a41702d1ad93648042aaf2d9f6014d75e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a41702d1ad93648042aaf2d9f6014d75e">randVecBoxed</a> ()</td></tr>
 <tr class="memdesc:a41702d1ad93648042aaf2d9f6014d75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random vector inside a box with sides of length 1.  <a href="#a41702d1ad93648042aaf2d9f6014d75e">More...</a><br /></td></tr>
 <tr class="separator:a41702d1ad93648042aaf2d9f6014d75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a0b5798554dc6b4009a82cde60fa2ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a2a0b5798554dc6b4009a82cde60fa2ab">randVecSphere</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> radius=1)</td></tr>
+<tr class="memitem:a2a0b5798554dc6b4009a82cde60fa2ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#a2a0b5798554dc6b4009a82cde60fa2ab">randVecSphere</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> radius=1)</td></tr>
 <tr class="memdesc:a2a0b5798554dc6b4009a82cde60fa2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a random vector inside a sphere.  <a href="#a2a0b5798554dc6b4009a82cde60fa2ab">More...</a><br /></td></tr>
 <tr class="separator:a2a0b5798554dc6b4009a82cde60fa2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec71d81c835e6d590db0e0ab34c8e2f5"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#aec71d81c835e6d590db0e0ab34c8e2f5">seed</a> (unsigned int n)</td></tr>
@@ -191,6 +220,8 @@ Functions</h2></td></tr>
 <tr class="memitem:ab75b19a15b2f1bc00c5005a33f6b8409"><td class="memItemLeft" align="right" valign="top">vector&lt; long double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ab75b19a15b2f1bc00c5005a33f6b8409">LDVector</a> (vector&lt; double &gt; dists)</td></tr>
 <tr class="memdesc:ab75b19a15b2f1bc00c5005a33f6b8409"><td class="mdescLeft">&#160;</td><td class="mdescRight">Go to and from Long Doubles.  <a href="#ab75b19a15b2f1bc00c5005a33f6b8409">More...</a><br /></td></tr>
 <tr class="separator:ab75b19a15b2f1bc00c5005a33f6b8409"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad45f531df9f4963e85b12dfca38a418f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="vecrand_8hpp.html#ad45f531df9f4963e85b12dfca38a418f">best_rotation_matrix</a> (<a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, Eigen::Dynamic, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a> &gt; &amp;from, <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, Eigen::Dynamic, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a> &gt; &amp;to)</td></tr>
+<tr class="separator:ad45f531df9f4963e85b12dfca38a418f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -208,7 +239,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a4">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#a3">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#a4">packer.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a5">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#a3">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#a4">packer.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -225,6 +256,18 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a98875dff65ee903f41a7ae62c696f935"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::complex&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&gt; <a class="el" href="vecrand_8hpp.html#a98875dff65ee903f41a7ae62c696f935">cmplx</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab2f0bf395f80c9e60313cddb8160c610"></a>
 <div class="memitem">
 <div class="memproto">
@@ -249,7 +292,7 @@ Variables</h2></td></tr>
 
 <p>The basic floating point type used in the simulations. </p>
 <p>The entire package can be compiled with LONGFLOAT defined to use long doubles. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="packer_8cpp-example.html#a2">packer.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a3">hardspheres.cpp</a>, and <a class="el" href="packer_8cpp-example.html#a2">packer.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -271,6 +314,18 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">typedef boost::variate_generator&lt;<a class="el" href="vecrand_8hpp.html#ab2f0bf395f80c9e60313cddb8160c610">engine</a>&amp;, <a class="el" href="vecrand_8hpp.html#a1ce74c60f66aab708edf15b9d61168e4">lindistribution</a> &gt; <a class="el" href="vecrand_8hpp.html#ae5b7bb8afccab06cda50b7abdbbc4459">lingenerator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a78509254bd1fca9808a2e88a688df17e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef Eigen::Matrix&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 3, 3&gt; <a class="el" href="class_matrix.html">Matrix</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -301,40 +356,63 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a6df33f24805f36ae92aa340c21c5de76"></a>
+<a class="anchor" id="a91ad9478d81a7aaf2593e8d9c3d06a14"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="class_num_vector.html">NumVector</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 2&gt; <a class="el" href="vecrand_8hpp.html#a6df33f24805f36ae92aa340c21c5de76">Pair</a></td>
+          <td class="memname">typedef unsigned int <a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a class="anchor" id="a3f96c19973963f3408a8e6e5b76d8387"></a>
+<a class="anchor" id="aa0c2bcbdfaf637fa46ae67b5685ce75c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="class_vector3.html">Vector3</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt; <a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a></td>
+          <td class="memname">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>, 1&gt; <a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>The basic physics vector. </p>
 <p>See <a class="el" href="class_vector3.html" title="A 3D physics vector, with methods for adding, subtracting, dot product, etc. ">Vector3</a> for full methods. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a8">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#a9">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#a8">packer.cpp</a>.</dd>
-</dl>
+
 </div>
 </div>
-<a class="anchor" id="a85edee7ff3e626b3ddf0efa865fe4d09"></a>
+<a class="anchor" id="a83def35d2587f49081638089789bc786"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="class_n_vector.html">NVector</a>&lt;<a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>, 2&gt; <a class="el" href="vecrand_8hpp.html#a85edee7ff3e626b3ddf0efa865fe4d09">VecPair</a></td>
+          <td class="memname">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 2, 1&gt; <a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0b317336327f5108afce83449188624b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, 3, 1&gt; <a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a11984e38f9bc1e7e88e423eeeffbf48f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef <a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>, 2&gt; <a class="el" href="vecrand_8hpp.html#a11984e38f9bc1e7e88e423eeeffbf48f">VecPair</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -342,6 +420,158 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ad45f531df9f4963e85b12dfca38a418f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_matrix.html">Matrix</a> best_rotation_matrix </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, Eigen::Dynamic, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a78509254bd1fca9808a2e88a688df17e">Eigen::Matrix</a>&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>, Eigen::Dynamic, <a class="el" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>to</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a665ab08b732e97046d5167e5b8d9cffd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a> cross </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a>&#160;</td>
+          <td class="paramname"><em>v1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a>&#160;</td>
+          <td class="paramname"><em>v2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa5c8b5b783d7d1d0f0b91475f53c541a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> cross </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0da717c329b67be9d07f8bd04a984a19"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> cross </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae4a6a8e29996d62460529cd57ec73a97"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> flip </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a3a5bd615b84c0307320fc820bca28da8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -380,6 +610,64 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aaa065585a7c2cba8525f9fdae7c17eae"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> perp </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab4be8248b8e26f6640b2002cec8f23c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> perpto </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td>
+          <td class="paramname"><em>to</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a00e601989e706a5df2d443248dadb0fc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -402,7 +690,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> randVec </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> randVec </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -421,7 +709,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> randVecBoxed </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> randVecBoxed </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -438,7 +726,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> randVecSphere </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> randVecSphere </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td>
           <td class="paramname"><em>radius</em> = <code>1</code></td><td>)</td>
@@ -448,6 +736,108 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Generate a random vector inside a sphere. </p>
+
+</div>
+</div>
+<a class="anchor" id="a54b91c527a91e9e3c835a5547343db92"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> rotate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a>&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adc9a14682ac1495679199e9a1eaed5d7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> rotate_flip </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a>&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a44f4359b4c093594312c428d8b34436c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> rotate_flip_inv </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a>&#160;</td>
+          <td class="paramname"><em>v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a>&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -506,7 +896,7 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae049b562e503290f617ff19af8cb6b87"></a>
+<a class="anchor" id="a772479455229b01f9c6d1f39561414d3"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -514,7 +904,32 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_vector2.html">Vector2</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&gt; vec </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> vec </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A one-liner for creating a Vec object, occasionally useful from within Python. </p>
+
+</div>
+</div>
+<a class="anchor" id="a24f0767e52c9796ea00b15700d1ad13f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a83def35d2587f49081638089789bc786">Vec2</a> vec </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -538,11 +953,9 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>A one-liner for creating a Vec object, occasionally useful from within Python. </p>
-
 </div>
 </div>
-<a class="anchor" id="a8ca1b489cff3d8f4934be294809e11d2"></a>
+<a class="anchor" id="a21547661bf06da1be24cd3f97d7e04f6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -550,7 +963,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_vector3.html">Vector3</a>&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&gt; vec </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#a0b317336327f5108afce83449188624b">Vec3</a> vec </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -617,14 +1030,14 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>A constant equal to \(\frac{1}{d}\), where \(d\) is the number of dimensions. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a5">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#a4">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#a5">packer.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#a6">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#a4">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#a5">packer.cpp</a>.</dd>
 </dl>
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -150,7 +150,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    opterr = 0;</div>
 <div class="line">    <span class="keywordflow">while</span> ((c = getopt (argc, argv, <span class="stringliteral">&quot;n:f:s:d:t:o:&quot;</span>)) != -1) <span class="keywordflow">switch</span> (c){</div>
 <div class="line">        <span class="keywordflow">case</span> <span class="charliteral">&#39;n&#39;</span>: <span class="comment">//Number of particles</span></div>
-<div class="line">            Natoms = atol(optarg);</div>
+<div class="line">            Natoms = (int) atol(optarg);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        <span class="keywordflow">case</span> <span class="charliteral">&#39;f&#39;</span>: <span class="comment">//Phi -Packing fraction</span></div>
 <div class="line">            phi = atof(optarg);</div>
@@ -159,10 +159,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">            sizeratio = atof(optarg);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        <span class="keywordflow">case</span> <span class="charliteral">&#39;d&#39;</span>: <span class="comment">//dt of integration of simulation</span></div>
-<div class="line">            dt = atol(optarg);</div>
+<div class="line">            dt = (<a name="a3"></a><a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>) atof(optarg);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        <span class="keywordflow">case</span> <span class="charliteral">&#39;t&#39;</span>: <span class="comment">// total time of simulation</span></div>
-<div class="line">            tottime = atof(optarg);</div>
+<div class="line">            tottime = (int) atof(optarg);</div>
 <div class="line">            <span class="keywordflow">break</span>;</div>
 <div class="line">        <span class="keywordflow">case</span> <span class="charliteral">&#39;o&#39;</span>:</div>
 <div class="line">            outname = optarg;</div>
@@ -182,19 +182,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="keywordtype">string</span> tclname=outname.substr(0,outname.size()-4)+<span class="stringliteral">&quot;.tcl&quot;</span>;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// new random seed each time, for velocities and placement</span></div>
-<div class="line">    <a name="a3"></a><a class="code" href="vecrand_8cpp.html#aec71d81c835e6d590db0e0ab34c8e2f5">seed</a>();</div>
+<div class="line">    <a name="a4"></a><a class="code" href="vecrand_8cpp.html#aec71d81c835e6d590db0e0ab34c8e2f5">seed</a>();</div>
 <div class="line">    </div>
 <div class="line">    vector&lt;flt&gt; atomsizes(Natoms, sigma);</div>
 <div class="line">    atomsizes[0] = sigma * sizeratio;</div>
 <div class="line">    vector&lt;flt&gt; atommasses(Natoms, 1);</div>
-<div class="line">    atommasses[0] = pow(sizeratio, <a name="a4"></a><a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>); <span class="comment">// NDIM is &quot;number of dimensions&quot; (i.e., 3)</span></div>
+<div class="line">    atommasses[0] = pow(sizeratio, <a name="a5"></a><a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>); <span class="comment">// NDIM is &quot;number of dimensions&quot; (i.e., 3)</span></div>
 <div class="line">    </div>
 <div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> Vs = 0;</div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;atomsizes.size(); ++i){</div>
 <div class="line">        Vs += pow(atomsizes[i], <a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>) * M_PI / 2 / <a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>;</div>
 <div class="line">    };</div>
 <div class="line">    </div>
-<div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> L = pow(Vs/phi, <a name="a5"></a><a class="code" href="vecrand_8hpp.html#aa4c4eddddfed65be9edd9a5d04d9b93e">OVERNDIM</a>); <span class="comment">// OVERNDIM is &quot;1/number of dimensions&quot; (i.e., 1.0/3.0)</span></div>
+<div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> L = pow(Vs/phi, <a name="a6"></a><a class="code" href="vecrand_8hpp.html#aa4c4eddddfed65be9edd9a5d04d9b93e">OVERNDIM</a>); <span class="comment">// OVERNDIM is &quot;1/number of dimensions&quot; (i.e., 1.0/3.0)</span></div>
 <div class="line">    assert(L &gt; (atomsizes[0] + atomsizes[1]));</div>
 <div class="line">    <span class="comment">// if the box is not wider than two atoms, this algorithm will have trouble</span></div>
 <div class="line">    </div>
@@ -213,7 +213,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// Hertzian Interaction, for the relaxing stage</span></div>
 <div class="line">    <span class="comment">//(new NeighborList(obox, sigcut*sigma, 1.4*(sigcut*sigma)));</span></div>
 <div class="line">    boost::shared_ptr&lt;NListed&lt;HertzianAtom, HertzianPair&gt; &gt; hertz(</div>
-<div class="line">        <span class="keyword">new</span> <a name="_a6"></a><a class="code" href="class_n_listed.html">NListed&lt;HertzianAtom, HertzianPair&gt;</a>(</div>
+<div class="line">        <span class="keyword">new</span> <a name="_a7"></a><a class="code" href="class_n_listed.html">NListed&lt;HertzianAtom, HertzianPair&gt;</a>(</div>
 <div class="line">            boxptr, atomptr, 0.4*(sigcut*sigma)</div>
 <div class="line">    ));</div>
 <div class="line">    boost::shared_ptr&lt;NeighborList&gt; nl = hertz-&gt;nlist();</div>
@@ -233,12 +233,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    </div>
 <div class="line">    <span class="comment">// Now we run through all the atoms, set their positions / velocities,</span></div>
 <div class="line">    <span class="comment">// and add them to the hertzian Interaction (i.e., to the neighbor list)</span></div>
-<div class="line">    <span class="keywordflow">for</span> (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i &lt; atoms.<a name="a7"></a><a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
+<div class="line">    <span class="keywordflow">for</span> (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i &lt; atoms.<a name="a8"></a><a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
 <div class="line">        <span class="comment">// we track energy to see if things are overlapping</span></div>
 <div class="line">        atoms[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
-<div class="line">        atoms[i].v = <a name="a8"></a><a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
-<div class="line">        atoms[i].f = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
-<div class="line">        atoms[i].a = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line">        atoms[i].v = Vec::Zero();</div>
+<div class="line">        atoms[i].f = Vec::Zero();</div>
+<div class="line">        atoms[i].a = Vec::Zero();</div>
 <div class="line">        </div>
 <div class="line">        <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> cursigma = sigma;</div>
 <div class="line">        <span class="keywordflow">if</span>(i==0) (cursigma = sigma*sizeratio);</div>
@@ -265,7 +265,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    </div>
 <div class="line">    <span class="comment">// Potential energy per Atom</span></div>
 <div class="line">    <span class="keywordtype">int</span> swtch = 0; <span class="comment">//Switch to help terminate simulations of unattainable packing fractions</span></div>
-<div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> U = collec0.<a name="a15"></a><a class="code" href="class_collection.html#aaf13b097ce715e5b20062d0dcb5360c4">potentialenergy</a>()/Natoms;</div>
+<div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> U = collec0.<a name="a15"></a><a class="code" href="class_collection.html#af8fa6055c3783d8accc9667c057da38f">potential_energy</a>()/Natoms;</div>
 <div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> U1 = U; <span class="comment">//U at prior timestep</span></div>
 <div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> U0 = U; <span class="comment">//Initial potential energy</span></div>
 <div class="line">    cout    &lt;&lt; <span class="stringliteral">&quot;Energy0:  &quot;</span> &lt;&lt; U &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
@@ -279,7 +279,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (U&lt;=U0){</div>
 <div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;1000; ++i) collec0.<a name="a16"></a><a class="code" href="class_collection_overdamped.html#a2d08abce24e5a2397ac49a3ae3b762da">timestep</a>();</div>
 <div class="line">        U1=U;</div>
-<div class="line">        U = collec0.<a class="code" href="class_collection.html#aaf13b097ce715e5b20062d0dcb5360c4">potentialenergy</a>()/Natoms;</div>
+<div class="line">        U = collec0.<a class="code" href="class_collection.html#af8fa6055c3783d8accc9667c057da38f">potential_energy</a>()/Natoms;</div>
 <div class="line">        cout    &lt;&lt; <span class="stringliteral">&quot;Energy:  &quot;</span> &lt;&lt; U &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">        }</div>
 <div class="line">    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (U&gt;.99*U1){</div>
@@ -314,7 +314,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> maxlog = log(tottime);</div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> n=0; n&lt;nMSDs; n++){</div>
 <div class="line">        <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> newlog = (maxlog * n) / (nMSDs-1);</div>
-<div class="line">        <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> newn = ceil(exp(newlog));</div>
+<div class="line">        <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> newn = (<a name="a19"></a><a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a>) ceil(exp(newlog));</div>
 <div class="line">        <span class="keywordflow">if</span>(newn &lt;= 0) newn = 1;</div>
 <div class="line">        <span class="keywordflow">if</span>(newn &gt; (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a>)tottime) newn = tottime;</div>
 <div class="line">        nset.insert(newn);</div>
@@ -323,9 +323,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    vector&lt;long unsigned int&gt; MSDns(nset.begin(), nset.end());</div>
 <div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;Using &quot;</span> &lt;&lt; MSDns.size() &lt;&lt; <span class="stringliteral">&quot; MSDns, [&quot;</span> &lt;&lt; MSDns.front() &lt;&lt; <span class="stringliteral">&quot;-&quot;</span> &lt;&lt; MSDns.back() &lt;&lt; <span class="stringliteral">&quot;]\n&quot;</span>;</div>
 <div class="line">    </div>
-<div class="line">    boost::shared_ptr&lt;RsqTracker&gt; rsqtracker(<span class="keyword">new</span> <a name="_a19"></a><a class="code" href="class_rsq_tracker.html">RsqTracker</a>(atomptr, MSDns));</div>
-<div class="line">    boost::shared_ptr&lt;StateTracker&gt; rsqptr = boost::static_pointer_cast&lt;<a name="_a20"></a><a class="code" href="class_state_tracker.html">StateTracker</a>&gt;(rsqtracker);</div>
-<div class="line">    collec.<a name="a21"></a><a class="code" href="class_collection.html#a32f2f42a8c7bf71845b88691f2cd8c8d">add</a>(rsqptr);</div>
+<div class="line">    boost::shared_ptr&lt;RsqTracker&gt; rsqtracker(<span class="keyword">new</span> <a name="_a20"></a><a class="code" href="class_rsq_tracker.html">RsqTracker</a>(atomptr, MSDns));</div>
+<div class="line">    boost::shared_ptr&lt;StateTracker&gt; rsqptr = boost::static_pointer_cast&lt;<a name="_a21"></a><a class="code" href="class_state_tracker.html">StateTracker</a>&gt;(rsqtracker);</div>
+<div class="line">    collec.<a name="a22"></a><a class="code" href="class_collection.html#a32f2f42a8c7bf71845b88691f2cd8c8d">add</a>(rsqptr);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// VMD is good for 3D visualization purposes, and it can read .xyz files</span></div>
 <div class="line">    <span class="comment">// see &#39;writefile&#39; function</span></div>
@@ -349,7 +349,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    ofstream msdfile;</div>
 <div class="line">    msdfile.open(outname.c_str(), ios::out);</div>
 <div class="line">    <span class="comment">// Retrieve the time-averaged r^2 values for each Atom for each Δt</span></div>
-<div class="line">    vector&lt;vector&lt;Vec&gt; &gt; MSDmeans = rsqtracker-&gt;xyz2();</div>
+<div class="line">    vector&lt;Eigen::Matrix&lt;flt, Eigen::Dynamic, NDIM&gt; &gt; MSDmeans = rsqtracker-&gt;xyz2();</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// This will be a tab-separated file, with the first column being </span></div>
 <div class="line">    <span class="comment">// Δt in time units (not timesteps),</span></div>
@@ -360,9 +360,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    </div>
 <div class="line">    </div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;MSDns.size(); i++){</div>
-<div class="line">        msdfile &lt;&lt; (MSDns[i] * dt);</div>
-<div class="line">        <span class="keywordflow">for</span>(vector&lt;Vec&gt;::iterator it=MSDmeans[i].begin(); it&lt;MSDmeans[i].end(); ++it){</div>
-<div class="line">            <a name="_a22"></a><a class="code" href="class_vector2.html">Vec</a> v = *it;</div>
+<div class="line">        msdfile &lt;&lt; (((<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>) MSDns[i]) * dt);</div>
+<div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;MSDmeans[i].rows(); j++){</div>
+<div class="line">            <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> v = MSDmeans[i].row(j);</div>
 <div class="line">            msdfile &lt;&lt; <span class="charliteral">&#39;\t&#39;</span> &lt;&lt; (v[0] + v[1] + v[2]);</div>
 <div class="line">        }</div>
 <div class="line">        msdfile &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
@@ -426,7 +426,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
 <div class="line">        <span class="keywordflow">if</span>(i == 0){outf &lt;&lt; <span class="stringliteral">&quot;O&quot;</span>;}</div>
 <div class="line">        <span class="keywordflow">else</span>{outf &lt;&lt; <span class="stringliteral">&quot;C&quot;</span>;};</div>
-<div class="line">        <a class="code" href="class_vector2.html">Vec</a> normloc = bx.<a name="a23"></a><a class="code" href="class_box.html#af9524b1dbd420bb8b49e9f8e0e21d7f8">diff</a>(<a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>(), atoms[i].x);</div>
+<div class="line">        <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> normloc = bx.<a name="a23"></a><a class="code" href="class_box.html#af9524b1dbd420bb8b49e9f8e0e21d7f8">diff</a>(Vec::Zero(), atoms[i].x);</div>
 <div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
 <div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; normloc[j];</div>
 <div class="line">        }</div>
@@ -436,7 +436,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

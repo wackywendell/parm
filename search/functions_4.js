@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['derivs',['derivs',['../class_dihedral.html#af0b08f3ca383b2a65db6315f7ae74428',1,'Dihedral']]],
   ['descend',['descend',['../class_collection_n_l_c_g.html#adfce685467557c4170f065a218863507',1,'CollectionNLCG::descend()'],['../class_collection_n_l_c_g_v.html#aa2b4fe43a343eff2659c768f738f34bb',1,'CollectionNLCGV::descend()']]],
   ['det',['det',['../class_matrix.html#a57815e56468485edc01caabc9f7807b1',1,'Matrix']]],
   ['diameters',['diameters',['../classpyparm_1_1packmin_1_1_minimizer.html#a14e933b0bd862250dabc2bf6692687b8',1,'pyparm::packmin::Minimizer']]],
@@ -14,6 +13,7 @@ var searchData=
   ['dof',['dof',['../class_collection.html#a7df6a25f9eb0d288016e83f67f8e9a4c',1,'Collection']]],
   ['done',['done',['../classpyparm_1_1packmin_1_1_minimizer.html#af309ade9ee6179a78b09e29d9b355b58',1,'pyparm::packmin::Minimizer']]],
   ['dot',['dot',['../class_num_vector.html#a8bb3cc0460bb4e5761882b6178edb264',1,'NumVector::dot()'],['../class_matrix.html#a29ff6ce8d8daee2d17e33c72e09b70a4',1,'Matrix::dot()']]],
+  ['dr_5fdcostheta',['dr_dcostheta',['../class_dihedral.html#af4e1b43e513c781e3856e3ea2767e796',1,'Dihedral']]],
   ['dudcostheta',['dudcostheta',['../class_dihedral.html#a7a414c3492ec3ea818dd0a7c47b463a7',1,'Dihedral']]],
   ['dudcosthetacos',['dudcosthetaCOS',['../class_dihedral.html#a37124cd2b8018b46816791b20b210d13',1,'Dihedral']]]
 ];

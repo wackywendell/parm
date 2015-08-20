@@ -8,8 +8,6 @@ var searchData=
   ['collection',['Collection',['../class_collection.html',1,'']]],
   ['collectioncdbd',['CollectionCDBD',['../class_collection_c_d_b_d.html',1,'']]],
   ['collectioncdbdgrid',['CollectionCDBDgrid',['../class_collection_c_d_b_dgrid.html',1,'']]],
-  ['collectionconjgradient',['CollectionConjGradient',['../class_collection_conj_gradient.html',1,'']]],
-  ['collectionconjgradientbox',['CollectionConjGradientBox',['../class_collection_conj_gradient_box.html',1,'']]],
   ['collectiondamped',['CollectionDamped',['../class_collection_damped.html',1,'']]],
   ['collectiongaussiant',['CollectionGaussianT',['../class_collection_gaussian_t.html',1,'']]],
   ['collectiongear3a',['CollectionGear3A',['../class_collection_gear3_a.html',1,'']]],

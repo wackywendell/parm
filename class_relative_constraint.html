@@ -115,7 +115,7 @@ Inheritance diagram for RelativeConstraint:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa9469e72ec7580e59bf05b81143e95f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#aa9469e72ec7580e59bf05b81143e95f0">RelativeConstraint</a> (<a class="el" href="struct_atom.html">Atom</a> *atm1, <a class="el" href="struct_atom.html">Atom</a> *atm2, bool fixx, bool fixy, bool fixz, <a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> loc)</td></tr>
+<tr class="memitem:aa9469e72ec7580e59bf05b81143e95f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#aa9469e72ec7580e59bf05b81143e95f0">RelativeConstraint</a> (<a class="el" href="struct_atom.html">Atom</a> *atm1, <a class="el" href="struct_atom.html">Atom</a> *atm2, bool fixx, bool fixy, bool fixz, <a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> loc)</td></tr>
 <tr class="separator:aa9469e72ec7580e59bf05b81143e95f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25aed0f2eb158361eecfb33dce5748ec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#a25aed0f2eb158361eecfb33dce5748ec">RelativeConstraint</a> (<a class="el" href="struct_atom.html">Atom</a> *atm1, <a class="el" href="struct_atom.html">Atom</a> *atm2, bool fixx, bool fixy, bool fixz)</td></tr>
 <tr class="separator:a25aed0f2eb158361eecfb33dce5748ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +123,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2f510e334367044ea56ceb73e38bc57a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d6caf9f9b348b4a9c1fe8933362cff3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#a1d6caf9f9b348b4a9c1fe8933362cff3">ndof</a> ()</td></tr>
 <tr class="separator:a1d6caf9f9b348b4a9c1fe8933362cff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f2e99140aa174826d4ffe85ad256af9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#a7f2e99140aa174826d4ffe85ad256af9">apply</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="separator:a7f2e99140aa174826d4ffe85ad256af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e9a0148f5be1a563e8a0c1561cc48a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#a4e9a0148f5be1a563e8a0c1561cc48a6">apply_positions</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a4e9a0148f5be1a563e8a0c1561cc48a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5295309307452b354bf49a37cefb56c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#a5295309307452b354bf49a37cefb56c7">apply_velocities</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a5295309307452b354bf49a37cefb56c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42ae12f3d283b30e48c2e41abc1810bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_relative_constraint.html#a42ae12f3d283b30e48c2e41abc1810bc">apply_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a42ae12f3d283b30e48c2e41abc1810bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_constraint"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_constraint')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_constraint.html">Constraint</a></td></tr>
 <tr class="memitem:a0ea4ebf0c039e8c4dac2616a8ec3acd7 inherit pub_methods_class_constraint"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_constraint.html#a0ea4ebf0c039e8c4dac2616a8ec3acd7">~Constraint</a> ()</td></tr>
 <tr class="separator:a0ea4ebf0c039e8c4dac2616a8ec3acd7 inherit pub_methods_class_constraint"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,7 +174,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td>
           <td class="paramname"><em>loc</em>&#160;</td>
         </tr>
         <tr>
@@ -275,7 +279,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a7f2e99140aa174826d4ffe85ad256af9"></a>
+<a class="anchor" id="a42ae12f3d283b30e48c2e41abc1810bc"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -283,7 +287,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void RelativeConstraint::apply </td>
+          <td class="memname">void RelativeConstraint::apply_forces </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em></td><td>)</td>
@@ -292,12 +296,64 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_constraint.html#a16077dfd477559808fd8021bbff7be51">Constraint</a>.</p>
+<p>Implements <a class="el" href="class_constraint.html#a2a1f1f7dfac91f21ad1b510deff7c71e">Constraint</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4e9a0148f5be1a563e8a0c1561cc48a6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RelativeConstraint::apply_positions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_constraint.html#a12ea87b193af053c7da165d8b6c271d2">Constraint</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5295309307452b354bf49a37cefb56c7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void RelativeConstraint::apply_velocities </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_constraint.html#aaf5ec1691ae4d46846a8479bbc5173ca">Constraint</a>.</p>
 
 </div>
 </div>
@@ -326,13 +382,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="constraints_8hpp_source.html">constraints.hpp</a></li>
+<li>src/<a class="el" href="constraints_8cpp.html">constraints.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:32 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

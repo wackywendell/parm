@@ -14,6 +14,6 @@ var searchData=
   ['xs3',['xs3',['../class_collection_gear4_n_p_t.html#aee522c2b14783423c30c3d52e275cdf3',1,'CollectionGear4NPT']]],
   ['xsum',['xsum',['../class_x_r_p_summer.html#a93970d71c31552f51deda6838944997f',1,'XRPSummer']]],
   ['xwalls',['xwalls',['../class_walled_box2_d.html#a88bdc92c62697c4e90d6a34b530fa3bc',1,'WalledBox2D']]],
-  ['xyz2sums',['xyz2sums',['../class_rsq_tracker1.html#a23c3a82bd57672b51bfcf8b2a5a6873b',1,'RsqTracker1']]],
-  ['xyz4sums',['xyz4sums',['../class_rsq_tracker1.html#a414c619226bd107b30fb663b342a7cb7',1,'RsqTracker1']]]
+  ['xyz2sums',['xyz2sums',['../class_rsq_tracker1.html#a5e61c69b03c92d8b0d763acde1c4befc',1,'RsqTracker1']]],
+  ['xyz4sums',['xyz4sums',['../class_rsq_tracker1.html#a6013429bb0c59f092868f02b91e379a5',1,'RsqTracker1']]]
 ];

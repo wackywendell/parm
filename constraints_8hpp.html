@@ -98,7 +98,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">constraints.hpp File Reference</div>  </div>
@@ -127,6 +126,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dist_constraint.html">DistConstraint</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_linear_constraint.html">LinearConstraint</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rigid_constraint.html">RigidConstraint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class that enforces rigid-body dynamics.  <a href="class_rigid_constraint.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_contact_tracker.html">ContactTracker</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,29 +163,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_connectivity.html">Connectivity</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a98875dff65ee903f41a7ae62c696f935"><td class="memItemLeft" align="right" valign="top">typedef std::complex&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="constraints_8hpp.html#a98875dff65ee903f41a7ae62c696f935">cmplx</a></td></tr>
-<tr class="separator:a98875dff65ee903f41a7ae62c696f935"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a56a7f494546ed50e702ccbb3943ab5fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_contact_tracker.html">ContactTracker</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="constraints_8hpp.html#a56a7f494546ed50e702ccbb3943ab5fa">ContactTrackerD</a> (<a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_box.html">Box</a> &gt; box, <a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_atom_group.html">AtomGroup</a> &gt; atoms, vector&lt; double &gt; dists)</td></tr>
 <tr class="separator:a56a7f494546ed50e702ccbb3943ab5fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
-<a class="anchor" id="a98875dff65ee903f41a7ae62c696f935"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef std::complex&lt;<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&gt; <a class="el" href="constraints_8hpp.html#a98875dff65ee903f41a7ae62c696f935">cmplx</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a56a7f494546ed50e702ccbb3943ab5fa"></a>
 <div class="memitem">
@@ -228,7 +212,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

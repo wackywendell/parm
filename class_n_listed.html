@@ -116,7 +116,7 @@ Inheritance diagram for NListed&lt; A, P &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae60eee4e4015412265d54a11b68b1814"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#ae60eee4e4015412265d54a11b68b1814">NListed</a> (<a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_atom_vec.html">AtomVec</a> &gt; <a class="el" href="vecrand_8hpp.html#a8ca1b489cff3d8f4934be294809e11d2">vec</a>, <a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_neighbor_list.html">NeighborList</a> &gt; <a class="el" href="class_n_listed.html#a9a07b860dbfcd8aa82c46ef04e38aa0a">neighbors</a>)</td></tr>
+<tr class="memitem:ae60eee4e4015412265d54a11b68b1814"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#ae60eee4e4015412265d54a11b68b1814">NListed</a> (<a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_atom_vec.html">AtomVec</a> &gt; <a class="el" href="vecrand_8hpp.html#a21547661bf06da1be24cd3f97d7e04f6">vec</a>, <a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_neighbor_list.html">NeighborList</a> &gt; <a class="el" href="class_n_listed.html#a9a07b860dbfcd8aa82c46ef04e38aa0a">neighbors</a>)</td></tr>
 <tr class="separator:ae60eee4e4015412265d54a11b68b1814"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2ad252433a739a2c0ddfcc04991b6b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#ac2ad252433a739a2c0ddfcc04991b6b2">add</a> (A atm)</td></tr>
 <tr class="separator:ac2ad252433a739a2c0ddfcc04991b6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,6 +133,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adeee01835c365ab9655f6e9efeb4f27f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#adeee01835c365ab9655f6e9efeb4f27f">energy</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:adeee01835c365ab9655f6e9efeb4f27f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Potential energy due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#adeee01835c365ab9655f6e9efeb4f27f">More...</a><br /></td></tr>
 <tr class="separator:adeee01835c365ab9655f6e9efeb4f27f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fbbb4732af565171568b57d5a832142"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#a7fbbb4732af565171568b57d5a832142">contacts</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:a7fbbb4732af565171568b57d5a832142"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of <a class="el" href="struct_atom.html" title="The basic class for representing each particle. ">Atom</a> pairs with E != 0  <a href="#a7fbbb4732af565171568b57d5a832142">More...</a><br /></td></tr>
+<tr class="separator:a7fbbb4732af565171568b57d5a832142"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affa3540e010d92a9a9e5416b174f4352"><td class="memItemLeft" align="right" valign="top">unsigned long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#affa3540e010d92a9a9e5416b174f4352">overlaps</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:affa3540e010d92a9a9e5416b174f4352"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of <a class="el" href="struct_atom.html" title="The basic class for representing each particle. ">Atom</a> pairs with E &gt; 0  <a href="#affa3540e010d92a9a9e5416b174f4352">More...</a><br /></td></tr>
+<tr class="separator:affa3540e010d92a9a9e5416b174f4352"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad84c04869edada2261f6ef9ad7166b8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#ad84c04869edada2261f6ef9ad7166b8e">pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:ad84c04869edada2261f6ef9ad7166b8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partial pressure due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#ad84c04869edada2261f6ef9ad7166b8e">More...</a><br /></td></tr>
 <tr class="separator:ad84c04869edada2261f6ef9ad7166b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +153,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a62f0b824326c4427cc9c509b47fa200b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#a62f0b824326c4427cc9c509b47fa200b">setForcesGetPressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:a62f0b824326c4427cc9c509b47fa200b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_n_listed.html#ad84c04869edada2261f6ef9ad7166b8e" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#a62f0b824326c4427cc9c509b47fa200b">More...</a><br /></td></tr>
 <tr class="separator:a62f0b824326c4427cc9c509b47fa200b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc3aefd5596b6984828010fe1f806de3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#abc3aefd5596b6984828010fe1f806de3">forces_pair</a> (P pair, <a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memitem:abc3aefd5596b6984828010fe1f806de3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#abc3aefd5596b6984828010fe1f806de3">forces_pair</a> (P pair, <a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="separator:abc3aefd5596b6984828010fe1f806de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac47dbdcf078356bbf29810e75acf37e0"><td class="memItemLeft" align="right" valign="top">vector&lt; A &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#ac47dbdcf078356bbf29810e75acf37e0">atom_list</a> ()</td></tr>
 <tr class="separator:ac47dbdcf078356bbf29810e75acf37e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,7 +180,7 @@ Protected Attributes</h2></td></tr>
 <div class="textblock"><h3>template&lt;class A, class P&gt;<br />
 class NListed&lt; A, P &gt;</h3>
 
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#_a6">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#_a6">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#_a6">packer.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="hardspheres_8cpp-example.html#_a7">hardspheres.cpp</a>, <a class="el" href="_l_jatoms_8cpp-example.html#_a6">LJatoms.cpp</a>, and <a class="el" href="packer_8cpp-example.html#_a6">packer.cpp</a>.</dd>
 </dl></div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="ae60eee4e4015412265d54a11b68b1814"></a>
 <div class="memitem">
@@ -331,6 +337,26 @@ template&lt;class A, class P&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a7fbbb4732af565171568b57d5a832142"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class A , class P &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long long <a class="el" href="class_n_listed.html">NListed</a>&lt; A, P &gt;::contacts </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>number of <a class="el" href="struct_atom.html" title="The basic class for representing each particle. ">Atom</a> pairs with E != 0 </p>
+
+</div>
+</div>
 <a class="anchor" id="accc44293a45e9e4ed503804cc6b798f8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -435,7 +461,7 @@ template&lt;class A, class P&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> <a class="el" href="class_n_listed.html">NListed</a>&lt; A, P &gt;::forces_pair </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> <a class="el" href="class_n_listed.html">NListed</a>&lt; A, P &gt;::forces_pair </td>
           <td>(</td>
           <td class="paramtype">P&#160;</td>
           <td class="paramname"><em>pair</em>, </td>
@@ -535,6 +561,26 @@ template&lt;class A, class P&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="affa3540e010d92a9a9e5416b174f4352"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class A , class P &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long long <a class="el" href="class_n_listed.html">NListed</a>&lt; A, P &gt;::overlaps </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>number of <a class="el" href="struct_atom.html" title="The basic class for representing each particle. ">Atom</a> pairs with E &gt; 0 </p>
 
 </div>
 </div>
@@ -789,7 +835,7 @@ template&lt;class A, class P&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:32 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

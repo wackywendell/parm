@@ -6,7 +6,6 @@ var searchData=
   ['lambda1',['lambda1',['../struct_sphero_cylinder_diff.html#a581d4dff378a2c08a5f5cac2cc39f905',1,'SpheroCylinderDiff']]],
   ['lambda2',['lambda2',['../struct_sphero_cylinder_diff.html#a055b3a3e5dec7811864d5bd751e5ae5c',1,'SpheroCylinderDiff']]],
   ['lastf',['lastf',['../class_soft_wall.html#a076e6b980efc09b581d63351e13b3584',1,'SoftWall::lastf()'],['../class_soft_wall_cylinder.html#aac1ac7630dcadac5735e84490ff71582',1,'SoftWallCylinder::lastf()']]],
-  ['lastfv',['lastFV',['../class_collection_conj_gradient_box.html#ac54182abd572908b9497d67e4e5a592c',1,'CollectionConjGradientBox']]],
   ['lastlocs',['lastlocs',['../class_neighbor_list.html#ab09aa393c24e6737e833831c7cc1b1c6',1,'NeighborList']]],
   ['lastupdate',['lastupdate',['../class_n_listed.html#ae656370c2593d18fcace021dd750b164',1,'NListed']]],
   ['lastv',['lastV',['../class_collection_verlet_n_p_t.html#a43cddd74654fb476a17a0fc68a62d269',1,'CollectionVerletNPT']]],
@@ -14,5 +13,5 @@ var searchData=
   ['lines',['lines',['../namespacenamereplacer.html#a80218617cdb6842e7b3229958691ba2b',1,'namereplacer']]],
   ['lns',['lns',['../class_collection_nose_hoover.html#a839bcadc6367377088d3037a4ee08fe9',1,'CollectionNoseHoover']]],
   ['loc',['loc',['../struct_fixed_spring_atom.html#a74feaf177137ddbfea54f65d6d74e491',1,'FixedSpringAtom::loc()'],['../class_soft_wall.html#acb4622582594b3bd4918cdbda60fe708',1,'SoftWall::loc()'],['../class_soft_wall_cylinder.html#ac5c6825a2e0ab85024faec2e2482eb85',1,'SoftWallCylinder::loc()']]],
-  ['locs',['locs',['../class_smooth_locs.html#aedb148dc27a2a603cfb01814d0854ca7',1,'SmoothLocs']]]
+  ['locs',['locs',['../class_smooth_locs.html#aaba851c3c3f1082187b322b83e8d7354',1,'SmoothLocs']]]
 ];

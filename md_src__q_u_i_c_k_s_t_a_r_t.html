@@ -123,8 +123,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="keywordflow">for</span> (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i &lt; atomptr-&gt;size(); i++){</div>
 <div class="line">    atoms[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
 <div class="line">    atoms[i].v = <a class="code" href="vecrand_8cpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a>(); <span class="comment">// from a Gaussian</span></div>
-<div class="line">    atoms[i].f = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
-<div class="line">    atoms[i].a = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line">    atoms[i].f = <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>();</div>
+<div class="line">    atoms[i].a = <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// Add it to the Lennard-Jones potential</span></div>
 <div class="line">    LJ-&gt;add(<a class="code" href="struct_l_jatomcut.html">LJatomcut</a>(epsilon, sigma, atoms.get_id(i), sigcut));</div>
@@ -148,14 +148,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        collec.<a class="code" href="class_collection_verlet.html#a4c45a64c482caa5c74a329d92037ebe9">timestep</a>();</div>
 <div class="line">    }</div>
 <div class="line">    writefile(outfile, atoms, *obox);</div>
-<div class="line">    cout &lt;&lt; (500-i) &lt;&lt; <span class="stringliteral">&quot; E: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a991d7217616b6435910f8c0e0c1ff78c">kinetic</a>() </div>
-<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; LJ-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">    cout &lt;&lt; (500-i) &lt;&lt; <span class="stringliteral">&quot; E: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.kinetic() </div>
+<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; LJ-&gt;<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>That's all! To see this example fully fleshed out, see <a class="el" href="_l_jatoms_8cpp-example.html">LJatoms.cpp</a> </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

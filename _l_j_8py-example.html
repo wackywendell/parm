@@ -142,7 +142,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment"># Setting up the simulation</span></div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;box = sim.OriginBox(L)</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;atoms = sim.AtomVec(masses)</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;neighbors = sim.NeighborList(box, atoms, 0.4) <span class="comment"># the neighborlist, for keeping track of what atoms are near what other atoms</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;neighbors = sim.NeighborList(box, atoms, 0.4) <span class="comment"># the NeighborList, for keeping track of what atoms are near what other atoms</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;LJ = sim.LJgroup(atoms, neighbors)</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;collec = sim.CollectionVerlet(box, atoms, dt, [LJ], [neighbors]) <span class="comment"># the integrator</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"># We use a simple velocity-verlet integrator, which is time-reversible and NVE ensemble</span></div>
@@ -202,7 +202,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        print(N, file=f)</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        print(time, file=f) <span class="comment"># xyz format for VMD requires a line here, and ignores it; I put the time here.</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">for</span> e,a <span class="keywordflow">in</span> zip(element_names, atoms):</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            x = box.diff(a.x, sim.Vec())</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            x = box.diff(a.x, sim.vec())</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            print(e, *x, file=f)</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment"># empty out the file</span></div>
@@ -255,7 +255,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

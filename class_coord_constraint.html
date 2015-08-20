@@ -115,7 +115,7 @@ Inheritance diagram for CoordConstraint:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6a2c918ebf70b16989b59995aaa94247"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#a6a2c918ebf70b16989b59995aaa94247">CoordConstraint</a> (<a class="el" href="struct_atom.html">Atom</a> *atm, bool fixx, bool fixy, bool fixz, <a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a> loc)</td></tr>
+<tr class="memitem:a6a2c918ebf70b16989b59995aaa94247"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#a6a2c918ebf70b16989b59995aaa94247">CoordConstraint</a> (<a class="el" href="struct_atom.html">Atom</a> *atm, bool fixx, bool fixy, bool fixz, <a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> loc)</td></tr>
 <tr class="separator:a6a2c918ebf70b16989b59995aaa94247"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7e5f2541fe439ce49575ed199deb228"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#af7e5f2541fe439ce49575ed199deb228">CoordConstraint</a> (<a class="el" href="struct_atom.html">Atom</a> *atm, bool fixx, bool fixy, bool fixz)</td></tr>
 <tr class="separator:af7e5f2541fe439ce49575ed199deb228"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +123,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab513edaad0d51b99defd564ce906ffd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad62706cb02eba5424372911c14a184d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#ad62706cb02eba5424372911c14a184d6">ndof</a> ()</td></tr>
 <tr class="separator:ad62706cb02eba5424372911c14a184d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac3c8500e01d767afade961496c4b9590"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#ac3c8500e01d767afade961496c4b9590">apply</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="separator:ac3c8500e01d767afade961496c4b9590"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a372f9ebd868f402c751c504ce2da117b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#a372f9ebd868f402c751c504ce2da117b">apply_positions</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a372f9ebd868f402c751c504ce2da117b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab986833b5c85e76cb10b0e1f63d4b755"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#ab986833b5c85e76cb10b0e1f63d4b755">apply_velocities</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:ab986833b5c85e76cb10b0e1f63d4b755"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1adb975c5ab6178b7a7a84efcb6f49f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_coord_constraint.html#a1adb975c5ab6178b7a7a84efcb6f49f8">apply_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a1adb975c5ab6178b7a7a84efcb6f49f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_constraint"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_constraint')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_constraint.html">Constraint</a></td></tr>
 <tr class="memitem:a0ea4ebf0c039e8c4dac2616a8ec3acd7 inherit pub_methods_class_constraint"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_constraint.html#a0ea4ebf0c039e8c4dac2616a8ec3acd7">~Constraint</a> ()</td></tr>
 <tr class="separator:a0ea4ebf0c039e8c4dac2616a8ec3acd7 inherit pub_methods_class_constraint"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,7 +168,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td>
           <td class="paramname"><em>loc</em>&#160;</td>
         </tr>
         <tr>
@@ -253,7 +257,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ac3c8500e01d767afade961496c4b9590"></a>
+<a class="anchor" id="a1adb975c5ab6178b7a7a84efcb6f49f8"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -261,7 +265,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void CoordConstraint::apply </td>
+          <td class="memname">void CoordConstraint::apply_forces </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em></td><td>)</td>
@@ -275,7 +279,59 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_constraint.html#a16077dfd477559808fd8021bbff7be51">Constraint</a>.</p>
+<p>Implements <a class="el" href="class_constraint.html#a2a1f1f7dfac91f21ad1b510deff7c71e">Constraint</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a372f9ebd868f402c751c504ce2da117b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CoordConstraint::apply_positions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_constraint.html#a12ea87b193af053c7da165d8b6c271d2">Constraint</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab986833b5c85e76cb10b0e1f63d4b755"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CoordConstraint::apply_velocities </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_constraint.html#aaf5ec1691ae4d46846a8479bbc5173ca">Constraint</a>.</p>
 
 </div>
 </div>
@@ -310,7 +366,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

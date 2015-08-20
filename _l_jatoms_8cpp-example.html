@@ -148,11 +148,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> E0 = LJ-&gt;energy(*obox);</div>
 <div class="line">        atoms[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
 <div class="line">        atoms[i].v = <a name="a8"></a><a class="code" href="vecrand_8cpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a>(); <span class="comment">// from a Gaussian</span></div>
-<div class="line">        atoms[i].f = <a name="a9"></a><a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
-<div class="line">        atoms[i].a = <a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>();</div>
+<div class="line">        atoms[i].f = Vec::Zero();</div>
+<div class="line">        atoms[i].a = Vec::Zero();</div>
 <div class="line">        </div>
 <div class="line">        <span class="comment">// Add it to the Lennard-Jones potential</span></div>
-<div class="line">        LJ-&gt;add(<a name="_a10"></a><a class="code" href="struct_l_jatomcut.html">LJatomcut</a>(epsilon, sigma, atoms.<a name="a11"></a><a class="code" href="class_atom_vec.html#acfb688c87a0616c6d76b9faf7e052d4e">get_id</a>(i), sigcut));</div>
+<div class="line">        LJ-&gt;add(<a name="_a9"></a><a class="code" href="struct_l_jatomcut.html">LJatomcut</a>(epsilon, sigma, atoms.<a name="a10"></a><a class="code" href="class_atom_vec.html#acfb688c87a0616c6d76b9faf7e052d4e">get_id</a>(i), sigcut));</div>
 <div class="line">        <span class="comment">// force an update the NeighborList, so we can get an accurate energy</span></div>
 <div class="line">        nl-&gt;update_list(<span class="keyword">true</span>);</div>
 <div class="line">        <span class="comment">// If we&#39;re overlapping too much, try a new location</span></div>
@@ -166,16 +166,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        (atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>()*(atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>()-1))/2 &lt;&lt; <span class="stringliteral">&quot; pairs.\n&quot;</span>;</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">//Now we make our &quot;Collection&quot;</span></div>
-<div class="line">    <a name="_a12"></a><a class="code" href="class_collection_verlet.html">CollectionVerlet</a> collec = <a class="code" href="class_collection_verlet.html">CollectionVerlet</a>(boost::static_pointer_cast&lt;Box&gt;(obox), atomptr, dt);</div>
+<div class="line">    <a name="_a11"></a><a class="code" href="class_collection_verlet.html">CollectionVerlet</a> collec = <a class="code" href="class_collection_verlet.html">CollectionVerlet</a>(boost::static_pointer_cast&lt;Box&gt;(obox), atomptr, dt);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// This is very important! Otherwise the NeighborList won&#39;t update!</span></div>
-<div class="line">    collec.<a name="a13"></a><a class="code" href="class_collection.html#ae69ca345a2bdfdee8acc3bee7591d023">addTracker</a>(nl);</div>
+<div class="line">    collec.<a name="a12"></a><a class="code" href="class_collection.html#ae69ca345a2bdfdee8acc3bee7591d023">addTracker</a>(nl);</div>
 <div class="line">    <span class="comment">// And add the Interaction</span></div>
-<div class="line">    collec.<a name="a14"></a><a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(LJ);</div>
+<div class="line">    collec.<a name="a13"></a><a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(LJ);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// subtract off center of mass velocity, and set a total energy</span></div>
-<div class="line">    collec.<a name="a15"></a><a class="code" href="class_collection.html#af4b069082af1bdc9f8ca25ed51faad1c">resetcomv</a>();</div>
-<div class="line">    collec.<a name="a16"></a><a class="code" href="class_collection.html#a2ca2186e1e8924c132cc15d64021cf69">scaleVelocitiesE</a>(Natoms / 4.0);</div>
+<div class="line">    collec.<a name="a14"></a><a class="code" href="class_collection.html#af4b069082af1bdc9f8ca25ed51faad1c">resetcomv</a>();</div>
+<div class="line">    collec.<a name="a15"></a><a class="code" href="class_collection.html#a2ca2186e1e8924c132cc15d64021cf69">scaleVelocitiesE</a>(Natoms / 4.0);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// We&#39;ll put the energies to stdout and the coordinates to a new file.</span></div>
 <div class="line">    <span class="comment">// VMD is good for 3D visualization purposes, and it can read .xyz files</span></div>
@@ -186,16 +186,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    writefile(outfile, atoms, *obox);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">//Print out total energy, kinetic energy, and potential energy</span></div>
-<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;E: &quot;</span> &lt;&lt; collec.<a name="a17"></a><a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a18"></a><a class="code" href="class_collection.html#a991d7217616b6435910f8c0e0c1ff78c">kinetic</a>() </div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;E: &quot;</span> &lt;&lt; collec.<a name="a16"></a><a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a17"></a><a class="code" href="class_collection.html#a805247cb09432efe60719f254912192f">kinetic_energy</a>() </div>
 <div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; LJ-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">    <span class="comment">// Run the simulation! And every _ steps, write a frame to the .xyz</span></div>
 <div class="line">    <span class="comment">// file and print out the energies again</span></div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;500; i++){</div>
 <div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;1000; j++){</div>
-<div class="line">            collec.<a name="a19"></a><a class="code" href="class_collection_verlet.html#a4c45a64c482caa5c74a329d92037ebe9">timestep</a>();</div>
+<div class="line">            collec.<a name="a18"></a><a class="code" href="class_collection_verlet.html#a4c45a64c482caa5c74a329d92037ebe9">timestep</a>();</div>
 <div class="line">        }</div>
 <div class="line">        writefile(outfile, atoms, *obox);</div>
-<div class="line">        cout &lt;&lt; (500-i) &lt;&lt; <span class="stringliteral">&quot; E: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a991d7217616b6435910f8c0e0c1ff78c">kinetic</a>() </div>
+<div class="line">        cout &lt;&lt; (500-i) &lt;&lt; <span class="stringliteral">&quot; E: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection.html#a805247cb09432efe60719f254912192f">kinetic_energy</a>() </div>
 <div class="line">            &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; LJ-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">    }</div>
 <div class="line">    </div>
@@ -241,7 +241,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    outf &lt;&lt; endl; <span class="comment">// blank line for comment</span></div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
 <div class="line">        outf &lt;&lt; <span class="stringliteral">&quot;C&quot;</span>;</div>
-<div class="line">        <a name="_a20"></a><a class="code" href="class_vector2.html">Vec</a> normloc = bx.<a name="a21"></a><a class="code" href="class_box.html#af9524b1dbd420bb8b49e9f8e0e21d7f8">diff</a>(<a class="code" href="vecrand_8hpp.html#a3f96c19973963f3408a8e6e5b76d8387">Vec</a>(), atoms[i].x);</div>
+<div class="line">        <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> normloc = bx.<a name="a19"></a><a class="code" href="class_box.html#af9524b1dbd420bb8b49e9f8e0e21d7f8">diff</a>(Vec::Zero(), atoms[i].x);</div>
 <div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
 <div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; normloc[j];</div>
 <div class="line">        }</div>
@@ -251,7 +251,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 4 2015 13:59:29 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
