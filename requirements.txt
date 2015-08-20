@@ -1,0 +1,4 @@
+numpy
+transforms3d
+
+# We also need the Eigen C++ library and the Boost C++ library
