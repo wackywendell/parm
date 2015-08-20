@@ -35,7 +35,7 @@ for f in fs:
     txt1 = txt = f.open('r').read()
 
     for old, new in replacements:
-        txt = re.sub(r'\b\binteraction\b(?![.][hc]pp)\b'.format(old), new, txt)
+        txt = re.sub(r'\b\b{}\b(?![.][hc]pp)\b'.format(old), new, txt)
 
     #newp = f.with_suffix(f.suffix + '.new')
     #print(newp)
