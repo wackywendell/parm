@@ -280,7 +280,7 @@ void AtomGroup::randomize_velocities(flt T){
     for(uint i=0; i<size(); i++){
         Atom& a = (*this)[i];
         if(a.m == 0 or isinf(a.m)) continue;
-        a.v = randVec() * sqrt(T*NDIM/a.m);
+        a.v = randVec() * sqrt(T/a.m);
     }
 };
 

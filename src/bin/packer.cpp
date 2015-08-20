@@ -66,6 +66,7 @@ int main(){
     // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the NeighborList
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > 
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
+    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
         hertzian(new NListed<HertzianAtom, HertzianPair>(obox, atomptr, 0.1*sigma));
     boost::shared_ptr<NeighborList> nl = hertzian->nlist();
     // ^ this is the Interaction

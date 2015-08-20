@@ -179,6 +179,7 @@ class CollectionSol : public Collection {
         flt dt;
         //! Damping coefficient, \f$\xi\f$
         flt damping;
+        flt forcemag;
         //! desired temperature
         flt desT;
         //! note that this is sigmar/sqrt(T/m), same for sigmav
@@ -208,8 +209,10 @@ class CollectionSol : public Collection {
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
         //! Change the desired damping coefficient \f$\xi\f$ or temperature \f$T\f$.
         void changeT(const flt damp, const flt desiredT){
-            damping = damp; desT = desiredT; setCs();};
+            damping = damp; forcemag=damp; desT = desiredT; setCs();};
+        void changeMag(const flt damp, const flt fmag, const flt desiredT){
         //! Change the timestep \f$\delta t\f$.
+            damping = damp; forcemag=fmag; desT = desiredT; setCs();};
         void setdt(const flt newdt){dt = newdt; setCs();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};

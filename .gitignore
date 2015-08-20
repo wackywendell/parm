@@ -46,5 +46,7 @@ pyparm/examples/*.npz
 pyparm/examples/*.tcl
 *.orig
 *.ipynb
+/.ipynb_checkpoints
 .DS_Store
 /doc
+__pycache__

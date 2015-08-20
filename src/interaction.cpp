@@ -130,8 +130,8 @@ Dihedral::Dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow
                     coscoeffs(cvals), sincoeffs(svals), usepow(usepow){
 }
 
-NVector<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
-                   const Vec &r3) const {
+DihedralDerivs Dihedral::dr_dcostheta(const Vec &r1, const Vec &r2,
+                   const Vec &r3) {
     // Taken from Rapaport "Art of Molecular Dynamics Simulation" p.279
     // The expressions and notation are very close to that of the book.
 
@@ -167,7 +167,7 @@ sides of the bond. */
     flt t5 = c[0][2] * c[1][2] - c[0][1] * c[2][2];
     flt t6 = -p;
 
-    NVector<Vec, 4> derivs;
+    DihedralDerivs dd;
 
     /*
      Rapaport: The Dihedral angle is defined as the angle between the
@@ -188,35 +188,35 @@ sides of the bond. */
     flt const3 = -c[1][1]/(sqq * qb);
 
 
-    derivs[0] = (r1 * t1 + r2 * t2 + r3 * t3) * const0;
-    derivs[3] = (r1 * t4 + r2 * t5 + r3 * t6) * const3;
+    dd.derivs[0] = (r1 * t1 + r2 * t2 + r3 * t3) * const0;
+    dd.derivs[3] = (r1 * t4 + r2 * t5 + r3 * t6) * const3;
 
-    derivs[1] = derivs[0] * (-1 - c[0][1]/c[1][1]) +
-                            derivs[3] * (c[1][2]/c[1][1]);
-    derivs[2] = derivs[0] * (c[0][1]/c[1][1]) -
-                            derivs[3] * (1 + c[1][2]/c[1][1]);
+    dd.derivs[1] = dd.derivs[0] * (-1 - c[0][1]/c[1][1]) +
+                            dd.derivs[3] * (c[1][2]/c[1][1]);
+    dd.derivs[2] = dd.derivs[0] * (c[0][1]/c[1][1]) -
+                            dd.derivs[3] * (1 + c[1][2]/c[1][1]);
 
      /*
      Rapaport says costheta = p/sqrt(q); we add a negative for the cosine.
      */
-
-    flt dcostheta;
-    if(sincoeffs.empty() and !usepow){
-        flt costheta = -p/sqq;
+    dd.costheta = -p/sqq;
         // costheta =-1 corresponds to atoms 1 and 4 on opposite sides of the bond (zigzag)
         // costheta = 1 corresponds to a C shape
 
-        dcostheta = dudcosthetaCOS(costheta); // F = -dU/d(costheta)
-
-
-        //~ if(abs(costheta) < .7)
-            //~ cout << "forces cos: " << costheta << " getcos: " << getcos(r1,r2,r3)
-                 //~ << " dcostheta: " << dcostheta << '\n';
+    return dd;
+}
+        
+NVector<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
+                   const Vec &r3) const {
+    DihedralDerivs dd = dr_dcostheta(r1, r2, r3);
+    flt dcostheta;
+    if(sincoeffs.empty() and !usepow){
+        dcostheta = dudcosthetaCOS(dd.costheta); // F = -dU/d(costheta)
     } else {
         dcostheta = dudcostheta(getang(r1, r2, r3));
     }
 
-    derivs *= -dcostheta;  // F = -dU/d(costheta)
+    dd.derivs *= -dcostheta;  // F = -dU/d(costheta)
     //~ assert(derivs[0].sq() < 1e8);
     //~ assert(derivs[1].sq() < 1e8);
     //~ assert(derivs[2].sq() < 1e8);
@@ -228,7 +228,7 @@ sides of the bond. */
     //~
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
               //~ << " derivs:" << derivs  << " : " << mag << std::endl;
-    return derivs;
+    return dd.derivs;
 
     // pea79, dun92
     // Pear, M. R. and Weiner, J. H., Brownian dynamics study of a polymer chain of linked rigid bodies, J. Chem. Phys. 71 (1979) 212.
@@ -944,7 +944,6 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     Atom &a1p = *p1.last();
     Atom &a2 = *p2.first();
     Atom &a2p = *p2.last();
-    Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1.x - a1p.x), s2 = (a2.x - a2p.x);
     flt M1 = a1.m + a1p.m;
     flt M2 = a2.m + a2p.m;

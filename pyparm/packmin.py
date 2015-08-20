@@ -114,19 +114,6 @@ class Minimizer:
         return self.sim.NDIM
     
     @property
-    def locs(self):
-        return self._locs
-    
-    @locs.setter
-    def locs(self, newlocs):
-        newlocs = np.array(newlocs)
-        assert locs.shape == newlocs.shape
-        for a, loc in zip(self.atoms, newlocs):
-            a.x = self.sim.Vec(*loc)
-        self._locs = newlocs
-        self.collec.setForces(True, True)
-    
-    @property
     def L(self):
         return self.box.L()
     

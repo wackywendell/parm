@@ -275,13 +275,17 @@ class BondAngle {
 };
 
 #ifdef VEC3D
+struct DihedralDerivs {
+    NVector<Vec,4> derivs;
+    flt costheta;
+};
+
 class Dihedral {
     // vectors are from 1 to 2, 2 to 3, 3 to 4
     protected:
         vector<flt> coscoeffs;
         vector<flt> sincoeffs;
         bool usepow;
-        NVector<Vec,4> derivs(const Vec& diff1, const Vec& diff2, const Vec& diff3) const;
         flt dudcosthetaCOS(const flt costheta) const;
     public:
         Dihedral(const vector<flt> cosvals,
@@ -289,6 +293,9 @@ class Dihedral {
                 bool usepow = true);
         static flt getcos(const Vec& diff1, const Vec& diff2, const Vec& diff3);
         static flt getang(const Vec& diff1, const Vec& diff2, const Vec& diff3);
+
+        /// Returns dr_i / d cos(θ)
+        static DihedralDerivs dr_dcostheta(const Vec& diff1, const Vec& diff2, const Vec& diff3);
 
         flt dudcostheta(const flt theta) const;
 
@@ -639,6 +646,7 @@ class AngleTriples : public Interaction {
         flt energy(Box &box);
         inline flt pressure(Box &box){return 0;};
         void setForces(Box &box);
+        inline flt setForcesGetPressure(Box &box){setForces(box); return 0;};
         uint size() const {return (uint) triples.size();};
         flt mean_dists() const;
         flt std_dists() const;
@@ -690,6 +698,7 @@ class Dihedrals : public Interaction {
         flt energy(Box &box);
         void setForces(Box &box);
         inline flt pressure(Box &box){return 0;};
+        inline flt setForcesGetPressure(Box &box){setForces(box); return 0;};
 };
 #endif
 
@@ -1659,6 +1668,11 @@ class NListed : public Interaction {
         A& getatom(uint n){return atoms[n];}
         flt energy(Box &box, IDPair &pair);
         flt energy(Box &box);
+        
+        /// number of atom pairs with E != 0
+        unsigned long long contacts(Box &box);
+        /// number of atom pairs with E > 0 
+        unsigned long long overlaps(Box &box);
         flt pressure(Box &box);
         inline vector<P> &pairiter(){return pairs;};
         uint size(){return ((uint) (atoms.size()));};
@@ -1843,6 +1857,30 @@ flt NListed<A, P>::energy(Box &box, IDPair &pair){
     P Epair = P(atoms[pair.first().n()],atoms[pair.last().n()]);
     //~ Vec dist = box.diff(Epair.atom1->x, Epair.atom2->x);
     return energy_pair(Epair, box);
+};
+
+template <class A, class P>
+unsigned long long NListed<A, P>::contacts(Box &box){
+    unsigned long long Nc = 0;
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        flt E = energy_pair(*it, box);
+        if(E != 0.0){Nc++;};
+    }
+    return Nc;
+};
+
+template <class A, class P>
+unsigned long long NListed<A, P>::overlaps(Box &box){
+    unsigned long long Nc = 0;
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        flt E = energy_pair(*it, box);
+        if(E > 0.0){Nc++;};
+    }
+    return Nc;
 };
 
 template <class A, class P>
