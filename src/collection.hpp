@@ -11,7 +11,7 @@
 
 
 /*!
-A "collection" of atoms, the box, and an integrator. Provides general simulation time-stepping as
+A "Collection" of atoms, the box, and an integrator. Provides general simulation time-stepping as
 well as statistical tracking.
 
 The most useful method is timestep(), which takes one step forward in time; this is defined
@@ -116,7 +116,7 @@ class Collection : public boost::enable_shared_from_this<Collection> {
         uint numInteraction(){ return (uint) interactions.size();};
 };
 
-//! A "static" collection, that doesn't move.
+//! A "static" Collection, that doesn't move.
 class StaticCollec : public Collection {
     public:
         StaticCollec(sptr<Box> box, sptr<AtomGroup> atoms,
@@ -135,7 +135,7 @@ class StaticCollec : public Collection {
         };
 };
 
-//! A collection with a "solvent", using the Langevin equation.
+//! A Collection with a "solvent", using the Langevin equation.
 /*! The Langevin Equation ((modified with \f$\vec{f}\f$):
 
 \f$\dot{\vec{p}} = - \xi \vec{p} + \vec{f} + \overset{\circ}{\vec{p}}\f$
@@ -210,7 +210,7 @@ class CollectionSol : public Collection {
                 const flt desiredT,
                 //! The interactions, other than brownian motion. These provide \f$\vec{f}\f$.
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
-                //! Trackers, such as a neighborlist
+                //! Trackers, such as a NeighborList
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
                 //! Constraints
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
@@ -226,7 +226,7 @@ class CollectionSol : public Collection {
         //void seed(){gauss.seed();};
 };
 
-//! A damped collection, equivalent to `CollectionSol` but without the random forces.
+//! A damped Collection, equivalent to `CollectionSol` but without the random forces.
 /*! Uses the Langevin Equation (modified with \f$\vec{f}\f$):
 
 \f$\dot{\vec{p}} = - \xi \vec{p} + \vec{f} + \overset{\circ}{\vec{p}}\f$

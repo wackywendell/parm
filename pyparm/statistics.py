@@ -28,7 +28,7 @@ class SimpleStat(Statistic):
     at each `gather()` time, and manages the array of previous values."""
     def __init__(self, func, name=None):
         """
-        func: a function that returns a simple Statistic when run as func(atoms, box, collection, time)
+        func: a function that returns a simple Statistic when run as func(atoms, box, Collection, time)
         name: the name of the statistic; defaults to function name"""
         self.func = func
         self.arr = []
@@ -75,7 +75,7 @@ class SimpleStat(Statistic):
 class ReturnStat(Statistic):
     """A statistic that is self-updating, and only needs to call a simple function to get its values.
 
-    Any `statetracker`, for example, probably falls into this category."""
+    Any `StateTracker`, for example, probably falls into this category."""
     def __init__(self, func, name=None):
         """
         func: a function that returns a simple Statistic when run as func()

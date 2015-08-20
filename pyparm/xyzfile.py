@@ -16,19 +16,19 @@ class XYZwriter:
         print(comment, file=self.file)
         
         lines = []
-        for atom in atoms:
-            elem = atom.element
+        for a in atoms:
+            elem = a.element
             if com is None:
-                x,y,z = tuple(atom.x) if box is None else tuple(box.diff(atom.x, sim.Vec.Zero()))
+                x,y,z = tuple(a.x) if box is None else tuple(box.diff(a.x, sim.Vec.Zero()))
             else:
-                x,y,z = tuple(atom.x - com)  if box is None else tuple(box.diff(atom.x, com))
+                x,y,z = tuple(a.x - com)  if box is None else tuple(box.diff(a.x, com))
             
             line = [elem] + ['%.4f' % coord for coord in (x,y,z)]
             if self.usevels:
-                vx,vy,vz = tuple(atom.v)
+                vx,vy,vz = tuple(a.v)
                 line.extend(['%.4f' % coord for coord in (vx,vy,vz)])
-            if hasattr(atom, 'sigma'):
-                line.append('%.6f' % atom.sigma)
+            if hasattr(a, 'sigma'):
+                line.append('%.6f' % a.sigma)
             
             print(' '.join(line), file=self.file)
                 
@@ -51,10 +51,10 @@ class XYZwriter:
             for name,interac in list(collec.interactions.items()):
                 cdict[name + 'E'] = interac.energy(collec.getbox())
             for i in list(collec.interactions.values()):
-                if isinstance(i, sim.bondpairs):
+                if isinstance(i, sim.BondPairs):
                     cdict[name + 'mean'] = i.mean_dists()
                     cdict[name + 'std'] = i.std_dists()
-                if isinstance(i, sim.angletriples):
+                if isinstance(i, sim.AngleTriples):
                     cdict[name + 'mean'] = i.mean_dists()
                     cdict[name + 'std'] = i.std_dists()
                 
@@ -294,25 +294,25 @@ class Frame:
     def __len__(self):
         return len(self.locs)
     
-    def _setx(self, atom, loc):
+    def _setx(self, atm, loc):
         x,y,z = loc
-        atom.x.set(float(x), float(y),float(z))
-    def _setv(self, atom, vel):
+        atm.x = (float(x), float(y),float(z))
+    def _setv(self, atm, vel):
         x,y,z = vel
-        atom.v.set(float(x), float(y),float(z))
+        atm.v = (float(x), float(y),float(z))
     
     def into(self, atoms, check=True):
         if self.vels is not None:
             for a, elem, loc, vel in zip(atoms, self.elems, self.locs, self.vels):
                 if check and hasattr(a, 'element') and a.element != elem:
-                    raise TypeError("Element mismatch for atom %s at %s: %s is not %s" 
+                    raise TypeError("Element mismatch for Atom %s at %s: %s is not %s" 
                                         % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
                 self._setv(a, vel)
         else:
             for a, elem, loc in zip(atoms, self.elems, self.locs):
                 if check and hasattr(a, 'element') and a.element != elem:
-                    raise TypeError("Element mismatch for atom %s at %s: %s is not %s" 
+                    raise TypeError("Element mismatch for Atom %s at %s: %s is not %s" 
                                         % (a.name, loc, a.element, elem))
                 self._setx(a, loc)
     
@@ -348,12 +348,12 @@ if __name__ == '__main__':
     
     if False:
         import cProfile as profile
-        from simw import atomvec
+        from simw import AtomVec
         f=open('/home/wendell/idp/data/T3-200K.xyz','r')
         x=XYZreader(f)
         #~ print(x.readframe())
         #~ profile.runctx('for l in x: pass', globals(), locals())
-        atoms = atomvec([1]*1013)
+        atoms = AtomVec([1]*1013)
         #~ profile.runctx('for t,l in x: Frame(l,t).into(atoms,False)', globals(), locals())
         frames = [Frame(l,t) for t,l in x]
         profile.runctx('for f in frames: f.into(atoms,False)', globals(), locals())

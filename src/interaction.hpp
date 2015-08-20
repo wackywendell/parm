@@ -551,11 +551,11 @@ class RandomForce : public Interaction {
         flt energy(Box &box){return 0;};
         void setForces(Box &box);
         
-        // no pressure from this interaction
+        // no pressure from this Interaction
         //TODO: maybe this should be average pressure
         flt pressure(Box &box){return 0;};
         
-        // no pressure from this interaction
+        // no pressure from this Interaction
         //TODO: maybe this should actually work; it could
         flt setForcesGetPressure(Box &box){setForces(box); return 0;};
         
@@ -1669,9 +1669,9 @@ class NListed : public Interaction {
         flt energy(Box &box, IDPair &pair);
         flt energy(Box &box);
         
-        /// number of atom pairs with E != 0
+        /// number of Atom pairs with E != 0
         unsigned long long contacts(Box &box);
-        /// number of atom pairs with E > 0 
+        /// number of Atom pairs with E > 0 
         unsigned long long overlaps(Box &box);
         flt pressure(Box &box);
         inline vector<P> &pairiter(){return pairs;};

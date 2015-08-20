@@ -41,15 +41,15 @@ class Minimizer:
         self.box = self.sim.OriginBox(L)
         
         self.masses = self.diameters**self.ndim if masses is None else masses
-        self.atoms = self.sim.atomvec([float(n) for n in self.masses])
-        self.neighbors = self.sim.neighborlist(self.box, self.atoms, 0.4)
+        self.atoms = self.sim.AtomVec([float(n) for n in self.masses])
+        self.neighbors = self.sim.NeighborList(self.box, self.atoms, 0.4)
         self.hertz = self.sim.Hertzian(self.atoms, self.neighbors)
 
         for a, s, loc in zip(self.atoms, self.diameters, locs):
             a.x = self.sim.Vec(*loc)
             self.hertz.add(self.sim.HertzianAtom(a, 1.0, float(s), 2.0))
             
-        collec = self.collec = self.sim.collectionNLCG(self.box, self.atoms, dt, P, 
+        collec = self.collec = self.sim.CollectionNLCG(self.box, self.atoms, dt, P, 
                 [self.hertz], [self.neighbors], [], 
                 kappa, kmax, secmax, seceps)
         collec.setamax(amax)

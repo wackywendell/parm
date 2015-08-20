@@ -43,7 +43,7 @@ class NPTestCase(TestCase):
 
 class VecTest(NPTestCase):
     def test_assignment(self):
-        a = sim2.atom()
+        a = sim2.Atom()
         v2 = a.x
         print('v2:', v2)
         x, y = v2
@@ -88,7 +88,7 @@ class RigidConstraintCube(NPTestCase):
         np.random.seed(self.seed)
         self.locs -= np.sum(self.locs.T*self.masses, axis=1).T/self.M
         self.box = sim3.InfiniteBox()
-        self.atoms = sim3.atomvec(self.masses)
+        self.atoms = sim3.AtomVec(self.masses)
         vs = np.random.normal(size=np.shape(self.locs)) if self.vs is None else self.vs
         fs = np.random.normal(size=np.shape(self.locs)) if self.fs is None else self.fs
         for a, loc, v, f in zip(self.atoms, self.locs, vs, fs):
@@ -115,7 +115,7 @@ class RigidConstraintCube(NPTestCase):
         comv = self.atoms.comv()
         omega = self.atoms.omega(com)
         angm = self.atoms.angmomentum(com)
-        K = self.atoms.kinetic(comv)
+        K = self.atoms.kinetic_energy(comv)
         self.rigid.apply_velocities(self.box)
         comf = self.atoms.comf()
         torq = self.atoms.torque(com)
@@ -128,7 +128,7 @@ class RigidConstraintCube(NPTestCase):
         mom2 = self.atoms.moment(com2)
         omega2 = self.atoms.omega(com2)
         torq2 = self.atoms.torque(com2)
-        K2 = self.atoms.kinetic(comv2)
+        K2 = self.atoms.kinetic_energy(comv2)
         
         self.assertClose(com, com2)
         self.assertClose(comv, comv2)
@@ -221,7 +221,7 @@ class RandomHertzianVerletTest(NPTestCase):
         self.L = float(V**(1./3.))
         self.box = sim3.OriginBox(self.L)
         
-        self.atoms = sim3.atomvec(self.masses)
+        self.atoms = sim3.AtomVec(self.masses)
         self.hertz = sim3.Hertzian(self.box, self.atoms, 0.4)
 
         for a, radius, mass in zip(self.atoms, self.radii, self.masses):
@@ -229,11 +229,11 @@ class RandomHertzianVerletTest(NPTestCase):
         
         self.reset_positions()
         
-        collec = self.collec = sim3.collectionVerlet(
+        collec = self.collec = sim3.CollectionVerlet(
             self.box, self.atoms, self.dt,
             [self.hertz], [self.hertz.nlist()], [])
         
-        print('EKUT:', collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
+        print('EKUT:', collec.energy(), collec.kinetic_energy(), collec.potential_energy(), collec.temp())
     
     def reset_positions(self):
         np.random.seed(131)
@@ -262,8 +262,8 @@ class RandomHertzianVerletTest(NPTestCase):
                 collec.timestep()
                 self.assertClose(collec.energy(), lastE, rtol=1e-2)
                 lastE = collec.energy()
-            EKUTs.append((collec.energy(), collec.kinetic(),
-                          collec.potentialenergy(), collec.temp()))
+            EKUTs.append((collec.energy(), collec.kinetic_energy(),
+                          collec.potential_energy(), collec.temp()))
             
         EKUTs = np.asarray(EKUTs)
         E, K, U, T = EKUTs.T
@@ -293,11 +293,11 @@ class RandomRigidConstraintTest(NPTestCase):
         self.L = float(V**(1./3.))
         self.box = sim3.OriginBox(self.L)
         
-        self.atoms = sim3.atomvec(self.masses)
+        self.atoms = sim3.AtomVec(self.masses)
 
         self.hertz = sim3.Hertzian(self.box, self.atoms, 0.4)
 
-        self.subgroups = [sim3.subgroup(self.atoms) for _ in range(self.N_mol)]
+        self.subgroups = [sim3.SubGroup(self.atoms) for _ in range(self.N_mol)]
         self.ixs = np.arange(self.N) // self.N_per_mol
         self.locs0 = np.random.normal(scale=10, size=(self.N_mol, 3))
         locs0 = np.array(self.locs0)
@@ -325,11 +325,11 @@ class RandomRigidConstraintTest(NPTestCase):
         nl.update_list(True)
         
         self.rigids = [sim3.RigidConstraint(self.box, s) for s in self.subgroups]
-        collec = self.collec = sim3.collectionVerlet(
+        collec = self.collec = sim3.CollectionVerlet(
             self.box, self.atoms, self.dt,
             [self.hertz], [self.hertz.nlist()], self.rigids)
         
-        print('EKUT:', collec.energy(), collec.kinetic(), collec.potentialenergy(), collec.temp())
+        print('EKUT:', collec.energy(), collec.kinetic_energy(), collec.potential_energy(), collec.temp())
     
     def reset(self):
         np.random.seed(2460659162+1)
@@ -372,7 +372,7 @@ class RandomRigidConstraintTest(NPTestCase):
             comv = s.comv()
             omega = s.omega(com)
             angm = s.angmomentum(com)
-            K = s.kinetic(comv)
+            K = s.kinetic_energy(comv)
             rigid.apply_velocities(self.box)
             comf = s.comf()
             torq = s.torque(com)
@@ -385,7 +385,7 @@ class RandomRigidConstraintTest(NPTestCase):
             mom2 = s.moment(com2)
             omega2 = s.omega(com2)
             torq2 = s.torque(com2)
-            K2 = s.kinetic(comv2)
+            K2 = s.kinetic_energy(comv2)
             
             self.assertClose(com, com2)
             self.assertClose(comv, comv2)
@@ -412,8 +412,8 @@ class RandomRigidConstraintTest(NPTestCase):
                 collec.timestep()
                 self.assertClose(collec.energy(), lastE, rtol=1e-2)
                 lastE = collec.energy()
-            EKUTs.append((collec.energy(), collec.kinetic(),
-                          collec.potentialenergy(), collec.temp()))
+            EKUTs.append((collec.energy(), collec.kinetic_energy(),
+                          collec.potential_energy(), collec.temp()))
             
         EKUTs = np.asarray(EKUTs)
         E, K, U, T = EKUTs.T
@@ -450,7 +450,7 @@ class RSQTest(NPTestCase):
         V = Vs / self.phi
         self.L = float(V**(1./3.))
         self.box = sim3.OriginBox(self.L)
-        self.atoms = sim3.atomvec(self.masses)
+        self.atoms = sim3.AtomVec(self.masses)
         self.rsqs = sim3.RsqTracker(self.atoms, self.ns, False)
         self.isfs = sim3.ISFTracker(self.atoms, self.ks, self.ns, False)
         

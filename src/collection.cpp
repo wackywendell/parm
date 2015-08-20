@@ -78,7 +78,7 @@ flt Collection::virial(){
 
 //! Returns (1/d V) Σ ri dot fi 
 //! where d is number of dimensions
-//! note that interaction->pressure just returns Σ ri dot fi
+//! note that Interaction->pressure just returns Σ ri dot fi
 flt Collection::pressure(){
     flt V = box->V();
 

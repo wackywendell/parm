@@ -348,7 +348,7 @@ class Packing:
         vs1 = [sim.Vec(*xy) for idx in sz1 for xy in self.rs[idx]]
         vs2 = [sim.Vec(*xy) for idx in sz2 for xy in other.rs[idx]]
         
-        tree = sim.jammingtreeBD(box, sim.vecvector(vs1), sim.vecvector(vs2), cutoff1, cutoff2)
+        tree = sim.JammingTreeBD(box, sim.vecvector(vs1), sim.vecvector(vs2), cutoff1, cutoff2)
         return tree
     
     def dist(self, other, tol=1e-8, maxt = 1000000):

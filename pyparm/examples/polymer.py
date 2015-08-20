@@ -63,7 +63,7 @@ L = (opts.npoly / opts.density)**(1.0/3.0)
 
 box = sim.OriginBox(L)
 atoms = sim.AtomVec(opts.npoly * opts.perpoly)
-neighbors = sim.NeighborList(box, atoms, 0.4) # the neighborlist, for keeping track of what atoms are near what other atoms
+neighbors = sim.NeighborList(box, atoms, 0.4) # the NeighborList, for keeping track of what atoms are near what other atoms
 LJ = sim.LJgroup(atoms, neighbors)
 collec = sim.CollectionVerlet(box, atoms, dt, [LJ], [neighbors]) # the integrator
 # We use a simple velocity-verlet integrator, which is time-reversible and NVE ensemble
