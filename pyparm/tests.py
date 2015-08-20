@@ -233,7 +233,8 @@ class RandomHertzianVerletTest(NPTestCase):
             self.box, self.atoms, self.dt,
             [self.hertz], [self.hertz.nlist()], [])
         
-        print('EKUT:', collec.energy(), collec.kinetic_energy(), collec.potential_energy(), collec.temp())
+        print('EKUT:', collec.energy(), collec.kinetic_energy(),
+            collec.potential_energy(), collec.temp())
     
     def reset_positions(self):
         np.random.seed(131)
@@ -329,7 +330,8 @@ class RandomRigidConstraintTest(NPTestCase):
             self.box, self.atoms, self.dt,
             [self.hertz], [self.hertz.nlist()], self.rigids)
         
-        print('EKUT:', collec.energy(), collec.kinetic_energy(), collec.potential_energy(), collec.temp())
+        print('EKUT:', collec.energy(), collec.kinetic_energy(),
+            collec.potential_energy(), collec.temp())
     
     def reset(self):
         np.random.seed(2460659162+1)
@@ -507,4 +509,3 @@ class RSQTest(NPTestCase):
             np.shape(ISFxyz),
             (len(self.ns), len(self.ks), len(self.atoms), 3)
         )
-        
