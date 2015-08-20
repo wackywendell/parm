@@ -24,8 +24,8 @@
 %include std_list.i
 %include std_set.i
 %include boost_shared_ptr.i
+%include array.i
 %include std_map.i
-%include "vec.hpp"
 
 %apply double { long double } 
 
@@ -54,6 +54,7 @@
 %shared_ptr(RDiffs)
 %shared_ptr(SCAtomVec)
 %shared_ptr(CoordConstraint)
+%shared_ptr(RigidConstraint)
 %shared_ptr(RandomForce)
 %shared_ptr(FixedForce)
 %shared_ptr(FixedForceRegion)
@@ -97,7 +98,6 @@
 %shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
 
 %{
-#include "vec.hpp"
 #include "vecrand.hpp"
 #include "vecrand.cpp"
 #include "box.hpp"
@@ -110,7 +110,20 @@
 #include "constraints.cpp"
 #include "collection.hpp"
 #include "collection.cpp"
+#include <Python.h>
+
+// Part of the numpy initialization sequence.
+// See http://wiki.scipy.org/Cookbook/SWIG_NumPy_examples#head-6c11cb03512f8fd5bfa20f8d8c6f69e7cc1ce494
+#define SWIG_FILE_WITH_INIT
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include <numpy/arrayobject.h>
+
 static int myErr = 0;
+%}
+
+// Part of the numpy initialization sequence.
+%init %{
+    import_array()
 %}
 
 %exception {
@@ -133,244 +146,252 @@ static int myErr = 0;
     }
 }
 
-%typemap(in) bool value[3] (bool temp[3]) {
-  int i;
-  if (!PySequence_Check($input)) {
-    PyErr_SetString(PyExc_ValueError,"Expected a sequence");
-    return NULL;
-  }
-  if (PySequence_Length($input) != 3) {
-    PyErr_SetString(PyExc_ValueError,"Size mismatch. Expected 3 elements");
-    return NULL;
-  }
-  for (i = 0; i < 3; i++) {
-    PyObject *o = PySequence_GetItem($input,i);
-    if (PyNumber_Check(o)) {
-      temp[i] = (bool) PyInt_AsLong(o);
-    } else {
-      PyErr_SetString(PyExc_ValueError,"Sequence elements must be numbers");      
+// Convert Vec2, Vec3 output into numpy arrays
+// Taken from
+// http://stackoverflow.com/questions/24375198/error-wrapping-eigen-c-with-python-using-swig
+%typemap(out) Vec2 { 
+    npy_intp dims[1] = {2}; 
+    PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array)); 
+    data[0] = (double) $1(0);
+    data[1] = (double) $1(1);
+    $result = array; 
+};
+
+// Written myself, using http://www.swig.org/Doc3.0/Typemaps.html#Typemaps
+%typemap(out) Vec3 { 
+    npy_intp dims[1] = {3}; 
+    PyObject* array = PyArray_SimpleNew(1, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array)); 
+    data[0] = (double) $1(0);
+    data[1] = (double) $1(1);
+    data[2] = (double) $1(2);
+    $result = array; 
+};
+
+%typemap(out) Matrix { 
+    npy_intp dims[2] = {NDIM,NDIM}; 
+    PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+    for(uint i=0; i<NDIM; i++){
+        for(uint j=0; j<NDIM; j++){
+            data[i*NDIM+j] = (double) $1(i, j);
+        }
+    }
+    $result = array; 
+};
+
+// from http://stackoverflow.com/questions/24375198/error-wrapping-eigen-c-with-python-using-swig
+%typemap(in) Eigen::Matrix<flt, Eigen::Dynamic, 3> & (Eigen::Matrix<flt, Eigen::Dynamic, 3> temp) {
+    if (!PySequence_Check($input)) {
+        PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+        return NULL;
+    }
+    int len = PySequence_Length($input);
+    if(len == 0){
+        PyErr_SetString(PyExc_TypeError,"expected a sequence of length greather than 0.");
+        return NULL;
+    } else if (len == -1){
+        PyErr_SetString(PyExc_TypeError, "Failure converting.");
+        return NULL;
+    }
+    
+    temp = Eigen::Matrix<flt, Eigen::Dynamic, 3>(len, 3);
+    for(int i=0; i < len; i++){
+        PyObject *obj_i = PySequence_GetItem($input, i);
+        if (obj_i == NULL) {
+            PyErr_SetString(PyExc_TypeError, "Failure parsing sequence.");
+            return NULL;
+        }
+        if (!PySequence_Check(obj_i)) {
+            PyErr_SetString(PyExc_TypeError, "expected a sequence of sequences.");
+            return NULL;
+        }
+        
+        PyObject* tup = PySequence_Tuple(obj_i);
+        if (!PyArg_ParseTuple(tup,"ddd", 
+                &temp(i, 0), &temp(i, 1), &temp(i, 2))){
+            PyErr_SetString(PyExc_TypeError,"inner sequences must have 3 doubles.");
+            return NULL;
+        }
+    }
+    
+    $1 = &temp;
+};
+
+%typemap(out) Eigen::Matrix<flt, Eigen::Dynamic, 3> { 
+    unsigned int rows = ($1.rows());
+    npy_intp dims[2] = {rows,NDIM};
+    PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+    for(uint i=0; i<rows; i++){
+        for(uint j=0; j<NDIM; j++){
+            data[i*NDIM+j] = (double) $1(i, j);
+        }
+    }
+    $result = array; 
+};
+
+%typemap(out) vector<Eigen::Matrix<flt, Eigen::Dynamic, 3> > { 
+    unsigned int vlength = $1.size();
+    PyObject* pylist = PyList_New(vlength);
+    if(pylist == NULL){
+        PyErr_SetString(PyExc_TypeError, "Failure creating list.");
+        return NULL;
+    }
+    for(unsigned int i=0; i<vlength; i++){
+        Eigen::Matrix<flt, Eigen::Dynamic, 3> &m = $1.at(i);
+        unsigned int rows = m.rows();
+        npy_intp dims[2] = {rows,NDIM};
+        PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+        double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+        for(uint j=0; j<rows; j++){
+            for(uint k=0; k<NDIM; k++){
+                data[j*NDIM+k] = (double) m(j, k);
+            }
+        }
+        if(PyList_SetItem(pylist, i, array) != 0){
+            PyErr_SetString(PyExc_TypeError, "Failure setting item.");
+            return NULL;
+        }
+    }
+    $result = pylist; 
+};
+
+// Take any sequence as input for a Vec2 (or Vec3, below)
+%typemap(in) Vec2 (Vec2 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"dd", &temp(0), &temp(1))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 2 doubles.");
       return NULL;
     }
+    $1 = temp;
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
   }
-  $1 = temp;
 };
 
-%extend Vector3 {
-    char* __str__() {
-        static char temp[256];
-        sprintf(temp,"(%g, %g, %g)", $self->getxd(),$self->getyd(),$self->getzd());
-        return &temp[0];
-    };
-    char* __repr__() {
-        static char temp[256];
-        sprintf(temp,"Vec(%g, %g, %g)", $self->getxd(),$self->getyd(),$self->getzd());
-        return &temp[0];
-    };
-    
-    Vector3 __truediv__(const double n) const{
-        return Vector3<T>($self->operator/(n));
-    };
-    
-    Vector3 __mul__(const double n) const{
-        return Vector3<T>($self->operator*(n));
-    };
-    
-    %insert("python") %{
-    @property
-    def X(self):
-        return self.getxd()
-    
-    @property
-    def Y(self):
-        return self.getyd()
-    
-    @property
-    def Z(self):
-        return self.getzd()
-    %}
-    #~ %insert("python") %{
-        #~ def __iter__(self):
-            #~ return iter((self.getxd(), self.getyd(), self.getzd()))
-    #~ %};
+%typemap(in) Vec2& (Vec2 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"dd", &temp(0), &temp(1))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 2 doubles.");
+      return NULL;
+    }
+    $1 = &temp;
+
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
 };
 
-%extend Vector2 {
-    char* __str__() {
-        static char temp[256];
-        sprintf(temp,"(%g, %g)", $self->getxd(),$self->getyd());
-        return &temp[0];
-    };
-    char* __repr__() {
-        static char temp[256];
-        sprintf(temp,"Vec(%g, %g)", $self->getxd(),$self->getyd());
-        return &temp[0];
-    };
-    
-    Vector2 __truediv__(const double n) const{
-        return Vector2<T>($self->operator/(n));
-    };
-    
-    Vector2 __mul__(const double n) const{
-        return Vector2<T>($self->operator*(n));
-    };
-    
-    %insert("python") %{
-    @property
-    def X(self):
-        return self.getxd()
-    
-    @property
-    def Y(self):
-        return self.getyd()
-    %}
+%typemap(in) Vec3 (Vec3 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"ddd", &temp(0), &temp(1), &temp(2))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 3 doubles.");
+      return NULL;
+    }
+    $1 = temp;
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
 };
 
-%extend Array {
-    T __getitem__(const unsigned int n) const{
-        return $self->get(n);
-    };
-    
-    void __setitem__(const unsigned int n, const T val){
-        $self->set(n, val);
-    };
-    
-    unsigned int __len__(){ return N;};
-    
-        
-    %insert("python") %{
-        #~ def __setitem__(self, n, val):
-            #~ return self.set(n, val)
-        
-        def __iter__(self):
-            for i in range(len(self)):
-                yield self.get(i)
-        
-        #~ def __len__(self):
-            #~ return self.len()
-    %};
+%typemap(in) Vec3& (Vec3 temp) {
+  if (PySequence_Check($input)) {
+    PyObject* tup = PySequence_Tuple($input);
+    if (!PyArg_ParseTuple(tup,"ddd", &temp(0), &temp(1), &temp(2))) {
+      PyErr_SetString(PyExc_TypeError,"sequence must have 3 doubles.");
+      return NULL;
+    }
+    $1 = &temp;
+
+  } else {
+    PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+    return NULL;
+  }
 };
 
-%extend NVector {
-    %template() operator*<double>;
-    %template() operator/<double>;
-    
-    NVector __truediv__(const double n) const{
-        return $self->operator/(n);
-    };
-    
-    T __getitem__(const unsigned int n) const{
-        return $self->get(n);
-    };
-    
-    void __setitem__(const unsigned int n, const T val){
-        $self->set(n, val);
-    };
-    
-    unsigned int __len__(){ return N;};
-    
-        
-    %insert("python") %{
-        #~ def __setitem__(self, n, val):
-            #~ return self.set(n, val)
-        
-        def __iter__(self):
-            for i in range(len(self)):
-                yield self.get(i)
-        
-        #~ def __len__(self):
-            #~ return self.len()
-    %};
+// Note that Vec2 has higher precedence than Vec3
+%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Vec2, Vec2&, Vec2* {
+    $1 = (PySequence_Check($input) && (PySequence_Size($input) == 2)) ? 1 : 0;
 };
 
-%template(_Nvector3) NVector<double, 3>;
-%template(_Nvector2) NVector<double, 2>;
-%template(_Numvector3) NumVector<double, 3>;
-%template(_Numvector2) NumVector<double, 2>;
-%template(_Nvector3L) NVector<long double, 3>;
-%template(_Nvector2L) NVector<long double, 2>;
-%template(_Numvector3L) NumVector<long double, 3>;
-%template(_Numvector2L) NumVector<long double, 2>;
+%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Vec3, Vec3&, Vec3* {
+    $1 = (PySequence_Check($input) && (PySequence_Size($input) == 3)) ? 1 : 0;
+};
 
 #ifdef VEC2D
-%template(Vec) Vector2<double>;
-%template(VecL) Vector2<long double>;
-%template(Veci) Array<std::complex<double>, 2>;
-%template(VecLi) Array<std::complex<long double>, 2>;
-namespace std {
-    %template(vecptrvector) vector<Vector2<double>*>;
-    %template(vecvector) vector<Vector2<double> >;
-    %template(_vvecvector) vector<vector<Vector2<double> > >;
-    %template(_vvvecvector) vector<vector<vector<Vector2<double> > > >;
-    %template(cvecvector) vector<Array<std::complex<double>, 2> >;
-    %template(_cvvecvector) vector<vector<Array<std::complex<double>, 2> > >;
-    %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 2> > > >;
-    %template(_jamminglist) list<JammingList>;
-    %template(_jamminglistrot) list<JammingListRot>;
-    
-    %template(vecptrvectorL) vector<Vector2<long double>*>;
-    %template(vecvectorL) vector<Vector2<long double> >;
-    %template(_vvecvectorL) vector<vector<Vector2<long double> > >;
-}
-#else
-%template(Vec) Vector3<double>;
-%template(VecL) Vector3<long double>;
-%template(Veci) Array<std::complex<double>, 3>;
-%template(VecLi) Array<std::complex<long double>, 3>;
-%template(_MatrixBase) NVector<Vector3<double>, 3>;
-%template(Matr) Matrix<double>;
-namespace std {
-    %template(vecptrvector) vector<Vector3<double>*>;
-    %template(vecvector) vector<Vector3<double> >;
-    %template(_vvecvector) vector<vector<Vector3<double> > >;
-    %template(_vvvecvector) vector<vector<vector<Vector3<double> > > >;
-    %template(cvecvector) vector<Array<std::complex<double>, 3> >;
-    %template(_cvvecvector) vector<vector<Array<std::complex<double>, 3> > >;
-    %template(_cvvvecvector) vector<vector<vector<Array<std::complex<double>, 3> > > >;
-    %template(vecptrvectorL) vector<Vector3<long double>*>;
-    %template(vecvectorL) vector<Vector3<long double> >;
-    %template(_vvecvectorL) vector<vector<Vector3<long double> > >;
-}
+%typemap(in) Vec = Vec2;
+%typemap(out) Vec = Vec2;
+%typemap(typecheck) Vec = Vec2;
+%typemap(in) Vec& = Vec2&;
+%typemap(typecheck) Vec& = Vec2&;
+#else 
+%typemap(in) Vec = Vec3;
+%typemap(out) Vec = Vec3;
+%typemap(typecheck) Vec = Vec3;
+%typemap(in) Vec& = Vec3&;
+%typemap(typecheck) Vec& = Vec3&;
+#endif 
+
+#ifdef VEC2D
+%template(_JammingList) std::list<JammingList>;
+%template(_JammingListRot) std::list<JammingListRot>;
 #endif
-%template(Pair) NumVector<double, 2>;
-%template(VecPair) NVector<Vec, 2>;
-%template(_atomarray2) Array<Atom*, 2>;
-%template(_atompair2) Array<Atom, 2>;
-%template(_idarray2) Array<AtomID, 2>;
-%template(_atomarray3) Array<Atom*, 3>;
-%template(_atomarray4) Array<Atom*, 4>;
 
+%template(fvector) std::vector<float>;
+%template(_ffvector) std::vector<std::vector<float> >;
+%template(dvector) std::vector<double>;
+%template(_ddvector) std::vector<std::vector<double> >;
+%template(_dddvector) std::vector<std::vector<std::vector<double> > >;
+%template(cvector) std::vector<std::complex<double> >;
+%template(_ccvector) std::vector<std::vector<std::complex<double> > >;
+%template(_cccvector) std::vector<std::vector<std::vector<std::complex<double> > > >;
+%template(ldvector) std::vector<long double>;
+// %template(_vvector) vector<Vec>;
+// %template(_vvvector) vector<vector<Vec> >;
+// %template(_vvvvector) vector<vector<vector<Vec> > >;
+// %template(_vvector2) vector<Vec2>;
+// %template(_vvvector2) vector<vector<Vec2> >;
+// %template(_vvvvector2) vector<vector<vector<Vec2> > >;
+// %template(_vvector3) std::vector<Vec3>;
+// %template(_vvvector3) vector<vector<Vec3> >;
+// %template(_vvvvector3) vector<vector<vector<Vec3> > >;
+//%template(avector) vector<shared_ptr<Atomgroup> >;
+//%template(aptrvector) vector<shared_ptr<Atom> >;
+%template(ivector) std::vector<shared_ptr<Interaction> >;
+%template(ifxvector) std::vector<shared_ptr<InteractionPairsX> >;
+%template(tvector) std::vector<shared_ptr<StateTracker> >;
+%template(constraintvector) std::vector<shared_ptr<Constraint> >;
+#ifdef VEC2D
+%template(wallvector) std::vector<shared_ptr<SoftWall> >;
+#endif
+%template(idvector) std::vector<AtomID>;
+%template(idpairvector) std::vector<IDPair>;
+%template(intvector) std::vector<int>;
+%template(uintvector) std::vector<unsigned int>;
+%template(ulongvector) std::vector<unsigned long>;
+%template(_eventset) std::set<Event>;
+%template(pair_uint_CNodePath) std::pair<unsigned int, CNodePath>;
+%template(map_uint_CNodePath) std::map<unsigned int, CNodePath>;
+%template(vector_CNode) std::vector<CNode>;
+%template(pair_int_CNode) std::pair<int, vector<CNode> >;
+%template(map_int_CNode) std::map<int, vector<CNode> >;
 
-namespace std {
-    %template(fvector) vector<float>;
-    %template(_ffvector) vector<vector<float> >;
-    %template(dvector) vector<double>;
-    %template(_ddvector) vector<vector<double> >;
-    %template(_dddvector) vector<vector<vector<double> > >;
-    %template(cvector) vector<std::complex<double> >;
-    %template(_ccvector) vector<vector<std::complex<double> > >;
-    %template(_cccvector) vector<vector<vector<std::complex<double> > > >;
-    %template(ldvector) vector<long double>;
-    //%template(avector) vector<shared_ptr<AtomGroup> >;
-    //%template(aptrvector) vector<shared_ptr<Atom> >;
-    %template(ivector) vector<shared_ptr<Interaction> >;
-    %template(ifxvector) vector<shared_ptr<InteractionPairsX> >;
-    %template(tvector) vector<shared_ptr<StateTracker> >;
-    %template(constraintvector) vector<shared_ptr<Constraint> >;
-    #ifdef VEC2D
-    %template(wallvector) vector<shared_ptr<SoftWall> >;
-    #endif
-    %template(idvector) vector<AtomID>;
-    %template(idpairvector) vector<IDPair>;
-    %template(intvector) vector<int>;
-    %template(uintvector) vector<unsigned int>;
-    %template(ulongvector) vector<unsigned long>;
-    %template(_eventset) set<Event>;
-    %template(pair_uint_CNodePath) pair<uint, CNodePath>;
-    %template(map_uint_CNodePath) map<uint, CNodePath>;
-    %template(vector_CNode) vector<CNode>;
-    %template(pair_int_CNode) pair<int, vector<CNode> >;
-    %template(map_int_CNode) map<int, vector<CNode> >;
-}
+%template(_carray2) boost::array<std::complex<double>, 2>;
+%template(_cavector2) std::vector<boost::array<std::complex<double>, 2> >;
+%template(_ccavector2) std::vector<std::vector<boost::array<std::complex<double>, 2> > >;
+%template(_cccavector2) std::vector<std::vector<std::vector<boost::array<std::complex<double>, 2> > > >;
+%template(_carray3) boost::array<std::complex<double>, 3>;
+%template(_cavector3) std::vector<boost::array<std::complex<double>, 3> >;
+%template(_ccavector3) std::vector<std::vector<boost::array<std::complex<double>, 3> > >;
+%template(_cccavector3) std::vector<std::vector<std::vector<boost::array<std::complex<double>, 3> > > >;
 
 %extend Atom {
     %insert("python") %{
@@ -532,7 +553,7 @@ namespace std {
       myErr = 1;
       return IDPair(AtomID(), AtomID());
     }
-    return $self->get((uint) i);
+    return $self->get((unsigned int) i);
   }
   
   %insert("python") %{

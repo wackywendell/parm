@@ -6,7 +6,6 @@
 #include <vector>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/array.hpp>
 
 #define sptr boost::shared_ptr
 
@@ -149,7 +148,7 @@ class OriginBox : public Box {
             for(uint i=0; i<NDIM; i++){
                 v[i] *= boxsize[i];
             }
-            return diff(v, Vec());
+            return diff(v, Vec::Zero());
         };
         Vec boxshape(){return boxsize;};
 };
@@ -268,12 +267,14 @@ class AtomID : public AtomRef {
         inline uint n() const {return num;};
 };
 
-class IDPair : public Array<AtomID, 2> {
+class IDPair {
+    private:
+        AtomID id1, id2;
     public:
-        IDPair(){vals[0] = AtomID(); vals[1] = AtomID();};
-        IDPair(AtomID a, AtomID b){ vals[0] = a; vals[1] = b;};
-        inline AtomID first() const {return vals[0];};
-        inline AtomID last() const {return vals[1];};
+        IDPair() : id1(), id2(){};
+        IDPair(AtomID a, AtomID b) : id1(a), id2(b){};
+        inline AtomID first() const {return id1;};
+        inline AtomID last() const {return id2;};
 };
 
 class AtomGroup;
@@ -312,6 +313,8 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
 
         //! center of mass
         Vec com() const;
+        //!center of mass force (i.e., sum of all forces)
+        Vec comf() const;
         //!center of mass velocity
         Vec comv() const;
 
@@ -322,43 +325,57 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         This is normally with reference to a "lab" reference frame (velocity (0,0,0)), but
         can optionally take a different origin velocity, e.g. `comv()`.
         */
-        flt kinetic_energy(const Vec &originvelocity=Vec()) const;
+        flt kinetic_energy(const Vec originvelocity=Vec::Zero()) const;
         //! Total momentum.
         Vec momentum() const;
         //! \f$R_g\f$
         flt gyradius() const;
         #ifdef VEC3D
-        //! Moment of inertia of the atoms as a whole
-        flt moment(const Vec &loc, const Vec &axis, Box &box) const;
+        //! Total torque about a given location
+        Vec torque(const Vec loc) const;
+        Vec torque() const{return torque(com());};
+        //! Moment of inertia of the atoms about an axis
+        flt moment_about(const Vec axis, const Vec loc) const;
+        flt moment_about(const Vec axis) const{return moment_about(axis, com());};
         //! Angular momentum
-        Vec angmomentum(const Vec &loc, Box &box) const;
+        Vec angmomentum(const Vec loc) const;
+        Vec angmomentum() const {return angmomentum(com());};
         //! Moment of inertia of the atoms as a whole
-        Matrix<flt> moment(const Vec &loc, Box &box) const;
+        Matrix moment(const Vec loc) const;
+        Matrix moment() const{return moment(com());};
         //! Angular velocity
-        Vec omega(const Vec &loc, Box &box) const;
+        Vec omega(const Vec loc) const;
+        Vec omega() const {return omega(com());};
         //! Add a given angular velocity to all atoms, by adding to their velocity
-        void addOmega(Vec w, Vec origin, Box &box);
+        void addOmega(Vec w, Vec origin);
+        void addOmega(Vec w){return addOmega(w, com());};
         //! Reset angular momentum to 0
-        inline void resetL(Box &box){
-            Vec c = com(), w = omega(c, box);
-            if (w.sq() == 0) return;
-            addOmega(-w, c, box);
+        inline void resetL(){
+            Vec c = com(), w = omega(c);
+            if (w.squaredNorm() == 0) return;
+            addOmega(-w, c);
         }
         #elif defined VEC2D
+        //! Total torque about a given location
+        flt torque(const Vec loc) const;
         //! Moment of inertia of the atoms as a whole
-        flt moment(const Vec &loc, Box &box) const;
+        flt moment(const Vec loc) const;
+        flt moment() const{return moment(com());};
         //! Angular momentum
-        flt angmomentum(const Vec &loc, Box &box) const;
+        flt angmomentum(const Vec loc) const;
+        flt angmomentum() const {return angmomentum(com());};
         //! Angular velocity
-        flt omega(const Vec &loc, Box &box) const{return angmomentum(loc, box) / moment(loc, box);};
+        flt omega(const Vec loc) const{return angmomentum(loc) / moment(loc);};
+        flt omega() const{return omega(com());};
         //! Add a given angular velocity to all atoms, by adding to their velocity
-        void addOmega(flt w, Vec origin, Box &box);
+        void addOmega(flt w, Vec origin);
+        void addOmega(flt w){addOmega(w, com());}
         //! Reset angular momentum to 0
-        inline void resetL(Box &box){
+        inline void resetL(){
             Vec c = com();
-            flt w = omega(c, box);
+            flt w = omega(c);
             if (w == 0) return;
-            addOmega(-w, c, box);
+            addOmega(-w, c);
         }
         #endif
 
@@ -384,14 +401,24 @@ class AtomVec : public virtual AtomGroup, public boost::enable_shared_from_this<
     private:
         Atom* atoms;
         uint sz;
+        void zero() {
+            for(uint i=0; i < sz; i++){
+                atoms[i].x = Vec::Zero();
+                atoms[i].v = Vec::Zero();
+                atoms[i].f = Vec::Zero();
+                atoms[i].a = Vec::Zero();
+            }
+        }
     public:
         AtomVec(vector<double> masses) : sz((uint) masses.size()){
             atoms = new Atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = masses[i];
+            zero();
         };
         AtomVec(uint N, flt mass) : sz(N){
             atoms = new Atom[sz];
             for(uint i=0; i < sz; i++) atoms[i].m = mass;
+            zero();
         };
         AtomVec(AtomVec& other) : sz(other.size()){
             atoms = new Atom[sz];

@@ -56,8 +56,8 @@ int main(){
         flt E0 = LJ->energy(*obox);
         atoms[i].x = obox->randLoc(); // random location in the box
         atoms[i].v = randVec(); // from a Gaussian
-        atoms[i].f = Vec();
-        atoms[i].a = Vec();
+        atoms[i].f = Vec::Zero();
+        atoms[i].a = Vec::Zero();
         
         // Add it to the Lennard-Jones potential
         LJ->add(LJatomcut(epsilon, sigma, atoms.get_id(i), sigcut));
@@ -149,7 +149,7 @@ void writefile(ofstream& outf, AtomVec& atoms, Box& bx){
     outf << endl; // blank line for comment
     for(uint i=0; i<atoms.size(); i++){
         outf << "C";
-        Vec normloc = bx.diff(Vec(), atoms[i].x);
+        Vec normloc = bx.diff(Vec::Zero(), atoms[i].x);
         for(uint j=0; j<NDIM; j++){
             outf << "\t" << normloc[j];
         }

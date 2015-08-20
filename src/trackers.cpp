@@ -19,7 +19,7 @@ bool NeighborList::update_list(bool force){
         flt bigdist = 0, biggestdist = 0;
         for(uint i=0; i < atoms.size(); i++){
             Atom &atm = atoms[i];
-            flt curdist = (atm.x - lastlocs[i]).mag();
+            flt curdist = (atm.x - lastlocs[i]).norm();
             if(curdist > biggestdist){
                 bigdist = biggestdist;
                 biggestdist = curdist;
@@ -59,7 +59,7 @@ bool NeighborList::update_list(bool force){
             AtomID a2=atoms.get_id(j);
             if (ignorepairs.has_pair(a1, a2)) continue;
             flt diam = (diameters[i] + diameters[j])/2;
-            if(box->diff(a1->x, a2->x).mag() < (diam + skin))
+            if(box->diff(a1->x, a2->x).norm() < (diam + skin))
                 curpairs.push_back(IDPair(a1, a2));
         }
     }

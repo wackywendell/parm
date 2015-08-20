@@ -19,7 +19,7 @@ class XYZwriter:
         for atom in atoms:
             elem = atom.element
             if com is None:
-                x,y,z = tuple(atom.x) if box is None else tuple(box.diff(atom.x, sim.Vec()))
+                x,y,z = tuple(atom.x) if box is None else tuple(box.diff(atom.x, sim.Vec.Zero()))
             else:
                 x,y,z = tuple(atom.x - com)  if box is None else tuple(box.diff(atom.x, com))
             

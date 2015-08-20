@@ -159,9 +159,9 @@ int main(int argc, char **argv){
     for (uint i=0; i < atoms.size(); i++){
         // we track energy to see if things are overlapping
         atoms[i].x = obox->randLoc(); // random location in the box
-        atoms[i].v = Vec();
-        atoms[i].f = Vec();
-        atoms[i].a = Vec();
+        atoms[i].v = Vec::Zero();
+        atoms[i].f = Vec::Zero();
+        atoms[i].a = Vec::Zero();
         
         flt cursigma = sigma;
         if(i==0) (cursigma = sigma*sizeratio);
@@ -371,7 +371,7 @@ void writefile(ofstream& outf, AtomVec& atoms, Box& bx){
     for(uint i=0; i<atoms.size(); i++){
         if(i == 0){outf << "O";}
         else{outf << "C";};
-        Vec normloc = bx.diff(Vec(), atoms[i].x);
+        Vec normloc = bx.diff(Vec::Zero(), atoms[i].x);
         for(uint j=0; j<NDIM; j++){
             outf << "\t" << normloc[j];
         }

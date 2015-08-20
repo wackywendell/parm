@@ -1,14 +1,14 @@
 #include "interaction.hpp"
 
 flt Spring::energy(const Vec r){
-    flt m = r.mag();
+    flt m = r.norm();
     flt l = m - x0;
     return .5 * springk * l*l;
 }
 
 Vec Spring::forces(const Vec r){
-    flt m = r.mag();
-    if(m < 1e-32) return Vec();
+    flt m = r.norm();
+    if(m < 1e-32) return Vec::Zero();
     flt fmag = (x0 - m) * springk;
     return r * (fmag / m);
 }
@@ -25,14 +25,14 @@ flt ElectricScreened::energy(const flt r, const flt qaqb, const flt screen, cons
 };
 
 Vec ElectricScreened::forces(const Vec r, const flt qaqb, const flt screen, const flt cutoff){
-    flt d = r.mag();
-    if(cutoff > 0 and d > cutoff) return Vec();
+    flt d = r.norm();
+    if(cutoff > 0 and d > cutoff) return Vec::Zero();
     flt fmag = exp(-d/screen) * (qaqb/d) * (1/d + 1/screen);
     return r * (fmag/d);
 };
 
 FixedForceRegionAtom::FixedForceRegionAtom(AtomID a, Vec dir, vector<flt> bound, vector<flt> Fs) :
-        AtomID(a), direction(dir.norm()), boundaries(bound), Fs(Fs){
+        AtomID(a), direction(dir.normalized()), boundaries(bound), Fs(Fs){
     if(boundaries.size() != Fs.size() - 1){
         throw std::invalid_argument("FixedForceRegionAtom: boundaries.size() != Fs.size() - 1");
     } else if(boundaries.size() <= 0){
@@ -68,16 +68,16 @@ void FixedForceRegionAtom::setForce(Box &box){
 };
 
 flt BondAngle::energy(const Vec& r1, const Vec& r2){
-    flt costheta = r1.dot(r2) / r1.mag() / r2.mag();
+    flt costheta = r1.dot(r2) / r1.norm() / r2.norm();
     if(costheta > 1) costheta = 1;
     else if(costheta < -1) costheta = -1;
     if(!usecos) return springk*pow(acos(costheta) - theta0,2)/2;
     else return springk*pow(costheta - cos(theta0),2)/2;
 }
 
-NVector<Vec, 3> BondAngle::forces(const Vec& r1, const Vec& r2){
-    flt r1mag = r1.mag();
-    flt r2mag = r2.mag();
+array<Vec, 3> BondAngle::forces(const Vec& r1, const Vec& r2){
+    flt r1mag = r1.norm();
+    flt r2mag = r2.norm();
     flt costheta = r1.dot(r2) / r1mag / r2mag;
     if(costheta > 1) costheta = 1;
     else if(costheta < -1) costheta = -1;
@@ -90,11 +90,11 @@ NVector<Vec, 3> BondAngle::forces(const Vec& r1, const Vec& r2){
     // We have V = \frac{1}{2}k(\theta-\theta_{0})^{2}
     // Then -f = grad V = \frac{k}{r}(\theta-\theta_{0})\hat{\theta}
     // first we get the direction:
-    NVector<Vec, 3> force;
+    array<Vec, 3> force;
     if (fmag == 0) {return force;}
-    Vec f0 = r2.perpto(r1);
-    Vec f2 = r1.perpto(r2);
-    if ((f0.sq() <= 1e-30) or (f2.sq() <= 1e-30)) {return force;}
+    Vec f0 = perpto(r2, r1);
+    Vec f2 = perpto(r1, r2);
+    if ((f0.squaredNorm() <= 1e-30) or (f2.squaredNorm() <= 1e-30)) {return force;}
     force[0] = f0;
     force[0].normalize();
     force[2] = f2;
@@ -104,7 +104,7 @@ NVector<Vec, 3> BondAngle::forces(const Vec& r1, const Vec& r2){
     force[0] *= fmag/r1mag;
     force[2] *= fmag/r2mag;
 
-    //~ if(!(force[0].sq() < 1e6)){
+    //~ if(!(force[0].squaredNorm() < 1e6)){
         //~ cout << "theta: " << theta << "  theta0: " << theta0 << endl;
         //~ cout << "fmag: " << fmag << "  r1mag: " << r1mag << "  r2mag: " << r2mag << endl;
         //~ cout << "f0: " << f0 << "  force[0]: " << force[0] << endl;
@@ -118,9 +118,9 @@ NVector<Vec, 3> BondAngle::forces(const Vec& r1, const Vec& r2){
     // **FIXED** its possible that x1 = +/-x2, and then x1.perp(x2) = 0
     // and then we get a divide by zero error.
 
-    //~ assert(force[0].sq() <= 1e7);
-    //~ assert(force[1].sq() <= 1e7);
-    //~ assert(force[2].sq() <= 1e7);
+    //~ assert(force[0].squaredNorm() <= 1e7);
+    //~ assert(force[1].squaredNorm() <= 1e7);
+    //~ assert(force[2].squaredNorm() <= 1e7);
 
     return force;
 }
@@ -206,7 +206,7 @@ sides of the bond. */
     return dd;
 }
         
-NVector<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
+array<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
                    const Vec &r3) const {
     DihedralDerivs dd = dr_dcostheta(r1, r2, r3);
     flt dcostheta;
@@ -215,16 +215,16 @@ NVector<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
     } else {
         dcostheta = dudcostheta(getang(r1, r2, r3));
     }
+    
+    for(uint i=0; i<4; i++) dd.derivs[i] *= -dcostheta;  // F = -dU/d(costheta)
+    //~ assert(derivs[0].squaredNorm() < 1e8);
+    //~ assert(derivs[1].squaredNorm() < 1e8);
+    //~ assert(derivs[2].squaredNorm() < 1e8);
+    //~ assert(derivs[3].squaredNorm() < 1e8);
 
-    dd.derivs *= -dcostheta;  // F = -dU/d(costheta)
-    //~ assert(derivs[0].sq() < 1e8);
-    //~ assert(derivs[1].sq() < 1e8);
-    //~ assert(derivs[2].sq() < 1e8);
-    //~ assert(derivs[3].sq() < 1e8);
 
-
-    //~ flt mag = sqrt(derivs[0].sq() +derivs[1].sq() + derivs[2].sq() +
-                    //~ derivs[3].sq());
+    //~ flt mag = sqrt(derivs[0].squaredNorm() +derivs[1].squaredNorm() + derivs[2].squaredNorm() +
+                    //~ derivs[3].squaredNorm());
     //~
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
               //~ << " derivs:" << derivs  << " : " << mag << std::endl;
@@ -281,8 +281,8 @@ flt Dihedral::getcos(const Vec &r1, const Vec &r2,
     Vec n1 = r1.cross(r2);
     Vec n2 = r2.cross(r3);
     //~ cout << r1 << ',' << r2  << ',' << r3 << "\n";
-    flt n1mag = n1.mag();
-    flt n2mag = n2.mag();
+    flt n1mag = n1.norm();
+    flt n2mag = n2.norm();
 
     if (n1mag == 0 or n2mag == 0) return -100;
     // if one plane is ill-defined, then we have no torsion angle
@@ -293,7 +293,7 @@ flt Dihedral::getcos(const Vec &r1, const Vec &r2,
 flt Dihedral::getang(const Vec &r1, const Vec &r2,
                    const Vec &r3){
 
-    return atan2(r1.dot(r2.cross(r3))*r2.mag(), (r1.cross(r2).dot(r2.cross(r3))));
+    return atan2(r1.dot(r2.cross(r3))*r2.norm(), (r1.cross(r2).dot(r2.cross(r3))));
 };
 
 flt Dihedral::energy(const flt ang) const{
@@ -344,10 +344,10 @@ void RandomForce::setForces(Box &box){
             Vec v = randVec();
             switch(a.force_type){
                 case FIXED:
-                    a->f += v * (a.force_mag / v.mag());
+                    a->f += v * (a.force_mag / v.norm());
                     continue;
                 case UNIFORM:
-                    a->f += v * (rand01() * a.force_mag / v.mag());
+                    a->f += v * (rand01() * a.force_mag / v.norm());
                     continue;
                 case GAUSSIAN:
                     a->f += v * a.force_mag;
@@ -376,7 +376,7 @@ Vec BondGrouping::diff(Box &box) const{
             OriginBox &obox = (OriginBox &) box;
             return obox.diff(a1->x, a2->x, fixed_box);
     }
-    return Vec()*NAN;
+    return Vec::Zero()*NAN;
 };
 
 BondPairs::BondPairs(vector<BondGrouping> pairs, bool zeropressure) :
@@ -418,7 +418,7 @@ void BondPairs::setForces(Box &box){
         Atom & atom2 = *it->a2;
         Vec r = it->diff(box);
         Vec f = Spring(it->k, it->x0).forces(r);
-        //~ assert(f.sq() < 10000000);
+        //~ assert(f.squaredNorm() < 10000000);
         atom1.f += f;
         atom2.f -= f;
     }
@@ -436,7 +436,7 @@ flt BondPairs::setForcesGetPressure(Box &box){
         Atom & atom2 = *it->a2;
         Vec r = it->diff(box);
         Vec f = Spring(it->k, it->x0).forces(r);
-        //~ assert(f.sq() < 10000000);
+        //~ assert(f.squaredNorm() < 10000000);
         atom1.f += f;
         atom2.f -= f;
         if(it->diff_type == UNBOXED) continue;
@@ -464,7 +464,7 @@ flt BondPairs::mean_dists(Box &box) const{
     vector<BondGrouping>::const_iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
         Vec r = it->diff(box);
-        dist += abs(r.mag() - it->x0);
+        dist += abs(r.norm() - it->x0);
         N++;
     }
     return dist/N;
@@ -476,7 +476,7 @@ flt BondPairs::std_dists(Box &box) const{
     vector<BondGrouping>::const_iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
         Vec r = it->diff(box);
-        flt curdist = r.mag() - it->x0;
+        flt curdist = r.norm() - it->x0;
         stds += curdist*curdist;
         N++;
     }
@@ -530,16 +530,16 @@ void AngleTriples::setForces(Box &box){
         Atom & atom3 = *it->a3;
         Vec r1 = diff(atom2.x, atom1.x);
         Vec r2 = diff(atom2.x, atom3.x);
-        NVector<Vec,3> f = BondAngle(it->k, it->x0).forces(r1, r2);
-        assert(f[0].sq() < 1e8);
-        assert(f[1].sq() < 1e8);
-        assert(f[2].sq() < 1e8);
+        array<Vec,3> f = BondAngle(it->k, it->x0).forces(r1, r2);
+        assert(f[0].squaredNorm() < 1e8);
+        assert(f[1].squaredNorm() < 1e8);
+        assert(f[2].squaredNorm() < 1e8);
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
-        assert(f[0].sq() < 1e8);
-        assert(f[1].sq() < 1e8);
-        assert(f[2].sq() < 1e8);
+        assert(f[0].squaredNorm() < 1e8);
+        assert(f[1].squaredNorm() < 1e8);
+        assert(f[2].squaredNorm() < 1e8);
     }
 };
 
@@ -552,7 +552,7 @@ flt AngleTriples::mean_dists() const{
     for(it = triples.begin(); it < triples.end(); ++it){
         Vec r1 = diff(it->a1->x, it->a2->x);
         Vec r2 = diff(it->a3->x, it->a2->x);
-        flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        flt theta = acos(r1.dot(r2) / r1.norm() / r2.norm());
         //~ flt curdist = abs(theta - it->x0);
         dist += abs(theta - it->x0);
         //~ if(curdist > .2){
@@ -560,7 +560,7 @@ flt AngleTriples::mean_dists() const{
             //~ Vec f0 = BondAngle(it->k, it->x0).forces(r1,r2)[0];
             //~ cout << "(" << theta << "," << it->x0 << "," << abs(theta - it->x0)
                  //~ << ";" << it->k << "," << E
-                 //~ << ",f:" << f0.mag() <<  ")" << ", ";
+                 //~ << ",f:" << f0.norm() <<  ")" << ", ";
          //~ }
         N++;
     }
@@ -575,7 +575,7 @@ flt AngleTriples::std_dists() const{
     for(it = triples.begin(); it < triples.end(); ++it){
         Vec r1 = diff(it->a1->x, it->a2->x);
         Vec r2 = diff(it->a3->x, it->a2->x);
-        flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        flt theta = acos(r1.dot(r2) / r1.norm() / r2.norm());
         flt curdist = theta - (it->x0);
         //~ cout << "angles: " << theta << " x0: " << it->x0
              //~ << " cur: " << curdist << "\n";
@@ -614,14 +614,14 @@ void Dihedrals::setForces(Box &box){
         Vec r1 = DihedralGrouping::diff(atom2.x, atom1.x);
         Vec r2 = DihedralGrouping::diff(atom3.x, atom2.x);
         Vec r3 = DihedralGrouping::diff(atom4.x, atom3.x);
-        NVector<Vec,4> f = it->dih.forces(r1, r2, r3);
+        array<Vec,4> f = it->dih.forces(r1, r2, r3);
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
         atom4.f += f[3];
         //~ flt maxf = 1000000;
-        //~ if(f[0].sq() > maxf or f[1].sq() > maxf or f[2].sq() > maxf
-            //~ or f[3].sq() > maxf){
+        //~ if(f[0].squaredNorm() > maxf or f[1].squaredNorm() > maxf or f[2].squaredNorm() > maxf 
+            //~ or f[3].squaredNorm() > maxf){
                 //~ cout << "Dihedral overload: " << r1 << r2 << r3 << " :: " <<
                 //~ f[0] << f[1] << f[2] << f[3] << "\n";
                 //~ cout << "Dihedral overload energy: " << Dihedral(it->nums).energy(r1,r2,r3) << "\n";
@@ -655,7 +655,7 @@ flt Dihedrals::mean_dists() const{
     //~ for(it = triples.begin(); it < triples.end(); ++it){
         //~ Vec r1 = diff(it->a1->x, it->a2->x);
         //~ Vec r2 = diff(it->a3->x, it->a2->x);
-        //~ flt theta = acos(r1.dot(r2) / r1.mag() / r2.mag());
+        //~ flt theta = acos(r1.dot(r2) / r1.norm() / r2.norm());
         //~ flt curdist = theta - (it->x0);
         // cout << "angles: " << theta << " x0: " << it->x0
              // << " cur: " << curdist << "\n";
@@ -735,7 +735,7 @@ flt Charges::energy(Box &box){
     for(it2 = atoms.begin(); it2 != it; ++it2){
         if (ignorepairs.has_pair(*it, *it2)) continue;
         Vec dist = box.diff((*it)->x, (*it2)->x);
-        E += k*ElectricScreened::energy(dist.mag(), (it->q) * (it2->q), screen);
+        E += k*ElectricScreened::energy(dist.norm(), (it->q) * (it2->q), screen);
     }
     return E;
 };
@@ -835,7 +835,7 @@ flt SoftWallCylinder::energy(Box &box){
         Atom &a = **it;
         Vec r = box.diff(a.x, loc);
         r -= axis * (r.dot(axis));
-        flt dist = (radius - r.mag())*2;
+        flt dist = (radius - r.norm())*2;
         if(dist > it->sigma) continue;
         E += it->epsilon * pow(1 - (dist/(it->sigma)), expt)/expt/2.0;
         // Note that normally you have ε(1-r/σ)^n for 2 particles.
@@ -853,11 +853,11 @@ void SoftWallCylinder::setForces(Box &box){
         Atom &a = **it;
         Vec r = box.diff(a.x, loc);
         r -= axis * (r.dot(axis));
-        flt rmag = r.mag();
+        flt rmag = r.norm();
         flt dist = (radius - rmag)*2;
         if(dist > it->sigma) continue;
         flt f = it->epsilon * pow(1 - (dist/(it->sigma)), expt - 1.0);
-        a.f -= r * (f/rmag); // equal to a.f += (-r.norm()) * f;
+        a.f -= r * (f/rmag); // equal to a.f += (-r.normalized()) * f;
         lastf += f;
     }
 };
@@ -883,8 +883,8 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     Atom &a2p = *p2.last();
     Vec r1 = (a1.x + a1p.x)/2, r2 = (a2.x + a2p.x)/2;
     Vec s1 = (a1p.x - a1.x), s2 = (a2p.x - a2.x);
-    //flt myl1 = s1.mag(), myl2 = s2.mag();
-    Vec u1 = s1.norm(), u2=s2.norm();
+    //flt myl1 = s1.norm(), myl2 = s2.norm();
+    Vec u1 = s1.normalized(), u2=s2.normalized();
     diff.r = box.diff(r2, r1);
 
     flt u1u2 = u1.dot(u2);
@@ -954,7 +954,7 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     a2p.f += f/2;
 
     Vec t1 = s1*(diff.lambda1/l1);
-    Vec atau1 = s1.cross(t1.cross(f)) / (-2*IoverM1*M1);
+    Vec atau1 = cross(s1, cross(t1, f)) / (-2*IoverM1*M1);
     //~ cout << "t1: " << t1 << "  atau1: " << atau1 << endl;
     // Formula says (t1×f)×s1 / 2I
     // -I because it should be (t1×f)×s1, but we wrote s1×(t1×f)
@@ -963,7 +963,7 @@ void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, f
     a1p.f -= atau1 * a1p.m;
 
     Vec t2 = s2*(diff.lambda2/l2);
-    Vec atau2 = s2.cross(t2.cross(f)) / (2*IoverM2*M2); // 2 because it should be -f
+    Vec atau2 = cross(s2, cross(t2, f)) / (2*IoverM2*M2); // 2 because it should be -f
     a2.f += atau2 * a2.m;
     a2p.f -= atau2 * a2p.m;
 
