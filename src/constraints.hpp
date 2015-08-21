@@ -12,7 +12,7 @@
 
 using namespace std;
 
-class Constraint : public boost::enable_shared_from_this<Constraint> {
+class Constraint {
     public:
         virtual void apply_positions(Box &box) = 0;
         virtual void apply_velocities(Box &box) = 0;

@@ -17,7 +17,7 @@ well as statistical tracking.
 The most useful method is timestep(), which takes one step forward in time; this is defined
 by each subclass separately, as each subclass uses a different integration scheme.
 */
-class Collection : public boost::enable_shared_from_this<Collection> {
+class Collection {
     protected:
         sptr<Box> box;
         sptr<AtomGroup> atoms;
