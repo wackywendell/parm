@@ -35,7 +35,7 @@ class Collection : public boost::enable_shared_from_this<Collection> {
         void update_constraint_positions();
         void update_constraint_velocities();
         void update_constraint_forces();
-        virtual flt setForcesGetPressure(bool constraints_and_a=true);
+        virtual flt set_forces_get_pressure(bool constraints_and_a=true);
 
     public:
         Collection(sptr<Box> box,
@@ -50,14 +50,14 @@ class Collection : public boost::enable_shared_from_this<Collection> {
         //Timestepping Methods /////////////////////////////////////////////////////////////////////
         //! Set forces. This should be called at the beginning of the simulation, and will also be
         //! called by timestep()
-        virtual void setForces(bool constraints_and_a=true);
+        virtual void set_forces(bool constraints_and_a=true);
         
         //! Take one step forward in time
         virtual void timestep()=0;
         
         //! Total degrees of freedom. This takes into account constraints, and whether the
         //! center-of-mass is free.
-        flt dof();
+        flt degrees_of_freedom();
 
         //Statistical Methods //////////////////////////////////////////////////////////////////////
         flt potential_energy();
@@ -67,53 +67,51 @@ class Collection : public boost::enable_shared_from_this<Collection> {
         virtual flt kinetic_energy(){return atoms->kinetic_energy();};
         virtual flt virial();
         virtual flt pressure();
-        sptr<Box> getbox(){return box;};
+        sptr<Box> get_box(){return box;};
         inline Vec com(){return atoms->com();};
-        inline Vec comv(){return atoms->comv();};
+        inline Vec com_velocity(){return atoms->com_velocity();};
         #ifdef VEC3D
         //! Shortcut to `AtomGroup` method of the same name
-        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline Vec angular_momentum(const Vec &loc){return atoms->angular_momentum(loc);};
         //! Shortcut to `AtomGroup` method of the same name
-        inline Vec angmomentum(){return atoms->angmomentum(com());};
+        inline Vec angular_momentum(){return atoms->angular_momentum(com());};
         #elif defined VEC2D
         //! Shortcut to `AtomGroup` method of the same name
-        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline flt angular_momentum(const Vec &loc){return atoms->angular_momentum(loc);};
         //! Shortcut to `AtomGroup` method of the same name
-        inline flt angmomentum(){return atoms->angmomentum(com());};
+        inline flt angular_momentum(){return atoms->angular_momentum(com());};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~Collection(){};
         
         //! Shortcut to `AtomGroup` method of the same name
-        void resetcomv(){atoms->resetcomv();};
+        void reset_com_velocity(){atoms->reset_com_velocity();};
         //! Shortcut to `AtomGroup` method of the same name
-        void resetL(){atoms->resetL();};
+        void reset_L(){atoms->reset_L();};
         //! Scale all velocities by a factor
-        void scaleVs(flt scaleby);
+        void scale_velocities(flt scaleby);
         //! Scale all velocities to get to a specific temperature
-        void scaleVelocitiesT(flt T, bool minuscomv=true);
+        void scale_velocities_to_temp(flt T, bool minuscomv=true);
         //! Scale all velocities to get to a specific total energy
-        void scaleVelocitiesE(flt E);
+        void scale_velocities_to_energy(flt E);
 
-        void addInteraction(sptr<Interaction> inter){
+        void add_interaction(sptr<Interaction> inter){
             interactions.push_back(inter);
             update_trackers();
         };
-        void addTracker(sptr<StateTracker> track){
+        void add_tracker(sptr<StateTracker> track){
             trackers.push_back(track);
             update_trackers();
         };
-        void addConstraint(sptr<Constraint> c){
+        void add_constraint(sptr<Constraint> c){
             constraints.push_back(c);
             update_trackers();
         };
-        void add(sptr<Interaction> a){addInteraction(a);};
-        void add(sptr<StateTracker> a){addTracker(a);};
-        void add(sptr<Constraint> a){addConstraint(a);};
+        void add(sptr<Interaction> a){add_interaction(a);};
+        void add(sptr<StateTracker> a){add_tracker(a);};
+        void add(sptr<Constraint> a){add_constraint(a);};
 
-        vector<sptr<Interaction> > getInteractions(){return interactions;};
-
-        uint numInteraction(){ return (uint) interactions.size();};
+        vector<sptr<Interaction> > get_interactions(){return interactions;};
 };
 
 //! A "static" Collection, that doesn't move.
@@ -186,7 +184,7 @@ class CollectionSol : public Collection {
         flt dt;
         //! Damping coefficient, \f$\xi\f$
         flt damping;
-        flt forcemag;
+        flt force_mag;
         //! desired temperature
         flt desT;
         //! note that this is sigmar/sqrt(T/m), same for sigmav
@@ -207,7 +205,7 @@ class CollectionSol : public Collection {
                 //! Damping coefficient, \f$\xi\f$
                 const flt damping, 
                 //! The desired temperature \f$T\f$
-                const flt desiredT,
+                const flt desired_temperature,
                 //! The interactions, other than brownian motion. These provide \f$\vec{f}\f$.
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
                 //! Trackers, such as a NeighborList
@@ -215,12 +213,12 @@ class CollectionSol : public Collection {
                 //! Constraints
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
         //! Change the desired damping coefficient \f$\xi\f$ or temperature \f$T\f$.
-        void changeT(const flt damp, const flt desiredT){
-            damping = damp; forcemag=damp; desT = desiredT; setCs();};
-        void changeMag(const flt damp, const flt fmag, const flt desiredT){
+        void change_temperature(const flt damp, const flt desired_temperature){
+            damping = damp; force_mag=damp; desT = desired_temperature; setCs();};
+        void change_force(const flt damp, const flt fmag, const flt desired_temperature){
         //! Change the timestep \f$\delta t\f$.
-            damping = damp; forcemag=fmag; desT = desiredT; setCs();};
-        void setdt(const flt newdt){dt = newdt; setCs();};
+            damping = damp; force_mag=fmag; desT = desired_temperature; setCs();};
+        void set_dt(const flt newdt){dt = newdt; setCs();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};
         //void seed(){gauss.seed();};
@@ -247,9 +245,9 @@ class CollectionDamped : public Collection {
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
-        void changeDamp(const flt damp){
+        void change_damping(const flt damp){
             damping = damp; setCs();};
-        void setdt(const flt newdt){dt = newdt; setCs();};
+        void set_dt(const flt newdt){dt = newdt; setCs();};
         void timestep();
 };
 
@@ -270,7 +268,7 @@ class CollectionDamped : public Collection {
   * 2) intermediate v: (v0,f0) -> (v1, f0)
   *         v1 = damped(v0) +  dt/2 f0/m
   *                 where damped(vo) = v0*(1-h*damping/2m + (h*damping/m)²/4)
-  * 3) setForces(): (x, f0) -> (x,f)
+  * 3) set_forces(): (x, f0) -> (x,f)
   *         reset and set the forces
   *         f = grad(V(x))
   * 4) Acceleration: (f, a0) -> (f, a1)
@@ -287,16 +285,16 @@ class CollectionSolHT : public Collection {
         flt damping;
         flt desT; // desired temperature
         GaussVec gauss;
-        void setGauss();
+        void set_gauss();
 
     public:
         CollectionSolHT(sptr<Box> box, sptr<AtomGroup> atoms,
-                const flt dt, const flt damping, const flt desiredT,
+                const flt dt, const flt damping, const flt desired_temperature,
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
-        void changeT(const flt newdt, const flt damp, const flt desiredT){
-            dt = newdt; damping = damp; desT = desiredT; setGauss();};
+        void change_temperature(const flt newdt, const flt damp, const flt desired_temperature){
+            dt = newdt; damping = damp; desT = desired_temperature; set_gauss();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};
         //void seed(){gauss.seed();};
@@ -319,7 +317,7 @@ class CollectionVerlet : public Collection {
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
             Collection(box, atoms, interactions, trackers, constraints), dt(dt){};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 class CollectionOverdamped : public Collection {
@@ -336,7 +334,7 @@ class CollectionOverdamped : public Collection {
             Collection(box, atoms, interactions, trackers, constraints),
                 dt(dt), gamma(gamma){};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 /**
@@ -391,22 +389,22 @@ class CollectionNLCG : public Collection {
 
         flt kinetic_energy();  // Note: masses are ignored
         flt pressure();
-        flt Hamiltonian();
-        void setForces(bool constraints_and_a=true){setForces(constraints_and_a,true);};
-        void setForces(bool constraints_and_a, bool setV);
+        flt hamiltonian();
+        void set_forces(bool constraints_and_a=true){set_forces(constraints_and_a,true);};
+        void set_forces(bool constraints_and_a, bool setV);
 
         void timestep();
         void descend(); // use steepest descent
         void reset();
         void resize(flt V);
 
-        void setdt(flt newdt){dt=newdt; reset();};
-        void setP(flt P){P0 = P; reset();};
-        void setkappa(flt k){kappa=k; reset();};
-        void setamax(flt a){alphamax=a;};
-        void setafrac(flt a){afrac=a;};
-        void setdxmax(flt d){dxmax=d;};
-        void setstepmax(flt m){stepmax=m;};
+        void set_dt(flt newdt){dt=newdt; reset();};
+        void set_pressure(flt P){P0 = P; reset();};
+        void set_kappa(flt k){kappa=k; reset();};
+        void set_max_alpha(flt a){alphamax=a;};
+        void set_max_alpha_fraction(flt a){afrac=a;};
+        void set_max_dx(flt d){dxmax=d;};
+        void set_max_step(flt m){stepmax=m;};
 
 };
 
@@ -469,14 +467,14 @@ class CollectionNLCGV : public Collection {
         void descend(); // use steepest descent
         void timestep();
 
-        void setdt(flt newdt){dt=newdt; reset();};
-        void setamax(flt a){alphamax=a;};
-        void setafrac(flt a){afrac=a;};
-        void setdxmax(flt d){dxmax=d;};
-        void setstepmax(flt m){stepmax=m;};
+        void set_dt(flt newdt){dt=newdt; reset();};
+        void set_max_alpha(flt a){alphamax=a;};
+        void set_max_alpha_fraction(flt a){afrac=a;};
+        void set_max_dx(flt d){dxmax=d;};
+        void set_max_step(flt m){stepmax=m;};
 };
 
-flt solveCubic1(flt b, flt c, flt d){
+flt solve_cubic_fast(flt b, flt c, flt d){
     // from Wikipedia
     flt determ = (pow(2*pow(b,2) - 9*b*c + 27*d,2) - 4*pow(b*b - 3*c,3));
     if (determ < 0)
@@ -496,7 +494,7 @@ template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
-flt solveCubic(flt a1, flt a2, flt a3, flt closeto=0){
+flt solve_cubic(flt a1, flt a2, flt a3, flt closeto=0){
     // from numerical recipes
     flt Q = (a1*a1 - 3*a2)/9;
     flt Q3 = Q*Q*Q;
@@ -558,14 +556,14 @@ class CollectionNoseHoover : public Collection {
             dt(dt), Q(Q), T(T){
                 xi = 0; lns = 0;
             };
-        void setdt(flt newdt){dt=newdt;};
-        void setQ(flt newQ){Q=newQ;};
+        void set_dt(flt newdt){dt=newdt;};
+        void set_Q(flt newQ){Q=newQ;};
         void resetBath(){xi=0;lns=0;};
 
         void timestep();
-        flt Hamiltonian();
-        flt getxi(){return xi;};
-        flt getlns(){return lns;};
+        flt hamiltonian();
+        flt get_xi(){return xi;};
+        flt get_lns(){return lns;};
 };
 
 class CollectionGaussianT : public Collection {
@@ -584,10 +582,10 @@ class CollectionGaussianT : public Collection {
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
             Collection(box, atoms, interactions, trackers, constraints),
             dt(dt), Q(Q), xi(0){};
-        void setdt(flt newdt){dt=newdt;};
-        void setQ(flt newQ){Q=newQ;};
-        void setForces(bool constraints_and_a=true){setForces(true,true);};
-        void setForces(bool constraints_and_a, bool setxi);
+        void set_dt(flt newdt){dt=newdt;};
+        void set_Q(flt newQ){Q=newQ;};
+        void set_forces(bool constraints_and_a=true){set_forces(true,true);};
+        void set_forces(bool constraints_and_a, bool setxi);
         void timestep();
 };
 
@@ -603,7 +601,7 @@ class CollectionGear3A : public Collection {
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
             Collection(box, atoms, interactions, trackers, constraints), dt(dt){};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 class CollectionGear4A : public Collection {
@@ -634,7 +632,7 @@ class CollectionGear4A : public Collection {
                 Collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(1) {resetbs();};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 class CollectionGear5A : public Collection {
@@ -665,7 +663,7 @@ class CollectionGear5A : public Collection {
                 Collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(1) {resetbcs();};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 class CollectionGear6A : public Collection {
@@ -697,7 +695,7 @@ class CollectionGear6A : public Collection {
                 Collection(box, atoms, interactions, trackers, constraints),
                         dt(dt), ncorrec(1) {resetbcds();};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 struct RK4data {
@@ -717,10 +715,10 @@ class CollectionRK4 : public Collection {
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
             Collection(box, ratoms, interactions,
                         trackers, constraints), dt(dt), data(ratoms->vec().size()){
-                setForces(true);
+                set_forces(true);
             };
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 class CollectionGear4NPH : public Collection {
@@ -758,12 +756,12 @@ class CollectionGear4NPH : public Collection {
         void timestep();
         flt kinetic_energy();
         flt temp(bool minuscomv=true);
-        flt Hamiltonian(){
+        flt hamiltonian(){
             return kinetic_energy() + (Q/2*dV*dV) + potential_energy() + P*(boost::static_pointer_cast<OriginBox>(box)->V());
         }
-        flt getdV(){return dV;};
+        flt get_dV(){return dV;};
         flt getddV(){return ddV;};
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 };
 
 class XRPSummer : public FPairXFunct {
@@ -818,7 +816,7 @@ class CollectionGear4NPT : public Collection {
                     dt(dt), xrpsums(box), ncorrec(1), chi(0), chixi(0) {
                 resetbs();
             };
-        void setForces(bool constraints_and_a=true);
+        void set_forces(bool constraints_and_a=true);
         void timestep();
 };
 
@@ -827,7 +825,7 @@ class CollectionGear4NPT : public Collection {
 class CollectionVerletNPT : public Collection {
     // From Toxvaerd 1993, PRE Vol. 47, No. 1, http://dx.doi.org/10.1103/PhysRevE.47.343
     // Parameter equivalences (in the form code: paper):
-    // dof() or ndof: g
+    // degrees_of_freedom() or ndof: g
     // QT: g k T t_\eta^2
     // QP: N k T t_\xi^2
     // where N is the number of particles
@@ -850,28 +848,28 @@ class CollectionVerletNPT : public Collection {
             dt(dt), eta(0), xidot(0), lastxidot(0), lastV(box->V()), etasum(0), P(P),
             QP(QP), T(T), QT(QT), curP(0){resetvhalf();};
         void timestep();
-        void setdt(flt newdt){dt=newdt;};
+        void set_dt(flt newdt){dt=newdt;};
 
 
-        void resetcomv(){Collection::resetcomv(); resetvhalf();};
-        void resetL(){Collection::resetL(); resetvhalf();};
-        void scaleVs(flt scaleby){Collection::scaleVs(scaleby); resetvhalf();};
-        void scaleVelocitiesT(flt T){Collection::scaleVelocitiesT(T); resetvhalf();};
-        void scaleVelocitiesE(flt E){Collection::scaleVelocitiesE(E); resetvhalf();};
+        void reset_com_velocity(){Collection::reset_com_velocity(); resetvhalf();};
+        void reset_L(){Collection::reset_L(); resetvhalf();};
+        void scale_velocities(flt scaleby){Collection::scale_velocities(scaleby); resetvhalf();};
+        void scale_velocities_to_temp(flt T){Collection::scale_velocities_to_temp(T); resetvhalf();};
+        void scale_velocities_to_energy(flt E){Collection::scale_velocities_to_energy(E); resetvhalf();};
 
-        flt geteta(){return eta;};
-        flt getxidot(){return xidot;};
-        flt getP(){return curP;};
-        Vec getvhalf(uint n){return vhalf[n];};
+        flt get_eta(){return eta;};
+        flt det_xi_dot(){return xidot;};
+        flt get_pressure(){return curP;};
+        Vec get_vhalf(uint n){return vhalf[n];};
 
         // note that this is a constant of the motion, but not a real hamiltonian
         // and also only such at constant T
-        flt Hamiltonian(){
+        flt hamiltonian(){
 			// regular energy
 			flt H = kinetic_energy() + potential_energy();
 
 			if(QT > 0){
-				flt gkT = dof()*T;
+				flt gkT = degrees_of_freedom()*T;
 				H +=gkT*etasum;
 				H+= eta*eta*QT/2;
 			}

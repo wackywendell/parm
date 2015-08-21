@@ -13,7 +13,7 @@ using namespace boost; // required for SWIG for some reason
 
 typedef const unsigned int cuint;
 
-inline bool toBuffer(vector<Vec*> arr, double* buffer, size_t sizet) {
+inline bool to_buffer(vector<Vec*> arr, double* buffer, size_t sizet) {
     if(sizet < NDIM * arr.size()){return false;};
     for(uint i=0; i < arr.size(); i++)
     for(uint j=0; j < NDIM; j++)
@@ -69,12 +69,12 @@ class Box : public boost::enable_shared_from_this<Box> {
 @ingroup boxes
 */
 #ifdef VEC3D
-inline Vec vecmod(Vec r1, Vec r2){
+inline Vec vec_mod(Vec r1, Vec r2){
     return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]), remainder(r1[2], r2[2]));
 };
 #endif
 #ifdef VEC2D
-inline Vec vecmod(Vec r1, Vec r2){
+inline Vec vec_mod(Vec r1, Vec r2){
     return Vec(remainder(r1[0], r2[0]), remainder(r1[1], r2[1]));
 };
 #endif
@@ -102,7 +102,7 @@ class OriginBox : public Box {
     public:
         OriginBox(Vec size) : boxsize(size){};
         Vec diff(Vec r1, Vec r2){
-            return vecmod((r1-r2), boxsize);
+            return vec_mod((r1-r2), boxsize);
         };
         virtual Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes){
             Vec dr = r1 - r2;
@@ -131,26 +131,26 @@ class OriginBox : public Box {
         //! Resize to a specific shape.
         flt resize(Vec newsize){boxsize = newsize; return V();}
         //! Resize to a specific volume.
-        flt resizeV(flt newV){
+        flt resize_to_V(flt newV){
             flt curV = V();
             boxsize *= pow(newV/curV, OVERNDIM);
             return V();
         }
         //! Resize to a specific volume.
-        flt resizeL(flt newL){
+        flt resize_to_L(flt newL){
             flt curL = pow(V(), OVERNDIM);
             boxsize *= newL/curL;
             return V();
         }
         //! Get a random point in the box.
-        Vec randLoc(){
+        Vec rand_loc(){
             Vec v = randVecBoxed();
             for(uint i=0; i<NDIM; i++){
                 v[i] *= boxsize[i];
             }
             return diff(v, Vec::Zero());
         };
-        Vec boxshape(){return boxsize;};
+        Vec box_shape(){return boxsize;};
 };
 
 //! Lees-Edwards boundary conditions, with shear in the x-direction, relative to y.
@@ -171,7 +171,7 @@ class LeesEdwardsBox : public OriginBox {
 
         //! Change the shear by dgamma, and move the atoms as necessary.
         void shear(flt dgamma, AtomGroup &atoms);
-        Vec nonaffine(Vec v){
+        Vec non_affine(Vec v){
             v[0] -= gamma * v[1];
             return v;
         }
@@ -187,7 +187,7 @@ class LeesEdwardsBox : public OriginBox {
 @ingroup boxes
 Note that this *does not* keep particles inside the box; use an Interaction like SCBoxed for that.
 
-This class is useful for functions like V(), dist, edgedist, inside, randLoc, etc.
+This class is useful for functions like V(), dist, edge_dist, inside, rand_loc, etc.
 
 The spherocylinder has an axis along the x-axis, centered at origin
 
@@ -201,9 +201,9 @@ class SCBox : public Box {
         Vec diff(Vec r1, Vec r2){return r1-r2;};
         flt V();
         Vec dist(Vec r1);
-        Vec edgedist(Vec r1);
+        Vec edge_dist(Vec r1);
         bool inside(Vec r1, flt buffer=0.0);
-        Vec randLoc(flt min_dist_to_wall=0.0);
+        Vec rand_loc(flt min_dist_to_wall=0.0);
         flt length(){return L;};
         flt radius(){return R;};
 };
@@ -314,16 +314,16 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         //! center of mass
         Vec com() const;
         //!center of mass force (i.e., sum of all forces)
-        Vec comf() const;
+        Vec com_force() const;
         //!center of mass velocity
-        Vec comv() const;
+        Vec com_velocity() const;
 
         //! Mass of the whole group
         flt mass() const;
         //! Total kinetic energy of the group.
         /*!
         This is normally with reference to a "lab" reference frame (velocity (0,0,0)), but
-        can optionally take a different origin velocity, e.g. `comv()`.
+        can optionally take a different origin velocity, e.g. `com_velocity()`.
         */
         flt kinetic_energy(const Vec originvelocity=Vec::Zero()) const;
         //! Total momentum.
@@ -338,8 +338,8 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         flt moment_about(const Vec axis, const Vec loc) const;
         flt moment_about(const Vec axis) const{return moment_about(axis, com());};
         //! Angular momentum
-        Vec angmomentum(const Vec loc) const;
-        Vec angmomentum() const {return angmomentum(com());};
+        Vec angular_momentum(const Vec loc) const;
+        Vec angular_momentum() const {return angular_momentum(com());};
         //! Moment of inertia of the atoms as a whole
         Matrix moment(const Vec loc) const;
         Matrix moment() const{return moment(com());};
@@ -347,13 +347,13 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         Vec omega(const Vec loc) const;
         Vec omega() const {return omega(com());};
         //! Add a given angular velocity to all atoms, by adding to their velocity
-        void addOmega(Vec w, Vec origin);
-        void addOmega(Vec w){return addOmega(w, com());};
+        void add_omega(Vec w, Vec origin);
+        void add_omega(Vec w){return add_omega(w, com());};
         //! Reset angular momentum to 0
-        inline void resetL(){
+        inline void reset_L(){
             Vec c = com(), w = omega(c);
             if (w.squaredNorm() == 0) return;
-            addOmega(-w, c);
+            add_omega(-w, c);
         }
         #elif defined VEC2D
         //! Total torque about a given location
@@ -362,32 +362,32 @@ class AtomGroup : public boost::enable_shared_from_this<AtomGroup> {
         flt moment(const Vec loc) const;
         flt moment() const{return moment(com());};
         //! Angular momentum
-        flt angmomentum(const Vec loc) const;
-        flt angmomentum() const {return angmomentum(com());};
+        flt angular_momentum(const Vec loc) const;
+        flt angular_momentum() const {return angular_momentum(com());};
         //! Angular velocity
-        flt omega(const Vec loc) const{return angmomentum(loc) / moment(loc);};
+        flt omega(const Vec loc) const{return angular_momentum(loc) / moment(loc);};
         flt omega() const{return omega(com());};
         //! Add a given angular velocity to all atoms, by adding to their velocity
-        void addOmega(flt w, Vec origin);
-        void addOmega(flt w){addOmega(w, com());}
+        void add_omega(flt w, Vec origin);
+        void add_omega(flt w){add_omega(w, com());}
         //! Reset angular momentum to 0
-        inline void resetL(){
+        inline void reset_L(){
             Vec c = com();
             flt w = omega(c);
             if (w == 0) return;
-            addOmega(-w, c);
+            add_omega(-w, c);
         }
         #endif
 
         //! for resetting. Adds a fixed velocity to all atoms
-        void addv(Vec v);
+        void add_velocity(Vec v);
         //! Subtracts the center of mass velocity from all atoms
-        void resetcomv(){addv(-comv());};
+        void reset_com_velocity(){add_velocity(-com_velocity());};
         //! Randomize velocities, for a specific temperature
         void randomize_velocities(flt T);
 
         //! for timestepping
-        void resetForces();
+        void reset_forces();
         virtual ~AtomGroup(){};
 };
 

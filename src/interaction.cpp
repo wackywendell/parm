@@ -336,7 +336,7 @@ bool RandomForce::add(RandomForceAtom a, bool replace){
     return false;
 };
 
-void RandomForce::setForces(Box &box){
+void RandomForce::set_forces(Box &box){
     vector<RandomForceAtom>::iterator it;
     for(it = group.begin(); it < group.end(); ++it){
         if(rand01() < 1.0/it->freq){
@@ -411,7 +411,7 @@ flt BondPairs::energy(Box &box){
     return E;
 }
 
-void BondPairs::setForces(Box &box){
+void BondPairs::set_forces(Box &box){
     vector<BondGrouping>::iterator it;
     for(it = pairs.begin(); it < pairs.end(); ++it){
         Atom & atom1 = *it->a1;
@@ -424,9 +424,9 @@ void BondPairs::setForces(Box &box){
     }
 }
 
-flt BondPairs::setForcesGetPressure(Box &box){
+flt BondPairs::set_forces_get_pressure(Box &box){
     if(zeropressure){
-        setForces(box);
+        set_forces(box);
         return 0.0;
     }
     flt P=0;
@@ -522,7 +522,7 @@ flt AngleTriples::energy(Box &box){
     return E;
 }
 
-void AngleTriples::setForces(Box &box){
+void AngleTriples::set_forces(Box &box){
     vector<AngleGrouping>::iterator it;
     for(it = triples.begin(); it < triples.end(); ++it){
         Atom & atom1 = *it->a1;
@@ -604,7 +604,7 @@ flt Dihedrals::energy(Box &box){
     return E;
 }
 
-void Dihedrals::setForces(Box &box){
+void Dihedrals::set_forces(Box &box){
     vector<DihedralGrouping>::iterator it;
     for(it = groups.begin(); it < groups.end(); ++it){
         Atom & atom1 = *it->a1;
@@ -682,7 +682,7 @@ flt LJsimple::energy(Box &box){
     return E;
 };
 
-void LJsimple::setForces(Box &box){
+void LJsimple::set_forces(Box &box){
     vector<LJatom>::iterator it;
     vector<LJatom>::iterator it2;
     for(it = atoms.begin(); it != atoms.end(); ++it)
@@ -740,7 +740,7 @@ flt Charges::energy(Box &box){
     return E;
 };
 
-void Charges::setForces(Box &box){
+void Charges::set_forces(Box &box){
     vector<Charged>::iterator it;
     vector<Charged>::iterator it2;
     for(it = atoms.begin(); it != atoms.end(); ++it)
@@ -784,7 +784,7 @@ flt SoftWall::energy(Box &box){
     return E;
 };
 
-void SoftWall::setForces(Box &box){
+void SoftWall::set_forces(Box &box){
     lastf = 0;
     vector<WallAtom>::iterator it;
     for(it = group.begin(); it != group.end(); ++it){
@@ -798,7 +798,7 @@ void SoftWall::setForces(Box &box){
     }
 };
 
-flt SoftWall::setForcesGetPressure(Box &box){
+flt SoftWall::set_forces_get_pressure(Box &box){
     flt p=0;
     lastf = 0;
     vector<WallAtom>::iterator it;
@@ -846,7 +846,7 @@ flt SoftWallCylinder::energy(Box &box){
     return E;
 };
 
-void SoftWallCylinder::setForces(Box &box){
+void SoftWallCylinder::set_forces(Box &box){
     lastf = 0;
     vector<WallAtom>::iterator it;
     for(it = group.begin(); it != group.end(); ++it){
@@ -862,8 +862,8 @@ void SoftWallCylinder::setForces(Box &box){
     }
 };
 
-flt SoftWallCylinder::setForcesGetPressure(Box &box){
-    throw std::runtime_error("SoftWallCylinder::setForcesGetPressure not implemented");
+flt SoftWallCylinder::set_forces_get_pressure(Box &box){
+    throw std::runtime_error("SoftWallCylinder::set_forces_get_pressure not implemented");
     return 0;
 };
 
@@ -991,7 +991,7 @@ flt SCSpringList::energy(Box &box){
     return E;
 };
 
-void SCSpringList::setForces(Box &box){
+void SCSpringList::set_forces(Box &box){
     array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
         IDPair pi = scs->pair(i);

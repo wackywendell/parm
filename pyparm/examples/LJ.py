@@ -66,13 +66,13 @@ for a,s in zip(atoms, sigmas):
     a.v = sim.randVec() # from a gaussian distribution
     LJ.add(sim.LJatom(1, s, a))
     while E > E0 + 0.1:
-        a.x = box.randLoc()
+        a.x = box.rand_loc()
         neighbors.update_list()
         E = LJ.energy(box)
     E0 = E
 
-collec.resetcomv() # subtract center-of-mass velocity from all particles
-collec.scaleVelocitiesT(T0) # scale all velocities to get an instantaneous temperature T = T0, at least at the beginning
+collec.reset_com_velocity() # subtract center-of-mass velocity from all particles
+collec.scale_velocities_to_temp(T0) # scale all velocities to get an instantaneous temperature T = T0, at least at the beginning
 
 ####################################################################################################
 # Data Analysis

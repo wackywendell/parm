@@ -17,7 +17,7 @@ class Constraint : public boost::enable_shared_from_this<Constraint> {
         virtual void apply_positions(Box &box) = 0;
         virtual void apply_velocities(Box &box) = 0;
         virtual void apply_forces(Box &box) = 0;
-        virtual int ndof() = 0;
+        virtual int constrained_dof() = 0;
         virtual ~Constraint(){};
 };
 
@@ -33,7 +33,7 @@ class CoordConstraint : public Constraint {
             a(atm), loc(a->x) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
         CoordConstraint(Atom* atm) :
             a(atm), loc(a->x) {fixed[0] = fixed[1] = fixed[2] = true;};
-        int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
+        int constrained_dof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         void apply_positions(Box &box){
             for(uint i=0; i<3; i++){
                 if(not fixed[i]) continue;
@@ -66,7 +66,7 @@ class CoordCOMConstraint : public Constraint {
             a(atm), loc(a->com()) {fixed[0] = fixx; fixed[1] = fixy; fixed[2] = fixz;};
         CoordCOMConstraint(sptr<AtomGroup> atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
-        int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
+        int constrained_dof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         void apply_positions(Box &box);
         void apply_velocities(Box &box);
         void apply_forces(Box &box);
@@ -87,7 +87,7 @@ class RelativeConstraint : public Constraint {
         RelativeConstraint(Atom* atm1, Atom* atm2) :
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixed[1] = fixed[2] = true;};
-        int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
+        int constrained_dof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
         
         void apply_positions(Box &box);
         void apply_velocities(Box &box);
@@ -103,7 +103,7 @@ class DistConstraint : public Constraint {
             a1(atm1), a2(atm2), dist(dist) {};
         DistConstraint(AtomID atm1, AtomID atm2) :
             a1(atm1), a2(atm2), dist((a1->x - a2->x).norm()){};
-        int ndof(){return 1;};
+        int constrained_dof(){return 1;};
         void apply_positions(Box &box);
         void apply_velocities(Box &box);
         void apply_forces(Box &box);
@@ -134,7 +134,7 @@ class LinearConstraint : public Constraint {
             
             set_lvec_com();
         };
-        int ndof(){return (int)atms->size()-1;};
+        int constrained_dof(){return (int)atms->size()-1;};
         void apply_positions(Box &box);
         void apply_velocities(Box &box);
         void apply_forces(Box &box);
@@ -166,7 +166,7 @@ class RigidConstraint : public Constraint {
         RigidConstraint(sptr<Box> box, sptr<AtomGroup> atms);
         
         //TODO: should probably handle cases with atms.size() < 3
-        int ndof(){return (int)atms->size() * NDIM-6;};
+        int constrained_dof(){return (int)atms->size() * NDIM-6;};
         
         void apply_positions(Box &box);
         void apply_velocities(Box &box);

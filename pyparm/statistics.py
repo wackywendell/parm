@@ -19,7 +19,7 @@ class Statistic:
 def get_order(atoms, box, local=True, weighted=True):
     import tess
     locs = [tuple(a.x) for a in atoms]
-    limits = tuple(box.boxshape())
+    limits = tuple(box.box_shape())
     cntr = tess.Container(locs, limits, radii=sigmas/2., periodic=True)
     return cntr.order(local=local, weighted=weighted)
 
@@ -173,7 +173,7 @@ class StatSet(OrderedDict):
 
         @self.add_func
         def COMV(time):
-            return collec.comv().mag()
+            return collec.com_velocity().mag()
 
         @self.add_func
         def V(time):

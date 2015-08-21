@@ -52,10 +52,10 @@ class Minimizer:
         collec = self.collec = self.sim.CollectionNLCG(self.box, self.atoms, dt, P, 
                 [self.hertz], [self.neighbors], [], 
                 kappa, kmax, secmax, seceps)
-        collec.setamax(amax)
-        collec.setdxmax(dxmax)
-        collec.setstepmax(stepmax)
-        self.collec.setForces(True, True)
+        collec.set_max_alpha(amax)
+        collec.set_max_dx(dxmax)
+        collec.set_max_step(stepmax)
+        self.collec.set_forces(True, True)
         
         self.timesteps = 0
     
@@ -119,8 +119,8 @@ class Minimizer:
     
     @L.setter
     def L(self, newL):
-        self.box.resizeL(newL)
-        self.collec.setForces(True, True)
+        self.box.resize_to_L(newL)
+        self.collec.set_forces(True, True)
     
     def err(self):
         return (self.collec.pressure() / self.collec.P0 - 1, max([a.f.mag() for a in self.atoms]))
@@ -164,7 +164,7 @@ class Minimizer:
     
     @property
     def H(self):
-        return self.collec.Hamiltonian() / self.N
+        return self.collec.hamiltonian() / self.N
     
     @property
     def U(self):

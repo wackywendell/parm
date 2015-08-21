@@ -61,12 +61,12 @@ class Interaction : public boost::enable_shared_from_this<Interaction> {
         Potential energy due to this Interaction.
         */
         virtual flt energy(Box &box)=0;
-        virtual void setForces(Box &box)=0;
+        virtual void set_forces(Box &box)=0;
         /**
         Set forces (`Atom.f`) and return \f$P = \sum_{\left<i,j \right>} \vec r_{ij} \cdot \vec F_{ij}\f$
         at the same time (see `pressure()`).
         */
-        virtual flt setForcesGetPressure(Box &box){return NAN;};
+        virtual flt set_forces_get_pressure(Box &box){return NAN;};
         /**
         Partial pressure due to this Interaction.
 
@@ -331,7 +331,7 @@ class ElectricScreened : public InteractPair {
         //~ void add(Interaction* a){inters.push_back(a);};
         //~ uint size() const{ return inters.size();};
         //~ flt energy(Box *box);
-        //~ void setForces(Box *box);
+        //~ void set_forces(Box *box);
 //~ };
 
 struct FixedForceAtom {
@@ -361,7 +361,7 @@ class FixedForce : public Interaction {
                 E += it->energy(box);
             return E;
         };
-        void setForces(Box &box){
+        void set_forces(Box &box){
             for(vector<FixedForceAtom>::iterator it = atoms.begin(); it < atoms.end(); ++it)
                 it->setForce(box);
         };
@@ -399,7 +399,7 @@ class FixedForceRegion : public Interaction {
                 E += it->energy(box);
             return E;
         };
-        void setForces(Box &box){
+        void set_forces(Box &box){
             for(vector<FixedForceRegionAtom>::iterator it = atoms.begin(); it < atoms.end(); ++it)
                 it->setForce(box);
         };
@@ -450,7 +450,7 @@ class FixedSpring : public Interaction{
                 E += it->energy(box);
             return E;
         };
-        void setForces(Box &box){
+        void set_forces(Box &box){
             for(vector<FixedSpringAtom>::iterator it = atoms.begin(); it < atoms.end(); ++it)
                 it->setForce(box);
         };
@@ -470,7 +470,7 @@ class COMSpring : public Interaction{
             flt dx = (g1->com() - g2->com()).norm() - x0;
             return k/2 * dx * dx;
         };
-        void setForces(Box &box){
+        void set_forces(Box &box){
             Vec comvec = g1->com() - g2->com();
             flt comdist = comvec.norm();
             flt fmag = -k * (comdist - x0);
@@ -549,7 +549,7 @@ class RandomForce : public Interaction {
         
         // No potential energy
         flt energy(Box &box){return 0;};
-        void setForces(Box &box);
+        void set_forces(Box &box);
         
         // no pressure from this Interaction
         //TODO: maybe this should be average pressure
@@ -557,7 +557,7 @@ class RandomForce : public Interaction {
         
         // no pressure from this Interaction
         //TODO: maybe this should actually work; it could
-        flt setForcesGetPressure(Box &box){setForces(box); return 0;};
+        flt set_forces_get_pressure(Box &box){set_forces(box); return 0;};
         
 };
 
@@ -611,9 +611,9 @@ class BondPairs : public Interaction {
         flt mean_dists(Box &box) const;
         flt std_dists(Box &box) const;
         flt energy(Box &box);
-        void setForces(Box &box);
+        void set_forces(Box &box);
         flt pressure(Box &box);
-        flt setForcesGetPressure(Box &box);
+        flt set_forces_get_pressure(Box &box);
 };
 
 struct AngleGrouping {
@@ -645,8 +645,8 @@ class AngleTriples : public Interaction {
 
         flt energy(Box &box);
         inline flt pressure(Box &box){return 0;};
-        void setForces(Box &box);
-        inline flt setForcesGetPressure(Box &box){setForces(box); return 0;};
+        void set_forces(Box &box);
+        inline flt set_forces_get_pressure(Box &box){set_forces(box); return 0;};
         uint size() const {return (uint) triples.size();};
         flt mean_dists() const;
         flt std_dists() const;
@@ -696,9 +696,9 @@ class Dihedrals : public Interaction {
         flt mean_dists() const;
         //~ flt std_dists() const;
         flt energy(Box &box);
-        void setForces(Box &box);
+        void set_forces(Box &box);
         inline flt pressure(Box &box){return 0;};
-        inline flt setForcesGetPressure(Box &box){setForces(box); return 0;};
+        inline flt set_forces_get_pressure(Box &box){set_forces(box); return 0;};
 };
 #endif
 
@@ -726,8 +726,8 @@ inline FPairXFunct::~FPairXFunct() { }  // defined even though it's pure virtual
 
 class InteractionPairsX : public Interaction {
     public:
-        using Interaction::setForces;
-        virtual void setForces(Box &box, FPairXFunct*)=0;
+        using Interaction::set_forces;
+        virtual void set_forces(Box &box, FPairXFunct*)=0;
         virtual ~InteractionPairsX(){};
 };
 
@@ -1586,7 +1586,7 @@ class LJsimple : public Interaction {
         inline uint atoms_size() const{return (uint) atoms.size();};
         flt energy(Box &box);
         flt pressure(Box &box);
-        void setForces(Box &box);
+        void set_forces(Box &box);
         //~ ~LJsimple(){};
 };
 
@@ -1602,8 +1602,8 @@ class SCBoxed : public Interaction {
         inline void add(A atm){group.push_back(atm);};
         flt energy(Box &box);
         flt pressure(Box &box);
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
+        void set_forces(Box &box);
+        flt set_forces_get_pressure(Box &box);
         inline vector<A> &atom_list(){return group;};
 };
 
@@ -1620,8 +1620,8 @@ class SimpleListed : public Interaction {
         flt pressure(Box &box);
         uint size(){return ((uint) (atoms.size()));};
         //inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
+        void set_forces(Box &box);
+        flt set_forces_get_pressure(Box &box);
         //inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         ~SimpleListed(){};
@@ -1677,8 +1677,8 @@ class NListed : public Interaction {
         inline vector<P> &pairiter(){return pairs;};
         uint size(){return ((uint) (atoms.size()));};
         inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
+        void set_forces(Box &box);
+        flt set_forces_get_pressure(Box &box);
         inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         inline sptr<NeighborList> nlist(){return neighbors;};
@@ -1694,9 +1694,9 @@ class NListedVirial : public InteractionPairsX {
     public:
         NListedVirial(sptr<AtomVec> vec, sptr<NeighborList> neighbors) :
                 nlisted(vec, neighbors){};
-        void setForces(Box &box){nlisted.setForces(box);};
-        void setForces(Box &box, FPairXFunct*);
-        virtual inline flt setForcesGetPressure(Box &box){return nlisted.setForcesGetPressure(box);};
+        void set_forces(Box &box){nlisted.set_forces(box);};
+        void set_forces(Box &box, FPairXFunct*);
+        virtual inline flt set_forces_get_pressure(Box &box){return nlisted.set_forces_get_pressure(box);};
         virtual flt setForcesGetEnergy(Box &box);
         virtual inline flt energy(Box &box){return nlisted.energy(box);};
         virtual inline flt pressure(Box &box){return nlisted.pressure(box);};
@@ -1713,7 +1713,7 @@ flt SCBoxed<A, P>::energy(Box &newbox){
     typename vector<A>::iterator it;
     for(it = group.begin(); it != group.end(); ++it){
         Vec r0 = (*it)->x;
-        Vec edger = box->edgedist(r0);
+        Vec edger = box->edge_dist(r0);
         wallatom.x = r0 + (edger*2);
         E += P(*it, HertzianAtom(wallid, *it)).energy(newbox) / 2; // no energy from fake Atom
     }
@@ -1721,14 +1721,14 @@ flt SCBoxed<A, P>::energy(Box &newbox){
 };
 
 template <class A, class P>
-void SCBoxed<A, P>::setForces(Box &newbox){
+void SCBoxed<A, P>::set_forces(Box &newbox){
     Atom wallatom;
     wallatom.m = NAN;
     AtomID wallid = AtomID(&wallatom, atoms->size());
     typename vector<A>::iterator it;
     for(it = group.begin(); it != group.end(); ++it){
         Vec r0 = (*it)->x;
-        Vec edger = box->edgedist(r0);
+        Vec edger = box->edge_dist(r0);
         wallatom.x = r0 + (edger*2);
         P pair = P(*it, HertzianAtom(wallid, *it));
         Vec f = pair.forces(*box);
@@ -1737,7 +1737,7 @@ void SCBoxed<A, P>::setForces(Box &newbox){
 };
 
 template <class A, class P>
-flt SCBoxed<A, P>::setForcesGetPressure(Box &newbox){
+flt SCBoxed<A, P>::set_forces_get_pressure(Box &newbox){
     flt p = 0;
     Atom wallatom;
     wallatom.m = NAN;
@@ -1745,7 +1745,7 @@ flt SCBoxed<A, P>::setForcesGetPressure(Box &newbox){
     typename vector<A>::iterator it;
     for(it = group.begin(); it != group.end(); ++it){
         Vec r0 = (*it)->x;
-        Vec dr = box->edgedist(r0) * 2;
+        Vec dr = box->edge_dist(r0) * 2;
         wallatom.x = r0 + dr;
         P pair = P(*it, HertzianAtom(wallid, *it));
         Vec f = pair.forces(*box);
@@ -1764,7 +1764,7 @@ flt SCBoxed<A, P>::pressure(Box &newbox){
     typename vector<A>::iterator it;
     for(it = group.begin(); it != group.end(); ++it){
         Vec r0 = (*it)->x;
-        Vec dr = box->edgedist(r0) * 2;
+        Vec dr = box->edge_dist(r0) * 2;
         wallatom.x = r0 + dr;
         P pair = P(*it, HertzianAtom(wallid, *it));
         Vec f = pair.forces(*box);
@@ -1787,7 +1787,7 @@ flt SimpleListed<A, P>::energy(Box &box){
 };
 
 template <class A, class P>
-void SimpleListed<A, P>::setForces(Box &box){
+void SimpleListed<A, P>::set_forces(Box &box){
     typename vector<A>::iterator it1;
     typename vector<A>::iterator it2;
     for(it1 = atoms.begin(); it1 != atoms.end(); ++it1){
@@ -1801,7 +1801,7 @@ void SimpleListed<A, P>::setForces(Box &box){
 };
 
 template <class A, class P>
-flt SimpleListed<A, P>::setForcesGetPressure(Box &box){
+flt SimpleListed<A, P>::set_forces_get_pressure(Box &box){
     flt p=0;
     typename vector<A>::iterator it1;
     typename vector<A>::iterator it2;
@@ -1896,7 +1896,7 @@ flt NListed<A, P>::energy(Box &box){
 };
 
 template <class A, class P>
-void NListed<A, P>::setForces(Box &box){
+void NListed<A, P>::set_forces(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); ++it){
@@ -1943,7 +1943,7 @@ flt NListedVirial<A, P>::setForcesGetEnergy(Box &box){
 //~ };
 
 template <class A, class P>
-void NListedVirial<A, P>::setForces(Box &box, FPairXFunct* funct){
+void NListedVirial<A, P>::set_forces(Box &box, FPairXFunct* funct){
     nlisted.update_pairs(); // make sure the LJpairs match the neighbor list ones
     ForcePairX myfpair;
     typename vector<P>::iterator it;
@@ -1958,7 +1958,7 @@ void NListedVirial<A, P>::setForces(Box &box, FPairXFunct* funct){
 };
 
 template <class A, class P>
-flt NListed<A, P>::setForcesGetPressure(Box &box){
+flt NListed<A, P>::set_forces_get_pressure(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
     flt p=0;
     typename vector<P>::iterator it;
@@ -2010,7 +2010,7 @@ class Charges : public Interaction {
         inline uint size() const{return (uint) atoms.size();};
         flt energy(Box &box);
         flt pressure(Box &box);
-        void setForces(Box &box);
+        void set_forces(Box &box);
         //~ ~LJsimple(){};
 };
 
@@ -2038,8 +2038,8 @@ class SoftWall : public Interaction {
             loc(loc), norm(norm.normalized()), expt(expt), lastf(NAN){};
         void add(WallAtom a){group.push_back(a);};
         flt energy(Box &box);
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
+        void set_forces(Box &box);
+        flt set_forces_get_pressure(Box &box);
         flt pressure(Box &box);
 
         void setLoc(Vec newloc){loc = newloc;};
@@ -2067,8 +2067,8 @@ class SoftWallCylinder : public Interaction {
             group.push_back(a);
         };
         flt energy(Box &box);
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box);
+        void set_forces(Box &box);
+        flt set_forces_get_pressure(Box &box);
         flt pressure(Box &box);
 
         void setLoc(Vec new_loc){loc = new_loc;};
@@ -2122,11 +2122,11 @@ class WalledBox2D : public OriginBox {
             };
             return V();
         }
-        flt resizeV(flt newV){
+        flt resize_to_V(flt newV){
             flt curV = V();
             return resize(pow(newV/curV, OVERNDIM));
         }
-        Vec randLoc(flt walldist){
+        Vec rand_loc(flt walldist){
             Vec bxvec = boxsize;
             if(xwalls) bxvec[0] -= walldist/2.0;
             if(ywalls) bxvec[1] -= walldist/2.0;
@@ -2238,8 +2238,8 @@ class SCSpringList : public Interaction {
         SCSpringList(SCAtomVec *scs, flt eps, flt sig, vector<flt> ls) :
             scs(scs), eps(eps), sig(sig), ls(ls){};
         flt energy(Box &box);
-        void setForces(Box &box);
-        flt setForcesGetPressure(Box &box){setForces(box); return NAN;};
+        void set_forces(Box &box);
+        flt set_forces_get_pressure(Box &box){set_forces(box); return NAN;};
         flt pressure(Box &box){return NAN;};
         void ignore(uint n1, uint n2){
             if(n1 > n2){uint n3=n1; n1=n2; n2=n3;}

@@ -104,7 +104,7 @@ for n, a, s in zip(range(N), atoms, sigmas):
             dx /= np.linalg.norm(dx)
             a.x = lasta.x + dx
         else:
-            a.x = box.randLoc()
+            a.x = box.rand_loc()
         neighbors.update_list()
         E = repulse.energy(box) + bonds.energy(box) + angles.energy(box)
     E0 = E
@@ -124,9 +124,9 @@ collec = sim.CollectionSol(box, atoms, opts.dt, opts.damping, opts.temp,
     [repulse, bonds, angles], [neighbors])
 
 # subtract center-of-mass velocity from all particles
-collec.resetcomv()
+collec.reset_com_velocity()
 # scale all velocities to get an instantaneous temperature T = T0, at least at the beginning
-collec.scaleVelocitiesT(opts.temp)
+collec.scale_velocities_to_temp(opts.temp)
 
 ################################################################################
 # Data Analysis

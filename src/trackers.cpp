@@ -169,7 +169,7 @@ void Grid::optimize_widths(){
     if(minwidth <= 0) return;
     flt width_per_atom = pow(box->V() * goalwidth / atoms->size(), OVERNDIM);
     if (width_per_atom < minwidth) width_per_atom = minwidth;
-    Vec bshape = box->boxshape();
+    Vec bshape = box->box_shape();
     widths[0] = (uint) floor(bshape[0] / width_per_atom);
     widths[1] = (uint) floor(bshape[1] / width_per_atom);
     #ifdef VEC2D
@@ -188,7 +188,7 @@ void Grid::optimize_widths(){
 };
 
 uint Grid::get_loc(Vec v, Vec bsize){
-    v = vecmod(v - bsize/2., bsize) + bsize/2;
+    v = vec_mod(v - bsize/2., bsize) + bsize/2;
     uint x = (uint)floor(v[0] * widths[0] / bsize[0]);
     if(x == widths[0]) x = 0;
     uint y = (uint)floor(v[1] * widths[1] / bsize[1]);
@@ -208,7 +208,7 @@ void Grid::make_grid(){
     #else
     gridlocs = vector<set<AtomID> >(widths[0] * widths[1] * widths[2]);
     #endif
-    Vec bsize = box->boxshape();
+    Vec bsize = box->box_shape();
     AtomGroup &g = *atoms;
     for(uint ai = 0; ai < g.size(); ai++){
         uint i = get_loc(g[ai].x, bsize);
@@ -229,8 +229,8 @@ Grid::pair_iter Grid::pairs(AtomID a){
 };
 
 flt Grid::time_to_edge(Atom &a){
-    Vec bsize = box->boxshape();
-    Vec v = vecmod(a.x - bsize/2., bsize) + bsize/2;
+    Vec bsize = box->box_shape();
+    Vec v = vec_mod(a.x - bsize/2., bsize) + bsize/2;
 
     flt t = 0;
     for(uint i=0; i<NDIM; ++i){
@@ -268,7 +268,7 @@ vector<AtomID> Grid::allpairs(AtomID a){
 
 GridPairedIterator::GridPairedIterator(Grid & grid, AtomID a) :
         grid(grid), atom1(a){
-    uint cellnum = grid.get_loc(a->x, grid.box->boxshape());
+    uint cellnum = grid.get_loc(a->x, grid.box->box_shape());
     neighbor_cells = grid.neighbors(cellnum);
     cellnum2 = neighbor_cells.begin();
 

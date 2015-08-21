@@ -47,10 +47,10 @@ class Simulation:
         self._cut = value
 
     def add_interaction(self, inter):
-        self.collec.addInteraction(inter)
+        self.collec.add_interaction(inter)
     
     def add_tracker(self, tracker):
-        self.collec.addTracker(tracker)
+        self.collec.add_tracker(tracker)
     
     def add_stats(self, statset):
         assert statset.statdt != None

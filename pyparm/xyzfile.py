@@ -43,13 +43,13 @@ class XYZwriter:
             'E':collec.energy(),
             'T':collec.temp(),
             'K':collec.kinetic(),
-            'L':collec.angmomentum().mag(),
-            'v':collec.comv().mag(),
+            'L':collec.angular_momentum().mag(),
+            'v':collec.com_velocity().mag(),
             }
         
         if hasattr(collec, 'interactions'):
             for name,interac in list(collec.interactions.items()):
-                cdict[name + 'E'] = interac.energy(collec.getbox())
+                cdict[name + 'E'] = interac.energy(collec.get_box())
             for i in list(collec.interactions.values()):
                 if isinstance(i, sim.BondPairs):
                     cdict[name + 'mean'] = i.mean_dists()

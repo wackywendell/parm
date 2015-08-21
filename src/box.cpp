@@ -59,7 +59,7 @@ Vec SCBox::dist(Vec r1){
     return r1;
 };
 
-Vec SCBox::edgedist(Vec r1){
+Vec SCBox::edge_dist(Vec r1){
     // Vector to nearest edge
     if(r1[0] < -L/2) r1[0] += L/2;
     else if(r1[0] > L/2) r1[0] -= L/2;
@@ -84,7 +84,7 @@ bool SCBox::inside(Vec r1, flt buffer){
     return r1.squaredNorm() < newR*newR;
 };
 
-Vec SCBox::randLoc(flt min_dist_to_wall){
+Vec SCBox::rand_loc(flt min_dist_to_wall){
     if(min_dist_to_wall >= R) return Vec::Zero();
     Vec v = Vec::Zero();
     flt Rmin = R - min_dist_to_wall;
@@ -136,7 +136,7 @@ flt AtomGroup::mass() const{
     return m;
 };
 
-Vec AtomGroup::comv() const {
+Vec AtomGroup::com_velocity() const {
     return momentum() / mass();
 };
 
@@ -151,7 +151,7 @@ Vec AtomGroup::momentum() const{
     return tot;
 };
 
-Vec AtomGroup::comf() const{
+Vec AtomGroup::com_force() const{
     Vec tot = Vec::Zero();
     for(uint i=0; i<size(); i++){
         Atom& a = (*this)[i];
@@ -176,7 +176,7 @@ flt AtomGroup::gyradius() const{
 };
 
 #ifdef VEC3D
-Vec AtomGroup::angmomentum(const Vec loc) const{
+Vec AtomGroup::angular_momentum(const Vec loc) const{
     Vec tot = Vec::Zero();
     for(uint i=0; i<size(); i++){
         flt curmass = (*this)[i].m;
@@ -198,7 +198,7 @@ Vec AtomGroup::torque(const Vec loc) const{
     return tot;
 };
 #elif defined VEC2D
-flt AtomGroup::angmomentum(const Vec loc) const{
+flt AtomGroup::angular_momentum(const Vec loc) const{
     flt tot = 0;
     for(uint i=0; i<size(); i++){
         Atom& a = (*this)[i];
@@ -257,11 +257,11 @@ Matrix AtomGroup::moment(const Vec loc) const{
 
 Vec AtomGroup::omega(const Vec loc) const{
     Matrix Inv = moment(loc).inverse();
-    Vec L = angmomentum(loc);
+    Vec L = angular_momentum(loc);
     return (Inv * L).transpose();
 };
 
-void AtomGroup::addOmega(Vec w, Vec loc){
+void AtomGroup::add_omega(Vec w, Vec loc){
     for(uint i=0; i<size(); i++){
         Vec r = (*this)[i].x - loc;
         (*this)[i].v -= r.cross(w);
@@ -280,7 +280,7 @@ flt AtomGroup::moment(const Vec loc) const{
     return tot;
 };
 
-void AtomGroup::addOmega(flt w, Vec loc){
+void AtomGroup::add_omega(flt w, Vec loc){
     for(uint i=0; i<size(); i++){
         Atom& a = (*this)[i];
         if(a.m <= 0 or isinf(a.m)) continue;
@@ -302,7 +302,7 @@ flt AtomGroup::kinetic_energy(const Vec originvelocity) const{
     return totE;
 };
 
-void AtomGroup::addv(Vec v){
+void AtomGroup::add_velocity(Vec v){
     for(uint i=0; i<size(); i++){
         (*this)[i].v += v;
     }
@@ -316,7 +316,7 @@ void AtomGroup::randomize_velocities(flt T){
     }
 };
 
-void AtomGroup::resetForces(){
+void AtomGroup::reset_forces(){
     for(uint i=0; i<size(); i++){
         (*this)[i].f = Vec::Zero();
     }

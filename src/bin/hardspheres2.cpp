@@ -158,7 +158,7 @@ int main(int argc, char **argv){
     // and add them to the hertzian Interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
         // we track energy to see if things are overlapping
-        atoms[i].x = obox->randLoc(); // random location in the box
+        atoms[i].x = obox->rand_loc(); // random location in the box
         atoms[i].v = Vec::Zero();
         atoms[i].f = Vec::Zero();
         atoms[i].a = Vec::Zero();
@@ -179,12 +179,12 @@ int main(int argc, char **argv){
     // Note that this Collection always goes down the potential energy gradient
     
     // This is very important! Otherwise the NeighborList won't update!
-    collec0.addTracker(nl);
+    collec0.add_tracker(nl);
     // And add the Interaction
-    collec0.addInteraction(hertz);
+    collec0.add_interaction(hertz);
     
     // subtract off center of mass velocity, and set a total energy
-    collec0.resetcomv();
+    collec0.reset_com_velocity();
     
     // Potential energy per Atom
     int swtch = 0; //Switch to help terminate simulations of unattainable packing fractions
@@ -338,7 +338,7 @@ void writetcl(const char *fname, OriginBox& box, vector<flt> &atomsizes){
     
     pbcfile << "set cell [pbc set {";
     for(uint j=0; j<NDIM; j++){
-        pbcfile << box.boxshape()[j] << " ";
+        pbcfile << box.box_shape()[j] << " ";
     }
     pbcfile << "} -all];\n";
     pbcfile << "pbc box -toggle -center origin -color red;\n";

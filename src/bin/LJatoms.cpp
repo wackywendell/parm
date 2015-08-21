@@ -54,7 +54,7 @@ int main(){
         
         // we track energy to see if things are overlapping
         flt E0 = LJ->energy(*obox);
-        atoms[i].x = obox->randLoc(); // random location in the box
+        atoms[i].x = obox->rand_loc(); // random location in the box
         atoms[i].v = randVec(); // from a Gaussian
         atoms[i].f = Vec::Zero();
         atoms[i].a = Vec::Zero();
@@ -65,7 +65,7 @@ int main(){
         nl->update_list(true);
         // If we're overlapping too much, try a new location
         while(LJ->energy(*obox) > E0 + epsilon/2.0){
-            atoms[i].x = obox->randLoc(); // random location in the box
+            atoms[i].x = obox->rand_loc(); // random location in the box
             nl->update_list(true);
         }
     }
@@ -77,13 +77,13 @@ int main(){
     CollectionVerlet collec = CollectionVerlet(boost::static_pointer_cast<Box>(obox), atomptr, dt);
     
     // This is very important! Otherwise the NeighborList won't update!
-    collec.addTracker(nl);
+    collec.add_tracker(nl);
     // And add the Interaction
-    collec.addInteraction(LJ);
+    collec.add_interaction(LJ);
     
     // subtract off center of mass velocity, and set a total energy
-    collec.resetcomv();
-    collec.scaleVelocitiesE(Natoms / 4.0);
+    collec.reset_com_velocity();
+    collec.scale_velocities_to_energy(Natoms / 4.0);
     
     // We'll put the energies to stdout and the coordinates to a new file.
     // VMD is good for 3D visualization purposes, and it can read .xyz files
@@ -114,7 +114,7 @@ int main(){
     pbcfile.open("LJatoms-pbc.tcl", ios::out);
     pbcfile << "set cell [pbc set {";
     for(uint j=0; j<NDIM; j++){
-        pbcfile << obox->boxshape()[j] << " ";
+        pbcfile << obox->box_shape()[j] << " ";
     }
     pbcfile << "} -all];\n";
     pbcfile << "pbc box -toggle -center origin -color red;\n";

@@ -22,13 +22,13 @@ void CoordCOMConstraint::apply_positions(Box &box){
 }
 
 void CoordCOMConstraint::apply_velocities(Box &box){
-    Vec comv = a->comv();
+    Vec com_velocity = a->com_velocity();
     
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
         for(uint j=0; j<3; j++){
             if(not fixed[j]) continue;
-            atm.v[j] -= comv[j];
+            atm.v[j] -= com_velocity[j];
         }
     }
 }
@@ -156,7 +156,7 @@ void LinearConstraint::apply_positions(Box &box){
 }
 
 void LinearConstraint::apply_velocities(Box &box){
-    Vec comv = atms->comv();
+    Vec com_velocity = atms->com_velocity();
     
     uint sz = atms->size();
     #ifdef VEC3D
@@ -180,12 +180,12 @@ void LinearConstraint::apply_velocities(Box &box){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
         Atom& ai = (*atms)[i];
-        ai.v = comv + cross(dx, omega);
+        ai.v = com_velocity + cross(dx, omega);
     }
 }
 
 void LinearConstraint::apply_forces(Box &box){
-    Vec comf = Vec::Zero();
+    Vec com_force = Vec::Zero();
     
     uint sz = atms->size();
     #ifdef VEC3D
@@ -200,7 +200,7 @@ void LinearConstraint::apply_forces(Box &box){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
         Atom& ai = (*atms)[i];
-        comf += ai.f;
+        com_force += ai.f;
         tau += cross(dx, ai.f);
     }
     alpha = tau / I;
@@ -209,7 +209,7 @@ void LinearConstraint::apply_forces(Box &box){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
         Atom& ai = (*atms)[i];
-        ai.f = comf + (cross(dx, alpha)*ai.m);
+        ai.f = com_force + (cross(dx, alpha)*ai.m);
     }
 }
 
@@ -259,7 +259,7 @@ void RigidConstraint::apply_positions(Box &box){
 }
 
 void RigidConstraint::apply_velocities(Box &box){
-    Vec comv = atms->comv();
+    Vec com_velocity = atms->com_velocity();
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
     
@@ -282,12 +282,12 @@ void RigidConstraint::apply_velocities(Box &box){
         Atom& ai = (*atms)[i];
         finite_or_throw(ai.x);
         Vec omega_cross_r = cross(omega, dx);
-        ai.v = comv + omega_cross_r; // L/T + L/T; V + ω × r
+        ai.v = com_velocity + omega_cross_r; // L/T + L/T; V + ω × r
     }
 }
 
 void RigidConstraint::apply_forces(Box &box){
-    Vec comf = Vec::Zero();
+    Vec com_force = Vec::Zero();
     
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
@@ -297,7 +297,7 @@ void RigidConstraint::apply_forces(Box &box){
     for(uint i = 0; i < sz; i++){
         Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
-        comf += ai.f;
+        com_force += ai.f;
         
         // L = sum((r - R) × m v)
         tau += cross(dx, ai.f);          // L, ML/T² -> ML²/T²
@@ -306,7 +306,7 @@ void RigidConstraint::apply_forces(Box &box){
     
     alpha = Vec(rot * MoI_solver.solve(rot.adjoint() * tau));
     // Vec alpha((I_inv * tau).transpose());           // 1/ML², ML²/T² -> 1/T²
-    Vec comf_M = comf / M;              // L/T²
+    Vec comf_M = com_force / M;              // L/T²
     
     for(uint i = 0; i < sz; i++){
         Vec loc(expected.row(i));
@@ -1036,7 +1036,7 @@ void Connectivity::add_edge(CNode node1, CNode node2){
 
 array<bool, NDIM> Connectivity::nonzero(Vec diff_vec){
     array<bool, NDIM> nonzeros;
-    Vec half_shape = box->boxshape() / 2;
+    Vec half_shape = box->box_shape() / 2;
     for(uint i=0; i<NDIM; i++){
         nonzeros[i] = (abs(diff_vec[i]) > half_shape[i]);
     }

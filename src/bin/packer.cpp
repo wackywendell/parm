@@ -82,7 +82,7 @@ int main(){
     // Now we run through all the atoms, set their positions / velocities,
     // and add them to the Hertzian Interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
-        atoms[i].x = obox->randLoc(); // random location in the box
+        atoms[i].x = obox->rand_loc(); // random location in the box
         atoms[i].v = Vec::Zero(); // A zero-vector
         atoms[i].f = Vec::Zero();
         atoms[i].a = Vec::Zero();
@@ -104,14 +104,14 @@ int main(){
     CollectionNLCG collec = CollectionNLCG(obox, atomptr, dt, P0);
     
     // This is very important! Otherwise the NeighborList won't update!
-    collec.addTracker(nl);
+    collec.add_tracker(nl);
     // And add the Interaction
-    collec.addInteraction(hertzian);
+    collec.add_interaction(hertzian);
     
     writefile(atoms, *obox);
     
     //Print out total energy, kinetic energy, and potential energy
-    cout << "H: " << collec.Hamiltonian() << " K: " << collec.kinetic()
+    cout << "H: " << collec.hamiltonian() << " K: " << collec.kinetic()
         << " U: " << hertzian->energy(*obox) << " phi: " << (Vs/obox->V()) << "\n";
     
     // Run the simulation! And every _ steps, write a frame to the .xyz
@@ -119,7 +119,7 @@ int main(){
     uint i = 0;
     for(flt curP=startP; curP>P0; curP/=10){
         cout << "P: " << curP << "\n";
-        collec.setP(curP);
+        collec.set_pressure(curP);
         while (true) {
             for(uint j=0; j<1000; j++){
                 collec.timestep();
@@ -136,7 +136,7 @@ int main(){
             }
 
             cout.precision(sizeof(flt));
-            cout << i << " H: " << collec.Hamiltonian() << " K: " << collec.kinetic() 
+            cout << i << " H: " << collec.hamiltonian() << " K: " << collec.kinetic() 
                 << " U: " << hertzian->energy(*obox) << " phi: " << (Vs/obox->V()) << "\n";
             cout.precision(6);
             cout << "        Pdiff: " << pdiff << " force_err: " << force_err << "\n";
@@ -193,7 +193,7 @@ void writefile(AtomVec& atoms, OriginBox& obox){
     pbcfile.open("packing.tcl", ios::out);
     pbcfile << "set cell [pbc set {";
     for(uint j=0; j<NDIM; j++){
-        pbcfile << obox.boxshape()[j] << " ";
+        pbcfile << obox.box_shape()[j] << " ";
     }
     pbcfile << "} -all];\n";
     pbcfile << "pbc box -toggle -center origin -color red;\n";
