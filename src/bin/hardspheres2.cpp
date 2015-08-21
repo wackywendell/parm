@@ -136,13 +136,13 @@ int main(int argc, char **argv){
     ////////////////////////////////////////////////////////////////////
     // The relaxing stage
     
-    // Hertzian Interaction, for the relaxing stage
+    // Repulsion Interaction, for the relaxing stage
     boost::shared_ptr<NeighborList> nl(new NeighborList(obox, sigcut*sigma, 1.4*(sigcut*sigma)));
-    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > hertz(
-                        new NListed<HertzianAtom, HertzianPair>(nl));
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> > hertz(
+                        new NListed<EpsSigExpAtom, RepulsionPair>(nl));
     // ^ this is the Interaction
     
-    // A Hertzian Interaction has energy 
+    // A Repulsion Interaction has energy 
     //    Uij = {1/2.5 * |sigma_ij - r_ij|^2.5      r_ij < sigma_ij
     //           0                                  r_ij >= sigma_ij
     
@@ -166,7 +166,7 @@ int main(int argc, char **argv){
         flt cursigma = sigma;
         if(i==0) (cursigma = sigma*sizeratio);
         // Add it to the potential
-        hertz->add(HertzianAtom(&atoms[i], epsilon, cursigma, sigcut));
+        hertz->add(EpsSigExpAtom(&atoms[i], epsilon, cursigma, sigcut));
     }
     // force an update the NeighborList, just to make sure
     nl->update_list(true);

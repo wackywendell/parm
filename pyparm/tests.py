@@ -222,10 +222,10 @@ class RandomHertzianVerletTest(NPTestCase):
         self.box = sim3.OriginBox(self.L)
         
         self.atoms = sim3.AtomVec(self.masses)
-        self.hertz = sim3.Hertzian(self.box, self.atoms, 0.4)
+        self.hertz = sim3.Repulsion(self.box, self.atoms, 0.4)
 
         for a, radius, mass in zip(self.atoms, self.radii, self.masses):
-            self.hertz.add(sim3.HertzianAtom(a, 100.0, radius*2.0, 2.0))
+            self.hertz.add(sim3.EpsSigExpAtom(a, 100.0, radius*2.0, 2.0))
         
         self.reset_positions()
         
@@ -296,7 +296,7 @@ class RandomRigidConstraintTest(NPTestCase):
         
         self.atoms = sim3.AtomVec(self.masses)
 
-        self.hertz = sim3.Hertzian(self.box, self.atoms, 0.4)
+        self.hertz = sim3.Repulsion(self.box, self.atoms, 0.4)
 
         self.subgroups = [sim3.SubGroup(self.atoms) for _ in range(self.N_mol)]
         self.ixs = np.arange(self.N) // self.N_per_mol
@@ -314,7 +314,7 @@ class RandomRigidConstraintTest(NPTestCase):
             locs0[ix] = a.x
             a.v = np.random.normal(size=(3,))
             a.f = np.random.normal(size=(3,))
-            self.hertz.add(sim3.HertzianAtom(a, 100.0, radius*2.0, 2.0))
+            self.hertz.add(sim3.EpsSigExpAtom(a, 100.0, radius*2.0, 2.0))
 
         nl = self.hertz.neighbor_list()
         for s in self.subgroups:

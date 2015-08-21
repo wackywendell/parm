@@ -65,7 +65,7 @@ box = sim.OriginBox(L)
 atoms = sim.AtomVec([1.]*N)
 # the NeighborList, for keeping track of what atoms are near what other atoms
 neighbors = sim.NeighborList(box, atoms, 0.4)
-repulse = sim.Hertzian(atoms, neighbors)
+repulse = sim.Repulsion(atoms, neighbors)
 bonds = sim.BondPairs()
 angles = sim.AngleTriples()
 
@@ -82,7 +82,7 @@ preva = None
 for n, a, s in zip(range(N), atoms, sigmas):
     E = E0 + 10
     a.v = sim.randVec()  # from a gaussian distribution
-    repulse.add(sim.HertzianAtom(a, 1.0, s, 2.0))
+    repulse.add(sim.EpsSigExpAtom(a, 1.0, s, 2.0))
     if n % opts.perpoly != 0:
         bonds.add(opts.bondk, s, lasta, a)
         neighbors.ignore(lasta, a)

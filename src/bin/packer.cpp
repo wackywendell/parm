@@ -62,12 +62,12 @@ int main(){
     AtomVec & atoms = *atomptr;
     
     // Harmonic Interaction
-    // Its called "Hertzian" for historical reasons
+    // Its called "Repulsion" for historical reasons
     // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the NeighborList
-    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > 
-    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
-    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
-        hertzian(new NListed<HertzianAtom, HertzianPair>(obox, atomptr, 0.1*sigma));
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> > 
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> >
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> >
+        hertzian(new NListed<EpsSigExpAtom, RepulsionPair>(obox, atomptr, 0.1*sigma));
     boost::shared_ptr<NeighborList> nl = hertzian->neighbor_list();
     // ^ this is the Interaction
     
@@ -80,7 +80,7 @@ int main(){
     // same NeighborList
     
     // Now we run through all the atoms, set their positions / velocities,
-    // and add them to the Hertzian Interaction (i.e., to the neighbor list)
+    // and add them to the Repulsion Interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
         atoms[i].x = obox->rand_loc(); // random location in the box
         atoms[i].v = Vec::Zero(); // A zero-vector
@@ -89,8 +89,8 @@ int main(){
 
         flt sig = i < Ns ? sigma : sigmal;
         
-        // Add it to the Hertzian potential
-        hertzian->add(HertzianAtom(atoms.get_id(i), epsilon, sig, 2));
+        // Add it to the Repulsion potential
+        hertzian->add(EpsSigExpAtom(atoms.get_id(i), epsilon, sig, 2));
         //                                                          ^ exponent for the harmonic Interaction
     }
 

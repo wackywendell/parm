@@ -51,7 +51,7 @@ L = (sum(volumes) / phi) ** (1.0/d) # length of each side of the box
 box = sim.OriginBox(L)
 atoms = sim.AtomVec(masses)
 neighbors = sim.NeighborList(box, atoms, 0.4) # the NeighborList, for keeping track of what atoms are near what other atoms
-LJ = sim.LJgroup(atoms, neighbors)
+LJ = sim.LJRepulse(atoms, neighbors)
 collec = sim.CollectionVerlet(box, atoms, dt, [LJ], [neighbors]) # the integrator
 # We use a simple velocity-verlet integrator, which is time-reversible and NVE ensemble
 # i.e., it preserves number of atoms, volume of box, and energy
@@ -64,7 +64,7 @@ E0 = 0
 for a,s in zip(atoms, sigmas):
     E = E0 + 10
     a.v = sim.randVec() # from a gaussian distribution
-    LJ.add(sim.LJatom(1, s, a))
+    LJ.add(sim.EpsSigAtom(a, 1, s))
     while E > E0 + 0.1:
         a.x = box.rand_loc()
         neighbors.update_list()

@@ -666,58 +666,6 @@ flt Dihedrals::mean_dists() const{
 //~ };
 #endif
 
-LJsimple::LJsimple(flt cutoff, vector<LJatom> atms) : atoms(atms){};
-
-flt LJsimple::energy(Box &box){
-    flt E = 0;
-    vector<LJatom>::iterator it;
-    vector<LJatom>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); ++it)
-    for(it2 = atoms.begin(); it2 != it; ++it2){
-        if (ignorepairs.has_pair(*it, *it2)) continue;
-        LJpair pair = LJpair(*it, *it2);
-        Vec dist = box.diff(pair.atom1->x, pair.atom2->x);
-        E += LJRepulsive::energy(dist, pair.sigma, pair.epsilon);
-    }
-    return E;
-};
-
-void LJsimple::set_forces(Box &box){
-    vector<LJatom>::iterator it;
-    vector<LJatom>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); ++it)
-    for(it2 = atoms.begin(); it2 != it; ++it2){
-        if (ignorepairs.has_pair(*it, *it2)) continue;
-        LJpair pair = LJpair(*it, *it2);
-        Vec r = box.diff(pair.atom1->x, pair.atom2->x);
-        Vec f = LJRepulsive::forces(r, pair.sigma, pair.epsilon);
-        pair.atom1->f += f;
-        pair.atom2->f -= f;
-    }
-};
-
-flt LJsimple::pressure(Box &box){
-    flt P=0;
-    vector<LJatom>::iterator it;
-    vector<LJatom>::iterator it2;
-    for(it = atoms.begin(); it != atoms.end(); ++it)
-    for(it2 = atoms.begin(); it2 != it; ++it2){
-        if (ignorepairs.has_pair(*it, *it2)) continue;
-        LJpair pair = LJpair(*it, *it2);
-        Vec r = box.diff(pair.atom1->x, pair.atom2->x);
-        Vec f = LJRepulsive::forces(r, pair.sigma, pair.epsilon);
-        P += r.dot(f);
-    }
-    return P;
-};
-
-AtomID LJsimple::get_id(Atom* a){
-    for(vector<LJatom>::iterator it=atoms.begin(); it!=atoms.end(); ++it)
-        if((*it) == a) return *it;
-    return AtomID();
-};
-
-
 Charges::Charges(flt screen, flt k, vector<Charged> atms) : atoms(atms),
                 screen(screen), k(k){};
 

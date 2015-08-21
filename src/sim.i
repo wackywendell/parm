@@ -75,27 +75,27 @@
 %shared_ptr(DistConstraint)
 %shared_ptr(LinearConstraint)
 %shared_ptr(NPHGaussianConstraint)
-%shared_ptr(SimpleListed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListed< LJatom,LJpair >)
-%shared_ptr(NListed< LJatom,LJpair >)
-%shared_ptr(NListed< LJatomcut,LJAttractPair >)
-%shared_ptr(NListed< HydroAtom,HydroPair >)
-%shared_ptr(NListed< LJAtomIndexed,LJAttractPair >)
-%shared_ptr(NListed< LJAtomIndexed,LJCutPair >)
-%shared_ptr(NListed< LJAttractRepulseAtom,LJAttractRepulsePair >)
-%shared_ptr(NListed< LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair >)
+%shared_ptr(SimpleListed< EpsSigExpAtom,RepulsionPair >)
+%shared_ptr(NListed< EpsSigAtom,LJRepulsePair >)
+%shared_ptr(NListed< EpsSigAtom,LJRepulsePair >)
+%shared_ptr(NListed< EpsSigCutAtom,LJAttractCutPair >)
+%shared_ptr(NListed< IEpsSigCutAtom,LJAttractCutPair >)
+%shared_ptr(NListed< IEpsISigCutAtom,LJAttractCutPair >)
+%shared_ptr(NListed< IEpsISigCutAtom,LennardJonesCutPair >)
+%shared_ptr(NListed< IEpsSigCutAtom,LJAttractRepulsePair >)
+%shared_ptr(NListed< IEpsRepsSigCutAtom,LJAttractFixedRepulsePair >)
 %shared_ptr(NListed< LJDoubleAtom,LJDoublePair >)
 %shared_ptr(NListed< EisMclachlanAtom,EisMclachlanPair >)
-%shared_ptr(NListed< LJishAtom,LJishPair >)
+%shared_ptr(NListed< IEpsRepsSigExpCutAtom,LJishPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPairMinCLs >)
 %shared_ptr(NListed< LoisLinAtom,LoisLinPair >)
 %shared_ptr(NListed< LoisLinAtom,LoisLinPairMin >)
-%shared_ptr(NListed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListed< HertzianAtomIndexed,HertzianPair >)
-%shared_ptr(NListed< HertzianDragAtom,HertzianDragPair >)
-%shared_ptr(SCBoxed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
+%shared_ptr(NListed< EpsSigExpAtom,RepulsionPair >)
+%shared_ptr(NListed< IEpsISigExpAtom,RepulsionPair >)
+%shared_ptr(NListed< EpsSigExpDragAtom,RepulsionDragPair >)
+%shared_ptr(SCBoxed< EpsSigExpAtom,RepulsionPair >)
+%shared_ptr(NListedVirial< EpsSigExpAtom,RepulsionPair >)
 
 %{
 #include "vecrand.hpp"
@@ -515,25 +515,24 @@ static int myErr = 0;
 %include "trackers.hpp"
 %include "interaction.hpp"
 %include "constraints.hpp"
-%template(LJgroup) NListed<LJatom, LJpair>; // Pure repulsive
-%template(LJattract) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive
-%template(Hydrophobicity) NListed<HydroAtom, HydroPair>;  // Pure attractive
-%template(LJattractix) NListed<LJAtomIndexed, LJAttractPair>;  // Pure attractive, with indices for sigma and epsilon
-%template(LJfullix) NListed<LJAtomIndexed, LJCutPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
+%template(LJRepulse) NListed<EpsSigAtom, LJRepulsePair>; // Pure repulsive
+%template(LJAttractCut) NListed<EpsSigCutAtom, LJAttractCutPair>;  // Both repulsive and attractive
+%template(LJAttractICut) NListed<IEpsSigCutAtom, LJAttractCutPair>;  // Pure attractive
+%template(LJAttractIICut) NListed<IEpsISigCutAtom, LJAttractCutPair>;  // Pure attractive, with indices for sigma and epsilon
+%template(LJIICut) NListed<IEpsISigCutAtom, LennardJonesCutPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
 
 // Both repulsive and attractive, with indices for epsilon, sigma fixed per Atom.
 // Positive epsilon -> Attractive + repulsive, negative for pure repulsive.
-%template(LJAttractRepulse) NListed<LJAttractRepulseAtom, LJAttractRepulsePair>;
-%template(LJAttractFixedRepulse) NListed<LJAttractFixedRepulseAtom, LJAttractFixedRepulsePair>;
-%template(LJDouble) NListed<LJDoubleAtom, LJDoublePair>;
+%template(LJAttractRepulse) NListed<IEpsSigCutAtom, LJAttractRepulsePair>;
+%template(LJAttractFixedRepulse) NListed<IEpsRepsSigCutAtom, LJAttractFixedRepulsePair>;
 %template(EisMclachlan) NListed<EisMclachlanAtom, EisMclachlanPair>;
-%template(LJish) NListed<LJishAtom, LJishPair>;
-%template(HertzianSimple) SimpleListed<HertzianAtom, HertzianPair>;
-%template(Hertzian) NListed<HertzianAtom, HertzianPair>;
-%template(HertzianIdx) NListed<HertzianAtomIndexed, HertzianPair>;
-%template(HertzianDrag) NListed<HertzianDragAtom, HertzianDragPair>;
-%template(HertzianSC) SCBoxed<HertzianAtom, HertzianPair>;
-%template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
+%template(LJish) NListed<IEpsRepsSigExpCutAtom, LJishPair>;
+%template(RepulsionSimple) SimpleListed<EpsSigExpAtom, RepulsionPair>;
+%template(Repulsion) NListed<EpsSigExpAtom, RepulsionPair>;
+%template(RepulsionII) NListed<IEpsISigExpAtom, RepulsionPair>;
+%template(HertzianDrag) NListed<EpsSigExpDragAtom, RepulsionDragPair>;
+%template(HertzianSC) SCBoxed<EpsSigExpAtom, RepulsionPair>;
+%template(HertzianVirial) NListedVirial<EpsSigExpAtom, RepulsionPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
 %template(LoisLin) NListed<LoisLinAtom, LoisLinPair>;
 %template(LoisLinMin) NListed<LoisLinAtom, LoisLinPairMin>;
@@ -541,9 +540,9 @@ static int myErr = 0;
 //%rename(__lt__) JammingList::operator<;
 
 //%{
-//    shared_ptr<NListedVirial<HertzianAtom, HertzianPair> > Hertzian(NeighborList *neighbors){
-//        NListedVirial<HertzianAtom, HertzianPair> *h = new NListedVirial<HertzianAtom, HertzianPair>(neighbors);
-//        return shared_ptr<NListedVirial<HertzianAtom, HertzianPair> >(h);
+//    shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> > Repulsion(NeighborList *neighbors){
+//        NListedVirial<EpsSigExpAtom, RepulsionPair> *h = new NListedVirial<EpsSigExpAtom, RepulsionPair>(neighbors);
+//        return shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> >(h);
 //    };
 //%}
 
@@ -562,47 +561,6 @@ static int myErr = 0;
             yield self[i]
   %}
 };
-
-// %extend Collection {
-//     %insert("python") %{
-//         def __init__(self, box, groups, interactions=None, trackers=None, constraints=None):
-//             self.box = box
-//             self.groups  = groups
-//             self.interactions = interactions
-//             self.trackers = trackers
-//             self.constraints = constraints
-//     %};
-// }
-
-%extend NListed<LJatom, LJpair> {
-    %insert("python") %{
-        def add_atom(self, epsilon, sigma, a):
-            self.add(LJatom(epsilon, sigma, a))
-    %};
-}
-
-%extend NListed<LJatomcut, LJAttractPair> {
-    %insert("python") %{
-        def add_atom(self, epsilon, sigma, a, cut):
-            self.add(LJatomcut(epsilon, sigma, a, cut))
-    %};
-}
-
-%extend RsqTracker {
-    %insert("python") %{
-        def mean_array(self):
-            import numpy as np
-            l = self.means()
-            l = [[list(v) for v in innerl] for innerl in l]
-            return np.array(l)
-        
-        def var_array(self):
-            import numpy as np
-            l = self.vars()
-            l = [[list(v) for v in innerl] for innerl in l]
-            return np.array(l)
-    %};
-}
 
 %include "collection.hpp"
 %include "collection.cpp"

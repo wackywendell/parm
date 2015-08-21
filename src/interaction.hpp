@@ -202,7 +202,7 @@ class LJAttractCut {
                         return forces(diff, epsilon, sigma, cut_distance);};
 };
 
-class LJFullCut {
+class LennardJonesCut {
     // uses ε*((1-1/r⁶)² - 1)
     // sigma is thus at the minimum
     // cut_distance is unitless; that times sigma is the distance we cut the potential
@@ -211,7 +211,7 @@ class LJFullCut {
         flt sigma;
         flt cut_distance, cut_energy;
     public:
-        LJFullCut(const flt epsilon, const flt sigma, const flt cutsig):
+        LennardJonesCut(const flt epsilon, const flt sigma, const flt cutsig):
             epsilon(epsilon), sigma(sigma), cut_distance(cutsig){
                 flt rsix = pow(cut_distance, 6);
                 flt mid = (1-1/rsix);
@@ -747,20 +747,20 @@ struct ChargePair {
 // Repulsive LJ, with ε = √(ε₁ ε₂) and σ = (σ₁+σ₂)/2
 // Potential is V(r) = ε (σ⁶/r⁶ - 1)²
 // cutoff at sigma
-struct LJatom : public AtomID {
+struct EpsSigAtom : public AtomID {
     flt epsilon, sigma;
-    LJatom(){};
-    LJatom(flt epsilon, flt sigma, AtomID a) : AtomID(a),
+    EpsSigAtom(){};
+    EpsSigAtom(AtomID a, flt epsilon, flt sigma) : AtomID(a),
             epsilon(epsilon), sigma(sigma){};
-    LJatom(AtomID a, LJatom other) : AtomID(a),
+    EpsSigAtom(AtomID a, EpsSigAtom other) : AtomID(a),
                     epsilon(other.epsilon), sigma(other.sigma){};
     flt max_size(){return sigma;};
 };
 
-struct LJpair {
+struct LJRepulsePair {
     flt epsilon, sigma;
     AtomID atom1, atom2;
-    LJpair(LJatom LJ1, LJatom LJ2) :
+    LJRepulsePair(EpsSigAtom LJ1, EpsSigAtom LJ2) :
             epsilon(sqrt(LJ1.epsilon * LJ2.epsilon)),
             sigma((LJ1.sigma + LJ2.sigma) / 2),
             atom1(LJ1), atom2(LJ2){};
@@ -774,12 +774,12 @@ struct LJpair {
 // Purely attractive LJ, with ε = √(ε₁ ε₂) and σ = (σ₁+σ₂)/2
 // cutoff at some sigcut
 // Minimum at σ
-struct LJatomcut : public LJatom {
+struct EpsSigCutAtom : public EpsSigAtom {
     flt sigcut; // sigma units
-    LJatomcut(){};
-    LJatomcut(flt epsilon, flt sigma, AtomID a, flt cut) :
-            LJatom(epsilon, sigma, a), sigcut(cut){};
-    LJatomcut(AtomID a, LJatomcut other) : LJatom(a, other),
+    EpsSigCutAtom(){};
+    EpsSigCutAtom(AtomID a, flt epsilon, flt sigma, flt cut) :
+            EpsSigAtom(a, epsilon, sigma), sigcut(cut){};
+    EpsSigCutAtom(AtomID a, EpsSigCutAtom other) : EpsSigAtom(a, other),
         sigcut(other.sigcut){};
     flt max_size(){return sigma*sigcut;};
 };
@@ -790,29 +790,29 @@ struct LJatomcut : public LJatom {
 // Purely attractive LJ, with ε = ε₁₂ and σ = σ₁₂ (both indexed)
 // cutoff at some sigcut (and r < σ)
 
-struct LJAtomIndexed : public AtomID {
+struct IEpsISigCutAtom : public AtomID {
     vector<flt> epsilons; // for finding epsilons
     vector<flt> sigmas; // for finding epsilons
     uint indx; // for finding this one in other atoms' epsilon lists
     // note that for two HydroAtoms a1, a2, the epsilon for the pair
     // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]; same for sigma
     flt sigcut; // sigma units
-    LJAtomIndexed(){};
-    LJAtomIndexed(vector<flt> epsilons, vector<flt> sigmas, uint indx, AtomID a, flt cut) :
+    IEpsISigCutAtom(){};
+    IEpsISigCutAtom(AtomID a, vector<flt> epsilons, vector<flt> sigmas, uint indx, flt cut) :
             AtomID(a), epsilons(epsilons), sigmas(sigmas), indx(indx),
              sigcut(cut){
                  assert(sigmas.size() == epsilons.size());
             };
-    LJAtomIndexed(AtomID a, LJAtomIndexed other) : AtomID(a), epsilons(other.epsilons),
+    IEpsISigCutAtom(AtomID a, IEpsISigCutAtom other) : AtomID(a), epsilons(other.epsilons),
         sigmas(other.sigmas), indx(other.indx), sigcut(other.sigcut){};
-    flt getEpsilon(LJAtomIndexed &other){
+    flt get_epsilon(IEpsISigCutAtom &other){
         assert(other.indx < epsilons.size());
         flt myeps = epsilons[other.indx];
         //~ assert(indx < other.epsilons.size());
         //~ assert(other.epsilons[indx] == myeps);
         return myeps;
     }
-    flt get_sigma(LJAtomIndexed &other){
+    flt get_sigma(IEpsISigCutAtom &other){
         assert(other.indx < sigmas.size());
         flt myeps = sigmas[other.indx];
         //~ assert(indx < other.sigmas.size());
@@ -828,16 +828,16 @@ struct LJAtomIndexed : public AtomID {
     };
 };
 
-struct LJCutPair {
-    LJFullCut inter;
+struct LennardJonesCutPair {
+    LennardJonesCut inter;
     AtomID atom1, atom2;
-    LJCutPair(LJatomcut a1, LJatomcut a2) :
+    LennardJonesCutPair(EpsSigCutAtom a1, EpsSigCutAtom a2) :
         inter(sqrt(a1.epsilon * a2.epsilon),
               (a1.sigma + a2.sigma) / 2,
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
-    LJCutPair(LJAtomIndexed a1, LJAtomIndexed a2) :
-        inter(a1.getEpsilon(a2),
+    LennardJonesCutPair(IEpsISigCutAtom a1, IEpsISigCutAtom a2) :
+        inter(a1.get_epsilon(a2),
               a1.get_sigma(a2),
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
@@ -846,41 +846,20 @@ struct LJCutPair {
     inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
 };
 
-struct LJAttractPair {
-    LJAttractCut inter;
-    AtomID atom1, atom2;
-    LJAttractPair(LJatomcut a1, LJatomcut a2) :
-        inter(sqrt(a1.epsilon * a2.epsilon),
-              (a1.sigma + a2.sigma) / 2,
-              max(a1.sigcut, a2.sigcut)),
-        atom1(a1), atom2(a2){};
-    LJAttractPair(LJAtomIndexed a1, LJAtomIndexed a2) :
-        inter(a1.getEpsilon(a2),
-              a1.get_sigma(a2),
-              max(a1.sigcut, a2.sigcut)),
-        atom1(a1), atom2(a2){};
-    inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
-    inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
-};
-
-////////////////////////////////////////////////////////////////////////
-// Purely attractive LJ, with ε = ε₁₂ (indexed) and σ = (σ₁+σ₂)/2
-// cutoff at some sigcut (and r < σ)
-
-struct HydroAtom : public AtomID {
+struct IEpsSigCutAtom : public AtomID {
     vector<flt> epsilons; // for finding epsilons
     uint indx; // for finding this one in other atoms' epsilon lists
     // note that for two HydroAtoms a1, a2, the epsilon for the pair
     // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]
     flt sigma;
     flt sigcut; // sigma units
-    HydroAtom(){};
-    HydroAtom(vector<flt> epsilons, uint indx, flt sigma, AtomID a, flt cut) :
+    IEpsSigCutAtom(){};
+    IEpsSigCutAtom(AtomID a, vector<flt> epsilons, uint indx, flt sigma, flt cut) :
             AtomID(a), epsilons(epsilons), indx(indx), sigma(sigma),
              sigcut(cut){};
-    HydroAtom(AtomID a, HydroAtom other) : AtomID(a), epsilons(other.epsilons),
+    IEpsSigCutAtom(AtomID a, IEpsSigCutAtom other) : AtomID(a), epsilons(other.epsilons),
         indx(other.indx), sigma(other.sigma), sigcut(other.sigcut){};
-    flt getEpsilon(HydroAtom &other){
+    flt get_epsilon(IEpsSigCutAtom &other){
         assert(other.indx < epsilons.size());
         flt myeps = epsilons[other.indx];
         assert(indx < other.epsilons.size());
@@ -890,25 +869,34 @@ struct HydroAtom : public AtomID {
     flt max_size(){return sigma*sigcut;};
 };
 
-struct HydroPair {
+struct LJAttractCutPair {
     LJAttractCut inter;
     AtomID atom1, atom2;
-    HydroPair(HydroAtom a1, HydroAtom a2) :
-        inter(a1.getEpsilon(a2),
+    LJAttractCutPair(EpsSigCutAtom a1, EpsSigCutAtom a2) :
+        inter(sqrt(a1.epsilon * a2.epsilon),
               (a1.sigma + a2.sigma) / 2,
               max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){};
+    LJAttractCutPair(IEpsISigCutAtom a1, IEpsISigCutAtom a2) :
+        inter(a1.get_epsilon(a2),
+              a1.get_sigma(a2),
+              max(a1.sigcut, a2.sigcut)),
+        atom1(a1), atom2(a2){};
+    LJAttractCutPair(IEpsSigCutAtom a1, IEpsSigCutAtom a2) :
+            inter(a1.get_epsilon(a2),
+                  (a1.sigma + a2.sigma) / 2,
+                  max(a1.sigcut, a2.sigcut)),
+            atom1(a1), atom2(a2){};
     inline flt energy(Box &box){return inter.energy(box.diff(atom1->x, atom2->x));};
     inline Vec forces(Box &box){return inter.forces(box.diff(atom1->x, atom2->x));};
 };
-
 
 ////////////////////////////////////////////////////////////////////////
 // Full LJish, with ε = ε₁₂ (indexed) and σ = (σ₁+σ₂)
 // Potential is V(r) = ε (σ^n/r^n - 1)² - ε (r₀^-n - 1)²
 // cutoff at some sigcut r₀
 
-struct LJishAtom : public AtomID {
+struct IEpsRepsSigExpCutAtom : public AtomID {
     vector<flt> epsilons; // for finding epsilons
     flt repeps, sigma;
     flt exponent; // power
@@ -917,27 +905,27 @@ struct LJishAtom : public AtomID {
     // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]
     // these should be the same
     flt sigcut; // sigma units
-    LJishAtom(){};
-    LJishAtom(AtomID a, vector<flt> epsilons, flt repeps, flt sigma,
+    IEpsRepsSigExpCutAtom(){};
+    IEpsRepsSigExpCutAtom(AtomID a, vector<flt> epsilons, flt repeps, flt sigma,
                             flt n, uint indx, flt cut) :
             AtomID(a), epsilons(epsilons), repeps(repeps), sigma(sigma),
             exponent(n), indx(indx), sigcut(cut){
         assert(indx < epsilons.size());
         //~ assert(sigma > 0.01);
     };
-    LJishAtom(AtomID a, LJishAtom other) :
+    IEpsRepsSigExpCutAtom(AtomID a, IEpsRepsSigExpCutAtom other) :
         AtomID(a), epsilons(other.epsilons), repeps(other.repeps),
             sigma(other.sigma), exponent(other.exponent), indx(other.indx),
         sigcut(other.sigcut){
             //~ assert(other.sigma > 0.01);
             //~ assert(sigma > 0.01);
         };
-    flt getEpsilon(LJishAtom &other){
+    flt get_epsilon(IEpsRepsSigExpCutAtom &other){
         assert(other.indx < epsilons.size());
         flt myeps = epsilons[other.indx];
         return myeps;
     }
-    flt get_sigma(LJishAtom &other){
+    flt get_sigma(IEpsRepsSigExpCutAtom &other){
         return (sigma + other.sigma)/2.0;
     }
     flt max_size(){return sigma*sigcut;};
@@ -947,8 +935,8 @@ struct LJishAtom : public AtomID {
 struct LJishPair {
     flt epsilon, repeps, sigma, n, cut_distance, cut_energy;
     AtomID atom1, atom2;
-    LJishPair(LJishAtom LJ1, LJishAtom LJ2) :
-            epsilon(LJ1.getEpsilon(LJ2)),
+    LJishPair(IEpsRepsSigExpCutAtom LJ1, IEpsRepsSigExpCutAtom LJ2) :
+            epsilon(LJ1.get_epsilon(LJ2)),
             repeps(sqrt(LJ1.repeps * LJ2.repeps)),
             sigma(LJ1.get_sigma(LJ2)),
             n((LJ1.exponent + LJ2.exponent) / 2),
@@ -994,35 +982,12 @@ struct LJishPair {
 // cutoff at some sigcut r₀
 // if ε₁₂ < 0, purely repulsive with ε = -ε₁₂
 
-
-struct LJAttractRepulseAtom : public AtomID {
-    vector<flt> epsilons; // for finding epsilons
-    flt sig;
-    uint indx;
-    flt sigcut; // sigma units
-    LJAttractRepulseAtom(){};
-    LJAttractRepulseAtom(AtomID a, vector<flt> epsilons, flt sigma, uint indx, flt cut) :
-            AtomID(a), epsilons(epsilons), sig(sigma), indx(indx),
-             sigcut(cut){
-                 assert(indx < epsilons.size());
-                 //~ printf("Made Atom  with ε=%.2f of size σ=%.2f\n", epsilons[indx], sig);
-                 };
-    LJAttractRepulseAtom(AtomID a, LJAttractRepulseAtom other) : AtomID(a), epsilons(other.epsilons),
-        sig(other.sig), indx(other.indx), sigcut(other.sigcut){};
-    flt getEpsilon(LJAttractRepulseAtom &other){
-        assert(other.indx < epsilons.size());
-        flt myeps = epsilons[other.indx];
-        return myeps;
-    }
-    flt max_size(){return sig*sigcut;};
-};
-
 struct LJAttractRepulsePair {
     flt eps, sig;
     flt cut_distance, cut_energy;
     AtomID atom1, atom2;
-    LJAttractRepulsePair(LJAttractRepulseAtom a1, LJAttractRepulseAtom a2) :
-        eps(a1.getEpsilon(a2)), sig((a1.sig + a2.sig)/2.0),
+    LJAttractRepulsePair(IEpsSigCutAtom a1, IEpsSigCutAtom a2) :
+        eps(a1.get_epsilon(a2)), sig((a1.sigma + a2.sigma)/2.0),
         cut_distance(max(a1.sigcut, a2.sigcut)),
         atom1(a1), atom2(a2){
             if(eps <= 0){
@@ -1067,22 +1032,22 @@ struct LJAttractRepulsePair {
 // cutoff at some sigcut r₀
 // For repulsive, ε_R = repeps
 
-struct LJAttractFixedRepulseAtom : public AtomID {
+struct IEpsRepsSigCutAtom : public AtomID {
     vector<flt> epsilons; // for finding epsilons
     flt repeps, sig;
     uint indx;
     flt sigcut; // sigma units
-    LJAttractFixedRepulseAtom(){};
-    LJAttractFixedRepulseAtom(AtomID a, vector<flt> epsilons, flt repeps,
+    IEpsRepsSigCutAtom(){};
+    IEpsRepsSigCutAtom(AtomID a, vector<flt> epsilons, flt repeps,
             flt sigma, uint indx, flt cut) :
             AtomID(a), epsilons(epsilons), repeps(repeps), sig(sigma),
             indx(indx), sigcut(cut){
                  assert(indx < epsilons.size());
                  };
-    LJAttractFixedRepulseAtom(AtomID a, LJAttractFixedRepulseAtom other) :
+    IEpsRepsSigCutAtom(AtomID a, IEpsRepsSigCutAtom other) :
         AtomID(a), epsilons(other.epsilons),
         repeps(other.repeps), sig(other.sig), indx(other.indx), sigcut(other.sigcut){};
-    flt getEpsilon(LJAttractFixedRepulseAtom &other){
+    flt get_epsilon(IEpsRepsSigCutAtom &other){
         assert(other.indx < epsilons.size());
         flt myeps = epsilons[other.indx];
         return myeps;
@@ -1101,10 +1066,10 @@ struct LJAttractFixedRepulsePair {
     bool attract;
     AtomID atom1, atom2;
     LJAttractFixedRepulsePair(){};
-    LJAttractFixedRepulsePair(LJAttractFixedRepulseAtom a1, LJAttractFixedRepulseAtom a2) :
-        eps(abs(a1.getEpsilon(a2))), repeps(sqrt(a1.repeps * a2.repeps)),
+    LJAttractFixedRepulsePair(IEpsRepsSigCutAtom a1, IEpsRepsSigCutAtom a2) :
+        eps(abs(a1.get_epsilon(a2))), repeps(sqrt(a1.repeps * a2.repeps)),
         sig((a1.sig + a2.sig)/2.0),
-        cut_distance(max(a1.sigcut, a2.sigcut)), attract(a1.getEpsilon(a2) > 0),
+        cut_distance(max(a1.sigcut, a2.sigcut)), attract(a1.get_epsilon(a2) > 0),
         atom1(a1), atom2(a2){
             if(!attract or eps == 0){
                 cut_distance = 1;
@@ -1156,46 +1121,10 @@ struct LJAttractFixedRepulsePair {
     };
 };
 
-////////////////////////////////////////////////////////////////////////
-// Full LJ, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
-// Potential is V(r) = ε (σ⁶/r⁶ - 1)² - ε (r₀⁻⁶ - 1)²
-// cutoff at some sigcut r₀
-// if ε₁₂ < 0, purely repulsive with ε = -ε₁₂
-struct LJDoubleAtom : public LJatom {
-    flt epsrep;
-    flt sigcut; // sigma units
-    LJDoubleAtom(){};
-    LJDoubleAtom(flt epsilon, flt epsrep, flt sigma, AtomID a, flt cut) :
-            LJatom(epsilon, sigma, a), epsrep(epsrep), sigcut(cut){};
-    LJDoubleAtom(AtomID a, LJDoubleAtom other) : LJatom(a, other),
-        epsrep(other.epsrep), sigcut(other.sigcut){};
-};
-
-struct LJDoublePair : public LJAttractFixedRepulsePair {
-    LJDoublePair(LJDoubleAtom a1, LJDoubleAtom a2) {
-        eps = sqrt(a1.epsilon * a2.epsilon);
-        repeps = sqrt(a1.epsrep * a2.epsrep);
-        sig = (a1.sigma + a2.sigma)/2.0;
-        cut_distance = max(a1.sigcut, a2.sigcut);
-        attract = a1.epsilon * a2.epsilon > 0;
-        atom1 = a1;
-        atom2 = a2;
-        if(!attract or eps == 0){
-            cut_distance = 1;
-            cut_energy = 0;
-            eps = 0;
-            attract = false;
-            return;
-        }
-        flt mid = (1-pow(cut_distance,-6));
-        cut_energy = eps*(mid*mid);
-    };
-};
-
 struct EisMclachlanAtom : public AtomID {
     flt dist, sigmai; // dist is radius of Atom + radius of water (1.4 Å)
     EisMclachlanAtom(){};
-    EisMclachlanAtom(flt dist, flt sigmai, AtomID a) : AtomID(a),
+    EisMclachlanAtom(AtomID a, flt dist, flt sigmai) : AtomID(a),
             dist(dist), sigmai(sigmai){};
     EisMclachlanAtom(AtomID a, EisMclachlanAtom other) : AtomID(a),
         dist(other.dist), sigmai(other.sigmai){};
@@ -1229,23 +1158,14 @@ struct EisMclachlanPair {
     }
 };
 
-////////////////////////////////////////////////////////////////////////
-//! Hertzian potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
-//! Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
-//! cutoff at r = σ
-
-struct HertzianAtom : public AtomID {
+struct EpsSigExpAtom : public AtomID {
     flt eps, sigma, exponent;
-    HertzianAtom(){};
-    HertzianAtom(AtomID a, flt eps, flt sigma, flt exponent=2.5) : AtomID(a),
+    EpsSigExpAtom(){};
+    EpsSigExpAtom(AtomID a, flt eps, flt sigma, flt exponent) : AtomID(a),
             eps(eps), sigma(sigma), exponent(exponent){};
-    HertzianAtom(AtomID a, HertzianAtom other) : AtomID(a),
+    EpsSigExpAtom(AtomID a, EpsSigExpAtom other) : AtomID(a),
         eps(other.eps), sigma(other.sigma), exponent(other.exponent){};
     flt max_size(){return sigma;};
-};
-
-inline HertzianAtom hertzd(AtomID a, double eps, double sigma, double exponent=2.5){
-    return HertzianAtom(a, eps, sigma, exponent);
 };
 
 struct EnergyForce {
@@ -1255,34 +1175,34 @@ struct EnergyForce {
 };
 
 //----------------------------------------------------------------------
-// Hertzian potential, as above, with ε = ε₁₂ and σ = σ₁₂ (both indexed)
+// Repulsion potential, as above, with ε = ε₁₂ and σ = σ₁₂ (both indexed)
 // exponent is n = (n₁ + n₂)/2
 
 
-struct HertzianAtomIndexed : public AtomID {
+struct IEpsISigExpAtom : public AtomID {
     vector<flt> epsilons; // for finding epsilons
     vector<flt> sigmas; // for finding epsilons
     flt exponent;
     uint indx; // for finding this one in other atoms' epsilon lists
-    // note that for two HertzianAtomIndexed atoms a1, a2, the epsilon for the pair
+    // note that for two IEpsISigExpAtom atoms a1, a2, the epsilon for the pair
     // is then either a1.epsilons[a2.indx] or a2.epsilons[a1.indx]; same for sigma
-    HertzianAtomIndexed(){};
-    HertzianAtomIndexed(AtomID a, vector<flt> epsilons, vector<flt> sigmas,
+    IEpsISigExpAtom(){};
+    IEpsISigExpAtom(AtomID a, vector<flt> epsilons, vector<flt> sigmas,
         uint indx, flt exponent=2.5) :
             AtomID(a), epsilons(epsilons), sigmas(sigmas), exponent(exponent),
             indx(indx){
                  assert(sigmas.size() == epsilons.size());
             };
-    HertzianAtomIndexed(AtomID a, LJAtomIndexed other) : AtomID(a), epsilons(other.epsilons),
+    IEpsISigExpAtom(AtomID a, IEpsISigCutAtom other) : AtomID(a), epsilons(other.epsilons),
         sigmas(other.sigmas), indx(other.indx){};
-    flt getEpsilon(HertzianAtomIndexed &other){
+    flt get_epsilon(IEpsISigExpAtom &other){
         assert(other.indx < epsilons.size());
         flt myeps = epsilons[other.indx];
         //~ assert(indx < other.epsilons.size());
         //~ assert(other.epsilons[indx] == myeps);
         return myeps;
     }
-    flt get_sigma(HertzianAtomIndexed &other){
+    flt get_sigma(IEpsISigExpAtom &other){
         assert(other.indx < sigmas.size());
         flt myeps = sigmas[other.indx];
         //~ assert(indx < other.sigmas.size());
@@ -1298,14 +1218,19 @@ struct HertzianAtomIndexed : public AtomID {
     };
 };
 
-struct HertzianPair {
+////////////////////////////////////////////////////////////////////////
+//! Repulsion potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
+//! Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
+//! cutoff at r = σ
+
+struct RepulsionPair {
     flt eps, sig, exponent;
     AtomID atom1, atom2;
-    HertzianPair(HertzianAtom a1, HertzianAtom a2) :
+    RepulsionPair(EpsSigExpAtom a1, EpsSigExpAtom a2) :
         eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         exponent((a1.exponent + a2.exponent)/2.0), atom1(a1), atom2(a2){};
-    HertzianPair(HertzianAtomIndexed a1, HertzianAtomIndexed a2) :
-        eps(a1.getEpsilon(a2)), sig(a1.get_sigma(a2)),
+    RepulsionPair(IEpsISigExpAtom a1, IEpsISigExpAtom a2) :
+        eps(a1.get_epsilon(a2)), sig(a1.get_sigma(a2)),
         exponent((a1.exponent + a2.exponent)/2.0), atom1(a1), atom2(a2){};
     inline flt energy(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
@@ -1321,7 +1246,7 @@ struct HertzianPair {
         flt R = sqrt(dsq);
         return rij * (eps * pow(1.0 - (R/sig), exponent-1) /sig/R);
     }
-    inline EnergyForce EnergyForces(Box &box){
+    inline EnergyForce get_energy_forces(Box &box){
         Vec rij = box.diff(atom1->x, atom2->x);
         flt dsq = rij.squaredNorm();
         if(dsq > sig*sig) return EnergyForce(Vec::Zero(),0);
@@ -1356,25 +1281,25 @@ struct HertzianPair {
 };
 
 ////////////////////////////////////////////////////////////////////////
-// Hertzian potential with drag, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
-// Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
-// cutoff at r = σ
-// drag is f = -γv in the normal direction
+//! Repulsion potential with drag, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2
+//! Potential is V(r) = ε/n (1 - r/σ)^n, with n = 5/2 usually
+//! cutoff at r = σ
+//! drag is f = -γv in the normal direction
 
-struct HertzianDragAtom : public AtomID {
+struct EpsSigExpDragAtom : public AtomID {
     flt eps, sigma, exponent, gamma;
-    HertzianDragAtom(){};
-    HertzianDragAtom(AtomID a, flt eps, flt sigma, flt gamma, flt exponent=2.5) : AtomID(a),
+    EpsSigExpDragAtom(){};
+    EpsSigExpDragAtom(AtomID a, flt eps, flt sigma, flt gamma, flt exponent=2.5) : AtomID(a),
             eps(eps), sigma(sigma), exponent(exponent), gamma(gamma){};
-    HertzianDragAtom(AtomID a, HertzianDragAtom other) : AtomID(a),
+    EpsSigExpDragAtom(AtomID a, EpsSigExpDragAtom other) : AtomID(a),
         eps(other.eps), sigma(other.sigma), exponent(other.exponent), gamma(other.gamma){};
     flt max_size(){return sigma;};
 };
 
-struct HertzianDragPair {
+struct RepulsionDragPair {
     flt eps, sig, exponent, gamma;
     AtomID atom1, atom2;
-    HertzianDragPair(HertzianDragAtom a1, HertzianDragAtom a2) :
+    RepulsionDragPair(EpsSigExpDragAtom a1, EpsSigExpDragAtom a2) :
         eps(sqrt(a1.eps * a2.eps)), sig((a1.sigma + a2.sigma)/2.0),
         exponent((a1.exponent + a2.exponent)/2.0),
         gamma((a1.gamma + a2.gamma)/2), atom1(a1), atom2(a2){};
@@ -1562,34 +1487,6 @@ struct LoisLinPairMin : public LoisLinPair {
         (a1.l < a2.l ? a1.l : a2.l)){};
 };
 
-////////////////////////////////////////////////////////////////////////
-class LJsimple : public Interaction {
-    protected:
-        vector<LJatom> atoms;
-        PairList ignorepairs;
-        AtomID get_id(Atom* a);
-
-    public:
-        LJsimple(flt cutoffdist, vector<LJatom> atms=vector<LJatom>());
-         // cutoffdist in sigma units
-
-        inline void add(LJatom a){
-            assert(a.n() <= atoms.size());
-            if (a.n() == atoms.size()) {atoms.push_back(a); return;};
-            atoms[a.n()] = a;};
-        inline void add(AtomID a, flt epsilon, flt sigma){
-            add(LJatom(epsilon,sigma,a));};
-        inline void ignore(AtomID a, AtomID b){ignorepairs.add_pair(a,b);};
-        inline void ignore(Atom* a, Atom* b){
-            ignore(get_id(a),get_id(b));};
-        inline uint ignore_size() const{return ignorepairs.size();};
-        inline uint atoms_size() const{return (uint) atoms.size();};
-        flt energy(Box &box);
-        flt pressure(Box &box);
-        void set_forces(Box &box);
-        //~ ~LJsimple(){};
-};
-
 template <class A, class P>
 class SCBoxed : public Interaction {
     protected:
@@ -1715,7 +1612,7 @@ flt SCBoxed<A, P>::energy(Box &newbox){
         Vec r0 = (*it)->x;
         Vec edger = box->edge_dist(r0);
         wallatom.x = r0 + (edger*2);
-        E += P(*it, HertzianAtom(wallid, *it)).energy(newbox) / 2; // no energy from fake Atom
+        E += P(*it, EpsSigExpAtom(wallid, *it)).energy(newbox) / 2; // no energy from fake Atom
     }
     return E;
 };
@@ -1730,7 +1627,7 @@ void SCBoxed<A, P>::set_forces(Box &newbox){
         Vec r0 = (*it)->x;
         Vec edger = box->edge_dist(r0);
         wallatom.x = r0 + (edger*2);
-        P pair = P(*it, HertzianAtom(wallid, *it));
+        P pair = P(*it, EpsSigExpAtom(wallid, *it));
         Vec f = pair.forces(*box);
         (*it)->f += f;
     }
@@ -1747,7 +1644,7 @@ flt SCBoxed<A, P>::set_forces_get_pressure(Box &newbox){
         Vec r0 = (*it)->x;
         Vec dr = box->edge_dist(r0) * 2;
         wallatom.x = r0 + dr;
-        P pair = P(*it, HertzianAtom(wallid, *it));
+        P pair = P(*it, EpsSigExpAtom(wallid, *it));
         Vec f = pair.forces(*box);
         (*it)->f += f;
         p += f.dot(dr);
@@ -1766,7 +1663,7 @@ flt SCBoxed<A, P>::pressure(Box &newbox){
         Vec r0 = (*it)->x;
         Vec dr = box->edge_dist(r0) * 2;
         wallatom.x = r0 + dr;
-        P pair = P(*it, HertzianAtom(wallid, *it));
+        P pair = P(*it, EpsSigExpAtom(wallid, *it));
         Vec f = pair.forces(*box);
         p += f.dot(dr);
     }
@@ -1913,7 +1810,7 @@ flt NListedVirial<A, P>::setForcesGetEnergy(Box &box){
     flt E = 0;
     vector<P> & pairs = nlisted.pair_iter();
     for(typename vector<P>::iterator it = pairs.begin(); it != pairs.end(); ++it){
-        EnergyForce EF = it->EnergyForces(box);
+        EnergyForce EF = it->get_energy_forces(box);
         it->atom1->f += EF.f;
         it->atom2->f -= EF.f;
         E += EF.E;
