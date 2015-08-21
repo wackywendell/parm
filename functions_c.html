@@ -171,15 +171,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>CGerr
 : <a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#ae044bea088272bba569b725fa1db079a">pyparm.packmin.Minimizer</a>
 </li>
-<li>changeDamp()
-: <a class="el" href="class_collection_damped.html#a4e46b460b7e7ca32b332ad75d8e47516">CollectionDamped</a>
+<li>change_damping()
+: <a class="el" href="class_collection_damped.html#a8883245cc5984db122c5bffa2c907c21">CollectionDamped</a>
 </li>
-<li>changeMag()
-: <a class="el" href="class_collection_sol.html#a74a38b73e55a4de6d31bc7d9145931d3">CollectionSol</a>
+<li>change_force()
+: <a class="el" href="class_collection_sol.html#a5928fba7798d8720c373ea2c1f6664f1">CollectionSol</a>
 </li>
-<li>changeT()
-: <a class="el" href="class_collection_sol.html#acea18c74447037db06fc1a34f0cc41ff">CollectionSol</a>
-, <a class="el" href="class_collection_sol_h_t.html#aabbc52d5892af413621e1055132cd0d9">CollectionSolHT</a>
+<li>change_temperature()
+: <a class="el" href="class_collection_sol.html#afa3ab2f1c20d231facca51aa77de4056">CollectionSol</a>
+, <a class="el" href="class_collection_sol_h_t.html#a87256c10e4513bcff6bde6f9d228b640">CollectionSolHT</a>
 </li>
 <li>Charged()
 : <a class="el" href="struct_charged.html#af5f2155cb0d654e1197c28cb9c26a35f">Charged</a>
@@ -260,10 +260,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_collection_r_k4.html#a2da50803a34783565b745f578325bb5b">CollectionRK4</a>
 </li>
 <li>CollectionSol()
-: <a class="el" href="class_collection_sol.html#ab40f78637f24e15d08c929aaeb654695">CollectionSol</a>
+: <a class="el" href="class_collection_sol.html#a57fbd9714db4898ced7c9288dce994a7">CollectionSol</a>
 </li>
 <li>CollectionSolHT()
-: <a class="el" href="class_collection_sol_h_t.html#a9b6f54c2ca6f997586c514f5cdb4885a">CollectionSolHT</a>
+: <a class="el" href="class_collection_sol_h_t.html#a9d4110a6cb20c8b5fff676403b51b518">CollectionSolHT</a>
 </li>
 <li>CollectionVerlet()
 : <a class="el" href="class_collection_verlet.html#a3a3b5b36722c834b4a87172150bad749">CollectionVerlet</a>
@@ -275,18 +275,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_atom_group.html#ac69f340d4332c9d0fb530de4a8fc3992">AtomGroup</a>
 , <a class="el" href="class_collection.html#a38c98b6626d925d70cc066228b3cb64a">Collection</a>
 </li>
-<li>comf()
-: <a class="el" href="class_atom_group.html#a5a2bc8d0f20fbf0dad6087c485ea8057">AtomGroup</a>
+<li>com_force()
+: <a class="el" href="class_atom_group.html#a70f3f86b69e21a9badb6e1d12a7a7a06">AtomGroup</a>
+</li>
+<li>com_velocity()
+: <a class="el" href="class_atom_group.html#a1d958d3955f90d1f02ae7d1b0b707369">AtomGroup</a>
+, <a class="el" href="class_collection.html#a6f95404cca845779f5bef0eba6927524">Collection</a>
 </li>
 <li>COMSpring()
 : <a class="el" href="class_c_o_m_spring.html#afcfc9695bc94816017113dd7662fbb7f">COMSpring</a>
 </li>
-<li>comv()
-: <a class="el" href="class_atom_group.html#a0492ac0bf6a1438cf3fb5566ebdf29e4">AtomGroup</a>
-, <a class="el" href="class_collection.html#a2138a262fac49ef021e9af33c170c4d7">Collection</a>
-</li>
 <li>Connectivity()
 : <a class="el" href="class_connectivity.html#a9f0cb48a74aedf06578097551919a14a">Connectivity</a>
+</li>
+<li>constrained_dof()
+: <a class="el" href="class_constraint.html#a5be5a986bb3a6742ba2ea7d6ff55e16b">Constraint</a>
+, <a class="el" href="class_coord_c_o_m_constraint.html#ad82f85e60897b495f27a384bb38d05a6">CoordCOMConstraint</a>
+, <a class="el" href="class_coord_constraint.html#a1593922a67a9dac27cfb92f35b5c1296">CoordConstraint</a>
+, <a class="el" href="class_dist_constraint.html#ada09e0c6dc9cea1979f8138dff105906">DistConstraint</a>
+, <a class="el" href="class_linear_constraint.html#a8064168f22df6d1e8a9769263d8fb191">LinearConstraint</a>
+, <a class="el" href="class_relative_constraint.html#a70e66ddfd187897328adde106b20c28f">RelativeConstraint</a>
+, <a class="el" href="class_rigid_constraint.html#a028af72d7cb15aaab6886e8c152b8b4c">RigidConstraint</a>
 </li>
 <li>constraints
 : <a class="el" href="class_collection.html#a834cdb1362aedc0956ccc4e56cf993df">Collection</a>
@@ -299,20 +308,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_contact_tracker.html#a13edcafa5cbcfcb8490515e160f56e85">ContactTracker</a>
 </li>
 <li>CoordCOMConstraint()
-: <a class="el" href="class_coord_c_o_m_constraint.html#a8c9381f9f3fd7f0977b3caaa7bea0fea">CoordCOMConstraint</a>
+: <a class="el" href="class_coord_c_o_m_constraint.html#a93fa3f04c500431f9e91f272330742ac">CoordCOMConstraint</a>
 </li>
 <li>CoordConstraint()
 : <a class="el" href="class_coord_constraint.html#a6a2c918ebf70b16989b59995aaa94247">CoordConstraint</a>
 </li>
-<li>copylist()
-: <a class="el" href="class_jamming_tree2.html#a60e7f8b0408b17d12bf1efeff1e5e8dc">JammingTree2</a>
-, <a class="el" href="class_jamming_tree.html#a1e0e1b6cf259a65052ca187e4372eb88">JammingTree</a>
+<li>copy_list()
+: <a class="el" href="class_jamming_tree2.html#a364e84a68847b31df5315a9fc2e02b06">JammingTree2</a>
+, <a class="el" href="class_jamming_tree.html#ae142ab8bc2e997499cc954b513e8b57d">JammingTree</a>
 </li>
 <li>corr
 : <a class="el" href="class_collection_sol.html#a2097658488a261360ba1fdfd9446acad">CollectionSol</a>
 </li>
-<li>coscoeffs
-: <a class="el" href="class_dihedral.html#aeb240691b6f0d44779d5c2812f172c36">Dihedral</a>
+<li>cos_coefficients
+: <a class="el" href="class_dihedral.html#ab93c525b0b53f7296a765ab5875c7b6c">Dihedral</a>
 </li>
 <li>costheta
 : <a class="el" href="struct_dihedral_derivs.html#a1a4021a5f7c4d4d791d50bb05c9fdf25">DihedralDerivs</a>
@@ -333,10 +342,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_collection_gear5_a.html#ac05a848852447ea6de4c4a57e7639862">CollectionGear5A</a>
 , <a class="el" href="class_collection_gear6_a.html#a71e385918a55f15efaa2fcf167496ea2">CollectionGear6A</a>
 </li>
-<li>curbest()
-: <a class="el" href="class_jamming_tree2.html#af1c79da430cfc0606167c21e2f7ea232">JammingTree2</a>
-, <a class="el" href="class_jamming_tree.html#a78614c6c0e70e0ee58061b62c89b0a3d">JammingTree</a>
-</li>
 <li>curlocs
 : <a class="el" href="class_smooth_locs.html#a405ec9867e76dc849b51a7ddce4d0c6d">SmoothLocs</a>
 </li>
@@ -346,6 +351,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>curpairs
 : <a class="el" href="class_neighbor_list.html#aec869927744dd96762f5191a2a45e363">NeighborList</a>
 </li>
+<li>current_best()
+: <a class="el" href="class_jamming_tree2.html#ae4df56004bcbe38230ec5e563d6bbb1d">JammingTree2</a>
+, <a class="el" href="class_jamming_tree.html#ac8905edd874dbfcc74e6dd932855114a">JammingTree</a>
+</li>
 <li>curt
 : <a class="el" href="class_collection_c_d_b_d.html#ae9ca6455c29969c95f88c74f8271b29d">CollectionCDBD</a>
 , <a class="el" href="class_collection_c_d_b_dgrid.html#ace550d3323903d200ea25daa00026923">CollectionCDBDgrid</a>
@@ -354,12 +363,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_rsq_tracker.html#a413557e906c24199a13c63a997355dac">RsqTracker</a>
 , <a class="el" href="class_smooth_locs.html#a435c08b9ce23a21a59f0b8af6cebe195">SmoothLocs</a>
 </li>
-<li>cutE
-: <a class="el" href="class_l_j_attract_cut.html#ac8c8d766418f080dc97968342cf2a34c">LJAttractCut</a>
-, <a class="el" href="struct_l_j_attract_fixed_repulse_pair.html#a7987c62c0c12a33c16960bd1b2ca96d8">LJAttractFixedRepulsePair</a>
-, <a class="el" href="struct_l_j_attract_repulse_pair.html#afa280f9cf24d512c5585040f6029c652">LJAttractRepulsePair</a>
-, <a class="el" href="class_l_j_full_cut.html#ad56b2fc8c6ea351225b8c62b90b7a2e6">LJFullCut</a>
-, <a class="el" href="struct_l_jish_pair.html#a14c14717f302da80bede2fa0ea811ba7">LJishPair</a>
+<li>cut_distance
+: <a class="el" href="class_lennard_jones_cut.html#a6c4d315fe65b6d7fa500f39c6e2b27ff">LennardJonesCut</a>
+, <a class="el" href="class_l_j_attract_cut.html#a4cf8cf6fe3e1920bb6f3e4f10554dda2">LJAttractCut</a>
+, <a class="el" href="struct_l_j_attract_fixed_repulse_pair.html#a040cfbe39b2fbd3da6a3064d4e323654">LJAttractFixedRepulsePair</a>
+, <a class="el" href="struct_l_j_attract_repulse_pair.html#aa22b12eea728ffe601cc7ce77a56b544">LJAttractRepulsePair</a>
+, <a class="el" href="struct_l_jish_pair.html#a662e732d81a989276d0cd6cf371ad236">LJishPair</a>
+</li>
+<li>cut_energy
+: <a class="el" href="class_lennard_jones_cut.html#a5945929bd6be5f0a0f5bf6c0d744ca43">LennardJonesCut</a>
+, <a class="el" href="class_l_j_attract_cut.html#ab1b287a5f54b12afe8c5f24de8459d5b">LJAttractCut</a>
+, <a class="el" href="struct_l_j_attract_fixed_repulse_pair.html#a35770731b0f21b72748ae75625914e61">LJAttractFixedRepulsePair</a>
+, <a class="el" href="struct_l_j_attract_repulse_pair.html#a5aae4b62769d34f03d78cc6c13fa7f3e">LJAttractRepulsePair</a>
+, <a class="el" href="struct_l_jish_pair.html#a7c895207aa23d29c127c2cfe8c96bb3a">LJishPair</a>
 </li>
 <li>cutoff
 : <a class="el" href="struct_eis_mclachlan_pair.html#a038c112161b8233403cff8056ca4edaa">EisMclachlanPair</a>
@@ -374,18 +390,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>cutoffE
 : <a class="el" href="class_electric_screened.html#a09a0f9bf0a1ede23994148c2183ba804">ElectricScreened</a>
 </li>
-<li>cutR
-: <a class="el" href="class_l_j_attract_cut.html#a23b03af1159c0078ce505516e7db2b35">LJAttractCut</a>
-, <a class="el" href="struct_l_j_attract_fixed_repulse_pair.html#ace6e5bfb34e99932f2455d61edf8bc18">LJAttractFixedRepulsePair</a>
-, <a class="el" href="struct_l_j_attract_repulse_pair.html#a720956988a45d7a245f2fdb1092b79c5">LJAttractRepulsePair</a>
-, <a class="el" href="class_l_j_full_cut.html#abea84f55833e5561115c2d2e632dce2a">LJFullCut</a>
-, <a class="el" href="struct_l_jish_pair.html#ac1118f2fff4ef6a793c2f464776d4587">LJishPair</a>
-</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -112,7 +112,7 @@ Inheritance diagram for RigidConstraint:</div>
  <div class="center">
   <img src="class_rigid_constraint.png" usemap="#RigidConstraint_map" alt=""/>
   <map id="RigidConstraint_map" name="RigidConstraint_map">
-<area href="class_constraint.html" alt="Constraint" shape="rect" coords="0,56,271,80"/>
+<area href="class_constraint.html" alt="Constraint" shape="rect" coords="0,0,97,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -120,8 +120,8 @@ Inheritance diagram for RigidConstraint:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5dfa71d0d9dd6999bb31cd8b68cf5dff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rigid_constraint.html#a5dfa71d0d9dd6999bb31cd8b68cf5dff">RigidConstraint</a> (<a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_box.html">Box</a> &gt; box, <a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_atom_group.html">AtomGroup</a> &gt; atms)</td></tr>
 <tr class="separator:a5dfa71d0d9dd6999bb31cd8b68cf5dff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a500ba61329e30b7d04e4d3fe42c3a34d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rigid_constraint.html#a500ba61329e30b7d04e4d3fe42c3a34d">ndof</a> ()</td></tr>
-<tr class="separator:a500ba61329e30b7d04e4d3fe42c3a34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a028af72d7cb15aaab6886e8c152b8b4c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rigid_constraint.html#a028af72d7cb15aaab6886e8c152b8b4c">constrained_dof</a> ()</td></tr>
+<tr class="separator:a028af72d7cb15aaab6886e8c152b8b4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55298422265c05ee09fc06d68fa987aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rigid_constraint.html#a55298422265c05ee09fc06d68fa987aa">apply_positions</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="separator:a55298422265c05ee09fc06d68fa987aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eeab6909cd7947cc83e383eaba079f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_rigid_constraint.html#a5eeab6909cd7947cc83e383eaba079f8">apply_velocities</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
@@ -244,6 +244,31 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a028af72d7cb15aaab6886e8c152b8b4c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int RigidConstraint::constrained_dof </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_constraint.html#a5be5a986bb3a6742ba2ea7d6ff55e16b">Constraint</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ab8459c4f7191fab6c8b5f4230f3c41ea"></a>
 <div class="memitem">
 <div class="memproto">
@@ -282,31 +307,6 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a500ba61329e30b7d04e4d3fe42c3a34d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int RigidConstraint::ndof </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Implements <a class="el" href="class_constraint.html#a8b931c89eb6a42c614f18d32e6719b88">Constraint</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="constraints_8hpp_source.html">constraints.hpp</a></li>
 <li>src/<a class="el" href="constraints_8cpp.html">constraints.cpp</a></li>
@@ -314,7 +314,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

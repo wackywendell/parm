@@ -127,7 +127,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    atoms[i].a = <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// Add it to the Lennard-Jones potential</span></div>
-<div class="line">    LJ-&gt;add(<a class="code" href="struct_l_jatomcut.html">LJatomcut</a>(epsilon, sigma, atoms.get_id(i), sigcut));</div>
+<div class="line">    LJ-&gt;add(LJatomcut(epsilon, sigma, atoms.get_id(i), sigcut));</div>
 <div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="comment">// Update the neighbor list</span></div>
@@ -139,8 +139,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a class="code" href="class_collection_verlet.html">CollectionVerlet</a> collec = <a class="code" href="class_collection_verlet.html">CollectionVerlet</a>(boost::static_pointer_cast&lt;Box&gt;(obox), atomptr, dt);</div>
 </div><!-- fragment --><h4>Link the <code><a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a></code>, <code><a class="el" href="class_neighbor_list.html" title="Maintains a Verlet list of &quot;neighbors&quot;: molecules within a &#39;skin radius&#39; of each other. ">NeighborList</a></code>, and <code><a class="el" href="class_collection.html">Collection</a></code></h4>
 <p>We made our collection, but it needs to know what potential to use with the atoms, and that it needs to update the <code><a class="el" href="class_neighbor_list.html" title="Maintains a Verlet list of &quot;neighbors&quot;: molecules within a &#39;skin radius&#39; of each other. ">NeighborList</a></code>:</p>
-<div class="fragment"><div class="line">collec.<a class="code" href="class_collection.html#ae69ca345a2bdfdee8acc3bee7591d023">addTracker</a>(neighbor_list);</div>
-<div class="line">collec.<a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(LJ);</div>
+<div class="fragment"><div class="line">collec.addTracker(neighbor_list);</div>
+<div class="line">collec.addInteraction(LJ);</div>
 </div><!-- fragment --><h3>Running the simulation</h3>
 <p>Let's run it for 500,000 timesteps, outputting the current energy, kinetic energy, and potential energy as we go:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;500; i++){</div>
@@ -155,7 +155,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -210,16 +210,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    </div>
 <div class="line">    <span class="comment">// The relaxing stage</span></div>
 <div class="line">    </div>
-<div class="line">    <span class="comment">// Hertzian Interaction, for the relaxing stage</span></div>
+<div class="line">    <span class="comment">// Repulsion Interaction, for the relaxing stage</span></div>
 <div class="line">    <span class="comment">//(new NeighborList(obox, sigcut*sigma, 1.4*(sigcut*sigma)));</span></div>
-<div class="line">    boost::shared_ptr&lt;NListed&lt;HertzianAtom, HertzianPair&gt; &gt; hertz(</div>
-<div class="line">        <span class="keyword">new</span> <a name="_a7"></a><a class="code" href="class_n_listed.html">NListed&lt;HertzianAtom, HertzianPair&gt;</a>(</div>
+<div class="line">    boost::shared_ptr&lt;NListed&lt;EpsSigExpAtom, RepulsionPair&gt; &gt; hertz(</div>
+<div class="line">        <span class="keyword">new</span> <a name="_a7"></a><a class="code" href="class_n_listed.html">NListed&lt;EpsSigExpAtom, RepulsionPair&gt;</a>(</div>
 <div class="line">            boxptr, atomptr, 0.4*(sigcut*sigma)</div>
 <div class="line">    ));</div>
-<div class="line">    boost::shared_ptr&lt;NeighborList&gt; nl = hertz-&gt;nlist();</div>
+<div class="line">    boost::shared_ptr&lt;NeighborList&gt; nl = hertz-&gt;neighbor_list();</div>
 <div class="line">    <span class="comment">// ^ this is the Interaction</span></div>
 <div class="line">    </div>
-<div class="line">    <span class="comment">// A Hertzian Interaction has energy </span></div>
+<div class="line">    <span class="comment">// A Repulsion Interaction has energy </span></div>
 <div class="line">    <span class="comment">//    Uij = {1/2.5 * |sigma_ij - r_ij|^2.5      r_ij &lt; sigma_ij</span></div>
 <div class="line">    <span class="comment">//           0                                  r_ij &gt;= sigma_ij</span></div>
 <div class="line">    </div>
@@ -235,7 +235,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// and add them to the hertzian Interaction (i.e., to the neighbor list)</span></div>
 <div class="line">    <span class="keywordflow">for</span> (<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i &lt; atoms.<a name="a8"></a><a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
 <div class="line">        <span class="comment">// we track energy to see if things are overlapping</span></div>
-<div class="line">        atoms[i].x = obox-&gt;randLoc(); <span class="comment">// random location in the box</span></div>
+<div class="line">        atoms[i].x = obox-&gt;rand_loc(); <span class="comment">// random location in the box</span></div>
 <div class="line">        atoms[i].v = Vec::Zero();</div>
 <div class="line">        atoms[i].f = Vec::Zero();</div>
 <div class="line">        atoms[i].a = Vec::Zero();</div>
@@ -243,7 +243,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> cursigma = sigma;</div>
 <div class="line">        <span class="keywordflow">if</span>(i==0) (cursigma = sigma*sizeratio);</div>
 <div class="line">        <span class="comment">// Add it to the potential</span></div>
-<div class="line">        hertz-&gt;add(<a name="_a9"></a><a class="code" href="struct_hertzian_atom.html">HertzianAtom</a>(atoms.<a name="a10"></a><a class="code" href="class_atom_vec.html#acfb688c87a0616c6d76b9faf7e052d4e">get_id</a>(i), epsilon, cursigma, sigcut));</div>
+<div class="line">        hertz-&gt;add(<a name="_a9"></a><a class="code" href="struct_eps_sig_exp_atom.html">EpsSigExpAtom</a>(atoms.<a name="a10"></a><a class="code" href="class_atom_vec.html#acfb688c87a0616c6d76b9faf7e052d4e">get_id</a>(i), epsilon, cursigma, sigcut));</div>
 <div class="line">    }</div>
 <div class="line">    <span class="comment">// force an update the NeighborList, just to make sure</span></div>
 <div class="line">    nl-&gt;update_list(<span class="keyword">true</span>);</div>
@@ -256,12 +256,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// Note that this Collection always goes down the potential energy gradient</span></div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// This is very important! Otherwise the NeighborList won&#39;t update!</span></div>
-<div class="line">    collec0.<a name="a12"></a><a class="code" href="class_collection.html#ae69ca345a2bdfdee8acc3bee7591d023">addTracker</a>(nl);</div>
+<div class="line">    collec0.<a name="a12"></a><a class="code" href="class_collection.html#a27d3572b81a8e747fd1b37c736c13648">add_tracker</a>(nl);</div>
 <div class="line">    <span class="comment">// And add the Interaction</span></div>
-<div class="line">    collec0.<a name="a13"></a><a class="code" href="class_collection.html#a3aec353bcdd4807e2aa5621e62c6361d">addInteraction</a>(hertz);</div>
+<div class="line">    collec0.<a name="a13"></a><a class="code" href="class_collection.html#a8327c4cdb81bcd50d43662b8c7e6e714">add_interaction</a>(hertz);</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// subtract off center of mass velocity, and set a total energy</span></div>
-<div class="line">    collec0.<a name="a14"></a><a class="code" href="class_collection.html#af4b069082af1bdc9f8ca25ed51faad1c">resetcomv</a>();</div>
+<div class="line">    collec0.<a name="a14"></a><a class="code" href="class_collection.html#a6a1785b2884b5f4834a8e685f4aa49b1">reset_com_velocity</a>();</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// Potential energy per Atom</span></div>
 <div class="line">    <span class="keywordtype">int</span> swtch = 0; <span class="comment">//Switch to help terminate simulations of unattainable packing fractions</span></div>
@@ -393,7 +393,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    </div>
 <div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;set cell [pbc set {&quot;</span>;</div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
-<div class="line">        pbcfile &lt;&lt; box.boxshape()[j] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line">        pbcfile &lt;&lt; box.box_shape()[j] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
 <div class="line">    }</div>
 <div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;} -all];\n&quot;</span>;</div>
 <div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;pbc box -toggle -center origin -color red;\n&quot;</span>;</div>
@@ -436,7 +436,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

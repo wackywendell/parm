@@ -138,11 +138,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>E()
 : <a class="el" href="class_energy_tracker.html#a3eceddb2389f3ca0a4f1d5456bcb54d2">EnergyTracker</a>
 </li>
-<li>edgedist()
-: <a class="el" href="class_s_c_box.html#a1ea8e4f88a8ab36679c8e7f90a69105d">SCBox</a>
+<li>E_squared_mean()
+: <a class="el" href="class_energy_tracker.html#a834c80200f2653af4787a9d3b2689499">EnergyTracker</a>
+</li>
+<li>E_std()
+: <a class="el" href="class_energy_tracker.html#acfac64819f3bb2a61f4fd434e40b1350">EnergyTracker</a>
+</li>
+<li>edge_dist()
+: <a class="el" href="class_s_c_box.html#a817988af10ac3cfcce5c151aa4f58fc5">SCBox</a>
 </li>
 <li>EisMclachlanAtom()
-: <a class="el" href="struct_eis_mclachlan_atom.html#a690400af864a5d4967d9856ed03a04fa">EisMclachlanAtom</a>
+: <a class="el" href="struct_eis_mclachlan_atom.html#a4e4a57a3c6853d6378da45697f3b8f80">EisMclachlanAtom</a>
 </li>
 <li>EisMclachlanPair()
 : <a class="el" href="struct_eis_mclachlan_pair.html#abbdfaafbf2dc75e8f7d28a6a81250048">EisMclachlanPair</a>
@@ -176,27 +182,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="struct_fixed_force_region_atom.html#a7c22767220283c6b2766cdaca8aa76ff">FixedForceRegionAtom</a>
 , <a class="el" href="class_fixed_spring.html#a8e0a25206dbf8d9bb200d40d4457fd63">FixedSpring</a>
 , <a class="el" href="struct_fixed_spring_atom.html#a59cc710433d889c33a7cfb331bbf0e9d">FixedSpringAtom</a>
-, <a class="el" href="struct_hertzian_drag_pair.html#aec95e966a43e295949d6f4bdb8aa84b7">HertzianDragPair</a>
-, <a class="el" href="struct_hertzian_pair.html#a80d9afe0a47dded58d2ef3a97f4e5d98">HertzianPair</a>
-, <a class="el" href="struct_hydro_pair.html#a6789f1ba8841cbce516352bd0cb1e7da">HydroPair</a>
 , <a class="el" href="class_interaction.html#a6eed0b499dd0932a5cff5fd7f32c6194">Interaction</a>
 , <a class="el" href="class_interact_pair.html#a1ddf4e9bdc4e7280834959b899576cf8">InteractPair</a>
+, <a class="el" href="class_lennard_jones_cut.html#a8f9f93efb62963ba5d8f4c2f604cee4c">LennardJonesCut</a>
+, <a class="el" href="struct_lennard_jones_cut_pair.html#af10a02150b3039df100a5be0b3f0fa35">LennardJonesCutPair</a>
 , <a class="el" href="class_l_j_attract.html#a285ddbd702f4232a0625d89b93a5443a">LJAttract</a>
 , <a class="el" href="class_l_j_attract_cut.html#afe4e378eea8e475a8fdb2fa6255cb627">LJAttractCut</a>
+, <a class="el" href="struct_l_j_attract_cut_pair.html#a1fb74f1e90c19d338256ce761cc5909b">LJAttractCutPair</a>
 , <a class="el" href="struct_l_j_attract_fixed_repulse_pair.html#a4aef1b68542277c56d5d87e7044a0369">LJAttractFixedRepulsePair</a>
-, <a class="el" href="struct_l_j_attract_pair.html#abd53293593786481a96f45f04ff679fa">LJAttractPair</a>
 , <a class="el" href="struct_l_j_attract_repulse_pair.html#a2b295e3e02b57c630db8cb0bcb54ffbc">LJAttractRepulsePair</a>
-, <a class="el" href="struct_l_j_cut_pair.html#ab1ac2187533f3606f571e045239e7e50">LJCutPair</a>
-, <a class="el" href="class_l_j_full_cut.html#a2f053d2a93a1389ae3d381c1038ac795">LJFullCut</a>
 , <a class="el" href="struct_l_jish_pair.html#a481515c7f3fa7ecade5b7cb700666a69">LJishPair</a>
-, <a class="el" href="struct_l_jpair.html#ac33b5e1669a327b54a36388c1af3301b">LJpair</a>
+, <a class="el" href="struct_l_j_repulse_pair.html#a3fc6910e5bad64cc1c39f75c80d54397">LJRepulsePair</a>
 , <a class="el" href="class_l_j_repulsive.html#a558c926dd099bdb1e13d24a818724378">LJRepulsive</a>
-, <a class="el" href="class_l_jsimple.html#a4e2e0aab1c0345ab9fc324009c0e1bdc">LJsimple</a>
 , <a class="el" href="struct_lois_lin_pair.html#a7f1e65eca34280c32bfca354580a1510">LoisLinPair</a>
 , <a class="el" href="struct_lois_ohern_pair.html#a6e129021cef8d8c99c5f730cfe2ab475">LoisOhernPair</a>
 , <a class="el" href="class_n_listed.html#accc44293a45e9e4ed503804cc6b798f8">NListed&lt; A, P &gt;</a>
 , <a class="el" href="class_n_listed_virial.html#a948d975599befbf6c791461a9bcce258">NListedVirial&lt; A, P &gt;</a>
 , <a class="el" href="class_random_force.html#a8a893c317670b75ad9c35933c1720484">RandomForce</a>
+, <a class="el" href="struct_repulsion_drag_pair.html#a97cbd878a53b438a0bce45c4921c77e7">RepulsionDragPair</a>
+, <a class="el" href="struct_repulsion_pair.html#a5f88be5526627ab5f084446d8fe09c99">RepulsionPair</a>
 , <a class="el" href="class_s_c_boxed.html#ad93fa8fb38925fece6bcfaad75a87b0a">SCBoxed&lt; A, P &gt;</a>
 , <a class="el" href="class_s_c_spring_list.html#a92dda5c2c0a560603bd326dbfa5dcec6">SCSpringList</a>
 , <a class="el" href="struct_s_c_spring_pair.html#acb34092877daa603e7d5e1ec500ab76d">SCSpringPair</a>
@@ -211,14 +215,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>EnergyForce()
 : <a class="el" href="struct_energy_force.html#a7a888fefb169209781554092e9e53c83">EnergyForce</a>
 </li>
-<li>EnergyForces()
-: <a class="el" href="struct_hertzian_pair.html#a6921f867918b5a98edf96e9b7ba54846">HertzianPair</a>
-</li>
 <li>EnergyTracker()
-: <a class="el" href="class_energy_tracker.html#aa1bafcc92891abf51aeaf47d72ef98e1">EnergyTracker</a>
+: <a class="el" href="class_energy_tracker.html#a6f99eda7f51ff65119fb73f1f2e242b8">EnergyTracker</a>
 </li>
 <li>ensure()
-: <a class="el" href="class_pair_list.html#a7beccbafc8f403e91ebfd1601b1a72df">PairList</a>
+: <a class="el" href="class_pair_list.html#a95b8991e11272705fbd3a7756d8083f3">PairList</a>
+</li>
+<li>EpsSigAtom()
+: <a class="el" href="struct_eps_sig_atom.html#ac8d32c82b0e0478a0e5d468c4cfd9047">EpsSigAtom</a>
+</li>
+<li>EpsSigCutAtom()
+: <a class="el" href="struct_eps_sig_cut_atom.html#a0797dd4c1c1145a79f8b3f4ea126fdd9">EpsSigCutAtom</a>
+</li>
+<li>EpsSigExpAtom()
+: <a class="el" href="struct_eps_sig_exp_atom.html#accc3778b37b3a1679ef10165699017d2">EpsSigExpAtom</a>
+</li>
+<li>EpsSigExpDragAtom()
+: <a class="el" href="struct_eps_sig_exp_drag_atom.html#a90211804b1e1154c453a54d197debfba">EpsSigExpDragAtom</a>
 </li>
 <li>equal_mass()
 : <a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#a515e2915daf9f2b3ebdd070fef23d96f">pyparm.packmin.Minimizer</a>
@@ -229,29 +242,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>err()
 : <a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#a38f46a781e32e9b54549e1d73e2fa7ad">pyparm.packmin.Minimizer</a>
 </li>
-<li>Esqmean()
-: <a class="el" href="class_energy_tracker.html#aea8afe5a55d082adb681979d16b417f1">EnergyTracker</a>
-</li>
-<li>Estd()
-: <a class="el" href="class_energy_tracker.html#a8dd8ab0a88b6c3932eab42f24024dc8a">EnergyTracker</a>
-</li>
 <li>events_processed()
 : <a class="el" href="class_collection_c_d_b_d.html#a8d9f3e1ebba458db9a1df22f27fff4f1">CollectionCDBD</a>
 , <a class="el" href="class_collection_c_d_b_dgrid.html#a45d98fdab317b571709c074b076ebfad">CollectionCDBDgrid</a>
 </li>
 <li>expand()
 : <a class="el" href="class_jamming_tree2.html#a07e970229143e9cf09e56d1b3e7f26b2">JammingTree2</a>
-, <a class="el" href="class_jamming_tree.html#a081e72e859185b65b41e291cd555fbd2">JammingTree</a>
-, <a class="el" href="class_jamming_tree_b_d.html#ab9e2bbcf2eebbe2316bc29b803d81fbb">JammingTreeBD</a>
+, <a class="el" href="class_jamming_tree.html#acea970f4942b9fc46c9182a8dac390b8">JammingTree</a>
+, <a class="el" href="class_jamming_tree_b_d.html#aa5e12051f10fb3a587c84de15bc22f65">JammingTreeBD</a>
 </li>
-<li>expandto()
-: <a class="el" href="class_jamming_tree2.html#a58010eabf4da6aa6e9d73c2f82783350">JammingTree2</a>
+<li>expand_to()
+: <a class="el" href="class_jamming_tree2.html#ae020a7a774cd4e55769ff6d8ae98b256">JammingTree2</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

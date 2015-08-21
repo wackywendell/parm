@@ -109,8 +109,8 @@ Inheritance diagram for NListedVirial&lt; A, P &gt;:</div>
  <div class="center">
   <img src="class_n_listed_virial.png" usemap="#NListedVirial&lt; A, P &gt;_map" alt=""/>
   <map id="NListedVirial&lt; A, P &gt;_map" name="NListedVirial&lt; A, P &gt;_map">
-<area href="class_interaction_pairs_x.html" alt="InteractionPairsX" shape="rect" coords="0,112,273,136"/>
-<area href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. " alt="Interaction" shape="rect" coords="0,56,273,80"/>
+<area href="class_interaction_pairs_x.html" alt="InteractionPairsX" shape="rect" coords="0,56,134,80"/>
+<area href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. " alt="Interaction" shape="rect" coords="0,0,134,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -118,13 +118,13 @@ Inheritance diagram for NListedVirial&lt; A, P &gt;:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a23da13f8afd425652f24485a0464b674"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a23da13f8afd425652f24485a0464b674">NListedVirial</a> (<a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_atom_vec.html">AtomVec</a> &gt; <a class="el" href="vecrand_8hpp.html#a21547661bf06da1be24cd3f97d7e04f6">vec</a>, <a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_neighbor_list.html">NeighborList</a> &gt; neighbors)</td></tr>
 <tr class="separator:a23da13f8afd425652f24485a0464b674"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d634055b824338be0918dcca7a2dd98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a8d634055b824338be0918dcca7a2dd98">setForces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="separator:a8d634055b824338be0918dcca7a2dd98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8439fef29b44748414706c65040740a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a8439fef29b44748414706c65040740a3">setForces</a> (<a class="el" href="class_box.html">Box</a> &amp;box, <a class="el" href="class_f_pair_x_funct.html">FPairXFunct</a> *)</td></tr>
-<tr class="separator:a8439fef29b44748414706c65040740a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6a5acd5681f771378148fca33af9e48"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#ac6a5acd5681f771378148fca33af9e48">setForcesGetPressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="memdesc:ac6a5acd5681f771378148fca33af9e48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_n_listed_virial.html#a704b8d4ddcb2fefe45155d90499afc4e" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#ac6a5acd5681f771378148fca33af9e48">More...</a><br /></td></tr>
-<tr class="separator:ac6a5acd5681f771378148fca33af9e48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adce1389dd61fead38b04237570ea719c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#adce1389dd61fead38b04237570ea719c">set_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:adce1389dd61fead38b04237570ea719c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a310aa8e2f229b112d59fbc3d9e9e8335"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a310aa8e2f229b112d59fbc3d9e9e8335">set_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box, <a class="el" href="class_f_pair_x_funct.html">FPairXFunct</a> *)</td></tr>
+<tr class="separator:a310aa8e2f229b112d59fbc3d9e9e8335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7400e0c89f147ddac8e627c7554eaa2a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a7400e0c89f147ddac8e627c7554eaa2a">set_forces_get_pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:a7400e0c89f147ddac8e627c7554eaa2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_n_listed_virial.html#a704b8d4ddcb2fefe45155d90499afc4e" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#a7400e0c89f147ddac8e627c7554eaa2a">More...</a><br /></td></tr>
+<tr class="separator:a7400e0c89f147ddac8e627c7554eaa2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fdedb32b878e49e972db4fd18fd6139"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a2fdedb32b878e49e972db4fd18fd6139">setForcesGetEnergy</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="separator:a2fdedb32b878e49e972db4fd18fd6139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a948d975599befbf6c791461a9bcce258"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a948d975599befbf6c791461a9bcce258">energy</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
@@ -135,8 +135,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a704b8d4ddcb2fefe45155d90499afc4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa7fe0ad8d3ac9a6bd14f985b22ab5c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#aaa7fe0ad8d3ac9a6bd14f985b22ab5c7">add</a> (A atm)</td></tr>
 <tr class="separator:aaa7fe0ad8d3ac9a6bd14f985b22ab5c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1328d31b97836bc23eca4be2069ceeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_neighbor_list.html">NeighborList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#ab1328d31b97836bc23eca4be2069ceeb">nlist</a> ()</td></tr>
-<tr class="separator:ab1328d31b97836bc23eca4be2069ceeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c45064e152dd36bf04c6db7dc5901c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt; <a class="el" href="class_neighbor_list.html">NeighborList</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed_virial.html#a5c45064e152dd36bf04c6db7dc5901c6">neighbor_list</a> ()</td></tr>
+<tr class="separator:a5c45064e152dd36bf04c6db7dc5901c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_interaction_pairs_x"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_interaction_pairs_x')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_interaction_pairs_x.html">InteractionPairsX</a></td></tr>
 <tr class="memitem:ab3e6538e6bf68a675a34c100dfb22530 inherit pub_methods_class_interaction_pairs_x"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction_pairs_x.html#ab3e6538e6bf68a675a34c100dfb22530">~InteractionPairsX</a> ()</td></tr>
 <tr class="separator:ab3e6538e6bf68a675a34c100dfb22530 inherit pub_methods_class_interaction_pairs_x"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,7 +238,7 @@ template&lt;class A , class P &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab1328d31b97836bc23eca4be2069ceeb"></a>
+<a class="anchor" id="a5c45064e152dd36bf04c6db7dc5901c6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -248,7 +248,7 @@ template&lt;class A , class P &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt;<a class="el" href="class_neighbor_list.html">NeighborList</a>&gt; <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::nlist </td>
+          <td class="memname"><a class="el" href="interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502">sptr</a>&lt;<a class="el" href="class_neighbor_list.html">NeighborList</a>&gt; <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::neighbor_list </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -294,7 +294,7 @@ template&lt;class A , class P &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a8d634055b824338be0918dcca7a2dd98"></a>
+<a class="anchor" id="adce1389dd61fead38b04237570ea719c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -304,7 +304,7 @@ template&lt;class A , class P &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::setForces </td>
+          <td class="memname">void <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::set_forces </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em></td><td>)</td>
@@ -318,11 +318,11 @@ template&lt;class A , class P &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_interaction.html#a53468021a533ea1082a7177fcbc7d192">Interaction</a>.</p>
+<p>Implements <a class="el" href="class_interaction.html#a80cc178c17185dfc93daaaa9765cd24e">Interaction</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8439fef29b44748414706c65040740a3"></a>
+<a class="anchor" id="a310aa8e2f229b112d59fbc3d9e9e8335"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -332,7 +332,7 @@ template&lt;class A , class P &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::setForces </td>
+          <td class="memname">void <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::set_forces </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em>, </td>
@@ -356,7 +356,37 @@ template&lt;class A , class P &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_interaction_pairs_x.html#afdd92d26e62c8f3d59ec4f9759656caf">InteractionPairsX</a>.</p>
+<p>Implements <a class="el" href="class_interaction_pairs_x.html#acf385368e3098af0545b779566c237c9">InteractionPairsX</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7400e0c89f147ddac8e627c7554eaa2a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class A , class P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::set_forces_get_pressure </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_n_listed_virial.html#a704b8d4ddcb2fefe45155d90499afc4e" title="Partial pressure due to this Interaction. ">pressure()</a></code>). </p>
+
+<p>Reimplemented from <a class="el" href="class_interaction.html#a8f82720f2121b026442422f9fe8c32a5">Interaction</a>.</p>
 
 </div>
 </div>
@@ -386,43 +416,13 @@ template&lt;class A , class P &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac6a5acd5681f771378148fca33af9e48"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class A , class P &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> <a class="el" href="class_n_listed_virial.html">NListedVirial</a>&lt; A, P &gt;::setForcesGetPressure </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
-          <td class="paramname"><em>box</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_n_listed_virial.html#a704b8d4ddcb2fefe45155d90499afc4e" title="Partial pressure due to this Interaction. ">pressure()</a></code>). </p>
-
-<p>Reimplemented from <a class="el" href="class_interaction.html#ab5fecee2405affe2eef22d754bb4dd4d">Interaction</a>.</p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/<a class="el" href="interaction_8hpp_source.html">interaction.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

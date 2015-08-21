@@ -2,6 +2,8 @@ var searchData=
 [
   ['u',['U',['../class_energy_tracker.html#af259293454641985a01978f0cd1fa7b8',1,'EnergyTracker::U()'],['../classpyparm_1_1packmin_1_1_minimizer.html#aa89c81aa74b527333e20e4f9ebd9dc54',1,'pyparm.packmin.Minimizer.U()']]],
   ['u0',['U0',['../class_energy_tracker.html#a827ccea7b8f77d54c7a30cf9d52a8dfc',1,'EnergyTracker']]],
+  ['u_5fsquared_5fmean',['U_squared_mean',['../class_energy_tracker.html#ae6d5d21c39474b44a5fbbbb0e8484f72',1,'EnergyTracker']]],
+  ['u_5fstd',['U_std',['../class_energy_tracker.html#ae34d6d123f4547727bf64560cac6ffb6',1,'EnergyTracker']]],
   ['uint',['uint',['../vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14',1,'uint():&#160;vec.hpp'],['../vecrand_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14',1,'uint():&#160;vecrand.hpp']]],
   ['unboxed',['UNBOXED',['../interaction_8hpp.html#a86d8947c85d8e817d3731cc5485f67e2a5155e7fdc0ce973ac980511ae390441d',1,'interaction.hpp']]],
   ['uniform',['UNIFORM',['../interaction_8hpp.html#ac74e51c6804e0e40809c136e9b96c21da8f44784d154005a214e0fe94119d28ef',1,'interaction.hpp']]],
@@ -20,7 +22,5 @@ var searchData=
   ['usecoord',['usecoord',['../struct_fixed_spring_atom.html#adb984bfedadef1017f5e267b5b124390',1,'FixedSpringAtom']]],
   ['usecos',['usecos',['../class_bond_angle.html#a34ae14e9d65d160c56126a9f500f9b24',1,'BondAngle']]],
   ['usepow',['usepow',['../class_dihedral.html#ad91a438aae31438715fcaa4ad48b93b1',1,'Dihedral']]],
-  ['usq',['Usq',['../class_energy_tracker.html#a22992d7fff673730a0d11a0ab95846e4',1,'EnergyTracker']]],
-  ['usqmean',['Usqmean',['../class_energy_tracker.html#a1347926cabcdaf49ad7e1a3ed90b1e8e',1,'EnergyTracker']]],
-  ['ustd',['Ustd',['../class_energy_tracker.html#abc220c377db5ec029c57dbc2d2cb29ec',1,'EnergyTracker']]]
+  ['usq',['Usq',['../class_energy_tracker.html#a22992d7fff673730a0d11a0ab95846e4',1,'EnergyTracker']]]
 ];

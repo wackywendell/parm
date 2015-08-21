@@ -109,26 +109,26 @@ Inheritance diagram for InteractionPairsX:</div>
  <div class="center">
   <img src="class_interaction_pairs_x.png" usemap="#InteractionPairsX_map" alt=""/>
   <map id="InteractionPairsX_map" name="InteractionPairsX_map">
-<area href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. " alt="Interaction" shape="rect" coords="0,56,273,80"/>
-<area href="class_n_listed_virial.html" alt="NListedVirial&lt; A, P &gt;" shape="rect" coords="0,168,273,192"/>
+<area href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. " alt="Interaction" shape="rect" coords="0,0,134,24"/>
+<area href="class_n_listed_virial.html" alt="NListedVirial&lt; A, P &gt;" shape="rect" coords="0,112,134,136"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afdd92d26e62c8f3d59ec4f9759656caf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction_pairs_x.html#afdd92d26e62c8f3d59ec4f9759656caf">setForces</a> (<a class="el" href="class_box.html">Box</a> &amp;box, <a class="el" href="class_f_pair_x_funct.html">FPairXFunct</a> *)=0</td></tr>
-<tr class="separator:afdd92d26e62c8f3d59ec4f9759656caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf385368e3098af0545b779566c237c9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction_pairs_x.html#acf385368e3098af0545b779566c237c9">set_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box, <a class="el" href="class_f_pair_x_funct.html">FPairXFunct</a> *)=0</td></tr>
+<tr class="separator:acf385368e3098af0545b779566c237c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3e6538e6bf68a675a34c100dfb22530"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction_pairs_x.html#ab3e6538e6bf68a675a34c100dfb22530">~InteractionPairsX</a> ()</td></tr>
 <tr class="separator:ab3e6538e6bf68a675a34c100dfb22530"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_interaction"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_interaction')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_interaction.html">Interaction</a></td></tr>
 <tr class="memitem:a6eed0b499dd0932a5cff5fd7f32c6194 inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a6eed0b499dd0932a5cff5fd7f32c6194">energy</a> (<a class="el" href="class_box.html">Box</a> &amp;box)=0</td></tr>
 <tr class="memdesc:a6eed0b499dd0932a5cff5fd7f32c6194 inherit pub_methods_class_interaction"><td class="mdescLeft">&#160;</td><td class="mdescRight">Potential energy due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#a6eed0b499dd0932a5cff5fd7f32c6194">More...</a><br /></td></tr>
 <tr class="separator:a6eed0b499dd0932a5cff5fd7f32c6194 inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53468021a533ea1082a7177fcbc7d192 inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a53468021a533ea1082a7177fcbc7d192">setForces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)=0</td></tr>
-<tr class="separator:a53468021a533ea1082a7177fcbc7d192 inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5fecee2405affe2eef22d754bb4dd4d inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#ab5fecee2405affe2eef22d754bb4dd4d">setForcesGetPressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="memdesc:ab5fecee2405affe2eef22d754bb4dd4d inherit pub_methods_class_interaction"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_interaction.html#a3448dd63ebb53811b8150096e47e0eb2" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#ab5fecee2405affe2eef22d754bb4dd4d">More...</a><br /></td></tr>
-<tr class="separator:ab5fecee2405affe2eef22d754bb4dd4d inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80cc178c17185dfc93daaaa9765cd24e inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a80cc178c17185dfc93daaaa9765cd24e">set_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)=0</td></tr>
+<tr class="separator:a80cc178c17185dfc93daaaa9765cd24e inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f82720f2121b026442422f9fe8c32a5 inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a8f82720f2121b026442422f9fe8c32a5">set_forces_get_pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:a8f82720f2121b026442422f9fe8c32a5 inherit pub_methods_class_interaction"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_interaction.html#a3448dd63ebb53811b8150096e47e0eb2" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#a8f82720f2121b026442422f9fe8c32a5">More...</a><br /></td></tr>
+<tr class="separator:a8f82720f2121b026442422f9fe8c32a5 inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3448dd63ebb53811b8150096e47e0eb2 inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a3448dd63ebb53811b8150096e47e0eb2">pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)=0</td></tr>
 <tr class="memdesc:a3448dd63ebb53811b8150096e47e0eb2 inherit pub_methods_class_interaction"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partial pressure due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#a3448dd63ebb53811b8150096e47e0eb2">More...</a><br /></td></tr>
 <tr class="separator:a3448dd63ebb53811b8150096e47e0eb2 inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,7 +160,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="afdd92d26e62c8f3d59ec4f9759656caf"></a>
+<a class="anchor" id="acf385368e3098af0545b779566c237c9"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -168,7 +168,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void InteractionPairsX::setForces </td>
+          <td class="memname">virtual void InteractionPairsX::set_forces </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em>, </td>
@@ -192,7 +192,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_n_listed_virial.html#a8439fef29b44748414706c65040740a3">NListedVirial&lt; A, P &gt;</a>.</p>
+<p>Implemented in <a class="el" href="class_n_listed_virial.html#a310aa8e2f229b112d59fbc3d9e9e8335">NListedVirial&lt; A, P &gt;</a>.</p>
 
 </div>
 </div>
@@ -202,7 +202,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

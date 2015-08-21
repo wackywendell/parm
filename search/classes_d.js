@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['originbox',['OriginBox',['../class_origin_box.html',1,'']]]
+  ['pairlist',['PairList',['../class_pair_list.html',1,'']]]
 ];

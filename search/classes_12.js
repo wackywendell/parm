@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['wallatom',['WallAtom',['../struct_wall_atom.html',1,'']]],
-  ['walledbox2d',['WalledBox2D',['../class_walled_box2_d.html',1,'']]]
+  ['xrpsummer',['XRPSummer',['../class_x_r_p_summer.html',1,'']]]
 ];

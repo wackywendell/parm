@@ -143,7 +143,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;box = sim.OriginBox(L)</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;atoms = sim.AtomVec(masses)</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;neighbors = sim.NeighborList(box, atoms, 0.4) <span class="comment"># the NeighborList, for keeping track of what atoms are near what other atoms</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;LJ = sim.LJgroup(atoms, neighbors)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;LJ = sim.LJRepulse(atoms, neighbors)</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;collec = sim.CollectionVerlet(box, atoms, dt, [LJ], [neighbors]) <span class="comment"># the integrator</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment"># We use a simple velocity-verlet integrator, which is time-reversible and NVE ensemble</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment"># i.e., it preserves number of atoms, volume of box, and energy</span></div>
@@ -156,15 +156,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keywordflow">for</span> a,s <span class="keywordflow">in</span> zip(atoms, sigmas):</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    E = E0 + 10</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    a.v = sim.randVec() <span class="comment"># from a gaussian distribution</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    LJ.add(sim.LJatom(1, s, a))</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    LJ.add(sim.EpsSigAtom(a, 1, s))</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordflow">while</span> E &gt; E0 + 0.1:</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        a.x = box.randLoc()</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        a.x = box.rand_loc()</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        neighbors.update_list()</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        E = LJ.energy(box)</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    E0 = E</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;collec.resetcomv() <span class="comment"># subtract center-of-mass velocity from all particles</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;collec.scaleVelocitiesT(T0) <span class="comment"># scale all velocities to get an instantaneous temperature T = T0, at least at the beginning</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;collec.reset_com_velocity() <span class="comment"># subtract center-of-mass velocity from all particles</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;collec.scale_velocities_to_temp(T0) <span class="comment"># scale all velocities to get an instantaneous temperature T = T0, at least at the beginning</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">####################################################################################################</span></div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment"># Data Analysis</span></div>
@@ -255,7 +255,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

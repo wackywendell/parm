@@ -110,7 +110,7 @@ Inheritance diagram for Dihedrals:</div>
  <div class="center">
   <img src="class_dihedrals.png" usemap="#Dihedrals_map" alt=""/>
   <map id="Dihedrals_map" name="Dihedrals_map">
-<area href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. " alt="Interaction" shape="rect" coords="0,56,273,80"/>
+<area href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. " alt="Interaction" shape="rect" coords="0,0,71,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -122,8 +122,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a368f86434cbeefd67fe668650d3da240"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9e49440ec6a2367e4546cde9bd40cf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#ab9e49440ec6a2367e4546cde9bd40cf5">add</a> (vector&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt; nums, <a class="el" href="class_atom_i_d.html">AtomID</a> a1, <a class="el" href="class_atom_i_d.html">AtomID</a> a2, <a class="el" href="class_atom_i_d.html">AtomID</a> a3, <a class="el" href="class_atom_i_d.html">AtomID</a> a4)</td></tr>
 <tr class="separator:ab9e49440ec6a2367e4546cde9bd40cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fce722b094480fe59266e59a7b60d38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#a3fce722b094480fe59266e59a7b60d38">add</a> (vector&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt; coscoeffs, vector&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt; sincoeffs, <a class="el" href="class_atom_i_d.html">AtomID</a> a1, <a class="el" href="class_atom_i_d.html">AtomID</a> a2, <a class="el" href="class_atom_i_d.html">AtomID</a> a3, <a class="el" href="class_atom_i_d.html">AtomID</a> a4, bool usepow=true)</td></tr>
-<tr class="separator:a3fce722b094480fe59266e59a7b60d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31c554213ab4dfb8a443e3cbf0427a67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#a31c554213ab4dfb8a443e3cbf0427a67">add</a> (vector&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt; cos_coefficients, vector&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt; sincoeffs, <a class="el" href="class_atom_i_d.html">AtomID</a> a1, <a class="el" href="class_atom_i_d.html">AtomID</a> a2, <a class="el" href="class_atom_i_d.html">AtomID</a> a3, <a class="el" href="class_atom_i_d.html">AtomID</a> a4, bool usepow=true)</td></tr>
+<tr class="separator:a31c554213ab4dfb8a443e3cbf0427a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3adabaa70a6d3fbc8d32cbf081e3da2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#af3adabaa70a6d3fbc8d32cbf081e3da2">add</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> k, <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> theta0, <a class="el" href="class_atom_i_d.html">AtomID</a> a1, <a class="el" href="class_atom_i_d.html">AtomID</a> a2, <a class="el" href="class_atom_i_d.html">AtomID</a> a3, <a class="el" href="class_atom_i_d.html">AtomID</a> a4)</td></tr>
 <tr class="memdesc:af3adabaa70a6d3fbc8d32cbf081e3da2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add 4 atoms with the potential \(V(\theta) = k (1 + \cos(\theta - \theta_0))\).  <a href="#af3adabaa70a6d3fbc8d32cbf081e3da2">More...</a><br /></td></tr>
 <tr class="separator:af3adabaa70a6d3fbc8d32cbf081e3da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,14 +137,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af0a9a058e8c89b4a0fee164c9cae6fbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#af0a9a058e8c89b4a0fee164c9cae6fbd">energy</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:af0a9a058e8c89b4a0fee164c9cae6fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Potential energy due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#af0a9a058e8c89b4a0fee164c9cae6fbd">More...</a><br /></td></tr>
 <tr class="separator:af0a9a058e8c89b4a0fee164c9cae6fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa718ca83d609ab15191f37ee1a464f1e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#aa718ca83d609ab15191f37ee1a464f1e">setForces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="separator:aa718ca83d609ab15191f37ee1a464f1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a458a0f53c51fa7a9052a5a9938157f92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#a458a0f53c51fa7a9052a5a9938157f92">set_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a458a0f53c51fa7a9052a5a9938157f92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4a26c866dad2cb93acd33f7d352b822"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#ab4a26c866dad2cb93acd33f7d352b822">pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:ab4a26c866dad2cb93acd33f7d352b822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partial pressure due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#ab4a26c866dad2cb93acd33f7d352b822">More...</a><br /></td></tr>
 <tr class="separator:ab4a26c866dad2cb93acd33f7d352b822"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a629e31f06ab1fa446e55472ba0b940a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#a629e31f06ab1fa446e55472ba0b940a8">setForcesGetPressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="memdesc:a629e31f06ab1fa446e55472ba0b940a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_dihedrals.html#ab4a26c866dad2cb93acd33f7d352b822" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#a629e31f06ab1fa446e55472ba0b940a8">More...</a><br /></td></tr>
-<tr class="separator:a629e31f06ab1fa446e55472ba0b940a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8f2d0a0e8a987325e459a7859dfbf9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_dihedrals.html#ad8f2d0a0e8a987325e459a7859dfbf9b">set_forces_get_pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:ad8f2d0a0e8a987325e459a7859dfbf9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_dihedrals.html#ab4a26c866dad2cb93acd33f7d352b822" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#ad8f2d0a0e8a987325e459a7859dfbf9b">More...</a><br /></td></tr>
+<tr class="separator:ad8f2d0a0e8a987325e459a7859dfbf9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_interaction"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_interaction')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_interaction.html">Interaction</a></td></tr>
 <tr class="memitem:a98522b3c97be621b78e14b3afd5b16bf inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a98522b3c97be621b78e14b3afd5b16bf">~Interaction</a> ()</td></tr>
 <tr class="separator:a98522b3c97be621b78e14b3afd5b16bf inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,7 +248,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3fce722b094480fe59266e59a7b60d38"></a>
+<a class="anchor" id="a31c554213ab4dfb8a443e3cbf0427a67"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -259,7 +259,7 @@ Protected Attributes</h2></td></tr>
           <td class="memname">void Dihedrals::add </td>
           <td>(</td>
           <td class="paramtype">vector&lt; <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> &gt;&#160;</td>
-          <td class="paramname"><em>coscoeffs</em>, </td>
+          <td class="paramname"><em>cos_coefficients</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -498,7 +498,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa718ca83d609ab15191f37ee1a464f1e"></a>
+<a class="anchor" id="a458a0f53c51fa7a9052a5a9938157f92"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -506,7 +506,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Dihedrals::setForces </td>
+          <td class="memname">void Dihedrals::set_forces </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em></td><td>)</td>
@@ -520,11 +520,11 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="class_interaction.html#a53468021a533ea1082a7177fcbc7d192">Interaction</a>.</p>
+<p>Implements <a class="el" href="class_interaction.html#a80cc178c17185dfc93daaaa9765cd24e">Interaction</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a629e31f06ab1fa446e55472ba0b940a8"></a>
+<a class="anchor" id="ad8f2d0a0e8a987325e459a7859dfbf9b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -532,7 +532,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> Dihedrals::setForcesGetPressure </td>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> Dihedrals::set_forces_get_pressure </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em></td><td>)</td>
@@ -548,7 +548,7 @@ Protected Attributes</h2></td></tr>
 
 <p>Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_dihedrals.html#ab4a26c866dad2cb93acd33f7d352b822" title="Partial pressure due to this Interaction. ">pressure()</a></code>). </p>
 
-<p>Reimplemented from <a class="el" href="class_interaction.html#ab5fecee2405affe2eef22d754bb4dd4d">Interaction</a>.</p>
+<p>Reimplemented from <a class="el" href="class_interaction.html#a8f82720f2121b026442422f9fe8c32a5">Interaction</a>.</p>
 
 </div>
 </div>
@@ -603,7 +603,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

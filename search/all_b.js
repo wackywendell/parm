@@ -1,14 +1,14 @@
 var searchData=
 [
   ['k',['k',['../class_collection_n_l_c_g.html#a4edc310aba97ecc72d2a232f8b182218',1,'CollectionNLCG::k()'],['../class_collection_n_l_c_g_v.html#a7755b2c36a475c7a95089ecae1355aeb',1,'CollectionNLCGV::k()'],['../struct_fixed_spring_atom.html#ac755a079271e08f9837e4ffe6a44abfe',1,'FixedSpringAtom::k()'],['../class_c_o_m_spring.html#ab3e5b150106701eba1ba252851784e66',1,'COMSpring::k()'],['../struct_bond_grouping.html#aae1bb3efe3370bb420505af8b61179e9',1,'BondGrouping::k()'],['../struct_angle_grouping.html#a895d03cc6edff41520ab9909864c5eeb',1,'AngleGrouping::k()'],['../class_charges.html#a084ebd48f2a18eb43aa0a3f577b5319f',1,'Charges::k()'],['../class_energy_tracker.html#aed7923feb7d9d4bb837d990ab6dc8d33',1,'EnergyTracker::K()']]],
+  ['k_5fsquared_5fmean',['K_squared_mean',['../class_energy_tracker.html#a63253303a10c33c3248997c6d2a9f5cf',1,'EnergyTracker']]],
+  ['k_5fstd',['K_std',['../class_energy_tracker.html#a3dda28c8346774c0f0e742465d9c24fa',1,'EnergyTracker']]],
   ['kappa',['kappa',['../class_collection_n_l_c_g.html#ab8bebd687d115d41799cf759b7f148bd',1,'CollectionNLCG']]],
   ['kinetic_5fenergy',['kinetic_energy',['../class_atom_group.html#a34556ac8ecb63de42d106c6405b39c83',1,'AtomGroup::kinetic_energy()'],['../class_collection.html#a805247cb09432efe60719f254912192f',1,'Collection::kinetic_energy()'],['../class_collection_n_l_c_g.html#a35daaad5c950121c78291e2ffaa30ddd',1,'CollectionNLCG::kinetic_energy()'],['../class_collection_gear4_n_p_h.html#a5975bc315f55119f16b7375bf7f65bc1',1,'CollectionGear4NPH::kinetic_energy()']]],
   ['kmax',['kmax',['../class_collection_n_l_c_g.html#a55965f91e541a7bf2b79124bea82077a',1,'CollectionNLCG::kmax()'],['../class_collection_n_l_c_g_v.html#ad84d4b5e39fce04c4365d187a7db3699',1,'CollectionNLCGV::kmax()']]],
   ['knew',['Knew',['../class_collection_n_l_c_g.html#aa7ae326760a999c44dc8bd7bc35d8b59',1,'CollectionNLCG::Knew()'],['../class_collection_n_l_c_g_v.html#add474cb738f1e5587332c2cb0079afcf',1,'CollectionNLCGV::Knew()']]],
   ['ks',['Ks',['../class_energy_tracker.html#a829baa10c9e3ee7903f7cee96283a583',1,'EnergyTracker::Ks()'],['../class_i_s_f_tracker1.html#a12ac8e995f34d0a08245c86e0ccee90f',1,'ISFTracker1::ks()']]],
   ['ksq',['Ksq',['../class_energy_tracker.html#a3ec8dc5c33361e98227286585cafde77',1,'EnergyTracker']]],
-  ['ksqmean',['Ksqmean',['../class_energy_tracker.html#aefad2a489a171015e071489ff62df45a',1,'EnergyTracker']]],
-  ['kstd',['Kstd',['../class_energy_tracker.html#a3e8b8d6316f902ac49f0d5db52590c7e',1,'EnergyTracker']]],
   ['kva',['Kva',['../struct_r_k4data.html#a4a4f57a3417229738d269d7704cbda75',1,'RK4data']]],
   ['kvb',['Kvb',['../struct_r_k4data.html#ab7edaad411d11799e6dc68f351b000df',1,'RK4data']]],
   ['kvc',['Kvc',['../struct_r_k4data.html#ab4dcc606dc10b4d81ca29537e3fb369f',1,'RK4data']]],

@@ -135,15 +135,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 &#160;
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
-<li>changeDamp()
-: <a class="el" href="class_collection_damped.html#a4e46b460b7e7ca32b332ad75d8e47516">CollectionDamped</a>
+<li>change_damping()
+: <a class="el" href="class_collection_damped.html#a8883245cc5984db122c5bffa2c907c21">CollectionDamped</a>
 </li>
-<li>changeMag()
-: <a class="el" href="class_collection_sol.html#a74a38b73e55a4de6d31bc7d9145931d3">CollectionSol</a>
+<li>change_force()
+: <a class="el" href="class_collection_sol.html#a5928fba7798d8720c373ea2c1f6664f1">CollectionSol</a>
 </li>
-<li>changeT()
-: <a class="el" href="class_collection_sol.html#acea18c74447037db06fc1a34f0cc41ff">CollectionSol</a>
-, <a class="el" href="class_collection_sol_h_t.html#aabbc52d5892af413621e1055132cd0d9">CollectionSolHT</a>
+<li>change_temperature()
+: <a class="el" href="class_collection_sol.html#afa3ab2f1c20d231facca51aa77de4056">CollectionSol</a>
+, <a class="el" href="class_collection_sol_h_t.html#a87256c10e4513bcff6bde6f9d228b640">CollectionSolHT</a>
 </li>
 <li>Charged()
 : <a class="el" href="struct_charged.html#af5f2155cb0d654e1197c28cb9c26a35f">Charged</a>
@@ -215,10 +215,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_collection_r_k4.html#a2da50803a34783565b745f578325bb5b">CollectionRK4</a>
 </li>
 <li>CollectionSol()
-: <a class="el" href="class_collection_sol.html#ab40f78637f24e15d08c929aaeb654695">CollectionSol</a>
+: <a class="el" href="class_collection_sol.html#a57fbd9714db4898ced7c9288dce994a7">CollectionSol</a>
 </li>
 <li>CollectionSolHT()
-: <a class="el" href="class_collection_sol_h_t.html#a9b6f54c2ca6f997586c514f5cdb4885a">CollectionSolHT</a>
+: <a class="el" href="class_collection_sol_h_t.html#a9d4110a6cb20c8b5fff676403b51b518">CollectionSolHT</a>
 </li>
 <li>CollectionVerlet()
 : <a class="el" href="class_collection_verlet.html#a3a3b5b36722c834b4a87172150bad749">CollectionVerlet</a>
@@ -230,18 +230,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_atom_group.html#ac69f340d4332c9d0fb530de4a8fc3992">AtomGroup</a>
 , <a class="el" href="class_collection.html#a38c98b6626d925d70cc066228b3cb64a">Collection</a>
 </li>
-<li>comf()
-: <a class="el" href="class_atom_group.html#a5a2bc8d0f20fbf0dad6087c485ea8057">AtomGroup</a>
+<li>com_force()
+: <a class="el" href="class_atom_group.html#a70f3f86b69e21a9badb6e1d12a7a7a06">AtomGroup</a>
+</li>
+<li>com_velocity()
+: <a class="el" href="class_atom_group.html#a1d958d3955f90d1f02ae7d1b0b707369">AtomGroup</a>
+, <a class="el" href="class_collection.html#a6f95404cca845779f5bef0eba6927524">Collection</a>
 </li>
 <li>COMSpring()
 : <a class="el" href="class_c_o_m_spring.html#afcfc9695bc94816017113dd7662fbb7f">COMSpring</a>
 </li>
-<li>comv()
-: <a class="el" href="class_atom_group.html#a0492ac0bf6a1438cf3fb5566ebdf29e4">AtomGroup</a>
-, <a class="el" href="class_collection.html#a2138a262fac49ef021e9af33c170c4d7">Collection</a>
-</li>
 <li>Connectivity()
 : <a class="el" href="class_connectivity.html#a9f0cb48a74aedf06578097551919a14a">Connectivity</a>
+</li>
+<li>constrained_dof()
+: <a class="el" href="class_constraint.html#a5be5a986bb3a6742ba2ea7d6ff55e16b">Constraint</a>
+, <a class="el" href="class_coord_c_o_m_constraint.html#ad82f85e60897b495f27a384bb38d05a6">CoordCOMConstraint</a>
+, <a class="el" href="class_coord_constraint.html#a1593922a67a9dac27cfb92f35b5c1296">CoordConstraint</a>
+, <a class="el" href="class_dist_constraint.html#ada09e0c6dc9cea1979f8138dff105906">DistConstraint</a>
+, <a class="el" href="class_linear_constraint.html#a8064168f22df6d1e8a9769263d8fb191">LinearConstraint</a>
+, <a class="el" href="class_relative_constraint.html#a70e66ddfd187897328adde106b20c28f">RelativeConstraint</a>
+, <a class="el" href="class_rigid_constraint.html#a028af72d7cb15aaab6886e8c152b8b4c">RigidConstraint</a>
 </li>
 <li>contacts()
 : <a class="el" href="class_n_listed.html#a7fbbb4732af565171568b57d5a832142">NListed&lt; A, P &gt;</a>
@@ -250,32 +259,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_contact_tracker.html#a13edcafa5cbcfcb8490515e160f56e85">ContactTracker</a>
 </li>
 <li>CoordCOMConstraint()
-: <a class="el" href="class_coord_c_o_m_constraint.html#a93fa3f04c500431f9e91f272330742ac">CoordCOMConstraint</a>
+: <a class="el" href="class_coord_c_o_m_constraint.html#aafdd12c0fa33fd878946aa070a67f684">CoordCOMConstraint</a>
 </li>
 <li>CoordConstraint()
 : <a class="el" href="class_coord_constraint.html#a6a2c918ebf70b16989b59995aaa94247">CoordConstraint</a>
 </li>
-<li>copylist()
-: <a class="el" href="class_jamming_tree2.html#a60e7f8b0408b17d12bf1efeff1e5e8dc">JammingTree2</a>
-, <a class="el" href="class_jamming_tree.html#a1e0e1b6cf259a65052ca187e4372eb88">JammingTree</a>
+<li>copy_list()
+: <a class="el" href="class_jamming_tree2.html#abeb4461a55087b4c576928836a579a50">JammingTree2</a>
+, <a class="el" href="class_jamming_tree.html#ae142ab8bc2e997499cc954b513e8b57d">JammingTree</a>
 </li>
 <li>counts()
 : <a class="el" href="class_i_s_f_tracker.html#a4da8fce7991ecd4aea8e5c6bc3afc805">ISFTracker</a>
 , <a class="el" href="class_rsq_tracker.html#ac751cb882de0eda1c0efd4473e08c82e">RsqTracker</a>
 </li>
 <li>cross()
-: <a class="el" href="class_vector2.html#a15fc8a7c9a226d645a801a55242af746">Vector2&lt; T &gt;</a>
+: <a class="el" href="class_vector2.html#a198662fae516fb6a0e68762c4ebde34a">Vector2&lt; T &gt;</a>
 , <a class="el" href="class_vector3.html#a9fa156dce867dc6088433a6cde308762">Vector3&lt; T &gt;</a>
 </li>
-<li>curbest()
-: <a class="el" href="class_jamming_tree2.html#af1c79da430cfc0606167c21e2f7ea232">JammingTree2</a>
-, <a class="el" href="class_jamming_tree.html#a78614c6c0e70e0ee58061b62c89b0a3d">JammingTree</a>
+<li>current_best()
+: <a class="el" href="class_jamming_tree2.html#ae4df56004bcbe38230ec5e563d6bbb1d">JammingTree2</a>
+, <a class="el" href="class_jamming_tree.html#ac8905edd874dbfcc74e6dd932855114a">JammingTree</a>
 </li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

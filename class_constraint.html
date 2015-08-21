@@ -109,12 +109,12 @@ Inheritance diagram for Constraint:</div>
  <div class="center">
   <img src="class_constraint.png" usemap="#Constraint_map" alt=""/>
   <map id="Constraint_map" name="Constraint_map">
-<area href="class_coord_c_o_m_constraint.html" alt="CoordCOMConstraint" shape="rect" coords="0,112,271,136"/>
-<area href="class_coord_constraint.html" alt="CoordConstraint" shape="rect" coords="281,112,552,136"/>
-<area href="class_dist_constraint.html" alt="DistConstraint" shape="rect" coords="562,112,833,136"/>
-<area href="class_linear_constraint.html" alt="LinearConstraint" shape="rect" coords="843,112,1114,136"/>
-<area href="class_relative_constraint.html" alt="RelativeConstraint" shape="rect" coords="1124,112,1395,136"/>
-<area href="class_rigid_constraint.html" title="A class that enforces rigid-body dynamics. " alt="RigidConstraint" shape="rect" coords="1405,112,1676,136"/>
+<area href="class_coord_c_o_m_constraint.html" alt="CoordCOMConstraint" shape="rect" coords="0,56,134,80"/>
+<area href="class_coord_constraint.html" alt="CoordConstraint" shape="rect" coords="144,56,278,80"/>
+<area href="class_dist_constraint.html" alt="DistConstraint" shape="rect" coords="288,56,422,80"/>
+<area href="class_linear_constraint.html" alt="LinearConstraint" shape="rect" coords="432,56,566,80"/>
+<area href="class_relative_constraint.html" alt="RelativeConstraint" shape="rect" coords="576,56,710,80"/>
+<area href="class_rigid_constraint.html" title="A class that enforces rigid-body dynamics. " alt="RigidConstraint" shape="rect" coords="720,56,854,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -126,8 +126,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaf5ec1691ae4d46846a8479bbc5173ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a1f1f7dfac91f21ad1b510deff7c71e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_constraint.html#a2a1f1f7dfac91f21ad1b510deff7c71e">apply_forces</a> (<a class="el" href="class_box.html">Box</a> &amp;box)=0</td></tr>
 <tr class="separator:a2a1f1f7dfac91f21ad1b510deff7c71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b931c89eb6a42c614f18d32e6719b88"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_constraint.html#a8b931c89eb6a42c614f18d32e6719b88">ndof</a> ()=0</td></tr>
-<tr class="separator:a8b931c89eb6a42c614f18d32e6719b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5be5a986bb3a6742ba2ea7d6ff55e16b"><td class="memItemLeft" align="right" valign="top">virtual int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_constraint.html#a5be5a986bb3a6742ba2ea7d6ff55e16b">constrained_dof</a> ()=0</td></tr>
+<tr class="separator:a5be5a986bb3a6742ba2ea7d6ff55e16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ea4ebf0c039e8c4dac2616a8ec3acd7"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_constraint.html#a0ea4ebf0c039e8c4dac2616a8ec3acd7">~Constraint</a> ()</td></tr>
 <tr class="separator:a0ea4ebf0c039e8c4dac2616a8ec3acd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -234,7 +234,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a8b931c89eb6a42c614f18d32e6719b88"></a>
+<a class="anchor" id="a5be5a986bb3a6742ba2ea7d6ff55e16b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -242,7 +242,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual int Constraint::ndof </td>
+          <td class="memname">virtual int Constraint::constrained_dof </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -255,7 +255,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="class_rigid_constraint.html#a500ba61329e30b7d04e4d3fe42c3a34d">RigidConstraint</a>, <a class="el" href="class_linear_constraint.html#a49fa745cfe1be3d9b2675b6c69f9d5da">LinearConstraint</a>, <a class="el" href="class_dist_constraint.html#a4f855326894a1fd6541b1d9246c97507">DistConstraint</a>, <a class="el" href="class_relative_constraint.html#a1d6caf9f9b348b4a9c1fe8933362cff3">RelativeConstraint</a>, <a class="el" href="class_coord_c_o_m_constraint.html#a84994dfa35c0134a5778990c6ee86cc3">CoordCOMConstraint</a>, and <a class="el" href="class_coord_constraint.html#ad62706cb02eba5424372911c14a184d6">CoordConstraint</a>.</p>
+<p>Implemented in <a class="el" href="class_rigid_constraint.html#a028af72d7cb15aaab6886e8c152b8b4c">RigidConstraint</a>, <a class="el" href="class_linear_constraint.html#a8064168f22df6d1e8a9769263d8fb191">LinearConstraint</a>, <a class="el" href="class_dist_constraint.html#ada09e0c6dc9cea1979f8138dff105906">DistConstraint</a>, <a class="el" href="class_relative_constraint.html#a70e66ddfd187897328adde106b20c28f">RelativeConstraint</a>, <a class="el" href="class_coord_c_o_m_constraint.html#ad82f85e60897b495f27a384bb38d05a6">CoordCOMConstraint</a>, and <a class="el" href="class_coord_constraint.html#a1593922a67a9dac27cfb92f35b5c1296">CoordConstraint</a>.</p>
 
 </div>
 </div>
@@ -265,7 +265,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:30 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

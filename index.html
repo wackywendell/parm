@@ -113,7 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>Note that <code>atomvec</code> is a concrete type, and <code>atomgroup</code> is an abstract class</li>
 </ul>
 </li>
-<li><code>interaction</code>: an <code>interaction</code> is a definition of a force and energy, such as a Lennard-Jones potential (use <code><a class="el" href="class_n_listed.html">NListed</a>&lt;<a class="el" href="struct_l_j_attract_repulse_atom.html">LJAttractRepulseAtom</a>, <a class="el" href="struct_l_j_attract_repulse_pair.html">LJAttractRepulsePair</a>&gt;</code>), springs for bonds (<code>bondpairs</code>), etc.<ul>
+<li><code>interaction</code>: an <code>interaction</code> is a definition of a force and energy, such as a Lennard-Jones potential (use <code><a class="el" href="class_n_listed.html">NListed</a>&lt;LJAttractRepulseAtom, <a class="el" href="struct_l_j_attract_repulse_pair.html">LJAttractRepulsePair</a>&gt;</code>), springs for bonds (<code>bondpairs</code>), etc.<ul>
 <li>Note that the neighbor list has been "abstracted" to work with many potentials; to use it, you create a <code>neighborlist</code>, then use <code><a class="el" href="class_n_listed.html">NListed</a>&lt;FooAtom, FooPair&gt;</code> as the interaction</li>
 </ul>
 </li>
@@ -132,8 +132,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ol>
 <ol type="1">
 <li>Make <code>interaction</code>s. For neighborlisted interactions, make <code>neighborlist</code> first, then make interactions.<ol type="a">
-<li><code><a class="el" href="class_n_listed.html">NListed</a>&lt;<a class="el" href="struct_l_jatom.html">LJatom</a>, <a class="el" href="struct_l_jpair.html">LJpair</a>&gt;</code> (<code>LJgroup</code> in Python) is a repulsive Lennard-Jones interaction</li>
-<li><code><a class="el" href="class_n_listed.html">NListed</a>&lt;<a class="el" href="struct_hertzian_atom.html" title="Hertzian potential, with ε = √(ε₁ ε₂) and σ = (σ₁ + σ₂)/2 Potential is V(r) = ε/n (1 - r/σ)^n...">HertzianAtom</a>, <a class="el" href="struct_hertzian_pair.html">HertzianPair</a>&gt;</code> (<code>Hertzian</code> in Python) is a Hertzian or Harmonic interaction (exponent can be chosen)</li>
+<li><code><a class="el" href="class_n_listed.html">NListed</a>&lt;LJatom, LJpair&gt;</code> (<code>LJgroup</code> in Python) is a repulsive Lennard-Jones interaction</li>
+<li><code><a class="el" href="class_n_listed.html">NListed</a>&lt;HertzianAtom, HertzianPair&gt;</code> (<code>Hertzian</code> in Python) is a Hertzian or Harmonic interaction (exponent can be chosen)</li>
 <li>Add atoms / pairs to interaction</li>
 </ol>
 </li>
@@ -172,7 +172,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 20 2015 17:26:31 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Aug 21 2015 14:51:43 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
