@@ -36,7 +36,7 @@ int main(){
     // We'll cut it off at 2.5σ, and have a NeighborList out to 1.4 times that
     boost::shared_ptr<NListed<LJatomcut, LJCutPair> > 
         LJ(new NListed<LJatomcut, LJCutPair>(obox, atomptr, 0.4*(sigcut*sigma)));
-    boost::shared_ptr<NeighborList> nl = LJ->nlist();
+    boost::shared_ptr<NeighborList> nl = LJ->neighbor_list();
     // ^ this is the Interaction
     
     // Note that NListed is a class template; its an Interaction that

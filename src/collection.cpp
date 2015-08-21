@@ -208,16 +208,16 @@ CollectionSol::CollectionSol(sptr<Box> box, sptr<AtomGroup> atoms,
         vector<sptr<StateTracker> > trackers, vector<sptr<Constraint> > constraints) : 
             Collection::Collection(box, atoms, interactions, trackers, constraints, false),
             dt(dt), damping(damp), force_mag(damp), desT(T){
-    // because that should be done *after* setCs()
+    // because that should be done *after* set_constants()
     if(dt <= 0){
 		throw std::invalid_argument("Collection::CollectionSol: dt >= 0");
 	};
    
-    setCs();
+    set_constants();
     initialize();
 };
 
-void CollectionSol::setCs(){
+void CollectionSol::set_constants(){
     if(force_mag <= 0.0){
         c0 = 1; c1 = 1; c2 = .5;
         sigmar = 0; sigmav = 0; corr = 1;
@@ -309,16 +309,16 @@ CollectionDamped::CollectionDamped(sptr<Box> box, sptr<AtomGroup> atoms,
         vector<sptr<StateTracker> > trackers, vector<sptr<Constraint> > constraints) : 
             Collection::Collection(box, atoms, interactions, trackers, constraints, false),
             dt(dt), damping(damp){
-    // because that should be done *after* setCs()
+    // because that should be done *after* set_constants()
     if(dt <= 0){
 		throw std::invalid_argument("Collection::CollectionSol: dt >= 0");
 	};
    
-    setCs();
+    set_constants();
     initialize();
 };
 
-void CollectionDamped::setCs(){
+void CollectionDamped::set_constants(){
     if(damping <= 0.0){
         c0 = 1; c1 = 1; c2 = .5;
         return;
@@ -591,7 +591,7 @@ void CollectionNLCG::stepx(flt dx){
     //~ cout << " -- V = " << obox->V() << '\n';
 }
 
-flt CollectionNLCG::getLsq(){
+flt CollectionNLCG::get_length_squared(){
     OriginBox& obox = (OriginBox&) *box;
     #ifdef VEC3D
     return pow(obox.V(), 2.0/3.0);
@@ -609,7 +609,7 @@ flt CollectionNLCG::fdotf(){
         returnvalue += a.f.squaredNorm();
     }
     
-    return returnvalue / getLsq() + fl * fl;
+    return returnvalue / get_length_squared() + fl * fl;
 }
 
 flt CollectionNLCG::fdota(){
@@ -620,7 +620,7 @@ flt CollectionNLCG::fdota(){
         returnvalue += a.f.dot(a.a);
     }
     
-    return returnvalue / getLsq() + fl * al;
+    return returnvalue / get_length_squared() + fl * al;
 }
 
 flt CollectionNLCG::fdotv(){
@@ -631,7 +631,7 @@ flt CollectionNLCG::fdotv(){
         returnvalue += a.f.dot(a.v);
     }
     
-    return returnvalue / getLsq() + fl * vl;
+    return returnvalue / get_length_squared() + fl * vl;
 }
 
 flt CollectionNLCG::vdotv(){
@@ -642,7 +642,7 @@ flt CollectionNLCG::vdotv(){
         returnvalue += a.v.squaredNorm();
     }
     
-    return returnvalue / getLsq() + vl * vl;
+    return returnvalue / get_length_squared() + vl * vl;
 }
 
 void CollectionNLCG::timestep(){
@@ -1160,7 +1160,7 @@ flt CollectionNoseHoover::hamiltonian(){
     return H;
 }
 
-flt CollectionGaussianT::setxi(){
+flt CollectionGaussianT::set_xi(){
     flt xiNumerator = 0, xiDenominator = 0;
     for(uint i=0; i<atoms->size(); i++){
             flt m = (*atoms)[i].m;
@@ -1173,7 +1173,7 @@ flt CollectionGaussianT::setxi(){
 
 void CollectionGaussianT::set_forces(bool constraints_and_a, bool shouldwesetxi){
     Collection::set_forces(constraints_and_a);
-    if(shouldwesetxi) setxi();
+    if(shouldwesetxi) set_xi();
 }
 
 void CollectionGaussianT::timestep(){
@@ -1195,7 +1195,7 @@ void CollectionGaussianT::timestep(){
     
     // now we get z and set xi
     //~ flt oldxi = xi;
-    flt z = setxi();
+    flt z = set_xi();
     xi = z/(1 - z*dt/2);
     
     // And finish v

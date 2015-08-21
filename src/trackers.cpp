@@ -247,7 +247,7 @@ flt Grid::time_to_edge(Atom &a){
     return t;
 };
 
-vector<IDPair> Grid::allpairs(){
+vector<IDPair> Grid::all_pairs(){
     vector<IDPair> v = vector<IDPair>();
     for(iterator p=begin(); p!=end(); ++p){
         IDPair pr = *p;
@@ -260,7 +260,7 @@ vector<IDPair> Grid::allpairs(){
     return v;
 };
 
-vector<AtomID> Grid::allpairs(AtomID a){
+vector<AtomID> Grid::all_pairs(AtomID a){
     vector<AtomID> v = vector<AtomID>();
     for(pair_iter p=pairs(a); p!=p.end(); ++p) v.push_back(*p);
     return v;

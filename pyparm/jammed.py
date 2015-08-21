@@ -354,7 +354,7 @@ class Packing:
     def dist(self, other, tol=1e-8, maxt = 1000000):
         tree = self.dist_tree(other, tol=tol)
         tree.expand(maxt)
-        return sqrt(tree.curbest().distsq)*self.L
+        return sqrt(tree.current_best().distance_squared)*self.L
         
     @staticmethod
     def _cage_pts(xyz, neighbor_xyzs, sigma, neighbor_sigmas, L, M, R):
@@ -408,12 +408,12 @@ class Packing:
             
             def get_pts():
                 pts = self._cage_pts(xyz, nxyzs, s, nsigs, 1.0, M, curR)
-                maxdist = np.max(np.sqrt(np.sum((pts-xyz)**2, axis=1))) if len(pts) > 0 else 0
-                return pts, maxdist
+                max_dist = np.max(np.sqrt(np.sum((pts-xyz)**2, axis=1))) if len(pts) > 0 else 0
+                return pts, max_dist
             
-            pts, maxdist = [], curR
-            while maxdist * (1. + padding) > curR:
-                # print(n, curpow, maxdist * (1. + padding), curR)
+            pts, max_dist = [], curR
+            while max_dist * (1. + padding) > curR:
+                # print(n, curpow, max_dist * (1. + padding), curR)
                 curpow += 1
                 curR = R * pow(Rfactor, curpow)
                 curM = M
@@ -426,17 +426,17 @@ class Packing:
                 nix = cur_neighbors[n]
                 nxyzs = self.rs[nix, :]
                 nsigs = self.sigmas[nix]
-                pts, maxdist = get_pts()
-                if maxdist * (1. + padding) > curR: continue
+                pts, max_dist = get_pts()
+                if max_dist * (1. + padding) > curR: continue
             
                 while len(pts) < Mfactor * M:
                     # print(curM, len(pts), Mfactor * M, len(pts) < Mfactor * M)
                     pts2, maxdist2 = get_pts()
-                    maxdist = max((maxdist, maxdist2))
+                    max_dist = max((max_dist, maxdist2))
                     pts = np.concatenate((pts, pts2))
                     curM += M
-                    if maxdist * (1. + padding) > curR: break
-                if maxdist > 0.5:
+                    if max_dist * (1. + padding) > curR: break
+                if max_dist > 0.5:
                     raise ValueError('Cage size filling entire space, cannot continue.')
             
             fracgood = len(pts) / curM
@@ -687,12 +687,12 @@ class Packing3d:
             
             def get_pts():
                 pts = self._cage_pts(xyz, nxyzs, s, nsigs, 1.0, M, curR)
-                maxdist = np.max(np.sqrt(np.sum((pts-xyz)**2, axis=1))) if len(pts) > 0 else 0
-                return pts, maxdist
+                max_dist = np.max(np.sqrt(np.sum((pts-xyz)**2, axis=1))) if len(pts) > 0 else 0
+                return pts, max_dist
             
-            pts, maxdist = [], curR
-            while maxdist * (1. + padding) > curR:
-                # print(n, curpow, maxdist * (1. + padding), curR)
+            pts, max_dist = [], curR
+            while max_dist * (1. + padding) > curR:
+                # print(n, curpow, max_dist * (1. + padding), curR)
                 curpow += 1
                 curR = R * pow(Rfactor, curpow)
                 curM = M
@@ -705,17 +705,17 @@ class Packing3d:
                 nix = cur_neighbors[n]
                 nxyzs = self.rs[nix, :]
                 nsigs = self.sigmas[nix]
-                pts, maxdist = get_pts()
-                if maxdist * (1. + padding) > curR: continue
+                pts, max_dist = get_pts()
+                if max_dist * (1. + padding) > curR: continue
             
                 while len(pts) < Mfactor * M:
                     # print(curM, len(pts), Mfactor * M, len(pts) < Mfactor * M)
                     pts2, maxdist2 = get_pts()
-                    maxdist = max((maxdist, maxdist2))
+                    max_dist = max((max_dist, maxdist2))
                     pts = np.concatenate((pts, pts2))
                     curM += M
-                    if maxdist * (1. + padding) > curR: break
-                if maxdist > 0.5:
+                    if max_dist * (1. + padding) > curR: break
+                if max_dist > 0.5:
                     raise ValueError('Cage size filling entire space, cannot continue.')
             
             fracgood = len(pts) / curM

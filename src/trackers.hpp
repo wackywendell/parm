@@ -163,7 +163,6 @@ class NeighborList : public StateTracker{
             //assert(i<curpairs.size());
             return curpairs[i];
         };
-        //~ inline vector<IDPair> getpairs(){return vector<IDPair>(curpairs);};
         ~NeighborList(){};
 };
 
@@ -239,9 +238,9 @@ class Grid {
         flt time_to_edge(uint i){return time_to_edge((*atoms)[i]);}
 
         /** Return a list of all pairs.\ SLOW function, but useful for debugging. */
-        vector<IDPair> allpairs();
+        vector<IDPair> all_pairs();
         /** Return a list of all neighbors of a given Atom.\ SLOW function, but useful for debugging. */
-        vector<AtomID> allpairs(AtomID a);
+        vector<AtomID> all_pairs(AtomID a);
 
         uint numcells(uint i){assert(i<NDIM); return widths[i];}
         #ifdef VEC2D

@@ -355,12 +355,12 @@ void ContactTracker::update(Box &box){
 };
 
 void EnergyTracker::update(Box &box){
-    if(nskipped + 1 < nskip){
-        nskipped += 1;
+    if(n_skipped + 1 < n_skip){
+        n_skipped += 1;
         return;
     }
     
-    nskipped = 0;
+    n_skipped = 0;
     uint Natoms = atoms->size();
     flt curU = 0, curK = 0;
     for(uint i=0; i<Natoms; ++i){
@@ -383,13 +383,13 @@ void EnergyTracker::update(Box &box){
     N++;
 };
 
-void EnergyTracker::setU0(Box &box){
+void EnergyTracker::set_U0(Box &box){
     flt curU = 0;
     vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it != interactions.end(); ++it){
         curU += (*it)->energy(box);
     }
-    setU0(curU);
+    set_U0(curU);
 };
 
 
@@ -423,18 +423,18 @@ bool RsqTracker1::update(Box& box, AtomGroup& atoms, unsigned long t, Vec com){
         Vec r = atoms[i].x - com;
         // We don't want the boxed distance - we want the actual distance moved!
         Vec pastr = pastlocs.row(i);
-        Vec distsq = r - pastr;
+        Vec distance_squared = r - pastr;
         Vec distsqsq = Vec::Zero();
         flt dist4 = 0;
         for(uint j=0; j<NDIM; ++j){
-            distsq[j] *= distsq[j];
-            distsqsq[j] = distsq[j]*distsq[j];
-            dist4 += distsq[j];
+            distance_squared[j] *= distance_squared[j];
+            distsqsq[j] = distance_squared[j]*distance_squared[j];
+            dist4 += distance_squared[j];
         };
         
         dist4 *= dist4;
         
-        xyz2sums.row(i) += distsq;
+        xyz2sums.row(i) += distance_squared;
         xyz4sums.row(i) += distsqsq;
         r4sums[i] += dist4;
         pastlocs.row(i) = r;
@@ -760,9 +760,9 @@ void RDiffs::update(Box &box){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool JammingList::operator<(const JammingList& other ) const{
-    //return distsq < other.distsq;
-    if(other.distsq  - distsq > 1e-8) return true;
-    if(distsq  - other.distsq > 1e-8) return false;
+    //return distance_squared < other.distance_squared;
+    if(other.distance_squared  - distance_squared > 1e-8) return true;
+    if(distance_squared  - other.distance_squared > 1e-8) return false;
     //~ cout << "\nWithin 1e-8\n";
     
     uint sz = size();
@@ -802,9 +802,9 @@ bool JammingList::operator<(const JammingList& other ) const{
 */
 
 bool JammingListRot::operator<(const JammingListRot& other ) const {
-    //return distsq < other.distsq;
-    if(other.distsq  - distsq > 1e-8) return true;
-    if(distsq  - other.distsq > 1e-8) return false;
+    //return distance_squared < other.distance_squared;
+    if(other.distance_squared  - distance_squared > 1e-8) return true;
+    if(distance_squared  - other.distance_squared > 1e-8) return false;
     
     uint sz = size();
     uint osz = other.size();
@@ -869,7 +869,7 @@ list<JammingListRot> JammingTree2::expand(JammingListRot curjlist){
         if (found != curlist.end()) continue;
         
         JammingListRot newjlist = JammingListRot(curjlist, i, 0);
-        newjlist.distsq = distance(newjlist);
+        newjlist.distance_squared = distance(newjlist);
         newlists.push_back(newjlist);
     }
     return newlists;
@@ -889,7 +889,7 @@ bool JammingTree2::expand(){
     jlists.pop_front();
     //~ cout << "Popped.\n";
     jlists.merge(newlists);
-    //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
+    //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distance_squared << "\n";
     return true;
 };
 
@@ -920,7 +920,7 @@ list<JammingListRot> JammingTreeBD::expand(JammingListRot curjlist){
         if (found != curlist.end()) continue;
         
         JammingListRot newjlist = JammingListRot(curjlist, i, 0);
-        newjlist.distsq = distance(newjlist);
+        newjlist.distance_squared = distance(newjlist);
         newlists.push_back(newjlist);
     }
     return newlists;
@@ -938,7 +938,7 @@ bool JammingTreeBD::expand(){
 };
 
 
-Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locationsB(JammingListRot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_B(JammingListRot jlist){
     uint rot = jlist.rotation;
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(jlist.size(), NDIM);
     
@@ -957,7 +957,7 @@ Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locationsB(JammingListRot
 };
 
 
-Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locationsA(JammingListRot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_A(JammingListRot jlist){
     uint rot = jlist.rotation;
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(Bs[rot].rows(), NDIM);
     

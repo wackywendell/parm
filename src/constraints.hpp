@@ -218,40 +218,40 @@ class EnergyTracker : public StateTracker{
         vector<sptr<Interaction> > interactions;
 
         uint N;
-        uint nskip, nskipped;
+        uint n_skip, n_skipped;
         flt U0;
         flt Es, Us, Ks;
         flt Esq, Usq, Ksq;
     public:
         EnergyTracker(sptr<AtomGroup> atoms,
-            vector<sptr<Interaction> > interactions, uint nskip=1)
+            vector<sptr<Interaction> > interactions, uint n_skip=1)
              : atoms(atoms),
-            interactions(interactions), N(0), nskip(max(nskip,1u)), nskipped(0),
+            interactions(interactions), N(0), n_skip(max(n_skip,1u)), n_skipped(0),
             U0(0),Es(0),Us(0),Ks(0), Esq(0), Usq(0), Ksq(0){};
         void update(Box &box);
         void reset(){
-            nskipped=0;
+            n_skipped=0;
             N=0; Es=0; Us=0; Ks=0;
             Esq=0; Usq=0; Ksq=0;
         };
-        void setU0(flt newU0){
+        void set_U0(flt newU0){
             U0 = newU0;
             reset();
         };
-        void setU0(Box &box);
-        flt getU0(){return U0;};
+        void set_U0(Box &box);
+        flt get_U0(){return U0;};
 
         flt E(){return Es/((flt) N);};
         flt U(){return Us/((flt) N);};
         flt K(){return Ks/((flt) N);};
-        flt Estd(){return sqrt(Esq/N -Es*Es/N/N);};
-        flt Kstd(){return sqrt(Ksq/N -Ks*Ks/N/N);};
-        flt Ustd(){return sqrt(Usq/N -Us*Us/N/N);};
-        flt Esqmean(){return Esq/N;};
-        flt Ksqmean(){return Ksq/N;};
-        flt Usqmean(){return Usq/N;};
-        //~ flt Ustd(){return sqrt((Usq -(U*U)) / ((flt) N));};
-        //~ flt Kstd(){return sqrt((Ksq -(K*K)) / ((flt) N));};
+        flt E_std(){return sqrt(Esq/N -Es*Es/N/N);};
+        flt K_std(){return sqrt(Ksq/N -Ks*Ks/N/N);};
+        flt U_std(){return sqrt(Usq/N -Us*Us/N/N);};
+        flt E_squared_mean(){return Esq/N;};
+        flt K_squared_mean(){return Ksq/N;};
+        flt U_squared_mean(){return Usq/N;};
+        //~ flt U_std(){return sqrt((Usq -(U*U)) / ((flt) N));};
+        //~ flt K_std(){return sqrt((Ksq -(K*K)) / ((flt) N));};
         uint n(){return N;};
 };
 
@@ -395,18 +395,18 @@ class RDiffs : public StateTracker {
 /* We have two packings, A and B, and want to know the sequence {A1, A2, A3...}
  * such that particle A1 of packing 1 matches particle 1 of packing B.
  * A JammingList is a partial list; it has a list {A1 .. An}, with n / N
- * particles assigned, with a total distance² of distsq.
+ * particles assigned, with a total distance² of distance_squared.
 */
 class JammingList {
     public:
         vector<uint> assigned;
-        flt distsq;
+        flt distance_squared;
 
-        JammingList() : assigned(), distsq(0){};
+        JammingList() : assigned(), distance_squared(0){};
         JammingList(const JammingList& other)
-            : assigned(other.assigned), distsq(other.distsq){};
+            : assigned(other.assigned), distance_squared(other.distance_squared){};
         JammingList(const JammingList& other, uint expand, flt addeddist)
-            : assigned(other.size() + 1, 0), distsq(other.distsq + addeddist){
+            : assigned(other.size() + 1, 0), distance_squared(other.distance_squared + addeddist){
             for(uint i=0; i < other.size(); i++){
                 assigned[i] = other.assigned[i];
             }
@@ -463,7 +463,7 @@ class JammingTree {
             jlists.pop_front();
             //~ cout << "Popped.\n";
             jlists.merge(newlists);
-            //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
+            //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distance_squared << "\n";
             return true;
         }
         bool expand(uint n){
@@ -473,12 +473,12 @@ class JammingTree {
             }
             return retval;
         }
-        list<JammingList> &mylist(){return jlists;};
-        list<JammingList> copylist(){return jlists;};
+        list<JammingList> &my_list(){return jlists;};
+        list<JammingList> copy_list(){return jlists;};
 
-        JammingList curbest(){
+        JammingList current_best(){
             JammingList j = JammingList(jlists.front());
-            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
+            //~ cout << "Best size: " << j.size() << " dist: " << j.distance_squared;
             //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
             //~ cout << '\n';
             return j;
@@ -527,9 +527,9 @@ class JammingTree2 {
             }
             return retval;
         }
-        bool expandto(flt maxdistsq){
+        bool expand_to(flt maxdistsq){
             bool retval = true;
-            while((maxdistsq <= 0 or jlists.front().distsq < maxdistsq) and retval){
+            while((maxdistsq <= 0 or jlists.front().distance_squared < maxdistsq) and retval){
                 retval = expand();
             };
             return retval;
@@ -537,23 +537,23 @@ class JammingTree2 {
         static Vec straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
         static flt straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
 
-        list<JammingListRot> &mylist(){return jlists;};
-        list<JammingListRot> copylist(){return jlists;};
-        list<JammingListRot> copylist(uint n){
+        list<JammingListRot> &my_list(){return jlists;};
+        list<JammingListRot> copy_list(){return jlists;};
+        list<JammingListRot> copy_list(uint n){
             list<JammingListRot>::iterator last = jlists.begin();
             advance(last, n);
             return list<JammingListRot>(jlists.begin(), last);
         };
 
 
-        JammingListRot curbest(){
+        JammingListRot current_best(){
             if(jlists.empty()){
                 JammingListRot bad_list = JammingListRot();
-                bad_list.distsq = -1;
+                bad_list.distance_squared = -1;
                 return bad_list;
                 }
             JammingListRot j = JammingListRot(jlists.front());
-            //~ cout << "Best size: " << j.size() << " dist: " << j.distsq;
+            //~ cout << "Best size: " << j.size() << " dist: " << j.distance_squared;
             //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " << j.assigned[j.size()-1] << "]";
             //~ cout << '\n';
             return j;
@@ -567,10 +567,10 @@ class JammingTree2 {
 
         uint size(){return (uint) jlists.size();};
 
-        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsB(JammingListRot jlist);
-        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsB(){return locationsB(curbest());};
-        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsA(JammingListRot jlist);
-        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsA(){return locationsA(curbest());};
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_B(JammingListRot jlist);
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_B(){return locations_B(current_best());};
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_A(JammingListRot jlist);
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_A(){return locations_A(current_best());};
         virtual ~JammingTree2(){};
 };
 

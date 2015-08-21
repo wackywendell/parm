@@ -231,7 +231,7 @@ class RandomHertzianVerletTest(NPTestCase):
         
         collec = self.collec = sim3.CollectionVerlet(
             self.box, self.atoms, self.dt,
-            [self.hertz], [self.hertz.nlist()], [])
+            [self.hertz], [self.hertz.neighbor_list()], [])
         
         print('EKUT:', collec.energy(), collec.kinetic_energy(),
             collec.potential_energy(), collec.temp())
@@ -243,7 +243,7 @@ class RandomHertzianVerletTest(NPTestCase):
             a.v = np.random.normal(size=(3,))
             a.f = np.random.normal(size=(3,))
         
-        nl = self.hertz.nlist()
+        nl = self.hertz.neighbor_list()
         nl.update_list(True)
     
     def reset(self):
@@ -316,7 +316,7 @@ class RandomRigidConstraintTest(NPTestCase):
             a.f = np.random.normal(size=(3,))
             self.hertz.add(sim3.HertzianAtom(a, 100.0, radius*2.0, 2.0))
 
-        nl = self.hertz.nlist()
+        nl = self.hertz.neighbor_list()
         for s in self.subgroups:
             for n, a in enumerate(s):
                 alist = list(s)
@@ -328,7 +328,7 @@ class RandomRigidConstraintTest(NPTestCase):
         self.rigids = [sim3.RigidConstraint(self.box, s) for s in self.subgroups]
         collec = self.collec = sim3.CollectionVerlet(
             self.box, self.atoms, self.dt,
-            [self.hertz], [self.hertz.nlist()], self.rigids)
+            [self.hertz], [self.hertz.neighbor_list()], self.rigids)
         
         print('EKUT:', collec.energy(), collec.kinetic_energy(),
             collec.potential_energy(), collec.temp())

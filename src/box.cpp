@@ -102,15 +102,15 @@ Vec SCBox::rand_loc(flt min_dist_to_wall){
         v[2] *= 2*Rmin;
         #endif
 
-        flt distsq = pow(v[1],2);
-        if(abs(v[0]) >= L/2.0) distsq += pow(abs(v[0]) - L/2.0, 2.0);
+        flt distance_squared = pow(v[1],2);
+        if(abs(v[0]) >= L/2.0) distance_squared += pow(abs(v[0]) - L/2.0, 2.0);
 
 
         #ifndef VEC2D
-        distsq += pow(v[2],2);
+        distance_squared += pow(v[2],2);
         #endif
 
-        if(distsq <= Rminsq) break;
+        if(distance_squared <= Rminsq) break;
     };
     return v;
 };

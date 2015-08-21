@@ -68,7 +68,7 @@ int main(){
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
     boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
         hertzian(new NListed<HertzianAtom, HertzianPair>(obox, atomptr, 0.1*sigma));
-    boost::shared_ptr<NeighborList> nl = hertzian->nlist();
+    boost::shared_ptr<NeighborList> nl = hertzian->neighbor_list();
     // ^ this is the Interaction
     
     // Note that NListed is a class template; its an Interaction that

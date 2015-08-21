@@ -55,7 +55,7 @@ flt FixedForceRegionAtom::energy(Box &box){
     return E;
 };
 
-void FixedForceRegionAtom::setForce(Box &box){
+void FixedForceRegionAtom::set_force(Box &box){
     flt dist = (*this)->x.dot(direction);
     flt F = Fs[Fs.size() - 1];
     for(uint i=0; i < boundaries.size(); ++i){
@@ -127,7 +127,7 @@ array<Vec, 3> BondAngle::forces(const Vec& r1, const Vec& r2){
 
 #ifdef VEC3D
 Dihedral::Dihedral(const vector<flt> cvals, const vector<flt> svals, bool usepow) :
-                    coscoeffs(cvals), sincoeffs(svals), usepow(usepow){
+                    cos_coefficients(cvals), sincoeffs(svals), usepow(usepow){
 }
 
 DihedralDerivs Dihedral::dr_dcostheta(const Vec &r1, const Vec &r2,
@@ -211,9 +211,9 @@ array<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
     DihedralDerivs dd = dr_dcostheta(r1, r2, r3);
     flt dcostheta;
     if(sincoeffs.empty() and !usepow){
-        dcostheta = dudcosthetaCOS(dd.costheta); // F = -dU/d(costheta)
+        dcostheta = dU_dcostheta_cos(dd.costheta); // F = -dU/d(costheta)
     } else {
-        dcostheta = dudcostheta(getang(r1, r2, r3));
+        dcostheta = dU_dcostheta(get_angle(r1, r2, r3));
     }
     
     for(uint i=0; i<4; i++) dd.derivs[i] *= -dcostheta;  // F = -dU/d(costheta)
@@ -237,29 +237,29 @@ array<Vec,4> Dihedral::forces(const Vec &r1, const Vec &r2,
 
 }
 
-flt Dihedral::dudcosthetaCOS(const flt costheta) const{
+flt Dihedral::dU_dcostheta_cos(const flt costheta) const{
     assert(sincoeffs.empty());
     assert(!usepow);
     flt tot = 0;
-    unsigned int cosmx = (unsigned int)(coscoeffs.size());
+    unsigned int cosmx = (unsigned int)(cos_coefficients.size());
     for(unsigned int i=1; i < cosmx; ++i){
-        tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
+        tot += cos_coefficients[i] * i * pow(costheta, flt(i-1));
     }
     //~ cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     //~ if(tot > 100) cout << "dudcos tot: " << tot << ", cos: " << costheta << '\n';
     return tot;
 }
 
-flt Dihedral::dudcostheta(const flt theta) const{
+flt Dihedral::dU_dcostheta(const flt theta) const{
     flt tot = 0;
-    unsigned int cosmx = (unsigned int)(coscoeffs.size());
+    unsigned int cosmx = (unsigned int)(cos_coefficients.size());
     unsigned int sinmx = (unsigned int)(sincoeffs.size());
     unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
     if(usepow) {
         flt costheta = cos(theta), sintheta = sin(theta);
         flt cottheta = -costheta / sintheta;
         for(unsigned int i=1; i < mx; ++i){
-            if (i < cosmx) tot += coscoeffs[i] * i * pow(costheta, flt(i-1));
+            if (i < cosmx) tot += cos_coefficients[i] * i * pow(costheta, flt(i-1));
             if (i < sinmx) tot += sincoeffs[i] * i * cottheta
                                     * pow(sintheta, flt(i-1));
         }
@@ -267,7 +267,7 @@ flt Dihedral::dudcostheta(const flt theta) const{
         flt csctheta = 1 / sin(theta);
         for(unsigned int i=1; i < mx; ++i){
             flt cositheta = cos(i*theta), sinitheta = sin(i*theta);
-            if (i < cosmx) tot += coscoeffs[i] * csctheta * i * sinitheta;
+            if (i < cosmx) tot += cos_coefficients[i] * csctheta * i * sinitheta;
             if (i < sinmx) tot -= sincoeffs[i] * csctheta * i * cositheta;
         }
     }
@@ -275,7 +275,7 @@ flt Dihedral::dudcostheta(const flt theta) const{
     return tot;
 }
 
-flt Dihedral::getcos(const Vec &r1, const Vec &r2,
+flt Dihedral::get_cos(const Vec &r1, const Vec &r2,
                    const Vec &r3){
    // The two normals to the planes
     Vec n1 = r1.cross(r2);
@@ -290,7 +290,7 @@ flt Dihedral::getcos(const Vec &r1, const Vec &r2,
     return (n1.dot(n2) / n1mag / n2mag);
 };
 
-flt Dihedral::getang(const Vec &r1, const Vec &r2,
+flt Dihedral::get_angle(const Vec &r1, const Vec &r2,
                    const Vec &r3){
 
     return atan2(r1.dot(r2.cross(r3))*r2.norm(), (r1.cross(r2).dot(r2.cross(r3))));
@@ -301,17 +301,17 @@ flt Dihedral::energy(const flt ang) const{
     flt costheta = (usepow ? cos(ang) : NAN);
     flt sintheta = (usepow ? sin(ang) : NAN);
 
-    unsigned int cosmx = (unsigned int)(coscoeffs.size());
+    unsigned int cosmx = (unsigned int)(cos_coefficients.size());
     unsigned int sinmx = (unsigned int)(sincoeffs.size());
     unsigned int mx = cosmx > sinmx ? cosmx : sinmx;
 
     flt tot = 0;
     for(unsigned int i=0; i < mx; ++i){
         if(usepow) {
-            if(i < cosmx) tot += coscoeffs[i] * pow(costheta, flt(i));
+            if(i < cosmx) tot += cos_coefficients[i] * pow(costheta, flt(i));
             if(i < sinmx) tot += sincoeffs[i] * pow(sintheta, flt(i));
         } else {
-            if(i < cosmx) tot += coscoeffs[i] * cos(i * ang);
+            if(i < cosmx) tot += cos_coefficients[i] * cos(i * ang);
             if(i < sinmx) tot += sincoeffs[i] * sin(i * ang);
         }
     }
@@ -641,7 +641,7 @@ flt Dihedrals::mean_dists() const{
         Vec r1 = DihedralGrouping::diff(atom1.x, atom2.x);
         Vec r2 = DihedralGrouping::diff(atom2.x, atom3.x);
         Vec r3 = DihedralGrouping::diff(atom3.x, atom4.x);
-        flt cosine = Dihedral::getcos(r1, r2, r3);
+        flt cosine = Dihedral::get_cos(r1, r2, r3);
         dist += cosine;
         N++;
     }
@@ -872,7 +872,7 @@ flt SoftWallCylinder::pressure(Box &box){
     return 0;
 };
 
-SpheroCylinderDiff SCPair::NearestLoc(Box &box){
+SpheroCylinderDiff SCPair::nearest_location(Box &box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
     SpheroCylinderDiff diff;
@@ -921,13 +921,13 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
             lambda2s = copysign(l2/2, lambda2p);
             lambda1s = u1r12 + (lambda2s*u1u2);
             //~ cout << "new l2s: " << lambda2s << "  l1s: " << lambda1s;
-            lambda1s = confineRange(-l1/2, lambda1s, l1/2);
+            lambda1s = confine_range(-l1/2, lambda1s, l1/2);
             //~ cout << " -> " << lambda1s << "\n";
         } else {
             lambda1s = copysign(l1/2, lambda1p);
             lambda2s = -u2r12 + (lambda1s*u1u2);
             //~ cout << "new l1s: " << lambda1s << "  l2s: " << lambda2s;
-            lambda2s = confineRange(-l2/2, lambda2s, l2/2);
+            lambda2s = confine_range(-l2/2, lambda2s, l2/2);
             //~ cout << " -> " << lambda2s << "\n";
         }
     }
@@ -939,7 +939,7 @@ SpheroCylinderDiff SCPair::NearestLoc(Box &box){
     return diff;
 };
 
-void SCPair::applyForce(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, flt IoverM2){
+void SCPair::apply_force(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1, flt IoverM2){
     Atom &a1 = *p1.first();
     Atom &a1p = *p1.last();
     Atom &a2 = *p2.first();
@@ -981,7 +981,7 @@ flt SCSpringList::energy(Box &box){
             if(ignore_list.count(pair) > 0) continue;
             IDPair pj = scs->pair(j);
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, ls[i], ls[j]);
-            SpheroCylinderDiff diff = scp.NearestLoc(box);
+            SpheroCylinderDiff diff = scp.nearest_location(box);
             //~ cout << "SCSpringList diff delta: " << diff.delta << '\n';
             //~ cout << "SCSpringList diff lambdas: " << diff.lambda1 << "    " << diff.lambda2 << '\n';
             E += scp.energy(box, diff);
@@ -1003,9 +1003,9 @@ void SCSpringList::set_forces(Box &box){
             IDPair pj = scs->pair(j);
             flt l2 = ls[j];
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
-            SpheroCylinderDiff diff = scp.NearestLoc(box);
+            SpheroCylinderDiff diff = scp.nearest_location(box);
             Vec f = scp.forces(box, diff);
-            scp.applyForce(box, f, diff, l1*l1/4, l2*l2/4);
+            scp.apply_force(box, f, diff, l1*l1/4, l2*l2/4);
         }
     }
 };

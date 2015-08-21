@@ -143,7 +143,7 @@ int main(int argc, char **argv){
         new NListed<HertzianAtom, HertzianPair>(
             boxptr, atomptr, 0.4*(sigcut*sigma)
     ));
-    boost::shared_ptr<NeighborList> nl = hertz->nlist();
+    boost::shared_ptr<NeighborList> nl = hertz->neighbor_list();
     // ^ this is the Interaction
     
     // A Hertzian Interaction has energy 

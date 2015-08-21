@@ -161,3 +161,14 @@ getNorm get_normal
 setNorm set_normal
 setAxis set_axis
 getAxis get_axis
+getpair get_pair
+getSigma    get_sigma
+getWalls    get_walls
+lastupdate  last_update
+maxdelta    max_delta
+maxsize max_size
+maxdist max_dist
+nlist   neighbor_list
+pairiter    pair_iter
+setForce    set_force
+allpairs    all_pairs

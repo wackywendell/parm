@@ -192,7 +192,7 @@ class CollectionSol : public Collection {
         flt sigmar, sigmav, corr;
         flt c0, c1, c2;
         //! Set c0, c1, c2, sigmar, sigmav, corr from desT, dt, and damping
-        void setCs();
+        void set_constants();
 
     public:
         CollectionSol(
@@ -214,11 +214,11 @@ class CollectionSol : public Collection {
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
         //! Change the desired damping coefficient \f$\xi\f$ or temperature \f$T\f$.
         void change_temperature(const flt damp, const flt desired_temperature){
-            damping = damp; force_mag=damp; desT = desired_temperature; setCs();};
+            damping = damp; force_mag=damp; desT = desired_temperature; set_constants();};
         void change_force(const flt damp, const flt fmag, const flt desired_temperature){
         //! Change the timestep \f$\delta t\f$.
-            damping = damp; force_mag=fmag; desT = desired_temperature; setCs();};
-        void set_dt(const flt newdt){dt = newdt; setCs();};
+            damping = damp; force_mag=fmag; desT = desired_temperature; set_constants();};
+        void set_dt(const flt newdt){dt = newdt; set_constants();};
         void timestep();
         //void seed(uint n){gauss.seed(n);};
         //void seed(){gauss.seed();};
@@ -237,7 +237,7 @@ class CollectionDamped : public Collection {
         flt dt;
         flt damping;
         flt c0, c1, c2;
-        void setCs();
+        void set_constants();
 
     public:
         CollectionDamped(sptr<Box> box, sptr<AtomGroup> atoms,
@@ -246,8 +246,8 @@ class CollectionDamped : public Collection {
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >());
         void change_damping(const flt damp){
-            damping = damp; setCs();};
-        void set_dt(const flt newdt){dt = newdt; setCs();};
+            damping = damp; set_constants();};
+        void set_dt(const flt newdt){dt = newdt; set_constants();};
         void timestep();
 };
 
@@ -371,7 +371,7 @@ class CollectionNLCG : public Collection {
         uint sec;
 
         void stepx(flt dx);
-        flt getLsq();
+        flt get_length_squared();
         flt fdota();
         flt fdotf();
         flt fdotv();
@@ -558,7 +558,7 @@ class CollectionNoseHoover : public Collection {
             };
         void set_dt(flt newdt){dt=newdt;};
         void set_Q(flt newQ){Q=newQ;};
-        void resetBath(){xi=0;lns=0;};
+        void reset_bath(){xi=0;lns=0;};
 
         void timestep();
         flt hamiltonian();
@@ -572,7 +572,7 @@ class CollectionGaussianT : public Collection {
     protected:
         flt dt, Q;
         flt xi;
-        flt setxi();
+        flt set_xi();
 
     public:
         CollectionGaussianT(sptr<Box> box, sptr<AtomGroup> atoms,
@@ -585,7 +585,7 @@ class CollectionGaussianT : public Collection {
         void set_dt(flt newdt){dt=newdt;};
         void set_Q(flt newQ){Q=newQ;};
         void set_forces(bool constraints_and_a=true){set_forces(true,true);};
-        void set_forces(bool constraints_and_a, bool setxi);
+        void set_forces(bool constraints_and_a, bool set_xi);
         void timestep();
 };
 
