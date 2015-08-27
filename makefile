@@ -52,7 +52,7 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 
 py$(SFX): pyparm/_sim$(SFX).so
 
-pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp src/vec.hpp
+pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/array.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
 	cd src ; $(SWIG) $(OPTSET) sim.i
 	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
 	rm src/sim_wrap.cxx
@@ -66,22 +66,22 @@ pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
 
 #-------------------------------------------------------------------------------
 # The C++ modules
-lib/vecrand$(SFX).o: src/vec.hpp src/vecrand.hpp src/vecrand.cpp | lib
+lib/vecrand$(SFX).o: src/vecrand.hpp src/vecrand.cpp | lib
 	$(CXX) $(CCOPTS) $(OPTSET) -c src/vecrand.cpp -o lib/vecrand$(SFX).o
 
-lib/box$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/box.cpp | lib
+lib/box$(SFX).o: src/vecrand.hpp src/box.hpp src/box.cpp | lib
 	$(CXX) $(CCOPTS) $(OPTSET) -c src/box.cpp -o lib/box$(SFX).o
 
-lib/trackers$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp | lib
+lib/trackers$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp | lib
 	$(CXX) $(CCOPTS) $(OPTSET) -c src/trackers.cpp -o lib/trackers$(SFX).o
 
-lib/interaction$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp | lib
+lib/interaction$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp | lib
 	$(CXX) $(CCOPTS) $(OPTSET) -c src/interaction.cpp -o lib/interaction$(SFX).o
 
-lib/constraints$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp | lib
+lib/constraints$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp | lib
 	$(CXX) $(CCOPTS) $(OPTSET) -c src/constraints.cpp -o lib/constraints$(SFX).o
 
-lib/collection$(SFX).o: src/vec.hpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp | lib
+lib/collection$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp | lib
 	$(CXX) $(CCOPTS) $(OPTSET) -c src/collection.cpp -o lib/collection$(SFX).o
 
 lib/libsim$(SFX).so: lib/vecrand$(SFX).o lib/box$(SFX).o lib/trackers$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o | lib

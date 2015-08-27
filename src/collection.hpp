@@ -23,8 +23,10 @@ class collection {
         vector<sptr<constraint> > constraints;
         
         void update_trackers();
-        void update_constraints();
-        virtual flt setForcesGetPressure(bool seta=true);
+        void update_constraint_positions();
+        void update_constraint_velocities();
+        void update_constraint_forces();
+        virtual flt setForcesGetPressure(bool constraints_and_a=true);
         
     public:
         collection(sptr<Box> box, 
@@ -37,7 +39,7 @@ class collection {
         virtual void initialize();
         
         //Timestepping
-        virtual void setForces(bool seta=true);
+        virtual void setForces(bool constraints_and_a=true);
         virtual void timestep()=0;
         flt dof();
         
@@ -52,17 +54,17 @@ class collection {
         inline Vec com(){return atoms->com();};
         inline Vec comv(){return atoms->comv();};
         #ifdef VEC3D
-        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
-        inline Vec angmomentum(){return atoms->angmomentum(com(), *box);};
+        inline Vec angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline Vec angmomentum(){return atoms->angmomentum(com());};
         #elif defined VEC2D
-        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc, *box);};
-        inline flt angmomentum(){return atoms->angmomentum(com(), *box);};
+        inline flt angmomentum(const Vec &loc){return atoms->angmomentum(loc);};
+        inline flt angmomentum(){return atoms->angmomentum(com());};
         #endif
         flt gyradius(); // Radius of gyration
         virtual ~collection(){};
         
         void resetcomv(){atoms->resetcomv();};
-        void resetL(){atoms->resetL(*box);};
+        void resetL(){atoms->resetL();};
         void scaleVs(flt scaleby);
         void scaleVelocitiesT(flt T, bool minuscomv=true);
         void scaleVelocitiesE(flt E);
@@ -96,7 +98,12 @@ class StaticCollec : public collection {
             vector<sptr<constraint> > constraints=vector<sptr<constraint> >())
                             : collection(box, atoms, interactions, trackers, constraints){};
         virtual void timestep(){};
-        void update(){update_trackers(); update_constraints();};
+        void update(){
+            update_trackers();
+            update_constraint_positions();
+            update_constraint_velocities();
+            update_constraint_forces();
+        };
 };
 
 class collectionSol : public collection {
@@ -255,63 +262,6 @@ class collectionOverdamped : public collection {
         void setdt(flt newdt){dt=newdt;};
 };
 
-class collectionConjGradient : public collection {
-    // over-damped simulation, v = gamma * f
-    protected:
-        flt dt;
-        
-    public:
-        collectionConjGradient(sptr<Box> box, sptr<atomgroup> atoms,
-                const flt dt,
-                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
-                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
-                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints),
-                dt(dt){};
-        void timestep();
-        void timestepNewton();
-        void reset();
-        void setdt(flt newdt){dt=newdt;};
-};
-
-class collectionConjGradientBox : public collection {
-    // Conjugate-Gradient energy minimization, with 
-    // H = H0(x₁, x₂, …, L) + P V
-    // More specifically, we take the Nose-Hoover NPH hamiltonian,
-    // H = ½m V^⅔ Σṡᵢ² + ½Q V̇² + U(V^⅓ ⃗sᵢ…) + P₀ V
-    // and E = U(V^⅓ ⃗sᵢ…) + P₀ V
-    // We minimize using ⃗sᵢ and ln V as the two variables
-    /// NOTE: this CANNOT be used with neighbor lists, as it modifies
-    /// the box size as it goes; either that, or you have to update
-    /// the neighbor list more carefully each time.
-    protected:
-        flt dt;
-        flt P0, kappaV;
-        flt hV, FV, lastFV, dV;
-        flt maxdV;
-        
-    public:
-        collectionConjGradientBox(sptr<OriginBox> box, sptr<atomgroup> atoms,
-                const flt dt, const flt P0, const flt kappaV=1.0,
-                vector<sptr<interaction> > interactions=vector<sptr<interaction> >(),
-                vector<sptr<statetracker> > trackers=vector<sptr<statetracker> >(),
-                vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
-            collection(box, atoms, interactions, trackers, constraints),
-                dt(dt), P0(P0), kappaV(kappaV), hV(0), FV(0), lastFV(0), dV(0),
-                maxdV(-1){};
-        
-        flt kinetic();
-        
-        void timestep();
-        void timestepBox();
-        void timestepAtoms();
-        void reset();
-        void resize(flt V);
-        void setdt(flt newdt){dt=newdt; reset();};
-        void setP(flt P){P0 = P; reset();};
-        void setMaxdV(flt diff){maxdV = diff;};
-};
-
 class collectionNLCG : public collection {
     // Conjugate-Gradient energy minimization, with 
     // H = H0(x₁, x₂, …, L) + P V
@@ -360,8 +310,8 @@ class collectionNLCG : public collection {
         flt kinetic();  // Note: masses are ignored
         flt pressure();
         flt Hamiltonian();
-        void setForces(bool seta=true){setForces(seta,true);};
-        void setForces(bool seta, bool setV);
+        void setForces(bool constraints_and_a=true){setForces(constraints_and_a,true);};
+        void setForces(bool constraints_and_a, bool setV);
         
         void timestep();
         void descend(); // use steepest descent
@@ -554,8 +504,8 @@ class collectionGaussianT : public collection {
             dt(dt), Q(Q), xi(0){};
         void setdt(flt newdt){dt=newdt;};
         void setQ(flt newQ){Q=newQ;};
-        void setForces(bool seta=true){setForces(true,true);};
-        void setForces(bool seta, bool setxi);
+        void setForces(bool constraints_and_a=true){setForces(true,true);};
+        void setForces(bool constraints_and_a, bool setxi);
         void timestep();
 };
 
@@ -581,7 +531,7 @@ class collectionGear4A : public collection {
         uint ncorrec;
         vector<Vec> bs;
         void resetbs(){
-            bs.resize(atoms->size(), Vec());
+            bs.resize(atoms->size(), Vec::Zero());
         }
         
     public:
@@ -613,8 +563,8 @@ class collectionGear5A : public collection {
         vector<Vec> bs, cs;
         void resetbcs(){
             uint Natoms = atoms->size();
-            bs.resize(Natoms, Vec());
-            cs.resize(Natoms, Vec());
+            bs.resize(Natoms, Vec::Zero());
+            cs.resize(Natoms, Vec::Zero());
         }
         
     public:
@@ -645,9 +595,9 @@ class collectionGear6A : public collection {
         void resetbcds(){
             uint Natoms = atoms->size();
             bs.clear(); cs.clear(); ds.clear();
-            bs.resize(Natoms, Vec());
-            cs.resize(Natoms, Vec());
-            ds.resize(Natoms, Vec());
+            bs.resize(Natoms, Vec::Zero());
+            cs.resize(Natoms, Vec::Zero());
+            ds.resize(Natoms, Vec::Zero());
         }
         
     public:
@@ -685,12 +635,7 @@ class collectionRK4 : public collection {
                 vector<sptr<constraint> > constraints=vector<sptr<constraint> >()) :
             collection(box, ratoms, interactions, 
                         trackers, constraints), dt(dt), data(ratoms->vec().size()){
-                setForces();
-                update_constraints();
-                for(uint i=0; i<atoms->size(); ++i){
-                    atom& a = (*atoms)[i];
-                    a.a = a.f / a.m;
-                };
+                setForces(true);
             };
         void timestep();
         void setdt(flt newdt){dt=newdt;};
@@ -706,7 +651,7 @@ class collectionGear4NPH : public collection {
         uint ncorrec;
         vector<Vec> bs;
         void resetbs(){
-            bs.resize(atoms->size(), Vec());
+            bs.resize(atoms->size(), Vec::Zero());
         }
         
     public:
@@ -761,11 +706,11 @@ class collectionGear4NPT : public collection {
         vector<Vec> vs2, vs3;
         void resetbs(){
             uint Natoms = atoms->size();
-            xs1.resize(Natoms, Vec());
-            xs2.resize(Natoms, Vec());
-            xs3.resize(Natoms, Vec());
-            vs2.resize(Natoms, Vec());
-            vs3.resize(Natoms, Vec());
+            xs1.resize(Natoms, Vec::Zero());
+            xs2.resize(Natoms, Vec::Zero());
+            xs3.resize(Natoms, Vec::Zero());
+            vs2.resize(Natoms, Vec::Zero());
+            vs3.resize(Natoms, Vec::Zero());
             V1 = V2 = V3 = 0;
         }
         static vector<sptr<interaction> > tointerpair(vector<sptr<interactionpairsx> >&);
@@ -791,7 +736,7 @@ class collectionGear4NPT : public collection {
                     dt(dt), xrpsums(box), ncorrec(1), chi(0), chixi(0) {
                 resetbs();
             };
-        void setForces(bool seta=true);
+        void setForces(bool constraints_and_a=true);
         void timestep();
 };
 

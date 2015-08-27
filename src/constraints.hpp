@@ -12,11 +12,11 @@
 
 using namespace std;
 
-typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure why
-
 class constraint {
     public:
-        virtual void apply(Box &box) = 0;
+        virtual void apply_positions(Box &box) = 0;
+        virtual void apply_velocities(Box &box) = 0;
+        virtual void apply_forces(Box &box) = 0;
         virtual int ndof() = 0;
         virtual ~constraint(){};
 };
@@ -34,12 +34,22 @@ class coordConstraint : public constraint {
         coordConstraint(atom* atm) :
             a(atm), loc(a->x) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box &box){
+        void apply_positions(Box &box){
+            for(uint i=0; i<3; i++){
+                if(not fixed[i]) continue;
+                a->x[i] = loc[i];
+            }
+        }
+        void apply_velocities(Box &box){
+            for(uint i=0; i<3; i++){
+                if(not fixed[i]) continue;
+                a->v[i] = 0;
+            }
+        }
+        void apply_forces(Box &box){
             for(uint i=0; i<3; i++){
                 if(not fixed[i]) continue;
                 a->f[i] = 0;
-                a->v[i] = 0;
-                a->x[i] = loc[i];
             }
         }
 };
@@ -57,26 +67,9 @@ class coordCOMConstraint : public constraint {
         coordCOMConstraint(sptr<atomgroup> atm) :
             a(atm), loc(a->com()) {fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box &box){
-            Vec com = a->com() - loc;
-            Vec comv = a->comv();
-            Vec totf = Vec();
-            for(uint i=0; i< a->size(); i++){
-                totf += (*a)[i].f;
-            }
-            Vec tota = totf / a->mass();
-            
-            for(uint i=0; i< a->size(); i++){
-                atom &atm = (*a)[i];
-                Vec df = (tota * (atm.m));
-                for(uint j=0; j<3; j++){
-                    if(not fixed[j]) continue;
-                    atm.f[j] -= df[j];
-                    atm.v[j] -= comv[j];
-                    atm.x[j] -= com[j];
-                }
-            }
-        }
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 class relativeConstraint : public constraint {
@@ -95,24 +88,10 @@ class relativeConstraint : public constraint {
             a1(atm1), a2(atm2), loc(a2->x - a1->x) {
                 fixed[0] = fixed[1] = fixed[2] = true;};
         int ndof(){return (int)fixed[0] + (int)fixed[1] + (int)fixed[2];};
-        void apply(Box &box){
-            flt mratio1 = a1->m / (a1->m + a2->m);
-            flt mratio2 = a2->m / (a1->m + a2->m);
-            Vec totf = a2->f + a1->f;
-            Vec dv = a2->v - a1->v;
-            Vec dx = a2->x - a1->x;
-            for(uint i=0; i<NDIM; i++){
-                if(not fixed[i]) continue;
-                a1->f[i] = totf[i]*mratio1;
-                a2->f[i] = totf[i]*mratio2;
-                a1->v[i] += dv[i]/2;
-                a2->v[i] -= dv[i]/2;
-                a1->x[i] += dx[i]/2;
-                a2->x[i] -= dx[i]/2;
-                assert(abs(a2->v[i] - a1->v[i]) < 1e-5);
-                assert(abs(a2->x[i] - a1->x[i]) < 1e-5);
-            }
-        }
+        
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 class distConstraint : public constraint {
@@ -123,47 +102,11 @@ class distConstraint : public constraint {
         distConstraint(atomid atm1, atomid atm2, flt dist) :
             a1(atm1), a2(atm2), dist(dist) {};
         distConstraint(atomid atm1, atomid atm2) :
-            a1(atm1), a2(atm2), dist((a1->x - a2->x).mag()){};
+            a1(atm1), a2(atm2), dist((a1->x - a2->x).norm()){};
         int ndof(){return 1;};
-        void apply(Box &box){
-            flt M = (a1->m + a2->m);
-            flt mratio1 = a1->m / M;
-            flt mratio2 = a2->m / M;
-            
-            Vec dx = a2->x - a1->x;
-            flt dxmag = dx.mag();
-            Vec dxnorm = dx / dxmag;
-            
-            a1->x += dx * ((1 - dist/dxmag)*mratio2);
-            a2->x -= dx * ((1 - dist/dxmag)*mratio1);
-            //~ dx = a2->x - a1->x;
-            //~ dxmag = dx.mag();
-            //~ dxnorm = dx / dxmag; dxnorm should still be the same
-            
-            Vec baddv = dxnorm * ((a2->v - a1->v).dot(dxnorm)/2);
-            a1->v += baddv;
-            a2->v -= baddv;
-            
-            // newv2 • u = v2 - |baddv|
-            // newv1 • u = v1 + |baddv|
-            // (newv2 - newv1) • u = (v2 - v1 - (2*baddv)) • u
-            //                     = ((v2 - v1)•u - (2*baddv)•u)
-            //                     = (|baddv|*2 - |baddv|*2) = 0
-            // assert((a2->v - a1->v).dot(dxnorm) < 1e-8);
-            if((a2->v - a1->v).dot(dxnorm) > 1e-8){
-                throw std::overflow_error("Velocities are not minimal.");
-            }
-            
-            // TODO: Fix mass ratio stuff
-            Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
-            a1->f += baddf;
-            a2->f -= baddf;
-            // assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
-            if((a2->f - a1->f).dot(dxnorm) > 1e-8){
-                throw std::overflow_error("Forces are not minimal.");
-            }
-            
-        }
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
 
 
@@ -172,9 +115,12 @@ class linearConstraint : public constraint {
         sptr<atomgroup> atms;
         flt dist;
         flt lincom, I, M;
+        Vec lvec, com;
+        
+        void set_lvec_com();
     public:
         linearConstraint(sptr<atomgroup> atms, flt dist) :
-            atms(atms), dist(dist), lincom(0), I(0), M(0) {
+            atms(atms), dist(dist), lincom(0), I(0), M(0), lvec(Vec::Zero()), com(Vec::Zero()) {
             for(uint i = 0; i < atms->size(); i++){
                 M += (*atms)[i].m;
                 lincom += (dist*i)*(*atms)[i].m;
@@ -185,52 +131,50 @@ class linearConstraint : public constraint {
                 flt dx = (dist*i - lincom);
                 I += (*atms)[i].m * dx * dx;
             }
+            
+            set_lvec_com();
         };
         int ndof(){return (int)atms->size()-1;};
-        
-        void apply(Box &box){
-            Vec com = atms->com();
-            Vec comv = atms->comv();
-            Vec comf = Vec();
-            
-            uint sz = atms->size();
-            Vec lvec = Vec();
-            #ifdef VEC3D
-            Vec L = Vec();
-            Vec omega  = Vec();
-            Vec tau = Vec();
-            Vec alpha = Vec();
-            #else
-            flt L = 0;
-            flt omega = 0;
-            flt tau = 0;
-            flt alpha = 0;
-            #endif
-            
-            for(uint i = 0; i < sz; i++){
-                flt chaindist = i * dist - lincom;
-                atom& ai = (*atms)[i];
-                Vec dx = ai.x - com;
-                comf += ai.f;
-                lvec += dx.norm() * chaindist;
-                L += dx.cross(ai.v) * ai.m;
-                tau += dx.cross(ai.f);
-            }
-            
-            lvec.normalize();
-            omega = L / I;
-            alpha = tau / I;
-            
-            for(uint i = 0; i < sz; i++){
-                flt chaindist = i * dist - lincom;
-                Vec dx = lvec*chaindist;
-                atom& ai = (*atms)[i];
-                ai.x = com + dx;
-                ai.v = comv + dx.cross(omega);
-                ai.f = comf + (dx.cross(alpha)*ai.m);
-            }
-        }
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
 };
+
+#ifdef VEC3D
+//! A class that enforces rigid-body dynamics
+class RigidConstraint : public constraint {
+    private:
+        sptr<atomgroup> atms;
+        flt M;
+        
+        // moment of inertia matrix
+        Matrix MoI;
+        // moment of inertia matrix inverse
+        Eigen::JacobiSVD<Matrix> MoI_solver;
+        // locations relative to center of mass, no rotation
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> expected; 
+        
+        // updated at every apply_positions()
+        // Curent rotation matrix
+        Matrix rot;
+        // center of mass
+        Vec com;
+        // Angular velocity, acceleration
+        Vec omega, alpha;
+        
+    public:
+        RigidConstraint(sptr<Box> box, sptr<atomgroup> atms);
+        
+        //TODO: should probably handle cases with atms.size() < 3
+        int ndof(){return (int)atms->size() * NDIM-6;};
+        
+        void apply_positions(Box &box);
+        void apply_velocities(Box &box);
+        void apply_forces(Box &box);
+        Matrix get_rotation();
+        Matrix get_MoI(){return MoI;};
+};
+#endif
 
 class ContactTracker : public statetracker{
     protected:
@@ -314,9 +258,9 @@ class EnergyTracker : public statetracker{
 class RsqTracker1 {
     // Tracks only a single dt (skip)
     public:
-        vector<Vec> pastlocs;
-        vector<Vec> xyz2sums;
-        vector<Vec> xyz4sums;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz2sums;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz4sums;
         vector<flt> r4sums;
         unsigned long skip, count;
         
@@ -326,8 +270,8 @@ class RsqTracker1 {
         void reset(atomgroup& atoms, Vec com);
             
         bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
-        vector<Vec> xyz2();
-        vector<Vec> xyz4();
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz2();
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> xyz4();
         vector<flt> r4();
         
         unsigned long get_skip(){return skip;};
@@ -347,9 +291,9 @@ class RsqTracker : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<Vec> > xyz2();
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > xyz2();
         vector<vector<flt> > r2();
-        vector<vector<Vec> > xyz4();
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > xyz4();
         vector<vector<flt> > r4();
         vector<flt> counts();
 };
@@ -364,8 +308,8 @@ class RsqTracker : public statetracker {
 class ISFTracker1 {
     // Tracks only a single dt (skip)
     public:
-        vector<Vec> pastlocs;
-        vector<vector<Array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
+        vector<vector<array<cmplx, NDIM> > > ISFsums; // (number of ks x number of particles x number of dimensions)
         vector<flt> ks;
         unsigned long skip, count;
         
@@ -376,7 +320,7 @@ class ISFTracker1 {
             
         bool update(Box& box, atomgroup& atoms, unsigned long t, Vec com); // updates if necessary.
         vector<vector<cmplx> > ISFs();
-        vector<vector<Array<cmplx, NDIM> > > ISFxyz();
+        vector<vector<array<cmplx, NDIM> > > ISFxyz();
         
         unsigned long get_skip(){return skip;};
         unsigned long get_count(){return count;};
@@ -396,7 +340,7 @@ class ISFTracker : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<vector<Array<cmplx, NDIM> > > > ISFxyz();
+        vector<vector<vector<array<cmplx, NDIM> > > > ISFxyz();
         vector<vector<vector<cmplx> > > ISFs();
         vector<flt> counts();
 };
@@ -409,9 +353,9 @@ class SmoothLocs : public statetracker {
         sptr<atomgroup> atoms;
         uint smoothn; // number of skipns to "smooth" over
         uint skipn; // number of dts to skip
-        vector<Vec> curlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> curlocs;
         uint numincur;
-        vector<vector<Vec> > locs;
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > locs;
         unsigned long curt;
         bool usecom;
     
@@ -421,7 +365,7 @@ class SmoothLocs : public statetracker {
         void reset();
         void update(Box &box);
         
-        vector<vector<Vec> > smooth_locs(){return locs;};
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > smooth_locs(){return locs;};
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -429,7 +373,7 @@ class RDiffs : public statetracker {
     // Tracks only a single dt (skip)
     public:
         sptr<atomgroup> atoms;
-        vector<Vec> pastlocs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
         vector<vector<flt> > dists;
         unsigned long skip;
         unsigned long curt;
@@ -477,10 +421,10 @@ class jammingtree {
     private:
         sptr<Box> box;
         list<jamminglist> jlists;
-        vector<Vec> A;
-        vector<Vec> B;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> A;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> B;
     public:
-        jammingtree(sptr<Box> box, vector<Vec>& A, vector<Vec>& B)
+        jammingtree(sptr<Box> box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B)
             : box(box), jlists(), A(A), B(B) {
             jlists.push_back(jamminglist());
             assert(A.size() <= B.size());
@@ -489,7 +433,7 @@ class jammingtree {
         bool expand(){
             jamminglist curjlist = jlists.front();
             vector<uint>& curlist = curjlist.assigned;
-            if(curlist.size() >= A.size()){
+            if(curlist.size() >= (uint) A.rows()){
                 //~ cout << "List already too big\n";
                 return false;
             }
@@ -503,7 +447,7 @@ class jammingtree {
                     //cout << found << '\n';
                     continue;
                 }
-                flt newdist = box->diff(A[curlist.size()], B[i]).sq();
+                flt newdist = box->diff(A.row(curlist.size()), B.row(i)).squaredNorm();
                 jamminglist newjlist = jamminglist(curjlist, i, newdist);
                 newlists.push_back(newjlist);
                 //~ cout << "Made " << i << "\n";
@@ -564,12 +508,12 @@ class jammingtree2 {
     protected:
         sptr<Box> box;
         list<jamminglistrot> jlists;
-        vector<Vec> A;
-        vector<vector<Vec> > Bs;
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> A;
+        vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > Bs;
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        jammingtree2(sptr<Box>box, vector<Vec>& A, vector<Vec>& B);
+        jammingtree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
         flt distance(jamminglistrot& jlist);
         list<jamminglistrot> expand(jamminglistrot curjlist);
         
@@ -590,8 +534,8 @@ class jammingtree2 {
             };
             return retval;
         }
-        static Vec straight_diff(Box &bx, vector<Vec>& A, vector<Vec>& B);
-        static flt straight_distsq(Box &bx, vector<Vec>& A, vector<Vec>& B);
+        static Vec straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
+        static flt straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
         
         list<jamminglistrot> &mylist(){return jlists;};
         list<jamminglistrot> copylist(){return jlists;};
@@ -623,10 +567,10 @@ class jammingtree2 {
         
         uint size(){return (uint) jlists.size();};
         
-        vector<Vec> locationsB(jamminglistrot jlist);
-        vector<Vec> locationsB(){return locationsB(curbest());};
-        vector<Vec> locationsA(jamminglistrot jlist);
-        vector<Vec> locationsA(){return locationsA(curbest());};
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsB(jamminglistrot jlist);
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsB(){return locationsB(curbest());};
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsA(jamminglistrot jlist);
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locationsA(){return locationsA(curbest());};
         virtual ~jammingtree2(){};
 };
 
@@ -649,9 +593,9 @@ class jammingtreeBD : public jammingtree2 {
     protected:
         uint cutoff1,cutoff2;
     public:
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, uint cutoff) :
+        jammingtreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, uint cutoff) :
             jammingtree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        jammingtreeBD(sptr<Box>box, vector<Vec>& A, vector<Vec>& B, 
+        jammingtreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
                     uint cutoffA, uint cutoffB);// :
             //jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
         
@@ -772,7 +716,7 @@ class Connectivity {
         
         // assumes diameters are additive
         // Note that "diameter" should generally be the attractive diameter
-        void add(vector<Vec> locs, vector<flt> diameters);
+        void add(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs, vector<flt> diameters);
         
         map<uint, CNodePath> find_percolation(bool check_all_dims=true);
 };

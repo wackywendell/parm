@@ -29,7 +29,7 @@ Vec randVecBoxed(){
 }
 
 Vec randVecSphere(flt radius){
-    return randVec().norm() * (cbrt(uniformrand()) * radius);
+    return randVec().normalized() * (cbrt(uniformrand()) * radius);
 }
 #endif
 
@@ -69,13 +69,13 @@ void bivariateGauss::set(const flt s1, const flt s2, const flt corr){
     x22 = s2 * sqrt(1 - corr*corr);
 }
 
-Pair bivariateGauss::generate(){
+Eigen::Matrix<flt, 1, 2> bivariateGauss::generate(){
     flt x1 = gauss();
     flt x2 = gauss();
     // Taken from Allen and Tildesley, 348
-    Pair p;
-    p[0] = x11*x1;
-    p[1] = x21*x1 + x22*x2;
+    Eigen::Matrix<flt, 1, 2> p;
+    p << x11*x1,
+         (x21*x1 + x22*x2);
     return p;
 }
 
@@ -89,8 +89,8 @@ VecPair bivariateGauss::genVecs(){
 #endif
     // Taken from Allen and Tildesley, 348
     VecPair p;
-    p[0] = x1*x11;
-    p[1] = x1*x21 + x2*x22;
+    p << x1*x11,
+         x1*x21 + x2*x22;
     return p;
 }
 
@@ -103,3 +103,35 @@ vector<long double> LDVector(vector<double> dists){
     }
     return newdists;
 };
+
+#ifdef VEC3D
+Matrix best_rotation_matrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &to) {
+    Eigen::JacobiSVD<Matrix> svd(from.adjoint() * to, Eigen::ComputeFullU | Eigen::ComputeFullV);
+    
+    Matrix VWprod(svd.matrixV() * svd.matrixU().adjoint());
+    if(!VWprod.allFinite()) {
+        std::cerr << "BestRotationMatrix ERROR" << std::endl;
+        std::cerr << "from:" << std::endl;
+        std::cerr << from << std:: endl;
+        std::cerr << "to:" << std::endl;
+        std::cerr << to << std:: endl;
+        
+        std::cerr << "U:" << std::endl;
+        std::cerr << svd.matrixU() << std:: endl;
+        std::cerr << "V:" << std::endl;
+        std::cerr << svd.matrixV() << std:: endl;
+        std::cerr << "VWprod:" << std::endl;
+        std::cerr << VWprod << std:: endl;
+    }
+    flt det = VWprod.determinant();
+    flt d = (det > 0.) ? 1. : 0.;
+    
+    Vec diagonal_vector;
+    for(uint i=0; i<NDIM-1; i++) diagonal_vector(i) = 1.0;
+    diagonal_vector(NDIM-1) = d;
+    Eigen::DiagonalMatrix<flt, NDIM> diag_d = diagonal_vector.asDiagonal();
+    
+    Matrix rot = (svd.matrixV()) * diag_d * (svd.matrixU().adjoint());
+    return rot;
+};
+#endif

@@ -76,7 +76,7 @@ int main(int argc, char **argv){
     opterr = 0;
     while ((c = getopt (argc, argv, "n:f:s:d:t:o:")) != -1) switch (c){
         case 'n': //Number of particles
-            Natoms = atol(optarg);
+            Natoms = (int) atol(optarg);
             break;
         case 'f': //Phi -Packing fraction
             phi = atof(optarg);
@@ -85,10 +85,10 @@ int main(int argc, char **argv){
             sizeratio = atof(optarg);
             break;
         case 'd': //dt of integration of simulation
-            dt = atol(optarg);
+            dt = (flt) atof(optarg);
             break;
         case 't': // total time of simulation
-            tottime = atof(optarg);
+            tottime = (int) atof(optarg);
             break;
         case 'o':
             outname = optarg;
@@ -163,9 +163,9 @@ int main(int argc, char **argv){
     for (uint i=0; i < atoms.size(); i++){
         // we track energy to see if things are overlapping
         atoms[i].x = obox->randLoc(); // random location in the box
-        atoms[i].v = Vec();
-        atoms[i].f = Vec();
-        atoms[i].a = Vec();
+        atoms[i].v = Vec::Zero();
+        atoms[i].f = Vec::Zero();
+        atoms[i].a = Vec::Zero();
         
         flt cursigma = sigma;
         if(i==0) (cursigma = sigma*sizeratio);
@@ -243,7 +243,7 @@ int main(int argc, char **argv){
     flt maxlog = log(tottime);
     for(uint n=0; n<nMSDs; n++){
         flt newlog = (maxlog * n) / (nMSDs-1);
-        uint newn = ceil(exp(newlog));
+        uint newn = (uint) ceil(exp(newlog));
         if(newn <= 0) newn = 1;
         if(newn > (uint)tottime) newn = tottime;
         nset.insert(newn);
@@ -278,7 +278,7 @@ int main(int argc, char **argv){
     ofstream msdfile;
     msdfile.open(outname.c_str(), ios::out);
     // Retrieve the time-averaged r^2 values for each atom for each Δt
-    vector<vector<Vec> > MSDmeans = rsqtracker->xyz2();
+    vector<Eigen::Matrix<flt, Eigen::Dynamic, NDIM> > MSDmeans = rsqtracker->xyz2();
     
     // This will be a tab-separated file, with the first column being 
     // Δt in time units (not timesteps),
@@ -289,9 +289,9 @@ int main(int argc, char **argv){
     
     
     for(uint i=0; i<MSDns.size(); i++){
-        msdfile << (MSDns[i] * dt);
-        for(vector<Vec>::iterator it=MSDmeans[i].begin(); it<MSDmeans[i].end(); ++it){
-            Vec v = *it;
+        msdfile << (((flt) MSDns[i]) * dt);
+        for(uint j=0; j<MSDmeans[i].rows(); j++){
+            Vec v = MSDmeans[i].row(j);
             msdfile << '\t' << (v[0] + v[1] + v[2]);
         }
         msdfile << "\n";
@@ -355,7 +355,7 @@ void writefile(ofstream& outf, atomvec& atoms, Box& bx){
     for(uint i=0; i<atoms.size(); i++){
         if(i == 0){outf << "O";}
         else{outf << "C";};
-        Vec normloc = bx.diff(Vec(), atoms[i].x);
+        Vec normloc = bx.diff(Vec::Zero(), atoms[i].x);
         for(uint j=0; j<NDIM; j++){
             outf << "\t" << normloc[j];
         }
