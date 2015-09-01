@@ -3,6 +3,8 @@ from pathlib import Path
 import re
 import sys
 
+script_dir = Path(sys.argv[0]).parent
+
 default_fs = (
         list(Path('src').glob('*.*pp')) + 
         list(Path('src/bin').glob('*.*pp')) + 
@@ -26,7 +28,8 @@ if len(sys.argv) > 1:
 else:
     fs = default_fs
 
-with open('src/namereplacements.txt', 'r') as f:
+replacements = script_dir / 'namereplacements.txt'
+with replacements.open('r') as f:
     lines = [l.strip().replace('\t',' ').split(' ') for l in f]
     replacements = [(l[0], l[-1]) for l in lines if l[0] and l[-1]]
 
