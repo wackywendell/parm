@@ -18,7 +18,7 @@ var searchData=
   ['lennardjonescut',['LennardJonesCut',['../class_lennard_jones_cut.html',1,'LennardJonesCut'],['../class_lennard_jones_cut.html#a7d22d55312c5d2cf123ad45cb66bb696',1,'LennardJonesCut::LennardJonesCut()']]],
   ['lennardjonescutpair',['LennardJonesCutPair',['../struct_lennard_jones_cut_pair.html',1,'LennardJonesCutPair'],['../struct_lennard_jones_cut_pair.html#aec0aca934f1d9b1bdf79b96ddb44af57',1,'LennardJonesCutPair::LennardJonesCutPair(EpsSigCutAtom a1, EpsSigCutAtom a2)'],['../struct_lennard_jones_cut_pair.html#aabb05ada643144a9dcf8d3e0b1e175d7',1,'LennardJonesCutPair::LennardJonesCutPair(IEpsISigCutAtom a1, IEpsISigCutAtom a2)']]],
   ['lindistribution',['lindistribution',['../vecrand_8hpp.html#a1ce74c60f66aab708edf15b9d61168e4',1,'vecrand.hpp']]],
-  ['line_5fadvance',['line_advance',['../class_collection_c_d_b_dgrid.html#a7b6537996cda36dbb38037b52c00b23e',1,'CollectionCDBDgrid::line_advance()'],['../class_collection_c_d_b_d.html#a2a21ca2ce4d7a0905053147b37445d33',1,'CollectionCDBD::line_advance()']]],
+  ['line_5fadvance',['line_advance',['../class_collection_c_d.html#a245daae07c2b11489541660adb250a14',1,'CollectionCD::line_advance()'],['../class_collection_c_dgrid.html#a19813f6b5ad6b21aee801dccd2d2b22d',1,'CollectionCDgrid::line_advance()']]],
   ['linearconstraint',['LinearConstraint',['../class_linear_constraint.html',1,'LinearConstraint'],['../class_linear_constraint.html#abbb34f21cfddbb48c0c44e21d476fd92',1,'LinearConstraint::LinearConstraint()']]],
   ['lines',['lines',['../namespacenamereplacer.html#a80218617cdb6842e7b3229958691ba2b',1,'namereplacer']]],
   ['lingenerator',['lingenerator',['../vecrand_8hpp.html#ae5b7bb8afccab06cda50b7abdbbc4459',1,'vecrand.hpp']]],

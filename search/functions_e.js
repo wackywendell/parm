@@ -6,7 +6,7 @@ var searchData=
   ['neighbor_5flist',['neighbor_list',['../class_n_listed.html#a41fcc1a859b225db96e486c0562522f7',1,'NListed::neighbor_list()'],['../class_n_listed_virial.html#a5c45064e152dd36bf04c6db7dc5901c6',1,'NListedVirial::neighbor_list()']]],
   ['neighborlist',['NeighborList',['../class_neighbor_list.html#a380951bf17fe40d1127405d4bb53be07',1,'NeighborList']]],
   ['neighbors',['neighbors',['../class_grid.html#a3f1423bbc51c40bad4bab6ddeb1cd436',1,'Grid']]],
-  ['next_5fevent',['next_event',['../class_collection_c_d_b_dgrid.html#a463708019bf23d5acc830fc9ba63f163',1,'CollectionCDBDgrid']]],
+  ['next_5fevent',['next_event',['../class_collection_c_dgrid.html#ac8c01ffd89d903c0bdda4a2916aaee13',1,'CollectionCDgrid']]],
   ['nlisted',['NListed',['../class_n_listed.html#ae60eee4e4015412265d54a11b68b1814',1,'NListed::NListed(sptr&lt; AtomVec &gt; vec, sptr&lt; NeighborList &gt; neighbors)'],['../class_n_listed.html#a0c96640e8f7fe798141d95bbf9faab65',1,'NListed::NListed(sptr&lt; Box &gt; box, sptr&lt; AtomVec &gt; atomv, const flt skin)']]],
   ['nlistedvirial',['NListedVirial',['../class_n_listed_virial.html#a23da13f8afd425652f24485a0464b674',1,'NListedVirial']]],
   ['non_5faffine',['non_affine',['../class_lees_edwards_box.html#a2a2f59e3a18458cfa9c60055ec8d5646',1,'LeesEdwardsBox']]],

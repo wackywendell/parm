@@ -8,7 +8,7 @@ var searchData=
   ['update_5fconstraint_5fforces',['update_constraint_forces',['../class_collection.html#a259aacd268be5cbdc0b386ebcb4567bd',1,'Collection']]],
   ['update_5fconstraint_5fpositions',['update_constraint_positions',['../class_collection.html#a575afbde82a626189ed83ed843196c69',1,'Collection']]],
   ['update_5fconstraint_5fvelocities',['update_constraint_velocities',['../class_collection.html#aed591ebcccb77cba91ee3135ee5cf00b',1,'Collection']]],
-  ['update_5fgrid',['update_grid',['../class_collection_c_d_b_dgrid.html#aed837b23bc31ff8cb0c2bc880bb6fb82',1,'CollectionCDBDgrid']]],
+  ['update_5fgrid',['update_grid',['../class_collection_c_dgrid.html#a518f54a78179f850bc8e4fac3e62fc09',1,'CollectionCDgrid']]],
   ['update_5flist',['update_list',['../class_neighbor_list.html#afcbfde4f7b54fa58630e61ad49ad795d',1,'NeighborList']]],
   ['update_5fpairs',['update_pairs',['../class_n_listed.html#a6b3353500842124d10fb8122ae91f1bf',1,'NListed']]],
   ['update_5ftrackers',['update_trackers',['../class_collection.html#ab807a12da691847c5a8d8ef102d9598b',1,'Collection']]]

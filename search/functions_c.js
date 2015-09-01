@@ -8,7 +8,7 @@ var searchData=
   ['length',['length',['../class_s_c_box.html#af8f5d2b8b91f417e10f6f19854d086e8',1,'SCBox']]],
   ['lennardjonescut',['LennardJonesCut',['../class_lennard_jones_cut.html#a7d22d55312c5d2cf123ad45cb66bb696',1,'LennardJonesCut']]],
   ['lennardjonescutpair',['LennardJonesCutPair',['../struct_lennard_jones_cut_pair.html#aec0aca934f1d9b1bdf79b96ddb44af57',1,'LennardJonesCutPair::LennardJonesCutPair(EpsSigCutAtom a1, EpsSigCutAtom a2)'],['../struct_lennard_jones_cut_pair.html#aabb05ada643144a9dcf8d3e0b1e175d7',1,'LennardJonesCutPair::LennardJonesCutPair(IEpsISigCutAtom a1, IEpsISigCutAtom a2)']]],
-  ['line_5fadvance',['line_advance',['../class_collection_c_d_b_dgrid.html#a7b6537996cda36dbb38037b52c00b23e',1,'CollectionCDBDgrid::line_advance()'],['../class_collection_c_d_b_d.html#a2a21ca2ce4d7a0905053147b37445d33',1,'CollectionCDBD::line_advance()']]],
+  ['line_5fadvance',['line_advance',['../class_collection_c_d.html#a245daae07c2b11489541660adb250a14',1,'CollectionCD::line_advance()'],['../class_collection_c_dgrid.html#a19813f6b5ad6b21aee801dccd2d2b22d',1,'CollectionCDgrid::line_advance()']]],
   ['linearconstraint',['LinearConstraint',['../class_linear_constraint.html#abbb34f21cfddbb48c0c44e21d476fd92',1,'LinearConstraint']]],
   ['ljattract',['LJAttract',['../class_l_j_attract.html#a010d88ab32775740ad58d2d09d774f80',1,'LJAttract']]],
   ['ljattractcut',['LJAttractCut',['../class_l_j_attract_cut.html#a93e64d699b674549dd3428f76804cba0',1,'LJAttractCut']]],

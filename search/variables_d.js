@@ -9,6 +9,6 @@ var searchData=
   ['neighbors',['neighbors',['../class_connectivity.html#a1cd65e0f1306878804459294114589a2',1,'Connectivity::neighbors()'],['../class_n_listed.html#a9a07b860dbfcd8aa82c46ef04e38aa0a',1,'NListed::neighbors()'],['../classpyparm_1_1packmin_1_1_minimizer.html#a21033ef257fe0e23e53248ecedbc2817',1,'pyparm.packmin.Minimizer.neighbors()']]],
   ['nodes',['nodes',['../class_c_node_path.html#ad0b03716c543195d81f3a2596ba683b2',1,'CNodePath::nodes()'],['../class_connectivity.html#af38ff9c44b157ba74e6a06e1452f63ef',1,'Connectivity::nodes()']]],
   ['norm',['norm',['../class_soft_wall.html#abac894265e3dc34e71488f49dca48b02',1,'SoftWall']]],
-  ['numevents',['numevents',['../class_collection_c_d_b_dgrid.html#a9c96e8edca60b4fc6aaa3eb4046de2e5',1,'CollectionCDBDgrid::numevents()'],['../class_collection_c_d_b_d.html#aa7bd25bfd27775bba68f364c017347bf',1,'CollectionCDBD::numevents()']]],
+  ['numevents',['numevents',['../class_collection_c_d.html#a910a8631e2b41d6780ba0b84d30a8d5e',1,'CollectionCD::numevents()'],['../class_collection_c_dgrid.html#a45b69b1fdbc1a881e8face0f6b4d31ee',1,'CollectionCDgrid::numevents()']]],
   ['numincur',['numincur',['../class_smooth_locs.html#a707d0e39085bfe24fe3940de12e54629',1,'SmoothLocs']]]
 ];
