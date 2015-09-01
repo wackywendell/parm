@@ -2136,8 +2136,8 @@ class SCSpringList : public Interaction {
             scs(scs), eps(eps), sig(sig), ls(ls){};
         flt energy(Box &box);
         void set_forces(Box &box);
-        flt set_forces_get_pressure(Box &box){set_forces(box); return NAN;};
-        flt pressure(Box &box){return NAN;};
+        flt set_forces_get_pressure(Box &box);
+        flt pressure(Box &box);
         void ignore(uint n1, uint n2){
             if(n1 > n2){uint n3=n1; n1=n2; n2=n3;}
             array<uint, 2> pair;

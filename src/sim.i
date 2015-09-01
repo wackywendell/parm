@@ -427,13 +427,12 @@ static int myErr = 0;
             return "<AtomID %s>" % self.n()
         
         def __repr__(self):
-            #ifdef VEC2D
-            x,y = tuple(self.x)
-            return "<AtomID %s at (%.2f,%.2f)>" % (self.n(),x,y)
-            #else
-            x,y,z = tuple(self.x)
-            return "<AtomID %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
-            #endif
+            if len(self.x) == 2:
+                x,y = tuple(self.x)
+                return "<AtomID %s at (%.2f,%.2f)>" % (self.n(),x,y)
+            else:
+                x,y,z = tuple(self.x)
+                return "<AtomID %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
     %};
 }
 
@@ -457,6 +456,9 @@ static int myErr = 0;
         
         def __getitem__(self, obj):
             return self.get_id(obj)
+        
+        def __str__(self):
+            return str(list(self))
         
         #def __setitem__(self, obj, val):
         #    return self.set(obj, val)
@@ -490,6 +492,9 @@ static int myErr = 0;
         
         def __getitem__(self, obj):
             return self.get_id(obj)
+        
+        def __str__(self):
+            return str(list(self))
     %};
 };
 
