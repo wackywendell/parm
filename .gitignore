@@ -9,6 +9,7 @@ core.*
 out
 /bin
 /lib
+/doc
 *.sublime*
 *.tsv
 *.png

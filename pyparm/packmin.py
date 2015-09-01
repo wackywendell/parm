@@ -1,4 +1,5 @@
 import numpy as np
+from .util import norm
 
 class Minimizer:
     def __init__(self, locs, diameters, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
@@ -41,21 +42,21 @@ class Minimizer:
         self.box = self.sim.OriginBox(L)
         
         self.masses = self.diameters**self.ndim if masses is None else masses
-        self.atoms = self.sim.atomvec([float(n) for n in self.masses])
-        self.neighbors = self.sim.neighborlist(self.box, self.atoms, 0.4)
-        self.hertz = self.sim.Hertzian(self.atoms, self.neighbors)
+        self.atoms = self.sim.AtomVec([float(n) for n in self.masses])
+        self.neighbors = self.sim.NeighborList(self.box, self.atoms, 0.4)
+        self.hertz = self.sim.Repulsion(self.atoms, self.neighbors)
 
         for a, s, loc in zip(self.atoms, self.diameters, locs):
-            a.x = self.sim.Vec(*loc)
-            self.hertz.add(self.sim.HertzianAtom(a, 1.0, float(s), 2.0))
+            a.x = self.sim.vec(*loc)
+            self.hertz.add(self.sim.EpsSigExpAtom(a, 1.0, float(s), 2.0))
             
-        collec = self.collec = self.sim.collectionNLCG(self.box, self.atoms, dt, P, 
+        collec = self.collec = self.sim.CollectionNLCG(self.box, self.atoms, dt, P, 
                 [self.hertz], [self.neighbors], [], 
                 kappa, kmax, secmax, seceps)
-        collec.setamax(amax)
-        collec.setdxmax(dxmax)
-        collec.setstepmax(stepmax)
-        self.collec.setForces(True, True)
+        collec.set_max_alpha(amax)
+        collec.set_max_dx(dxmax)
+        collec.set_max_step(stepmax)
+        self.collec.set_forces(True, True)
         
         self.timesteps = 0
     
@@ -72,7 +73,7 @@ class Minimizer:
                    mass_func=None, **kw):
         if mass_func is None:
             mass_func = cls.proportionate_mass
-        if ratios == None:
+        if ratios is None:
             ratios = [1.] * len(sizes)
         if len(ratios) != len(sizes):
             raise ValueError("`ratios` list must be same length as `sizes` list")
@@ -119,11 +120,11 @@ class Minimizer:
     
     @L.setter
     def L(self, newL):
-        self.box.resizeL(newL)
-        self.collec.setForces(True, True)
+        self.box.resize_to_L(newL)
+        self.collec.set_forces(True, True)
     
     def err(self):
-        return (self.collec.pressure() / self.collec.P0 - 1, max([a.f.mag() for a in self.atoms]))
+        return (self.collec.pressure() / self.collec.P0 - 1, max([norm(a.f) for a in self.atoms]))
     
     def done(self):
         Perr, CGerr = self.err()
@@ -164,7 +165,7 @@ class Minimizer:
     
     @property
     def H(self):
-        return self.collec.Hamiltonian() / self.N
+        return self.collec.hamiltonian() / self.N
     
     @property
     def U(self):

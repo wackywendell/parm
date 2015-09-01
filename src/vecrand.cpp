@@ -36,7 +36,7 @@ Vec randVecSphere(flt radius){
 unsigned int seed(unsigned int n){
     randengine.seed(n);
     return n;
-    
+
 }
 
 unsigned int seed(){
@@ -45,31 +45,31 @@ unsigned int seed(){
     return n;
 }
 
-gaussVec::gaussVec(flt sigma) : distro(0,sigma), gauss(randengine,distro){};
+GaussVec::GaussVec(flt sigma) : distro(0,sigma), gauss(randengine,distro){};
 
 
-bivariateGauss::bivariateGauss(const flt s1, const flt s2,
+BivariateGauss::BivariateGauss(const flt s1, const flt s2,
         const flt corr) : distro(0,1), gauss(randengine,distro){
             set(s1, s2, corr);
 };
 
-void bivariateGauss::set(const flt s1, const flt s2, const flt corr){
+void BivariateGauss::set(const flt s1, const flt s2, const flt corr){
     // Taken from Allen and Tildesley, 348
     if(!(s1 >= 0)){
-		throw std::invalid_argument("bivariateGauss::set: s1 >= 0");
+		throw std::invalid_argument("BivariateGauss::set: s1 >= 0");
 	} else if(!(s2 >= 0)){
-		throw std::invalid_argument("bivariateGauss::set: s2 >= 0");
+		throw std::invalid_argument("BivariateGauss::set: s2 >= 0");
 	} else if(!(corr >= 0)){
-		throw std::invalid_argument("bivariateGauss::set: corr >= 0");
+		throw std::invalid_argument("BivariateGauss::set: corr >= 0");
 	} else if(!(corr <= 1)){
-		throw std::invalid_argument("bivariateGauss::set: corr <= 1");
+		throw std::invalid_argument("BivariateGauss::set: corr <= 1");
 	};
     x11 = s1;
     x21 = s2 * corr;
     x22 = s2 * sqrt(1 - corr*corr);
 }
 
-Eigen::Matrix<flt, 1, 2> bivariateGauss::generate(){
+Eigen::Matrix<flt, 1, 2> BivariateGauss::generate(){
     flt x1 = gauss();
     flt x2 = gauss();
     // Taken from Allen and Tildesley, 348
@@ -79,7 +79,7 @@ Eigen::Matrix<flt, 1, 2> bivariateGauss::generate(){
     return p;
 }
 
-VecPair bivariateGauss::genVecs(){
+VecPair BivariateGauss::genVecs(){
 #ifdef VEC2D
     Vec x1 = Vec(gauss(), gauss());
     Vec x2 = Vec(gauss(), gauss());

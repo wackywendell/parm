@@ -49,30 +49,30 @@ L = (sum(volumes) / phi) ** (1.0/d) # length of each side of the box
 #---------------------------------------------------------------------------------------------------
 # Setting up the simulation
 box = sim.OriginBox(L)
-atoms = sim.atomvec(masses)
-neighbors = sim.neighborlist(box, atoms, 0.4) # the neighborlist, for keeping track of what atoms are near what other atoms
-LJ = sim.LJgroup(atoms, neighbors)
-collec = sim.collectionVerlet(box, atoms, dt, [LJ], [neighbors]) # the integrator
+atoms = sim.AtomVec(masses)
+neighbors = sim.NeighborList(box, atoms, 0.4) # the NeighborList, for keeping track of what atoms are near what other atoms
+LJ = sim.LJRepulse(atoms, neighbors)
+collec = sim.CollectionVerlet(box, atoms, dt, [LJ], [neighbors]) # the integrator
 # We use a simple velocity-verlet integrator, which is time-reversible and NVE ensemble
 # i.e., it preserves number of atoms, volume of box, and energy
 
 #---------------------------------------------------------------------------------------------------
 # Initial Conditions
-# Now we have created our interaction, but we need to add our atoms to it. We do that in a way that prevents overlap
+# Now we have created our Atom, but we need to add our atoms to it. We do that in a way that prevents overlap
 
 E0 = 0
 for a,s in zip(atoms, sigmas):
     E = E0 + 10
     a.v = sim.randVec() # from a gaussian distribution
-    LJ.add(sim.LJatom(1, s, a))
+    LJ.add(sim.EpsSigAtom(a, 1, s))
     while E > E0 + 0.1:
-        a.x = box.randLoc()
+        a.x = box.rand_loc()
         neighbors.update_list()
         E = LJ.energy(box)
     E0 = E
 
-collec.resetcomv() # subtract center-of-mass velocity from all particles
-collec.scaleVelocitiesT(T0) # scale all velocities to get an instantaneous temperature T = T0, at least at the beginning
+collec.reset_com_velocity() # subtract center-of-mass velocity from all particles
+collec.scale_velocities_to_temp(T0) # scale all velocities to get an instantaneous temperature T = T0, at least at the beginning
 
 ####################################################################################################
 # Data Analysis

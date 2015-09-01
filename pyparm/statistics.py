@@ -19,7 +19,7 @@ class Statistic:
 def get_order(atoms, box, local=True, weighted=True):
     import tess
     locs = [tuple(a.x) for a in atoms]
-    limits = tuple(box.boxshape())
+    limits = tuple(box.box_shape())
     cntr = tess.Container(locs, limits, radii=sigmas/2., periodic=True)
     return cntr.order(local=local, weighted=weighted)
 
@@ -28,7 +28,7 @@ class SimpleStat(Statistic):
     at each `gather()` time, and manages the array of previous values."""
     def __init__(self, func, name=None):
         """
-        func: a function that returns a simple Statistic when run as func(atoms, box, collection, time)
+        func: a function that returns a simple Statistic when run as func(atoms, box, Collection, time)
         name: the name of the statistic; defaults to function name"""
         self.func = func
         self.arr = []
@@ -75,7 +75,7 @@ class SimpleStat(Statistic):
 class ReturnStat(Statistic):
     """A statistic that is self-updating, and only needs to call a simple function to get its values.
 
-    Any `statetracker`, for example, probably falls into this category."""
+    Any `StateTracker`, for example, probably falls into this category."""
     def __init__(self, func, name=None):
         """
         func: a function that returns a simple Statistic when run as func()
@@ -173,7 +173,7 @@ class StatSet(OrderedDict):
 
         @self.add_func
         def COMV(time):
-            return collec.comv().mag()
+            return collec.com_velocity().mag()
 
         @self.add_func
         def V(time):

@@ -9,11 +9,11 @@ void finite_or_throw(T &m){
     }
 }
 
-void coordCOMConstraint::apply_positions(Box &box){
+void CoordCOMConstraint::apply_positions(Box &box){
     Vec com = a->com() - loc;
     
     for(uint i=0; i< a->size(); i++){
-        atom &atm = (*a)[i];
+        Atom &atm = (*a)[i];
         for(uint j=0; j<3; j++){
             if(not fixed[j]) continue;
             atm.x[j] -= com[j];
@@ -21,19 +21,19 @@ void coordCOMConstraint::apply_positions(Box &box){
     }
 }
 
-void coordCOMConstraint::apply_velocities(Box &box){
-    Vec comv = a->comv();
+void CoordCOMConstraint::apply_velocities(Box &box){
+    Vec com_velocity = a->com_velocity();
     
     for(uint i=0; i< a->size(); i++){
-        atom &atm = (*a)[i];
+        Atom &atm = (*a)[i];
         for(uint j=0; j<3; j++){
             if(not fixed[j]) continue;
-            atm.v[j] -= comv[j];
+            atm.v[j] -= com_velocity[j];
         }
     }
 }
 
-void coordCOMConstraint::apply_forces(Box &box){
+void CoordCOMConstraint::apply_forces(Box &box){
     Vec totf = Vec::Zero();
     for(uint i=0; i< a->size(); i++){
         totf += (*a)[i].f;
@@ -41,7 +41,7 @@ void coordCOMConstraint::apply_forces(Box &box){
     Vec tota = totf / a->mass();
     
     for(uint i=0; i< a->size(); i++){
-        atom &atm = (*a)[i];
+        Atom &atm = (*a)[i];
         Vec df = (tota * (atm.m));
         for(uint j=0; j<3; j++){
             if(not fixed[j]) continue;
@@ -50,7 +50,7 @@ void coordCOMConstraint::apply_forces(Box &box){
     }
 }
 
-void relativeConstraint::apply_positions(Box &box){
+void RelativeConstraint::apply_positions(Box &box){
     Vec dx = a2->x - a1->x;
     for(uint i=0; i<NDIM; i++){
         if(not fixed[i]) continue;
@@ -60,7 +60,7 @@ void relativeConstraint::apply_positions(Box &box){
     }
 }
 
-void relativeConstraint::apply_velocities(Box &box){
+void RelativeConstraint::apply_velocities(Box &box){
     Vec dv = a2->v - a1->v;
     for(uint i=0; i<NDIM; i++){
         if(not fixed[i]) continue;
@@ -70,7 +70,7 @@ void relativeConstraint::apply_velocities(Box &box){
     }
 }
 
-void relativeConstraint::apply_forces(Box &box){
+void RelativeConstraint::apply_forces(Box &box){
     flt mratio1 = a1->m / (a1->m + a2->m);
     flt mratio2 = a2->m / (a1->m + a2->m);
     Vec totf = a2->f + a1->f;
@@ -81,7 +81,7 @@ void relativeConstraint::apply_forces(Box &box){
     }
 }
 
-void distConstraint::apply_positions(Box &box){
+void DistConstraint::apply_positions(Box &box){
     flt M = (a1->m + a2->m);
     flt mratio1 = a1->m / M;
     flt mratio2 = a2->m / M;
@@ -93,7 +93,7 @@ void distConstraint::apply_positions(Box &box){
     a2->x -= dx * ((1 - dist/dxmag)*mratio1);
 }
 
-void distConstraint::apply_velocities(Box &box){
+void DistConstraint::apply_velocities(Box &box){
     Vec dx = a2->x - a1->x;
     flt dxmag = dx.norm();
     Vec dxnorm = dx / dxmag;
@@ -106,7 +106,7 @@ void distConstraint::apply_velocities(Box &box){
     }
 }
 
-void distConstraint::apply_forces(Box &box){
+void DistConstraint::apply_forces(Box &box){
     flt M = (a1->m + a2->m);
     flt mratio1 = a1->m / M;
     flt mratio2 = a2->m / M;
@@ -128,14 +128,14 @@ void distConstraint::apply_forces(Box &box){
     }
 }
 
-void linearConstraint::set_lvec_com(){
+void LinearConstraint::set_lvec_com(){
     com = atms->com();
     uint sz = atms->size();
     lvec = Vec::Zero();
     
     for(uint i = 0; i < sz; i++){
         flt chaindist = i * dist - lincom;
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
         lvec += dx.normalized() * chaindist;
     }
@@ -143,20 +143,20 @@ void linearConstraint::set_lvec_com(){
     lvec.normalize();
 }
 
-void linearConstraint::apply_positions(Box &box){
+void LinearConstraint::apply_positions(Box &box){
     set_lvec_com();
     uint sz = atms->size();
     
     for(uint i = 0; i < sz; i++){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         ai.x = com + dx;
     }
 }
 
-void linearConstraint::apply_velocities(Box &box){
-    Vec comv = atms->comv();
+void LinearConstraint::apply_velocities(Box &box){
+    Vec com_velocity = atms->com_velocity();
     
     uint sz = atms->size();
     #ifdef VEC3D
@@ -168,7 +168,7 @@ void linearConstraint::apply_velocities(Box &box){
     #endif
     
     for(uint i = 0; i < sz; i++){
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
         L += cross(dx, ai.v) * ai.m;
     }
@@ -179,13 +179,13 @@ void linearConstraint::apply_velocities(Box &box){
     for(uint i = 0; i < sz; i++){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
-        atom& ai = (*atms)[i];
-        ai.v = comv + cross(dx, omega);
+        Atom& ai = (*atms)[i];
+        ai.v = com_velocity + cross(dx, omega);
     }
 }
 
-void linearConstraint::apply_forces(Box &box){
-    Vec comf = Vec::Zero();
+void LinearConstraint::apply_forces(Box &box){
+    Vec com_force = Vec::Zero();
     
     uint sz = atms->size();
     #ifdef VEC3D
@@ -199,8 +199,8 @@ void linearConstraint::apply_forces(Box &box){
     for(uint i = 0; i < sz; i++){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
-        atom& ai = (*atms)[i];
-        comf += ai.f;
+        Atom& ai = (*atms)[i];
+        com_force += ai.f;
         tau += cross(dx, ai.f);
     }
     alpha = tau / I;
@@ -208,14 +208,14 @@ void linearConstraint::apply_forces(Box &box){
     for(uint i = 0; i < sz; i++){
         flt chaindist = i * dist - lincom;
         Vec dx = lvec*chaindist;
-        atom& ai = (*atms)[i];
-        ai.f = comf + (cross(dx, alpha)*ai.m);
+        Atom& ai = (*atms)[i];
+        ai.f = com_force + (cross(dx, alpha)*ai.m);
     }
 }
 
 #ifdef VEC3D
-RigidConstraint::RigidConstraint(sptr<Box> box, sptr<atomgroup> atms) :
-    atms(atms), M(atms->mass()), MoI(atms->moment(atms->com())), MoI_solver(MoI, Eigen::ComputeFullU | Eigen::ComputeFullV), expected(atms->size(), NDIM), rot(Matrix::Identity()), com(atms->com()), omega(Vec::Zero()), alpha(Vec::Zero()) {
+RigidConstraint::RigidConstraint(sptr<Box> box, sptr<AtomGroup> atms) :
+    atms(atms), M(atms->mass()), MoI(atms->moment()), MoI_solver(MoI, Eigen::ComputeFullU | Eigen::ComputeFullV), expected(atms->size(), NDIM), rot(Matrix::Identity()), com(atms->com()), omega(Vec::Zero()), alpha(Vec::Zero()) {
     finite_or_throw(MoI);
     for(uint i = 0; i < atms->size(); i++){
         expected.row(i) = ((*atms)[i].x - com);
@@ -227,7 +227,7 @@ Matrix RigidConstraint::get_rotation(){
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
     for(uint i = 0; i < sz; i++){
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
         locs.row(i) = dx;
     }
@@ -243,7 +243,7 @@ void RigidConstraint::apply_positions(Box &box){
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
     
     for(uint i = 0; i < sz; i++){
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
         locs.row(i) = dx;
     }
@@ -253,20 +253,20 @@ void RigidConstraint::apply_positions(Box &box){
     for(uint i = 0; i < sz; i++){
         Vec loc(expected.row(i));
         Vec dx(rot * loc);
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         ai.x = com + dx;
     }
 }
 
 void RigidConstraint::apply_velocities(Box &box){
-    Vec comv = atms->comv();
+    Vec com_velocity = atms->com_velocity();
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
     
     Vec L = Vec::Zero();
     
     for(uint i = 0; i < sz; i++){
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
         
         // L = sum((r - R) × m v)
@@ -279,15 +279,15 @@ void RigidConstraint::apply_velocities(Box &box){
     for(uint i = 0; i < sz; i++){
         Vec loc(expected.row(i));
         Vec dx(rot * loc);
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         finite_or_throw(ai.x);
         Vec omega_cross_r = cross(omega, dx);
-        ai.v = comv + omega_cross_r; // L/T + L/T; V + ω × r
+        ai.v = com_velocity + omega_cross_r; // L/T + L/T; V + ω × r
     }
 }
 
 void RigidConstraint::apply_forces(Box &box){
-    Vec comf = Vec::Zero();
+    Vec com_force = Vec::Zero();
     
     uint sz = atms->size();
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs(sz, NDIM);
@@ -295,9 +295,9 @@ void RigidConstraint::apply_forces(Box &box){
     Vec tau = Vec::Zero();
     
     for(uint i = 0; i < sz; i++){
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         Vec dx = ai.x - com;
-        comf += ai.f;
+        com_force += ai.f;
         
         // L = sum((r - R) × m v)
         tau += cross(dx, ai.f);          // L, ML/T² -> ML²/T²
@@ -306,12 +306,12 @@ void RigidConstraint::apply_forces(Box &box){
     
     alpha = Vec(rot * MoI_solver.solve(rot.adjoint() * tau));
     // Vec alpha((I_inv * tau).transpose());           // 1/ML², ML²/T² -> 1/T²
-    Vec comf_M = comf / M;              // L/T²
+    Vec comf_M = com_force / M;              // L/T²
     
     for(uint i = 0; i < sz; i++){
         Vec loc(expected.row(i));
         Vec dx(rot * loc);
-        atom& ai = (*atms)[i];
+        Atom& ai = (*atms)[i];
         ai.x = com + dx;
         Vec omega_cross_r = cross(omega, dx);
         ai.f = (comf_M + cross(alpha, dx) + cross(omega, omega_cross_r))*ai.m; // (L/T² + L/T²) M; V + α × r
@@ -319,7 +319,7 @@ void RigidConstraint::apply_forces(Box &box){
 }
 #endif
 
-ContactTracker::ContactTracker(sptr<Box> box, sptr<atomgroup> atoms, vector<flt> dists) :
+ContactTracker::ContactTracker(sptr<Box> box, sptr<AtomGroup> atoms, vector<flt> dists) :
     atoms(atoms), dists(dists), contacts(), breaks(0), formations(0),
         incontact(0){
     //~ cout << "Making contact tracker." << endl;
@@ -355,20 +355,20 @@ void ContactTracker::update(Box &box){
 };
 
 void EnergyTracker::update(Box &box){
-    if(nskipped + 1 < nskip){
-        nskipped += 1;
+    if(n_skipped + 1 < n_skip){
+        n_skipped += 1;
         return;
     }
     
-    nskipped = 0;
+    n_skipped = 0;
     uint Natoms = atoms->size();
     flt curU = 0, curK = 0;
     for(uint i=0; i<Natoms; ++i){
-        atom &curatom = atoms->get(i);
+        Atom &curatom = atoms->get(i);
         curK += curatom.v.squaredNorm() * curatom.m / 2;
     }
     
-    vector<sptr<interaction> >::iterator it;
+    vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it != interactions.end(); ++it){
         curU += (*it)->energy(box);
     }
@@ -383,17 +383,17 @@ void EnergyTracker::update(Box &box){
     N++;
 };
 
-void EnergyTracker::setU0(Box &box){
+void EnergyTracker::set_U0(Box &box){
     flt curU = 0;
-    vector<sptr<interaction> >::iterator it;
+    vector<sptr<Interaction> >::iterator it;
     for(it = interactions.begin(); it != interactions.end(); ++it){
         curU += (*it)->energy(box);
     }
-    setU0(curU);
+    set_U0(curU);
 };
 
 
-RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
+RsqTracker1::RsqTracker1(AtomGroup& atoms, unsigned long skip, Vec com) :
             pastlocs(atoms.size(), NDIM), xyz2sums(atoms.size(), NDIM),
             xyz4sums(atoms.size(), NDIM), r4sums(atoms.size(), 0),
             skip(skip), count(0){
@@ -404,7 +404,7 @@ RsqTracker1::RsqTracker1(atomgroup& atoms, unsigned long skip, Vec com) :
     };
 };
         
-void RsqTracker1::reset(atomgroup& atoms, Vec com){
+void RsqTracker1::reset(AtomGroup& atoms, Vec com){
     pastlocs.resize(atoms.size(), NDIM);
     xyz2sums.setZero();
     xyz4sums.setZero();
@@ -415,7 +415,7 @@ void RsqTracker1::reset(atomgroup& atoms, Vec com){
     count = 0;
 };
 
-bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
+bool RsqTracker1::update(Box& box, AtomGroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); ++i){
@@ -423,18 +423,18 @@ bool RsqTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
         Vec r = atoms[i].x - com;
         // We don't want the boxed distance - we want the actual distance moved!
         Vec pastr = pastlocs.row(i);
-        Vec distsq = r - pastr;
+        Vec distance_squared = r - pastr;
         Vec distsqsq = Vec::Zero();
         flt dist4 = 0;
         for(uint j=0; j<NDIM; ++j){
-            distsq[j] *= distsq[j];
-            distsqsq[j] = distsq[j]*distsq[j];
-            dist4 += distsq[j];
+            distance_squared[j] *= distance_squared[j];
+            distsqsq[j] = distance_squared[j]*distance_squared[j];
+            dist4 += distance_squared[j];
         };
         
         dist4 *= dist4;
         
-        xyz2sums.row(i) += distsq;
+        xyz2sums.row(i) += distance_squared;
         xyz4sums.row(i) += distsqsq;
         r4sums[i] += dist4;
         pastlocs.row(i) = r;
@@ -470,7 +470,7 @@ vector<flt> RsqTracker1::r4(){
 };
     
 
-RsqTracker::RsqTracker(sptr<atomgroup> atoms, vector<unsigned long> ns, bool usecom) : 
+RsqTracker::RsqTracker(sptr<AtomGroup> atoms, vector<unsigned long> ns, bool usecom) : 
             atoms(atoms), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
@@ -546,7 +546,7 @@ vector<flt> RsqTracker::counts(){
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
+ISFTracker1::ISFTracker1(AtomGroup& atoms, unsigned long skip, vector<flt> ks, Vec com) :
             pastlocs(atoms.size(), NDIM), ISFsums(ks.size(), vector<array<cmplx, NDIM> >()),
             ks(ks), skip(skip), count(0){
     for(uint i = 0; i<atoms.size(); ++i){
@@ -558,7 +558,7 @@ ISFTracker1::ISFTracker1(atomgroup& atoms, unsigned long skip, vector<flt> ks, V
     };
 };
         
-void ISFTracker1::reset(atomgroup& atoms, Vec com){
+void ISFTracker1::reset(AtomGroup& atoms, Vec com){
     pastlocs.resize(atoms.size(), Eigen::NoChange);
     for(uint ki=0; ki<ks.size(); ki++){
         ISFsums[ki].assign(atoms.size(), array<cmplx, NDIM>());
@@ -569,7 +569,7 @@ void ISFTracker1::reset(atomgroup& atoms, Vec com){
     count = 0;
 };
 
-bool ISFTracker1::update(Box& box, atomgroup& atoms, unsigned long t, Vec com){
+bool ISFTracker1::update(Box& box, AtomGroup& atoms, unsigned long t, Vec com){
     if(t % skip != 0) return false;
     
     for(uint i = 0; i<atoms.size(); ++i){
@@ -626,7 +626,7 @@ vector<vector<array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-ISFTracker::ISFTracker(sptr<atomgroup> atoms, vector<flt> ks, 
+ISFTracker::ISFTracker(sptr<AtomGroup> atoms, vector<flt> ks, 
                     vector<unsigned long> ns, bool usecom) : atoms(atoms), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec::Zero();
     for(vector<unsigned long>::iterator n=ns.begin(); n!=ns.end(); ++n){
@@ -679,7 +679,7 @@ vector<flt> ISFTracker::counts(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SmoothLocs::SmoothLocs(sptr<atomgroup> atoms, Box &box, uint smoothn, uint skipn, bool usecom) : 
+SmoothLocs::SmoothLocs(sptr<AtomGroup> atoms, Box &box, uint smoothn, uint skipn, bool usecom) : 
         atoms(atoms), smoothn(smoothn), skipn(skipn), curlocs(atoms->size(), NDIM), numincur(0), locs(),
         curt(0), usecom(usecom){
             curlocs.setZero();
@@ -723,7 +723,7 @@ void SmoothLocs::update(Box &box){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-RDiffs::RDiffs(sptr<atomgroup> atoms, unsigned long skip, bool usecom) :
+RDiffs::RDiffs(sptr<AtomGroup> atoms, unsigned long skip, bool usecom) :
         atoms(atoms), pastlocs(atoms->size(), NDIM), dists(), skip(skip), curt(0), usecom(usecom){
     Vec com = usecom ? atoms->com() : Vec::Zero();
     for(uint i = 0; i<atoms->size(); ++i){
@@ -759,10 +759,10 @@ void RDiffs::update(Box &box){
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool jamminglist::operator<(const jamminglist& other ) const{
-    //return distsq < other.distsq;
-    if(other.distsq  - distsq > 1e-8) return true;
-    if(distsq  - other.distsq > 1e-8) return false;
+bool JammingList::operator<(const JammingList& other ) const{
+    //return distance_squared < other.distance_squared;
+    if(other.distance_squared  - distance_squared > 1e-8) return true;
+    if(distance_squared  - other.distance_squared > 1e-8) return false;
     //~ cout << "\nWithin 1e-8\n";
     
     uint sz = size();
@@ -801,10 +801,10 @@ bool jamminglist::operator<(const jamminglist& other ) const{
  * We'll go with method 3.
 */
 
-bool jamminglistrot::operator<(const jamminglistrot& other ) const {
-    //return distsq < other.distsq;
-    if(other.distsq  - distsq > 1e-8) return true;
-    if(distsq  - other.distsq > 1e-8) return false;
+bool JammingListRot::operator<(const JammingListRot& other ) const {
+    //return distance_squared < other.distance_squared;
+    if(other.distance_squared  - distance_squared > 1e-8) return true;
+    if(distance_squared  - other.distance_squared > 1e-8) return false;
     
     uint sz = size();
     uint osz = other.size();
@@ -829,18 +829,18 @@ bool jamminglistrot::operator<(const jamminglistrot& other ) const {
     return false; // consider them equal
 };
 
-jammingtree2::jammingtree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A0, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B0)
+JammingTree2::JammingTree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A0, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B0)
             : box(box), jlists(), A(A0), Bs(8, B0){
     for(uint rot=0; rot < 8; ++rot){
         for(uint i=0; i<B0.size(); ++i){
                         Bs[rot].row(i) = rotate_flip(B0.row(i), rot); }
-        if(A0.size() <= B0.size()) jlists.push_back(jamminglistrot(rot));
+        if(A0.size() <= B0.size()) jlists.push_back(JammingListRot(rot));
         //~ cout << "Created, now size " << jlists.size() << endl;
     }
     
 };
 
-flt jammingtree2::distance(jamminglistrot& jlist){
+flt JammingTree2::distance(JammingListRot& jlist){
     flt dist = 0;
     uint rot = jlist.rotation;
     for(uint i=1; i<jlist.size(); ++i){
@@ -855,9 +855,9 @@ flt jammingtree2::distance(jamminglistrot& jlist){
     return dist / ((flt) jlist.assigned.size());
 };
 
-list<jamminglistrot> jammingtree2::expand(jamminglistrot curjlist){
+list<JammingListRot> JammingTree2::expand(JammingListRot curjlist){
     vector<uint>& curlist = curjlist.assigned;
-    list<jamminglistrot> newlists = list<jamminglistrot>();
+    list<JammingListRot> newlists = list<JammingListRot>();
     if(curlist.size() >= (uint) A.rows()){
         return newlists;
     }
@@ -868,16 +868,16 @@ list<jamminglistrot> jammingtree2::expand(jamminglistrot curjlist){
         //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
         if (found != curlist.end()) continue;
         
-        jamminglistrot newjlist = jamminglistrot(curjlist, i, 0);
-        newjlist.distsq = distance(newjlist);
+        JammingListRot newjlist = JammingListRot(curjlist, i, 0);
+        newjlist.distance_squared = distance(newjlist);
         newlists.push_back(newjlist);
     }
     return newlists;
 };
 
-bool jammingtree2::expand(){
-    jamminglistrot curjlist = jlists.front();
-    list<jamminglistrot> newlists = expand(curjlist);
+bool JammingTree2::expand(){
+    JammingListRot curjlist = jlists.front();
+    list<JammingListRot> newlists = expand(curjlist);
     
     if(newlists.empty()){
         //~ cout << "No lists made\n";
@@ -889,21 +889,21 @@ bool jammingtree2::expand(){
     jlists.pop_front();
     //~ cout << "Popped.\n";
     jlists.merge(newlists);
-    //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distsq << "\n";
+    //~ cout << "Merged to size " << jlists.size() << "best dist now " << jlists.front().distance_squared << "\n";
     return true;
 };
 
 
-jammingtreeBD::jammingtreeBD(sptr<Box> box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
+JammingTreeBD::JammingTreeBD(sptr<Box> box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
                     uint cutoffA, uint cutoffB) :
-            jammingtree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
+            JammingTree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
     if(cutoffA > cutoffB){jlists.clear();}
     if(A.rows() - cutoffA > B.rows() - cutoffB){jlists.clear();}
 };
 
-list<jamminglistrot> jammingtreeBD::expand(jamminglistrot curjlist){
+list<JammingListRot> JammingTreeBD::expand(JammingListRot curjlist){
     vector<uint>& curlist = curjlist.assigned;
-    list<jamminglistrot> newlists = list<jamminglistrot>();
+    list<JammingListRot> newlists = list<JammingListRot>();
     if(curlist.size() >= (uint) A.rows()){
         return newlists;
     }
@@ -919,16 +919,16 @@ list<jamminglistrot> jammingtreeBD::expand(jamminglistrot curjlist){
         //if (find(curlist.begin(), curlist.end(), i) != curlist.end()){
         if (found != curlist.end()) continue;
         
-        jamminglistrot newjlist = jamminglistrot(curjlist, i, 0);
-        newjlist.distsq = distance(newjlist);
+        JammingListRot newjlist = JammingListRot(curjlist, i, 0);
+        newjlist.distance_squared = distance(newjlist);
         newlists.push_back(newjlist);
     }
     return newlists;
 };
 
-bool jammingtreeBD::expand(){
-    jamminglistrot curjlist = jlists.front();
-    list<jamminglistrot> newlists = expand(curjlist);
+bool JammingTreeBD::expand(){
+    JammingListRot curjlist = jlists.front();
+    list<JammingListRot> newlists = expand(curjlist);
     
     if(newlists.empty()) return false;
     newlists.sort();
@@ -938,7 +938,7 @@ bool jammingtreeBD::expand(){
 };
 
 
-Eigen::Matrix<flt, Eigen::Dynamic, NDIM> jammingtree2::locationsB(jamminglistrot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_B(JammingListRot jlist){
     uint rot = jlist.rotation;
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(jlist.size(), NDIM);
     
@@ -957,7 +957,7 @@ Eigen::Matrix<flt, Eigen::Dynamic, NDIM> jammingtree2::locationsB(jamminglistrot
 };
 
 
-Eigen::Matrix<flt, Eigen::Dynamic, NDIM> jammingtree2::locationsA(jamminglistrot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_A(JammingListRot jlist){
     uint rot = jlist.rotation;
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(Bs[rot].rows(), NDIM);
     
@@ -978,7 +978,7 @@ Eigen::Matrix<flt, Eigen::Dynamic, NDIM> jammingtree2::locationsA(jamminglistrot
     return locs;
 };
 
-Vec jammingtree2::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
+Vec JammingTree2::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
     uint N = (uint) As.rows();
     if(Bs.rows() != N) return vec(NAN,NAN);
     
@@ -993,7 +993,7 @@ Vec jammingtree2::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM
     return loc / N;
 };
 
-flt jammingtree2::straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
+flt JammingTree2::straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
     long int N = As.rows();
     if(Bs.rows() != N) return NAN;
     
@@ -1036,7 +1036,7 @@ void Connectivity::add_edge(CNode node1, CNode node2){
 
 array<bool, NDIM> Connectivity::nonzero(Vec diff_vec){
     array<bool, NDIM> nonzeros;
-    Vec half_shape = box->boxshape() / 2;
+    Vec half_shape = box->box_shape() / 2;
     for(uint i=0; i<NDIM; i++){
         nonzeros[i] = (abs(diff_vec[i]) > half_shape[i]);
     }

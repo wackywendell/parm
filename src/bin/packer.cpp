@@ -35,7 +35,7 @@ const flt force_max = 1e-14;
 const flt force_max = 1e-18;
 #endif
 
-void writefile(atomvec& atoms, OriginBox& obox);
+void writefile(AtomVec& atoms, OriginBox& obox);
 
 int main(){
     cout << "Float size: " << sizeof(flt) << " epsilon: " << std::numeric_limits<flt>::epsilon() << "\n";
@@ -58,59 +58,60 @@ int main(){
 
     // Create a vector of the masses of the atoms
     // We just use all mass 1, because this is a packing
-    boost::shared_ptr<atomvec> atomptr(new atomvec(Nl + Ns, 1.0));
-    atomvec & atoms = *atomptr;
+    boost::shared_ptr<AtomVec> atomptr(new AtomVec(Nl + Ns, 1.0));
+    AtomVec & atoms = *atomptr;
     
-    // Harmonic interaction
-    // Its called "Hertzian" for historical reasons
-    // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the neighborlist
-    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> > 
-    boost::shared_ptr<NListed<HertzianAtom, HertzianPair> >
-        hertzian(new NListed<HertzianAtom, HertzianPair>(obox, atomptr, 0.1*sigma));
-    boost::shared_ptr<neighborlist> nl = hertzian->nlist();
-    // ^ this is the interaction
+    // Harmonic Interaction
+    // Its called "Repulsion" for historical reasons
+    // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the NeighborList
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> > 
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> >
+    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> >
+        hertzian(new NListed<EpsSigExpAtom, RepulsionPair>(obox, atomptr, 0.1*sigma));
+    boost::shared_ptr<NeighborList> nl = hertzian->neighbor_list();
+    // ^ this is the Interaction
     
-    // Note that NListed is a class template; its an interaction that
+    // Note that NListed is a class template; its an Interaction that
     // takes various structs as template parameters, and turns them into
-    // a neighbor interaction
+    // a neighbor Interaction
     // See interaction.hpp for a whole bunch of them
-    // Also note that the neighborlist is not the same as the
-    // "neighborlisted" interaction; multiple interactions can use the
-    // same neighborlist
+    // Also note that the NeighborList is not the same as the
+    // "neighborlisted" Interaction; multiple interactions can use the
+    // same NeighborList
     
     // Now we run through all the atoms, set their positions / velocities,
-    // and add them to the Hertzian interaction (i.e., to the neighbor list)
+    // and add them to the Repulsion Interaction (i.e., to the neighbor list)
     for (uint i=0; i < atoms.size(); i++){
-        atoms[i].x = obox->randLoc(); // random location in the box
+        atoms[i].x = obox->rand_loc(); // random location in the box
         atoms[i].v = Vec::Zero(); // A zero-vector
         atoms[i].f = Vec::Zero();
         atoms[i].a = Vec::Zero();
 
         flt sig = i < Ns ? sigma : sigmal;
         
-        // Add it to the Hertzian potential
-        hertzian->add(HertzianAtom(atoms.get_id(i), epsilon, sig, 2));
-        //                                                          ^ exponent for the harmonic interaction
+        // Add it to the Repulsion potential
+        hertzian->add(EpsSigExpAtom(atoms.get_id(i), epsilon, sig, 2));
+        //                                                          ^ exponent for the harmonic Interaction
     }
 
-    // force an update the neighborlist, so we can get an accurate energy
+    // force an update the NeighborList, so we can get an accurate energy
     nl->update_list(true);
 
     cout << "Starting. Neighborlist contains " << nl->numpairs() << " / " <<
         (atoms.size()*(atoms.size()-1))/2 << " pairs\n";
     
-    //Now we make our "collection"
-    collectionNLCG collec = collectionNLCG(obox, atomptr, dt, P0);
+    //Now we make our "Collection"
+    CollectionNLCG collec = CollectionNLCG(obox, atomptr, dt, P0);
     
-    // This is very important! Otherwise the neighborlist won't update!
-    collec.addTracker(nl);
-    // And add the interaction
-    collec.addInteraction(hertzian);
+    // This is very important! Otherwise the NeighborList won't update!
+    collec.add_tracker(nl);
+    // And add the Interaction
+    collec.add_interaction(hertzian);
     
     writefile(atoms, *obox);
     
     //Print out total energy, kinetic energy, and potential energy
-    cout << "H: " << collec.Hamiltonian() << " K: " << collec.kinetic()
+    cout << "H: " << collec.hamiltonian() << " K: " << collec.kinetic()
         << " U: " << hertzian->energy(*obox) << " phi: " << (Vs/obox->V()) << "\n";
     
     // Run the simulation! And every _ steps, write a frame to the .xyz
@@ -118,7 +119,7 @@ int main(){
     uint i = 0;
     for(flt curP=startP; curP>P0; curP/=10){
         cout << "P: " << curP << "\n";
-        collec.setP(curP);
+        collec.set_pressure(curP);
         while (true) {
             for(uint j=0; j<1000; j++){
                 collec.timestep();
@@ -135,7 +136,7 @@ int main(){
             }
 
             cout.precision(sizeof(flt));
-            cout << i << " H: " << collec.Hamiltonian() << " K: " << collec.kinetic() 
+            cout << i << " H: " << collec.hamiltonian() << " K: " << collec.kinetic() 
                 << " U: " << hertzian->energy(*obox) << " phi: " << (Vs/obox->V()) << "\n";
             cout.precision(6);
             cout << "        Pdiff: " << pdiff << " force_err: " << force_err << "\n";
@@ -148,7 +149,7 @@ int main(){
     }
 };
 
-void writefile(atomvec& atoms, OriginBox& obox){
+void writefile(AtomVec& atoms, OriginBox& obox){
     // The .xyz format is simple:
     // Line 1: [Number of atoms]
     // Line 2: [Comment line, whatever you want, left blank here]
@@ -192,7 +193,7 @@ void writefile(atomvec& atoms, OriginBox& obox){
     pbcfile.open("packing.tcl", ios::out);
     pbcfile << "set cell [pbc set {";
     for(uint j=0; j<NDIM; j++){
-        pbcfile << obox.boxshape()[j] << " ";
+        pbcfile << obox.box_shape()[j] << " ";
     }
     pbcfile << "} -all];\n";
     pbcfile << "pbc box -toggle -center origin -color red;\n";

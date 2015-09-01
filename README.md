@@ -22,13 +22,13 @@ Examples
 
 There are several examples in C++ in the `src/bin` folder, all with good comments:
 
-* `LJatoms.cpp`: a simulation of a  Lennard-Jones simulation (2D, or 3D)
-* `packer.cpp`: Generates packings (2D or 3D)
-* `src/hardspheres.cpp` for a more unconventional example of collision-driven dynamics
+* `LJatoms.cpp` (\ref LJatoms.cpp): a simulation of a  Lennard-Jones simulation (2D, or 3D)
+* `packer.cpp` (\ref packer.cpp): Generates packings (2D or 3D)
+* `hardspheres.cpp` (\ref hardspheres.cpp): for a more unconventional example of collision-driven dynamics
 
 ### Python
 
-See `pyparm/examples/LJ.py` for an example of a simple Lennard-Jones
+See `pyparm/examples/LJ.py` (\ref LJ.py) for an example of a simple Lennard-Jones
 simulation, with data analysis included.
 
 See `pyparm/packmin.py` for an example of how to make a packing.
@@ -57,12 +57,12 @@ Basic Concepts
     many potentials; to use it, you create a `neighborlist`, then use
     `NListed<FooAtom, FooPair>` as the interaction
 
-*  `Box`: a box is either infinite (`InfiniteBox`) or periodic
-(`OriginBox`), and takes care of the boundary conditions
+ *  `Box`: a box is either infinite (`InfiniteBox`) or periodic
+ (`OriginBox`), and takes care of the boundary conditions
 
-*  `collection`: a grouping together of a `Box`, `atomgroup`, and
-`interaction`s, with an integrator (such as velocity Verlet,
-`collectionVerlet`, or browian motion, `CollectionSol`).
+ *  `collection`: a grouping together of a `Box`, `atomgroup`, and
+ `interaction`s, with an integrator (such as velocity Verlet,
+ `collectionVerlet`, or browian motion, `CollectionSol`).
 
 Standard Steps
 ----
@@ -117,9 +117,9 @@ Other Notes
 ### Lennard-Jones
 
 This module uses the equation
-$$V\left(r\right)=\varepsilon\left(1-\frac{\sigma^{6}}{r^{6}}\right)^{2}$$
+\f$V\left(r\right)=\varepsilon\left(1-\frac{\sigma^{6}}{r^{6}}\right)^{2}\f$
 
 The other standard form is
-$$V\left(r\right)=4\varepsilon\left(\frac{\sigma^{\prime12}}{r^{12}}-\frac{\sigma^{12}}{r^{6}}\right)$$
+\f$V\left(r\right)=4\varepsilon\left(\frac{\sigma^{\prime12}}{r^{12}}-\frac{\sigma^{12}}{r^{6}}\right)\f$
 
-To convert, use $\sigma=2^{\frac{1}{6}}\sigma^{\prime}$.
+To convert, use \f$\sigma=2^{\frac{1}{6}}\sigma^{\prime}\f$.

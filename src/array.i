@@ -29,9 +29,7 @@ public:
             (*self)[idx]=val;
         }
         
-        int __len__(){
-            return N;
-        }
+        unsigned int __len__(){ return N;};
         
         ~array() {
             %delete(self);

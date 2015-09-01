@@ -6,7 +6,7 @@ CCOPTS=-I src -Wall -O2 -fPIC -std=c++98
 INC=`python3-config --includes`
 LIB=`python3-config --ldflags`
 
-.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py wrap2d wrap3d wrap2dlong wrap3dlong
+.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py wrap2d wrap3d wrap2dlong wrap3dlong doc ghp
 
 all: py2d py3d
 	@echo "making 2d and 3d."
@@ -18,7 +18,16 @@ wraps: wrap2d wrap3d wrap2dlong wrap3dlong
 
 printout:
 	@echo Running \"$(CXX)\" on \"$(UNAME)\"
-
+	
+ghp: doc
+	echo 'parm.lostinmyterminal.com' > doc/html/CNAME
+	ghp-import doc/html
+	
+doc: doc/html/index.html
+	
+doc/html/index.html: src/*.cpp src/*.hpp src/*.md src/bin/*.cpp pyparm/examples/*.py Doxyfile README.md
+	doxygen Doxyfile >/dev/null
+	
 clean:
 	rm -f bin/* lib/*
 	cd src; rm -f *.o *.so *.gch

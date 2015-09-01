@@ -36,66 +36,66 @@
 %shared_ptr(OriginBox)
 %shared_ptr(InfiniteBox)
 %shared_ptr(LeesEdwardsBox)
-%shared_ptr(SCbox)
+%shared_ptr(SCBox)
 %ignore AtomIter;
-%shared_ptr(atomgroup)
-%shared_ptr(subgroup)
-%shared_ptr(statetracker)
-%shared_ptr(interaction)
-%shared_ptr(constraint)
-%shared_ptr(atomvec)
-%shared_ptr(metagroup)
-%shared_ptr(neighborlist)
+%shared_ptr(AtomGroup)
+%shared_ptr(SubGroup)
+%shared_ptr(StateTracker)
+%shared_ptr(Interaction)
+%shared_ptr(Constraint)
+%shared_ptr(AtomVec)
+%shared_ptr(MetaGroup)
+%shared_ptr(NeighborList)
 %shared_ptr(ContactTracker)
 %shared_ptr(EnergyTracker)
 %shared_ptr(RsqTracker)
 %shared_ptr(ISFTracker)
 %shared_ptr(SmoothLocs)
 %shared_ptr(RDiffs)
-%shared_ptr(SCatomvec)
+%shared_ptr(SCAtomVec)
+%shared_ptr(CoordConstraint)
 %shared_ptr(RigidConstraint)
-%shared_ptr(coordConstraint)
 %shared_ptr(RandomForce)
-%shared_ptr(fixedForce)
-%shared_ptr(fixedForceRegion)
-%shared_ptr(fixedSpring)
+%shared_ptr(FixedForce)
+%shared_ptr(FixedForceRegion)
+%shared_ptr(FixedSpring)
 %shared_ptr(SoftWall)
 %shared_ptr(SoftWallCylinder)
 %shared_ptr(WalledBox2D)
 %shared_ptr(COMSpring)
-%shared_ptr(bondpairs)
-%shared_ptr(angletriples)
-%shared_ptr(dihedrals)
-%shared_ptr(interactionpairsx)
+%shared_ptr(BondPairs)
+%shared_ptr(AngleTriples)
+%shared_ptr(Dihedrals)
+%shared_ptr(InteractionPairsX)
 %shared_ptr(LJsimple)
 %shared_ptr(Charges)
 %shared_ptr(SCSpringList)
-%shared_ptr(coordCOMConstraint)
-%shared_ptr(relativeConstraint)
-%shared_ptr(distConstraint)
-%shared_ptr(linearConstraint)
+%shared_ptr(CoordCOMConstraint)
+%shared_ptr(RelativeConstraint)
+%shared_ptr(DistConstraint)
+%shared_ptr(LinearConstraint)
 %shared_ptr(NPHGaussianConstraint)
-%shared_ptr(SimpleListed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListed< LJatom,LJpair >)
-%shared_ptr(NListed< LJatom,LJpair >)
-%shared_ptr(NListed< LJatomcut,LJAttractPair >)
-%shared_ptr(NListed< HydroAtom,HydroPair >)
-%shared_ptr(NListed< LJAtomIndexed,LJAttractPair >)
-%shared_ptr(NListed< LJAtomIndexed,LJCutPair >)
-%shared_ptr(NListed< LJAttractRepulseAtom,LJAttractRepulsePair >)
-%shared_ptr(NListed< LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair >)
+%shared_ptr(SimpleListed< EpsSigExpAtom,RepulsionPair >)
+%shared_ptr(NListed< EpsSigAtom,LJRepulsePair >)
+%shared_ptr(NListed< EpsSigAtom,LJRepulsePair >)
+%shared_ptr(NListed< EpsSigCutAtom,LJAttractCutPair >)
+%shared_ptr(NListed< IEpsSigCutAtom,LJAttractCutPair >)
+%shared_ptr(NListed< IEpsISigCutAtom,LJAttractCutPair >)
+%shared_ptr(NListed< IEpsISigCutAtom,LennardJonesCutPair >)
+%shared_ptr(NListed< IEpsSigCutAtom,LJAttractRepulsePair >)
+%shared_ptr(NListed< IEpsRepsSigCutAtom,LJAttractFixedRepulsePair >)
 %shared_ptr(NListed< LJDoubleAtom,LJDoublePair >)
 %shared_ptr(NListed< EisMclachlanAtom,EisMclachlanPair >)
-%shared_ptr(NListed< LJishAtom,LJishPair >)
+%shared_ptr(NListed< IEpsRepsSigExpCutAtom,LJishPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPairMinCLs >)
 %shared_ptr(NListed< LoisLinAtom,LoisLinPair >)
 %shared_ptr(NListed< LoisLinAtom,LoisLinPairMin >)
-%shared_ptr(NListed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListed< HertzianAtomIndexed,HertzianPair >)
-%shared_ptr(NListed< HertzianDragAtom,HertzianDragPair >)
-%shared_ptr(SCboxed< HertzianAtom,HertzianPair >)
-%shared_ptr(NListedVirial< HertzianAtom,HertzianPair >)
+%shared_ptr(NListed< EpsSigExpAtom,RepulsionPair >)
+%shared_ptr(NListed< IEpsISigExpAtom,RepulsionPair >)
+%shared_ptr(NListed< EpsSigExpDragAtom,RepulsionDragPair >)
+%shared_ptr(SCBoxed< EpsSigExpAtom,RepulsionPair >)
+%shared_ptr(NListedVirial< EpsSigExpAtom,RepulsionPair >)
 
 %{
 #include "vecrand.hpp"
@@ -341,8 +341,8 @@ static int myErr = 0;
 #endif 
 
 #ifdef VEC2D
-%template(_jamminglist) std::list<jamminglist>;
-%template(_jamminglistrot) std::list<jamminglistrot>;
+%template(_JammingList) std::list<JammingList>;
+%template(_JammingListRot) std::list<JammingListRot>;
 #endif
 
 %template(fvector) std::vector<float>;
@@ -363,21 +363,21 @@ static int myErr = 0;
 // %template(_vvector3) std::vector<Vec3>;
 // %template(_vvvector3) vector<vector<Vec3> >;
 // %template(_vvvvector3) vector<vector<vector<Vec3> > >;
-//%template(avector) vector<shared_ptr<atomgroup> >;
-//%template(aptrvector) vector<shared_ptr<atom> >;
-%template(ivector) std::vector<shared_ptr<interaction> >;
-%template(ifxvector) std::vector<shared_ptr<interactionpairsx> >;
-%template(tvector) std::vector<shared_ptr<statetracker> >;
-%template(constraintvector) std::vector<shared_ptr<constraint> >;
+//%template(avector) vector<shared_ptr<Atomgroup> >;
+//%template(aptrvector) vector<shared_ptr<Atom> >;
+%template(ivector) std::vector<shared_ptr<Interaction> >;
+%template(ifxvector) std::vector<shared_ptr<InteractionPairsX> >;
+%template(tvector) std::vector<shared_ptr<StateTracker> >;
+%template(constraintvector) std::vector<shared_ptr<Constraint> >;
 #ifdef VEC2D
 %template(wallvector) std::vector<shared_ptr<SoftWall> >;
 #endif
-%template(idvector) std::vector<atomid>;
-%template(idpairvector) std::vector<idpair>;
+%template(idvector) std::vector<AtomID>;
+%template(idpairvector) std::vector<IDPair>;
 %template(intvector) std::vector<int>;
 %template(uintvector) std::vector<unsigned int>;
 %template(ulongvector) std::vector<unsigned long>;
-%template(_eventset) std::set<event>;
+%template(_eventset) std::set<Event>;
 %template(pair_uint_CNodePath) std::pair<unsigned int, CNodePath>;
 %template(map_uint_CNodePath) std::map<unsigned int, CNodePath>;
 %template(vector_CNode) std::vector<CNode>;
@@ -393,7 +393,7 @@ static int myErr = 0;
 %template(_ccavector3) std::vector<std::vector<boost::array<std::complex<double>, 3> > >;
 %template(_cccavector3) std::vector<std::vector<std::vector<boost::array<std::complex<double>, 3> > > >;
 
-%extend atom {
+%extend Atom {
     %insert("python") %{
         def __getstate__(self):
             return (tuple(self.x),tuple(self.v),tuple(self.f), tuple(self.a))
@@ -403,41 +403,40 @@ static int myErr = 0;
         
         def __str__(self):
             if hasattr(self, 'name'):
-                return "<atom %s>" % self.name
-            return "<atom>"
+                return "<Atom %s>" % self.name
+            return "<Atom>"
         
         def __repr__(self):
             #ifdef VEC2D
             x,y = tuple(self.x)
             if hasattr(self, 'name'):
-                return "<atom %s at (%.2f,%.2f)>" % (self.name,x,y)
-            return "<atom at (%.2f,%.2f)>" % (x,y)
+                return "<Atom %s at (%.2f,%.2f)>" % (self.name,x,y)
+            return "<Atom at (%.2f,%.2f)>" % (x,y)
             #else
             x,y,z = tuple(self.x)
             if hasattr(self, 'name'):
-                return "<atom %s at (%.2f,%.2f,%.2f)>" % (self.name,x,y,z)
-            return "<atom at (%.2f,%.2f,%.2f)>" % (x,y,z)
+                return "<Atom %s at (%.2f,%.2f,%.2f)>" % (self.name,x,y,z)
+            return "<Atom at (%.2f,%.2f,%.2f)>" % (x,y,z)
             #endif
     %};
 }
 
-%extend atomid {
+%extend AtomID {
     %insert("python") %{
         def __str__(self):
-            return "<atomid %s>" % self.n()
+            return "<AtomID %s>" % self.n()
         
         def __repr__(self):
-            #ifdef VEC2D
-            x,y = tuple(self.x)
-            return "<atomid %s at (%.2f,%.2f)>" % (self.n(),x,y)
-            #else
-            x,y,z = tuple(self.x)
-            return "<atomid %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
-            #endif
+            if len(self.x) == 2:
+                x,y = tuple(self.x)
+                return "<AtomID %s at (%.2f,%.2f)>" % (self.n(),x,y)
+            else:
+                x,y,z = tuple(self.x)
+                return "<AtomID %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
     %};
 }
 
-%extend atomgroup {
+%extend AtomGroup {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
@@ -446,7 +445,7 @@ static int myErr = 0;
 };
 
 
-%extend atomvec {
+%extend AtomVec {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
@@ -457,6 +456,9 @@ static int myErr = 0;
         
         def __getitem__(self, obj):
             return self.get_id(obj)
+        
+        def __str__(self):
+            return str(list(self))
         
         #def __setitem__(self, obj, val):
         #    return self.set(obj, val)
@@ -475,7 +477,7 @@ static int myErr = 0;
     %};
 };
 
-%extend SCatomvec {
+%extend SCAtomVec {
     %insert("python") %{
         def __iter__(self):
             for i in range(self.size()):
@@ -490,17 +492,20 @@ static int myErr = 0;
         
         def __getitem__(self, obj):
             return self.get_id(obj)
+        
+        def __str__(self):
+            return str(list(self))
     %};
 };
 
-%extend idpair {
+%extend IDPair {
     %insert("python") %{
         def __iter__(self):
             return iter((self.first(), self.last()))
     %};
 };
 
-%exception neighborlist::__getitem__ {
+%exception NeighborList::__getitem__ {
   assert(!myErr);
   $action
   if (myErr) {
@@ -515,43 +520,42 @@ static int myErr = 0;
 %include "trackers.hpp"
 %include "interaction.hpp"
 %include "constraints.hpp"
-%template(LJgroup) NListed<LJatom, LJpair>; // Pure repulsive
-%template(LJattract) NListed<LJatomcut, LJAttractPair>;  // Both repulsive and attractive
-%template(Hydrophobicity) NListed<HydroAtom, HydroPair>;  // Pure attractive
-%template(LJattractix) NListed<LJAtomIndexed, LJAttractPair>;  // Pure attractive, with indices for sigma and epsilon
-%template(LJfullix) NListed<LJAtomIndexed, LJCutPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
+%template(LJRepulse) NListed<EpsSigAtom, LJRepulsePair>; // Pure repulsive
+%template(LJAttractCut) NListed<EpsSigCutAtom, LJAttractCutPair>;  // Both repulsive and attractive
+%template(LJAttractICut) NListed<IEpsSigCutAtom, LJAttractCutPair>;  // Pure attractive
+%template(LJAttractIICut) NListed<IEpsISigCutAtom, LJAttractCutPair>;  // Pure attractive, with indices for sigma and epsilon
+%template(LJIICut) NListed<IEpsISigCutAtom, LennardJonesCutPair>;  // Both repulsive and attractive, with indices for sigma and epsilon
 
-// Both repulsive and attractive, with indices for epsilon, sigma fixed per atom.
+// Both repulsive and attractive, with indices for epsilon, sigma fixed per Atom.
 // Positive epsilon -> Attractive + repulsive, negative for pure repulsive.
-%template(LJAttractRepulse) NListed<LJAttractRepulseAtom, LJAttractRepulsePair>;
-%template(LJAttractFixedRepulse) NListed<LJAttractFixedRepulseAtom, LJAttractFixedRepulsePair>;
-%template(LJDouble) NListed<LJDoubleAtom, LJDoublePair>;
+%template(LJAttractRepulse) NListed<IEpsSigCutAtom, LJAttractRepulsePair>;
+%template(LJAttractFixedRepulse) NListed<IEpsRepsSigCutAtom, LJAttractFixedRepulsePair>;
 %template(EisMclachlan) NListed<EisMclachlanAtom, EisMclachlanPair>;
-%template(LJish) NListed<LJishAtom, LJishPair>;
-%template(HertzianSimple) SimpleListed<HertzianAtom, HertzianPair>;
-%template(Hertzian) NListed<HertzianAtom, HertzianPair>;
-%template(HertzianIdx) NListed<HertzianAtomIndexed, HertzianPair>;
-%template(HertzianDrag) NListed<HertzianDragAtom, HertzianDragPair>;
-%template(HertzianSC) SCboxed<HertzianAtom, HertzianPair>;
-%template(HertzianVirial) NListedVirial<HertzianAtom, HertzianPair>;
+%template(LJish) NListed<IEpsRepsSigExpCutAtom, LJishPair>;
+%template(RepulsionSimple) SimpleListed<EpsSigExpAtom, RepulsionPair>;
+%template(Repulsion) NListed<EpsSigExpAtom, RepulsionPair>;
+%template(RepulsionII) NListed<IEpsISigExpAtom, RepulsionPair>;
+%template(HertzianDrag) NListed<EpsSigExpDragAtom, RepulsionDragPair>;
+%template(HertzianSC) SCBoxed<EpsSigExpAtom, RepulsionPair>;
+%template(HertzianVirial) NListedVirial<EpsSigExpAtom, RepulsionPair>;
 %template(LoisOhern) NListed<LoisOhernAtom, LoisOhernPair>;
 %template(LoisLin) NListed<LoisLinAtom, LoisLinPair>;
 %template(LoisLinMin) NListed<LoisLinAtom, LoisLinPairMin>;
 %template(LoisOhernMin) NListed<LoisOhernAtom, LoisOhernPairMinCLs>;
-//%rename(__lt__) jamminglist::operator<;
+//%rename(__lt__) JammingList::operator<;
 
 //%{
-//    shared_ptr<NListedVirial<HertzianAtom, HertzianPair> > Hertzian(neighborlist *neighbors){
-//        NListedVirial<HertzianAtom, HertzianPair> *h = new NListedVirial<HertzianAtom, HertzianPair>(neighbors);
-//        return shared_ptr<NListedVirial<HertzianAtom, HertzianPair> >(h);
+//    shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> > Repulsion(NeighborList *neighbors){
+//        NListedVirial<EpsSigExpAtom, RepulsionPair> *h = new NListedVirial<EpsSigExpAtom, RepulsionPair>(neighbors);
+//        return shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> >(h);
 //    };
 //%}
 
-%extend neighborlist {
-  idpair __getitem__(size_t i) {
+%extend NeighborList {
+  IDPair __getitem__(size_t i) {
     if (i >= $self->numpairs()) {
       myErr = 1;
-      return idpair(atomid(), atomid());
+      return IDPair(AtomID(), AtomID());
     }
     return $self->get((unsigned int) i);
   }
@@ -562,47 +566,6 @@ static int myErr = 0;
             yield self[i]
   %}
 };
-
-// %extend collection {
-//     %insert("python") %{
-//         def __init__(self, box, groups, interactions=None, trackers=None, constraints=None):
-//             self.box = box
-//             self.groups  = groups
-//             self.interactions = interactions
-//             self.trackers = trackers
-//             self.constraints = constraints
-//     %};
-// }
-
-%extend NListed<LJatom, LJpair> {
-    %insert("python") %{
-        def add_atom(self, epsilon, sigma, a):
-            self.add(LJatom(epsilon, sigma, a))
-    %};
-}
-
-%extend NListed<LJatomcut, LJAttractPair> {
-    %insert("python") %{
-        def add_atom(self, epsilon, sigma, a, cut):
-            self.add(LJatomcut(epsilon, sigma, a, cut))
-    %};
-}
-
-%extend RsqTracker {
-    %insert("python") %{
-        def mean_array(self):
-            import numpy as np
-            l = self.means()
-            l = [[list(v) for v in innerl] for innerl in l]
-            return np.array(l)
-        
-        def var_array(self):
-            import numpy as np
-            l = self.vars()
-            l = [[list(v) for v in innerl] for innerl in l]
-            return np.array(l)
-    %};
-}
 
 %include "collection.hpp"
 %include "collection.cpp"
