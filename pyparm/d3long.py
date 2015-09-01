@@ -2073,7 +2073,7 @@ ldvector_swigregister = _sim3dlong.ldvector_swigregister
 ldvector_swigregister(ldvector)
 
 class ivector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(interaction)>)> class"""
+    """Proxy of C++ std::vector<(shared_ptr<(Interaction)>)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -2101,61 +2101,61 @@ class ivector(collections.MutableSequence):
         return _sim3dlong.ivector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< interaction > >::size_type":
-        """__len__(ivector self) -> std::vector< shared_ptr< interaction > >::size_type"""
+    def __len__(self) -> "std::vector< shared_ptr< Interaction > >::size_type":
+        """__len__(ivector self) -> std::vector< shared_ptr< Interaction > >::size_type"""
         return _sim3dlong.ivector___len__(self)
 
 
-    def pop(self) -> "std::vector< shared_ptr< interaction > >::value_type":
-        """pop(ivector self) -> std::vector< shared_ptr< interaction > >::value_type"""
+    def pop(self) -> "std::vector< shared_ptr< Interaction > >::value_type":
+        """pop(ivector self) -> std::vector< shared_ptr< Interaction > >::value_type"""
         return _sim3dlong.ivector_pop(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< interaction > >::difference_type', j: 'std::vector< shared_ptr< interaction > >::difference_type') -> "std::vector< boost::shared_ptr< interaction >,std::allocator< boost::shared_ptr< interaction > > > *":
-        """__getslice__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i, std::vector< shared_ptr< interaction > >::difference_type j) -> std::vector< boost::shared_ptr< interaction >,std::allocator< boost::shared_ptr< interaction > > > *"""
+    def __getslice__(self, i: 'std::vector< shared_ptr< Interaction > >::difference_type', j: 'std::vector< shared_ptr< Interaction > >::difference_type') -> "std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *":
+        """__getslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j) -> std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *"""
         return _sim3dlong.ivector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i, std::vector< shared_ptr< interaction > >::difference_type j, std::vector< boost::shared_ptr< interaction >,std::allocator< boost::shared_ptr< interaction > > > const & v)
-        __setslice__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i, std::vector< shared_ptr< interaction > >::difference_type j)
+        __setslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j, std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > const & v)
+        __setslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j)
         """
         return _sim3dlong.ivector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< interaction > >::difference_type', j: 'std::vector< shared_ptr< interaction > >::difference_type') -> "void":
-        """__delslice__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i, std::vector< shared_ptr< interaction > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< shared_ptr< Interaction > >::difference_type', j: 'std::vector< shared_ptr< Interaction > >::difference_type') -> "void":
+        """__delslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j)"""
         return _sim3dlong.ivector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i)
+        __delitem__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i)
         __delitem__(ivector self, PySliceObject * slice)
         """
         return _sim3dlong.ivector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< interaction > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< shared_ptr< Interaction > >::value_type const &":
         """
-        __getitem__(ivector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< interaction >,std::allocator< boost::shared_ptr< interaction > > >
-        __getitem__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i) -> std::vector< shared_ptr< interaction > >::value_type const &
+        __getitem__(ivector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > >
+        __getitem__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i) -> std::vector< shared_ptr< Interaction > >::value_type const &
         """
         return _sim3dlong.ivector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(ivector self, PySliceObject * slice, std::vector< boost::shared_ptr< interaction >,std::allocator< boost::shared_ptr< interaction > > > const & v)
+        __setitem__(ivector self, PySliceObject * slice, std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > const & v)
         __setitem__(ivector self, PySliceObject * slice)
-        __setitem__(ivector self, std::vector< shared_ptr< interaction > >::difference_type i, std::vector< shared_ptr< interaction > >::value_type const & x)
+        __setitem__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim3dlong.ivector___setitem__(self, *args)
 
 
-    def append(self, x: 'std::vector< shared_ptr< interaction > >::value_type const &') -> "void":
-        """append(ivector self, std::vector< shared_ptr< interaction > >::value_type const & x)"""
+    def append(self, x: 'std::vector< shared_ptr< Interaction > >::value_type const &') -> "void":
+        """append(ivector self, std::vector< shared_ptr< Interaction > >::value_type const & x)"""
         return _sim3dlong.ivector_append(self, x)
 
 
@@ -2164,8 +2164,8 @@ class ivector(collections.MutableSequence):
         return _sim3dlong.ivector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< interaction > >::size_type":
-        """size(ivector self) -> std::vector< shared_ptr< interaction > >::size_type"""
+    def size(self) -> "std::vector< shared_ptr< Interaction > >::size_type":
+        """size(ivector self) -> std::vector< shared_ptr< Interaction > >::size_type"""
         return _sim3dlong.ivector_size(self)
 
 
@@ -2179,28 +2179,28 @@ class ivector(collections.MutableSequence):
         return _sim3dlong.ivector_swap(self, v)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< interaction > >::allocator_type":
-        """get_allocator(ivector self) -> std::vector< shared_ptr< interaction > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< shared_ptr< Interaction > >::allocator_type":
+        """get_allocator(ivector self) -> std::vector< shared_ptr< Interaction > >::allocator_type"""
         return _sim3dlong.ivector_get_allocator(self)
 
 
-    def begin(self) -> "std::vector< shared_ptr< interaction > >::iterator":
-        """begin(ivector self) -> std::vector< shared_ptr< interaction > >::iterator"""
+    def begin(self) -> "std::vector< shared_ptr< Interaction > >::iterator":
+        """begin(ivector self) -> std::vector< shared_ptr< Interaction > >::iterator"""
         return _sim3dlong.ivector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< interaction > >::iterator":
-        """end(ivector self) -> std::vector< shared_ptr< interaction > >::iterator"""
+    def end(self) -> "std::vector< shared_ptr< Interaction > >::iterator":
+        """end(ivector self) -> std::vector< shared_ptr< Interaction > >::iterator"""
         return _sim3dlong.ivector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< interaction > >::reverse_iterator":
-        """rbegin(ivector self) -> std::vector< shared_ptr< interaction > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< shared_ptr< Interaction > >::reverse_iterator":
+        """rbegin(ivector self) -> std::vector< shared_ptr< Interaction > >::reverse_iterator"""
         return _sim3dlong.ivector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< interaction > >::reverse_iterator":
-        """rend(ivector self) -> std::vector< shared_ptr< interaction > >::reverse_iterator"""
+    def rend(self) -> "std::vector< shared_ptr< Interaction > >::reverse_iterator":
+        """rend(ivector self) -> std::vector< shared_ptr< Interaction > >::reverse_iterator"""
         return _sim3dlong.ivector_rend(self)
 
 
@@ -2209,20 +2209,20 @@ class ivector(collections.MutableSequence):
         return _sim3dlong.ivector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< interaction > >::iterator":
+    def erase(self, *args) -> "std::vector< shared_ptr< Interaction > >::iterator":
         """
-        erase(ivector self, std::vector< shared_ptr< interaction > >::iterator pos) -> std::vector< shared_ptr< interaction > >::iterator
-        erase(ivector self, std::vector< shared_ptr< interaction > >::iterator first, std::vector< shared_ptr< interaction > >::iterator last) -> std::vector< shared_ptr< interaction > >::iterator
+        erase(ivector self, std::vector< shared_ptr< Interaction > >::iterator pos) -> std::vector< shared_ptr< Interaction > >::iterator
+        erase(ivector self, std::vector< shared_ptr< Interaction > >::iterator first, std::vector< shared_ptr< Interaction > >::iterator last) -> std::vector< shared_ptr< Interaction > >::iterator
         """
         return _sim3dlong.ivector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(interaction)>)> self) -> ivector
-        __init__(std::vector<(shared_ptr<(interaction)>)> self, ivector arg2) -> ivector
-        __init__(std::vector<(shared_ptr<(interaction)>)> self, std::vector< shared_ptr< interaction > >::size_type size) -> ivector
-        __init__(std::vector<(shared_ptr<(interaction)>)> self, std::vector< shared_ptr< interaction > >::size_type size, std::vector< shared_ptr< interaction > >::value_type const & value) -> ivector
+        __init__(std::vector<(shared_ptr<(Interaction)>)> self) -> ivector
+        __init__(std::vector<(shared_ptr<(Interaction)>)> self, ivector arg2) -> ivector
+        __init__(std::vector<(shared_ptr<(Interaction)>)> self, std::vector< shared_ptr< Interaction > >::size_type size) -> ivector
+        __init__(std::vector<(shared_ptr<(Interaction)>)> self, std::vector< shared_ptr< Interaction > >::size_type size, std::vector< shared_ptr< Interaction > >::value_type const & value) -> ivector
         """
         this = _sim3dlong.new_ivector(*args)
         try:
@@ -2230,49 +2230,49 @@ class ivector(collections.MutableSequence):
         except:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< interaction > >::value_type const &') -> "void":
-        """push_back(ivector self, std::vector< shared_ptr< interaction > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< shared_ptr< Interaction > >::value_type const &') -> "void":
+        """push_back(ivector self, std::vector< shared_ptr< Interaction > >::value_type const & x)"""
         return _sim3dlong.ivector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< interaction > >::value_type const &":
-        """front(ivector self) -> std::vector< shared_ptr< interaction > >::value_type const &"""
+    def front(self) -> "std::vector< shared_ptr< Interaction > >::value_type const &":
+        """front(ivector self) -> std::vector< shared_ptr< Interaction > >::value_type const &"""
         return _sim3dlong.ivector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< interaction > >::value_type const &":
-        """back(ivector self) -> std::vector< shared_ptr< interaction > >::value_type const &"""
+    def back(self) -> "std::vector< shared_ptr< Interaction > >::value_type const &":
+        """back(ivector self) -> std::vector< shared_ptr< Interaction > >::value_type const &"""
         return _sim3dlong.ivector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< interaction > >::size_type', x: 'std::vector< shared_ptr< interaction > >::value_type const &') -> "void":
-        """assign(ivector self, std::vector< shared_ptr< interaction > >::size_type n, std::vector< shared_ptr< interaction > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< shared_ptr< Interaction > >::size_type', x: 'std::vector< shared_ptr< Interaction > >::value_type const &') -> "void":
+        """assign(ivector self, std::vector< shared_ptr< Interaction > >::size_type n, std::vector< shared_ptr< Interaction > >::value_type const & x)"""
         return _sim3dlong.ivector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(ivector self, std::vector< shared_ptr< interaction > >::size_type new_size)
-        resize(ivector self, std::vector< shared_ptr< interaction > >::size_type new_size, std::vector< shared_ptr< interaction > >::value_type const & x)
+        resize(ivector self, std::vector< shared_ptr< Interaction > >::size_type new_size)
+        resize(ivector self, std::vector< shared_ptr< Interaction > >::size_type new_size, std::vector< shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim3dlong.ivector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(ivector self, std::vector< shared_ptr< interaction > >::iterator pos, std::vector< shared_ptr< interaction > >::value_type const & x) -> std::vector< shared_ptr< interaction > >::iterator
-        insert(ivector self, std::vector< shared_ptr< interaction > >::iterator pos, std::vector< shared_ptr< interaction > >::size_type n, std::vector< shared_ptr< interaction > >::value_type const & x)
+        insert(ivector self, std::vector< shared_ptr< Interaction > >::iterator pos, std::vector< shared_ptr< Interaction > >::value_type const & x) -> std::vector< shared_ptr< Interaction > >::iterator
+        insert(ivector self, std::vector< shared_ptr< Interaction > >::iterator pos, std::vector< shared_ptr< Interaction > >::size_type n, std::vector< shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim3dlong.ivector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< interaction > >::size_type') -> "void":
-        """reserve(ivector self, std::vector< shared_ptr< interaction > >::size_type n)"""
+    def reserve(self, n: 'std::vector< shared_ptr< Interaction > >::size_type') -> "void":
+        """reserve(ivector self, std::vector< shared_ptr< Interaction > >::size_type n)"""
         return _sim3dlong.ivector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< interaction > >::size_type":
-        """capacity(ivector self) -> std::vector< shared_ptr< interaction > >::size_type"""
+    def capacity(self) -> "std::vector< shared_ptr< Interaction > >::size_type":
+        """capacity(ivector self) -> std::vector< shared_ptr< Interaction > >::size_type"""
         return _sim3dlong.ivector_capacity(self)
 
     __swig_destroy__ = _sim3dlong.delete_ivector
@@ -2281,7 +2281,7 @@ ivector_swigregister = _sim3dlong.ivector_swigregister
 ivector_swigregister(ivector)
 
 class ifxvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(interactionpairsx)>)> class"""
+    """Proxy of C++ std::vector<(shared_ptr<(InteractionPairsX)>)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -2309,61 +2309,61 @@ class ifxvector(collections.MutableSequence):
         return _sim3dlong.ifxvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< interactionpairsx > >::size_type":
-        """__len__(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::size_type"""
+    def __len__(self) -> "std::vector< shared_ptr< InteractionPairsX > >::size_type":
+        """__len__(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::size_type"""
         return _sim3dlong.ifxvector___len__(self)
 
 
-    def pop(self) -> "std::vector< shared_ptr< interactionpairsx > >::value_type":
-        """pop(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::value_type"""
+    def pop(self) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type":
+        """pop(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::value_type"""
         return _sim3dlong.ifxvector_pop(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< interactionpairsx > >::difference_type', j: 'std::vector< shared_ptr< interactionpairsx > >::difference_type') -> "std::vector< boost::shared_ptr< interactionpairsx >,std::allocator< boost::shared_ptr< interactionpairsx > > > *":
-        """__getslice__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i, std::vector< shared_ptr< interactionpairsx > >::difference_type j) -> std::vector< boost::shared_ptr< interactionpairsx >,std::allocator< boost::shared_ptr< interactionpairsx > > > *"""
+    def __getslice__(self, i: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type') -> "std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *":
+        """__getslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j) -> std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *"""
         return _sim3dlong.ifxvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i, std::vector< shared_ptr< interactionpairsx > >::difference_type j, std::vector< boost::shared_ptr< interactionpairsx >,std::allocator< boost::shared_ptr< interactionpairsx > > > const & v)
-        __setslice__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i, std::vector< shared_ptr< interactionpairsx > >::difference_type j)
+        __setslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j, std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > const & v)
+        __setslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j)
         """
         return _sim3dlong.ifxvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< interactionpairsx > >::difference_type', j: 'std::vector< shared_ptr< interactionpairsx > >::difference_type') -> "void":
-        """__delslice__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i, std::vector< shared_ptr< interactionpairsx > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type') -> "void":
+        """__delslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j)"""
         return _sim3dlong.ifxvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i)
+        __delitem__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i)
         __delitem__(ifxvector self, PySliceObject * slice)
         """
         return _sim3dlong.ifxvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< interactionpairsx > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type const &":
         """
-        __getitem__(ifxvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< interactionpairsx >,std::allocator< boost::shared_ptr< interactionpairsx > > >
-        __getitem__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i) -> std::vector< shared_ptr< interactionpairsx > >::value_type const &
+        __getitem__(ifxvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > >
+        __getitem__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i) -> std::vector< shared_ptr< InteractionPairsX > >::value_type const &
         """
         return _sim3dlong.ifxvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(ifxvector self, PySliceObject * slice, std::vector< boost::shared_ptr< interactionpairsx >,std::allocator< boost::shared_ptr< interactionpairsx > > > const & v)
+        __setitem__(ifxvector self, PySliceObject * slice, std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > const & v)
         __setitem__(ifxvector self, PySliceObject * slice)
-        __setitem__(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::difference_type i, std::vector< shared_ptr< interactionpairsx > >::value_type const & x)
+        __setitem__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim3dlong.ifxvector___setitem__(self, *args)
 
 
-    def append(self, x: 'std::vector< shared_ptr< interactionpairsx > >::value_type const &') -> "void":
-        """append(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::value_type const & x)"""
+    def append(self, x: 'std::vector< shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """append(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim3dlong.ifxvector_append(self, x)
 
 
@@ -2372,8 +2372,8 @@ class ifxvector(collections.MutableSequence):
         return _sim3dlong.ifxvector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< interactionpairsx > >::size_type":
-        """size(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::size_type"""
+    def size(self) -> "std::vector< shared_ptr< InteractionPairsX > >::size_type":
+        """size(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::size_type"""
         return _sim3dlong.ifxvector_size(self)
 
 
@@ -2387,28 +2387,28 @@ class ifxvector(collections.MutableSequence):
         return _sim3dlong.ifxvector_swap(self, v)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< interactionpairsx > >::allocator_type":
-        """get_allocator(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< shared_ptr< InteractionPairsX > >::allocator_type":
+        """get_allocator(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::allocator_type"""
         return _sim3dlong.ifxvector_get_allocator(self)
 
 
-    def begin(self) -> "std::vector< shared_ptr< interactionpairsx > >::iterator":
-        """begin(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::iterator"""
+    def begin(self) -> "std::vector< shared_ptr< InteractionPairsX > >::iterator":
+        """begin(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::iterator"""
         return _sim3dlong.ifxvector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< interactionpairsx > >::iterator":
-        """end(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::iterator"""
+    def end(self) -> "std::vector< shared_ptr< InteractionPairsX > >::iterator":
+        """end(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::iterator"""
         return _sim3dlong.ifxvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< interactionpairsx > >::reverse_iterator":
-        """rbegin(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator":
+        """rbegin(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator"""
         return _sim3dlong.ifxvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< interactionpairsx > >::reverse_iterator":
-        """rend(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::reverse_iterator"""
+    def rend(self) -> "std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator":
+        """rend(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator"""
         return _sim3dlong.ifxvector_rend(self)
 
 
@@ -2417,20 +2417,20 @@ class ifxvector(collections.MutableSequence):
         return _sim3dlong.ifxvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< interactionpairsx > >::iterator":
+    def erase(self, *args) -> "std::vector< shared_ptr< InteractionPairsX > >::iterator":
         """
-        erase(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::iterator pos) -> std::vector< shared_ptr< interactionpairsx > >::iterator
-        erase(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::iterator first, std::vector< shared_ptr< interactionpairsx > >::iterator last) -> std::vector< shared_ptr< interactionpairsx > >::iterator
+        erase(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator pos) -> std::vector< shared_ptr< InteractionPairsX > >::iterator
+        erase(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator first, std::vector< shared_ptr< InteractionPairsX > >::iterator last) -> std::vector< shared_ptr< InteractionPairsX > >::iterator
         """
         return _sim3dlong.ifxvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(interactionpairsx)>)> self) -> ifxvector
-        __init__(std::vector<(shared_ptr<(interactionpairsx)>)> self, ifxvector arg2) -> ifxvector
-        __init__(std::vector<(shared_ptr<(interactionpairsx)>)> self, std::vector< shared_ptr< interactionpairsx > >::size_type size) -> ifxvector
-        __init__(std::vector<(shared_ptr<(interactionpairsx)>)> self, std::vector< shared_ptr< interactionpairsx > >::size_type size, std::vector< shared_ptr< interactionpairsx > >::value_type const & value) -> ifxvector
+        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self) -> ifxvector
+        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self, ifxvector arg2) -> ifxvector
+        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self, std::vector< shared_ptr< InteractionPairsX > >::size_type size) -> ifxvector
+        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self, std::vector< shared_ptr< InteractionPairsX > >::size_type size, std::vector< shared_ptr< InteractionPairsX > >::value_type const & value) -> ifxvector
         """
         this = _sim3dlong.new_ifxvector(*args)
         try:
@@ -2438,49 +2438,49 @@ class ifxvector(collections.MutableSequence):
         except:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< interactionpairsx > >::value_type const &') -> "void":
-        """push_back(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """push_back(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim3dlong.ifxvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< interactionpairsx > >::value_type const &":
-        """front(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::value_type const &"""
+    def front(self) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type const &":
+        """front(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::value_type const &"""
         return _sim3dlong.ifxvector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< interactionpairsx > >::value_type const &":
-        """back(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::value_type const &"""
+    def back(self) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type const &":
+        """back(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::value_type const &"""
         return _sim3dlong.ifxvector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< interactionpairsx > >::size_type', x: 'std::vector< shared_ptr< interactionpairsx > >::value_type const &') -> "void":
-        """assign(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::size_type n, std::vector< shared_ptr< interactionpairsx > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< shared_ptr< InteractionPairsX > >::size_type', x: 'std::vector< shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """assign(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type n, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim3dlong.ifxvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::size_type new_size)
-        resize(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::size_type new_size, std::vector< shared_ptr< interactionpairsx > >::value_type const & x)
+        resize(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type new_size)
+        resize(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type new_size, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim3dlong.ifxvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::iterator pos, std::vector< shared_ptr< interactionpairsx > >::value_type const & x) -> std::vector< shared_ptr< interactionpairsx > >::iterator
-        insert(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::iterator pos, std::vector< shared_ptr< interactionpairsx > >::size_type n, std::vector< shared_ptr< interactionpairsx > >::value_type const & x)
+        insert(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator pos, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x) -> std::vector< shared_ptr< InteractionPairsX > >::iterator
+        insert(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator pos, std::vector< shared_ptr< InteractionPairsX > >::size_type n, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim3dlong.ifxvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< interactionpairsx > >::size_type') -> "void":
-        """reserve(ifxvector self, std::vector< shared_ptr< interactionpairsx > >::size_type n)"""
+    def reserve(self, n: 'std::vector< shared_ptr< InteractionPairsX > >::size_type') -> "void":
+        """reserve(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type n)"""
         return _sim3dlong.ifxvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< interactionpairsx > >::size_type":
-        """capacity(ifxvector self) -> std::vector< shared_ptr< interactionpairsx > >::size_type"""
+    def capacity(self) -> "std::vector< shared_ptr< InteractionPairsX > >::size_type":
+        """capacity(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::size_type"""
         return _sim3dlong.ifxvector_capacity(self)
 
     __swig_destroy__ = _sim3dlong.delete_ifxvector
@@ -2489,7 +2489,7 @@ ifxvector_swigregister = _sim3dlong.ifxvector_swigregister
 ifxvector_swigregister(ifxvector)
 
 class tvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(statetracker)>)> class"""
+    """Proxy of C++ std::vector<(shared_ptr<(StateTracker)>)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -2517,61 +2517,61 @@ class tvector(collections.MutableSequence):
         return _sim3dlong.tvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< statetracker > >::size_type":
-        """__len__(tvector self) -> std::vector< shared_ptr< statetracker > >::size_type"""
+    def __len__(self) -> "std::vector< shared_ptr< StateTracker > >::size_type":
+        """__len__(tvector self) -> std::vector< shared_ptr< StateTracker > >::size_type"""
         return _sim3dlong.tvector___len__(self)
 
 
-    def pop(self) -> "std::vector< shared_ptr< statetracker > >::value_type":
-        """pop(tvector self) -> std::vector< shared_ptr< statetracker > >::value_type"""
+    def pop(self) -> "std::vector< shared_ptr< StateTracker > >::value_type":
+        """pop(tvector self) -> std::vector< shared_ptr< StateTracker > >::value_type"""
         return _sim3dlong.tvector_pop(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< statetracker > >::difference_type', j: 'std::vector< shared_ptr< statetracker > >::difference_type') -> "std::vector< boost::shared_ptr< statetracker >,std::allocator< boost::shared_ptr< statetracker > > > *":
-        """__getslice__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i, std::vector< shared_ptr< statetracker > >::difference_type j) -> std::vector< boost::shared_ptr< statetracker >,std::allocator< boost::shared_ptr< statetracker > > > *"""
+    def __getslice__(self, i: 'std::vector< shared_ptr< StateTracker > >::difference_type', j: 'std::vector< shared_ptr< StateTracker > >::difference_type') -> "std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *":
+        """__getslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j) -> std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *"""
         return _sim3dlong.tvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i, std::vector< shared_ptr< statetracker > >::difference_type j, std::vector< boost::shared_ptr< statetracker >,std::allocator< boost::shared_ptr< statetracker > > > const & v)
-        __setslice__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i, std::vector< shared_ptr< statetracker > >::difference_type j)
+        __setslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j, std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > const & v)
+        __setslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j)
         """
         return _sim3dlong.tvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< statetracker > >::difference_type', j: 'std::vector< shared_ptr< statetracker > >::difference_type') -> "void":
-        """__delslice__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i, std::vector< shared_ptr< statetracker > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< shared_ptr< StateTracker > >::difference_type', j: 'std::vector< shared_ptr< StateTracker > >::difference_type') -> "void":
+        """__delslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j)"""
         return _sim3dlong.tvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i)
+        __delitem__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i)
         __delitem__(tvector self, PySliceObject * slice)
         """
         return _sim3dlong.tvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< statetracker > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< shared_ptr< StateTracker > >::value_type const &":
         """
-        __getitem__(tvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< statetracker >,std::allocator< boost::shared_ptr< statetracker > > >
-        __getitem__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i) -> std::vector< shared_ptr< statetracker > >::value_type const &
+        __getitem__(tvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > >
+        __getitem__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i) -> std::vector< shared_ptr< StateTracker > >::value_type const &
         """
         return _sim3dlong.tvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(tvector self, PySliceObject * slice, std::vector< boost::shared_ptr< statetracker >,std::allocator< boost::shared_ptr< statetracker > > > const & v)
+        __setitem__(tvector self, PySliceObject * slice, std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > const & v)
         __setitem__(tvector self, PySliceObject * slice)
-        __setitem__(tvector self, std::vector< shared_ptr< statetracker > >::difference_type i, std::vector< shared_ptr< statetracker > >::value_type const & x)
+        __setitem__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim3dlong.tvector___setitem__(self, *args)
 
 
-    def append(self, x: 'std::vector< shared_ptr< statetracker > >::value_type const &') -> "void":
-        """append(tvector self, std::vector< shared_ptr< statetracker > >::value_type const & x)"""
+    def append(self, x: 'std::vector< shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """append(tvector self, std::vector< shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim3dlong.tvector_append(self, x)
 
 
@@ -2580,8 +2580,8 @@ class tvector(collections.MutableSequence):
         return _sim3dlong.tvector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< statetracker > >::size_type":
-        """size(tvector self) -> std::vector< shared_ptr< statetracker > >::size_type"""
+    def size(self) -> "std::vector< shared_ptr< StateTracker > >::size_type":
+        """size(tvector self) -> std::vector< shared_ptr< StateTracker > >::size_type"""
         return _sim3dlong.tvector_size(self)
 
 
@@ -2595,28 +2595,28 @@ class tvector(collections.MutableSequence):
         return _sim3dlong.tvector_swap(self, v)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< statetracker > >::allocator_type":
-        """get_allocator(tvector self) -> std::vector< shared_ptr< statetracker > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< shared_ptr< StateTracker > >::allocator_type":
+        """get_allocator(tvector self) -> std::vector< shared_ptr< StateTracker > >::allocator_type"""
         return _sim3dlong.tvector_get_allocator(self)
 
 
-    def begin(self) -> "std::vector< shared_ptr< statetracker > >::iterator":
-        """begin(tvector self) -> std::vector< shared_ptr< statetracker > >::iterator"""
+    def begin(self) -> "std::vector< shared_ptr< StateTracker > >::iterator":
+        """begin(tvector self) -> std::vector< shared_ptr< StateTracker > >::iterator"""
         return _sim3dlong.tvector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< statetracker > >::iterator":
-        """end(tvector self) -> std::vector< shared_ptr< statetracker > >::iterator"""
+    def end(self) -> "std::vector< shared_ptr< StateTracker > >::iterator":
+        """end(tvector self) -> std::vector< shared_ptr< StateTracker > >::iterator"""
         return _sim3dlong.tvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< statetracker > >::reverse_iterator":
-        """rbegin(tvector self) -> std::vector< shared_ptr< statetracker > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< shared_ptr< StateTracker > >::reverse_iterator":
+        """rbegin(tvector self) -> std::vector< shared_ptr< StateTracker > >::reverse_iterator"""
         return _sim3dlong.tvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< statetracker > >::reverse_iterator":
-        """rend(tvector self) -> std::vector< shared_ptr< statetracker > >::reverse_iterator"""
+    def rend(self) -> "std::vector< shared_ptr< StateTracker > >::reverse_iterator":
+        """rend(tvector self) -> std::vector< shared_ptr< StateTracker > >::reverse_iterator"""
         return _sim3dlong.tvector_rend(self)
 
 
@@ -2625,20 +2625,20 @@ class tvector(collections.MutableSequence):
         return _sim3dlong.tvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< statetracker > >::iterator":
+    def erase(self, *args) -> "std::vector< shared_ptr< StateTracker > >::iterator":
         """
-        erase(tvector self, std::vector< shared_ptr< statetracker > >::iterator pos) -> std::vector< shared_ptr< statetracker > >::iterator
-        erase(tvector self, std::vector< shared_ptr< statetracker > >::iterator first, std::vector< shared_ptr< statetracker > >::iterator last) -> std::vector< shared_ptr< statetracker > >::iterator
+        erase(tvector self, std::vector< shared_ptr< StateTracker > >::iterator pos) -> std::vector< shared_ptr< StateTracker > >::iterator
+        erase(tvector self, std::vector< shared_ptr< StateTracker > >::iterator first, std::vector< shared_ptr< StateTracker > >::iterator last) -> std::vector< shared_ptr< StateTracker > >::iterator
         """
         return _sim3dlong.tvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(statetracker)>)> self) -> tvector
-        __init__(std::vector<(shared_ptr<(statetracker)>)> self, tvector arg2) -> tvector
-        __init__(std::vector<(shared_ptr<(statetracker)>)> self, std::vector< shared_ptr< statetracker > >::size_type size) -> tvector
-        __init__(std::vector<(shared_ptr<(statetracker)>)> self, std::vector< shared_ptr< statetracker > >::size_type size, std::vector< shared_ptr< statetracker > >::value_type const & value) -> tvector
+        __init__(std::vector<(shared_ptr<(StateTracker)>)> self) -> tvector
+        __init__(std::vector<(shared_ptr<(StateTracker)>)> self, tvector arg2) -> tvector
+        __init__(std::vector<(shared_ptr<(StateTracker)>)> self, std::vector< shared_ptr< StateTracker > >::size_type size) -> tvector
+        __init__(std::vector<(shared_ptr<(StateTracker)>)> self, std::vector< shared_ptr< StateTracker > >::size_type size, std::vector< shared_ptr< StateTracker > >::value_type const & value) -> tvector
         """
         this = _sim3dlong.new_tvector(*args)
         try:
@@ -2646,49 +2646,49 @@ class tvector(collections.MutableSequence):
         except:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< statetracker > >::value_type const &') -> "void":
-        """push_back(tvector self, std::vector< shared_ptr< statetracker > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """push_back(tvector self, std::vector< shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim3dlong.tvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< statetracker > >::value_type const &":
-        """front(tvector self) -> std::vector< shared_ptr< statetracker > >::value_type const &"""
+    def front(self) -> "std::vector< shared_ptr< StateTracker > >::value_type const &":
+        """front(tvector self) -> std::vector< shared_ptr< StateTracker > >::value_type const &"""
         return _sim3dlong.tvector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< statetracker > >::value_type const &":
-        """back(tvector self) -> std::vector< shared_ptr< statetracker > >::value_type const &"""
+    def back(self) -> "std::vector< shared_ptr< StateTracker > >::value_type const &":
+        """back(tvector self) -> std::vector< shared_ptr< StateTracker > >::value_type const &"""
         return _sim3dlong.tvector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< statetracker > >::size_type', x: 'std::vector< shared_ptr< statetracker > >::value_type const &') -> "void":
-        """assign(tvector self, std::vector< shared_ptr< statetracker > >::size_type n, std::vector< shared_ptr< statetracker > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< shared_ptr< StateTracker > >::size_type', x: 'std::vector< shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """assign(tvector self, std::vector< shared_ptr< StateTracker > >::size_type n, std::vector< shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim3dlong.tvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(tvector self, std::vector< shared_ptr< statetracker > >::size_type new_size)
-        resize(tvector self, std::vector< shared_ptr< statetracker > >::size_type new_size, std::vector< shared_ptr< statetracker > >::value_type const & x)
+        resize(tvector self, std::vector< shared_ptr< StateTracker > >::size_type new_size)
+        resize(tvector self, std::vector< shared_ptr< StateTracker > >::size_type new_size, std::vector< shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim3dlong.tvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(tvector self, std::vector< shared_ptr< statetracker > >::iterator pos, std::vector< shared_ptr< statetracker > >::value_type const & x) -> std::vector< shared_ptr< statetracker > >::iterator
-        insert(tvector self, std::vector< shared_ptr< statetracker > >::iterator pos, std::vector< shared_ptr< statetracker > >::size_type n, std::vector< shared_ptr< statetracker > >::value_type const & x)
+        insert(tvector self, std::vector< shared_ptr< StateTracker > >::iterator pos, std::vector< shared_ptr< StateTracker > >::value_type const & x) -> std::vector< shared_ptr< StateTracker > >::iterator
+        insert(tvector self, std::vector< shared_ptr< StateTracker > >::iterator pos, std::vector< shared_ptr< StateTracker > >::size_type n, std::vector< shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim3dlong.tvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< statetracker > >::size_type') -> "void":
-        """reserve(tvector self, std::vector< shared_ptr< statetracker > >::size_type n)"""
+    def reserve(self, n: 'std::vector< shared_ptr< StateTracker > >::size_type') -> "void":
+        """reserve(tvector self, std::vector< shared_ptr< StateTracker > >::size_type n)"""
         return _sim3dlong.tvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< statetracker > >::size_type":
-        """capacity(tvector self) -> std::vector< shared_ptr< statetracker > >::size_type"""
+    def capacity(self) -> "std::vector< shared_ptr< StateTracker > >::size_type":
+        """capacity(tvector self) -> std::vector< shared_ptr< StateTracker > >::size_type"""
         return _sim3dlong.tvector_capacity(self)
 
     __swig_destroy__ = _sim3dlong.delete_tvector
@@ -2697,7 +2697,7 @@ tvector_swigregister = _sim3dlong.tvector_swigregister
 tvector_swigregister(tvector)
 
 class constraintvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(constraint)>)> class"""
+    """Proxy of C++ std::vector<(shared_ptr<(Constraint)>)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -2725,61 +2725,61 @@ class constraintvector(collections.MutableSequence):
         return _sim3dlong.constraintvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< constraint > >::size_type":
-        """__len__(constraintvector self) -> std::vector< shared_ptr< constraint > >::size_type"""
+    def __len__(self) -> "std::vector< shared_ptr< Constraint > >::size_type":
+        """__len__(constraintvector self) -> std::vector< shared_ptr< Constraint > >::size_type"""
         return _sim3dlong.constraintvector___len__(self)
 
 
-    def pop(self) -> "std::vector< shared_ptr< constraint > >::value_type":
-        """pop(constraintvector self) -> std::vector< shared_ptr< constraint > >::value_type"""
+    def pop(self) -> "std::vector< shared_ptr< Constraint > >::value_type":
+        """pop(constraintvector self) -> std::vector< shared_ptr< Constraint > >::value_type"""
         return _sim3dlong.constraintvector_pop(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< constraint > >::difference_type', j: 'std::vector< shared_ptr< constraint > >::difference_type') -> "std::vector< boost::shared_ptr< constraint >,std::allocator< boost::shared_ptr< constraint > > > *":
-        """__getslice__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i, std::vector< shared_ptr< constraint > >::difference_type j) -> std::vector< boost::shared_ptr< constraint >,std::allocator< boost::shared_ptr< constraint > > > *"""
+    def __getslice__(self, i: 'std::vector< shared_ptr< Constraint > >::difference_type', j: 'std::vector< shared_ptr< Constraint > >::difference_type') -> "std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *":
+        """__getslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j) -> std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *"""
         return _sim3dlong.constraintvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i, std::vector< shared_ptr< constraint > >::difference_type j, std::vector< boost::shared_ptr< constraint >,std::allocator< boost::shared_ptr< constraint > > > const & v)
-        __setslice__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i, std::vector< shared_ptr< constraint > >::difference_type j)
+        __setslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j, std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > const & v)
+        __setslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j)
         """
         return _sim3dlong.constraintvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< constraint > >::difference_type', j: 'std::vector< shared_ptr< constraint > >::difference_type') -> "void":
-        """__delslice__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i, std::vector< shared_ptr< constraint > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< shared_ptr< Constraint > >::difference_type', j: 'std::vector< shared_ptr< Constraint > >::difference_type') -> "void":
+        """__delslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j)"""
         return _sim3dlong.constraintvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i)
+        __delitem__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i)
         __delitem__(constraintvector self, PySliceObject * slice)
         """
         return _sim3dlong.constraintvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< constraint > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< shared_ptr< Constraint > >::value_type const &":
         """
-        __getitem__(constraintvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< constraint >,std::allocator< boost::shared_ptr< constraint > > >
-        __getitem__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i) -> std::vector< shared_ptr< constraint > >::value_type const &
+        __getitem__(constraintvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > >
+        __getitem__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i) -> std::vector< shared_ptr< Constraint > >::value_type const &
         """
         return _sim3dlong.constraintvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(constraintvector self, PySliceObject * slice, std::vector< boost::shared_ptr< constraint >,std::allocator< boost::shared_ptr< constraint > > > const & v)
+        __setitem__(constraintvector self, PySliceObject * slice, std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > const & v)
         __setitem__(constraintvector self, PySliceObject * slice)
-        __setitem__(constraintvector self, std::vector< shared_ptr< constraint > >::difference_type i, std::vector< shared_ptr< constraint > >::value_type const & x)
+        __setitem__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim3dlong.constraintvector___setitem__(self, *args)
 
 
-    def append(self, x: 'std::vector< shared_ptr< constraint > >::value_type const &') -> "void":
-        """append(constraintvector self, std::vector< shared_ptr< constraint > >::value_type const & x)"""
+    def append(self, x: 'std::vector< shared_ptr< Constraint > >::value_type const &') -> "void":
+        """append(constraintvector self, std::vector< shared_ptr< Constraint > >::value_type const & x)"""
         return _sim3dlong.constraintvector_append(self, x)
 
 
@@ -2788,8 +2788,8 @@ class constraintvector(collections.MutableSequence):
         return _sim3dlong.constraintvector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< constraint > >::size_type":
-        """size(constraintvector self) -> std::vector< shared_ptr< constraint > >::size_type"""
+    def size(self) -> "std::vector< shared_ptr< Constraint > >::size_type":
+        """size(constraintvector self) -> std::vector< shared_ptr< Constraint > >::size_type"""
         return _sim3dlong.constraintvector_size(self)
 
 
@@ -2803,28 +2803,28 @@ class constraintvector(collections.MutableSequence):
         return _sim3dlong.constraintvector_swap(self, v)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< constraint > >::allocator_type":
-        """get_allocator(constraintvector self) -> std::vector< shared_ptr< constraint > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< shared_ptr< Constraint > >::allocator_type":
+        """get_allocator(constraintvector self) -> std::vector< shared_ptr< Constraint > >::allocator_type"""
         return _sim3dlong.constraintvector_get_allocator(self)
 
 
-    def begin(self) -> "std::vector< shared_ptr< constraint > >::iterator":
-        """begin(constraintvector self) -> std::vector< shared_ptr< constraint > >::iterator"""
+    def begin(self) -> "std::vector< shared_ptr< Constraint > >::iterator":
+        """begin(constraintvector self) -> std::vector< shared_ptr< Constraint > >::iterator"""
         return _sim3dlong.constraintvector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< constraint > >::iterator":
-        """end(constraintvector self) -> std::vector< shared_ptr< constraint > >::iterator"""
+    def end(self) -> "std::vector< shared_ptr< Constraint > >::iterator":
+        """end(constraintvector self) -> std::vector< shared_ptr< Constraint > >::iterator"""
         return _sim3dlong.constraintvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< constraint > >::reverse_iterator":
-        """rbegin(constraintvector self) -> std::vector< shared_ptr< constraint > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< shared_ptr< Constraint > >::reverse_iterator":
+        """rbegin(constraintvector self) -> std::vector< shared_ptr< Constraint > >::reverse_iterator"""
         return _sim3dlong.constraintvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< constraint > >::reverse_iterator":
-        """rend(constraintvector self) -> std::vector< shared_ptr< constraint > >::reverse_iterator"""
+    def rend(self) -> "std::vector< shared_ptr< Constraint > >::reverse_iterator":
+        """rend(constraintvector self) -> std::vector< shared_ptr< Constraint > >::reverse_iterator"""
         return _sim3dlong.constraintvector_rend(self)
 
 
@@ -2833,20 +2833,20 @@ class constraintvector(collections.MutableSequence):
         return _sim3dlong.constraintvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< constraint > >::iterator":
+    def erase(self, *args) -> "std::vector< shared_ptr< Constraint > >::iterator":
         """
-        erase(constraintvector self, std::vector< shared_ptr< constraint > >::iterator pos) -> std::vector< shared_ptr< constraint > >::iterator
-        erase(constraintvector self, std::vector< shared_ptr< constraint > >::iterator first, std::vector< shared_ptr< constraint > >::iterator last) -> std::vector< shared_ptr< constraint > >::iterator
+        erase(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator pos) -> std::vector< shared_ptr< Constraint > >::iterator
+        erase(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator first, std::vector< shared_ptr< Constraint > >::iterator last) -> std::vector< shared_ptr< Constraint > >::iterator
         """
         return _sim3dlong.constraintvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(constraint)>)> self) -> constraintvector
-        __init__(std::vector<(shared_ptr<(constraint)>)> self, constraintvector arg2) -> constraintvector
-        __init__(std::vector<(shared_ptr<(constraint)>)> self, std::vector< shared_ptr< constraint > >::size_type size) -> constraintvector
-        __init__(std::vector<(shared_ptr<(constraint)>)> self, std::vector< shared_ptr< constraint > >::size_type size, std::vector< shared_ptr< constraint > >::value_type const & value) -> constraintvector
+        __init__(std::vector<(shared_ptr<(Constraint)>)> self) -> constraintvector
+        __init__(std::vector<(shared_ptr<(Constraint)>)> self, constraintvector arg2) -> constraintvector
+        __init__(std::vector<(shared_ptr<(Constraint)>)> self, std::vector< shared_ptr< Constraint > >::size_type size) -> constraintvector
+        __init__(std::vector<(shared_ptr<(Constraint)>)> self, std::vector< shared_ptr< Constraint > >::size_type size, std::vector< shared_ptr< Constraint > >::value_type const & value) -> constraintvector
         """
         this = _sim3dlong.new_constraintvector(*args)
         try:
@@ -2854,49 +2854,49 @@ class constraintvector(collections.MutableSequence):
         except:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< constraint > >::value_type const &') -> "void":
-        """push_back(constraintvector self, std::vector< shared_ptr< constraint > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< shared_ptr< Constraint > >::value_type const &') -> "void":
+        """push_back(constraintvector self, std::vector< shared_ptr< Constraint > >::value_type const & x)"""
         return _sim3dlong.constraintvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< constraint > >::value_type const &":
-        """front(constraintvector self) -> std::vector< shared_ptr< constraint > >::value_type const &"""
+    def front(self) -> "std::vector< shared_ptr< Constraint > >::value_type const &":
+        """front(constraintvector self) -> std::vector< shared_ptr< Constraint > >::value_type const &"""
         return _sim3dlong.constraintvector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< constraint > >::value_type const &":
-        """back(constraintvector self) -> std::vector< shared_ptr< constraint > >::value_type const &"""
+    def back(self) -> "std::vector< shared_ptr< Constraint > >::value_type const &":
+        """back(constraintvector self) -> std::vector< shared_ptr< Constraint > >::value_type const &"""
         return _sim3dlong.constraintvector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< constraint > >::size_type', x: 'std::vector< shared_ptr< constraint > >::value_type const &') -> "void":
-        """assign(constraintvector self, std::vector< shared_ptr< constraint > >::size_type n, std::vector< shared_ptr< constraint > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< shared_ptr< Constraint > >::size_type', x: 'std::vector< shared_ptr< Constraint > >::value_type const &') -> "void":
+        """assign(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type n, std::vector< shared_ptr< Constraint > >::value_type const & x)"""
         return _sim3dlong.constraintvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(constraintvector self, std::vector< shared_ptr< constraint > >::size_type new_size)
-        resize(constraintvector self, std::vector< shared_ptr< constraint > >::size_type new_size, std::vector< shared_ptr< constraint > >::value_type const & x)
+        resize(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type new_size)
+        resize(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type new_size, std::vector< shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim3dlong.constraintvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(constraintvector self, std::vector< shared_ptr< constraint > >::iterator pos, std::vector< shared_ptr< constraint > >::value_type const & x) -> std::vector< shared_ptr< constraint > >::iterator
-        insert(constraintvector self, std::vector< shared_ptr< constraint > >::iterator pos, std::vector< shared_ptr< constraint > >::size_type n, std::vector< shared_ptr< constraint > >::value_type const & x)
+        insert(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator pos, std::vector< shared_ptr< Constraint > >::value_type const & x) -> std::vector< shared_ptr< Constraint > >::iterator
+        insert(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator pos, std::vector< shared_ptr< Constraint > >::size_type n, std::vector< shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim3dlong.constraintvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< constraint > >::size_type') -> "void":
-        """reserve(constraintvector self, std::vector< shared_ptr< constraint > >::size_type n)"""
+    def reserve(self, n: 'std::vector< shared_ptr< Constraint > >::size_type') -> "void":
+        """reserve(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type n)"""
         return _sim3dlong.constraintvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< constraint > >::size_type":
-        """capacity(constraintvector self) -> std::vector< shared_ptr< constraint > >::size_type"""
+    def capacity(self) -> "std::vector< shared_ptr< Constraint > >::size_type":
+        """capacity(constraintvector self) -> std::vector< shared_ptr< Constraint > >::size_type"""
         return _sim3dlong.constraintvector_capacity(self)
 
     __swig_destroy__ = _sim3dlong.delete_constraintvector
@@ -2905,7 +2905,7 @@ constraintvector_swigregister = _sim3dlong.constraintvector_swigregister
 constraintvector_swigregister(constraintvector)
 
 class idvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(atomid)> class"""
+    """Proxy of C++ std::vector<(AtomID)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -2933,46 +2933,46 @@ class idvector(collections.MutableSequence):
         return _sim3dlong.idvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< atomid >::size_type":
-        """__len__(idvector self) -> std::vector< atomid >::size_type"""
+    def __len__(self) -> "std::vector< AtomID >::size_type":
+        """__len__(idvector self) -> std::vector< AtomID >::size_type"""
         return _sim3dlong.idvector___len__(self)
 
 
-    def pop(self) -> "std::vector< atomid >::value_type":
-        """pop(idvector self) -> atomid"""
+    def pop(self) -> "std::vector< AtomID >::value_type":
+        """pop(idvector self) -> AtomID"""
         return _sim3dlong.idvector_pop(self)
 
 
-    def __getslice__(self, i: 'std::vector< atomid >::difference_type', j: 'std::vector< atomid >::difference_type') -> "std::vector< atomid,std::allocator< atomid > > *":
-        """__getslice__(idvector self, std::vector< atomid >::difference_type i, std::vector< atomid >::difference_type j) -> idvector"""
+    def __getslice__(self, i: 'std::vector< AtomID >::difference_type', j: 'std::vector< AtomID >::difference_type') -> "std::vector< AtomID,std::allocator< AtomID > > *":
+        """__getslice__(idvector self, std::vector< AtomID >::difference_type i, std::vector< AtomID >::difference_type j) -> idvector"""
         return _sim3dlong.idvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(idvector self, std::vector< atomid >::difference_type i, std::vector< atomid >::difference_type j, idvector v)
-        __setslice__(idvector self, std::vector< atomid >::difference_type i, std::vector< atomid >::difference_type j)
+        __setslice__(idvector self, std::vector< AtomID >::difference_type i, std::vector< AtomID >::difference_type j, idvector v)
+        __setslice__(idvector self, std::vector< AtomID >::difference_type i, std::vector< AtomID >::difference_type j)
         """
         return _sim3dlong.idvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< atomid >::difference_type', j: 'std::vector< atomid >::difference_type') -> "void":
-        """__delslice__(idvector self, std::vector< atomid >::difference_type i, std::vector< atomid >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< AtomID >::difference_type', j: 'std::vector< AtomID >::difference_type') -> "void":
+        """__delslice__(idvector self, std::vector< AtomID >::difference_type i, std::vector< AtomID >::difference_type j)"""
         return _sim3dlong.idvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(idvector self, std::vector< atomid >::difference_type i)
+        __delitem__(idvector self, std::vector< AtomID >::difference_type i)
         __delitem__(idvector self, PySliceObject * slice)
         """
         return _sim3dlong.idvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< atomid >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< AtomID >::value_type const &":
         """
         __getitem__(idvector self, PySliceObject * slice) -> idvector
-        __getitem__(idvector self, std::vector< atomid >::difference_type i) -> atomid
+        __getitem__(idvector self, std::vector< AtomID >::difference_type i) -> AtomID
         """
         return _sim3dlong.idvector___getitem__(self, *args)
 
@@ -2981,13 +2981,13 @@ class idvector(collections.MutableSequence):
         """
         __setitem__(idvector self, PySliceObject * slice, idvector v)
         __setitem__(idvector self, PySliceObject * slice)
-        __setitem__(idvector self, std::vector< atomid >::difference_type i, atomid x)
+        __setitem__(idvector self, std::vector< AtomID >::difference_type i, AtomID x)
         """
         return _sim3dlong.idvector___setitem__(self, *args)
 
 
-    def append(self, x: 'atomid') -> "void":
-        """append(idvector self, atomid x)"""
+    def append(self, x: 'AtomID') -> "void":
+        """append(idvector self, AtomID x)"""
         return _sim3dlong.idvector_append(self, x)
 
 
@@ -2996,8 +2996,8 @@ class idvector(collections.MutableSequence):
         return _sim3dlong.idvector_empty(self)
 
 
-    def size(self) -> "std::vector< atomid >::size_type":
-        """size(idvector self) -> std::vector< atomid >::size_type"""
+    def size(self) -> "std::vector< AtomID >::size_type":
+        """size(idvector self) -> std::vector< AtomID >::size_type"""
         return _sim3dlong.idvector_size(self)
 
 
@@ -3011,28 +3011,28 @@ class idvector(collections.MutableSequence):
         return _sim3dlong.idvector_swap(self, v)
 
 
-    def get_allocator(self) -> "std::vector< atomid >::allocator_type":
-        """get_allocator(idvector self) -> std::vector< atomid >::allocator_type"""
+    def get_allocator(self) -> "std::vector< AtomID >::allocator_type":
+        """get_allocator(idvector self) -> std::vector< AtomID >::allocator_type"""
         return _sim3dlong.idvector_get_allocator(self)
 
 
-    def begin(self) -> "std::vector< atomid >::iterator":
-        """begin(idvector self) -> std::vector< atomid >::iterator"""
+    def begin(self) -> "std::vector< AtomID >::iterator":
+        """begin(idvector self) -> std::vector< AtomID >::iterator"""
         return _sim3dlong.idvector_begin(self)
 
 
-    def end(self) -> "std::vector< atomid >::iterator":
-        """end(idvector self) -> std::vector< atomid >::iterator"""
+    def end(self) -> "std::vector< AtomID >::iterator":
+        """end(idvector self) -> std::vector< AtomID >::iterator"""
         return _sim3dlong.idvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< atomid >::reverse_iterator":
-        """rbegin(idvector self) -> std::vector< atomid >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< AtomID >::reverse_iterator":
+        """rbegin(idvector self) -> std::vector< AtomID >::reverse_iterator"""
         return _sim3dlong.idvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< atomid >::reverse_iterator":
-        """rend(idvector self) -> std::vector< atomid >::reverse_iterator"""
+    def rend(self) -> "std::vector< AtomID >::reverse_iterator":
+        """rend(idvector self) -> std::vector< AtomID >::reverse_iterator"""
         return _sim3dlong.idvector_rend(self)
 
 
@@ -3041,20 +3041,20 @@ class idvector(collections.MutableSequence):
         return _sim3dlong.idvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< atomid >::iterator":
+    def erase(self, *args) -> "std::vector< AtomID >::iterator":
         """
-        erase(idvector self, std::vector< atomid >::iterator pos) -> std::vector< atomid >::iterator
-        erase(idvector self, std::vector< atomid >::iterator first, std::vector< atomid >::iterator last) -> std::vector< atomid >::iterator
+        erase(idvector self, std::vector< AtomID >::iterator pos) -> std::vector< AtomID >::iterator
+        erase(idvector self, std::vector< AtomID >::iterator first, std::vector< AtomID >::iterator last) -> std::vector< AtomID >::iterator
         """
         return _sim3dlong.idvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(atomid)> self) -> idvector
-        __init__(std::vector<(atomid)> self, idvector arg2) -> idvector
-        __init__(std::vector<(atomid)> self, std::vector< atomid >::size_type size) -> idvector
-        __init__(std::vector<(atomid)> self, std::vector< atomid >::size_type size, atomid value) -> idvector
+        __init__(std::vector<(AtomID)> self) -> idvector
+        __init__(std::vector<(AtomID)> self, idvector arg2) -> idvector
+        __init__(std::vector<(AtomID)> self, std::vector< AtomID >::size_type size) -> idvector
+        __init__(std::vector<(AtomID)> self, std::vector< AtomID >::size_type size, AtomID value) -> idvector
         """
         this = _sim3dlong.new_idvector(*args)
         try:
@@ -3062,49 +3062,49 @@ class idvector(collections.MutableSequence):
         except:
             self.this = this
 
-    def push_back(self, x: 'atomid') -> "void":
-        """push_back(idvector self, atomid x)"""
+    def push_back(self, x: 'AtomID') -> "void":
+        """push_back(idvector self, AtomID x)"""
         return _sim3dlong.idvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< atomid >::value_type const &":
-        """front(idvector self) -> atomid"""
+    def front(self) -> "std::vector< AtomID >::value_type const &":
+        """front(idvector self) -> AtomID"""
         return _sim3dlong.idvector_front(self)
 
 
-    def back(self) -> "std::vector< atomid >::value_type const &":
-        """back(idvector self) -> atomid"""
+    def back(self) -> "std::vector< AtomID >::value_type const &":
+        """back(idvector self) -> AtomID"""
         return _sim3dlong.idvector_back(self)
 
 
-    def assign(self, n: 'std::vector< atomid >::size_type', x: 'atomid') -> "void":
-        """assign(idvector self, std::vector< atomid >::size_type n, atomid x)"""
+    def assign(self, n: 'std::vector< AtomID >::size_type', x: 'AtomID') -> "void":
+        """assign(idvector self, std::vector< AtomID >::size_type n, AtomID x)"""
         return _sim3dlong.idvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(idvector self, std::vector< atomid >::size_type new_size)
-        resize(idvector self, std::vector< atomid >::size_type new_size, atomid x)
+        resize(idvector self, std::vector< AtomID >::size_type new_size)
+        resize(idvector self, std::vector< AtomID >::size_type new_size, AtomID x)
         """
         return _sim3dlong.idvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(idvector self, std::vector< atomid >::iterator pos, atomid x) -> std::vector< atomid >::iterator
-        insert(idvector self, std::vector< atomid >::iterator pos, std::vector< atomid >::size_type n, atomid x)
+        insert(idvector self, std::vector< AtomID >::iterator pos, AtomID x) -> std::vector< AtomID >::iterator
+        insert(idvector self, std::vector< AtomID >::iterator pos, std::vector< AtomID >::size_type n, AtomID x)
         """
         return _sim3dlong.idvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< atomid >::size_type') -> "void":
-        """reserve(idvector self, std::vector< atomid >::size_type n)"""
+    def reserve(self, n: 'std::vector< AtomID >::size_type') -> "void":
+        """reserve(idvector self, std::vector< AtomID >::size_type n)"""
         return _sim3dlong.idvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< atomid >::size_type":
-        """capacity(idvector self) -> std::vector< atomid >::size_type"""
+    def capacity(self) -> "std::vector< AtomID >::size_type":
+        """capacity(idvector self) -> std::vector< AtomID >::size_type"""
         return _sim3dlong.idvector_capacity(self)
 
     __swig_destroy__ = _sim3dlong.delete_idvector
@@ -3113,7 +3113,7 @@ idvector_swigregister = _sim3dlong.idvector_swigregister
 idvector_swigregister(idvector)
 
 class idpairvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(idpair)> class"""
+    """Proxy of C++ std::vector<(IDPair)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -3141,46 +3141,46 @@ class idpairvector(collections.MutableSequence):
         return _sim3dlong.idpairvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< idpair >::size_type":
-        """__len__(idpairvector self) -> std::vector< idpair >::size_type"""
+    def __len__(self) -> "std::vector< IDPair >::size_type":
+        """__len__(idpairvector self) -> std::vector< IDPair >::size_type"""
         return _sim3dlong.idpairvector___len__(self)
 
 
-    def pop(self) -> "std::vector< idpair >::value_type":
-        """pop(idpairvector self) -> idpair"""
+    def pop(self) -> "std::vector< IDPair >::value_type":
+        """pop(idpairvector self) -> IDPair"""
         return _sim3dlong.idpairvector_pop(self)
 
 
-    def __getslice__(self, i: 'std::vector< idpair >::difference_type', j: 'std::vector< idpair >::difference_type') -> "std::vector< idpair,std::allocator< idpair > > *":
-        """__getslice__(idpairvector self, std::vector< idpair >::difference_type i, std::vector< idpair >::difference_type j) -> idpairvector"""
+    def __getslice__(self, i: 'std::vector< IDPair >::difference_type', j: 'std::vector< IDPair >::difference_type') -> "std::vector< IDPair,std::allocator< IDPair > > *":
+        """__getslice__(idpairvector self, std::vector< IDPair >::difference_type i, std::vector< IDPair >::difference_type j) -> idpairvector"""
         return _sim3dlong.idpairvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(idpairvector self, std::vector< idpair >::difference_type i, std::vector< idpair >::difference_type j, idpairvector v)
-        __setslice__(idpairvector self, std::vector< idpair >::difference_type i, std::vector< idpair >::difference_type j)
+        __setslice__(idpairvector self, std::vector< IDPair >::difference_type i, std::vector< IDPair >::difference_type j, idpairvector v)
+        __setslice__(idpairvector self, std::vector< IDPair >::difference_type i, std::vector< IDPair >::difference_type j)
         """
         return _sim3dlong.idpairvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< idpair >::difference_type', j: 'std::vector< idpair >::difference_type') -> "void":
-        """__delslice__(idpairvector self, std::vector< idpair >::difference_type i, std::vector< idpair >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< IDPair >::difference_type', j: 'std::vector< IDPair >::difference_type') -> "void":
+        """__delslice__(idpairvector self, std::vector< IDPair >::difference_type i, std::vector< IDPair >::difference_type j)"""
         return _sim3dlong.idpairvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(idpairvector self, std::vector< idpair >::difference_type i)
+        __delitem__(idpairvector self, std::vector< IDPair >::difference_type i)
         __delitem__(idpairvector self, PySliceObject * slice)
         """
         return _sim3dlong.idpairvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< idpair >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< IDPair >::value_type const &":
         """
         __getitem__(idpairvector self, PySliceObject * slice) -> idpairvector
-        __getitem__(idpairvector self, std::vector< idpair >::difference_type i) -> idpair
+        __getitem__(idpairvector self, std::vector< IDPair >::difference_type i) -> IDPair
         """
         return _sim3dlong.idpairvector___getitem__(self, *args)
 
@@ -3189,13 +3189,13 @@ class idpairvector(collections.MutableSequence):
         """
         __setitem__(idpairvector self, PySliceObject * slice, idpairvector v)
         __setitem__(idpairvector self, PySliceObject * slice)
-        __setitem__(idpairvector self, std::vector< idpair >::difference_type i, idpair x)
+        __setitem__(idpairvector self, std::vector< IDPair >::difference_type i, IDPair x)
         """
         return _sim3dlong.idpairvector___setitem__(self, *args)
 
 
-    def append(self, x: 'idpair') -> "void":
-        """append(idpairvector self, idpair x)"""
+    def append(self, x: 'IDPair') -> "void":
+        """append(idpairvector self, IDPair x)"""
         return _sim3dlong.idpairvector_append(self, x)
 
 
@@ -3204,8 +3204,8 @@ class idpairvector(collections.MutableSequence):
         return _sim3dlong.idpairvector_empty(self)
 
 
-    def size(self) -> "std::vector< idpair >::size_type":
-        """size(idpairvector self) -> std::vector< idpair >::size_type"""
+    def size(self) -> "std::vector< IDPair >::size_type":
+        """size(idpairvector self) -> std::vector< IDPair >::size_type"""
         return _sim3dlong.idpairvector_size(self)
 
 
@@ -3219,28 +3219,28 @@ class idpairvector(collections.MutableSequence):
         return _sim3dlong.idpairvector_swap(self, v)
 
 
-    def get_allocator(self) -> "std::vector< idpair >::allocator_type":
-        """get_allocator(idpairvector self) -> std::vector< idpair >::allocator_type"""
+    def get_allocator(self) -> "std::vector< IDPair >::allocator_type":
+        """get_allocator(idpairvector self) -> std::vector< IDPair >::allocator_type"""
         return _sim3dlong.idpairvector_get_allocator(self)
 
 
-    def begin(self) -> "std::vector< idpair >::iterator":
-        """begin(idpairvector self) -> std::vector< idpair >::iterator"""
+    def begin(self) -> "std::vector< IDPair >::iterator":
+        """begin(idpairvector self) -> std::vector< IDPair >::iterator"""
         return _sim3dlong.idpairvector_begin(self)
 
 
-    def end(self) -> "std::vector< idpair >::iterator":
-        """end(idpairvector self) -> std::vector< idpair >::iterator"""
+    def end(self) -> "std::vector< IDPair >::iterator":
+        """end(idpairvector self) -> std::vector< IDPair >::iterator"""
         return _sim3dlong.idpairvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< idpair >::reverse_iterator":
-        """rbegin(idpairvector self) -> std::vector< idpair >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< IDPair >::reverse_iterator":
+        """rbegin(idpairvector self) -> std::vector< IDPair >::reverse_iterator"""
         return _sim3dlong.idpairvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< idpair >::reverse_iterator":
-        """rend(idpairvector self) -> std::vector< idpair >::reverse_iterator"""
+    def rend(self) -> "std::vector< IDPair >::reverse_iterator":
+        """rend(idpairvector self) -> std::vector< IDPair >::reverse_iterator"""
         return _sim3dlong.idpairvector_rend(self)
 
 
@@ -3249,20 +3249,20 @@ class idpairvector(collections.MutableSequence):
         return _sim3dlong.idpairvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< idpair >::iterator":
+    def erase(self, *args) -> "std::vector< IDPair >::iterator":
         """
-        erase(idpairvector self, std::vector< idpair >::iterator pos) -> std::vector< idpair >::iterator
-        erase(idpairvector self, std::vector< idpair >::iterator first, std::vector< idpair >::iterator last) -> std::vector< idpair >::iterator
+        erase(idpairvector self, std::vector< IDPair >::iterator pos) -> std::vector< IDPair >::iterator
+        erase(idpairvector self, std::vector< IDPair >::iterator first, std::vector< IDPair >::iterator last) -> std::vector< IDPair >::iterator
         """
         return _sim3dlong.idpairvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(idpair)> self) -> idpairvector
-        __init__(std::vector<(idpair)> self, idpairvector arg2) -> idpairvector
-        __init__(std::vector<(idpair)> self, std::vector< idpair >::size_type size) -> idpairvector
-        __init__(std::vector<(idpair)> self, std::vector< idpair >::size_type size, idpair value) -> idpairvector
+        __init__(std::vector<(IDPair)> self) -> idpairvector
+        __init__(std::vector<(IDPair)> self, idpairvector arg2) -> idpairvector
+        __init__(std::vector<(IDPair)> self, std::vector< IDPair >::size_type size) -> idpairvector
+        __init__(std::vector<(IDPair)> self, std::vector< IDPair >::size_type size, IDPair value) -> idpairvector
         """
         this = _sim3dlong.new_idpairvector(*args)
         try:
@@ -3270,49 +3270,49 @@ class idpairvector(collections.MutableSequence):
         except:
             self.this = this
 
-    def push_back(self, x: 'idpair') -> "void":
-        """push_back(idpairvector self, idpair x)"""
+    def push_back(self, x: 'IDPair') -> "void":
+        """push_back(idpairvector self, IDPair x)"""
         return _sim3dlong.idpairvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< idpair >::value_type const &":
-        """front(idpairvector self) -> idpair"""
+    def front(self) -> "std::vector< IDPair >::value_type const &":
+        """front(idpairvector self) -> IDPair"""
         return _sim3dlong.idpairvector_front(self)
 
 
-    def back(self) -> "std::vector< idpair >::value_type const &":
-        """back(idpairvector self) -> idpair"""
+    def back(self) -> "std::vector< IDPair >::value_type const &":
+        """back(idpairvector self) -> IDPair"""
         return _sim3dlong.idpairvector_back(self)
 
 
-    def assign(self, n: 'std::vector< idpair >::size_type', x: 'idpair') -> "void":
-        """assign(idpairvector self, std::vector< idpair >::size_type n, idpair x)"""
+    def assign(self, n: 'std::vector< IDPair >::size_type', x: 'IDPair') -> "void":
+        """assign(idpairvector self, std::vector< IDPair >::size_type n, IDPair x)"""
         return _sim3dlong.idpairvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(idpairvector self, std::vector< idpair >::size_type new_size)
-        resize(idpairvector self, std::vector< idpair >::size_type new_size, idpair x)
+        resize(idpairvector self, std::vector< IDPair >::size_type new_size)
+        resize(idpairvector self, std::vector< IDPair >::size_type new_size, IDPair x)
         """
         return _sim3dlong.idpairvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(idpairvector self, std::vector< idpair >::iterator pos, idpair x) -> std::vector< idpair >::iterator
-        insert(idpairvector self, std::vector< idpair >::iterator pos, std::vector< idpair >::size_type n, idpair x)
+        insert(idpairvector self, std::vector< IDPair >::iterator pos, IDPair x) -> std::vector< IDPair >::iterator
+        insert(idpairvector self, std::vector< IDPair >::iterator pos, std::vector< IDPair >::size_type n, IDPair x)
         """
         return _sim3dlong.idpairvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< idpair >::size_type') -> "void":
-        """reserve(idpairvector self, std::vector< idpair >::size_type n)"""
+    def reserve(self, n: 'std::vector< IDPair >::size_type') -> "void":
+        """reserve(idpairvector self, std::vector< IDPair >::size_type n)"""
         return _sim3dlong.idpairvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< idpair >::size_type":
-        """capacity(idpairvector self) -> std::vector< idpair >::size_type"""
+    def capacity(self) -> "std::vector< IDPair >::size_type":
+        """capacity(idpairvector self) -> std::vector< IDPair >::size_type"""
         return _sim3dlong.idpairvector_capacity(self)
 
     __swig_destroy__ = _sim3dlong.delete_idpairvector
@@ -3945,7 +3945,7 @@ ulongvector_swigregister = _sim3dlong.ulongvector_swigregister
 ulongvector_swigregister(ulongvector)
 
 class _eventset(collections.MutableSet):
-    """Proxy of C++ std::set<(event)> class"""
+    """Proxy of C++ std::set<(Event)> class"""
     __swig_setmethods__ = {}
     for _s in [collections.MutableSet]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
@@ -3973,41 +3973,41 @@ class _eventset(collections.MutableSet):
         return _sim3dlong._eventset___bool__(self)
 
 
-    def __len__(self) -> "std::set< event >::size_type":
-        """__len__(_eventset self) -> std::set< event >::size_type"""
+    def __len__(self) -> "std::set< Event >::size_type":
+        """__len__(_eventset self) -> std::set< Event >::size_type"""
         return _sim3dlong._eventset___len__(self)
 
 
-    def append(self, x: 'event') -> "void":
-        """append(_eventset self, event x)"""
+    def append(self, x: 'Event') -> "void":
+        """append(_eventset self, Event x)"""
         return _sim3dlong._eventset_append(self, x)
 
 
-    def __contains__(self, x: 'event') -> "bool":
-        """__contains__(_eventset self, event x) -> bool"""
+    def __contains__(self, x: 'Event') -> "bool":
+        """__contains__(_eventset self, Event x) -> bool"""
         return _sim3dlong._eventset___contains__(self, x)
 
 
-    def __getitem__(self, i: 'std::set< event >::difference_type') -> "std::set< event >::value_type":
-        """__getitem__(_eventset self, std::set< event >::difference_type i) -> event"""
+    def __getitem__(self, i: 'std::set< Event >::difference_type') -> "std::set< Event >::value_type":
+        """__getitem__(_eventset self, std::set< Event >::difference_type i) -> Event"""
         return _sim3dlong._eventset___getitem__(self, i)
 
 
-    def add(self, x: 'event') -> "void":
-        """add(_eventset self, event x)"""
+    def add(self, x: 'Event') -> "void":
+        """add(_eventset self, Event x)"""
         return _sim3dlong._eventset_add(self, x)
 
 
-    def discard(self, x: 'event') -> "void":
-        """discard(_eventset self, event x)"""
+    def discard(self, x: 'Event') -> "void":
+        """discard(_eventset self, Event x)"""
         return _sim3dlong._eventset_discard(self, x)
 
 
     def __init__(self, *args):
         """
-        __init__(std::set<(event)> self, std::less< event > const & arg2) -> _eventset
-        __init__(std::set<(event)> self) -> _eventset
-        __init__(std::set<(event)> self, _eventset arg2) -> _eventset
+        __init__(std::set<(Event)> self, std::less< Event > const & arg2) -> _eventset
+        __init__(std::set<(Event)> self) -> _eventset
+        __init__(std::set<(Event)> self, _eventset arg2) -> _eventset
         """
         this = _sim3dlong.new__eventset(*args)
         try:
@@ -4020,8 +4020,8 @@ class _eventset(collections.MutableSet):
         return _sim3dlong._eventset_empty(self)
 
 
-    def size(self) -> "std::set< event >::size_type":
-        """size(_eventset self) -> std::set< event >::size_type"""
+    def size(self) -> "std::set< Event >::size_type":
+        """size(_eventset self) -> std::set< Event >::size_type"""
         return _sim3dlong._eventset_size(self)
 
 
@@ -4035,62 +4035,62 @@ class _eventset(collections.MutableSet):
         return _sim3dlong._eventset_swap(self, v)
 
 
-    def count(self, x: 'event') -> "std::set< event >::size_type":
-        """count(_eventset self, event x) -> std::set< event >::size_type"""
+    def count(self, x: 'Event') -> "std::set< Event >::size_type":
+        """count(_eventset self, Event x) -> std::set< Event >::size_type"""
         return _sim3dlong._eventset_count(self, x)
 
 
-    def begin(self) -> "std::set< event >::iterator":
-        """begin(_eventset self) -> std::set< event >::iterator"""
+    def begin(self) -> "std::set< Event >::iterator":
+        """begin(_eventset self) -> std::set< Event >::iterator"""
         return _sim3dlong._eventset_begin(self)
 
 
-    def end(self) -> "std::set< event >::iterator":
-        """end(_eventset self) -> std::set< event >::iterator"""
+    def end(self) -> "std::set< Event >::iterator":
+        """end(_eventset self) -> std::set< Event >::iterator"""
         return _sim3dlong._eventset_end(self)
 
 
-    def rbegin(self) -> "std::set< event >::reverse_iterator":
-        """rbegin(_eventset self) -> std::set< event >::reverse_iterator"""
+    def rbegin(self) -> "std::set< Event >::reverse_iterator":
+        """rbegin(_eventset self) -> std::set< Event >::reverse_iterator"""
         return _sim3dlong._eventset_rbegin(self)
 
 
-    def rend(self) -> "std::set< event >::reverse_iterator":
-        """rend(_eventset self) -> std::set< event >::reverse_iterator"""
+    def rend(self) -> "std::set< Event >::reverse_iterator":
+        """rend(_eventset self) -> std::set< Event >::reverse_iterator"""
         return _sim3dlong._eventset_rend(self)
 
 
     def erase(self, *args) -> "void":
         """
-        erase(_eventset self, event x) -> std::set< event >::size_type
-        erase(_eventset self, std::set< event >::iterator pos)
-        erase(_eventset self, std::set< event >::iterator first, std::set< event >::iterator last)
+        erase(_eventset self, Event x) -> std::set< Event >::size_type
+        erase(_eventset self, std::set< Event >::iterator pos)
+        erase(_eventset self, std::set< Event >::iterator first, std::set< Event >::iterator last)
         """
         return _sim3dlong._eventset_erase(self, *args)
 
 
-    def find(self, x: 'event') -> "std::set< event >::iterator":
-        """find(_eventset self, event x) -> std::set< event >::iterator"""
+    def find(self, x: 'Event') -> "std::set< Event >::iterator":
+        """find(_eventset self, Event x) -> std::set< Event >::iterator"""
         return _sim3dlong._eventset_find(self, x)
 
 
-    def lower_bound(self, x: 'event') -> "std::set< event >::iterator":
-        """lower_bound(_eventset self, event x) -> std::set< event >::iterator"""
+    def lower_bound(self, x: 'Event') -> "std::set< Event >::iterator":
+        """lower_bound(_eventset self, Event x) -> std::set< Event >::iterator"""
         return _sim3dlong._eventset_lower_bound(self, x)
 
 
-    def upper_bound(self, x: 'event') -> "std::set< event >::iterator":
-        """upper_bound(_eventset self, event x) -> std::set< event >::iterator"""
+    def upper_bound(self, x: 'Event') -> "std::set< Event >::iterator":
+        """upper_bound(_eventset self, Event x) -> std::set< Event >::iterator"""
         return _sim3dlong._eventset_upper_bound(self, x)
 
 
-    def equal_range(self, x: 'event') -> "std::pair< std::set< event >::iterator,std::set< event >::iterator >":
-        """equal_range(_eventset self, event x) -> std::pair< std::set< event >::iterator,std::set< event >::iterator >"""
+    def equal_range(self, x: 'Event') -> "std::pair< std::set< Event >::iterator,std::set< Event >::iterator >":
+        """equal_range(_eventset self, Event x) -> std::pair< std::set< Event >::iterator,std::set< Event >::iterator >"""
         return _sim3dlong._eventset_equal_range(self, x)
 
 
-    def insert(self, __x: 'event') -> "std::pair< std::set< event >::iterator,bool >":
-        """insert(_eventset self, event __x) -> std::pair< std::set< event >::iterator,bool >"""
+    def insert(self, __x: 'Event') -> "std::pair< std::set< Event >::iterator,bool >":
+        """insert(_eventset self, Event __x) -> std::pair< std::set< Event >::iterator,bool >"""
         return _sim3dlong._eventset_insert(self, __x)
 
     __swig_destroy__ = _sim3dlong.delete__eventset
@@ -4811,8 +4811,8 @@ class _carray2(_object):
         return _sim3dlong._carray2___setitem__(self, idx, val)
 
 
-    def __len__(self) -> "int":
-        """__len__(_carray2 self) -> int"""
+    def __len__(self) -> "unsigned int":
+        """__len__(_carray2 self) -> unsigned int"""
         return _sim3dlong._carray2___len__(self)
 
 
@@ -5486,8 +5486,8 @@ class _carray3(_object):
         return _sim3dlong._carray3___setitem__(self, idx, val)
 
 
-    def __len__(self) -> "int":
-        """__len__(_carray3 self) -> int"""
+    def __len__(self) -> "unsigned int":
+        """__len__(_carray3 self) -> unsigned int"""
         return _sim3dlong._carray3___len__(self)
 
 
@@ -6221,82 +6221,82 @@ def seed(*args) -> "unsigned int":
     seed() -> unsigned int
     """
     return _sim3dlong.seed(*args)
-class gaussVec(_object):
-    """Proxy of C++ gaussVec class"""
+class GaussVec(_object):
+    """Proxy of C++ GaussVec class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, gaussVec, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, GaussVec, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, gaussVec, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, GaussVec, name)
     __repr__ = _swig_repr
 
     def __init__(self, sigma: 'flt'):
-        """__init__(gaussVec self, flt sigma) -> gaussVec"""
-        this = _sim3dlong.new_gaussVec(sigma)
+        """__init__(GaussVec self, flt sigma) -> GaussVec"""
+        this = _sim3dlong.new_GaussVec(sigma)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def set(self, sigma: 'flt') -> "void":
-        """set(gaussVec self, flt sigma)"""
-        return _sim3dlong.gaussVec_set(self, sigma)
+        """set(GaussVec self, flt sigma)"""
+        return _sim3dlong.GaussVec_set(self, sigma)
 
 
     def generate(self) -> "Vec":
-        """generate(gaussVec self) -> Vec"""
-        return _sim3dlong.gaussVec_generate(self)
+        """generate(GaussVec self) -> Vec"""
+        return _sim3dlong.GaussVec_generate(self)
 
-    __swig_destroy__ = _sim3dlong.delete_gaussVec
+    __swig_destroy__ = _sim3dlong.delete_GaussVec
     __del__ = lambda self: None
-gaussVec_swigregister = _sim3dlong.gaussVec_swigregister
-gaussVec_swigregister(gaussVec)
+GaussVec_swigregister = _sim3dlong.GaussVec_swigregister
+GaussVec_swigregister(GaussVec)
 cvar = _sim3dlong.cvar
 OVERNDIM = cvar.OVERNDIM
 
-class bivariateGauss(_object):
-    """Proxy of C++ bivariateGauss class"""
+class BivariateGauss(_object):
+    """Proxy of C++ BivariateGauss class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, bivariateGauss, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BivariateGauss, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, bivariateGauss, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, BivariateGauss, name)
     __repr__ = _swig_repr
 
     def __init__(self, s1: 'flt const'=1, s2: 'flt const'=1, corr: 'flt const'=0):
         """
-        __init__(bivariateGauss self, flt const s1=1, flt const s2=1, flt const corr=0) -> bivariateGauss
-        __init__(bivariateGauss self, flt const s1=1, flt const s2=1) -> bivariateGauss
-        __init__(bivariateGauss self, flt const s1=1) -> bivariateGauss
-        __init__(bivariateGauss self) -> bivariateGauss
+        __init__(BivariateGauss self, flt const s1=1, flt const s2=1, flt const corr=0) -> BivariateGauss
+        __init__(BivariateGauss self, flt const s1=1, flt const s2=1) -> BivariateGauss
+        __init__(BivariateGauss self, flt const s1=1) -> BivariateGauss
+        __init__(BivariateGauss self) -> BivariateGauss
         """
-        this = _sim3dlong.new_bivariateGauss(s1, s2, corr)
+        this = _sim3dlong.new_BivariateGauss(s1, s2, corr)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def set(self, s1: 'flt const', s2: 'flt const', corr: 'flt const') -> "void":
-        """set(bivariateGauss self, flt const s1, flt const s2, flt const corr)"""
-        return _sim3dlong.bivariateGauss_set(self, s1, s2, corr)
+        """set(BivariateGauss self, flt const s1, flt const s2, flt const corr)"""
+        return _sim3dlong.BivariateGauss_set(self, s1, s2, corr)
 
 
     def generate(self) -> "Eigen::Matrix< flt,1,2 >":
-        """generate(bivariateGauss self) -> Eigen::Matrix< flt,1,2 >"""
-        return _sim3dlong.bivariateGauss_generate(self)
+        """generate(BivariateGauss self) -> Eigen::Matrix< flt,1,2 >"""
+        return _sim3dlong.BivariateGauss_generate(self)
 
 
     def genVec(self) -> "Vec":
-        """genVec(bivariateGauss self) -> Vec"""
-        return _sim3dlong.bivariateGauss_genVec(self)
+        """genVec(BivariateGauss self) -> Vec"""
+        return _sim3dlong.BivariateGauss_genVec(self)
 
 
     def genVecs(self) -> "VecPair":
-        """genVecs(bivariateGauss self) -> VecPair"""
-        return _sim3dlong.bivariateGauss_genVecs(self)
+        """genVecs(BivariateGauss self) -> VecPair"""
+        return _sim3dlong.BivariateGauss_genVecs(self)
 
-    __swig_destroy__ = _sim3dlong.delete_bivariateGauss
+    __swig_destroy__ = _sim3dlong.delete_BivariateGauss
     __del__ = lambda self: None
-bivariateGauss_swigregister = _sim3dlong.bivariateGauss_swigregister
-bivariateGauss_swigregister(bivariateGauss)
+BivariateGauss_swigregister = _sim3dlong.BivariateGauss_swigregister
+BivariateGauss_swigregister(BivariateGauss)
 
 
 def toLD(e: 'double') -> "long double":
@@ -6315,9 +6315,9 @@ def best_rotation_matrix(arg1: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &', to: 'E
     """best_rotation_matrix(Eigen::Matrix< flt,Eigen::Dynamic,3 > & arg1, Eigen::Matrix< flt,Eigen::Dynamic,3 > & to) -> Matrix"""
     return _sim3dlong.best_rotation_matrix(arg1, to)
 
-def toBuffer(arr: 'std::vector< Vec *,std::allocator< Vec * > >', buffer: 'double *') -> "bool":
-    """toBuffer(std::vector< Vec *,std::allocator< Vec * > > arr, double * buffer) -> bool"""
-    return _sim3dlong.toBuffer(arr, buffer)
+def to_buffer(arr: 'std::vector< Vec *,std::allocator< Vec * > >', buffer: 'double *') -> "bool":
+    """to_buffer(std::vector< Vec *,std::allocator< Vec * > > arr, double * buffer) -> bool"""
+    return _sim3dlong.to_buffer(arr, buffer)
 class Box(_object):
     """Proxy of C++ Box class"""
     __swig_setmethods__ = {}
@@ -6344,9 +6344,9 @@ Box_swigregister = _sim3dlong.Box_swigregister
 Box_swigregister(Box)
 
 
-def vecmod(r1: 'Vec', r2: 'Vec') -> "Vec":
-    """vecmod(Vec r1, Vec r2) -> Vec"""
-    return _sim3dlong.vecmod(r1, r2)
+def vec_mod(r1: 'Vec', r2: 'Vec') -> "Vec":
+    """vec_mod(Vec r1, Vec r2) -> Vec"""
+    return _sim3dlong.vec_mod(r1, r2)
 class InfiniteBox(Box):
     """Proxy of C++ InfiniteBox class"""
     __swig_setmethods__ = {}
@@ -6435,24 +6435,24 @@ class OriginBox(Box):
         return _sim3dlong.OriginBox_resize(self, *args)
 
 
-    def resizeV(self, newV: 'flt') -> "flt":
-        """resizeV(OriginBox self, flt newV) -> flt"""
-        return _sim3dlong.OriginBox_resizeV(self, newV)
+    def resize_to_V(self, newV: 'flt') -> "flt":
+        """resize_to_V(OriginBox self, flt newV) -> flt"""
+        return _sim3dlong.OriginBox_resize_to_V(self, newV)
 
 
-    def resizeL(self, newL: 'flt') -> "flt":
-        """resizeL(OriginBox self, flt newL) -> flt"""
-        return _sim3dlong.OriginBox_resizeL(self, newL)
+    def resize_to_L(self, newL: 'flt') -> "flt":
+        """resize_to_L(OriginBox self, flt newL) -> flt"""
+        return _sim3dlong.OriginBox_resize_to_L(self, newL)
 
 
-    def randLoc(self) -> "Vec":
-        """randLoc(OriginBox self) -> Vec"""
-        return _sim3dlong.OriginBox_randLoc(self)
+    def rand_loc(self) -> "Vec":
+        """rand_loc(OriginBox self) -> Vec"""
+        return _sim3dlong.OriginBox_rand_loc(self)
 
 
-    def boxshape(self) -> "Vec":
-        """boxshape(OriginBox self) -> Vec"""
-        return _sim3dlong.OriginBox_boxshape(self)
+    def box_shape(self) -> "Vec":
+        """box_shape(OriginBox self) -> Vec"""
+        return _sim3dlong.OriginBox_box_shape(self)
 
     __swig_destroy__ = _sim3dlong.delete_OriginBox
     __del__ = lambda self: None
@@ -6500,14 +6500,14 @@ class LeesEdwardsBox(OriginBox):
         return _sim3dlong.LeesEdwardsBox_get_gamma(self)
 
 
-    def shear(self, dgamma: 'flt', atoms: 'atomgroup') -> "void":
-        """shear(LeesEdwardsBox self, flt dgamma, atomgroup atoms)"""
+    def shear(self, dgamma: 'flt', atoms: 'AtomGroup') -> "void":
+        """shear(LeesEdwardsBox self, flt dgamma, AtomGroup atoms)"""
         return _sim3dlong.LeesEdwardsBox_shear(self, dgamma, atoms)
 
 
-    def nonaffine(self, v: 'Vec') -> "Vec":
-        """nonaffine(LeesEdwardsBox self, Vec v) -> Vec"""
-        return _sim3dlong.LeesEdwardsBox_nonaffine(self, v)
+    def non_affine(self, v: 'Vec') -> "Vec":
+        """non_affine(LeesEdwardsBox self, Vec v) -> Vec"""
+        return _sim3dlong.LeesEdwardsBox_non_affine(self, v)
 
 
     def affine(self, v: 'Vec') -> "Vec":
@@ -6519,103 +6519,103 @@ class LeesEdwardsBox(OriginBox):
 LeesEdwardsBox_swigregister = _sim3dlong.LeesEdwardsBox_swigregister
 LeesEdwardsBox_swigregister(LeesEdwardsBox)
 
-class SCbox(Box):
-    """Proxy of C++ SCbox class"""
+class SCBox(Box):
+    """Proxy of C++ SCBox class"""
     __swig_setmethods__ = {}
     for _s in [Box]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SCbox, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SCBox, name, value)
     __swig_getmethods__ = {}
     for _s in [Box]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, SCbox, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SCBox, name)
     __repr__ = _swig_repr
 
     def __init__(self, L: 'flt', R: 'flt'):
-        """__init__(SCbox self, flt L, flt R) -> SCbox"""
-        this = _sim3dlong.new_SCbox(L, R)
+        """__init__(SCBox self, flt L, flt R) -> SCBox"""
+        this = _sim3dlong.new_SCBox(L, R)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def diff(self, r1: 'Vec', r2: 'Vec') -> "Vec":
-        """diff(SCbox self, Vec r1, Vec r2) -> Vec"""
-        return _sim3dlong.SCbox_diff(self, r1, r2)
+        """diff(SCBox self, Vec r1, Vec r2) -> Vec"""
+        return _sim3dlong.SCBox_diff(self, r1, r2)
 
 
     def V(self) -> "flt":
-        """V(SCbox self) -> flt"""
-        return _sim3dlong.SCbox_V(self)
+        """V(SCBox self) -> flt"""
+        return _sim3dlong.SCBox_V(self)
 
 
     def dist(self, r1: 'Vec') -> "Vec":
-        """dist(SCbox self, Vec r1) -> Vec"""
-        return _sim3dlong.SCbox_dist(self, r1)
+        """dist(SCBox self, Vec r1) -> Vec"""
+        return _sim3dlong.SCBox_dist(self, r1)
 
 
-    def edgedist(self, r1: 'Vec') -> "Vec":
-        """edgedist(SCbox self, Vec r1) -> Vec"""
-        return _sim3dlong.SCbox_edgedist(self, r1)
+    def edge_dist(self, r1: 'Vec') -> "Vec":
+        """edge_dist(SCBox self, Vec r1) -> Vec"""
+        return _sim3dlong.SCBox_edge_dist(self, r1)
 
 
     def inside(self, r1: 'Vec', buffer: 'flt'=0.0) -> "bool":
         """
-        inside(SCbox self, Vec r1, flt buffer=0.0) -> bool
-        inside(SCbox self, Vec r1) -> bool
+        inside(SCBox self, Vec r1, flt buffer=0.0) -> bool
+        inside(SCBox self, Vec r1) -> bool
         """
-        return _sim3dlong.SCbox_inside(self, r1, buffer)
+        return _sim3dlong.SCBox_inside(self, r1, buffer)
 
 
-    def randLoc(self, min_dist_to_wall: 'flt'=0.0) -> "Vec":
+    def rand_loc(self, min_dist_to_wall: 'flt'=0.0) -> "Vec":
         """
-        randLoc(SCbox self, flt min_dist_to_wall=0.0) -> Vec
-        randLoc(SCbox self) -> Vec
+        rand_loc(SCBox self, flt min_dist_to_wall=0.0) -> Vec
+        rand_loc(SCBox self) -> Vec
         """
-        return _sim3dlong.SCbox_randLoc(self, min_dist_to_wall)
+        return _sim3dlong.SCBox_rand_loc(self, min_dist_to_wall)
 
 
     def length(self) -> "flt":
-        """length(SCbox self) -> flt"""
-        return _sim3dlong.SCbox_length(self)
+        """length(SCBox self) -> flt"""
+        return _sim3dlong.SCBox_length(self)
 
 
     def radius(self) -> "flt":
-        """radius(SCbox self) -> flt"""
-        return _sim3dlong.SCbox_radius(self)
+        """radius(SCBox self) -> flt"""
+        return _sim3dlong.SCBox_radius(self)
 
-    __swig_destroy__ = _sim3dlong.delete_SCbox
+    __swig_destroy__ = _sim3dlong.delete_SCBox
     __del__ = lambda self: None
-SCbox_swigregister = _sim3dlong.SCbox_swigregister
-SCbox_swigregister(SCbox)
+SCBox_swigregister = _sim3dlong.SCBox_swigregister
+SCBox_swigregister(SCBox)
 
-class atom(_object):
-    """Proxy of C++ atom class"""
+class Atom(_object):
+    """Proxy of C++ Atom class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, atom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Atom, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, atom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Atom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["x"] = _sim3dlong.atom_x_set
-    __swig_getmethods__["x"] = _sim3dlong.atom_x_get
+    __swig_setmethods__["x"] = _sim3dlong.Atom_x_set
+    __swig_getmethods__["x"] = _sim3dlong.Atom_x_get
     if _newclass:
-        x = _swig_property(_sim3dlong.atom_x_get, _sim3dlong.atom_x_set)
-    __swig_setmethods__["v"] = _sim3dlong.atom_v_set
-    __swig_getmethods__["v"] = _sim3dlong.atom_v_get
+        x = _swig_property(_sim3dlong.Atom_x_get, _sim3dlong.Atom_x_set)
+    __swig_setmethods__["v"] = _sim3dlong.Atom_v_set
+    __swig_getmethods__["v"] = _sim3dlong.Atom_v_get
     if _newclass:
-        v = _swig_property(_sim3dlong.atom_v_get, _sim3dlong.atom_v_set)
-    __swig_setmethods__["a"] = _sim3dlong.atom_a_set
-    __swig_getmethods__["a"] = _sim3dlong.atom_a_get
+        v = _swig_property(_sim3dlong.Atom_v_get, _sim3dlong.Atom_v_set)
+    __swig_setmethods__["a"] = _sim3dlong.Atom_a_set
+    __swig_getmethods__["a"] = _sim3dlong.Atom_a_get
     if _newclass:
-        a = _swig_property(_sim3dlong.atom_a_get, _sim3dlong.atom_a_set)
-    __swig_setmethods__["f"] = _sim3dlong.atom_f_set
-    __swig_getmethods__["f"] = _sim3dlong.atom_f_get
+        a = _swig_property(_sim3dlong.Atom_a_get, _sim3dlong.Atom_a_set)
+    __swig_setmethods__["f"] = _sim3dlong.Atom_f_set
+    __swig_getmethods__["f"] = _sim3dlong.Atom_f_get
     if _newclass:
-        f = _swig_property(_sim3dlong.atom_f_get, _sim3dlong.atom_f_set)
-    __swig_setmethods__["m"] = _sim3dlong.atom_m_set
-    __swig_getmethods__["m"] = _sim3dlong.atom_m_get
+        f = _swig_property(_sim3dlong.Atom_f_get, _sim3dlong.Atom_f_set)
+    __swig_setmethods__["m"] = _sim3dlong.Atom_m_set
+    __swig_getmethods__["m"] = _sim3dlong.Atom_m_get
     if _newclass:
-        m = _swig_property(_sim3dlong.atom_m_get, _sim3dlong.atom_m_set)
+        m = _swig_property(_sim3dlong.Atom_m_get, _sim3dlong.Atom_m_set)
 
     def __getstate__(self):
         return (tuple(self.x),tuple(self.v),tuple(self.f), tuple(self.a))
@@ -6625,388 +6625,407 @@ class atom(_object):
 
     def __str__(self):
         if hasattr(self, 'name'):
-            return "<atom %s>" % self.name
-        return "<atom>"
+            return "<Atom %s>" % self.name
+        return "<Atom>"
 
     def __repr__(self):
     #ifdef VEC2D
         x,y = tuple(self.x)
         if hasattr(self, 'name'):
-            return "<atom %s at (%.2f,%.2f)>" % (self.name,x,y)
-        return "<atom at (%.2f,%.2f)>" % (x,y)
+            return "<Atom %s at (%.2f,%.2f)>" % (self.name,x,y)
+        return "<Atom at (%.2f,%.2f)>" % (x,y)
     #else
         x,y,z = tuple(self.x)
         if hasattr(self, 'name'):
-            return "<atom %s at (%.2f,%.2f,%.2f)>" % (self.name,x,y,z)
-        return "<atom at (%.2f,%.2f,%.2f)>" % (x,y,z)
+            return "<Atom %s at (%.2f,%.2f,%.2f)>" % (self.name,x,y,z)
+        return "<Atom at (%.2f,%.2f,%.2f)>" % (x,y,z)
     #endif
 
 
     def __init__(self):
-        """__init__(atom self) -> atom"""
-        this = _sim3dlong.new_atom()
+        """__init__(Atom self) -> Atom"""
+        this = _sim3dlong.new_Atom()
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _sim3dlong.delete_atom
+    __swig_destroy__ = _sim3dlong.delete_Atom
     __del__ = lambda self: None
-atom_swigregister = _sim3dlong.atom_swigregister
-atom_swigregister(atom)
+Atom_swigregister = _sim3dlong.Atom_swigregister
+Atom_swigregister(Atom)
 
-class atomref(_object):
-    """Proxy of C++ atomref class"""
+class AtomRef(_object):
+    """Proxy of C++ AtomRef class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, atomref, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AtomRef, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, atomref, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, AtomRef, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(atomref self) -> atomref
-        __init__(atomref self, atom a) -> atomref
+        __init__(AtomRef self) -> AtomRef
+        __init__(AtomRef self, Atom a) -> AtomRef
         """
-        this = _sim3dlong.new_atomref(*args)
+        this = _sim3dlong.new_AtomRef(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def __ref__(self) -> "atom &":
-        """__ref__(atomref self) -> atom"""
-        return _sim3dlong.atomref___ref__(self)
+    def __ref__(self) -> "Atom &":
+        """__ref__(AtomRef self) -> Atom"""
+        return _sim3dlong.AtomRef___ref__(self)
 
 
-    def __deref__(self) -> "atom *":
-        """__deref__(atomref self) -> atom"""
-        return _sim3dlong.atomref___deref__(self)
+    def __deref__(self) -> "Atom *":
+        """__deref__(AtomRef self) -> Atom"""
+        return _sim3dlong.AtomRef___deref__(self)
 
 
     def __eq__(self, *args) -> "bool":
         """
-        __eq__(atomref self, atomref other) -> bool
-        __eq__(atomref self, atom other) -> bool
+        __eq__(AtomRef self, AtomRef other) -> bool
+        __eq__(AtomRef self, Atom other) -> bool
         """
-        return _sim3dlong.atomref___eq__(self, *args)
+        return _sim3dlong.AtomRef___eq__(self, *args)
 
 
-    def __ne__(self, other: 'atomref') -> "bool":
-        """__ne__(atomref self, atomref other) -> bool"""
-        return _sim3dlong.atomref___ne__(self, other)
+    def __ne__(self, other: 'AtomRef') -> "bool":
+        """__ne__(AtomRef self, AtomRef other) -> bool"""
+        return _sim3dlong.AtomRef___ne__(self, other)
 
 
-    def __lt__(self, other: 'atomref') -> "bool":
-        """__lt__(atomref self, atomref other) -> bool"""
-        return _sim3dlong.atomref___lt__(self, other)
+    def __lt__(self, other: 'AtomRef') -> "bool":
+        """__lt__(AtomRef self, AtomRef other) -> bool"""
+        return _sim3dlong.AtomRef___lt__(self, other)
 
 
-    def __le__(self, other: 'atomref') -> "bool":
-        """__le__(atomref self, atomref other) -> bool"""
-        return _sim3dlong.atomref___le__(self, other)
+    def __le__(self, other: 'AtomRef') -> "bool":
+        """__le__(AtomRef self, AtomRef other) -> bool"""
+        return _sim3dlong.AtomRef___le__(self, other)
 
 
-    def __ge__(self, other: 'atomref') -> "bool":
-        """__ge__(atomref self, atomref other) -> bool"""
-        return _sim3dlong.atomref___ge__(self, other)
+    def __ge__(self, other: 'AtomRef') -> "bool":
+        """__ge__(AtomRef self, AtomRef other) -> bool"""
+        return _sim3dlong.AtomRef___ge__(self, other)
 
 
-    def __gt__(self, other: 'atomref') -> "bool":
-        """__gt__(atomref self, atomref other) -> bool"""
-        return _sim3dlong.atomref___gt__(self, other)
+    def __gt__(self, other: 'AtomRef') -> "bool":
+        """__gt__(AtomRef self, AtomRef other) -> bool"""
+        return _sim3dlong.AtomRef___gt__(self, other)
 
 
     def is_null(self) -> "bool":
-        """is_null(atomref self) -> bool"""
-        return _sim3dlong.atomref_is_null(self)
+        """is_null(AtomRef self) -> bool"""
+        return _sim3dlong.AtomRef_is_null(self)
 
-    __swig_destroy__ = _sim3dlong.delete_atomref
+    __swig_destroy__ = _sim3dlong.delete_AtomRef
     __del__ = lambda self: None
-    __swig_setmethods__["x"] = _sim3dlong.atomref_x_set
-    __swig_getmethods__["x"] = _sim3dlong.atomref_x_get
+    __swig_setmethods__["x"] = _sim3dlong.AtomRef_x_set
+    __swig_getmethods__["x"] = _sim3dlong.AtomRef_x_get
     if _newclass:
-        x = _swig_property(_sim3dlong.atomref_x_get, _sim3dlong.atomref_x_set)
-    __swig_setmethods__["v"] = _sim3dlong.atomref_v_set
-    __swig_getmethods__["v"] = _sim3dlong.atomref_v_get
+        x = _swig_property(_sim3dlong.AtomRef_x_get, _sim3dlong.AtomRef_x_set)
+    __swig_setmethods__["v"] = _sim3dlong.AtomRef_v_set
+    __swig_getmethods__["v"] = _sim3dlong.AtomRef_v_get
     if _newclass:
-        v = _swig_property(_sim3dlong.atomref_v_get, _sim3dlong.atomref_v_set)
-    __swig_setmethods__["a"] = _sim3dlong.atomref_a_set
-    __swig_getmethods__["a"] = _sim3dlong.atomref_a_get
+        v = _swig_property(_sim3dlong.AtomRef_v_get, _sim3dlong.AtomRef_v_set)
+    __swig_setmethods__["a"] = _sim3dlong.AtomRef_a_set
+    __swig_getmethods__["a"] = _sim3dlong.AtomRef_a_get
     if _newclass:
-        a = _swig_property(_sim3dlong.atomref_a_get, _sim3dlong.atomref_a_set)
-    __swig_setmethods__["f"] = _sim3dlong.atomref_f_set
-    __swig_getmethods__["f"] = _sim3dlong.atomref_f_get
+        a = _swig_property(_sim3dlong.AtomRef_a_get, _sim3dlong.AtomRef_a_set)
+    __swig_setmethods__["f"] = _sim3dlong.AtomRef_f_set
+    __swig_getmethods__["f"] = _sim3dlong.AtomRef_f_get
     if _newclass:
-        f = _swig_property(_sim3dlong.atomref_f_get, _sim3dlong.atomref_f_set)
-    __swig_setmethods__["m"] = _sim3dlong.atomref_m_set
-    __swig_getmethods__["m"] = _sim3dlong.atomref_m_get
+        f = _swig_property(_sim3dlong.AtomRef_f_get, _sim3dlong.AtomRef_f_set)
+    __swig_setmethods__["m"] = _sim3dlong.AtomRef_m_set
+    __swig_getmethods__["m"] = _sim3dlong.AtomRef_m_get
     if _newclass:
-        m = _swig_property(_sim3dlong.atomref_m_get, _sim3dlong.atomref_m_set)
-atomref_swigregister = _sim3dlong.atomref_swigregister
-atomref_swigregister(atomref)
+        m = _swig_property(_sim3dlong.AtomRef_m_get, _sim3dlong.AtomRef_m_set)
+AtomRef_swigregister = _sim3dlong.AtomRef_swigregister
+AtomRef_swigregister(AtomRef)
 
-class atomid(atomref):
-    """Proxy of C++ atomid class"""
+class AtomID(AtomRef):
+    """Proxy of C++ AtomID class"""
     __swig_setmethods__ = {}
-    for _s in [atomref]:
+    for _s in [AtomRef]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, atomid, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AtomID, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomref]:
+    for _s in [AtomRef]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, atomid, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, AtomID, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(atomid self) -> atomid
-        __init__(atomid self, atom a, uint n) -> atomid
+        __init__(AtomID self) -> AtomID
+        __init__(AtomID self, Atom a, uint n) -> AtomID
         """
-        this = _sim3dlong.new_atomid(*args)
+        this = _sim3dlong.new_AtomID(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def n(self) -> "uint":
-        """n(atomid self) -> uint"""
-        return _sim3dlong.atomid_n(self)
+        """n(AtomID self) -> uint"""
+        return _sim3dlong.AtomID_n(self)
 
 
     def __str__(self):
-        return "<atomid %s>" % self.n()
+        return "<AtomID %s>" % self.n()
 
     def __repr__(self):
-    #ifdef VEC2D
-        x,y = tuple(self.x)
-        return "<atomid %s at (%.2f,%.2f)>" % (self.n(),x,y)
-    #else
-        x,y,z = tuple(self.x)
-        return "<atomid %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
-    #endif
+        if len(self.x) == 2:
+            x,y = tuple(self.x)
+            return "<AtomID %s at (%.2f,%.2f)>" % (self.n(),x,y)
+        else:
+            x,y,z = tuple(self.x)
+            return "<AtomID %s at (%.2f,%.2f,%.2f)>" % (self.n(),x,y,z)
 
-    __swig_destroy__ = _sim3dlong.delete_atomid
+    __swig_destroy__ = _sim3dlong.delete_AtomID
     __del__ = lambda self: None
-atomid_swigregister = _sim3dlong.atomid_swigregister
-atomid_swigregister(atomid)
+AtomID_swigregister = _sim3dlong.AtomID_swigregister
+AtomID_swigregister(AtomID)
 
-class idpair(_object):
-    """Proxy of C++ idpair class"""
+class IDPair(_object):
+    """Proxy of C++ IDPair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, idpair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IDPair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, idpair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, IDPair, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(idpair self) -> idpair
-        __init__(idpair self, atomid a, atomid b) -> idpair
+        __init__(IDPair self) -> IDPair
+        __init__(IDPair self, AtomID a, AtomID b) -> IDPair
         """
-        this = _sim3dlong.new_idpair(*args)
+        this = _sim3dlong.new_IDPair(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def first(self) -> "atomid":
-        """first(idpair self) -> atomid"""
-        return _sim3dlong.idpair_first(self)
+    def first(self) -> "AtomID":
+        """first(IDPair self) -> AtomID"""
+        return _sim3dlong.IDPair_first(self)
 
 
-    def last(self) -> "atomid":
-        """last(idpair self) -> atomid"""
-        return _sim3dlong.idpair_last(self)
+    def last(self) -> "AtomID":
+        """last(IDPair self) -> AtomID"""
+        return _sim3dlong.IDPair_last(self)
 
 
     def __iter__(self):
         return iter((self.first(), self.last()))
 
-    __swig_destroy__ = _sim3dlong.delete_idpair
+    __swig_destroy__ = _sim3dlong.delete_IDPair
     __del__ = lambda self: None
-idpair_swigregister = _sim3dlong.idpair_swigregister
-idpair_swigregister(idpair)
+IDPair_swigregister = _sim3dlong.IDPair_swigregister
+IDPair_swigregister(IDPair)
 
-class atomgroup(_object):
-    """Proxy of C++ atomgroup class"""
+class AtomGroup(_object):
+    """Proxy of C++ AtomGroup class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, atomgroup, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AtomGroup, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, atomgroup, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, AtomGroup, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
-    def vec(self) -> "atomvec &":
-        """vec(atomgroup self) -> atomvec"""
-        return _sim3dlong.atomgroup_vec(self)
+    def vec(self) -> "AtomVec &":
+        """vec(AtomGroup self) -> AtomVec"""
+        return _sim3dlong.AtomGroup_vec(self)
 
 
-    def get(self, n: 'cuint') -> "atom &":
-        """get(atomgroup self, cuint n) -> atom"""
-        return _sim3dlong.atomgroup_get(self, n)
+    def get(self, n: 'cuint') -> "Atom &":
+        """get(AtomGroup self, cuint n) -> Atom"""
+        return _sim3dlong.AtomGroup_get(self, n)
 
 
-    def get_id(self, n: 'cuint') -> "atomid":
-        """get_id(atomgroup self, cuint n) -> atomid"""
-        return _sim3dlong.atomgroup_get_id(self, n)
+    def get_id(self, n: 'cuint') -> "AtomID":
+        """get_id(AtomGroup self, cuint n) -> AtomID"""
+        return _sim3dlong.AtomGroup_get_id(self, n)
 
 
     def size(self) -> "uint":
-        """size(atomgroup self) -> uint"""
-        return _sim3dlong.atomgroup_size(self)
+        """size(AtomGroup self) -> uint"""
+        return _sim3dlong.AtomGroup_size(self)
 
 
     def begin(self) -> "AtomIter":
-        """begin(atomgroup self) -> AtomIter"""
-        return _sim3dlong.atomgroup_begin(self)
+        """begin(AtomGroup self) -> AtomIter"""
+        return _sim3dlong.AtomGroup_begin(self)
 
 
     def end(self) -> "AtomIter":
-        """end(atomgroup self) -> AtomIter"""
-        return _sim3dlong.atomgroup_end(self)
+        """end(AtomGroup self) -> AtomIter"""
+        return _sim3dlong.AtomGroup_end(self)
 
 
     def com(self) -> "Vec":
-        """com(atomgroup self) -> Vec"""
-        return _sim3dlong.atomgroup_com(self)
+        """com(AtomGroup self) -> Vec"""
+        return _sim3dlong.AtomGroup_com(self)
 
 
-    def comv(self) -> "Vec":
-        """comv(atomgroup self) -> Vec"""
-        return _sim3dlong.atomgroup_comv(self)
+    def com_force(self) -> "Vec":
+        """com_force(AtomGroup self) -> Vec"""
+        return _sim3dlong.AtomGroup_com_force(self)
 
 
-    def comf(self) -> "Vec":
-        """comf(atomgroup self) -> Vec"""
-        return _sim3dlong.atomgroup_comf(self)
+    def com_velocity(self) -> "Vec":
+        """com_velocity(AtomGroup self) -> Vec"""
+        return _sim3dlong.AtomGroup_com_velocity(self)
 
 
     def mass(self) -> "flt":
-        """mass(atomgroup self) -> flt"""
-        return _sim3dlong.atomgroup_mass(self)
+        """mass(AtomGroup self) -> flt"""
+        return _sim3dlong.AtomGroup_mass(self)
 
 
-    def kinetic(self, *args) -> "flt":
+    def kinetic_energy(self, *args) -> "flt":
         """
-        kinetic(atomgroup self, Vec const & originvelocity) -> flt
-        kinetic(atomgroup self) -> flt
+        kinetic_energy(AtomGroup self, Vec const originvelocity) -> flt
+        kinetic_energy(AtomGroup self) -> flt
         """
-        return _sim3dlong.atomgroup_kinetic(self, *args)
+        return _sim3dlong.AtomGroup_kinetic_energy(self, *args)
 
 
     def momentum(self) -> "Vec":
-        """momentum(atomgroup self) -> Vec"""
-        return _sim3dlong.atomgroup_momentum(self)
+        """momentum(AtomGroup self) -> Vec"""
+        return _sim3dlong.AtomGroup_momentum(self)
 
 
     def gyradius(self) -> "flt":
-        """gyradius(atomgroup self) -> flt"""
-        return _sim3dlong.atomgroup_gyradius(self)
+        """gyradius(AtomGroup self) -> flt"""
+        return _sim3dlong.AtomGroup_gyradius(self)
 
 
-    def angmomentum(self, loc: 'Vec const &') -> "Vec":
-        """angmomentum(atomgroup self, Vec const & loc) -> Vec"""
-        return _sim3dlong.atomgroup_angmomentum(self, loc)
+    def torque(self, *args) -> "Vec":
+        """
+        torque(AtomGroup self, Vec const loc) -> Vec
+        torque(AtomGroup self) -> Vec
+        """
+        return _sim3dlong.AtomGroup_torque(self, *args)
 
 
-    def torque(self, loc: 'Vec const &') -> "Vec":
-        """torque(atomgroup self, Vec const & loc) -> Vec"""
-        return _sim3dlong.atomgroup_torque(self, loc)
+    def moment_about(self, *args) -> "flt":
+        """
+        moment_about(AtomGroup self, Vec const axis, Vec const loc) -> flt
+        moment_about(AtomGroup self, Vec const axis) -> flt
+        """
+        return _sim3dlong.AtomGroup_moment_about(self, *args)
+
+
+    def angular_momentum(self, *args) -> "Vec":
+        """
+        angular_momentum(AtomGroup self, Vec const loc) -> Vec
+        angular_momentum(AtomGroup self) -> Vec
+        """
+        return _sim3dlong.AtomGroup_angular_momentum(self, *args)
 
 
     def moment(self, *args) -> "Matrix":
         """
-        moment(atomgroup self, Vec const & loc, Vec const & axis) -> flt
-        moment(atomgroup self, Vec const & loc) -> Matrix
+        moment(AtomGroup self, Vec const loc) -> Matrix
+        moment(AtomGroup self) -> Matrix
         """
-        return _sim3dlong.atomgroup_moment(self, *args)
+        return _sim3dlong.AtomGroup_moment(self, *args)
 
 
-    def omega(self, loc: 'Vec const &') -> "Vec":
-        """omega(atomgroup self, Vec const & loc) -> Vec"""
-        return _sim3dlong.atomgroup_omega(self, loc)
+    def omega(self, *args) -> "Vec":
+        """
+        omega(AtomGroup self, Vec const loc) -> Vec
+        omega(AtomGroup self) -> Vec
+        """
+        return _sim3dlong.AtomGroup_omega(self, *args)
 
 
-    def addOmega(self, w: 'Vec', origin: 'Vec') -> "void":
-        """addOmega(atomgroup self, Vec w, Vec origin)"""
-        return _sim3dlong.atomgroup_addOmega(self, w, origin)
+    def add_omega(self, *args) -> "void":
+        """
+        add_omega(AtomGroup self, Vec w, Vec origin)
+        add_omega(AtomGroup self, Vec w)
+        """
+        return _sim3dlong.AtomGroup_add_omega(self, *args)
 
 
-    def resetL(self) -> "void":
-        """resetL(atomgroup self)"""
-        return _sim3dlong.atomgroup_resetL(self)
+    def reset_L(self) -> "void":
+        """reset_L(AtomGroup self)"""
+        return _sim3dlong.AtomGroup_reset_L(self)
 
 
-    def addv(self, v: 'Vec') -> "void":
-        """addv(atomgroup self, Vec v)"""
-        return _sim3dlong.atomgroup_addv(self, v)
+    def add_velocity(self, v: 'Vec') -> "void":
+        """add_velocity(AtomGroup self, Vec v)"""
+        return _sim3dlong.AtomGroup_add_velocity(self, v)
 
 
-    def resetcomv(self) -> "void":
-        """resetcomv(atomgroup self)"""
-        return _sim3dlong.atomgroup_resetcomv(self)
+    def reset_com_velocity(self) -> "void":
+        """reset_com_velocity(AtomGroup self)"""
+        return _sim3dlong.AtomGroup_reset_com_velocity(self)
 
 
     def randomize_velocities(self, T: 'flt') -> "void":
-        """randomize_velocities(atomgroup self, flt T)"""
-        return _sim3dlong.atomgroup_randomize_velocities(self, T)
+        """randomize_velocities(AtomGroup self, flt T)"""
+        return _sim3dlong.AtomGroup_randomize_velocities(self, T)
 
 
-    def resetForces(self) -> "void":
-        """resetForces(atomgroup self)"""
-        return _sim3dlong.atomgroup_resetForces(self)
+    def reset_forces(self) -> "void":
+        """reset_forces(AtomGroup self)"""
+        return _sim3dlong.AtomGroup_reset_forces(self)
 
-    __swig_destroy__ = _sim3dlong.delete_atomgroup
+    __swig_destroy__ = _sim3dlong.delete_AtomGroup
     __del__ = lambda self: None
 
     def __iter__(self):
         for i in range(self.size()):
             yield self.get_id(i)
 
-atomgroup_swigregister = _sim3dlong.atomgroup_swigregister
-atomgroup_swigregister(atomgroup)
+AtomGroup_swigregister = _sim3dlong.AtomGroup_swigregister
+AtomGroup_swigregister(AtomGroup)
 
-class atomvec(atomgroup):
-    """Proxy of C++ atomvec class"""
+class AtomVec(AtomGroup):
+    """Proxy of C++ AtomVec class"""
     __swig_setmethods__ = {}
-    for _s in [atomgroup]:
+    for _s in [AtomGroup]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, atomvec, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AtomVec, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomgroup]:
+    for _s in [AtomGroup]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, atomvec, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, AtomVec, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(atomvec self, dvector masses) -> atomvec
-        __init__(atomvec self, uint N, flt mass) -> atomvec
-        __init__(atomvec self, atomvec other) -> atomvec
+        __init__(AtomVec self, dvector masses) -> AtomVec
+        __init__(AtomVec self, uint N, flt mass) -> AtomVec
+        __init__(AtomVec self, AtomVec other) -> AtomVec
         """
-        this = _sim3dlong.new_atomvec(*args)
+        this = _sim3dlong.new_AtomVec(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def vec(self) -> "atomvec &":
-        """vec(atomvec self) -> atomvec"""
-        return _sim3dlong.atomvec_vec(self)
+    def vec(self) -> "AtomVec &":
+        """vec(AtomVec self) -> AtomVec"""
+        return _sim3dlong.AtomVec_vec(self)
 
 
-    def get_id(self, n: 'cuint') -> "atomid":
-        """get_id(atomvec self, cuint n) -> atomid"""
-        return _sim3dlong.atomvec_get_id(self, n)
+    def get_id(self, n: 'cuint') -> "AtomID":
+        """get_id(AtomVec self, cuint n) -> AtomID"""
+        return _sim3dlong.AtomVec_get_id(self, n)
 
 
     def size(self) -> "uint":
-        """size(atomvec self) -> uint"""
-        return _sim3dlong.atomvec_size(self)
+        """size(AtomVec self) -> uint"""
+        return _sim3dlong.AtomVec_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_atomvec
+    __swig_destroy__ = _sim3dlong.delete_AtomVec
     __del__ = lambda self: None
 
     def __iter__(self):
@@ -7018,6 +7037,9 @@ class atomvec(atomgroup):
 
     def __getitem__(self, obj):
         return self.get_id(obj)
+
+    def __str__(self):
+        return str(list(self))
 
     #def __setitem__(self, obj, val):
     #    return self.set(obj, val)
@@ -7034,89 +7056,89 @@ class atomvec(atomgroup):
             a = self.get(i)
             a.__setstate__(atomstate)
 
-atomvec_swigregister = _sim3dlong.atomvec_swigregister
-atomvec_swigregister(atomvec)
+AtomVec_swigregister = _sim3dlong.AtomVec_swigregister
+AtomVec_swigregister(AtomVec)
 
-class subgroup(atomgroup):
-    """Proxy of C++ subgroup class"""
+class SubGroup(AtomGroup):
+    """Proxy of C++ SubGroup class"""
     __swig_setmethods__ = {}
-    for _s in [atomgroup]:
+    for _s in [AtomGroup]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, subgroup, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SubGroup, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomgroup]:
+    for _s in [AtomGroup]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, subgroup, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SubGroup, name)
     __repr__ = _swig_repr
 
-    def __init__(self, atoms: 'boost::shared_ptr< atomvec >'):
-        """__init__(subgroup self, boost::shared_ptr< atomvec > atoms) -> subgroup"""
-        this = _sim3dlong.new_subgroup(atoms)
+    def __init__(self, atoms: 'boost::shared_ptr< AtomVec >'):
+        """__init__(SubGroup self, boost::shared_ptr< AtomVec > atoms) -> SubGroup"""
+        this = _sim3dlong.new_SubGroup(atoms)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def vec(self) -> "atomvec &":
-        """vec(subgroup self) -> atomvec"""
-        return _sim3dlong.subgroup_vec(self)
+    def vec(self) -> "AtomVec &":
+        """vec(SubGroup self) -> AtomVec"""
+        return _sim3dlong.SubGroup_vec(self)
 
 
-    def get(self, n: 'cuint') -> "atom &":
-        """get(subgroup self, cuint n) -> atom"""
-        return _sim3dlong.subgroup_get(self, n)
+    def get(self, n: 'cuint') -> "Atom &":
+        """get(SubGroup self, cuint n) -> Atom"""
+        return _sim3dlong.SubGroup_get(self, n)
 
 
-    def add(self, a: 'atomid') -> "void":
-        """add(subgroup self, atomid a)"""
-        return _sim3dlong.subgroup_add(self, a)
+    def add(self, a: 'AtomID') -> "void":
+        """add(SubGroup self, AtomID a)"""
+        return _sim3dlong.SubGroup_add(self, a)
 
 
-    def get_id(self, n: 'cuint') -> "atomid":
-        """get_id(subgroup self, cuint n) -> atomid"""
-        return _sim3dlong.subgroup_get_id(self, n)
+    def get_id(self, n: 'cuint') -> "AtomID":
+        """get_id(SubGroup self, cuint n) -> AtomID"""
+        return _sim3dlong.SubGroup_get_id(self, n)
 
 
     def size(self) -> "uint":
-        """size(subgroup self) -> uint"""
-        return _sim3dlong.subgroup_size(self)
+        """size(SubGroup self) -> uint"""
+        return _sim3dlong.SubGroup_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_subgroup
+    __swig_destroy__ = _sim3dlong.delete_SubGroup
     __del__ = lambda self: None
-subgroup_swigregister = _sim3dlong.subgroup_swigregister
-subgroup_swigregister(subgroup)
+SubGroup_swigregister = _sim3dlong.SubGroup_swigregister
+SubGroup_swigregister(SubGroup)
 
-class statetracker(_object):
-    """Proxy of C++ statetracker class"""
+class StateTracker(_object):
+    """Proxy of C++ StateTracker class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, statetracker, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, StateTracker, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, statetracker, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, StateTracker, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
     def update(self, box: 'Box') -> "void":
-        """update(statetracker self, Box box)"""
-        return _sim3dlong.statetracker_update(self, box)
+        """update(StateTracker self, Box box)"""
+        return _sim3dlong.StateTracker_update(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_statetracker
+    __swig_destroy__ = _sim3dlong.delete_StateTracker
     __del__ = lambda self: None
-statetracker_swigregister = _sim3dlong.statetracker_swigregister
-statetracker_swigregister(statetracker)
+StateTracker_swigregister = _sim3dlong.StateTracker_swigregister
+StateTracker_swigregister(StateTracker)
 
-class pairlist(_object):
-    """Proxy of C++ pairlist class"""
+class PairList(_object):
+    """Proxy of C++ PairList class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, pairlist, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PairList, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, pairlist, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, PairList, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(pairlist self) -> pairlist"""
-        this = _sim3dlong.new_pairlist()
+        """__init__(PairList self) -> PairList"""
+        this = _sim3dlong.new_PairList()
         try:
             self.this.append(this)
         except:
@@ -7124,153 +7146,153 @@ class pairlist(_object):
 
     def ensure(self, *args) -> "void":
         """
-        ensure(pairlist self, atomid a)
-        ensure(pairlist self, idvector ps)
-        ensure(pairlist self, atomgroup group)
+        ensure(PairList self, AtomID a)
+        ensure(PairList self, idvector ps)
+        ensure(PairList self, AtomGroup group)
         """
-        return _sim3dlong.pairlist_ensure(self, *args)
+        return _sim3dlong.PairList_ensure(self, *args)
 
 
-    def has_pair(self, a1: 'atomid', a2: 'atomid') -> "bool":
-        """has_pair(pairlist self, atomid a1, atomid a2) -> bool"""
-        return _sim3dlong.pairlist_has_pair(self, a1, a2)
+    def has_pair(self, a1: 'AtomID', a2: 'AtomID') -> "bool":
+        """has_pair(PairList self, AtomID a1, AtomID a2) -> bool"""
+        return _sim3dlong.PairList_has_pair(self, a1, a2)
 
 
-    def add_pair(self, a1: 'atomid', a2: 'atomid') -> "void":
-        """add_pair(pairlist self, atomid a1, atomid a2)"""
-        return _sim3dlong.pairlist_add_pair(self, a1, a2)
+    def add_pair(self, a1: 'AtomID', a2: 'AtomID') -> "void":
+        """add_pair(PairList self, AtomID a1, AtomID a2)"""
+        return _sim3dlong.PairList_add_pair(self, a1, a2)
 
 
-    def erase_pair(self, a1: 'atomid', a2: 'atomid') -> "void":
-        """erase_pair(pairlist self, atomid a1, atomid a2)"""
-        return _sim3dlong.pairlist_erase_pair(self, a1, a2)
+    def erase_pair(self, a1: 'AtomID', a2: 'AtomID') -> "void":
+        """erase_pair(PairList self, AtomID a1, AtomID a2)"""
+        return _sim3dlong.PairList_erase_pair(self, a1, a2)
 
 
-    def get_pairs(self, a: 'atomid') -> "std::set< atomid >":
-        """get_pairs(pairlist self, atomid a) -> std::set< atomid >"""
-        return _sim3dlong.pairlist_get_pairs(self, a)
+    def get_pairs(self, a: 'AtomID') -> "std::set< AtomID >":
+        """get_pairs(PairList self, AtomID a) -> std::set< AtomID >"""
+        return _sim3dlong.PairList_get_pairs(self, a)
 
 
-    def begin(self, a: 'atomid') -> "std::set< atomid,std::less< atomid >,std::allocator< atomid > >::iterator":
-        """begin(pairlist self, atomid a) -> std::set< atomid,std::less< atomid >,std::allocator< atomid > >::iterator"""
-        return _sim3dlong.pairlist_begin(self, a)
+    def begin(self, a: 'AtomID') -> "std::set< AtomID,std::less< AtomID >,std::allocator< AtomID > >::iterator":
+        """begin(PairList self, AtomID a) -> std::set< AtomID,std::less< AtomID >,std::allocator< AtomID > >::iterator"""
+        return _sim3dlong.PairList_begin(self, a)
 
 
-    def end(self, a: 'atomid') -> "std::set< atomid,std::less< atomid >,std::allocator< atomid > >::iterator":
-        """end(pairlist self, atomid a) -> std::set< atomid,std::less< atomid >,std::allocator< atomid > >::iterator"""
-        return _sim3dlong.pairlist_end(self, a)
+    def end(self, a: 'AtomID') -> "std::set< AtomID,std::less< AtomID >,std::allocator< AtomID > >::iterator":
+        """end(PairList self, AtomID a) -> std::set< AtomID,std::less< AtomID >,std::allocator< AtomID > >::iterator"""
+        return _sim3dlong.PairList_end(self, a)
 
 
     def size(self) -> "uint":
-        """size(pairlist self) -> uint"""
-        return _sim3dlong.pairlist_size(self)
+        """size(PairList self) -> uint"""
+        return _sim3dlong.PairList_size(self)
 
 
     def clear(self) -> "void":
-        """clear(pairlist self)"""
-        return _sim3dlong.pairlist_clear(self)
+        """clear(PairList self)"""
+        return _sim3dlong.PairList_clear(self)
 
-    __swig_destroy__ = _sim3dlong.delete_pairlist
+    __swig_destroy__ = _sim3dlong.delete_PairList
     __del__ = lambda self: None
-pairlist_swigregister = _sim3dlong.pairlist_swigregister
-pairlist_swigregister(pairlist)
+PairList_swigregister = _sim3dlong.PairList_swigregister
+PairList_swigregister(PairList)
 
-class neighborlist(statetracker):
-    """Proxy of C++ neighborlist class"""
+class NeighborList(StateTracker):
+    """Proxy of C++ NeighborList class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, neighborlist, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NeighborList, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, neighborlist, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, NeighborList, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', atoms: 'boost::shared_ptr< atomvec >', skin: 'flt const'):
-        """__init__(neighborlist self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atoms, flt const skin) -> neighborlist"""
-        this = _sim3dlong.new_neighborlist(box, atoms, skin)
+    def __init__(self, box: 'boost::shared_ptr< Box >', atoms: 'boost::shared_ptr< AtomVec >', skin: 'flt const'):
+        """__init__(NeighborList self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atoms, flt const skin) -> NeighborList"""
+        this = _sim3dlong.new_NeighborList(box, atoms, skin)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update(self, newbox: 'Box') -> "void":
-        """update(neighborlist self, Box newbox)"""
-        return _sim3dlong.neighborlist_update(self, newbox)
+        """update(NeighborList self, Box newbox)"""
+        return _sim3dlong.NeighborList_update(self, newbox)
 
 
     def update_list(self, force: 'bool'=True) -> "bool":
         """
-        update_list(neighborlist self, bool force=True) -> bool
-        update_list(neighborlist self) -> bool
+        update_list(NeighborList self, bool force=True) -> bool
+        update_list(NeighborList self) -> bool
         """
-        return _sim3dlong.neighborlist_update_list(self, force)
+        return _sim3dlong.NeighborList_update_list(self, force)
 
 
-    def vec(self) -> "atomvec &":
-        """vec(neighborlist self) -> atomvec"""
-        return _sim3dlong.neighborlist_vec(self)
+    def vec(self) -> "AtomVec &":
+        """vec(NeighborList self) -> AtomVec"""
+        return _sim3dlong.NeighborList_vec(self)
 
 
     def which(self) -> "uint":
-        """which(neighborlist self) -> uint"""
-        return _sim3dlong.neighborlist_which(self)
+        """which(NeighborList self) -> uint"""
+        return _sim3dlong.NeighborList_which(self)
 
 
     def numpairs(self) -> "uint":
-        """numpairs(neighborlist self) -> uint"""
-        return _sim3dlong.neighborlist_numpairs(self)
+        """numpairs(NeighborList self) -> uint"""
+        return _sim3dlong.NeighborList_numpairs(self)
 
 
-    def ignore(self, a: 'atomid', b: 'atomid') -> "void":
-        """ignore(neighborlist self, atomid a, atomid b)"""
-        return _sim3dlong.neighborlist_ignore(self, a, b)
+    def ignore(self, a: 'AtomID', b: 'AtomID') -> "void":
+        """ignore(NeighborList self, AtomID a, AtomID b)"""
+        return _sim3dlong.NeighborList_ignore(self, a, b)
 
 
-    def add(self, a: 'atomid', diameter: 'flt') -> "void":
-        """add(neighborlist self, atomid a, flt diameter)"""
-        return _sim3dlong.neighborlist_add(self, a, diameter)
+    def add(self, a: 'AtomID', diameter: 'flt') -> "void":
+        """add(NeighborList self, AtomID a, flt diameter)"""
+        return _sim3dlong.NeighborList_add(self, a, diameter)
 
 
     def ignore_size(self) -> "uint":
-        """ignore_size(neighborlist self) -> uint"""
-        return _sim3dlong.neighborlist_ignore_size(self)
+        """ignore_size(NeighborList self) -> uint"""
+        return _sim3dlong.NeighborList_ignore_size(self)
 
 
     def size(self) -> "uint":
-        """size(neighborlist self) -> uint"""
-        return _sim3dlong.neighborlist_size(self)
+        """size(NeighborList self) -> uint"""
+        return _sim3dlong.NeighborList_size(self)
 
 
-    def begin(self) -> "std::vector< idpair,std::allocator< idpair > >::iterator":
-        """begin(neighborlist self) -> std::vector< idpair,std::allocator< idpair > >::iterator"""
-        return _sim3dlong.neighborlist_begin(self)
+    def begin(self) -> "std::vector< IDPair,std::allocator< IDPair > >::iterator":
+        """begin(NeighborList self) -> std::vector< IDPair,std::allocator< IDPair > >::iterator"""
+        return _sim3dlong.NeighborList_begin(self)
 
 
-    def end(self) -> "std::vector< idpair,std::allocator< idpair > >::iterator":
-        """end(neighborlist self) -> std::vector< idpair,std::allocator< idpair > >::iterator"""
-        return _sim3dlong.neighborlist_end(self)
+    def end(self) -> "std::vector< IDPair,std::allocator< IDPair > >::iterator":
+        """end(NeighborList self) -> std::vector< IDPair,std::allocator< IDPair > >::iterator"""
+        return _sim3dlong.NeighborList_end(self)
 
 
-    def get(self, i: 'uint') -> "idpair":
-        """get(neighborlist self, uint i) -> idpair"""
-        return _sim3dlong.neighborlist_get(self, i)
+    def get(self, i: 'uint') -> "IDPair":
+        """get(NeighborList self, uint i) -> IDPair"""
+        return _sim3dlong.NeighborList_get(self, i)
 
-    __swig_destroy__ = _sim3dlong.delete_neighborlist
+    __swig_destroy__ = _sim3dlong.delete_NeighborList
     __del__ = lambda self: None
 
-    def __getitem__(self, i: 'size_t') -> "idpair":
-        """__getitem__(neighborlist self, size_t i) -> idpair"""
-        return _sim3dlong.neighborlist___getitem__(self, i)
+    def __getitem__(self, i: 'size_t') -> "IDPair":
+        """__getitem__(NeighborList self, size_t i) -> IDPair"""
+        return _sim3dlong.NeighborList___getitem__(self, i)
 
 
     def __iter__(self):
         for i in range(self.numpairs()):
             yield self[i]
 
-neighborlist_swigregister = _sim3dlong.neighborlist_swigregister
-neighborlist_swigregister(neighborlist)
+NeighborList_swigregister = _sim3dlong.NeighborList_swigregister
+NeighborList_swigregister(NeighborList)
 
 class Grid(_object):
     """Proxy of C++ Grid class"""
@@ -7316,10 +7338,10 @@ class Grid(_object):
 
     def __init__(self, *args):
         """
-        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, uint const width=1) -> Grid
-        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms) -> Grid
-        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, uintvector width) -> Grid
-        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const minwidth, flt const goalwidth) -> Grid
+        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, uint const width=1) -> Grid
+        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms) -> Grid
+        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, uintvector width) -> Grid
+        __init__(Grid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const minwidth, flt const goalwidth) -> Grid
         """
         this = _sim3dlong.new_Grid(*args)
         try:
@@ -7347,25 +7369,25 @@ class Grid(_object):
         return _sim3dlong.Grid_end(self)
 
 
-    def pairs(self, a: 'atomid') -> "Grid::pair_iter":
-        """pairs(Grid self, atomid a) -> GridPairedIterator"""
+    def pairs(self, a: 'AtomID') -> "Grid::pair_iter":
+        """pairs(Grid self, AtomID a) -> GridPairedIterator"""
         return _sim3dlong.Grid_pairs(self, a)
 
 
     def time_to_edge(self, *args) -> "flt":
         """
-        time_to_edge(Grid self, atom a) -> flt
+        time_to_edge(Grid self, Atom a) -> flt
         time_to_edge(Grid self, uint i) -> flt
         """
         return _sim3dlong.Grid_time_to_edge(self, *args)
 
 
-    def allpairs(self, *args) -> "std::vector< atomid >":
+    def all_pairs(self, *args) -> "std::vector< AtomID >":
         """
-        allpairs(Grid self) -> idpairvector
-        allpairs(Grid self, atomid a) -> idvector
+        all_pairs(Grid self) -> idpairvector
+        all_pairs(Grid self, AtomID a) -> idvector
         """
-        return _sim3dlong.Grid_allpairs(self, *args)
+        return _sim3dlong.Grid_all_pairs(self, *args)
 
 
     def numcells(self, *args) -> "uint":
@@ -7388,16 +7410,16 @@ class GridPairedIterator(_object):
     __getattr__ = lambda self, name: _swig_getattr(self, GridPairedIterator, name)
     __repr__ = _swig_repr
 
-    def __init__(self, grid: 'Grid', a: 'atomid'):
-        """__init__(GridPairedIterator self, Grid grid, atomid a) -> GridPairedIterator"""
+    def __init__(self, grid: 'Grid', a: 'AtomID'):
+        """__init__(GridPairedIterator self, Grid grid, AtomID a) -> GridPairedIterator"""
         this = _sim3dlong.new_GridPairedIterator(grid, a)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def __ref__(self) -> "atomid":
-        """__ref__(GridPairedIterator self) -> atomid"""
+    def __ref__(self) -> "AtomID":
+        """__ref__(GridPairedIterator self) -> AtomID"""
         return _sim3dlong.GridPairedIterator___ref__(self)
 
 
@@ -7437,7 +7459,7 @@ class GridIterator(_object):
     def __init__(self, *args):
         """
         __init__(GridIterator self, Grid grid) -> GridIterator
-        __init__(GridIterator self, Grid grid, std::vector< std::set< atomid,std::less< atomid >,std::allocator< atomid > >,std::allocator< std::set< atomid,std::less< atomid >,std::allocator< atomid > > > >::iterator cell1) -> GridIterator
+        __init__(GridIterator self, Grid grid, std::vector< std::set< AtomID,std::less< AtomID >,std::allocator< AtomID > >,std::allocator< std::set< AtomID,std::less< AtomID >,std::allocator< AtomID > > > >::iterator cell1) -> GridIterator
         """
         this = _sim3dlong.new_GridIterator(*args)
         try:
@@ -7445,8 +7467,8 @@ class GridIterator(_object):
         except:
             self.this = this
 
-    def __ref__(self) -> "idpair":
-        """__ref__(GridIterator self) -> idpair"""
+    def __ref__(self) -> "IDPair":
+        """__ref__(GridIterator self) -> IDPair"""
         return _sim3dlong.GridIterator___ref__(self)
 
 
@@ -7464,77 +7486,77 @@ class GridIterator(_object):
 GridIterator_swigregister = _sim3dlong.GridIterator_swigregister
 GridIterator_swigregister(GridIterator)
 
-class interaction(_object):
-    """Proxy of C++ interaction class"""
+class Interaction(_object):
+    """Proxy of C++ Interaction class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, interaction, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Interaction, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, interaction, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Interaction, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(interaction self, Box box) -> flt"""
-        return _sim3dlong.interaction_energy(self, box)
+        """energy(Interaction self, Box box) -> flt"""
+        return _sim3dlong.Interaction_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(interaction self, Box box)"""
-        return _sim3dlong.interaction_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(Interaction self, Box box)"""
+        return _sim3dlong.Interaction_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(interaction self, Box box) -> flt"""
-        return _sim3dlong.interaction_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(Interaction self, Box box) -> flt"""
+        return _sim3dlong.Interaction_set_forces_get_pressure(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(interaction self, Box box) -> flt"""
-        return _sim3dlong.interaction_pressure(self, box)
+        """pressure(Interaction self, Box box) -> flt"""
+        return _sim3dlong.Interaction_pressure(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_interaction
+    __swig_destroy__ = _sim3dlong.delete_Interaction
     __del__ = lambda self: None
-interaction_swigregister = _sim3dlong.interaction_swigregister
-interaction_swigregister(interaction)
+Interaction_swigregister = _sim3dlong.Interaction_swigregister
+Interaction_swigregister(Interaction)
 
-class interactpair(_object):
-    """Proxy of C++ interactpair class"""
+class InteractPair(_object):
+    """Proxy of C++ InteractPair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, interactpair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, InteractPair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, interactpair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, InteractPair, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
     def energy(self, diff: 'Vec const') -> "flt":
-        """energy(interactpair self, Vec const diff) -> flt"""
-        return _sim3dlong.interactpair_energy(self, diff)
+        """energy(InteractPair self, Vec const diff) -> flt"""
+        return _sim3dlong.InteractPair_energy(self, diff)
 
 
     def forces(self, diff: 'Vec const') -> "Vec":
-        """forces(interactpair self, Vec const diff) -> Vec"""
-        return _sim3dlong.interactpair_forces(self, diff)
+        """forces(InteractPair self, Vec const diff) -> Vec"""
+        return _sim3dlong.InteractPair_forces(self, diff)
 
-    __swig_destroy__ = _sim3dlong.delete_interactpair
+    __swig_destroy__ = _sim3dlong.delete_InteractPair
     __del__ = lambda self: None
-interactpair_swigregister = _sim3dlong.interactpair_swigregister
-interactpair_swigregister(interactpair)
+InteractPair_swigregister = _sim3dlong.InteractPair_swigregister
+InteractPair_swigregister(InteractPair)
 
-class LJrepulsive(_object):
-    """Proxy of C++ LJrepulsive class"""
+class LJRepulsive(_object):
+    """Proxy of C++ LJRepulsive class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJrepulsive, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJRepulsive, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJrepulsive, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJRepulsive, name)
     __repr__ = _swig_repr
 
     def __init__(self, epsilon: 'flt const', sigma: 'flt const'):
-        """__init__(LJrepulsive self, flt const epsilon, flt const sigma) -> LJrepulsive"""
-        this = _sim3dlong.new_LJrepulsive(epsilon, sigma)
+        """__init__(LJRepulsive self, flt const epsilon, flt const sigma) -> LJRepulsive"""
+        this = _sim3dlong.new_LJRepulsive(epsilon, sigma)
         try:
             self.this.append(this)
         except:
@@ -7542,37 +7564,37 @@ class LJrepulsive(_object):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJrepulsive self, Vec const diff, flt const eps, flt const sig) -> flt
-        energy(LJrepulsive self, Vec const & diff) -> flt
+        energy(LJRepulsive self, Vec const diff, flt const eps, flt const sig) -> flt
+        energy(LJRepulsive self, Vec const & diff) -> flt
         """
-        return _sim3dlong.LJrepulsive_energy(self, *args)
+        return _sim3dlong.LJRepulsive_energy(self, *args)
 
 
     def forces(self, *args) -> "Vec":
         """
-        forces(LJrepulsive self, Vec const diff, flt const eps, flt const sig) -> Vec
-        forces(LJrepulsive self, Vec const & diff) -> Vec
+        forces(LJRepulsive self, Vec const diff, flt const eps, flt const sig) -> Vec
+        forces(LJRepulsive self, Vec const & diff) -> Vec
         """
-        return _sim3dlong.LJrepulsive_forces(self, *args)
+        return _sim3dlong.LJRepulsive_forces(self, *args)
 
-    __swig_destroy__ = _sim3dlong.delete_LJrepulsive
+    __swig_destroy__ = _sim3dlong.delete_LJRepulsive
     __del__ = lambda self: None
-LJrepulsive_swigregister = _sim3dlong.LJrepulsive_swigregister
-LJrepulsive_swigregister(LJrepulsive)
+LJRepulsive_swigregister = _sim3dlong.LJRepulsive_swigregister
+LJRepulsive_swigregister(LJRepulsive)
 LJr0 = cvar.LJr0
 LJr0sq = cvar.LJr0sq
 
-class LJattract(_object):
-    """Proxy of C++ LJattract class"""
+class LJAttract(_object):
+    """Proxy of C++ LJAttract class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJattract, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttract, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJattract, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttract, name)
     __repr__ = _swig_repr
 
     def __init__(self, epsilon: 'flt const', sigma: 'flt const'):
-        """__init__(LJattract self, flt const epsilon, flt const sigma) -> LJattract"""
-        this = _sim3dlong.new_LJattract(epsilon, sigma)
+        """__init__(LJAttract self, flt const epsilon, flt const sigma) -> LJAttract"""
+        this = _sim3dlong.new_LJAttract(epsilon, sigma)
         try:
             self.this.append(this)
         except:
@@ -7580,37 +7602,37 @@ class LJattract(_object):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJattract self, Vec const diff, flt const eps, flt const sig) -> flt
-        energy(LJattract self, flt const rsig) -> flt
-        energy(LJattract self, Vec const & diff) -> flt
+        energy(LJAttract self, Vec const diff, flt const eps, flt const sig) -> flt
+        energy(LJAttract self, flt const rsig) -> flt
+        energy(LJAttract self, Vec const & diff) -> flt
         """
-        return _sim3dlong.LJattract_energy(self, *args)
+        return _sim3dlong.LJAttract_energy(self, *args)
 
 
     def forces(self, *args) -> "Vec":
         """
-        forces(LJattract self, Vec const diff, flt const eps, flt const sig) -> Vec
-        forces(LJattract self, flt const rsig) -> flt
-        forces(LJattract self, Vec const & diff) -> Vec
+        forces(LJAttract self, Vec const diff, flt const eps, flt const sig) -> Vec
+        forces(LJAttract self, flt const rsig) -> flt
+        forces(LJAttract self, Vec const & diff) -> Vec
         """
-        return _sim3dlong.LJattract_forces(self, *args)
+        return _sim3dlong.LJAttract_forces(self, *args)
 
-    __swig_destroy__ = _sim3dlong.delete_LJattract
+    __swig_destroy__ = _sim3dlong.delete_LJAttract
     __del__ = lambda self: None
-LJattract_swigregister = _sim3dlong.LJattract_swigregister
-LJattract_swigregister(LJattract)
+LJAttract_swigregister = _sim3dlong.LJAttract_swigregister
+LJAttract_swigregister(LJAttract)
 
-class LJattractCut(_object):
-    """Proxy of C++ LJattractCut class"""
+class LJAttractCut(_object):
+    """Proxy of C++ LJAttractCut class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJattractCut, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractCut, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJattractCut, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractCut, name)
     __repr__ = _swig_repr
 
     def __init__(self, epsilon: 'flt const', sigma: 'flt const', cutsig: 'flt const'):
-        """__init__(LJattractCut self, flt const epsilon, flt const sigma, flt const cutsig) -> LJattractCut"""
-        this = _sim3dlong.new_LJattractCut(epsilon, sigma, cutsig)
+        """__init__(LJAttractCut self, flt const epsilon, flt const sigma, flt const cutsig) -> LJAttractCut"""
+        this = _sim3dlong.new_LJAttractCut(epsilon, sigma, cutsig)
         try:
             self.this.append(this)
         except:
@@ -7618,106 +7640,106 @@ class LJattractCut(_object):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJattractCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> flt
-        energy(LJattractCut self, Vec const & diff) -> flt
+        energy(LJAttractCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> flt
+        energy(LJAttractCut self, Vec const & diff) -> flt
         """
-        return _sim3dlong.LJattractCut_energy(self, *args)
+        return _sim3dlong.LJAttractCut_energy(self, *args)
 
 
     def forces(self, *args) -> "Vec":
         """
-        forces(LJattractCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> Vec
-        forces(LJattractCut self, Vec const & diff) -> Vec
+        forces(LJAttractCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> Vec
+        forces(LJAttractCut self, Vec const & diff) -> Vec
         """
-        return _sim3dlong.LJattractCut_forces(self, *args)
+        return _sim3dlong.LJAttractCut_forces(self, *args)
 
-    __swig_destroy__ = _sim3dlong.delete_LJattractCut
+    __swig_destroy__ = _sim3dlong.delete_LJAttractCut
     __del__ = lambda self: None
-LJattractCut_swigregister = _sim3dlong.LJattractCut_swigregister
-LJattractCut_swigregister(LJattractCut)
+LJAttractCut_swigregister = _sim3dlong.LJAttractCut_swigregister
+LJAttractCut_swigregister(LJAttractCut)
 
-class LJFullCut(_object):
-    """Proxy of C++ LJFullCut class"""
+class LennardJonesCut(_object):
+    """Proxy of C++ LennardJonesCut class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJFullCut, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LennardJonesCut, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJFullCut, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LennardJonesCut, name)
     __repr__ = _swig_repr
 
     def __init__(self, epsilon: 'flt const', sigma: 'flt const', cutsig: 'flt const'):
-        """__init__(LJFullCut self, flt const epsilon, flt const sigma, flt const cutsig) -> LJFullCut"""
-        this = _sim3dlong.new_LJFullCut(epsilon, sigma, cutsig)
+        """__init__(LennardJonesCut self, flt const epsilon, flt const sigma, flt const cutsig) -> LennardJonesCut"""
+        this = _sim3dlong.new_LennardJonesCut(epsilon, sigma, cutsig)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, diff: 'Vec const &') -> "flt":
-        """energy(LJFullCut self, Vec const & diff) -> flt"""
-        return _sim3dlong.LJFullCut_energy(self, diff)
+        """energy(LennardJonesCut self, Vec const & diff) -> flt"""
+        return _sim3dlong.LennardJonesCut_energy(self, diff)
 
 
     def forces(self, *args) -> "Vec":
         """
-        forces(LJFullCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> Vec
-        forces(LJFullCut self, flt const rsig, flt const cutsig) -> flt
-        forces(LJFullCut self, Vec const & diff) -> Vec
+        forces(LennardJonesCut self, Vec const diff, flt const eps, flt const sig, flt const cutsig) -> Vec
+        forces(LennardJonesCut self, flt const rsig, flt const cutsig) -> flt
+        forces(LennardJonesCut self, Vec const & diff) -> Vec
         """
-        return _sim3dlong.LJFullCut_forces(self, *args)
+        return _sim3dlong.LennardJonesCut_forces(self, *args)
 
-    __swig_destroy__ = _sim3dlong.delete_LJFullCut
+    __swig_destroy__ = _sim3dlong.delete_LennardJonesCut
     __del__ = lambda self: None
-LJFullCut_swigregister = _sim3dlong.LJFullCut_swigregister
-LJFullCut_swigregister(LJFullCut)
+LennardJonesCut_swigregister = _sim3dlong.LennardJonesCut_swigregister
+LennardJonesCut_swigregister(LennardJonesCut)
 
-class spring(interactpair):
-    """Proxy of C++ spring class"""
+class Spring(InteractPair):
+    """Proxy of C++ Spring class"""
     __swig_setmethods__ = {}
-    for _s in [interactpair]:
+    for _s in [InteractPair]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, spring, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Spring, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactpair]:
+    for _s in [InteractPair]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, spring, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Spring, name)
     __repr__ = _swig_repr
 
     def __init__(self, k: 'flt const', x0: 'flt const'):
-        """__init__(spring self, flt const k, flt const x0) -> spring"""
-        this = _sim3dlong.new_spring(k, x0)
+        """__init__(Spring self, flt const k, flt const x0) -> Spring"""
+        this = _sim3dlong.new_Spring(k, x0)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, diff: 'Vec const') -> "flt":
-        """energy(spring self, Vec const diff) -> flt"""
-        return _sim3dlong.spring_energy(self, diff)
+        """energy(Spring self, Vec const diff) -> flt"""
+        return _sim3dlong.Spring_energy(self, diff)
 
 
     def forces(self, diff: 'Vec const') -> "Vec":
-        """forces(spring self, Vec const diff) -> Vec"""
-        return _sim3dlong.spring_forces(self, diff)
+        """forces(Spring self, Vec const diff) -> Vec"""
+        return _sim3dlong.Spring_forces(self, diff)
 
-    __swig_destroy__ = _sim3dlong.delete_spring
+    __swig_destroy__ = _sim3dlong.delete_Spring
     __del__ = lambda self: None
-spring_swigregister = _sim3dlong.spring_swigregister
-spring_swigregister(spring)
+Spring_swigregister = _sim3dlong.Spring_swigregister
+Spring_swigregister(Spring)
 
-class bondangle(_object):
-    """Proxy of C++ bondangle class"""
+class BondAngle(_object):
+    """Proxy of C++ BondAngle class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, bondangle, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BondAngle, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, bondangle, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, BondAngle, name)
     __repr__ = _swig_repr
 
     def __init__(self, k: 'flt const', theta: 'flt const', cosine: 'bool const'=False):
         """
-        __init__(bondangle self, flt const k, flt const theta, bool const cosine=False) -> bondangle
-        __init__(bondangle self, flt const k, flt const theta) -> bondangle
+        __init__(BondAngle self, flt const k, flt const theta, bool const cosine=False) -> BondAngle
+        __init__(BondAngle self, flt const k, flt const theta) -> BondAngle
         """
-        this = _sim3dlong.new_bondangle(k, theta, cosine)
+        this = _sim3dlong.new_BondAngle(k, theta, cosine)
         try:
             self.this.append(this)
         except:
@@ -7725,29 +7747,29 @@ class bondangle(_object):
 
     def get_angle(r1: 'Vec const &', r2: 'Vec const &') -> "flt":
         """get_angle(Vec const & r1, Vec const & r2) -> flt"""
-        return _sim3dlong.bondangle_get_angle(r1, r2)
+        return _sim3dlong.BondAngle_get_angle(r1, r2)
 
     if _newclass:
         get_angle = staticmethod(get_angle)
     __swig_getmethods__["get_angle"] = lambda x: get_angle
 
     def energy(self, diff1: 'Vec const &', diff2: 'Vec const &') -> "flt":
-        """energy(bondangle self, Vec const & diff1, Vec const & diff2) -> flt"""
-        return _sim3dlong.bondangle_energy(self, diff1, diff2)
+        """energy(BondAngle self, Vec const & diff1, Vec const & diff2) -> flt"""
+        return _sim3dlong.BondAngle_energy(self, diff1, diff2)
 
 
     def forces(self, diff1: 'Vec const &', diff2: 'Vec const &') -> "boost::array< Vec,3 >":
-        """forces(bondangle self, Vec const & diff1, Vec const & diff2) -> boost::array< Vec,3 >"""
-        return _sim3dlong.bondangle_forces(self, diff1, diff2)
+        """forces(BondAngle self, Vec const & diff1, Vec const & diff2) -> boost::array< Vec,3 >"""
+        return _sim3dlong.BondAngle_forces(self, diff1, diff2)
 
-    __swig_destroy__ = _sim3dlong.delete_bondangle
+    __swig_destroy__ = _sim3dlong.delete_BondAngle
     __del__ = lambda self: None
-bondangle_swigregister = _sim3dlong.bondangle_swigregister
-bondangle_swigregister(bondangle)
+BondAngle_swigregister = _sim3dlong.BondAngle_swigregister
+BondAngle_swigregister(BondAngle)
 
-def bondangle_get_angle(r1: 'Vec const &', r2: 'Vec const &') -> "flt":
-    """bondangle_get_angle(Vec const & r1, Vec const & r2) -> flt"""
-    return _sim3dlong.bondangle_get_angle(r1, r2)
+def BondAngle_get_angle(r1: 'Vec const &', r2: 'Vec const &') -> "flt":
+    """BondAngle_get_angle(Vec const & r1, Vec const & r2) -> flt"""
+    return _sim3dlong.BondAngle_get_angle(r1, r2)
 
 class DihedralDerivs(_object):
     """Proxy of C++ DihedralDerivs class"""
@@ -7777,99 +7799,99 @@ class DihedralDerivs(_object):
 DihedralDerivs_swigregister = _sim3dlong.DihedralDerivs_swigregister
 DihedralDerivs_swigregister(DihedralDerivs)
 
-class dihedral(_object):
-    """Proxy of C++ dihedral class"""
+class Dihedral(_object):
+    """Proxy of C++ Dihedral class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, dihedral, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Dihedral, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, dihedral, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Dihedral, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(dihedral self, ldvector cosvals, ldvector sinvals, bool usepow=True) -> dihedral
-        __init__(dihedral self, ldvector cosvals, ldvector sinvals) -> dihedral
-        __init__(dihedral self, ldvector cosvals) -> dihedral
+        __init__(Dihedral self, ldvector cosvals, ldvector sinvals, bool usepow=True) -> Dihedral
+        __init__(Dihedral self, ldvector cosvals, ldvector sinvals) -> Dihedral
+        __init__(Dihedral self, ldvector cosvals) -> Dihedral
         """
-        this = _sim3dlong.new_dihedral(*args)
+        this = _sim3dlong.new_Dihedral(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def getcos(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
-        """getcos(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
-        return _sim3dlong.dihedral_getcos(diff1, diff2, diff3)
+    def get_cos(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
+        """get_cos(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
+        return _sim3dlong.Dihedral_get_cos(diff1, diff2, diff3)
 
     if _newclass:
-        getcos = staticmethod(getcos)
-    __swig_getmethods__["getcos"] = lambda x: getcos
+        get_cos = staticmethod(get_cos)
+    __swig_getmethods__["get_cos"] = lambda x: get_cos
 
-    def getang(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
-        """getang(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
-        return _sim3dlong.dihedral_getang(diff1, diff2, diff3)
+    def get_angle(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
+        """get_angle(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
+        return _sim3dlong.Dihedral_get_angle(diff1, diff2, diff3)
 
     if _newclass:
-        getang = staticmethod(getang)
-    __swig_getmethods__["getang"] = lambda x: getang
+        get_angle = staticmethod(get_angle)
+    __swig_getmethods__["get_angle"] = lambda x: get_angle
 
     def dr_dcostheta(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "DihedralDerivs":
         """dr_dcostheta(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> DihedralDerivs"""
-        return _sim3dlong.dihedral_dr_dcostheta(diff1, diff2, diff3)
+        return _sim3dlong.Dihedral_dr_dcostheta(diff1, diff2, diff3)
 
     if _newclass:
         dr_dcostheta = staticmethod(dr_dcostheta)
     __swig_getmethods__["dr_dcostheta"] = lambda x: dr_dcostheta
 
-    def dudcostheta(self, theta: 'flt const') -> "flt":
-        """dudcostheta(dihedral self, flt const theta) -> flt"""
-        return _sim3dlong.dihedral_dudcostheta(self, theta)
+    def dU_dcostheta(self, theta: 'flt const') -> "flt":
+        """dU_dcostheta(Dihedral self, flt const theta) -> flt"""
+        return _sim3dlong.Dihedral_dU_dcostheta(self, theta)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(dihedral self, Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt
-        energy(dihedral self, flt ang) -> flt
+        energy(Dihedral self, Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt
+        energy(Dihedral self, flt ang) -> flt
         """
-        return _sim3dlong.dihedral_energy(self, *args)
+        return _sim3dlong.Dihedral_energy(self, *args)
 
 
     def forces(self, diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "boost::array< Vec,4 >":
-        """forces(dihedral self, Vec const & diff1, Vec const & diff2, Vec const & diff3) -> boost::array< Vec,4 >"""
-        return _sim3dlong.dihedral_forces(self, diff1, diff2, diff3)
+        """forces(Dihedral self, Vec const & diff1, Vec const & diff2, Vec const & diff3) -> boost::array< Vec,4 >"""
+        return _sim3dlong.Dihedral_forces(self, diff1, diff2, diff3)
 
-    __swig_destroy__ = _sim3dlong.delete_dihedral
+    __swig_destroy__ = _sim3dlong.delete_Dihedral
     __del__ = lambda self: None
-dihedral_swigregister = _sim3dlong.dihedral_swigregister
-dihedral_swigregister(dihedral)
+Dihedral_swigregister = _sim3dlong.Dihedral_swigregister
+Dihedral_swigregister(Dihedral)
 
-def dihedral_getcos(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
-    """dihedral_getcos(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
-    return _sim3dlong.dihedral_getcos(diff1, diff2, diff3)
+def Dihedral_get_cos(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
+    """Dihedral_get_cos(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
+    return _sim3dlong.Dihedral_get_cos(diff1, diff2, diff3)
 
-def dihedral_getang(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
-    """dihedral_getang(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
-    return _sim3dlong.dihedral_getang(diff1, diff2, diff3)
+def Dihedral_get_angle(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "flt":
+    """Dihedral_get_angle(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> flt"""
+    return _sim3dlong.Dihedral_get_angle(diff1, diff2, diff3)
 
-def dihedral_dr_dcostheta(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "DihedralDerivs":
-    """dihedral_dr_dcostheta(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> DihedralDerivs"""
-    return _sim3dlong.dihedral_dr_dcostheta(diff1, diff2, diff3)
+def Dihedral_dr_dcostheta(diff1: 'Vec const &', diff2: 'Vec const &', diff3: 'Vec const &') -> "DihedralDerivs":
+    """Dihedral_dr_dcostheta(Vec const & diff1, Vec const & diff2, Vec const & diff3) -> DihedralDerivs"""
+    return _sim3dlong.Dihedral_dr_dcostheta(diff1, diff2, diff3)
 
-class electricScreened(interactpair):
-    """Proxy of C++ electricScreened class"""
+class ElectricScreened(InteractPair):
+    """Proxy of C++ ElectricScreened class"""
     __swig_setmethods__ = {}
-    for _s in [interactpair]:
+    for _s in [InteractPair]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, electricScreened, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ElectricScreened, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactpair]:
+    for _s in [InteractPair]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, electricScreened, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ElectricScreened, name)
     __repr__ = _swig_repr
 
     def __init__(self, screenLength: 'flt const', q1: 'flt const', q2: 'flt const', cutoff: 'flt const'):
-        """__init__(electricScreened self, flt const screenLength, flt const q1, flt const q2, flt const cutoff) -> electricScreened"""
-        this = _sim3dlong.new_electricScreened(screenLength, q1, q2, cutoff)
+        """__init__(ElectricScreened self, flt const screenLength, flt const q1, flt const q2, flt const cutoff) -> ElectricScreened"""
+        this = _sim3dlong.new_ElectricScreened(screenLength, q1, q2, cutoff)
         try:
             self.this.append(this)
         except:
@@ -7881,7 +7903,7 @@ class electricScreened(interactpair):
         energy(flt const r, flt const qaqb, flt const screen, flt const cutoff=0) -> flt
         energy(flt const r, flt const qaqb, flt const screen) -> flt
         """
-        return _sim3dlong.electricScreened_energy(*args)
+        return _sim3dlong.ElectricScreened_energy(*args)
 
     if _newclass:
         energy = staticmethod(energy)
@@ -7893,88 +7915,88 @@ class electricScreened(interactpair):
         forces(Vec const r, flt const qaqb, flt const screen, flt const cutoff=0) -> Vec
         forces(Vec const r, flt const qaqb, flt const screen) -> Vec
         """
-        return _sim3dlong.electricScreened_forces(*args)
+        return _sim3dlong.ElectricScreened_forces(*args)
 
     if _newclass:
         forces = staticmethod(forces)
     __swig_getmethods__["forces"] = lambda x: forces
-    __swig_destroy__ = _sim3dlong.delete_electricScreened
+    __swig_destroy__ = _sim3dlong.delete_ElectricScreened
     __del__ = lambda self: None
-electricScreened_swigregister = _sim3dlong.electricScreened_swigregister
-electricScreened_swigregister(electricScreened)
+ElectricScreened_swigregister = _sim3dlong.ElectricScreened_swigregister
+ElectricScreened_swigregister(ElectricScreened)
 
-def electricScreened_energy(*args) -> "flt":
+def ElectricScreened_energy(*args) -> "flt":
     """
     energy(Vec const r) -> flt
     energy(flt const r, flt const qaqb, flt const screen, flt const cutoff=0) -> flt
-    electricScreened_energy(flt const r, flt const qaqb, flt const screen) -> flt
+    ElectricScreened_energy(flt const r, flt const qaqb, flt const screen) -> flt
     """
-    return _sim3dlong.electricScreened_energy(*args)
+    return _sim3dlong.ElectricScreened_energy(*args)
 
-def electricScreened_forces(*args) -> "Vec":
+def ElectricScreened_forces(*args) -> "Vec":
     """
     forces(Vec const r) -> Vec
     forces(Vec const r, flt const qaqb, flt const screen, flt const cutoff=0) -> Vec
-    electricScreened_forces(Vec const r, flt const qaqb, flt const screen) -> Vec
+    ElectricScreened_forces(Vec const r, flt const qaqb, flt const screen) -> Vec
     """
-    return _sim3dlong.electricScreened_forces(*args)
+    return _sim3dlong.ElectricScreened_forces(*args)
 
-class fixedForceAtom(_object):
-    """Proxy of C++ fixedForceAtom class"""
+class FixedForceAtom(_object):
+    """Proxy of C++ FixedForceAtom class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fixedForceAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FixedForceAtom, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, fixedForceAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FixedForceAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["F"] = _sim3dlong.fixedForceAtom_F_set
-    __swig_getmethods__["F"] = _sim3dlong.fixedForceAtom_F_get
+    __swig_setmethods__["F"] = _sim3dlong.FixedForceAtom_F_set
+    __swig_getmethods__["F"] = _sim3dlong.FixedForceAtom_F_get
     if _newclass:
-        F = _swig_property(_sim3dlong.fixedForceAtom_F_get, _sim3dlong.fixedForceAtom_F_set)
-    __swig_setmethods__["a"] = _sim3dlong.fixedForceAtom_a_set
-    __swig_getmethods__["a"] = _sim3dlong.fixedForceAtom_a_get
+        F = _swig_property(_sim3dlong.FixedForceAtom_F_get, _sim3dlong.FixedForceAtom_F_set)
+    __swig_setmethods__["a"] = _sim3dlong.FixedForceAtom_a_set
+    __swig_getmethods__["a"] = _sim3dlong.FixedForceAtom_a_get
     if _newclass:
-        a = _swig_property(_sim3dlong.fixedForceAtom_a_get, _sim3dlong.fixedForceAtom_a_set)
+        a = _swig_property(_sim3dlong.FixedForceAtom_a_get, _sim3dlong.FixedForceAtom_a_set)
 
-    def __init__(self, F: 'Vec', a: 'atomid'):
-        """__init__(fixedForceAtom self, Vec F, atomid a) -> fixedForceAtom"""
-        this = _sim3dlong.new_fixedForceAtom(F, a)
+    def __init__(self, F: 'Vec', a: 'AtomID'):
+        """__init__(FixedForceAtom self, Vec F, AtomID a) -> FixedForceAtom"""
+        this = _sim3dlong.new_FixedForceAtom(F, a)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(fixedForceAtom self, Box box) -> flt"""
-        return _sim3dlong.fixedForceAtom_energy(self, box)
+        """energy(FixedForceAtom self, Box box) -> flt"""
+        return _sim3dlong.FixedForceAtom_energy(self, box)
 
 
-    def setForce(self, box: 'Box') -> "void":
-        """setForce(fixedForceAtom self, Box box)"""
-        return _sim3dlong.fixedForceAtom_setForce(self, box)
+    def set_force(self, box: 'Box') -> "void":
+        """set_force(FixedForceAtom self, Box box)"""
+        return _sim3dlong.FixedForceAtom_set_force(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_fixedForceAtom
+    __swig_destroy__ = _sim3dlong.delete_FixedForceAtom
     __del__ = lambda self: None
-fixedForceAtom_swigregister = _sim3dlong.fixedForceAtom_swigregister
-fixedForceAtom_swigregister(fixedForceAtom)
+FixedForceAtom_swigregister = _sim3dlong.FixedForceAtom_swigregister
+FixedForceAtom_swigregister(FixedForceAtom)
 
-class fixedForce(interaction):
-    """Proxy of C++ fixedForce class"""
+class FixedForce(Interaction):
+    """Proxy of C++ FixedForce class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fixedForce, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FixedForce, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, fixedForce, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FixedForce, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(fixedForce self, std::vector< fixedForceAtom > atoms) -> fixedForce
-        __init__(fixedForce self) -> fixedForce
+        __init__(FixedForce self, std::vector< FixedForceAtom > atoms) -> FixedForce
+        __init__(FixedForce self) -> FixedForce
         """
-        this = _sim3dlong.new_fixedForce(*args)
+        this = _sim3dlong.new_FixedForce(*args)
         try:
             self.this.append(this)
         except:
@@ -7982,101 +8004,101 @@ class fixedForce(interaction):
 
     def add(self, *args) -> "void":
         """
-        add(fixedForce self, fixedForceAtom a)
-        add(fixedForce self, Vec F, atomid a)
-        add(fixedForce self, flt x, flt y, flt z, atomid a)
+        add(FixedForce self, FixedForceAtom a)
+        add(FixedForce self, Vec F, AtomID a)
+        add(FixedForce self, flt x, flt y, flt z, AtomID a)
         """
-        return _sim3dlong.fixedForce_add(self, *args)
+        return _sim3dlong.FixedForce_add(self, *args)
 
 
     def size(self) -> "uint":
-        """size(fixedForce self) -> uint"""
-        return _sim3dlong.fixedForce_size(self)
+        """size(FixedForce self) -> uint"""
+        return _sim3dlong.FixedForce_size(self)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(fixedForce self, Box box) -> flt"""
-        return _sim3dlong.fixedForce_energy(self, box)
+        """energy(FixedForce self, Box box) -> flt"""
+        return _sim3dlong.FixedForce_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(fixedForce self, Box box)"""
-        return _sim3dlong.fixedForce_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(FixedForce self, Box box)"""
+        return _sim3dlong.FixedForce_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(fixedForce self, Box box) -> flt"""
-        return _sim3dlong.fixedForce_pressure(self, box)
+        """pressure(FixedForce self, Box box) -> flt"""
+        return _sim3dlong.FixedForce_pressure(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_fixedForce
+    __swig_destroy__ = _sim3dlong.delete_FixedForce
     __del__ = lambda self: None
-fixedForce_swigregister = _sim3dlong.fixedForce_swigregister
-fixedForce_swigregister(fixedForce)
+FixedForce_swigregister = _sim3dlong.FixedForce_swigregister
+FixedForce_swigregister(FixedForce)
 
-class fixedForceRegionAtom(atomid):
-    """Proxy of C++ fixedForceRegionAtom class"""
+class FixedForceRegionAtom(AtomID):
+    """Proxy of C++ FixedForceRegionAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fixedForceRegionAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FixedForceRegionAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, fixedForceRegionAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FixedForceRegionAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["direction"] = _sim3dlong.fixedForceRegionAtom_direction_set
-    __swig_getmethods__["direction"] = _sim3dlong.fixedForceRegionAtom_direction_get
+    __swig_setmethods__["direction"] = _sim3dlong.FixedForceRegionAtom_direction_set
+    __swig_getmethods__["direction"] = _sim3dlong.FixedForceRegionAtom_direction_get
     if _newclass:
-        direction = _swig_property(_sim3dlong.fixedForceRegionAtom_direction_get, _sim3dlong.fixedForceRegionAtom_direction_set)
-    __swig_setmethods__["boundaries"] = _sim3dlong.fixedForceRegionAtom_boundaries_set
-    __swig_getmethods__["boundaries"] = _sim3dlong.fixedForceRegionAtom_boundaries_get
+        direction = _swig_property(_sim3dlong.FixedForceRegionAtom_direction_get, _sim3dlong.FixedForceRegionAtom_direction_set)
+    __swig_setmethods__["boundaries"] = _sim3dlong.FixedForceRegionAtom_boundaries_set
+    __swig_getmethods__["boundaries"] = _sim3dlong.FixedForceRegionAtom_boundaries_get
     if _newclass:
-        boundaries = _swig_property(_sim3dlong.fixedForceRegionAtom_boundaries_get, _sim3dlong.fixedForceRegionAtom_boundaries_set)
-    __swig_setmethods__["Fs"] = _sim3dlong.fixedForceRegionAtom_Fs_set
-    __swig_getmethods__["Fs"] = _sim3dlong.fixedForceRegionAtom_Fs_get
+        boundaries = _swig_property(_sim3dlong.FixedForceRegionAtom_boundaries_get, _sim3dlong.FixedForceRegionAtom_boundaries_set)
+    __swig_setmethods__["Fs"] = _sim3dlong.FixedForceRegionAtom_Fs_set
+    __swig_getmethods__["Fs"] = _sim3dlong.FixedForceRegionAtom_Fs_get
     if _newclass:
-        Fs = _swig_property(_sim3dlong.fixedForceRegionAtom_Fs_get, _sim3dlong.fixedForceRegionAtom_Fs_set)
+        Fs = _swig_property(_sim3dlong.FixedForceRegionAtom_Fs_get, _sim3dlong.FixedForceRegionAtom_Fs_set)
 
-    def __init__(self, a: 'atomid', direction: 'Vec', boundaries: 'ldvector', Fs: 'ldvector'):
-        """__init__(fixedForceRegionAtom self, atomid a, Vec direction, ldvector boundaries, ldvector Fs) -> fixedForceRegionAtom"""
-        this = _sim3dlong.new_fixedForceRegionAtom(a, direction, boundaries, Fs)
+    def __init__(self, a: 'AtomID', direction: 'Vec', boundaries: 'ldvector', Fs: 'ldvector'):
+        """__init__(FixedForceRegionAtom self, AtomID a, Vec direction, ldvector boundaries, ldvector Fs) -> FixedForceRegionAtom"""
+        this = _sim3dlong.new_FixedForceRegionAtom(a, direction, boundaries, Fs)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(fixedForceRegionAtom self, Box box) -> flt"""
-        return _sim3dlong.fixedForceRegionAtom_energy(self, box)
+        """energy(FixedForceRegionAtom self, Box box) -> flt"""
+        return _sim3dlong.FixedForceRegionAtom_energy(self, box)
 
 
-    def setForce(self, box: 'Box') -> "void":
-        """setForce(fixedForceRegionAtom self, Box box)"""
-        return _sim3dlong.fixedForceRegionAtom_setForce(self, box)
+    def set_force(self, box: 'Box') -> "void":
+        """set_force(FixedForceRegionAtom self, Box box)"""
+        return _sim3dlong.FixedForceRegionAtom_set_force(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_fixedForceRegionAtom
+    __swig_destroy__ = _sim3dlong.delete_FixedForceRegionAtom
     __del__ = lambda self: None
-fixedForceRegionAtom_swigregister = _sim3dlong.fixedForceRegionAtom_swigregister
-fixedForceRegionAtom_swigregister(fixedForceRegionAtom)
+FixedForceRegionAtom_swigregister = _sim3dlong.FixedForceRegionAtom_swigregister
+FixedForceRegionAtom_swigregister(FixedForceRegionAtom)
 
-class fixedForceRegion(interaction):
-    """Proxy of C++ fixedForceRegion class"""
+class FixedForceRegion(Interaction):
+    """Proxy of C++ FixedForceRegion class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fixedForceRegion, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FixedForceRegion, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, fixedForceRegion, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FixedForceRegion, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(fixedForceRegion self, std::vector< fixedForceRegionAtom > atoms) -> fixedForceRegion
-        __init__(fixedForceRegion self) -> fixedForceRegion
+        __init__(FixedForceRegion self, std::vector< FixedForceRegionAtom > atoms) -> FixedForceRegion
+        __init__(FixedForceRegion self) -> FixedForceRegion
         """
-        this = _sim3dlong.new_fixedForceRegion(*args)
+        this = _sim3dlong.new_FixedForceRegion(*args)
         try:
             self.this.append(this)
         except:
@@ -8084,105 +8106,105 @@ class fixedForceRegion(interaction):
 
     def add(self, *args) -> "void":
         """
-        add(fixedForceRegion self, fixedForceRegionAtom a)
-        add(fixedForceRegion self, atomid a, Vec dir, ldvector bound, ldvector F)
+        add(FixedForceRegion self, FixedForceRegionAtom a)
+        add(FixedForceRegion self, AtomID a, Vec dir, ldvector bound, ldvector F)
         """
-        return _sim3dlong.fixedForceRegion_add(self, *args)
+        return _sim3dlong.FixedForceRegion_add(self, *args)
 
 
     def size(self) -> "uint":
-        """size(fixedForceRegion self) -> uint"""
-        return _sim3dlong.fixedForceRegion_size(self)
+        """size(FixedForceRegion self) -> uint"""
+        return _sim3dlong.FixedForceRegion_size(self)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(fixedForceRegion self, Box box) -> flt"""
-        return _sim3dlong.fixedForceRegion_energy(self, box)
+        """energy(FixedForceRegion self, Box box) -> flt"""
+        return _sim3dlong.FixedForceRegion_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(fixedForceRegion self, Box box)"""
-        return _sim3dlong.fixedForceRegion_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(FixedForceRegion self, Box box)"""
+        return _sim3dlong.FixedForceRegion_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(fixedForceRegion self, Box box) -> flt"""
-        return _sim3dlong.fixedForceRegion_pressure(self, box)
+        """pressure(FixedForceRegion self, Box box) -> flt"""
+        return _sim3dlong.FixedForceRegion_pressure(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_fixedForceRegion
+    __swig_destroy__ = _sim3dlong.delete_FixedForceRegion
     __del__ = lambda self: None
-fixedForceRegion_swigregister = _sim3dlong.fixedForceRegion_swigregister
-fixedForceRegion_swigregister(fixedForceRegion)
+FixedForceRegion_swigregister = _sim3dlong.FixedForceRegion_swigregister
+FixedForceRegion_swigregister(FixedForceRegion)
 
-class fixedSpringAtom(_object):
-    """Proxy of C++ fixedSpringAtom class"""
+class FixedSpringAtom(_object):
+    """Proxy of C++ FixedSpringAtom class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fixedSpringAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FixedSpringAtom, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, fixedSpringAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FixedSpringAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["loc"] = _sim3dlong.fixedSpringAtom_loc_set
-    __swig_getmethods__["loc"] = _sim3dlong.fixedSpringAtom_loc_get
+    __swig_setmethods__["loc"] = _sim3dlong.FixedSpringAtom_loc_set
+    __swig_getmethods__["loc"] = _sim3dlong.FixedSpringAtom_loc_get
     if _newclass:
-        loc = _swig_property(_sim3dlong.fixedSpringAtom_loc_get, _sim3dlong.fixedSpringAtom_loc_set)
-    __swig_setmethods__["k"] = _sim3dlong.fixedSpringAtom_k_set
-    __swig_getmethods__["k"] = _sim3dlong.fixedSpringAtom_k_get
+        loc = _swig_property(_sim3dlong.FixedSpringAtom_loc_get, _sim3dlong.FixedSpringAtom_loc_set)
+    __swig_setmethods__["k"] = _sim3dlong.FixedSpringAtom_k_set
+    __swig_getmethods__["k"] = _sim3dlong.FixedSpringAtom_k_get
     if _newclass:
-        k = _swig_property(_sim3dlong.fixedSpringAtom_k_get, _sim3dlong.fixedSpringAtom_k_set)
-    __swig_setmethods__["usecoord"] = _sim3dlong.fixedSpringAtom_usecoord_set
-    __swig_getmethods__["usecoord"] = _sim3dlong.fixedSpringAtom_usecoord_get
+        k = _swig_property(_sim3dlong.FixedSpringAtom_k_get, _sim3dlong.FixedSpringAtom_k_set)
+    __swig_setmethods__["usecoord"] = _sim3dlong.FixedSpringAtom_usecoord_set
+    __swig_getmethods__["usecoord"] = _sim3dlong.FixedSpringAtom_usecoord_get
     if _newclass:
-        usecoord = _swig_property(_sim3dlong.fixedSpringAtom_usecoord_get, _sim3dlong.fixedSpringAtom_usecoord_set)
-    __swig_setmethods__["a"] = _sim3dlong.fixedSpringAtom_a_set
-    __swig_getmethods__["a"] = _sim3dlong.fixedSpringAtom_a_get
+        usecoord = _swig_property(_sim3dlong.FixedSpringAtom_usecoord_get, _sim3dlong.FixedSpringAtom_usecoord_set)
+    __swig_setmethods__["a"] = _sim3dlong.FixedSpringAtom_a_set
+    __swig_getmethods__["a"] = _sim3dlong.FixedSpringAtom_a_get
     if _newclass:
-        a = _swig_property(_sim3dlong.fixedSpringAtom_a_get, _sim3dlong.fixedSpringAtom_a_set)
+        a = _swig_property(_sim3dlong.FixedSpringAtom_a_get, _sim3dlong.FixedSpringAtom_a_set)
 
-    def __init__(self, a: 'atomid', loc: 'Vec', k: 'flt', usex: 'bool'=True, usey: 'bool'=True, usez: 'bool'=True):
+    def __init__(self, a: 'AtomID', loc: 'Vec', k: 'flt', usex: 'bool'=True, usey: 'bool'=True, usez: 'bool'=True):
         """
-        __init__(fixedSpringAtom self, atomid a, Vec loc, flt k, bool usex=True, bool usey=True, bool usez=True) -> fixedSpringAtom
-        __init__(fixedSpringAtom self, atomid a, Vec loc, flt k, bool usex=True, bool usey=True) -> fixedSpringAtom
-        __init__(fixedSpringAtom self, atomid a, Vec loc, flt k, bool usex=True) -> fixedSpringAtom
-        __init__(fixedSpringAtom self, atomid a, Vec loc, flt k) -> fixedSpringAtom
+        __init__(FixedSpringAtom self, AtomID a, Vec loc, flt k, bool usex=True, bool usey=True, bool usez=True) -> FixedSpringAtom
+        __init__(FixedSpringAtom self, AtomID a, Vec loc, flt k, bool usex=True, bool usey=True) -> FixedSpringAtom
+        __init__(FixedSpringAtom self, AtomID a, Vec loc, flt k, bool usex=True) -> FixedSpringAtom
+        __init__(FixedSpringAtom self, AtomID a, Vec loc, flt k) -> FixedSpringAtom
         """
-        this = _sim3dlong.new_fixedSpringAtom(a, loc, k, usex, usey, usez)
+        this = _sim3dlong.new_FixedSpringAtom(a, loc, k, usex, usey, usez)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(fixedSpringAtom self, Box box) -> flt"""
-        return _sim3dlong.fixedSpringAtom_energy(self, box)
+        """energy(FixedSpringAtom self, Box box) -> flt"""
+        return _sim3dlong.FixedSpringAtom_energy(self, box)
 
 
-    def setForce(self, box: 'Box') -> "void":
-        """setForce(fixedSpringAtom self, Box box)"""
-        return _sim3dlong.fixedSpringAtom_setForce(self, box)
+    def set_force(self, box: 'Box') -> "void":
+        """set_force(FixedSpringAtom self, Box box)"""
+        return _sim3dlong.FixedSpringAtom_set_force(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_fixedSpringAtom
+    __swig_destroy__ = _sim3dlong.delete_FixedSpringAtom
     __del__ = lambda self: None
-fixedSpringAtom_swigregister = _sim3dlong.fixedSpringAtom_swigregister
-fixedSpringAtom_swigregister(fixedSpringAtom)
+FixedSpringAtom_swigregister = _sim3dlong.FixedSpringAtom_swigregister
+FixedSpringAtom_swigregister(FixedSpringAtom)
 
-class fixedSpring(interaction):
-    """Proxy of C++ fixedSpring class"""
+class FixedSpring(Interaction):
+    """Proxy of C++ FixedSpring class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fixedSpring, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FixedSpring, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, fixedSpring, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FixedSpring, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(fixedSpring self, std::vector< fixedSpringAtom > atoms) -> fixedSpring
-        __init__(fixedSpring self) -> fixedSpring
+        __init__(FixedSpring self, std::vector< FixedSpringAtom > atoms) -> FixedSpring
+        __init__(FixedSpring self) -> FixedSpring
         """
-        this = _sim3dlong.new_fixedSpring(*args)
+        this = _sim3dlong.new_FixedSpring(*args)
         try:
             self.this.append(this)
         except:
@@ -8190,55 +8212,55 @@ class fixedSpring(interaction):
 
     def add(self, *args) -> "void":
         """
-        add(fixedSpring self, fixedSpringAtom a)
-        add(fixedSpring self, atomid a, Vec loc, flt k, bool usex=True, bool usey=True, bool usez=True)
-        add(fixedSpring self, atomid a, Vec loc, flt k, bool usex=True, bool usey=True)
-        add(fixedSpring self, atomid a, Vec loc, flt k, bool usex=True)
-        add(fixedSpring self, atomid a, Vec loc, flt k)
+        add(FixedSpring self, FixedSpringAtom a)
+        add(FixedSpring self, AtomID a, Vec loc, flt k, bool usex=True, bool usey=True, bool usez=True)
+        add(FixedSpring self, AtomID a, Vec loc, flt k, bool usex=True, bool usey=True)
+        add(FixedSpring self, AtomID a, Vec loc, flt k, bool usex=True)
+        add(FixedSpring self, AtomID a, Vec loc, flt k)
         """
-        return _sim3dlong.fixedSpring_add(self, *args)
+        return _sim3dlong.FixedSpring_add(self, *args)
 
 
     def size(self) -> "uint":
-        """size(fixedSpring self) -> uint"""
-        return _sim3dlong.fixedSpring_size(self)
+        """size(FixedSpring self) -> uint"""
+        return _sim3dlong.FixedSpring_size(self)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(fixedSpring self, Box box) -> flt"""
-        return _sim3dlong.fixedSpring_energy(self, box)
+        """energy(FixedSpring self, Box box) -> flt"""
+        return _sim3dlong.FixedSpring_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(fixedSpring self, Box box)"""
-        return _sim3dlong.fixedSpring_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(FixedSpring self, Box box)"""
+        return _sim3dlong.FixedSpring_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(fixedSpring self, Box box) -> flt"""
-        return _sim3dlong.fixedSpring_pressure(self, box)
+        """pressure(FixedSpring self, Box box) -> flt"""
+        return _sim3dlong.FixedSpring_pressure(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_fixedSpring
+    __swig_destroy__ = _sim3dlong.delete_FixedSpring
     __del__ = lambda self: None
-fixedSpring_swigregister = _sim3dlong.fixedSpring_swigregister
-fixedSpring_swigregister(fixedSpring)
+FixedSpring_swigregister = _sim3dlong.FixedSpring_swigregister
+FixedSpring_swigregister(FixedSpring)
 
-class COMSpring(interaction):
+class COMSpring(Interaction):
     """Proxy of C++ COMSpring class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, COMSpring, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, COMSpring, name)
     __repr__ = _swig_repr
 
-    def __init__(self, g1: 'atomgroup', g2: 'atomgroup', k: 'flt', x0: 'flt'=0):
+    def __init__(self, g1: 'AtomGroup', g2: 'AtomGroup', k: 'flt', x0: 'flt'=0):
         """
-        __init__(COMSpring self, atomgroup g1, atomgroup g2, flt k, flt x0=0) -> COMSpring
-        __init__(COMSpring self, atomgroup g1, atomgroup g2, flt k) -> COMSpring
+        __init__(COMSpring self, AtomGroup g1, AtomGroup g2, flt k, flt x0=0) -> COMSpring
+        __init__(COMSpring self, AtomGroup g1, AtomGroup g2, flt k) -> COMSpring
         """
         this = _sim3dlong.new_COMSpring(g1, g2, k, x0)
         try:
@@ -8251,9 +8273,9 @@ class COMSpring(interaction):
         return _sim3dlong.COMSpring_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(COMSpring self, Box box)"""
-        return _sim3dlong.COMSpring_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(COMSpring self, Box box)"""
+        return _sim3dlong.COMSpring_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -8274,14 +8296,14 @@ UNIFORM = _sim3dlong.UNIFORM
 
 _sim3dlong.GAUSSIAN_swigconstant(_sim3dlong)
 GAUSSIAN = _sim3dlong.GAUSSIAN
-class RandomForceAtom(atomref):
+class RandomForceAtom(AtomRef):
     """Proxy of C++ RandomForceAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomref]:
+    for _s in [AtomRef]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RandomForceAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomref]:
+    for _s in [AtomRef]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RandomForceAtom, name)
     __repr__ = _swig_repr
@@ -8298,10 +8320,10 @@ class RandomForceAtom(atomref):
     if _newclass:
         force_type = _swig_property(_sim3dlong.RandomForceAtom_force_type_get, _sim3dlong.RandomForceAtom_force_type_set)
 
-    def __init__(self, a: 'atomid', force_mag: 'flt', freq: 'flt', force_type: 'RandomForceType'=UNIFORM):
+    def __init__(self, a: 'AtomID', force_mag: 'flt', freq: 'flt', force_type: 'RandomForceType'=UNIFORM):
         """
-        __init__(RandomForceAtom self, atomid a, flt force_mag, flt freq, RandomForceType force_type=UNIFORM) -> RandomForceAtom
-        __init__(RandomForceAtom self, atomid a, flt force_mag, flt freq) -> RandomForceAtom
+        __init__(RandomForceAtom self, AtomID a, flt force_mag, flt freq, RandomForceType force_type=UNIFORM) -> RandomForceAtom
+        __init__(RandomForceAtom self, AtomID a, flt force_mag, flt freq) -> RandomForceAtom
         """
         this = _sim3dlong.new_RandomForceAtom(a, force_mag, freq, force_type)
         try:
@@ -8313,14 +8335,14 @@ class RandomForceAtom(atomref):
 RandomForceAtom_swigregister = _sim3dlong.RandomForceAtom_swigregister
 RandomForceAtom_swigregister(RandomForceAtom)
 
-class RandomForce(interaction):
+class RandomForce(Interaction):
     """Proxy of C++ RandomForce class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RandomForce, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RandomForce, name)
     __repr__ = _swig_repr
@@ -8332,8 +8354,8 @@ class RandomForce(interaction):
     def __init__(self, *args):
         """
         __init__(RandomForce self) -> RandomForce
-        __init__(RandomForce self, atomgroup agroup, flt force_mag, flt freq, RandomForceType force_type=UNIFORM) -> RandomForce
-        __init__(RandomForce self, atomgroup agroup, flt force_mag, flt freq) -> RandomForce
+        __init__(RandomForce self, AtomGroup agroup, flt force_mag, flt freq, RandomForceType force_type=UNIFORM) -> RandomForce
+        __init__(RandomForce self, AtomGroup agroup, flt force_mag, flt freq) -> RandomForce
         """
         this = _sim3dlong.new_RandomForce(*args)
         try:
@@ -8364,9 +8386,9 @@ class RandomForce(interaction):
         return _sim3dlong.RandomForce_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(RandomForce self, Box box)"""
-        return _sim3dlong.RandomForce_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(RandomForce self, Box box)"""
+        return _sim3dlong.RandomForce_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -8374,9 +8396,9 @@ class RandomForce(interaction):
         return _sim3dlong.RandomForce_pressure(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(RandomForce self, Box box) -> flt"""
-        return _sim3dlong.RandomForce_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(RandomForce self, Box box) -> flt"""
+        return _sim3dlong.RandomForce_set_forces_get_pressure(self, box)
 
     __swig_destroy__ = _sim3dlong.delete_RandomForce
     __del__ = lambda self: None
@@ -8392,218 +8414,218 @@ UNBOXED = _sim3dlong.UNBOXED
 
 _sim3dlong.FIXEDBOX_swigconstant(_sim3dlong)
 FIXEDBOX = _sim3dlong.FIXEDBOX
-class bondgrouping(_object):
-    """Proxy of C++ bondgrouping class"""
+class BondGrouping(_object):
+    """Proxy of C++ BondGrouping class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, bondgrouping, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BondGrouping, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, bondgrouping, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, BondGrouping, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["k"] = _sim3dlong.bondgrouping_k_set
-    __swig_getmethods__["k"] = _sim3dlong.bondgrouping_k_get
+    __swig_setmethods__["k"] = _sim3dlong.BondGrouping_k_set
+    __swig_getmethods__["k"] = _sim3dlong.BondGrouping_k_get
     if _newclass:
-        k = _swig_property(_sim3dlong.bondgrouping_k_get, _sim3dlong.bondgrouping_k_set)
-    __swig_setmethods__["x0"] = _sim3dlong.bondgrouping_x0_set
-    __swig_getmethods__["x0"] = _sim3dlong.bondgrouping_x0_get
+        k = _swig_property(_sim3dlong.BondGrouping_k_get, _sim3dlong.BondGrouping_k_set)
+    __swig_setmethods__["x0"] = _sim3dlong.BondGrouping_x0_set
+    __swig_getmethods__["x0"] = _sim3dlong.BondGrouping_x0_get
     if _newclass:
-        x0 = _swig_property(_sim3dlong.bondgrouping_x0_get, _sim3dlong.bondgrouping_x0_set)
-    __swig_setmethods__["a1"] = _sim3dlong.bondgrouping_a1_set
-    __swig_getmethods__["a1"] = _sim3dlong.bondgrouping_a1_get
+        x0 = _swig_property(_sim3dlong.BondGrouping_x0_get, _sim3dlong.BondGrouping_x0_set)
+    __swig_setmethods__["a1"] = _sim3dlong.BondGrouping_a1_set
+    __swig_getmethods__["a1"] = _sim3dlong.BondGrouping_a1_get
     if _newclass:
-        a1 = _swig_property(_sim3dlong.bondgrouping_a1_get, _sim3dlong.bondgrouping_a1_set)
-    __swig_setmethods__["a2"] = _sim3dlong.bondgrouping_a2_set
-    __swig_getmethods__["a2"] = _sim3dlong.bondgrouping_a2_get
+        a1 = _swig_property(_sim3dlong.BondGrouping_a1_get, _sim3dlong.BondGrouping_a1_set)
+    __swig_setmethods__["a2"] = _sim3dlong.BondGrouping_a2_set
+    __swig_getmethods__["a2"] = _sim3dlong.BondGrouping_a2_get
     if _newclass:
-        a2 = _swig_property(_sim3dlong.bondgrouping_a2_get, _sim3dlong.bondgrouping_a2_set)
-    __swig_setmethods__["diff_type"] = _sim3dlong.bondgrouping_diff_type_set
-    __swig_getmethods__["diff_type"] = _sim3dlong.bondgrouping_diff_type_get
+        a2 = _swig_property(_sim3dlong.BondGrouping_a2_get, _sim3dlong.BondGrouping_a2_set)
+    __swig_setmethods__["diff_type"] = _sim3dlong.BondGrouping_diff_type_set
+    __swig_getmethods__["diff_type"] = _sim3dlong.BondGrouping_diff_type_get
     if _newclass:
-        diff_type = _swig_property(_sim3dlong.bondgrouping_diff_type_get, _sim3dlong.bondgrouping_diff_type_set)
-    __swig_setmethods__["fixed_box"] = _sim3dlong.bondgrouping_fixed_box_set
-    __swig_getmethods__["fixed_box"] = _sim3dlong.bondgrouping_fixed_box_get
+        diff_type = _swig_property(_sim3dlong.BondGrouping_diff_type_get, _sim3dlong.BondGrouping_diff_type_set)
+    __swig_setmethods__["fixed_box"] = _sim3dlong.BondGrouping_fixed_box_set
+    __swig_getmethods__["fixed_box"] = _sim3dlong.BondGrouping_fixed_box_get
     if _newclass:
-        fixed_box = _swig_property(_sim3dlong.bondgrouping_fixed_box_get, _sim3dlong.bondgrouping_fixed_box_set)
+        fixed_box = _swig_property(_sim3dlong.BondGrouping_fixed_box_get, _sim3dlong.BondGrouping_fixed_box_set)
 
-    def __init__(self, k: 'flt', x0: 'flt', a1: 'atomid', a2: 'atomid', diff: 'BondDiffType'=UNBOXED, box: 'OriginBox'=None):
+    def __init__(self, k: 'flt', x0: 'flt', a1: 'AtomID', a2: 'AtomID', diff: 'BondDiffType'=UNBOXED, box: 'OriginBox'=None):
         """
-        __init__(bondgrouping self, flt k, flt x0, atomid a1, atomid a2, BondDiffType diff=UNBOXED, OriginBox box=None) -> bondgrouping
-        __init__(bondgrouping self, flt k, flt x0, atomid a1, atomid a2, BondDiffType diff=UNBOXED) -> bondgrouping
-        __init__(bondgrouping self, flt k, flt x0, atomid a1, atomid a2) -> bondgrouping
+        __init__(BondGrouping self, flt k, flt x0, AtomID a1, AtomID a2, BondDiffType diff=UNBOXED, OriginBox box=None) -> BondGrouping
+        __init__(BondGrouping self, flt k, flt x0, AtomID a1, AtomID a2, BondDiffType diff=UNBOXED) -> BondGrouping
+        __init__(BondGrouping self, flt k, flt x0, AtomID a1, AtomID a2) -> BondGrouping
         """
-        this = _sim3dlong.new_bondgrouping(k, x0, a1, a2, diff, box)
+        this = _sim3dlong.new_BondGrouping(k, x0, a1, a2, diff, box)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def diff(self, box: 'Box') -> "Vec":
-        """diff(bondgrouping self, Box box) -> Vec"""
-        return _sim3dlong.bondgrouping_diff(self, box)
+        """diff(BondGrouping self, Box box) -> Vec"""
+        return _sim3dlong.BondGrouping_diff(self, box)
 
 
     def get_fixed(self, i: 'uint') -> "int":
-        """get_fixed(bondgrouping self, uint i) -> int"""
-        return _sim3dlong.bondgrouping_get_fixed(self, i)
+        """get_fixed(BondGrouping self, uint i) -> int"""
+        return _sim3dlong.BondGrouping_get_fixed(self, i)
 
 
-    def same_atoms(self, other: 'bondgrouping') -> "bool":
-        """same_atoms(bondgrouping self, bondgrouping other) -> bool"""
-        return _sim3dlong.bondgrouping_same_atoms(self, other)
+    def same_atoms(self, other: 'BondGrouping') -> "bool":
+        """same_atoms(BondGrouping self, BondGrouping other) -> bool"""
+        return _sim3dlong.BondGrouping_same_atoms(self, other)
 
-    __swig_destroy__ = _sim3dlong.delete_bondgrouping
+    __swig_destroy__ = _sim3dlong.delete_BondGrouping
     __del__ = lambda self: None
-bondgrouping_swigregister = _sim3dlong.bondgrouping_swigregister
-bondgrouping_swigregister(bondgrouping)
+BondGrouping_swigregister = _sim3dlong.BondGrouping_swigregister
+BondGrouping_swigregister(BondGrouping)
 
-class bondpairs(interaction):
-    """Proxy of C++ bondpairs class"""
+class BondPairs(Interaction):
+    """Proxy of C++ BondPairs class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, bondpairs, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, BondPairs, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, bondpairs, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, BondPairs, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(bondpairs self, std::vector< bondgrouping > pairs, bool zeropressure=True) -> bondpairs
-        __init__(bondpairs self, std::vector< bondgrouping > pairs) -> bondpairs
-        __init__(bondpairs self, bool zeropressure=True) -> bondpairs
-        __init__(bondpairs self) -> bondpairs
+        __init__(BondPairs self, std::vector< BondGrouping > pairs, bool zeropressure=True) -> BondPairs
+        __init__(BondPairs self, std::vector< BondGrouping > pairs) -> BondPairs
+        __init__(BondPairs self, bool zeropressure=True) -> BondPairs
+        __init__(BondPairs self) -> BondPairs
         """
-        this = _sim3dlong.new_bondpairs(*args)
+        this = _sim3dlong.new_BondPairs(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def add_forced(self, b: 'bondgrouping') -> "void":
-        """add_forced(bondpairs self, bondgrouping b)"""
-        return _sim3dlong.bondpairs_add_forced(self, b)
+    def add_forced(self, b: 'BondGrouping') -> "void":
+        """add_forced(BondPairs self, BondGrouping b)"""
+        return _sim3dlong.BondPairs_add_forced(self, b)
 
 
     def add(self, *args) -> "bool":
         """
-        add(bondpairs self, bondgrouping b, bool replace=True) -> bool
-        add(bondpairs self, bondgrouping b) -> bool
-        add(bondpairs self, flt k, flt x0, atomid a1, atomid a2, bool replace=True) -> bool
-        add(bondpairs self, flt k, flt x0, atomid a1, atomid a2) -> bool
-        add(bondpairs self, flt k, atomid a1, atomid a2, bool replace=True) -> bool
-        add(bondpairs self, flt k, atomid a1, atomid a2) -> bool
+        add(BondPairs self, BondGrouping b, bool replace=True) -> bool
+        add(BondPairs self, BondGrouping b) -> bool
+        add(BondPairs self, flt k, flt x0, AtomID a1, AtomID a2, bool replace=True) -> bool
+        add(BondPairs self, flt k, flt x0, AtomID a1, AtomID a2) -> bool
+        add(BondPairs self, flt k, AtomID a1, AtomID a2, bool replace=True) -> bool
+        add(BondPairs self, flt k, AtomID a1, AtomID a2) -> bool
         """
-        return _sim3dlong.bondpairs_add(self, *args)
+        return _sim3dlong.BondPairs_add(self, *args)
 
 
     def size(self) -> "uint":
-        """size(bondpairs self) -> uint"""
-        return _sim3dlong.bondpairs_size(self)
+        """size(BondPairs self) -> uint"""
+        return _sim3dlong.BondPairs_size(self)
 
 
-    def get(self, i: 'uint') -> "bondgrouping":
-        """get(bondpairs self, uint i) -> bondgrouping"""
-        return _sim3dlong.bondpairs_get(self, i)
+    def get(self, i: 'uint') -> "BondGrouping":
+        """get(BondPairs self, uint i) -> BondGrouping"""
+        return _sim3dlong.BondPairs_get(self, i)
 
 
     def mean_dists(self, box: 'Box') -> "flt":
-        """mean_dists(bondpairs self, Box box) -> flt"""
-        return _sim3dlong.bondpairs_mean_dists(self, box)
+        """mean_dists(BondPairs self, Box box) -> flt"""
+        return _sim3dlong.BondPairs_mean_dists(self, box)
 
 
     def std_dists(self, box: 'Box') -> "flt":
-        """std_dists(bondpairs self, Box box) -> flt"""
-        return _sim3dlong.bondpairs_std_dists(self, box)
+        """std_dists(BondPairs self, Box box) -> flt"""
+        return _sim3dlong.BondPairs_std_dists(self, box)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(bondpairs self, Box box) -> flt"""
-        return _sim3dlong.bondpairs_energy(self, box)
+        """energy(BondPairs self, Box box) -> flt"""
+        return _sim3dlong.BondPairs_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(bondpairs self, Box box)"""
-        return _sim3dlong.bondpairs_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(BondPairs self, Box box)"""
+        return _sim3dlong.BondPairs_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(bondpairs self, Box box) -> flt"""
-        return _sim3dlong.bondpairs_pressure(self, box)
+        """pressure(BondPairs self, Box box) -> flt"""
+        return _sim3dlong.BondPairs_pressure(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(bondpairs self, Box box) -> flt"""
-        return _sim3dlong.bondpairs_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(BondPairs self, Box box) -> flt"""
+        return _sim3dlong.BondPairs_set_forces_get_pressure(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_bondpairs
+    __swig_destroy__ = _sim3dlong.delete_BondPairs
     __del__ = lambda self: None
-bondpairs_swigregister = _sim3dlong.bondpairs_swigregister
-bondpairs_swigregister(bondpairs)
+BondPairs_swigregister = _sim3dlong.BondPairs_swigregister
+BondPairs_swigregister(BondPairs)
 
-class anglegrouping(_object):
-    """Proxy of C++ anglegrouping class"""
+class AngleGrouping(_object):
+    """Proxy of C++ AngleGrouping class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, anglegrouping, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AngleGrouping, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, anglegrouping, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, AngleGrouping, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["k"] = _sim3dlong.anglegrouping_k_set
-    __swig_getmethods__["k"] = _sim3dlong.anglegrouping_k_get
+    __swig_setmethods__["k"] = _sim3dlong.AngleGrouping_k_set
+    __swig_getmethods__["k"] = _sim3dlong.AngleGrouping_k_get
     if _newclass:
-        k = _swig_property(_sim3dlong.anglegrouping_k_get, _sim3dlong.anglegrouping_k_set)
-    __swig_setmethods__["x0"] = _sim3dlong.anglegrouping_x0_set
-    __swig_getmethods__["x0"] = _sim3dlong.anglegrouping_x0_get
+        k = _swig_property(_sim3dlong.AngleGrouping_k_get, _sim3dlong.AngleGrouping_k_set)
+    __swig_setmethods__["x0"] = _sim3dlong.AngleGrouping_x0_set
+    __swig_getmethods__["x0"] = _sim3dlong.AngleGrouping_x0_get
     if _newclass:
-        x0 = _swig_property(_sim3dlong.anglegrouping_x0_get, _sim3dlong.anglegrouping_x0_set)
-    __swig_setmethods__["a1"] = _sim3dlong.anglegrouping_a1_set
-    __swig_getmethods__["a1"] = _sim3dlong.anglegrouping_a1_get
+        x0 = _swig_property(_sim3dlong.AngleGrouping_x0_get, _sim3dlong.AngleGrouping_x0_set)
+    __swig_setmethods__["a1"] = _sim3dlong.AngleGrouping_a1_set
+    __swig_getmethods__["a1"] = _sim3dlong.AngleGrouping_a1_get
     if _newclass:
-        a1 = _swig_property(_sim3dlong.anglegrouping_a1_get, _sim3dlong.anglegrouping_a1_set)
-    __swig_setmethods__["a2"] = _sim3dlong.anglegrouping_a2_set
-    __swig_getmethods__["a2"] = _sim3dlong.anglegrouping_a2_get
+        a1 = _swig_property(_sim3dlong.AngleGrouping_a1_get, _sim3dlong.AngleGrouping_a1_set)
+    __swig_setmethods__["a2"] = _sim3dlong.AngleGrouping_a2_set
+    __swig_getmethods__["a2"] = _sim3dlong.AngleGrouping_a2_get
     if _newclass:
-        a2 = _swig_property(_sim3dlong.anglegrouping_a2_get, _sim3dlong.anglegrouping_a2_set)
-    __swig_setmethods__["a3"] = _sim3dlong.anglegrouping_a3_set
-    __swig_getmethods__["a3"] = _sim3dlong.anglegrouping_a3_get
+        a2 = _swig_property(_sim3dlong.AngleGrouping_a2_get, _sim3dlong.AngleGrouping_a2_set)
+    __swig_setmethods__["a3"] = _sim3dlong.AngleGrouping_a3_set
+    __swig_getmethods__["a3"] = _sim3dlong.AngleGrouping_a3_get
     if _newclass:
-        a3 = _swig_property(_sim3dlong.anglegrouping_a3_get, _sim3dlong.anglegrouping_a3_set)
+        a3 = _swig_property(_sim3dlong.AngleGrouping_a3_get, _sim3dlong.AngleGrouping_a3_set)
 
-    def __init__(self, k: 'flt', x0: 'flt', a1: 'atomid', a2: 'atomid', a3: 'atomid'):
-        """__init__(anglegrouping self, flt k, flt x0, atomid a1, atomid a2, atomid a3) -> anglegrouping"""
-        this = _sim3dlong.new_anglegrouping(k, x0, a1, a2, a3)
+    def __init__(self, k: 'flt', x0: 'flt', a1: 'AtomID', a2: 'AtomID', a3: 'AtomID'):
+        """__init__(AngleGrouping self, flt k, flt x0, AtomID a1, AtomID a2, AtomID a3) -> AngleGrouping"""
+        this = _sim3dlong.new_AngleGrouping(k, x0, a1, a2, a3)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def same_atoms(self, other: 'anglegrouping') -> "bool":
-        """same_atoms(anglegrouping self, anglegrouping other) -> bool"""
-        return _sim3dlong.anglegrouping_same_atoms(self, other)
+    def same_atoms(self, other: 'AngleGrouping') -> "bool":
+        """same_atoms(AngleGrouping self, AngleGrouping other) -> bool"""
+        return _sim3dlong.AngleGrouping_same_atoms(self, other)
 
-    __swig_destroy__ = _sim3dlong.delete_anglegrouping
+    __swig_destroy__ = _sim3dlong.delete_AngleGrouping
     __del__ = lambda self: None
-anglegrouping_swigregister = _sim3dlong.anglegrouping_swigregister
-anglegrouping_swigregister(anglegrouping)
+AngleGrouping_swigregister = _sim3dlong.AngleGrouping_swigregister
+AngleGrouping_swigregister(AngleGrouping)
 
-class angletriples(interaction):
-    """Proxy of C++ angletriples class"""
+class AngleTriples(Interaction):
+    """Proxy of C++ AngleTriples class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, angletriples, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AngleTriples, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, angletriples, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, AngleTriples, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(angletriples self, std::vector< anglegrouping > triples) -> angletriples
-        __init__(angletriples self) -> angletriples
+        __init__(AngleTriples self, std::vector< AngleGrouping > triples) -> AngleTriples
+        __init__(AngleTriples self) -> AngleTriples
         """
-        this = _sim3dlong.new_angletriples(*args)
+        this = _sim3dlong.new_AngleTriples(*args)
         try:
             self.this.append(this)
         except:
@@ -8611,133 +8633,133 @@ class angletriples(interaction):
 
     def add(self, *args) -> "bool":
         """
-        add(angletriples self, anglegrouping b, bool replace=True) -> bool
-        add(angletriples self, anglegrouping b) -> bool
-        add(angletriples self, flt k, flt x0, atomid a1, atomid a2, atomid a3, bool replace=True) -> bool
-        add(angletriples self, flt k, flt x0, atomid a1, atomid a2, atomid a3) -> bool
-        add(angletriples self, flt k, atomid a1, atomid a2, atomid a3, bool replace=True) -> bool
-        add(angletriples self, flt k, atomid a1, atomid a2, atomid a3) -> bool
+        add(AngleTriples self, AngleGrouping b, bool replace=True) -> bool
+        add(AngleTriples self, AngleGrouping b) -> bool
+        add(AngleTriples self, flt k, flt x0, AtomID a1, AtomID a2, AtomID a3, bool replace=True) -> bool
+        add(AngleTriples self, flt k, flt x0, AtomID a1, AtomID a2, AtomID a3) -> bool
+        add(AngleTriples self, flt k, AtomID a1, AtomID a2, AtomID a3, bool replace=True) -> bool
+        add(AngleTriples self, flt k, AtomID a1, AtomID a2, AtomID a3) -> bool
         """
-        return _sim3dlong.angletriples_add(self, *args)
+        return _sim3dlong.AngleTriples_add(self, *args)
 
 
-    def add_forced(self, b: 'anglegrouping') -> "void":
-        """add_forced(angletriples self, anglegrouping b)"""
-        return _sim3dlong.angletriples_add_forced(self, b)
+    def add_forced(self, b: 'AngleGrouping') -> "void":
+        """add_forced(AngleTriples self, AngleGrouping b)"""
+        return _sim3dlong.AngleTriples_add_forced(self, b)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(angletriples self, Box box) -> flt"""
-        return _sim3dlong.angletriples_energy(self, box)
+        """energy(AngleTriples self, Box box) -> flt"""
+        return _sim3dlong.AngleTriples_energy(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(angletriples self, Box box) -> flt"""
-        return _sim3dlong.angletriples_pressure(self, box)
+        """pressure(AngleTriples self, Box box) -> flt"""
+        return _sim3dlong.AngleTriples_pressure(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(angletriples self, Box box)"""
-        return _sim3dlong.angletriples_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(AngleTriples self, Box box)"""
+        return _sim3dlong.AngleTriples_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(angletriples self, Box box) -> flt"""
-        return _sim3dlong.angletriples_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(AngleTriples self, Box box) -> flt"""
+        return _sim3dlong.AngleTriples_set_forces_get_pressure(self, box)
 
 
     def size(self) -> "uint":
-        """size(angletriples self) -> uint"""
-        return _sim3dlong.angletriples_size(self)
+        """size(AngleTriples self) -> uint"""
+        return _sim3dlong.AngleTriples_size(self)
 
 
     def mean_dists(self) -> "flt":
-        """mean_dists(angletriples self) -> flt"""
-        return _sim3dlong.angletriples_mean_dists(self)
+        """mean_dists(AngleTriples self) -> flt"""
+        return _sim3dlong.AngleTriples_mean_dists(self)
 
 
     def std_dists(self) -> "flt":
-        """std_dists(angletriples self) -> flt"""
-        return _sim3dlong.angletriples_std_dists(self)
+        """std_dists(AngleTriples self) -> flt"""
+        return _sim3dlong.AngleTriples_std_dists(self)
 
-    __swig_destroy__ = _sim3dlong.delete_angletriples
+    __swig_destroy__ = _sim3dlong.delete_AngleTriples
     __del__ = lambda self: None
-angletriples_swigregister = _sim3dlong.angletriples_swigregister
-angletriples_swigregister(angletriples)
+AngleTriples_swigregister = _sim3dlong.AngleTriples_swigregister
+AngleTriples_swigregister(AngleTriples)
 
-class dihedralgrouping(_object):
-    """Proxy of C++ dihedralgrouping class"""
+class DihedralGrouping(_object):
+    """Proxy of C++ DihedralGrouping class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, dihedralgrouping, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DihedralGrouping, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, dihedralgrouping, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, DihedralGrouping, name)
     __repr__ = _swig_repr
 
     def diff(r1: 'Vec', r2: 'Vec') -> "Vec":
         """diff(Vec r1, Vec r2) -> Vec"""
-        return _sim3dlong.dihedralgrouping_diff(r1, r2)
+        return _sim3dlong.DihedralGrouping_diff(r1, r2)
 
     if _newclass:
         diff = staticmethod(diff)
     __swig_getmethods__["diff"] = lambda x: diff
-    __swig_setmethods__["dih"] = _sim3dlong.dihedralgrouping_dih_set
-    __swig_getmethods__["dih"] = _sim3dlong.dihedralgrouping_dih_get
+    __swig_setmethods__["dih"] = _sim3dlong.DihedralGrouping_dih_set
+    __swig_getmethods__["dih"] = _sim3dlong.DihedralGrouping_dih_get
     if _newclass:
-        dih = _swig_property(_sim3dlong.dihedralgrouping_dih_get, _sim3dlong.dihedralgrouping_dih_set)
-    __swig_setmethods__["a1"] = _sim3dlong.dihedralgrouping_a1_set
-    __swig_getmethods__["a1"] = _sim3dlong.dihedralgrouping_a1_get
+        dih = _swig_property(_sim3dlong.DihedralGrouping_dih_get, _sim3dlong.DihedralGrouping_dih_set)
+    __swig_setmethods__["a1"] = _sim3dlong.DihedralGrouping_a1_set
+    __swig_getmethods__["a1"] = _sim3dlong.DihedralGrouping_a1_get
     if _newclass:
-        a1 = _swig_property(_sim3dlong.dihedralgrouping_a1_get, _sim3dlong.dihedralgrouping_a1_set)
-    __swig_setmethods__["a2"] = _sim3dlong.dihedralgrouping_a2_set
-    __swig_getmethods__["a2"] = _sim3dlong.dihedralgrouping_a2_get
+        a1 = _swig_property(_sim3dlong.DihedralGrouping_a1_get, _sim3dlong.DihedralGrouping_a1_set)
+    __swig_setmethods__["a2"] = _sim3dlong.DihedralGrouping_a2_set
+    __swig_getmethods__["a2"] = _sim3dlong.DihedralGrouping_a2_get
     if _newclass:
-        a2 = _swig_property(_sim3dlong.dihedralgrouping_a2_get, _sim3dlong.dihedralgrouping_a2_set)
-    __swig_setmethods__["a3"] = _sim3dlong.dihedralgrouping_a3_set
-    __swig_getmethods__["a3"] = _sim3dlong.dihedralgrouping_a3_get
+        a2 = _swig_property(_sim3dlong.DihedralGrouping_a2_get, _sim3dlong.DihedralGrouping_a2_set)
+    __swig_setmethods__["a3"] = _sim3dlong.DihedralGrouping_a3_set
+    __swig_getmethods__["a3"] = _sim3dlong.DihedralGrouping_a3_get
     if _newclass:
-        a3 = _swig_property(_sim3dlong.dihedralgrouping_a3_get, _sim3dlong.dihedralgrouping_a3_set)
-    __swig_setmethods__["a4"] = _sim3dlong.dihedralgrouping_a4_set
-    __swig_getmethods__["a4"] = _sim3dlong.dihedralgrouping_a4_get
+        a3 = _swig_property(_sim3dlong.DihedralGrouping_a3_get, _sim3dlong.DihedralGrouping_a3_set)
+    __swig_setmethods__["a4"] = _sim3dlong.DihedralGrouping_a4_set
+    __swig_getmethods__["a4"] = _sim3dlong.DihedralGrouping_a4_get
     if _newclass:
-        a4 = _swig_property(_sim3dlong.dihedralgrouping_a4_get, _sim3dlong.dihedralgrouping_a4_set)
+        a4 = _swig_property(_sim3dlong.DihedralGrouping_a4_get, _sim3dlong.DihedralGrouping_a4_set)
 
-    def __init__(self, coscoeffs: 'ldvector', sincoeffs: 'ldvector', a1: 'atomid', a2: 'atomid', a3: 'atomid', a4: 'atomid', usepow: 'bool'=True):
+    def __init__(self, cos_coefficients: 'ldvector', sincoeffs: 'ldvector', a1: 'AtomID', a2: 'AtomID', a3: 'AtomID', a4: 'AtomID', usepow: 'bool'=True):
         """
-        __init__(dihedralgrouping self, ldvector coscoeffs, ldvector sincoeffs, atomid a1, atomid a2, atomid a3, atomid a4, bool usepow=True) -> dihedralgrouping
-        __init__(dihedralgrouping self, ldvector coscoeffs, ldvector sincoeffs, atomid a1, atomid a2, atomid a3, atomid a4) -> dihedralgrouping
+        __init__(DihedralGrouping self, ldvector cos_coefficients, ldvector sincoeffs, AtomID a1, AtomID a2, AtomID a3, AtomID a4, bool usepow=True) -> DihedralGrouping
+        __init__(DihedralGrouping self, ldvector cos_coefficients, ldvector sincoeffs, AtomID a1, AtomID a2, AtomID a3, AtomID a4) -> DihedralGrouping
         """
-        this = _sim3dlong.new_dihedralgrouping(coscoeffs, sincoeffs, a1, a2, a3, a4, usepow)
+        this = _sim3dlong.new_DihedralGrouping(cos_coefficients, sincoeffs, a1, a2, a3, a4, usepow)
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _sim3dlong.delete_dihedralgrouping
+    __swig_destroy__ = _sim3dlong.delete_DihedralGrouping
     __del__ = lambda self: None
-dihedralgrouping_swigregister = _sim3dlong.dihedralgrouping_swigregister
-dihedralgrouping_swigregister(dihedralgrouping)
+DihedralGrouping_swigregister = _sim3dlong.DihedralGrouping_swigregister
+DihedralGrouping_swigregister(DihedralGrouping)
 
-def dihedralgrouping_diff(r1: 'Vec', r2: 'Vec') -> "Vec":
-    """dihedralgrouping_diff(Vec r1, Vec r2) -> Vec"""
-    return _sim3dlong.dihedralgrouping_diff(r1, r2)
+def DihedralGrouping_diff(r1: 'Vec', r2: 'Vec') -> "Vec":
+    """DihedralGrouping_diff(Vec r1, Vec r2) -> Vec"""
+    return _sim3dlong.DihedralGrouping_diff(r1, r2)
 
-class dihedrals(interaction):
-    """Proxy of C++ dihedrals class"""
+class Dihedrals(Interaction):
+    """Proxy of C++ Dihedrals class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, dihedrals, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Dihedrals, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, dihedrals, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Dihedrals, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(dihedrals self, std::vector< dihedralgrouping > pairs) -> dihedrals
-        __init__(dihedrals self) -> dihedrals
+        __init__(Dihedrals self, std::vector< DihedralGrouping > pairs) -> Dihedrals
+        __init__(Dihedrals self) -> Dihedrals
         """
-        this = _sim3dlong.new_dihedrals(*args)
+        this = _sim3dlong.new_Dihedrals(*args)
         try:
             self.this.append(this)
         except:
@@ -8745,173 +8767,173 @@ class dihedrals(interaction):
 
     def add(self, *args) -> "void":
         """
-        add(dihedrals self, dihedralgrouping b)
-        add(dihedrals self, ldvector nums, atomid a1, atomid a2, atomid a3, atomid a4)
-        add(dihedrals self, ldvector coscoeffs, ldvector sincoeffs, atomid a1, atomid a2, atomid a3, atomid a4, bool usepow=True)
-        add(dihedrals self, ldvector coscoeffs, ldvector sincoeffs, atomid a1, atomid a2, atomid a3, atomid a4)
-        add(dihedrals self, flt k, flt theta0, atomid a1, atomid a2, atomid a3, atomid a4)
-        add(dihedrals self, flt k, atomid a1, atomid a2, atomid a3, atomid a4)
+        add(Dihedrals self, DihedralGrouping b)
+        add(Dihedrals self, ldvector nums, AtomID a1, AtomID a2, AtomID a3, AtomID a4)
+        add(Dihedrals self, ldvector cos_coefficients, ldvector sincoeffs, AtomID a1, AtomID a2, AtomID a3, AtomID a4, bool usepow=True)
+        add(Dihedrals self, ldvector cos_coefficients, ldvector sincoeffs, AtomID a1, AtomID a2, AtomID a3, AtomID a4)
+        add(Dihedrals self, flt k, flt theta0, AtomID a1, AtomID a2, AtomID a3, AtomID a4)
+        add(Dihedrals self, flt k, AtomID a1, AtomID a2, AtomID a3, AtomID a4)
         """
-        return _sim3dlong.dihedrals_add(self, *args)
+        return _sim3dlong.Dihedrals_add(self, *args)
 
 
     def size(self) -> "uint":
-        """size(dihedrals self) -> uint"""
-        return _sim3dlong.dihedrals_size(self)
+        """size(Dihedrals self) -> uint"""
+        return _sim3dlong.Dihedrals_size(self)
 
 
     def mean_dists(self) -> "flt":
-        """mean_dists(dihedrals self) -> flt"""
-        return _sim3dlong.dihedrals_mean_dists(self)
+        """mean_dists(Dihedrals self) -> flt"""
+        return _sim3dlong.Dihedrals_mean_dists(self)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(dihedrals self, Box box) -> flt"""
-        return _sim3dlong.dihedrals_energy(self, box)
+        """energy(Dihedrals self, Box box) -> flt"""
+        return _sim3dlong.Dihedrals_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(dihedrals self, Box box)"""
-        return _sim3dlong.dihedrals_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(Dihedrals self, Box box)"""
+        return _sim3dlong.Dihedrals_set_forces(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(dihedrals self, Box box) -> flt"""
-        return _sim3dlong.dihedrals_pressure(self, box)
+        """pressure(Dihedrals self, Box box) -> flt"""
+        return _sim3dlong.Dihedrals_pressure(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(dihedrals self, Box box) -> flt"""
-        return _sim3dlong.dihedrals_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(Dihedrals self, Box box) -> flt"""
+        return _sim3dlong.Dihedrals_set_forces_get_pressure(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_dihedrals
+    __swig_destroy__ = _sim3dlong.delete_Dihedrals
     __del__ = lambda self: None
-dihedrals_swigregister = _sim3dlong.dihedrals_swigregister
-dihedrals_swigregister(dihedrals)
+Dihedrals_swigregister = _sim3dlong.Dihedrals_swigregister
+Dihedrals_swigregister(Dihedrals)
 
-class forcepair(_object):
-    """Proxy of C++ forcepair class"""
+class ForcePair(_object):
+    """Proxy of C++ ForcePair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, forcepair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ForcePair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, forcepair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ForcePair, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["a1"] = _sim3dlong.forcepair_a1_set
-    __swig_getmethods__["a1"] = _sim3dlong.forcepair_a1_get
+    __swig_setmethods__["a1"] = _sim3dlong.ForcePair_a1_set
+    __swig_getmethods__["a1"] = _sim3dlong.ForcePair_a1_get
     if _newclass:
-        a1 = _swig_property(_sim3dlong.forcepair_a1_get, _sim3dlong.forcepair_a1_set)
-    __swig_setmethods__["a2"] = _sim3dlong.forcepair_a2_set
-    __swig_getmethods__["a2"] = _sim3dlong.forcepair_a2_get
+        a1 = _swig_property(_sim3dlong.ForcePair_a1_get, _sim3dlong.ForcePair_a1_set)
+    __swig_setmethods__["a2"] = _sim3dlong.ForcePair_a2_set
+    __swig_getmethods__["a2"] = _sim3dlong.ForcePair_a2_get
     if _newclass:
-        a2 = _swig_property(_sim3dlong.forcepair_a2_get, _sim3dlong.forcepair_a2_set)
-    __swig_setmethods__["fij"] = _sim3dlong.forcepair_fij_set
-    __swig_getmethods__["fij"] = _sim3dlong.forcepair_fij_get
+        a2 = _swig_property(_sim3dlong.ForcePair_a2_get, _sim3dlong.ForcePair_a2_set)
+    __swig_setmethods__["fij"] = _sim3dlong.ForcePair_fij_set
+    __swig_getmethods__["fij"] = _sim3dlong.ForcePair_fij_get
     if _newclass:
-        fij = _swig_property(_sim3dlong.forcepair_fij_get, _sim3dlong.forcepair_fij_set)
+        fij = _swig_property(_sim3dlong.ForcePair_fij_get, _sim3dlong.ForcePair_fij_set)
 
     def __init__(self):
-        """__init__(forcepair self) -> forcepair"""
-        this = _sim3dlong.new_forcepair()
+        """__init__(ForcePair self) -> ForcePair"""
+        this = _sim3dlong.new_ForcePair()
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _sim3dlong.delete_forcepair
+    __swig_destroy__ = _sim3dlong.delete_ForcePair
     __del__ = lambda self: None
-forcepair_swigregister = _sim3dlong.forcepair_swigregister
-forcepair_swigregister(forcepair)
+ForcePair_swigregister = _sim3dlong.ForcePair_swigregister
+ForcePair_swigregister(ForcePair)
 
-class forcepairx(_object):
-    """Proxy of C++ forcepairx class"""
+class ForcePairX(_object):
+    """Proxy of C++ ForcePairX class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, forcepairx, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, ForcePairX, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, forcepairx, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, ForcePairX, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["a1"] = _sim3dlong.forcepairx_a1_set
-    __swig_getmethods__["a1"] = _sim3dlong.forcepairx_a1_get
+    __swig_setmethods__["a1"] = _sim3dlong.ForcePairX_a1_set
+    __swig_getmethods__["a1"] = _sim3dlong.ForcePairX_a1_get
     if _newclass:
-        a1 = _swig_property(_sim3dlong.forcepairx_a1_get, _sim3dlong.forcepairx_a1_set)
-    __swig_setmethods__["a2"] = _sim3dlong.forcepairx_a2_set
-    __swig_getmethods__["a2"] = _sim3dlong.forcepairx_a2_get
+        a1 = _swig_property(_sim3dlong.ForcePairX_a1_get, _sim3dlong.ForcePairX_a1_set)
+    __swig_setmethods__["a2"] = _sim3dlong.ForcePairX_a2_set
+    __swig_getmethods__["a2"] = _sim3dlong.ForcePairX_a2_get
     if _newclass:
-        a2 = _swig_property(_sim3dlong.forcepairx_a2_get, _sim3dlong.forcepairx_a2_set)
-    __swig_setmethods__["xij"] = _sim3dlong.forcepairx_xij_set
-    __swig_getmethods__["xij"] = _sim3dlong.forcepairx_xij_get
+        a2 = _swig_property(_sim3dlong.ForcePairX_a2_get, _sim3dlong.ForcePairX_a2_set)
+    __swig_setmethods__["xij"] = _sim3dlong.ForcePairX_xij_set
+    __swig_getmethods__["xij"] = _sim3dlong.ForcePairX_xij_get
     if _newclass:
-        xij = _swig_property(_sim3dlong.forcepairx_xij_get, _sim3dlong.forcepairx_xij_set)
-    __swig_setmethods__["fij"] = _sim3dlong.forcepairx_fij_set
-    __swig_getmethods__["fij"] = _sim3dlong.forcepairx_fij_get
+        xij = _swig_property(_sim3dlong.ForcePairX_xij_get, _sim3dlong.ForcePairX_xij_set)
+    __swig_setmethods__["fij"] = _sim3dlong.ForcePairX_fij_set
+    __swig_getmethods__["fij"] = _sim3dlong.ForcePairX_fij_get
     if _newclass:
-        fij = _swig_property(_sim3dlong.forcepairx_fij_get, _sim3dlong.forcepairx_fij_set)
+        fij = _swig_property(_sim3dlong.ForcePairX_fij_get, _sim3dlong.ForcePairX_fij_set)
 
     def __init__(self):
-        """__init__(forcepairx self) -> forcepairx"""
-        this = _sim3dlong.new_forcepairx()
+        """__init__(ForcePairX self) -> ForcePairX"""
+        this = _sim3dlong.new_ForcePairX()
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _sim3dlong.delete_forcepairx
+    __swig_destroy__ = _sim3dlong.delete_ForcePairX
     __del__ = lambda self: None
-forcepairx_swigregister = _sim3dlong.forcepairx_swigregister
-forcepairx_swigregister(forcepairx)
+ForcePairX_swigregister = _sim3dlong.ForcePairX_swigregister
+ForcePairX_swigregister(ForcePairX)
 
-class fpairxFunct(_object):
-    """Proxy of C++ fpairxFunct class"""
+class FPairXFunct(_object):
+    """Proxy of C++ FPairXFunct class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, fpairxFunct, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FPairXFunct, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, fpairxFunct, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, FPairXFunct, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
-    def run(self, arg2: 'forcepairx') -> "void":
-        """run(fpairxFunct self, forcepairx arg2)"""
-        return _sim3dlong.fpairxFunct_run(self, arg2)
+    def run(self, arg2: 'ForcePairX') -> "void":
+        """run(FPairXFunct self, ForcePairX arg2)"""
+        return _sim3dlong.FPairXFunct_run(self, arg2)
 
-    __swig_destroy__ = _sim3dlong.delete_fpairxFunct
+    __swig_destroy__ = _sim3dlong.delete_FPairXFunct
     __del__ = lambda self: None
-fpairxFunct_swigregister = _sim3dlong.fpairxFunct_swigregister
-fpairxFunct_swigregister(fpairxFunct)
+FPairXFunct_swigregister = _sim3dlong.FPairXFunct_swigregister
+FPairXFunct_swigregister(FPairXFunct)
 
-class interactionpairsx(interaction):
-    """Proxy of C++ interactionpairsx class"""
+class InteractionPairsX(Interaction):
+    """Proxy of C++ InteractionPairsX class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, interactionpairsx, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, InteractionPairsX, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, interactionpairsx, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, InteractionPairsX, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
-    def setForces(self, *args) -> "void":
+    def set_forces(self, *args) -> "void":
         """
-        setForces(interactionpairsx self, Box box)
-        setForces(interactionpairsx self, Box box, fpairxFunct arg3)
+        set_forces(InteractionPairsX self, Box box)
+        set_forces(InteractionPairsX self, Box box, FPairXFunct arg3)
         """
-        return _sim3dlong.interactionpairsx_setForces(self, *args)
+        return _sim3dlong.InteractionPairsX_set_forces(self, *args)
 
-    __swig_destroy__ = _sim3dlong.delete_interactionpairsx
+    __swig_destroy__ = _sim3dlong.delete_InteractionPairsX
     __del__ = lambda self: None
-interactionpairsx_swigregister = _sim3dlong.interactionpairsx_swigregister
-interactionpairsx_swigregister(interactionpairsx)
+InteractionPairsX_swigregister = _sim3dlong.InteractionPairsX_swigregister
+InteractionPairsX_swigregister(InteractionPairsX)
 
-class Charged(atomid):
+class Charged(AtomID):
     """Proxy of C++ Charged class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Charged, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Charged, name)
     __repr__ = _swig_repr
@@ -8923,7 +8945,7 @@ class Charged(atomid):
     def __init__(self, *args):
         """
         __init__(Charged self) -> Charged
-        __init__(Charged self, flt q, atomid a) -> Charged
+        __init__(Charged self, flt q, AtomID a) -> Charged
         """
         this = _sim3dlong.new_Charged(*args)
         try:
@@ -8967,441 +8989,400 @@ class ChargePair(_object):
 ChargePair_swigregister = _sim3dlong.ChargePair_swigregister
 ChargePair_swigregister(ChargePair)
 
-class LJatom(atomid):
-    """Proxy of C++ LJatom class"""
+class EpsSigAtom(AtomID):
+    """Proxy of C++ EpsSigAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJatom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EpsSigAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJatom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, EpsSigAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["epsilon"] = _sim3dlong.LJatom_epsilon_set
-    __swig_getmethods__["epsilon"] = _sim3dlong.LJatom_epsilon_get
+    __swig_setmethods__["epsilon"] = _sim3dlong.EpsSigAtom_epsilon_set
+    __swig_getmethods__["epsilon"] = _sim3dlong.EpsSigAtom_epsilon_get
     if _newclass:
-        epsilon = _swig_property(_sim3dlong.LJatom_epsilon_get, _sim3dlong.LJatom_epsilon_set)
-    __swig_setmethods__["sigma"] = _sim3dlong.LJatom_sigma_set
-    __swig_getmethods__["sigma"] = _sim3dlong.LJatom_sigma_get
+        epsilon = _swig_property(_sim3dlong.EpsSigAtom_epsilon_get, _sim3dlong.EpsSigAtom_epsilon_set)
+    __swig_setmethods__["sigma"] = _sim3dlong.EpsSigAtom_sigma_set
+    __swig_getmethods__["sigma"] = _sim3dlong.EpsSigAtom_sigma_get
     if _newclass:
-        sigma = _swig_property(_sim3dlong.LJatom_sigma_get, _sim3dlong.LJatom_sigma_set)
+        sigma = _swig_property(_sim3dlong.EpsSigAtom_sigma_get, _sim3dlong.EpsSigAtom_sigma_set)
 
     def __init__(self, *args):
         """
-        __init__(LJatom self) -> LJatom
-        __init__(LJatom self, flt epsilon, flt sigma, atomid a) -> LJatom
-        __init__(LJatom self, atomid a, LJatom other) -> LJatom
+        __init__(EpsSigAtom self) -> EpsSigAtom
+        __init__(EpsSigAtom self, AtomID a, flt epsilon, flt sigma) -> EpsSigAtom
+        __init__(EpsSigAtom self, AtomID a, EpsSigAtom other) -> EpsSigAtom
         """
-        this = _sim3dlong.new_LJatom(*args)
+        this = _sim3dlong.new_EpsSigAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(LJatom self) -> flt"""
-        return _sim3dlong.LJatom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(EpsSigAtom self) -> flt"""
+        return _sim3dlong.EpsSigAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJatom
+    __swig_destroy__ = _sim3dlong.delete_EpsSigAtom
     __del__ = lambda self: None
-LJatom_swigregister = _sim3dlong.LJatom_swigregister
-LJatom_swigregister(LJatom)
+EpsSigAtom_swigregister = _sim3dlong.EpsSigAtom_swigregister
+EpsSigAtom_swigregister(EpsSigAtom)
 
-class LJpair(_object):
-    """Proxy of C++ LJpair class"""
+class LJRepulsePair(_object):
+    """Proxy of C++ LJRepulsePair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJpair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJRepulsePair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJpair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJRepulsePair, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["epsilon"] = _sim3dlong.LJpair_epsilon_set
-    __swig_getmethods__["epsilon"] = _sim3dlong.LJpair_epsilon_get
+    __swig_setmethods__["epsilon"] = _sim3dlong.LJRepulsePair_epsilon_set
+    __swig_getmethods__["epsilon"] = _sim3dlong.LJRepulsePair_epsilon_get
     if _newclass:
-        epsilon = _swig_property(_sim3dlong.LJpair_epsilon_get, _sim3dlong.LJpair_epsilon_set)
-    __swig_setmethods__["sigma"] = _sim3dlong.LJpair_sigma_set
-    __swig_getmethods__["sigma"] = _sim3dlong.LJpair_sigma_get
+        epsilon = _swig_property(_sim3dlong.LJRepulsePair_epsilon_get, _sim3dlong.LJRepulsePair_epsilon_set)
+    __swig_setmethods__["sigma"] = _sim3dlong.LJRepulsePair_sigma_set
+    __swig_getmethods__["sigma"] = _sim3dlong.LJRepulsePair_sigma_get
     if _newclass:
-        sigma = _swig_property(_sim3dlong.LJpair_sigma_get, _sim3dlong.LJpair_sigma_set)
-    __swig_setmethods__["atom1"] = _sim3dlong.LJpair_atom1_set
-    __swig_getmethods__["atom1"] = _sim3dlong.LJpair_atom1_get
+        sigma = _swig_property(_sim3dlong.LJRepulsePair_sigma_get, _sim3dlong.LJRepulsePair_sigma_set)
+    __swig_setmethods__["atom1"] = _sim3dlong.LJRepulsePair_atom1_set
+    __swig_getmethods__["atom1"] = _sim3dlong.LJRepulsePair_atom1_get
     if _newclass:
-        atom1 = _swig_property(_sim3dlong.LJpair_atom1_get, _sim3dlong.LJpair_atom1_set)
-    __swig_setmethods__["atom2"] = _sim3dlong.LJpair_atom2_set
-    __swig_getmethods__["atom2"] = _sim3dlong.LJpair_atom2_get
+        atom1 = _swig_property(_sim3dlong.LJRepulsePair_atom1_get, _sim3dlong.LJRepulsePair_atom1_set)
+    __swig_setmethods__["atom2"] = _sim3dlong.LJRepulsePair_atom2_set
+    __swig_getmethods__["atom2"] = _sim3dlong.LJRepulsePair_atom2_get
     if _newclass:
-        atom2 = _swig_property(_sim3dlong.LJpair_atom2_get, _sim3dlong.LJpair_atom2_set)
+        atom2 = _swig_property(_sim3dlong.LJRepulsePair_atom2_get, _sim3dlong.LJRepulsePair_atom2_set)
 
-    def __init__(self, LJ1: 'LJatom', LJ2: 'LJatom'):
-        """__init__(LJpair self, LJatom LJ1, LJatom LJ2) -> LJpair"""
-        this = _sim3dlong.new_LJpair(LJ1, LJ2)
+    def __init__(self, LJ1: 'EpsSigAtom', LJ2: 'EpsSigAtom'):
+        """__init__(LJRepulsePair self, EpsSigAtom LJ1, EpsSigAtom LJ2) -> LJRepulsePair"""
+        this = _sim3dlong.new_LJRepulsePair(LJ1, LJ2)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(LJpair self, Box box) -> flt"""
-        return _sim3dlong.LJpair_energy(self, box)
+        """energy(LJRepulsePair self, Box box) -> flt"""
+        return _sim3dlong.LJRepulsePair_energy(self, box)
 
 
     def forces(self, box: 'Box') -> "Vec":
-        """forces(LJpair self, Box box) -> Vec"""
-        return _sim3dlong.LJpair_forces(self, box)
+        """forces(LJRepulsePair self, Box box) -> Vec"""
+        return _sim3dlong.LJRepulsePair_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_LJpair
+    __swig_destroy__ = _sim3dlong.delete_LJRepulsePair
     __del__ = lambda self: None
-LJpair_swigregister = _sim3dlong.LJpair_swigregister
-LJpair_swigregister(LJpair)
+LJRepulsePair_swigregister = _sim3dlong.LJRepulsePair_swigregister
+LJRepulsePair_swigregister(LJRepulsePair)
 
-class LJatomcut(LJatom):
-    """Proxy of C++ LJatomcut class"""
+class EpsSigCutAtom(EpsSigAtom):
+    """Proxy of C++ EpsSigCutAtom class"""
     __swig_setmethods__ = {}
-    for _s in [LJatom]:
+    for _s in [EpsSigAtom]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJatomcut, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EpsSigCutAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [LJatom]:
+    for _s in [EpsSigAtom]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJatomcut, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, EpsSigCutAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["sigcut"] = _sim3dlong.LJatomcut_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.LJatomcut_sigcut_get
+    __swig_setmethods__["sigcut"] = _sim3dlong.EpsSigCutAtom_sigcut_set
+    __swig_getmethods__["sigcut"] = _sim3dlong.EpsSigCutAtom_sigcut_get
     if _newclass:
-        sigcut = _swig_property(_sim3dlong.LJatomcut_sigcut_get, _sim3dlong.LJatomcut_sigcut_set)
+        sigcut = _swig_property(_sim3dlong.EpsSigCutAtom_sigcut_get, _sim3dlong.EpsSigCutAtom_sigcut_set)
 
     def __init__(self, *args):
         """
-        __init__(LJatomcut self) -> LJatomcut
-        __init__(LJatomcut self, flt epsilon, flt sigma, atomid a, flt cut) -> LJatomcut
-        __init__(LJatomcut self, atomid a, LJatomcut other) -> LJatomcut
+        __init__(EpsSigCutAtom self) -> EpsSigCutAtom
+        __init__(EpsSigCutAtom self, AtomID a, flt epsilon, flt sigma, flt cut) -> EpsSigCutAtom
+        __init__(EpsSigCutAtom self, AtomID a, EpsSigCutAtom other) -> EpsSigCutAtom
         """
-        this = _sim3dlong.new_LJatomcut(*args)
+        this = _sim3dlong.new_EpsSigCutAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(LJatomcut self) -> flt"""
-        return _sim3dlong.LJatomcut_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(EpsSigCutAtom self) -> flt"""
+        return _sim3dlong.EpsSigCutAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJatomcut
+    __swig_destroy__ = _sim3dlong.delete_EpsSigCutAtom
     __del__ = lambda self: None
-LJatomcut_swigregister = _sim3dlong.LJatomcut_swigregister
-LJatomcut_swigregister(LJatomcut)
+EpsSigCutAtom_swigregister = _sim3dlong.EpsSigCutAtom_swigregister
+EpsSigCutAtom_swigregister(EpsSigCutAtom)
 
-class LJAtomIndexed(atomid):
-    """Proxy of C++ LJAtomIndexed class"""
+class IEpsISigCutAtom(AtomID):
+    """Proxy of C++ IEpsISigCutAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAtomIndexed, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IEpsISigCutAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJAtomIndexed, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, IEpsISigCutAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["epsilons"] = _sim3dlong.LJAtomIndexed_epsilons_set
-    __swig_getmethods__["epsilons"] = _sim3dlong.LJAtomIndexed_epsilons_get
+    __swig_setmethods__["epsilons"] = _sim3dlong.IEpsISigCutAtom_epsilons_set
+    __swig_getmethods__["epsilons"] = _sim3dlong.IEpsISigCutAtom_epsilons_get
     if _newclass:
-        epsilons = _swig_property(_sim3dlong.LJAtomIndexed_epsilons_get, _sim3dlong.LJAtomIndexed_epsilons_set)
-    __swig_setmethods__["sigmas"] = _sim3dlong.LJAtomIndexed_sigmas_set
-    __swig_getmethods__["sigmas"] = _sim3dlong.LJAtomIndexed_sigmas_get
+        epsilons = _swig_property(_sim3dlong.IEpsISigCutAtom_epsilons_get, _sim3dlong.IEpsISigCutAtom_epsilons_set)
+    __swig_setmethods__["sigmas"] = _sim3dlong.IEpsISigCutAtom_sigmas_set
+    __swig_getmethods__["sigmas"] = _sim3dlong.IEpsISigCutAtom_sigmas_get
     if _newclass:
-        sigmas = _swig_property(_sim3dlong.LJAtomIndexed_sigmas_get, _sim3dlong.LJAtomIndexed_sigmas_set)
-    __swig_setmethods__["indx"] = _sim3dlong.LJAtomIndexed_indx_set
-    __swig_getmethods__["indx"] = _sim3dlong.LJAtomIndexed_indx_get
+        sigmas = _swig_property(_sim3dlong.IEpsISigCutAtom_sigmas_get, _sim3dlong.IEpsISigCutAtom_sigmas_set)
+    __swig_setmethods__["indx"] = _sim3dlong.IEpsISigCutAtom_indx_set
+    __swig_getmethods__["indx"] = _sim3dlong.IEpsISigCutAtom_indx_get
     if _newclass:
-        indx = _swig_property(_sim3dlong.LJAtomIndexed_indx_get, _sim3dlong.LJAtomIndexed_indx_set)
-    __swig_setmethods__["sigcut"] = _sim3dlong.LJAtomIndexed_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.LJAtomIndexed_sigcut_get
+        indx = _swig_property(_sim3dlong.IEpsISigCutAtom_indx_get, _sim3dlong.IEpsISigCutAtom_indx_set)
+    __swig_setmethods__["sigcut"] = _sim3dlong.IEpsISigCutAtom_sigcut_set
+    __swig_getmethods__["sigcut"] = _sim3dlong.IEpsISigCutAtom_sigcut_get
     if _newclass:
-        sigcut = _swig_property(_sim3dlong.LJAtomIndexed_sigcut_get, _sim3dlong.LJAtomIndexed_sigcut_set)
+        sigcut = _swig_property(_sim3dlong.IEpsISigCutAtom_sigcut_get, _sim3dlong.IEpsISigCutAtom_sigcut_set)
 
     def __init__(self, *args):
         """
-        __init__(LJAtomIndexed self) -> LJAtomIndexed
-        __init__(LJAtomIndexed self, ldvector epsilons, ldvector sigmas, uint indx, atomid a, flt cut) -> LJAtomIndexed
-        __init__(LJAtomIndexed self, atomid a, LJAtomIndexed other) -> LJAtomIndexed
+        __init__(IEpsISigCutAtom self) -> IEpsISigCutAtom
+        __init__(IEpsISigCutAtom self, AtomID a, ldvector epsilons, ldvector sigmas, uint indx, flt cut) -> IEpsISigCutAtom
+        __init__(IEpsISigCutAtom self, AtomID a, IEpsISigCutAtom other) -> IEpsISigCutAtom
         """
-        this = _sim3dlong.new_LJAtomIndexed(*args)
+        this = _sim3dlong.new_IEpsISigCutAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def getEpsilon(self, other: 'LJAtomIndexed') -> "flt":
-        """getEpsilon(LJAtomIndexed self, LJAtomIndexed other) -> flt"""
-        return _sim3dlong.LJAtomIndexed_getEpsilon(self, other)
+    def get_epsilon(self, other: 'IEpsISigCutAtom') -> "flt":
+        """get_epsilon(IEpsISigCutAtom self, IEpsISigCutAtom other) -> flt"""
+        return _sim3dlong.IEpsISigCutAtom_get_epsilon(self, other)
 
 
-    def getSigma(self, other: 'LJAtomIndexed') -> "flt":
-        """getSigma(LJAtomIndexed self, LJAtomIndexed other) -> flt"""
-        return _sim3dlong.LJAtomIndexed_getSigma(self, other)
+    def get_sigma(self, other: 'IEpsISigCutAtom') -> "flt":
+        """get_sigma(IEpsISigCutAtom self, IEpsISigCutAtom other) -> flt"""
+        return _sim3dlong.IEpsISigCutAtom_get_sigma(self, other)
 
 
-    def maxsize(self) -> "flt":
-        """maxsize(LJAtomIndexed self) -> flt"""
-        return _sim3dlong.LJAtomIndexed_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(IEpsISigCutAtom self) -> flt"""
+        return _sim3dlong.IEpsISigCutAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJAtomIndexed
+    __swig_destroy__ = _sim3dlong.delete_IEpsISigCutAtom
     __del__ = lambda self: None
-LJAtomIndexed_swigregister = _sim3dlong.LJAtomIndexed_swigregister
-LJAtomIndexed_swigregister(LJAtomIndexed)
+IEpsISigCutAtom_swigregister = _sim3dlong.IEpsISigCutAtom_swigregister
+IEpsISigCutAtom_swigregister(IEpsISigCutAtom)
 
-class LJCutPair(_object):
-    """Proxy of C++ LJCutPair class"""
+class LennardJonesCutPair(_object):
+    """Proxy of C++ LennardJonesCutPair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJCutPair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LennardJonesCutPair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJCutPair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LennardJonesCutPair, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["inter"] = _sim3dlong.LJCutPair_inter_set
-    __swig_getmethods__["inter"] = _sim3dlong.LJCutPair_inter_get
+    __swig_setmethods__["inter"] = _sim3dlong.LennardJonesCutPair_inter_set
+    __swig_getmethods__["inter"] = _sim3dlong.LennardJonesCutPair_inter_get
     if _newclass:
-        inter = _swig_property(_sim3dlong.LJCutPair_inter_get, _sim3dlong.LJCutPair_inter_set)
-    __swig_setmethods__["atom1"] = _sim3dlong.LJCutPair_atom1_set
-    __swig_getmethods__["atom1"] = _sim3dlong.LJCutPair_atom1_get
+        inter = _swig_property(_sim3dlong.LennardJonesCutPair_inter_get, _sim3dlong.LennardJonesCutPair_inter_set)
+    __swig_setmethods__["atom1"] = _sim3dlong.LennardJonesCutPair_atom1_set
+    __swig_getmethods__["atom1"] = _sim3dlong.LennardJonesCutPair_atom1_get
     if _newclass:
-        atom1 = _swig_property(_sim3dlong.LJCutPair_atom1_get, _sim3dlong.LJCutPair_atom1_set)
-    __swig_setmethods__["atom2"] = _sim3dlong.LJCutPair_atom2_set
-    __swig_getmethods__["atom2"] = _sim3dlong.LJCutPair_atom2_get
+        atom1 = _swig_property(_sim3dlong.LennardJonesCutPair_atom1_get, _sim3dlong.LennardJonesCutPair_atom1_set)
+    __swig_setmethods__["atom2"] = _sim3dlong.LennardJonesCutPair_atom2_set
+    __swig_getmethods__["atom2"] = _sim3dlong.LennardJonesCutPair_atom2_get
     if _newclass:
-        atom2 = _swig_property(_sim3dlong.LJCutPair_atom2_get, _sim3dlong.LJCutPair_atom2_set)
+        atom2 = _swig_property(_sim3dlong.LennardJonesCutPair_atom2_get, _sim3dlong.LennardJonesCutPair_atom2_set)
 
     def __init__(self, *args):
         """
-        __init__(LJCutPair self, LJatomcut a1, LJatomcut a2) -> LJCutPair
-        __init__(LJCutPair self, LJAtomIndexed a1, LJAtomIndexed a2) -> LJCutPair
+        __init__(LennardJonesCutPair self, EpsSigCutAtom a1, EpsSigCutAtom a2) -> LennardJonesCutPair
+        __init__(LennardJonesCutPair self, IEpsISigCutAtom a1, IEpsISigCutAtom a2) -> LennardJonesCutPair
         """
-        this = _sim3dlong.new_LJCutPair(*args)
+        this = _sim3dlong.new_LennardJonesCutPair(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(LJCutPair self, Box box) -> flt"""
-        return _sim3dlong.LJCutPair_energy(self, box)
+        """energy(LennardJonesCutPair self, Box box) -> flt"""
+        return _sim3dlong.LennardJonesCutPair_energy(self, box)
 
 
     def forces(self, box: 'Box') -> "Vec":
-        """forces(LJCutPair self, Box box) -> Vec"""
-        return _sim3dlong.LJCutPair_forces(self, box)
+        """forces(LennardJonesCutPair self, Box box) -> Vec"""
+        return _sim3dlong.LennardJonesCutPair_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_LJCutPair
+    __swig_destroy__ = _sim3dlong.delete_LennardJonesCutPair
     __del__ = lambda self: None
-LJCutPair_swigregister = _sim3dlong.LJCutPair_swigregister
-LJCutPair_swigregister(LJCutPair)
+LennardJonesCutPair_swigregister = _sim3dlong.LennardJonesCutPair_swigregister
+LennardJonesCutPair_swigregister(LennardJonesCutPair)
 
-class LJAttractPair(_object):
-    """Proxy of C++ LJAttractPair class"""
+class IEpsSigCutAtom(AtomID):
+    """Proxy of C++ IEpsSigCutAtom class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractPair, name, value)
+    for _s in [AtomID]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IEpsSigCutAtom, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractPair, name)
+    for _s in [AtomID]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, IEpsSigCutAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["inter"] = _sim3dlong.LJAttractPair_inter_set
-    __swig_getmethods__["inter"] = _sim3dlong.LJAttractPair_inter_get
+    __swig_setmethods__["epsilons"] = _sim3dlong.IEpsSigCutAtom_epsilons_set
+    __swig_getmethods__["epsilons"] = _sim3dlong.IEpsSigCutAtom_epsilons_get
     if _newclass:
-        inter = _swig_property(_sim3dlong.LJAttractPair_inter_get, _sim3dlong.LJAttractPair_inter_set)
-    __swig_setmethods__["atom1"] = _sim3dlong.LJAttractPair_atom1_set
-    __swig_getmethods__["atom1"] = _sim3dlong.LJAttractPair_atom1_get
+        epsilons = _swig_property(_sim3dlong.IEpsSigCutAtom_epsilons_get, _sim3dlong.IEpsSigCutAtom_epsilons_set)
+    __swig_setmethods__["indx"] = _sim3dlong.IEpsSigCutAtom_indx_set
+    __swig_getmethods__["indx"] = _sim3dlong.IEpsSigCutAtom_indx_get
     if _newclass:
-        atom1 = _swig_property(_sim3dlong.LJAttractPair_atom1_get, _sim3dlong.LJAttractPair_atom1_set)
-    __swig_setmethods__["atom2"] = _sim3dlong.LJAttractPair_atom2_set
-    __swig_getmethods__["atom2"] = _sim3dlong.LJAttractPair_atom2_get
+        indx = _swig_property(_sim3dlong.IEpsSigCutAtom_indx_get, _sim3dlong.IEpsSigCutAtom_indx_set)
+    __swig_setmethods__["sigma"] = _sim3dlong.IEpsSigCutAtom_sigma_set
+    __swig_getmethods__["sigma"] = _sim3dlong.IEpsSigCutAtom_sigma_get
     if _newclass:
-        atom2 = _swig_property(_sim3dlong.LJAttractPair_atom2_get, _sim3dlong.LJAttractPair_atom2_set)
+        sigma = _swig_property(_sim3dlong.IEpsSigCutAtom_sigma_get, _sim3dlong.IEpsSigCutAtom_sigma_set)
+    __swig_setmethods__["sigcut"] = _sim3dlong.IEpsSigCutAtom_sigcut_set
+    __swig_getmethods__["sigcut"] = _sim3dlong.IEpsSigCutAtom_sigcut_get
+    if _newclass:
+        sigcut = _swig_property(_sim3dlong.IEpsSigCutAtom_sigcut_get, _sim3dlong.IEpsSigCutAtom_sigcut_set)
 
     def __init__(self, *args):
         """
-        __init__(LJAttractPair self, LJatomcut a1, LJatomcut a2) -> LJAttractPair
-        __init__(LJAttractPair self, LJAtomIndexed a1, LJAtomIndexed a2) -> LJAttractPair
+        __init__(IEpsSigCutAtom self) -> IEpsSigCutAtom
+        __init__(IEpsSigCutAtom self, AtomID a, ldvector epsilons, uint indx, flt sigma, flt cut) -> IEpsSigCutAtom
+        __init__(IEpsSigCutAtom self, AtomID a, IEpsSigCutAtom other) -> IEpsSigCutAtom
         """
-        this = _sim3dlong.new_LJAttractPair(*args)
+        this = _sim3dlong.new_IEpsSigCutAtom(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def get_epsilon(self, other: 'IEpsSigCutAtom') -> "flt":
+        """get_epsilon(IEpsSigCutAtom self, IEpsSigCutAtom other) -> flt"""
+        return _sim3dlong.IEpsSigCutAtom_get_epsilon(self, other)
+
+
+    def max_size(self) -> "flt":
+        """max_size(IEpsSigCutAtom self) -> flt"""
+        return _sim3dlong.IEpsSigCutAtom_max_size(self)
+
+    __swig_destroy__ = _sim3dlong.delete_IEpsSigCutAtom
+    __del__ = lambda self: None
+IEpsSigCutAtom_swigregister = _sim3dlong.IEpsSigCutAtom_swigregister
+IEpsSigCutAtom_swigregister(IEpsSigCutAtom)
+
+class LJAttractCutPair(_object):
+    """Proxy of C++ LJAttractCutPair class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractCutPair, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractCutPair, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["inter"] = _sim3dlong.LJAttractCutPair_inter_set
+    __swig_getmethods__["inter"] = _sim3dlong.LJAttractCutPair_inter_get
+    if _newclass:
+        inter = _swig_property(_sim3dlong.LJAttractCutPair_inter_get, _sim3dlong.LJAttractCutPair_inter_set)
+    __swig_setmethods__["atom1"] = _sim3dlong.LJAttractCutPair_atom1_set
+    __swig_getmethods__["atom1"] = _sim3dlong.LJAttractCutPair_atom1_get
+    if _newclass:
+        atom1 = _swig_property(_sim3dlong.LJAttractCutPair_atom1_get, _sim3dlong.LJAttractCutPair_atom1_set)
+    __swig_setmethods__["atom2"] = _sim3dlong.LJAttractCutPair_atom2_set
+    __swig_getmethods__["atom2"] = _sim3dlong.LJAttractCutPair_atom2_get
+    if _newclass:
+        atom2 = _swig_property(_sim3dlong.LJAttractCutPair_atom2_get, _sim3dlong.LJAttractCutPair_atom2_set)
+
+    def __init__(self, *args):
+        """
+        __init__(LJAttractCutPair self, EpsSigCutAtom a1, EpsSigCutAtom a2) -> LJAttractCutPair
+        __init__(LJAttractCutPair self, IEpsISigCutAtom a1, IEpsISigCutAtom a2) -> LJAttractCutPair
+        __init__(LJAttractCutPair self, IEpsSigCutAtom a1, IEpsSigCutAtom a2) -> LJAttractCutPair
+        """
+        this = _sim3dlong.new_LJAttractCutPair(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(LJAttractPair self, Box box) -> flt"""
-        return _sim3dlong.LJAttractPair_energy(self, box)
+        """energy(LJAttractCutPair self, Box box) -> flt"""
+        return _sim3dlong.LJAttractCutPair_energy(self, box)
 
 
     def forces(self, box: 'Box') -> "Vec":
-        """forces(LJAttractPair self, Box box) -> Vec"""
-        return _sim3dlong.LJAttractPair_forces(self, box)
+        """forces(LJAttractCutPair self, Box box) -> Vec"""
+        return _sim3dlong.LJAttractCutPair_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_LJAttractPair
+    __swig_destroy__ = _sim3dlong.delete_LJAttractCutPair
     __del__ = lambda self: None
-LJAttractPair_swigregister = _sim3dlong.LJAttractPair_swigregister
-LJAttractPair_swigregister(LJAttractPair)
+LJAttractCutPair_swigregister = _sim3dlong.LJAttractCutPair_swigregister
+LJAttractCutPair_swigregister(LJAttractCutPair)
 
-class HydroAtom(atomid):
-    """Proxy of C++ HydroAtom class"""
+class IEpsRepsSigExpCutAtom(AtomID):
+    """Proxy of C++ IEpsRepsSigExpCutAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HydroAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IEpsRepsSigExpCutAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HydroAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, IEpsRepsSigExpCutAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["epsilons"] = _sim3dlong.HydroAtom_epsilons_set
-    __swig_getmethods__["epsilons"] = _sim3dlong.HydroAtom_epsilons_get
+    __swig_setmethods__["epsilons"] = _sim3dlong.IEpsRepsSigExpCutAtom_epsilons_set
+    __swig_getmethods__["epsilons"] = _sim3dlong.IEpsRepsSigExpCutAtom_epsilons_get
     if _newclass:
-        epsilons = _swig_property(_sim3dlong.HydroAtom_epsilons_get, _sim3dlong.HydroAtom_epsilons_set)
-    __swig_setmethods__["indx"] = _sim3dlong.HydroAtom_indx_set
-    __swig_getmethods__["indx"] = _sim3dlong.HydroAtom_indx_get
+        epsilons = _swig_property(_sim3dlong.IEpsRepsSigExpCutAtom_epsilons_get, _sim3dlong.IEpsRepsSigExpCutAtom_epsilons_set)
+    __swig_setmethods__["repeps"] = _sim3dlong.IEpsRepsSigExpCutAtom_repeps_set
+    __swig_getmethods__["repeps"] = _sim3dlong.IEpsRepsSigExpCutAtom_repeps_get
     if _newclass:
-        indx = _swig_property(_sim3dlong.HydroAtom_indx_get, _sim3dlong.HydroAtom_indx_set)
-    __swig_setmethods__["sigma"] = _sim3dlong.HydroAtom_sigma_set
-    __swig_getmethods__["sigma"] = _sim3dlong.HydroAtom_sigma_get
+        repeps = _swig_property(_sim3dlong.IEpsRepsSigExpCutAtom_repeps_get, _sim3dlong.IEpsRepsSigExpCutAtom_repeps_set)
+    __swig_setmethods__["sigma"] = _sim3dlong.IEpsRepsSigExpCutAtom_sigma_set
+    __swig_getmethods__["sigma"] = _sim3dlong.IEpsRepsSigExpCutAtom_sigma_get
     if _newclass:
-        sigma = _swig_property(_sim3dlong.HydroAtom_sigma_get, _sim3dlong.HydroAtom_sigma_set)
-    __swig_setmethods__["sigcut"] = _sim3dlong.HydroAtom_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.HydroAtom_sigcut_get
+        sigma = _swig_property(_sim3dlong.IEpsRepsSigExpCutAtom_sigma_get, _sim3dlong.IEpsRepsSigExpCutAtom_sigma_set)
+    __swig_setmethods__["exponent"] = _sim3dlong.IEpsRepsSigExpCutAtom_exponent_set
+    __swig_getmethods__["exponent"] = _sim3dlong.IEpsRepsSigExpCutAtom_exponent_get
     if _newclass:
-        sigcut = _swig_property(_sim3dlong.HydroAtom_sigcut_get, _sim3dlong.HydroAtom_sigcut_set)
+        exponent = _swig_property(_sim3dlong.IEpsRepsSigExpCutAtom_exponent_get, _sim3dlong.IEpsRepsSigExpCutAtom_exponent_set)
+    __swig_setmethods__["indx"] = _sim3dlong.IEpsRepsSigExpCutAtom_indx_set
+    __swig_getmethods__["indx"] = _sim3dlong.IEpsRepsSigExpCutAtom_indx_get
+    if _newclass:
+        indx = _swig_property(_sim3dlong.IEpsRepsSigExpCutAtom_indx_get, _sim3dlong.IEpsRepsSigExpCutAtom_indx_set)
+    __swig_setmethods__["sigcut"] = _sim3dlong.IEpsRepsSigExpCutAtom_sigcut_set
+    __swig_getmethods__["sigcut"] = _sim3dlong.IEpsRepsSigExpCutAtom_sigcut_get
+    if _newclass:
+        sigcut = _swig_property(_sim3dlong.IEpsRepsSigExpCutAtom_sigcut_get, _sim3dlong.IEpsRepsSigExpCutAtom_sigcut_set)
 
     def __init__(self, *args):
         """
-        __init__(HydroAtom self) -> HydroAtom
-        __init__(HydroAtom self, ldvector epsilons, uint indx, flt sigma, atomid a, flt cut) -> HydroAtom
-        __init__(HydroAtom self, atomid a, HydroAtom other) -> HydroAtom
+        __init__(IEpsRepsSigExpCutAtom self) -> IEpsRepsSigExpCutAtom
+        __init__(IEpsRepsSigExpCutAtom self, AtomID a, ldvector epsilons, flt repeps, flt sigma, flt n, uint indx, flt cut) -> IEpsRepsSigExpCutAtom
+        __init__(IEpsRepsSigExpCutAtom self, AtomID a, IEpsRepsSigExpCutAtom other) -> IEpsRepsSigExpCutAtom
         """
-        this = _sim3dlong.new_HydroAtom(*args)
+        this = _sim3dlong.new_IEpsRepsSigExpCutAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def getEpsilon(self, other: 'HydroAtom') -> "flt":
-        """getEpsilon(HydroAtom self, HydroAtom other) -> flt"""
-        return _sim3dlong.HydroAtom_getEpsilon(self, other)
+    def get_epsilon(self, other: 'IEpsRepsSigExpCutAtom') -> "flt":
+        """get_epsilon(IEpsRepsSigExpCutAtom self, IEpsRepsSigExpCutAtom other) -> flt"""
+        return _sim3dlong.IEpsRepsSigExpCutAtom_get_epsilon(self, other)
 
 
-    def maxsize(self) -> "flt":
-        """maxsize(HydroAtom self) -> flt"""
-        return _sim3dlong.HydroAtom_maxsize(self)
+    def get_sigma(self, other: 'IEpsRepsSigExpCutAtom') -> "flt":
+        """get_sigma(IEpsRepsSigExpCutAtom self, IEpsRepsSigExpCutAtom other) -> flt"""
+        return _sim3dlong.IEpsRepsSigExpCutAtom_get_sigma(self, other)
 
-    __swig_destroy__ = _sim3dlong.delete_HydroAtom
+
+    def max_size(self) -> "flt":
+        """max_size(IEpsRepsSigExpCutAtom self) -> flt"""
+        return _sim3dlong.IEpsRepsSigExpCutAtom_max_size(self)
+
+    __swig_destroy__ = _sim3dlong.delete_IEpsRepsSigExpCutAtom
     __del__ = lambda self: None
-HydroAtom_swigregister = _sim3dlong.HydroAtom_swigregister
-HydroAtom_swigregister(HydroAtom)
-
-class HydroPair(_object):
-    """Proxy of C++ HydroPair class"""
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HydroPair, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, HydroPair, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["inter"] = _sim3dlong.HydroPair_inter_set
-    __swig_getmethods__["inter"] = _sim3dlong.HydroPair_inter_get
-    if _newclass:
-        inter = _swig_property(_sim3dlong.HydroPair_inter_get, _sim3dlong.HydroPair_inter_set)
-    __swig_setmethods__["atom1"] = _sim3dlong.HydroPair_atom1_set
-    __swig_getmethods__["atom1"] = _sim3dlong.HydroPair_atom1_get
-    if _newclass:
-        atom1 = _swig_property(_sim3dlong.HydroPair_atom1_get, _sim3dlong.HydroPair_atom1_set)
-    __swig_setmethods__["atom2"] = _sim3dlong.HydroPair_atom2_set
-    __swig_getmethods__["atom2"] = _sim3dlong.HydroPair_atom2_get
-    if _newclass:
-        atom2 = _swig_property(_sim3dlong.HydroPair_atom2_get, _sim3dlong.HydroPair_atom2_set)
-
-    def __init__(self, a1: 'HydroAtom', a2: 'HydroAtom'):
-        """__init__(HydroPair self, HydroAtom a1, HydroAtom a2) -> HydroPair"""
-        this = _sim3dlong.new_HydroPair(a1, a2)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def energy(self, box: 'Box') -> "flt":
-        """energy(HydroPair self, Box box) -> flt"""
-        return _sim3dlong.HydroPair_energy(self, box)
-
-
-    def forces(self, box: 'Box') -> "Vec":
-        """forces(HydroPair self, Box box) -> Vec"""
-        return _sim3dlong.HydroPair_forces(self, box)
-
-    __swig_destroy__ = _sim3dlong.delete_HydroPair
-    __del__ = lambda self: None
-HydroPair_swigregister = _sim3dlong.HydroPair_swigregister
-HydroPair_swigregister(HydroPair)
-
-class LJishAtom(atomid):
-    """Proxy of C++ LJishAtom class"""
-    __swig_setmethods__ = {}
-    for _s in [atomid]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJishAtom, name, value)
-    __swig_getmethods__ = {}
-    for _s in [atomid]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJishAtom, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["epsilons"] = _sim3dlong.LJishAtom_epsilons_set
-    __swig_getmethods__["epsilons"] = _sim3dlong.LJishAtom_epsilons_get
-    if _newclass:
-        epsilons = _swig_property(_sim3dlong.LJishAtom_epsilons_get, _sim3dlong.LJishAtom_epsilons_set)
-    __swig_setmethods__["repeps"] = _sim3dlong.LJishAtom_repeps_set
-    __swig_getmethods__["repeps"] = _sim3dlong.LJishAtom_repeps_get
-    if _newclass:
-        repeps = _swig_property(_sim3dlong.LJishAtom_repeps_get, _sim3dlong.LJishAtom_repeps_set)
-    __swig_setmethods__["sigma"] = _sim3dlong.LJishAtom_sigma_set
-    __swig_getmethods__["sigma"] = _sim3dlong.LJishAtom_sigma_get
-    if _newclass:
-        sigma = _swig_property(_sim3dlong.LJishAtom_sigma_get, _sim3dlong.LJishAtom_sigma_set)
-    __swig_setmethods__["exponent"] = _sim3dlong.LJishAtom_exponent_set
-    __swig_getmethods__["exponent"] = _sim3dlong.LJishAtom_exponent_get
-    if _newclass:
-        exponent = _swig_property(_sim3dlong.LJishAtom_exponent_get, _sim3dlong.LJishAtom_exponent_set)
-    __swig_setmethods__["indx"] = _sim3dlong.LJishAtom_indx_set
-    __swig_getmethods__["indx"] = _sim3dlong.LJishAtom_indx_get
-    if _newclass:
-        indx = _swig_property(_sim3dlong.LJishAtom_indx_get, _sim3dlong.LJishAtom_indx_set)
-    __swig_setmethods__["sigcut"] = _sim3dlong.LJishAtom_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.LJishAtom_sigcut_get
-    if _newclass:
-        sigcut = _swig_property(_sim3dlong.LJishAtom_sigcut_get, _sim3dlong.LJishAtom_sigcut_set)
-
-    def __init__(self, *args):
-        """
-        __init__(LJishAtom self) -> LJishAtom
-        __init__(LJishAtom self, atomid a, ldvector epsilons, flt repeps, flt sigma, flt n, uint indx, flt cut) -> LJishAtom
-        __init__(LJishAtom self, atomid a, LJishAtom other) -> LJishAtom
-        """
-        this = _sim3dlong.new_LJishAtom(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def getEpsilon(self, other: 'LJishAtom') -> "flt":
-        """getEpsilon(LJishAtom self, LJishAtom other) -> flt"""
-        return _sim3dlong.LJishAtom_getEpsilon(self, other)
-
-
-    def getSigma(self, other: 'LJishAtom') -> "flt":
-        """getSigma(LJishAtom self, LJishAtom other) -> flt"""
-        return _sim3dlong.LJishAtom_getSigma(self, other)
-
-
-    def maxsize(self) -> "flt":
-        """maxsize(LJishAtom self) -> flt"""
-        return _sim3dlong.LJishAtom_maxsize(self)
-
-    __swig_destroy__ = _sim3dlong.delete_LJishAtom
-    __del__ = lambda self: None
-LJishAtom_swigregister = _sim3dlong.LJishAtom_swigregister
-LJishAtom_swigregister(LJishAtom)
+IEpsRepsSigExpCutAtom_swigregister = _sim3dlong.IEpsRepsSigExpCutAtom_swigregister
+IEpsRepsSigExpCutAtom_swigregister(IEpsRepsSigExpCutAtom)
 
 class LJishPair(_object):
     """Proxy of C++ LJishPair class"""
@@ -9426,14 +9407,14 @@ class LJishPair(_object):
     __swig_getmethods__["n"] = _sim3dlong.LJishPair_n_get
     if _newclass:
         n = _swig_property(_sim3dlong.LJishPair_n_get, _sim3dlong.LJishPair_n_set)
-    __swig_setmethods__["cutR"] = _sim3dlong.LJishPair_cutR_set
-    __swig_getmethods__["cutR"] = _sim3dlong.LJishPair_cutR_get
+    __swig_setmethods__["cut_distance"] = _sim3dlong.LJishPair_cut_distance_set
+    __swig_getmethods__["cut_distance"] = _sim3dlong.LJishPair_cut_distance_get
     if _newclass:
-        cutR = _swig_property(_sim3dlong.LJishPair_cutR_get, _sim3dlong.LJishPair_cutR_set)
-    __swig_setmethods__["cutE"] = _sim3dlong.LJishPair_cutE_set
-    __swig_getmethods__["cutE"] = _sim3dlong.LJishPair_cutE_get
+        cut_distance = _swig_property(_sim3dlong.LJishPair_cut_distance_get, _sim3dlong.LJishPair_cut_distance_set)
+    __swig_setmethods__["cut_energy"] = _sim3dlong.LJishPair_cut_energy_set
+    __swig_getmethods__["cut_energy"] = _sim3dlong.LJishPair_cut_energy_get
     if _newclass:
-        cutE = _swig_property(_sim3dlong.LJishPair_cutE_get, _sim3dlong.LJishPair_cutE_set)
+        cut_energy = _swig_property(_sim3dlong.LJishPair_cut_energy_get, _sim3dlong.LJishPair_cut_energy_set)
     __swig_setmethods__["atom1"] = _sim3dlong.LJishPair_atom1_set
     __swig_getmethods__["atom1"] = _sim3dlong.LJishPair_atom1_get
     if _newclass:
@@ -9443,8 +9424,8 @@ class LJishPair(_object):
     if _newclass:
         atom2 = _swig_property(_sim3dlong.LJishPair_atom2_get, _sim3dlong.LJishPair_atom2_set)
 
-    def __init__(self, LJ1: 'LJishAtom', LJ2: 'LJishAtom'):
-        """__init__(LJishPair self, LJishAtom LJ1, LJishAtom LJ2) -> LJishPair"""
+    def __init__(self, LJ1: 'IEpsRepsSigExpCutAtom', LJ2: 'IEpsRepsSigExpCutAtom'):
+        """__init__(LJishPair self, IEpsRepsSigExpCutAtom LJ1, IEpsRepsSigExpCutAtom LJ2) -> LJishPair"""
         this = _sim3dlong.new_LJishPair(LJ1, LJ2)
         try:
             self.this.append(this)
@@ -9465,60 +9446,6 @@ class LJishPair(_object):
 LJishPair_swigregister = _sim3dlong.LJishPair_swigregister
 LJishPair_swigregister(LJishPair)
 
-class LJAttractRepulseAtom(atomid):
-    """Proxy of C++ LJAttractRepulseAtom class"""
-    __swig_setmethods__ = {}
-    for _s in [atomid]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractRepulseAtom, name, value)
-    __swig_getmethods__ = {}
-    for _s in [atomid]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractRepulseAtom, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["epsilons"] = _sim3dlong.LJAttractRepulseAtom_epsilons_set
-    __swig_getmethods__["epsilons"] = _sim3dlong.LJAttractRepulseAtom_epsilons_get
-    if _newclass:
-        epsilons = _swig_property(_sim3dlong.LJAttractRepulseAtom_epsilons_get, _sim3dlong.LJAttractRepulseAtom_epsilons_set)
-    __swig_setmethods__["sig"] = _sim3dlong.LJAttractRepulseAtom_sig_set
-    __swig_getmethods__["sig"] = _sim3dlong.LJAttractRepulseAtom_sig_get
-    if _newclass:
-        sig = _swig_property(_sim3dlong.LJAttractRepulseAtom_sig_get, _sim3dlong.LJAttractRepulseAtom_sig_set)
-    __swig_setmethods__["indx"] = _sim3dlong.LJAttractRepulseAtom_indx_set
-    __swig_getmethods__["indx"] = _sim3dlong.LJAttractRepulseAtom_indx_get
-    if _newclass:
-        indx = _swig_property(_sim3dlong.LJAttractRepulseAtom_indx_get, _sim3dlong.LJAttractRepulseAtom_indx_set)
-    __swig_setmethods__["sigcut"] = _sim3dlong.LJAttractRepulseAtom_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.LJAttractRepulseAtom_sigcut_get
-    if _newclass:
-        sigcut = _swig_property(_sim3dlong.LJAttractRepulseAtom_sigcut_get, _sim3dlong.LJAttractRepulseAtom_sigcut_set)
-
-    def __init__(self, *args):
-        """
-        __init__(LJAttractRepulseAtom self) -> LJAttractRepulseAtom
-        __init__(LJAttractRepulseAtom self, atomid a, ldvector epsilons, flt sigma, uint indx, flt cut) -> LJAttractRepulseAtom
-        __init__(LJAttractRepulseAtom self, atomid a, LJAttractRepulseAtom other) -> LJAttractRepulseAtom
-        """
-        this = _sim3dlong.new_LJAttractRepulseAtom(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def getEpsilon(self, other: 'LJAttractRepulseAtom') -> "flt":
-        """getEpsilon(LJAttractRepulseAtom self, LJAttractRepulseAtom other) -> flt"""
-        return _sim3dlong.LJAttractRepulseAtom_getEpsilon(self, other)
-
-
-    def maxsize(self) -> "flt":
-        """maxsize(LJAttractRepulseAtom self) -> flt"""
-        return _sim3dlong.LJAttractRepulseAtom_maxsize(self)
-
-    __swig_destroy__ = _sim3dlong.delete_LJAttractRepulseAtom
-    __del__ = lambda self: None
-LJAttractRepulseAtom_swigregister = _sim3dlong.LJAttractRepulseAtom_swigregister
-LJAttractRepulseAtom_swigregister(LJAttractRepulseAtom)
-
 class LJAttractRepulsePair(_object):
     """Proxy of C++ LJAttractRepulsePair class"""
     __swig_setmethods__ = {}
@@ -9534,14 +9461,14 @@ class LJAttractRepulsePair(_object):
     __swig_getmethods__["sig"] = _sim3dlong.LJAttractRepulsePair_sig_get
     if _newclass:
         sig = _swig_property(_sim3dlong.LJAttractRepulsePair_sig_get, _sim3dlong.LJAttractRepulsePair_sig_set)
-    __swig_setmethods__["cutR"] = _sim3dlong.LJAttractRepulsePair_cutR_set
-    __swig_getmethods__["cutR"] = _sim3dlong.LJAttractRepulsePair_cutR_get
+    __swig_setmethods__["cut_distance"] = _sim3dlong.LJAttractRepulsePair_cut_distance_set
+    __swig_getmethods__["cut_distance"] = _sim3dlong.LJAttractRepulsePair_cut_distance_get
     if _newclass:
-        cutR = _swig_property(_sim3dlong.LJAttractRepulsePair_cutR_get, _sim3dlong.LJAttractRepulsePair_cutR_set)
-    __swig_setmethods__["cutE"] = _sim3dlong.LJAttractRepulsePair_cutE_set
-    __swig_getmethods__["cutE"] = _sim3dlong.LJAttractRepulsePair_cutE_get
+        cut_distance = _swig_property(_sim3dlong.LJAttractRepulsePair_cut_distance_get, _sim3dlong.LJAttractRepulsePair_cut_distance_set)
+    __swig_setmethods__["cut_energy"] = _sim3dlong.LJAttractRepulsePair_cut_energy_set
+    __swig_getmethods__["cut_energy"] = _sim3dlong.LJAttractRepulsePair_cut_energy_get
     if _newclass:
-        cutE = _swig_property(_sim3dlong.LJAttractRepulsePair_cutE_get, _sim3dlong.LJAttractRepulsePair_cutE_set)
+        cut_energy = _swig_property(_sim3dlong.LJAttractRepulsePair_cut_energy_get, _sim3dlong.LJAttractRepulsePair_cut_energy_set)
     __swig_setmethods__["atom1"] = _sim3dlong.LJAttractRepulsePair_atom1_set
     __swig_getmethods__["atom1"] = _sim3dlong.LJAttractRepulsePair_atom1_get
     if _newclass:
@@ -9551,8 +9478,8 @@ class LJAttractRepulsePair(_object):
     if _newclass:
         atom2 = _swig_property(_sim3dlong.LJAttractRepulsePair_atom2_get, _sim3dlong.LJAttractRepulsePair_atom2_set)
 
-    def __init__(self, a1: 'LJAttractRepulseAtom', a2: 'LJAttractRepulseAtom'):
-        """__init__(LJAttractRepulsePair self, LJAttractRepulseAtom a1, LJAttractRepulseAtom a2) -> LJAttractRepulsePair"""
+    def __init__(self, a1: 'IEpsSigCutAtom', a2: 'IEpsSigCutAtom'):
+        """__init__(LJAttractRepulsePair self, IEpsSigCutAtom a1, IEpsSigCutAtom a2) -> LJAttractRepulsePair"""
         this = _sim3dlong.new_LJAttractRepulsePair(a1, a2)
         try:
             self.this.append(this)
@@ -9573,63 +9500,63 @@ class LJAttractRepulsePair(_object):
 LJAttractRepulsePair_swigregister = _sim3dlong.LJAttractRepulsePair_swigregister
 LJAttractRepulsePair_swigregister(LJAttractRepulsePair)
 
-class LJAttractFixedRepulseAtom(atomid):
-    """Proxy of C++ LJAttractFixedRepulseAtom class"""
+class IEpsRepsSigCutAtom(AtomID):
+    """Proxy of C++ IEpsRepsSigCutAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractFixedRepulseAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IEpsRepsSigCutAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractFixedRepulseAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, IEpsRepsSigCutAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["epsilons"] = _sim3dlong.LJAttractFixedRepulseAtom_epsilons_set
-    __swig_getmethods__["epsilons"] = _sim3dlong.LJAttractFixedRepulseAtom_epsilons_get
+    __swig_setmethods__["epsilons"] = _sim3dlong.IEpsRepsSigCutAtom_epsilons_set
+    __swig_getmethods__["epsilons"] = _sim3dlong.IEpsRepsSigCutAtom_epsilons_get
     if _newclass:
-        epsilons = _swig_property(_sim3dlong.LJAttractFixedRepulseAtom_epsilons_get, _sim3dlong.LJAttractFixedRepulseAtom_epsilons_set)
-    __swig_setmethods__["repeps"] = _sim3dlong.LJAttractFixedRepulseAtom_repeps_set
-    __swig_getmethods__["repeps"] = _sim3dlong.LJAttractFixedRepulseAtom_repeps_get
+        epsilons = _swig_property(_sim3dlong.IEpsRepsSigCutAtom_epsilons_get, _sim3dlong.IEpsRepsSigCutAtom_epsilons_set)
+    __swig_setmethods__["repeps"] = _sim3dlong.IEpsRepsSigCutAtom_repeps_set
+    __swig_getmethods__["repeps"] = _sim3dlong.IEpsRepsSigCutAtom_repeps_get
     if _newclass:
-        repeps = _swig_property(_sim3dlong.LJAttractFixedRepulseAtom_repeps_get, _sim3dlong.LJAttractFixedRepulseAtom_repeps_set)
-    __swig_setmethods__["sig"] = _sim3dlong.LJAttractFixedRepulseAtom_sig_set
-    __swig_getmethods__["sig"] = _sim3dlong.LJAttractFixedRepulseAtom_sig_get
+        repeps = _swig_property(_sim3dlong.IEpsRepsSigCutAtom_repeps_get, _sim3dlong.IEpsRepsSigCutAtom_repeps_set)
+    __swig_setmethods__["sig"] = _sim3dlong.IEpsRepsSigCutAtom_sig_set
+    __swig_getmethods__["sig"] = _sim3dlong.IEpsRepsSigCutAtom_sig_get
     if _newclass:
-        sig = _swig_property(_sim3dlong.LJAttractFixedRepulseAtom_sig_get, _sim3dlong.LJAttractFixedRepulseAtom_sig_set)
-    __swig_setmethods__["indx"] = _sim3dlong.LJAttractFixedRepulseAtom_indx_set
-    __swig_getmethods__["indx"] = _sim3dlong.LJAttractFixedRepulseAtom_indx_get
+        sig = _swig_property(_sim3dlong.IEpsRepsSigCutAtom_sig_get, _sim3dlong.IEpsRepsSigCutAtom_sig_set)
+    __swig_setmethods__["indx"] = _sim3dlong.IEpsRepsSigCutAtom_indx_set
+    __swig_getmethods__["indx"] = _sim3dlong.IEpsRepsSigCutAtom_indx_get
     if _newclass:
-        indx = _swig_property(_sim3dlong.LJAttractFixedRepulseAtom_indx_get, _sim3dlong.LJAttractFixedRepulseAtom_indx_set)
-    __swig_setmethods__["sigcut"] = _sim3dlong.LJAttractFixedRepulseAtom_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.LJAttractFixedRepulseAtom_sigcut_get
+        indx = _swig_property(_sim3dlong.IEpsRepsSigCutAtom_indx_get, _sim3dlong.IEpsRepsSigCutAtom_indx_set)
+    __swig_setmethods__["sigcut"] = _sim3dlong.IEpsRepsSigCutAtom_sigcut_set
+    __swig_getmethods__["sigcut"] = _sim3dlong.IEpsRepsSigCutAtom_sigcut_get
     if _newclass:
-        sigcut = _swig_property(_sim3dlong.LJAttractFixedRepulseAtom_sigcut_get, _sim3dlong.LJAttractFixedRepulseAtom_sigcut_set)
+        sigcut = _swig_property(_sim3dlong.IEpsRepsSigCutAtom_sigcut_get, _sim3dlong.IEpsRepsSigCutAtom_sigcut_set)
 
     def __init__(self, *args):
         """
-        __init__(LJAttractFixedRepulseAtom self) -> LJAttractFixedRepulseAtom
-        __init__(LJAttractFixedRepulseAtom self, atomid a, ldvector epsilons, flt repeps, flt sigma, uint indx, flt cut) -> LJAttractFixedRepulseAtom
-        __init__(LJAttractFixedRepulseAtom self, atomid a, LJAttractFixedRepulseAtom other) -> LJAttractFixedRepulseAtom
+        __init__(IEpsRepsSigCutAtom self) -> IEpsRepsSigCutAtom
+        __init__(IEpsRepsSigCutAtom self, AtomID a, ldvector epsilons, flt repeps, flt sigma, uint indx, flt cut) -> IEpsRepsSigCutAtom
+        __init__(IEpsRepsSigCutAtom self, AtomID a, IEpsRepsSigCutAtom other) -> IEpsRepsSigCutAtom
         """
-        this = _sim3dlong.new_LJAttractFixedRepulseAtom(*args)
+        this = _sim3dlong.new_IEpsRepsSigCutAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def getEpsilon(self, other: 'LJAttractFixedRepulseAtom') -> "flt":
-        """getEpsilon(LJAttractFixedRepulseAtom self, LJAttractFixedRepulseAtom other) -> flt"""
-        return _sim3dlong.LJAttractFixedRepulseAtom_getEpsilon(self, other)
+    def get_epsilon(self, other: 'IEpsRepsSigCutAtom') -> "flt":
+        """get_epsilon(IEpsRepsSigCutAtom self, IEpsRepsSigCutAtom other) -> flt"""
+        return _sim3dlong.IEpsRepsSigCutAtom_get_epsilon(self, other)
 
 
-    def maxsize(self) -> "flt":
-        """maxsize(LJAttractFixedRepulseAtom self) -> flt"""
-        return _sim3dlong.LJAttractFixedRepulseAtom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(IEpsRepsSigCutAtom self) -> flt"""
+        return _sim3dlong.IEpsRepsSigCutAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJAttractFixedRepulseAtom
+    __swig_destroy__ = _sim3dlong.delete_IEpsRepsSigCutAtom
     __del__ = lambda self: None
-LJAttractFixedRepulseAtom_swigregister = _sim3dlong.LJAttractFixedRepulseAtom_swigregister
-LJAttractFixedRepulseAtom_swigregister(LJAttractFixedRepulseAtom)
+IEpsRepsSigCutAtom_swigregister = _sim3dlong.IEpsRepsSigCutAtom_swigregister
+IEpsRepsSigCutAtom_swigregister(IEpsRepsSigCutAtom)
 
 class LJAttractFixedRepulsePair(_object):
     """Proxy of C++ LJAttractFixedRepulsePair class"""
@@ -9650,14 +9577,14 @@ class LJAttractFixedRepulsePair(_object):
     __swig_getmethods__["sig"] = _sim3dlong.LJAttractFixedRepulsePair_sig_get
     if _newclass:
         sig = _swig_property(_sim3dlong.LJAttractFixedRepulsePair_sig_get, _sim3dlong.LJAttractFixedRepulsePair_sig_set)
-    __swig_setmethods__["cutR"] = _sim3dlong.LJAttractFixedRepulsePair_cutR_set
-    __swig_getmethods__["cutR"] = _sim3dlong.LJAttractFixedRepulsePair_cutR_get
+    __swig_setmethods__["cut_distance"] = _sim3dlong.LJAttractFixedRepulsePair_cut_distance_set
+    __swig_getmethods__["cut_distance"] = _sim3dlong.LJAttractFixedRepulsePair_cut_distance_get
     if _newclass:
-        cutR = _swig_property(_sim3dlong.LJAttractFixedRepulsePair_cutR_get, _sim3dlong.LJAttractFixedRepulsePair_cutR_set)
-    __swig_setmethods__["cutE"] = _sim3dlong.LJAttractFixedRepulsePair_cutE_set
-    __swig_getmethods__["cutE"] = _sim3dlong.LJAttractFixedRepulsePair_cutE_get
+        cut_distance = _swig_property(_sim3dlong.LJAttractFixedRepulsePair_cut_distance_get, _sim3dlong.LJAttractFixedRepulsePair_cut_distance_set)
+    __swig_setmethods__["cut_energy"] = _sim3dlong.LJAttractFixedRepulsePair_cut_energy_set
+    __swig_getmethods__["cut_energy"] = _sim3dlong.LJAttractFixedRepulsePair_cut_energy_get
     if _newclass:
-        cutE = _swig_property(_sim3dlong.LJAttractFixedRepulsePair_cutE_get, _sim3dlong.LJAttractFixedRepulsePair_cutE_set)
+        cut_energy = _swig_property(_sim3dlong.LJAttractFixedRepulsePair_cut_energy_get, _sim3dlong.LJAttractFixedRepulsePair_cut_energy_set)
     __swig_setmethods__["attract"] = _sim3dlong.LJAttractFixedRepulsePair_attract_set
     __swig_getmethods__["attract"] = _sim3dlong.LJAttractFixedRepulsePair_attract_get
     if _newclass:
@@ -9674,7 +9601,7 @@ class LJAttractFixedRepulsePair(_object):
     def __init__(self, *args):
         """
         __init__(LJAttractFixedRepulsePair self) -> LJAttractFixedRepulsePair
-        __init__(LJAttractFixedRepulsePair self, LJAttractFixedRepulseAtom a1, LJAttractFixedRepulseAtom a2) -> LJAttractFixedRepulsePair
+        __init__(LJAttractFixedRepulsePair self, IEpsRepsSigCutAtom a1, IEpsRepsSigCutAtom a2) -> LJAttractFixedRepulsePair
         """
         this = _sim3dlong.new_LJAttractFixedRepulsePair(*args)
         try:
@@ -9696,74 +9623,14 @@ class LJAttractFixedRepulsePair(_object):
 LJAttractFixedRepulsePair_swigregister = _sim3dlong.LJAttractFixedRepulsePair_swigregister
 LJAttractFixedRepulsePair_swigregister(LJAttractFixedRepulsePair)
 
-class LJDoubleAtom(LJatom):
-    """Proxy of C++ LJDoubleAtom class"""
-    __swig_setmethods__ = {}
-    for _s in [LJatom]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJDoubleAtom, name, value)
-    __swig_getmethods__ = {}
-    for _s in [LJatom]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJDoubleAtom, name)
-    __repr__ = _swig_repr
-    __swig_setmethods__["epsrep"] = _sim3dlong.LJDoubleAtom_epsrep_set
-    __swig_getmethods__["epsrep"] = _sim3dlong.LJDoubleAtom_epsrep_get
-    if _newclass:
-        epsrep = _swig_property(_sim3dlong.LJDoubleAtom_epsrep_get, _sim3dlong.LJDoubleAtom_epsrep_set)
-    __swig_setmethods__["sigcut"] = _sim3dlong.LJDoubleAtom_sigcut_set
-    __swig_getmethods__["sigcut"] = _sim3dlong.LJDoubleAtom_sigcut_get
-    if _newclass:
-        sigcut = _swig_property(_sim3dlong.LJDoubleAtom_sigcut_get, _sim3dlong.LJDoubleAtom_sigcut_set)
-
-    def __init__(self, *args):
-        """
-        __init__(LJDoubleAtom self) -> LJDoubleAtom
-        __init__(LJDoubleAtom self, flt epsilon, flt epsrep, flt sigma, atomid a, flt cut) -> LJDoubleAtom
-        __init__(LJDoubleAtom self, atomid a, LJDoubleAtom other) -> LJDoubleAtom
-        """
-        this = _sim3dlong.new_LJDoubleAtom(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-    __swig_destroy__ = _sim3dlong.delete_LJDoubleAtom
-    __del__ = lambda self: None
-LJDoubleAtom_swigregister = _sim3dlong.LJDoubleAtom_swigregister
-LJDoubleAtom_swigregister(LJDoubleAtom)
-
-class LJDoublePair(LJAttractFixedRepulsePair):
-    """Proxy of C++ LJDoublePair class"""
-    __swig_setmethods__ = {}
-    for _s in [LJAttractFixedRepulsePair]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJDoublePair, name, value)
-    __swig_getmethods__ = {}
-    for _s in [LJAttractFixedRepulsePair]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJDoublePair, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, a1: 'LJDoubleAtom', a2: 'LJDoubleAtom'):
-        """__init__(LJDoublePair self, LJDoubleAtom a1, LJDoubleAtom a2) -> LJDoublePair"""
-        this = _sim3dlong.new_LJDoublePair(a1, a2)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-    __swig_destroy__ = _sim3dlong.delete_LJDoublePair
-    __del__ = lambda self: None
-LJDoublePair_swigregister = _sim3dlong.LJDoublePair_swigregister
-LJDoublePair_swigregister(LJDoublePair)
-
-class EisMclachlanAtom(atomid):
+class EisMclachlanAtom(AtomID):
     """Proxy of C++ EisMclachlanAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, EisMclachlanAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, EisMclachlanAtom, name)
     __repr__ = _swig_repr
@@ -9779,8 +9646,8 @@ class EisMclachlanAtom(atomid):
     def __init__(self, *args):
         """
         __init__(EisMclachlanAtom self) -> EisMclachlanAtom
-        __init__(EisMclachlanAtom self, flt dist, flt sigmai, atomid a) -> EisMclachlanAtom
-        __init__(EisMclachlanAtom self, atomid a, EisMclachlanAtom other) -> EisMclachlanAtom
+        __init__(EisMclachlanAtom self, AtomID a, flt dist, flt sigmai) -> EisMclachlanAtom
+        __init__(EisMclachlanAtom self, AtomID a, EisMclachlanAtom other) -> EisMclachlanAtom
         """
         this = _sim3dlong.new_EisMclachlanAtom(*args)
         try:
@@ -9788,9 +9655,9 @@ class EisMclachlanAtom(atomid):
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(EisMclachlanAtom self) -> flt"""
-        return _sim3dlong.EisMclachlanAtom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(EisMclachlanAtom self) -> flt"""
+        return _sim3dlong.EisMclachlanAtom_max_size(self)
 
     __swig_destroy__ = _sim3dlong.delete_EisMclachlanAtom
     __del__ = lambda self: None
@@ -9851,59 +9718,51 @@ class EisMclachlanPair(_object):
 EisMclachlanPair_swigregister = _sim3dlong.EisMclachlanPair_swigregister
 EisMclachlanPair_swigregister(EisMclachlanPair)
 
-class HertzianAtom(atomid):
-    """Proxy of C++ HertzianAtom class"""
+class EpsSigExpAtom(AtomID):
+    """Proxy of C++ EpsSigExpAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EpsSigExpAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, EpsSigExpAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["eps"] = _sim3dlong.HertzianAtom_eps_set
-    __swig_getmethods__["eps"] = _sim3dlong.HertzianAtom_eps_get
+    __swig_setmethods__["eps"] = _sim3dlong.EpsSigExpAtom_eps_set
+    __swig_getmethods__["eps"] = _sim3dlong.EpsSigExpAtom_eps_get
     if _newclass:
-        eps = _swig_property(_sim3dlong.HertzianAtom_eps_get, _sim3dlong.HertzianAtom_eps_set)
-    __swig_setmethods__["sigma"] = _sim3dlong.HertzianAtom_sigma_set
-    __swig_getmethods__["sigma"] = _sim3dlong.HertzianAtom_sigma_get
+        eps = _swig_property(_sim3dlong.EpsSigExpAtom_eps_get, _sim3dlong.EpsSigExpAtom_eps_set)
+    __swig_setmethods__["sigma"] = _sim3dlong.EpsSigExpAtom_sigma_set
+    __swig_getmethods__["sigma"] = _sim3dlong.EpsSigExpAtom_sigma_get
     if _newclass:
-        sigma = _swig_property(_sim3dlong.HertzianAtom_sigma_get, _sim3dlong.HertzianAtom_sigma_set)
-    __swig_setmethods__["exponent"] = _sim3dlong.HertzianAtom_exponent_set
-    __swig_getmethods__["exponent"] = _sim3dlong.HertzianAtom_exponent_get
+        sigma = _swig_property(_sim3dlong.EpsSigExpAtom_sigma_get, _sim3dlong.EpsSigExpAtom_sigma_set)
+    __swig_setmethods__["exponent"] = _sim3dlong.EpsSigExpAtom_exponent_set
+    __swig_getmethods__["exponent"] = _sim3dlong.EpsSigExpAtom_exponent_get
     if _newclass:
-        exponent = _swig_property(_sim3dlong.HertzianAtom_exponent_get, _sim3dlong.HertzianAtom_exponent_set)
+        exponent = _swig_property(_sim3dlong.EpsSigExpAtom_exponent_get, _sim3dlong.EpsSigExpAtom_exponent_set)
 
     def __init__(self, *args):
         """
-        __init__(HertzianAtom self) -> HertzianAtom
-        __init__(HertzianAtom self, atomid a, flt eps, flt sigma, flt exponent=2.5) -> HertzianAtom
-        __init__(HertzianAtom self, atomid a, flt eps, flt sigma) -> HertzianAtom
-        __init__(HertzianAtom self, atomid a, HertzianAtom other) -> HertzianAtom
+        __init__(EpsSigExpAtom self) -> EpsSigExpAtom
+        __init__(EpsSigExpAtom self, AtomID a, flt eps, flt sigma, flt exponent) -> EpsSigExpAtom
+        __init__(EpsSigExpAtom self, AtomID a, EpsSigExpAtom other) -> EpsSigExpAtom
         """
-        this = _sim3dlong.new_HertzianAtom(*args)
+        this = _sim3dlong.new_EpsSigExpAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(HertzianAtom self) -> flt"""
-        return _sim3dlong.HertzianAtom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(EpsSigExpAtom self) -> flt"""
+        return _sim3dlong.EpsSigExpAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianAtom
+    __swig_destroy__ = _sim3dlong.delete_EpsSigExpAtom
     __del__ = lambda self: None
-HertzianAtom_swigregister = _sim3dlong.HertzianAtom_swigregister
-HertzianAtom_swigregister(HertzianAtom)
+EpsSigExpAtom_swigregister = _sim3dlong.EpsSigExpAtom_swigregister
+EpsSigExpAtom_swigregister(EpsSigExpAtom)
 
-
-def hertzd(a: 'atomid', eps: 'double', sigma: 'double', exponent: 'double'=2.5) -> "HertzianAtom":
-    """
-    hertzd(atomid a, double eps, double sigma, double exponent=2.5) -> HertzianAtom
-    hertzd(atomid a, double eps, double sigma) -> HertzianAtom
-    """
-    return _sim3dlong.hertzd(a, eps, sigma, exponent)
 class EnergyForce(_object):
     """Proxy of C++ EnergyForce class"""
     __swig_setmethods__ = {}
@@ -9932,241 +9791,241 @@ class EnergyForce(_object):
 EnergyForce_swigregister = _sim3dlong.EnergyForce_swigregister
 EnergyForce_swigregister(EnergyForce)
 
-class HertzianAtomIndexed(atomid):
-    """Proxy of C++ HertzianAtomIndexed class"""
+class IEpsISigExpAtom(AtomID):
+    """Proxy of C++ IEpsISigExpAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianAtomIndexed, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, IEpsISigExpAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianAtomIndexed, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, IEpsISigExpAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["epsilons"] = _sim3dlong.HertzianAtomIndexed_epsilons_set
-    __swig_getmethods__["epsilons"] = _sim3dlong.HertzianAtomIndexed_epsilons_get
+    __swig_setmethods__["epsilons"] = _sim3dlong.IEpsISigExpAtom_epsilons_set
+    __swig_getmethods__["epsilons"] = _sim3dlong.IEpsISigExpAtom_epsilons_get
     if _newclass:
-        epsilons = _swig_property(_sim3dlong.HertzianAtomIndexed_epsilons_get, _sim3dlong.HertzianAtomIndexed_epsilons_set)
-    __swig_setmethods__["sigmas"] = _sim3dlong.HertzianAtomIndexed_sigmas_set
-    __swig_getmethods__["sigmas"] = _sim3dlong.HertzianAtomIndexed_sigmas_get
+        epsilons = _swig_property(_sim3dlong.IEpsISigExpAtom_epsilons_get, _sim3dlong.IEpsISigExpAtom_epsilons_set)
+    __swig_setmethods__["sigmas"] = _sim3dlong.IEpsISigExpAtom_sigmas_set
+    __swig_getmethods__["sigmas"] = _sim3dlong.IEpsISigExpAtom_sigmas_get
     if _newclass:
-        sigmas = _swig_property(_sim3dlong.HertzianAtomIndexed_sigmas_get, _sim3dlong.HertzianAtomIndexed_sigmas_set)
-    __swig_setmethods__["exponent"] = _sim3dlong.HertzianAtomIndexed_exponent_set
-    __swig_getmethods__["exponent"] = _sim3dlong.HertzianAtomIndexed_exponent_get
+        sigmas = _swig_property(_sim3dlong.IEpsISigExpAtom_sigmas_get, _sim3dlong.IEpsISigExpAtom_sigmas_set)
+    __swig_setmethods__["exponent"] = _sim3dlong.IEpsISigExpAtom_exponent_set
+    __swig_getmethods__["exponent"] = _sim3dlong.IEpsISigExpAtom_exponent_get
     if _newclass:
-        exponent = _swig_property(_sim3dlong.HertzianAtomIndexed_exponent_get, _sim3dlong.HertzianAtomIndexed_exponent_set)
-    __swig_setmethods__["indx"] = _sim3dlong.HertzianAtomIndexed_indx_set
-    __swig_getmethods__["indx"] = _sim3dlong.HertzianAtomIndexed_indx_get
+        exponent = _swig_property(_sim3dlong.IEpsISigExpAtom_exponent_get, _sim3dlong.IEpsISigExpAtom_exponent_set)
+    __swig_setmethods__["indx"] = _sim3dlong.IEpsISigExpAtom_indx_set
+    __swig_getmethods__["indx"] = _sim3dlong.IEpsISigExpAtom_indx_get
     if _newclass:
-        indx = _swig_property(_sim3dlong.HertzianAtomIndexed_indx_get, _sim3dlong.HertzianAtomIndexed_indx_set)
+        indx = _swig_property(_sim3dlong.IEpsISigExpAtom_indx_get, _sim3dlong.IEpsISigExpAtom_indx_set)
 
     def __init__(self, *args):
         """
-        __init__(HertzianAtomIndexed self) -> HertzianAtomIndexed
-        __init__(HertzianAtomIndexed self, atomid a, ldvector epsilons, ldvector sigmas, uint indx, flt exponent=2.5) -> HertzianAtomIndexed
-        __init__(HertzianAtomIndexed self, atomid a, ldvector epsilons, ldvector sigmas, uint indx) -> HertzianAtomIndexed
-        __init__(HertzianAtomIndexed self, atomid a, LJAtomIndexed other) -> HertzianAtomIndexed
+        __init__(IEpsISigExpAtom self) -> IEpsISigExpAtom
+        __init__(IEpsISigExpAtom self, AtomID a, ldvector epsilons, ldvector sigmas, uint indx, flt exponent=2.5) -> IEpsISigExpAtom
+        __init__(IEpsISigExpAtom self, AtomID a, ldvector epsilons, ldvector sigmas, uint indx) -> IEpsISigExpAtom
+        __init__(IEpsISigExpAtom self, AtomID a, IEpsISigCutAtom other) -> IEpsISigExpAtom
         """
-        this = _sim3dlong.new_HertzianAtomIndexed(*args)
+        this = _sim3dlong.new_IEpsISigExpAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def getEpsilon(self, other: 'HertzianAtomIndexed') -> "flt":
-        """getEpsilon(HertzianAtomIndexed self, HertzianAtomIndexed other) -> flt"""
-        return _sim3dlong.HertzianAtomIndexed_getEpsilon(self, other)
+    def get_epsilon(self, other: 'IEpsISigExpAtom') -> "flt":
+        """get_epsilon(IEpsISigExpAtom self, IEpsISigExpAtom other) -> flt"""
+        return _sim3dlong.IEpsISigExpAtom_get_epsilon(self, other)
 
 
-    def getSigma(self, other: 'HertzianAtomIndexed') -> "flt":
-        """getSigma(HertzianAtomIndexed self, HertzianAtomIndexed other) -> flt"""
-        return _sim3dlong.HertzianAtomIndexed_getSigma(self, other)
+    def get_sigma(self, other: 'IEpsISigExpAtom') -> "flt":
+        """get_sigma(IEpsISigExpAtom self, IEpsISigExpAtom other) -> flt"""
+        return _sim3dlong.IEpsISigExpAtom_get_sigma(self, other)
 
 
-    def maxsize(self) -> "flt":
-        """maxsize(HertzianAtomIndexed self) -> flt"""
-        return _sim3dlong.HertzianAtomIndexed_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(IEpsISigExpAtom self) -> flt"""
+        return _sim3dlong.IEpsISigExpAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianAtomIndexed
+    __swig_destroy__ = _sim3dlong.delete_IEpsISigExpAtom
     __del__ = lambda self: None
-HertzianAtomIndexed_swigregister = _sim3dlong.HertzianAtomIndexed_swigregister
-HertzianAtomIndexed_swigregister(HertzianAtomIndexed)
+IEpsISigExpAtom_swigregister = _sim3dlong.IEpsISigExpAtom_swigregister
+IEpsISigExpAtom_swigregister(IEpsISigExpAtom)
 
-class HertzianPair(_object):
-    """Proxy of C++ HertzianPair class"""
+class RepulsionPair(_object):
+    """Proxy of C++ RepulsionPair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianPair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RepulsionPair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianPair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, RepulsionPair, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["eps"] = _sim3dlong.HertzianPair_eps_set
-    __swig_getmethods__["eps"] = _sim3dlong.HertzianPair_eps_get
+    __swig_setmethods__["eps"] = _sim3dlong.RepulsionPair_eps_set
+    __swig_getmethods__["eps"] = _sim3dlong.RepulsionPair_eps_get
     if _newclass:
-        eps = _swig_property(_sim3dlong.HertzianPair_eps_get, _sim3dlong.HertzianPair_eps_set)
-    __swig_setmethods__["sig"] = _sim3dlong.HertzianPair_sig_set
-    __swig_getmethods__["sig"] = _sim3dlong.HertzianPair_sig_get
+        eps = _swig_property(_sim3dlong.RepulsionPair_eps_get, _sim3dlong.RepulsionPair_eps_set)
+    __swig_setmethods__["sig"] = _sim3dlong.RepulsionPair_sig_set
+    __swig_getmethods__["sig"] = _sim3dlong.RepulsionPair_sig_get
     if _newclass:
-        sig = _swig_property(_sim3dlong.HertzianPair_sig_get, _sim3dlong.HertzianPair_sig_set)
-    __swig_setmethods__["exponent"] = _sim3dlong.HertzianPair_exponent_set
-    __swig_getmethods__["exponent"] = _sim3dlong.HertzianPair_exponent_get
+        sig = _swig_property(_sim3dlong.RepulsionPair_sig_get, _sim3dlong.RepulsionPair_sig_set)
+    __swig_setmethods__["exponent"] = _sim3dlong.RepulsionPair_exponent_set
+    __swig_getmethods__["exponent"] = _sim3dlong.RepulsionPair_exponent_get
     if _newclass:
-        exponent = _swig_property(_sim3dlong.HertzianPair_exponent_get, _sim3dlong.HertzianPair_exponent_set)
-    __swig_setmethods__["atom1"] = _sim3dlong.HertzianPair_atom1_set
-    __swig_getmethods__["atom1"] = _sim3dlong.HertzianPair_atom1_get
+        exponent = _swig_property(_sim3dlong.RepulsionPair_exponent_get, _sim3dlong.RepulsionPair_exponent_set)
+    __swig_setmethods__["atom1"] = _sim3dlong.RepulsionPair_atom1_set
+    __swig_getmethods__["atom1"] = _sim3dlong.RepulsionPair_atom1_get
     if _newclass:
-        atom1 = _swig_property(_sim3dlong.HertzianPair_atom1_get, _sim3dlong.HertzianPair_atom1_set)
-    __swig_setmethods__["atom2"] = _sim3dlong.HertzianPair_atom2_set
-    __swig_getmethods__["atom2"] = _sim3dlong.HertzianPair_atom2_get
+        atom1 = _swig_property(_sim3dlong.RepulsionPair_atom1_get, _sim3dlong.RepulsionPair_atom1_set)
+    __swig_setmethods__["atom2"] = _sim3dlong.RepulsionPair_atom2_set
+    __swig_getmethods__["atom2"] = _sim3dlong.RepulsionPair_atom2_get
     if _newclass:
-        atom2 = _swig_property(_sim3dlong.HertzianPair_atom2_get, _sim3dlong.HertzianPair_atom2_set)
+        atom2 = _swig_property(_sim3dlong.RepulsionPair_atom2_get, _sim3dlong.RepulsionPair_atom2_set)
 
     def __init__(self, *args):
         """
-        __init__(HertzianPair self, HertzianAtom a1, HertzianAtom a2) -> HertzianPair
-        __init__(HertzianPair self, HertzianAtomIndexed a1, HertzianAtomIndexed a2) -> HertzianPair
+        __init__(RepulsionPair self, EpsSigExpAtom a1, EpsSigExpAtom a2) -> RepulsionPair
+        __init__(RepulsionPair self, IEpsISigExpAtom a1, IEpsISigExpAtom a2) -> RepulsionPair
         """
-        this = _sim3dlong.new_HertzianPair(*args)
+        this = _sim3dlong.new_RepulsionPair(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(HertzianPair self, Box box) -> flt"""
-        return _sim3dlong.HertzianPair_energy(self, box)
+        """energy(RepulsionPair self, Box box) -> flt"""
+        return _sim3dlong.RepulsionPair_energy(self, box)
 
 
     def forces(self, box: 'Box') -> "Vec":
-        """forces(HertzianPair self, Box box) -> Vec"""
-        return _sim3dlong.HertzianPair_forces(self, box)
+        """forces(RepulsionPair self, Box box) -> Vec"""
+        return _sim3dlong.RepulsionPair_forces(self, box)
 
 
-    def EnergyForces(self, box: 'Box') -> "EnergyForce":
-        """EnergyForces(HertzianPair self, Box box) -> EnergyForce"""
-        return _sim3dlong.HertzianPair_EnergyForces(self, box)
+    def get_energy_forces(self, box: 'Box') -> "EnergyForce":
+        """get_energy_forces(RepulsionPair self, Box box) -> EnergyForce"""
+        return _sim3dlong.RepulsionPair_get_energy_forces(self, box)
 
 
-    def fill(self, box: 'Box', fpair: 'forcepairx') -> "void":
-        """fill(HertzianPair self, Box box, forcepairx fpair)"""
-        return _sim3dlong.HertzianPair_fill(self, box, fpair)
+    def fill(self, box: 'Box', fpair: 'ForcePairX') -> "void":
+        """fill(RepulsionPair self, Box box, ForcePairX fpair)"""
+        return _sim3dlong.RepulsionPair_fill(self, box, fpair)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianPair
+    __swig_destroy__ = _sim3dlong.delete_RepulsionPair
     __del__ = lambda self: None
-HertzianPair_swigregister = _sim3dlong.HertzianPair_swigregister
-HertzianPair_swigregister(HertzianPair)
+RepulsionPair_swigregister = _sim3dlong.RepulsionPair_swigregister
+RepulsionPair_swigregister(RepulsionPair)
 
-class HertzianDragAtom(atomid):
-    """Proxy of C++ HertzianDragAtom class"""
+class EpsSigExpDragAtom(AtomID):
+    """Proxy of C++ EpsSigExpDragAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianDragAtom, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EpsSigExpDragAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianDragAtom, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, EpsSigExpDragAtom, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["eps"] = _sim3dlong.HertzianDragAtom_eps_set
-    __swig_getmethods__["eps"] = _sim3dlong.HertzianDragAtom_eps_get
+    __swig_setmethods__["eps"] = _sim3dlong.EpsSigExpDragAtom_eps_set
+    __swig_getmethods__["eps"] = _sim3dlong.EpsSigExpDragAtom_eps_get
     if _newclass:
-        eps = _swig_property(_sim3dlong.HertzianDragAtom_eps_get, _sim3dlong.HertzianDragAtom_eps_set)
-    __swig_setmethods__["sigma"] = _sim3dlong.HertzianDragAtom_sigma_set
-    __swig_getmethods__["sigma"] = _sim3dlong.HertzianDragAtom_sigma_get
+        eps = _swig_property(_sim3dlong.EpsSigExpDragAtom_eps_get, _sim3dlong.EpsSigExpDragAtom_eps_set)
+    __swig_setmethods__["sigma"] = _sim3dlong.EpsSigExpDragAtom_sigma_set
+    __swig_getmethods__["sigma"] = _sim3dlong.EpsSigExpDragAtom_sigma_get
     if _newclass:
-        sigma = _swig_property(_sim3dlong.HertzianDragAtom_sigma_get, _sim3dlong.HertzianDragAtom_sigma_set)
-    __swig_setmethods__["exponent"] = _sim3dlong.HertzianDragAtom_exponent_set
-    __swig_getmethods__["exponent"] = _sim3dlong.HertzianDragAtom_exponent_get
+        sigma = _swig_property(_sim3dlong.EpsSigExpDragAtom_sigma_get, _sim3dlong.EpsSigExpDragAtom_sigma_set)
+    __swig_setmethods__["exponent"] = _sim3dlong.EpsSigExpDragAtom_exponent_set
+    __swig_getmethods__["exponent"] = _sim3dlong.EpsSigExpDragAtom_exponent_get
     if _newclass:
-        exponent = _swig_property(_sim3dlong.HertzianDragAtom_exponent_get, _sim3dlong.HertzianDragAtom_exponent_set)
-    __swig_setmethods__["gamma"] = _sim3dlong.HertzianDragAtom_gamma_set
-    __swig_getmethods__["gamma"] = _sim3dlong.HertzianDragAtom_gamma_get
+        exponent = _swig_property(_sim3dlong.EpsSigExpDragAtom_exponent_get, _sim3dlong.EpsSigExpDragAtom_exponent_set)
+    __swig_setmethods__["gamma"] = _sim3dlong.EpsSigExpDragAtom_gamma_set
+    __swig_getmethods__["gamma"] = _sim3dlong.EpsSigExpDragAtom_gamma_get
     if _newclass:
-        gamma = _swig_property(_sim3dlong.HertzianDragAtom_gamma_get, _sim3dlong.HertzianDragAtom_gamma_set)
+        gamma = _swig_property(_sim3dlong.EpsSigExpDragAtom_gamma_get, _sim3dlong.EpsSigExpDragAtom_gamma_set)
 
     def __init__(self, *args):
         """
-        __init__(HertzianDragAtom self) -> HertzianDragAtom
-        __init__(HertzianDragAtom self, atomid a, flt eps, flt sigma, flt gamma, flt exponent=2.5) -> HertzianDragAtom
-        __init__(HertzianDragAtom self, atomid a, flt eps, flt sigma, flt gamma) -> HertzianDragAtom
-        __init__(HertzianDragAtom self, atomid a, HertzianDragAtom other) -> HertzianDragAtom
+        __init__(EpsSigExpDragAtom self) -> EpsSigExpDragAtom
+        __init__(EpsSigExpDragAtom self, AtomID a, flt eps, flt sigma, flt gamma, flt exponent=2.5) -> EpsSigExpDragAtom
+        __init__(EpsSigExpDragAtom self, AtomID a, flt eps, flt sigma, flt gamma) -> EpsSigExpDragAtom
+        __init__(EpsSigExpDragAtom self, AtomID a, EpsSigExpDragAtom other) -> EpsSigExpDragAtom
         """
-        this = _sim3dlong.new_HertzianDragAtom(*args)
+        this = _sim3dlong.new_EpsSigExpDragAtom(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(HertzianDragAtom self) -> flt"""
-        return _sim3dlong.HertzianDragAtom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(EpsSigExpDragAtom self) -> flt"""
+        return _sim3dlong.EpsSigExpDragAtom_max_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianDragAtom
+    __swig_destroy__ = _sim3dlong.delete_EpsSigExpDragAtom
     __del__ = lambda self: None
-HertzianDragAtom_swigregister = _sim3dlong.HertzianDragAtom_swigregister
-HertzianDragAtom_swigregister(HertzianDragAtom)
+EpsSigExpDragAtom_swigregister = _sim3dlong.EpsSigExpDragAtom_swigregister
+EpsSigExpDragAtom_swigregister(EpsSigExpDragAtom)
 
-class HertzianDragPair(_object):
-    """Proxy of C++ HertzianDragPair class"""
+class RepulsionDragPair(_object):
+    """Proxy of C++ RepulsionDragPair class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianDragPair, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RepulsionDragPair, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianDragPair, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, RepulsionDragPair, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["eps"] = _sim3dlong.HertzianDragPair_eps_set
-    __swig_getmethods__["eps"] = _sim3dlong.HertzianDragPair_eps_get
+    __swig_setmethods__["eps"] = _sim3dlong.RepulsionDragPair_eps_set
+    __swig_getmethods__["eps"] = _sim3dlong.RepulsionDragPair_eps_get
     if _newclass:
-        eps = _swig_property(_sim3dlong.HertzianDragPair_eps_get, _sim3dlong.HertzianDragPair_eps_set)
-    __swig_setmethods__["sig"] = _sim3dlong.HertzianDragPair_sig_set
-    __swig_getmethods__["sig"] = _sim3dlong.HertzianDragPair_sig_get
+        eps = _swig_property(_sim3dlong.RepulsionDragPair_eps_get, _sim3dlong.RepulsionDragPair_eps_set)
+    __swig_setmethods__["sig"] = _sim3dlong.RepulsionDragPair_sig_set
+    __swig_getmethods__["sig"] = _sim3dlong.RepulsionDragPair_sig_get
     if _newclass:
-        sig = _swig_property(_sim3dlong.HertzianDragPair_sig_get, _sim3dlong.HertzianDragPair_sig_set)
-    __swig_setmethods__["exponent"] = _sim3dlong.HertzianDragPair_exponent_set
-    __swig_getmethods__["exponent"] = _sim3dlong.HertzianDragPair_exponent_get
+        sig = _swig_property(_sim3dlong.RepulsionDragPair_sig_get, _sim3dlong.RepulsionDragPair_sig_set)
+    __swig_setmethods__["exponent"] = _sim3dlong.RepulsionDragPair_exponent_set
+    __swig_getmethods__["exponent"] = _sim3dlong.RepulsionDragPair_exponent_get
     if _newclass:
-        exponent = _swig_property(_sim3dlong.HertzianDragPair_exponent_get, _sim3dlong.HertzianDragPair_exponent_set)
-    __swig_setmethods__["gamma"] = _sim3dlong.HertzianDragPair_gamma_set
-    __swig_getmethods__["gamma"] = _sim3dlong.HertzianDragPair_gamma_get
+        exponent = _swig_property(_sim3dlong.RepulsionDragPair_exponent_get, _sim3dlong.RepulsionDragPair_exponent_set)
+    __swig_setmethods__["gamma"] = _sim3dlong.RepulsionDragPair_gamma_set
+    __swig_getmethods__["gamma"] = _sim3dlong.RepulsionDragPair_gamma_get
     if _newclass:
-        gamma = _swig_property(_sim3dlong.HertzianDragPair_gamma_get, _sim3dlong.HertzianDragPair_gamma_set)
-    __swig_setmethods__["atom1"] = _sim3dlong.HertzianDragPair_atom1_set
-    __swig_getmethods__["atom1"] = _sim3dlong.HertzianDragPair_atom1_get
+        gamma = _swig_property(_sim3dlong.RepulsionDragPair_gamma_get, _sim3dlong.RepulsionDragPair_gamma_set)
+    __swig_setmethods__["atom1"] = _sim3dlong.RepulsionDragPair_atom1_set
+    __swig_getmethods__["atom1"] = _sim3dlong.RepulsionDragPair_atom1_get
     if _newclass:
-        atom1 = _swig_property(_sim3dlong.HertzianDragPair_atom1_get, _sim3dlong.HertzianDragPair_atom1_set)
-    __swig_setmethods__["atom2"] = _sim3dlong.HertzianDragPair_atom2_set
-    __swig_getmethods__["atom2"] = _sim3dlong.HertzianDragPair_atom2_get
+        atom1 = _swig_property(_sim3dlong.RepulsionDragPair_atom1_get, _sim3dlong.RepulsionDragPair_atom1_set)
+    __swig_setmethods__["atom2"] = _sim3dlong.RepulsionDragPair_atom2_set
+    __swig_getmethods__["atom2"] = _sim3dlong.RepulsionDragPair_atom2_get
     if _newclass:
-        atom2 = _swig_property(_sim3dlong.HertzianDragPair_atom2_get, _sim3dlong.HertzianDragPair_atom2_set)
+        atom2 = _swig_property(_sim3dlong.RepulsionDragPair_atom2_get, _sim3dlong.RepulsionDragPair_atom2_set)
 
-    def __init__(self, a1: 'HertzianDragAtom', a2: 'HertzianDragAtom'):
-        """__init__(HertzianDragPair self, HertzianDragAtom a1, HertzianDragAtom a2) -> HertzianDragPair"""
-        this = _sim3dlong.new_HertzianDragPair(a1, a2)
+    def __init__(self, a1: 'EpsSigExpDragAtom', a2: 'EpsSigExpDragAtom'):
+        """__init__(RepulsionDragPair self, EpsSigExpDragAtom a1, EpsSigExpDragAtom a2) -> RepulsionDragPair"""
+        this = _sim3dlong.new_RepulsionDragPair(a1, a2)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(HertzianDragPair self, Box box) -> flt"""
-        return _sim3dlong.HertzianDragPair_energy(self, box)
+        """energy(RepulsionDragPair self, Box box) -> flt"""
+        return _sim3dlong.RepulsionDragPair_energy(self, box)
 
 
     def forces(self, box: 'Box') -> "Vec":
-        """forces(HertzianDragPair self, Box box) -> Vec"""
-        return _sim3dlong.HertzianDragPair_forces(self, box)
+        """forces(RepulsionDragPair self, Box box) -> Vec"""
+        return _sim3dlong.RepulsionDragPair_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianDragPair
+    __swig_destroy__ = _sim3dlong.delete_RepulsionDragPair
     __del__ = lambda self: None
-HertzianDragPair_swigregister = _sim3dlong.HertzianDragPair_swigregister
-HertzianDragPair_swigregister(HertzianDragPair)
+RepulsionDragPair_swigregister = _sim3dlong.RepulsionDragPair_swigregister
+RepulsionDragPair_swigregister(RepulsionDragPair)
 
-class LoisOhernAtom(atomid):
+class LoisOhernAtom(AtomID):
     """Proxy of C++ LoisOhernAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LoisOhernAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LoisOhernAtom, name)
     __repr__ = _swig_repr
@@ -10190,8 +10049,8 @@ class LoisOhernAtom(atomid):
     def __init__(self, *args):
         """
         __init__(LoisOhernAtom self) -> LoisOhernAtom
-        __init__(LoisOhernAtom self, atomid a, flt eps, flt sigma, flt C, flt l) -> LoisOhernAtom
-        __init__(LoisOhernAtom self, atomid a, LoisOhernAtom other) -> LoisOhernAtom
+        __init__(LoisOhernAtom self, AtomID a, flt eps, flt sigma, flt C, flt l) -> LoisOhernAtom
+        __init__(LoisOhernAtom self, AtomID a, LoisOhernAtom other) -> LoisOhernAtom
         """
         this = _sim3dlong.new_LoisOhernAtom(*args)
         try:
@@ -10199,9 +10058,9 @@ class LoisOhernAtom(atomid):
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(LoisOhernAtom self) -> flt"""
-        return _sim3dlong.LoisOhernAtom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(LoisOhernAtom self) -> flt"""
+        return _sim3dlong.LoisOhernAtom_max_size(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisOhernAtom
     __del__ = lambda self: None
@@ -10293,14 +10152,14 @@ class LoisOhernPairMinCLs(LoisOhernPair):
 LoisOhernPairMinCLs_swigregister = _sim3dlong.LoisOhernPairMinCLs_swigregister
 LoisOhernPairMinCLs_swigregister(LoisOhernPairMinCLs)
 
-class LoisLinAtom(atomid):
+class LoisLinAtom(AtomID):
     """Proxy of C++ LoisLinAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LoisLinAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomid]:
+    for _s in [AtomID]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LoisLinAtom, name)
     __repr__ = _swig_repr
@@ -10324,8 +10183,8 @@ class LoisLinAtom(atomid):
     def __init__(self, *args):
         """
         __init__(LoisLinAtom self) -> LoisLinAtom
-        __init__(LoisLinAtom self, atomid a, flt eps, flt sigma, flt depth, flt width) -> LoisLinAtom
-        __init__(LoisLinAtom self, atomid a, LoisLinAtom other) -> LoisLinAtom
+        __init__(LoisLinAtom self, AtomID a, flt eps, flt sigma, flt depth, flt width) -> LoisLinAtom
+        __init__(LoisLinAtom self, AtomID a, LoisLinAtom other) -> LoisLinAtom
         """
         this = _sim3dlong.new_LoisLinAtom(*args)
         try:
@@ -10333,9 +10192,9 @@ class LoisLinAtom(atomid):
         except:
             self.this = this
 
-    def maxsize(self) -> "flt":
-        """maxsize(LoisLinAtom self) -> flt"""
-        return _sim3dlong.LoisLinAtom_maxsize(self)
+    def max_size(self) -> "flt":
+        """max_size(LoisLinAtom self) -> flt"""
+        return _sim3dlong.LoisLinAtom_max_size(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisLinAtom
     __del__ = lambda self: None
@@ -10427,82 +10286,14 @@ class LoisLinPairMin(LoisLinPair):
 LoisLinPairMin_swigregister = _sim3dlong.LoisLinPairMin_swigregister
 LoisLinPairMin_swigregister(LoisLinPairMin)
 
-class LJsimple(interaction):
-    """Proxy of C++ LJsimple class"""
-    __swig_setmethods__ = {}
-    for _s in [interaction]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJsimple, name, value)
-    __swig_getmethods__ = {}
-    for _s in [interaction]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJsimple, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(LJsimple self, flt cutoffdist, std::vector< LJatom > atms) -> LJsimple
-        __init__(LJsimple self, flt cutoffdist) -> LJsimple
-        """
-        this = _sim3dlong.new_LJsimple(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def add(self, *args) -> "void":
-        """
-        add(LJsimple self, LJatom a)
-        add(LJsimple self, atomid a, flt epsilon, flt sigma)
-        """
-        return _sim3dlong.LJsimple_add(self, *args)
-
-
-    def ignore(self, *args) -> "void":
-        """
-        ignore(LJsimple self, atomid a, atomid b)
-        ignore(LJsimple self, atom a, atom b)
-        """
-        return _sim3dlong.LJsimple_ignore(self, *args)
-
-
-    def ignore_size(self) -> "uint":
-        """ignore_size(LJsimple self) -> uint"""
-        return _sim3dlong.LJsimple_ignore_size(self)
-
-
-    def atoms_size(self) -> "uint":
-        """atoms_size(LJsimple self) -> uint"""
-        return _sim3dlong.LJsimple_atoms_size(self)
-
-
-    def energy(self, box: 'Box') -> "flt":
-        """energy(LJsimple self, Box box) -> flt"""
-        return _sim3dlong.LJsimple_energy(self, box)
-
-
-    def pressure(self, box: 'Box') -> "flt":
-        """pressure(LJsimple self, Box box) -> flt"""
-        return _sim3dlong.LJsimple_pressure(self, box)
-
-
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJsimple self, Box box)"""
-        return _sim3dlong.LJsimple_setForces(self, box)
-
-    __swig_destroy__ = _sim3dlong.delete_LJsimple
-    __del__ = lambda self: None
-LJsimple_swigregister = _sim3dlong.LJsimple_swigregister
-LJsimple_swigregister(LJsimple)
-
-class Charges(interaction):
+class Charges(Interaction):
     """Proxy of C++ Charges class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, Charges, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, Charges, name)
     __repr__ = _swig_repr
@@ -10522,15 +10313,15 @@ class Charges(interaction):
     def add(self, *args) -> "void":
         """
         add(Charges self, Charged a)
-        add(Charges self, atomid a, flt q)
+        add(Charges self, AtomID a, flt q)
         """
         return _sim3dlong.Charges_add(self, *args)
 
 
     def ignore(self, *args) -> "void":
         """
-        ignore(Charges self, atomid a, atomid b)
-        ignore(Charges self, atom a, atom b)
+        ignore(Charges self, AtomID a, AtomID b)
+        ignore(Charges self, Atom a, Atom b)
         """
         return _sim3dlong.Charges_ignore(self, *args)
 
@@ -10555,23 +10346,23 @@ class Charges(interaction):
         return _sim3dlong.Charges_pressure(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(Charges self, Box box)"""
-        return _sim3dlong.Charges_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(Charges self, Box box)"""
+        return _sim3dlong.Charges_set_forces(self, box)
 
     __swig_destroy__ = _sim3dlong.delete_Charges
     __del__ = lambda self: None
 Charges_swigregister = _sim3dlong.Charges_swigregister
 Charges_swigregister(Charges)
 
-class WallAtom(atomref):
+class WallAtom(AtomRef):
     """Proxy of C++ WallAtom class"""
     __swig_setmethods__ = {}
-    for _s in [atomref]:
+    for _s in [AtomRef]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, WallAtom, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomref]:
+    for _s in [AtomRef]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, WallAtom, name)
     __repr__ = _swig_repr
@@ -10584,10 +10375,10 @@ class WallAtom(atomref):
     if _newclass:
         epsilon = _swig_property(_sim3dlong.WallAtom_epsilon_get, _sim3dlong.WallAtom_epsilon_set)
 
-    def __init__(self, a: 'atomid', sigma: 'flt', epsilon: 'flt'=1.0):
+    def __init__(self, a: 'AtomID', sigma: 'flt', epsilon: 'flt'=1.0):
         """
-        __init__(WallAtom self, atomid a, flt sigma, flt epsilon=1.0) -> WallAtom
-        __init__(WallAtom self, atomid a, flt sigma) -> WallAtom
+        __init__(WallAtom self, AtomID a, flt sigma, flt epsilon=1.0) -> WallAtom
+        __init__(WallAtom self, AtomID a, flt sigma) -> WallAtom
         """
         this = _sim3dlong.new_WallAtom(a, sigma, epsilon)
         try:
@@ -10599,14 +10390,14 @@ class WallAtom(atomref):
 WallAtom_swigregister = _sim3dlong.WallAtom_swigregister
 WallAtom_swigregister(WallAtom)
 
-class SoftWall(interaction):
+class SoftWall(Interaction):
     """Proxy of C++ SoftWall class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SoftWall, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SoftWall, name)
     __repr__ = _swig_repr
@@ -10632,14 +10423,14 @@ class SoftWall(interaction):
         return _sim3dlong.SoftWall_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(SoftWall self, Box box)"""
-        return _sim3dlong.SoftWall_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(SoftWall self, Box box)"""
+        return _sim3dlong.SoftWall_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(SoftWall self, Box box) -> flt"""
-        return _sim3dlong.SoftWall_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(SoftWall self, Box box) -> flt"""
+        return _sim3dlong.SoftWall_set_forces_get_pressure(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -10647,24 +10438,24 @@ class SoftWall(interaction):
         return _sim3dlong.SoftWall_pressure(self, box)
 
 
-    def setLoc(self, newloc: 'Vec') -> "void":
-        """setLoc(SoftWall self, Vec newloc)"""
-        return _sim3dlong.SoftWall_setLoc(self, newloc)
+    def set_location(self, newloc: 'Vec') -> "void":
+        """set_location(SoftWall self, Vec newloc)"""
+        return _sim3dlong.SoftWall_set_location(self, newloc)
 
 
-    def getLoc(self) -> "Vec":
-        """getLoc(SoftWall self) -> Vec"""
-        return _sim3dlong.SoftWall_getLoc(self)
+    def get_location(self) -> "Vec":
+        """get_location(SoftWall self) -> Vec"""
+        return _sim3dlong.SoftWall_get_location(self)
 
 
-    def setNorm(self, newNorm: 'Vec') -> "void":
-        """setNorm(SoftWall self, Vec newNorm)"""
-        return _sim3dlong.SoftWall_setNorm(self, newNorm)
+    def set_normal(self, newNorm: 'Vec') -> "void":
+        """set_normal(SoftWall self, Vec newNorm)"""
+        return _sim3dlong.SoftWall_set_normal(self, newNorm)
 
 
-    def getNorm(self) -> "Vec":
-        """getNorm(SoftWall self) -> Vec"""
-        return _sim3dlong.SoftWall_getNorm(self)
+    def get_normal(self) -> "Vec":
+        """get_normal(SoftWall self) -> Vec"""
+        return _sim3dlong.SoftWall_get_normal(self)
 
 
     def get_last_f(self) -> "flt":
@@ -10676,14 +10467,14 @@ class SoftWall(interaction):
 SoftWall_swigregister = _sim3dlong.SoftWall_swigregister
 SoftWall_swigregister(SoftWall)
 
-class SoftWallCylinder(interaction):
+class SoftWallCylinder(Interaction):
     """Proxy of C++ SoftWallCylinder class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SoftWallCylinder, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SoftWallCylinder, name)
     __repr__ = _swig_repr
@@ -10709,14 +10500,14 @@ class SoftWallCylinder(interaction):
         return _sim3dlong.SoftWallCylinder_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(SoftWallCylinder self, Box box)"""
-        return _sim3dlong.SoftWallCylinder_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(SoftWallCylinder self, Box box)"""
+        return _sim3dlong.SoftWallCylinder_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(SoftWallCylinder self, Box box) -> flt"""
-        return _sim3dlong.SoftWallCylinder_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(SoftWallCylinder self, Box box) -> flt"""
+        return _sim3dlong.SoftWallCylinder_set_forces_get_pressure(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -10724,24 +10515,24 @@ class SoftWallCylinder(interaction):
         return _sim3dlong.SoftWallCylinder_pressure(self, box)
 
 
-    def setLoc(self, new_loc: 'Vec') -> "void":
-        """setLoc(SoftWallCylinder self, Vec new_loc)"""
-        return _sim3dlong.SoftWallCylinder_setLoc(self, new_loc)
+    def set_location(self, new_loc: 'Vec') -> "void":
+        """set_location(SoftWallCylinder self, Vec new_loc)"""
+        return _sim3dlong.SoftWallCylinder_set_location(self, new_loc)
 
 
-    def getLoc(self) -> "Vec":
-        """getLoc(SoftWallCylinder self) -> Vec"""
-        return _sim3dlong.SoftWallCylinder_getLoc(self)
+    def get_location(self) -> "Vec":
+        """get_location(SoftWallCylinder self) -> Vec"""
+        return _sim3dlong.SoftWallCylinder_get_location(self)
 
 
-    def setAxis(self, new_axis: 'Vec') -> "void":
-        """setAxis(SoftWallCylinder self, Vec new_axis)"""
-        return _sim3dlong.SoftWallCylinder_setAxis(self, new_axis)
+    def set_axis(self, new_axis: 'Vec') -> "void":
+        """set_axis(SoftWallCylinder self, Vec new_axis)"""
+        return _sim3dlong.SoftWallCylinder_set_axis(self, new_axis)
 
 
-    def getAxis(self) -> "Vec":
-        """getAxis(SoftWallCylinder self) -> Vec"""
-        return _sim3dlong.SoftWallCylinder_getAxis(self)
+    def get_axis(self) -> "Vec":
+        """get_axis(SoftWallCylinder self) -> Vec"""
+        return _sim3dlong.SoftWallCylinder_get_axis(self)
 
 
     def get_last_f(self) -> "flt":
@@ -10754,57 +10545,57 @@ SoftWallCylinder_swigregister = _sim3dlong.SoftWallCylinder_swigregister
 SoftWallCylinder_swigregister(SoftWallCylinder)
 
 
-def confineRange(minimum: 'flt', val: 'flt', maximum: 'flt') -> "flt":
-    """confineRange(flt minimum, flt val, flt maximum) -> flt"""
-    return _sim3dlong.confineRange(minimum, val, maximum)
-class SCatomvec(atomgroup):
-    """Proxy of C++ SCatomvec class"""
+def confine_range(minimum: 'flt', val: 'flt', maximum: 'flt') -> "flt":
+    """confine_range(flt minimum, flt val, flt maximum) -> flt"""
+    return _sim3dlong.confine_range(minimum, val, maximum)
+class SCAtomVec(AtomGroup):
+    """Proxy of C++ SCAtomVec class"""
     __swig_setmethods__ = {}
-    for _s in [atomgroup]:
+    for _s in [AtomGroup]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, SCatomvec, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, SCAtomVec, name, value)
     __swig_getmethods__ = {}
-    for _s in [atomgroup]:
+    for _s in [AtomGroup]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, SCatomvec, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, SCAtomVec, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(SCatomvec self, dvector masses) -> SCatomvec
-        __init__(SCatomvec self, uint N, flt mass) -> SCatomvec
+        __init__(SCAtomVec self, dvector masses) -> SCAtomVec
+        __init__(SCAtomVec self, uint N, flt mass) -> SCAtomVec
         """
-        this = _sim3dlong.new_SCatomvec(*args)
+        this = _sim3dlong.new_SCAtomVec(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def vec(self) -> "atomvec &":
-        """vec(SCatomvec self) -> atomvec"""
-        return _sim3dlong.SCatomvec_vec(self)
+    def vec(self) -> "AtomVec &":
+        """vec(SCAtomVec self) -> AtomVec"""
+        return _sim3dlong.SCAtomVec_vec(self)
 
 
-    def get_id(self, n: 'cuint') -> "atomid":
-        """get_id(SCatomvec self, cuint n) -> atomid"""
-        return _sim3dlong.SCatomvec_get_id(self, n)
+    def get_id(self, n: 'cuint') -> "AtomID":
+        """get_id(SCAtomVec self, cuint n) -> AtomID"""
+        return _sim3dlong.SCAtomVec_get_id(self, n)
 
 
-    def pair(self, n: 'cuint') -> "idpair":
-        """pair(SCatomvec self, cuint n) -> idpair"""
-        return _sim3dlong.SCatomvec_pair(self, n)
+    def pair(self, n: 'cuint') -> "IDPair":
+        """pair(SCAtomVec self, cuint n) -> IDPair"""
+        return _sim3dlong.SCAtomVec_pair(self, n)
 
 
     def size(self) -> "uint":
-        """size(SCatomvec self) -> uint"""
-        return _sim3dlong.SCatomvec_size(self)
+        """size(SCAtomVec self) -> uint"""
+        return _sim3dlong.SCAtomVec_size(self)
 
 
     def pairs(self) -> "uint":
-        """pairs(SCatomvec self) -> uint"""
-        return _sim3dlong.SCatomvec_pairs(self)
+        """pairs(SCAtomVec self) -> uint"""
+        return _sim3dlong.SCAtomVec_pairs(self)
 
-    __swig_destroy__ = _sim3dlong.delete_SCatomvec
+    __swig_destroy__ = _sim3dlong.delete_SCAtomVec
     __del__ = lambda self: None
 
     def __iter__(self):
@@ -10821,8 +10612,11 @@ class SCatomvec(atomgroup):
     def __getitem__(self, obj):
         return self.get_id(obj)
 
-SCatomvec_swigregister = _sim3dlong.SCatomvec_swigregister
-SCatomvec_swigregister(SCatomvec)
+    def __str__(self):
+        return str(list(self))
+
+SCAtomVec_swigregister = _sim3dlong.SCAtomVec_swigregister
+SCAtomVec_swigregister(SCAtomVec)
 
 class SpheroCylinderDiff(_object):
     """Proxy of C++ SpheroCylinderDiff class"""
@@ -10886,8 +10680,8 @@ class SCPair(_object):
 
     def __init__(self, *args):
         """
-        __init__(SCPair self, idpair p1, idpair p2, flt l1, flt l2) -> SCPair
-        __init__(SCPair self, idpair p1, idpair p2, flt l) -> SCPair
+        __init__(SCPair self, IDPair p1, IDPair p2, flt l1, flt l2) -> SCPair
+        __init__(SCPair self, IDPair p1, IDPair p2, flt l) -> SCPair
         __init__(SCPair self, SCPair other) -> SCPair
         """
         this = _sim3dlong.new_SCPair(*args)
@@ -10896,17 +10690,17 @@ class SCPair(_object):
         except:
             self.this = this
 
-    def NearestLoc(self, box: 'Box') -> "SpheroCylinderDiff":
-        """NearestLoc(SCPair self, Box box) -> SpheroCylinderDiff"""
-        return _sim3dlong.SCPair_NearestLoc(self, box)
+    def nearest_location(self, box: 'Box') -> "SpheroCylinderDiff":
+        """nearest_location(SCPair self, Box box) -> SpheroCylinderDiff"""
+        return _sim3dlong.SCPair_nearest_location(self, box)
 
 
-    def applyForce(self, *args) -> "void":
+    def apply_force(self, *args) -> "void":
         """
-        applyForce(SCPair self, Box box, Vec f, SpheroCylinderDiff diff, flt I1, flt I2)
-        applyForce(SCPair self, Box box, Vec f, SpheroCylinderDiff diff, flt I)
+        apply_force(SCPair self, Box box, Vec f, SpheroCylinderDiff diff, flt I1, flt I2)
+        apply_force(SCPair self, Box box, Vec f, SpheroCylinderDiff diff, flt I)
         """
-        return _sim3dlong.SCPair_applyForce(self, *args)
+        return _sim3dlong.SCPair_apply_force(self, *args)
 
     __swig_destroy__ = _sim3dlong.delete_SCPair
     __del__ = lambda self: None
@@ -10935,8 +10729,8 @@ class SCSpringPair(SCPair):
 
     def __init__(self, *args):
         """
-        __init__(SCSpringPair self, idpair p1, idpair p2, flt eps, flt sig, flt l1, flt l2) -> SCSpringPair
-        __init__(SCSpringPair self, idpair p1, idpair p2, flt eps, flt sig, flt l) -> SCSpringPair
+        __init__(SCSpringPair self, IDPair p1, IDPair p2, flt eps, flt sig, flt l1, flt l2) -> SCSpringPair
+        __init__(SCSpringPair self, IDPair p1, IDPair p2, flt eps, flt sig, flt l) -> SCSpringPair
         """
         this = _sim3dlong.new_SCSpringPair(*args)
         try:
@@ -10944,14 +10738,14 @@ class SCSpringPair(SCPair):
         except:
             self.this = this
 
-    def maxdist(self) -> "flt":
-        """maxdist(SCSpringPair self) -> flt"""
-        return _sim3dlong.SCSpringPair_maxdist(self)
+    def max_dist(self) -> "flt":
+        """max_dist(SCSpringPair self) -> flt"""
+        return _sim3dlong.SCSpringPair_max_dist(self)
 
 
-    def maxdelta(self) -> "flt":
-        """maxdelta(SCSpringPair self) -> flt"""
-        return _sim3dlong.SCSpringPair_maxdelta(self)
+    def max_delta(self) -> "flt":
+        """max_delta(SCSpringPair self) -> flt"""
+        return _sim3dlong.SCSpringPair_max_delta(self)
 
 
     def energy(self, box: 'Box', diff: 'SpheroCylinderDiff') -> "flt":
@@ -10968,22 +10762,22 @@ class SCSpringPair(SCPair):
 SCSpringPair_swigregister = _sim3dlong.SCSpringPair_swigregister
 SCSpringPair_swigregister(SCSpringPair)
 
-class SCSpringList(interaction):
+class SCSpringList(Interaction):
     """Proxy of C++ SCSpringList class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SCSpringList, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SCSpringList, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(SCSpringList self, SCatomvec scs, flt eps, flt sig, flt l) -> SCSpringList
-        __init__(SCSpringList self, SCatomvec scs, flt eps, flt sig, ldvector ls) -> SCSpringList
+        __init__(SCSpringList self, SCAtomVec scs, flt eps, flt sig, flt l) -> SCSpringList
+        __init__(SCSpringList self, SCAtomVec scs, flt eps, flt sig, ldvector ls) -> SCSpringList
         """
         this = _sim3dlong.new_SCSpringList(*args)
         try:
@@ -10996,14 +10790,14 @@ class SCSpringList(interaction):
         return _sim3dlong.SCSpringList_energy(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(SCSpringList self, Box box)"""
-        return _sim3dlong.SCSpringList_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(SCSpringList self, Box box)"""
+        return _sim3dlong.SCSpringList_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(SCSpringList self, Box box) -> flt"""
-        return _sim3dlong.SCSpringList_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(SCSpringList self, Box box) -> flt"""
+        return _sim3dlong.SCSpringList_set_forces_get_pressure(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
@@ -11014,7 +10808,7 @@ class SCSpringList(interaction):
     def ignore(self, *args) -> "void":
         """
         ignore(SCSpringList self, uint n1, uint n2)
-        ignore(SCSpringList self, atomid a1, atomid a2)
+        ignore(SCSpringList self, AtomID a1, AtomID a2)
         """
         return _sim3dlong.SCSpringList_ignore(self, *args)
 
@@ -11023,299 +10817,299 @@ class SCSpringList(interaction):
 SCSpringList_swigregister = _sim3dlong.SCSpringList_swigregister
 SCSpringList_swigregister(SCSpringList)
 
-class constraint(_object):
-    """Proxy of C++ constraint class"""
+class Constraint(_object):
+    """Proxy of C++ Constraint class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, constraint, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Constraint, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, constraint, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Constraint, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
     def apply_positions(self, box: 'Box') -> "void":
-        """apply_positions(constraint self, Box box)"""
-        return _sim3dlong.constraint_apply_positions(self, box)
+        """apply_positions(Constraint self, Box box)"""
+        return _sim3dlong.Constraint_apply_positions(self, box)
 
 
     def apply_velocities(self, box: 'Box') -> "void":
-        """apply_velocities(constraint self, Box box)"""
-        return _sim3dlong.constraint_apply_velocities(self, box)
+        """apply_velocities(Constraint self, Box box)"""
+        return _sim3dlong.Constraint_apply_velocities(self, box)
 
 
     def apply_forces(self, box: 'Box') -> "void":
-        """apply_forces(constraint self, Box box)"""
-        return _sim3dlong.constraint_apply_forces(self, box)
+        """apply_forces(Constraint self, Box box)"""
+        return _sim3dlong.Constraint_apply_forces(self, box)
 
 
-    def ndof(self) -> "int":
-        """ndof(constraint self) -> int"""
-        return _sim3dlong.constraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(Constraint self) -> int"""
+        return _sim3dlong.Constraint_constrained_dof(self)
 
-    __swig_destroy__ = _sim3dlong.delete_constraint
+    __swig_destroy__ = _sim3dlong.delete_Constraint
     __del__ = lambda self: None
-constraint_swigregister = _sim3dlong.constraint_swigregister
-constraint_swigregister(constraint)
+Constraint_swigregister = _sim3dlong.Constraint_swigregister
+Constraint_swigregister(Constraint)
 
-class coordConstraint(constraint):
-    """Proxy of C++ coordConstraint class"""
+class CoordConstraint(Constraint):
+    """Proxy of C++ CoordConstraint class"""
     __swig_setmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, coordConstraint, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CoordConstraint, name, value)
     __swig_getmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, coordConstraint, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CoordConstraint, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(coordConstraint self, atom atm, bool fixx, bool fixy, bool fixz, Vec loc) -> coordConstraint
-        __init__(coordConstraint self, atom atm, bool fixx, bool fixy, bool fixz) -> coordConstraint
-        __init__(coordConstraint self, atom atm) -> coordConstraint
+        __init__(CoordConstraint self, Atom atm, bool fixx, bool fixy, bool fixz, Vec loc) -> CoordConstraint
+        __init__(CoordConstraint self, Atom atm, bool fixx, bool fixy, bool fixz) -> CoordConstraint
+        __init__(CoordConstraint self, Atom atm) -> CoordConstraint
         """
-        this = _sim3dlong.new_coordConstraint(*args)
+        this = _sim3dlong.new_CoordConstraint(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def ndof(self) -> "int":
-        """ndof(coordConstraint self) -> int"""
-        return _sim3dlong.coordConstraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(CoordConstraint self) -> int"""
+        return _sim3dlong.CoordConstraint_constrained_dof(self)
 
 
     def apply_positions(self, box: 'Box') -> "void":
-        """apply_positions(coordConstraint self, Box box)"""
-        return _sim3dlong.coordConstraint_apply_positions(self, box)
+        """apply_positions(CoordConstraint self, Box box)"""
+        return _sim3dlong.CoordConstraint_apply_positions(self, box)
 
 
     def apply_velocities(self, box: 'Box') -> "void":
-        """apply_velocities(coordConstraint self, Box box)"""
-        return _sim3dlong.coordConstraint_apply_velocities(self, box)
+        """apply_velocities(CoordConstraint self, Box box)"""
+        return _sim3dlong.CoordConstraint_apply_velocities(self, box)
 
 
     def apply_forces(self, box: 'Box') -> "void":
-        """apply_forces(coordConstraint self, Box box)"""
-        return _sim3dlong.coordConstraint_apply_forces(self, box)
+        """apply_forces(CoordConstraint self, Box box)"""
+        return _sim3dlong.CoordConstraint_apply_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_coordConstraint
+    __swig_destroy__ = _sim3dlong.delete_CoordConstraint
     __del__ = lambda self: None
-coordConstraint_swigregister = _sim3dlong.coordConstraint_swigregister
-coordConstraint_swigregister(coordConstraint)
+CoordConstraint_swigregister = _sim3dlong.CoordConstraint_swigregister
+CoordConstraint_swigregister(CoordConstraint)
 
-class coordCOMConstraint(constraint):
-    """Proxy of C++ coordCOMConstraint class"""
+class CoordCOMConstraint(Constraint):
+    """Proxy of C++ CoordCOMConstraint class"""
     __swig_setmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, coordCOMConstraint, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CoordCOMConstraint, name, value)
     __swig_getmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, coordCOMConstraint, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CoordCOMConstraint, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(coordCOMConstraint self, boost::shared_ptr< atomgroup > atm, bool fixx, bool fixy, bool fixz, Vec loc) -> coordCOMConstraint
-        __init__(coordCOMConstraint self, boost::shared_ptr< atomgroup > atm, bool fixx, bool fixy, bool fixz) -> coordCOMConstraint
-        __init__(coordCOMConstraint self, boost::shared_ptr< atomgroup > atm) -> coordCOMConstraint
+        __init__(CoordCOMConstraint self, boost::shared_ptr< AtomGroup > atm, bool fixx, bool fixy, bool fixz, Vec loc) -> CoordCOMConstraint
+        __init__(CoordCOMConstraint self, boost::shared_ptr< AtomGroup > atm, bool fixx, bool fixy, bool fixz) -> CoordCOMConstraint
+        __init__(CoordCOMConstraint self, boost::shared_ptr< AtomGroup > atm) -> CoordCOMConstraint
         """
-        this = _sim3dlong.new_coordCOMConstraint(*args)
+        this = _sim3dlong.new_CoordCOMConstraint(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def ndof(self) -> "int":
-        """ndof(coordCOMConstraint self) -> int"""
-        return _sim3dlong.coordCOMConstraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(CoordCOMConstraint self) -> int"""
+        return _sim3dlong.CoordCOMConstraint_constrained_dof(self)
 
 
     def apply_positions(self, box: 'Box') -> "void":
-        """apply_positions(coordCOMConstraint self, Box box)"""
-        return _sim3dlong.coordCOMConstraint_apply_positions(self, box)
+        """apply_positions(CoordCOMConstraint self, Box box)"""
+        return _sim3dlong.CoordCOMConstraint_apply_positions(self, box)
 
 
     def apply_velocities(self, box: 'Box') -> "void":
-        """apply_velocities(coordCOMConstraint self, Box box)"""
-        return _sim3dlong.coordCOMConstraint_apply_velocities(self, box)
+        """apply_velocities(CoordCOMConstraint self, Box box)"""
+        return _sim3dlong.CoordCOMConstraint_apply_velocities(self, box)
 
 
     def apply_forces(self, box: 'Box') -> "void":
-        """apply_forces(coordCOMConstraint self, Box box)"""
-        return _sim3dlong.coordCOMConstraint_apply_forces(self, box)
+        """apply_forces(CoordCOMConstraint self, Box box)"""
+        return _sim3dlong.CoordCOMConstraint_apply_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_coordCOMConstraint
+    __swig_destroy__ = _sim3dlong.delete_CoordCOMConstraint
     __del__ = lambda self: None
-coordCOMConstraint_swigregister = _sim3dlong.coordCOMConstraint_swigregister
-coordCOMConstraint_swigregister(coordCOMConstraint)
+CoordCOMConstraint_swigregister = _sim3dlong.CoordCOMConstraint_swigregister
+CoordCOMConstraint_swigregister(CoordCOMConstraint)
 
-class relativeConstraint(constraint):
-    """Proxy of C++ relativeConstraint class"""
+class RelativeConstraint(Constraint):
+    """Proxy of C++ RelativeConstraint class"""
     __swig_setmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, relativeConstraint, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RelativeConstraint, name, value)
     __swig_getmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, relativeConstraint, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, RelativeConstraint, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(relativeConstraint self, atom atm1, atom atm2, bool fixx, bool fixy, bool fixz, Vec loc) -> relativeConstraint
-        __init__(relativeConstraint self, atom atm1, atom atm2, bool fixx, bool fixy, bool fixz) -> relativeConstraint
-        __init__(relativeConstraint self, atom atm1, atom atm2) -> relativeConstraint
+        __init__(RelativeConstraint self, Atom atm1, Atom atm2, bool fixx, bool fixy, bool fixz, Vec loc) -> RelativeConstraint
+        __init__(RelativeConstraint self, Atom atm1, Atom atm2, bool fixx, bool fixy, bool fixz) -> RelativeConstraint
+        __init__(RelativeConstraint self, Atom atm1, Atom atm2) -> RelativeConstraint
         """
-        this = _sim3dlong.new_relativeConstraint(*args)
+        this = _sim3dlong.new_RelativeConstraint(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def ndof(self) -> "int":
-        """ndof(relativeConstraint self) -> int"""
-        return _sim3dlong.relativeConstraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(RelativeConstraint self) -> int"""
+        return _sim3dlong.RelativeConstraint_constrained_dof(self)
 
 
     def apply_positions(self, box: 'Box') -> "void":
-        """apply_positions(relativeConstraint self, Box box)"""
-        return _sim3dlong.relativeConstraint_apply_positions(self, box)
+        """apply_positions(RelativeConstraint self, Box box)"""
+        return _sim3dlong.RelativeConstraint_apply_positions(self, box)
 
 
     def apply_velocities(self, box: 'Box') -> "void":
-        """apply_velocities(relativeConstraint self, Box box)"""
-        return _sim3dlong.relativeConstraint_apply_velocities(self, box)
+        """apply_velocities(RelativeConstraint self, Box box)"""
+        return _sim3dlong.RelativeConstraint_apply_velocities(self, box)
 
 
     def apply_forces(self, box: 'Box') -> "void":
-        """apply_forces(relativeConstraint self, Box box)"""
-        return _sim3dlong.relativeConstraint_apply_forces(self, box)
+        """apply_forces(RelativeConstraint self, Box box)"""
+        return _sim3dlong.RelativeConstraint_apply_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_relativeConstraint
+    __swig_destroy__ = _sim3dlong.delete_RelativeConstraint
     __del__ = lambda self: None
-relativeConstraint_swigregister = _sim3dlong.relativeConstraint_swigregister
-relativeConstraint_swigregister(relativeConstraint)
+RelativeConstraint_swigregister = _sim3dlong.RelativeConstraint_swigregister
+RelativeConstraint_swigregister(RelativeConstraint)
 
-class distConstraint(constraint):
-    """Proxy of C++ distConstraint class"""
+class DistConstraint(Constraint):
+    """Proxy of C++ DistConstraint class"""
     __swig_setmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, distConstraint, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, DistConstraint, name, value)
     __swig_getmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, distConstraint, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, DistConstraint, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(distConstraint self, atomid atm1, atomid atm2, flt dist) -> distConstraint
-        __init__(distConstraint self, atomid atm1, atomid atm2) -> distConstraint
+        __init__(DistConstraint self, AtomID atm1, AtomID atm2, flt dist) -> DistConstraint
+        __init__(DistConstraint self, AtomID atm1, AtomID atm2) -> DistConstraint
         """
-        this = _sim3dlong.new_distConstraint(*args)
+        this = _sim3dlong.new_DistConstraint(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def ndof(self) -> "int":
-        """ndof(distConstraint self) -> int"""
-        return _sim3dlong.distConstraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(DistConstraint self) -> int"""
+        return _sim3dlong.DistConstraint_constrained_dof(self)
 
 
     def apply_positions(self, box: 'Box') -> "void":
-        """apply_positions(distConstraint self, Box box)"""
-        return _sim3dlong.distConstraint_apply_positions(self, box)
+        """apply_positions(DistConstraint self, Box box)"""
+        return _sim3dlong.DistConstraint_apply_positions(self, box)
 
 
     def apply_velocities(self, box: 'Box') -> "void":
-        """apply_velocities(distConstraint self, Box box)"""
-        return _sim3dlong.distConstraint_apply_velocities(self, box)
+        """apply_velocities(DistConstraint self, Box box)"""
+        return _sim3dlong.DistConstraint_apply_velocities(self, box)
 
 
     def apply_forces(self, box: 'Box') -> "void":
-        """apply_forces(distConstraint self, Box box)"""
-        return _sim3dlong.distConstraint_apply_forces(self, box)
+        """apply_forces(DistConstraint self, Box box)"""
+        return _sim3dlong.DistConstraint_apply_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_distConstraint
+    __swig_destroy__ = _sim3dlong.delete_DistConstraint
     __del__ = lambda self: None
-distConstraint_swigregister = _sim3dlong.distConstraint_swigregister
-distConstraint_swigregister(distConstraint)
+DistConstraint_swigregister = _sim3dlong.DistConstraint_swigregister
+DistConstraint_swigregister(DistConstraint)
 
-class linearConstraint(constraint):
-    """Proxy of C++ linearConstraint class"""
+class LinearConstraint(Constraint):
+    """Proxy of C++ LinearConstraint class"""
     __swig_setmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, linearConstraint, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LinearConstraint, name, value)
     __swig_getmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, linearConstraint, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LinearConstraint, name)
     __repr__ = _swig_repr
 
-    def __init__(self, atms: 'boost::shared_ptr< atomgroup >', dist: 'flt'):
-        """__init__(linearConstraint self, boost::shared_ptr< atomgroup > atms, flt dist) -> linearConstraint"""
-        this = _sim3dlong.new_linearConstraint(atms, dist)
+    def __init__(self, atms: 'boost::shared_ptr< AtomGroup >', dist: 'flt'):
+        """__init__(LinearConstraint self, boost::shared_ptr< AtomGroup > atms, flt dist) -> LinearConstraint"""
+        this = _sim3dlong.new_LinearConstraint(atms, dist)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def ndof(self) -> "int":
-        """ndof(linearConstraint self) -> int"""
-        return _sim3dlong.linearConstraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(LinearConstraint self) -> int"""
+        return _sim3dlong.LinearConstraint_constrained_dof(self)
 
 
     def apply_positions(self, box: 'Box') -> "void":
-        """apply_positions(linearConstraint self, Box box)"""
-        return _sim3dlong.linearConstraint_apply_positions(self, box)
+        """apply_positions(LinearConstraint self, Box box)"""
+        return _sim3dlong.LinearConstraint_apply_positions(self, box)
 
 
     def apply_velocities(self, box: 'Box') -> "void":
-        """apply_velocities(linearConstraint self, Box box)"""
-        return _sim3dlong.linearConstraint_apply_velocities(self, box)
+        """apply_velocities(LinearConstraint self, Box box)"""
+        return _sim3dlong.LinearConstraint_apply_velocities(self, box)
 
 
     def apply_forces(self, box: 'Box') -> "void":
-        """apply_forces(linearConstraint self, Box box)"""
-        return _sim3dlong.linearConstraint_apply_forces(self, box)
+        """apply_forces(LinearConstraint self, Box box)"""
+        return _sim3dlong.LinearConstraint_apply_forces(self, box)
 
-    __swig_destroy__ = _sim3dlong.delete_linearConstraint
+    __swig_destroy__ = _sim3dlong.delete_LinearConstraint
     __del__ = lambda self: None
-linearConstraint_swigregister = _sim3dlong.linearConstraint_swigregister
-linearConstraint_swigregister(linearConstraint)
+LinearConstraint_swigregister = _sim3dlong.LinearConstraint_swigregister
+LinearConstraint_swigregister(LinearConstraint)
 
-class RigidConstraint(constraint):
+class RigidConstraint(Constraint):
     """Proxy of C++ RigidConstraint class"""
     __swig_setmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RigidConstraint, name, value)
     __swig_getmethods__ = {}
-    for _s in [constraint]:
+    for _s in [Constraint]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RigidConstraint, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', atms: 'boost::shared_ptr< atomgroup >'):
-        """__init__(RigidConstraint self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atms) -> RigidConstraint"""
+    def __init__(self, box: 'boost::shared_ptr< Box >', atms: 'boost::shared_ptr< AtomGroup >'):
+        """__init__(RigidConstraint self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atms) -> RigidConstraint"""
         this = _sim3dlong.new_RigidConstraint(box, atms)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def ndof(self) -> "int":
-        """ndof(RigidConstraint self) -> int"""
-        return _sim3dlong.RigidConstraint_ndof(self)
+    def constrained_dof(self) -> "int":
+        """constrained_dof(RigidConstraint self) -> int"""
+        return _sim3dlong.RigidConstraint_constrained_dof(self)
 
 
     def apply_positions(self, box: 'Box') -> "void":
@@ -11347,20 +11141,20 @@ class RigidConstraint(constraint):
 RigidConstraint_swigregister = _sim3dlong.RigidConstraint_swigregister
 RigidConstraint_swigregister(RigidConstraint)
 
-class ContactTracker(statetracker):
+class ContactTracker(StateTracker):
     """Proxy of C++ ContactTracker class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ContactTracker, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ContactTracker, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', atoms: 'boost::shared_ptr< atomgroup >', dists: 'ldvector'):
-        """__init__(ContactTracker self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, ldvector dists) -> ContactTracker"""
+    def __init__(self, box: 'boost::shared_ptr< Box >', atoms: 'boost::shared_ptr< AtomGroup >', dists: 'ldvector'):
+        """__init__(ContactTracker self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ldvector dists) -> ContactTracker"""
         this = _sim3dlong.new_ContactTracker(box, atoms, dists)
         try:
             self.this.append(this)
@@ -11397,27 +11191,27 @@ ContactTracker_swigregister = _sim3dlong.ContactTracker_swigregister
 ContactTracker_swigregister(ContactTracker)
 
 
-def ContactTrackerD(box: 'boost::shared_ptr< Box >', atoms: 'boost::shared_ptr< atomgroup >', dists: 'dvector') -> "ContactTracker *":
-    """ContactTrackerD(boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, dvector dists) -> ContactTracker"""
+def ContactTrackerD(box: 'boost::shared_ptr< Box >', atoms: 'boost::shared_ptr< AtomGroup >', dists: 'dvector') -> "ContactTracker *":
+    """ContactTrackerD(boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, dvector dists) -> ContactTracker"""
     return _sim3dlong.ContactTrackerD(box, atoms, dists)
-class EnergyTracker(statetracker):
+class EnergyTracker(StateTracker):
     """Proxy of C++ EnergyTracker class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, EnergyTracker, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, EnergyTracker, name)
     __repr__ = _swig_repr
 
-    def __init__(self, atoms: 'boost::shared_ptr< atomgroup >', interactions: 'std::vector< boost::shared_ptr< interaction > >', nskip: 'uint'=1):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', interactions: 'std::vector< boost::shared_ptr< Interaction > >', n_skip: 'uint'=1):
         """
-        __init__(EnergyTracker self, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions, uint nskip=1) -> EnergyTracker
-        __init__(EnergyTracker self, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions) -> EnergyTracker
+        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, uint n_skip=1) -> EnergyTracker
+        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> EnergyTracker
         """
-        this = _sim3dlong.new_EnergyTracker(atoms, interactions, nskip)
+        this = _sim3dlong.new_EnergyTracker(atoms, interactions, n_skip)
         try:
             self.this.append(this)
         except:
@@ -11433,17 +11227,17 @@ class EnergyTracker(statetracker):
         return _sim3dlong.EnergyTracker_reset(self)
 
 
-    def setU0(self, *args) -> "void":
+    def set_U0(self, *args) -> "void":
         """
-        setU0(EnergyTracker self, flt newU0)
-        setU0(EnergyTracker self, Box box)
+        set_U0(EnergyTracker self, flt newU0)
+        set_U0(EnergyTracker self, Box box)
         """
-        return _sim3dlong.EnergyTracker_setU0(self, *args)
+        return _sim3dlong.EnergyTracker_set_U0(self, *args)
 
 
-    def getU0(self) -> "flt":
-        """getU0(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_getU0(self)
+    def get_U0(self) -> "flt":
+        """get_U0(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_get_U0(self)
 
 
     def E(self) -> "flt":
@@ -11461,34 +11255,34 @@ class EnergyTracker(statetracker):
         return _sim3dlong.EnergyTracker_K(self)
 
 
-    def Estd(self) -> "flt":
-        """Estd(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_Estd(self)
+    def E_std(self) -> "flt":
+        """E_std(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_E_std(self)
 
 
-    def Kstd(self) -> "flt":
-        """Kstd(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_Kstd(self)
+    def K_std(self) -> "flt":
+        """K_std(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_K_std(self)
 
 
-    def Ustd(self) -> "flt":
-        """Ustd(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_Ustd(self)
+    def U_std(self) -> "flt":
+        """U_std(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_U_std(self)
 
 
-    def Esqmean(self) -> "flt":
-        """Esqmean(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_Esqmean(self)
+    def E_squared_mean(self) -> "flt":
+        """E_squared_mean(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_E_squared_mean(self)
 
 
-    def Ksqmean(self) -> "flt":
-        """Ksqmean(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_Ksqmean(self)
+    def K_squared_mean(self) -> "flt":
+        """K_squared_mean(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_K_squared_mean(self)
 
 
-    def Usqmean(self) -> "flt":
-        """Usqmean(EnergyTracker self) -> flt"""
-        return _sim3dlong.EnergyTracker_Usqmean(self)
+    def U_squared_mean(self) -> "flt":
+        """U_squared_mean(EnergyTracker self) -> flt"""
+        return _sim3dlong.EnergyTracker_U_squared_mean(self)
 
 
     def n(self) -> "uint":
@@ -11532,21 +11326,21 @@ class RsqTracker1(_object):
     if _newclass:
         count = _swig_property(_sim3dlong.RsqTracker1_count_get, _sim3dlong.RsqTracker1_count_set)
 
-    def __init__(self, atoms: 'atomgroup', skip: 'unsigned long', com: 'Vec'):
-        """__init__(RsqTracker1 self, atomgroup atoms, unsigned long skip, Vec com) -> RsqTracker1"""
+    def __init__(self, atoms: 'AtomGroup', skip: 'unsigned long', com: 'Vec'):
+        """__init__(RsqTracker1 self, AtomGroup atoms, unsigned long skip, Vec com) -> RsqTracker1"""
         this = _sim3dlong.new_RsqTracker1(atoms, skip, com)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def reset(self, atoms: 'atomgroup', com: 'Vec') -> "void":
-        """reset(RsqTracker1 self, atomgroup atoms, Vec com)"""
+    def reset(self, atoms: 'AtomGroup', com: 'Vec') -> "void":
+        """reset(RsqTracker1 self, AtomGroup atoms, Vec com)"""
         return _sim3dlong.RsqTracker1_reset(self, atoms, com)
 
 
-    def update(self, box: 'Box', atoms: 'atomgroup', t: 'unsigned long', com: 'Vec') -> "bool":
-        """update(RsqTracker1 self, Box box, atomgroup atoms, unsigned long t, Vec com) -> bool"""
+    def update(self, box: 'Box', atoms: 'AtomGroup', t: 'unsigned long', com: 'Vec') -> "bool":
+        """update(RsqTracker1 self, Box box, AtomGroup atoms, unsigned long t, Vec com) -> bool"""
         return _sim3dlong.RsqTracker1_update(self, box, atoms, t, com)
 
 
@@ -11579,14 +11373,14 @@ class RsqTracker1(_object):
 RsqTracker1_swigregister = _sim3dlong.RsqTracker1_swigregister
 RsqTracker1_swigregister(RsqTracker1)
 
-class RsqTracker(statetracker):
+class RsqTracker(StateTracker):
     """Proxy of C++ RsqTracker class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RsqTracker, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RsqTracker, name)
     __repr__ = _swig_repr
@@ -11607,10 +11401,10 @@ class RsqTracker(statetracker):
     if _newclass:
         usecom = _swig_property(_sim3dlong.RsqTracker_usecom_get, _sim3dlong.RsqTracker_usecom_set)
 
-    def __init__(self, atoms: 'boost::shared_ptr< atomgroup >', ns: 'ulongvector', usecom: 'bool'=True):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', ns: 'ulongvector', usecom: 'bool'=True):
         """
-        __init__(RsqTracker self, boost::shared_ptr< atomgroup > atoms, ulongvector ns, bool usecom=True) -> RsqTracker
-        __init__(RsqTracker self, boost::shared_ptr< atomgroup > atoms, ulongvector ns) -> RsqTracker
+        __init__(RsqTracker self, boost::shared_ptr< AtomGroup > atoms, ulongvector ns, bool usecom=True) -> RsqTracker
+        __init__(RsqTracker self, boost::shared_ptr< AtomGroup > atoms, ulongvector ns) -> RsqTracker
         """
         this = _sim3dlong.new_RsqTracker(atoms, ns, usecom)
         try:
@@ -11652,19 +11446,6 @@ class RsqTracker(statetracker):
         """counts(RsqTracker self) -> ldvector"""
         return _sim3dlong.RsqTracker_counts(self)
 
-
-    def mean_array(self):
-        import numpy as np
-        l = self.means()
-        l = [[list(v) for v in innerl] for innerl in l]
-        return np.array(l)
-
-    def var_array(self):
-        import numpy as np
-        l = self.vars()
-        l = [[list(v) for v in innerl] for innerl in l]
-        return np.array(l)
-
     __swig_destroy__ = _sim3dlong.delete_RsqTracker
     __del__ = lambda self: None
 RsqTracker_swigregister = _sim3dlong.RsqTracker_swigregister
@@ -11698,21 +11479,21 @@ class ISFTracker1(_object):
     if _newclass:
         count = _swig_property(_sim3dlong.ISFTracker1_count_get, _sim3dlong.ISFTracker1_count_set)
 
-    def __init__(self, atoms: 'atomgroup', skip: 'unsigned long', ks: 'ldvector', com: 'Vec'):
-        """__init__(ISFTracker1 self, atomgroup atoms, unsigned long skip, ldvector ks, Vec com) -> ISFTracker1"""
+    def __init__(self, atoms: 'AtomGroup', skip: 'unsigned long', ks: 'ldvector', com: 'Vec'):
+        """__init__(ISFTracker1 self, AtomGroup atoms, unsigned long skip, ldvector ks, Vec com) -> ISFTracker1"""
         this = _sim3dlong.new_ISFTracker1(atoms, skip, ks, com)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def reset(self, atoms: 'atomgroup', com: 'Vec') -> "void":
-        """reset(ISFTracker1 self, atomgroup atoms, Vec com)"""
+    def reset(self, atoms: 'AtomGroup', com: 'Vec') -> "void":
+        """reset(ISFTracker1 self, AtomGroup atoms, Vec com)"""
         return _sim3dlong.ISFTracker1_reset(self, atoms, com)
 
 
-    def update(self, box: 'Box', atoms: 'atomgroup', t: 'unsigned long', com: 'Vec') -> "bool":
-        """update(ISFTracker1 self, Box box, atomgroup atoms, unsigned long t, Vec com) -> bool"""
+    def update(self, box: 'Box', atoms: 'AtomGroup', t: 'unsigned long', com: 'Vec') -> "bool":
+        """update(ISFTracker1 self, Box box, AtomGroup atoms, unsigned long t, Vec com) -> bool"""
         return _sim3dlong.ISFTracker1_update(self, box, atoms, t, com)
 
 
@@ -11740,14 +11521,14 @@ class ISFTracker1(_object):
 ISFTracker1_swigregister = _sim3dlong.ISFTracker1_swigregister
 ISFTracker1_swigregister(ISFTracker1)
 
-class ISFTracker(statetracker):
+class ISFTracker(StateTracker):
     """Proxy of C++ ISFTracker class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, ISFTracker, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, ISFTracker, name)
     __repr__ = _swig_repr
@@ -11768,10 +11549,10 @@ class ISFTracker(statetracker):
     if _newclass:
         usecom = _swig_property(_sim3dlong.ISFTracker_usecom_get, _sim3dlong.ISFTracker_usecom_set)
 
-    def __init__(self, atoms: 'boost::shared_ptr< atomgroup >', ks: 'ldvector', ns: 'ulongvector', usecom: 'bool'=False):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', ks: 'ldvector', ns: 'ulongvector', usecom: 'bool'=False):
         """
-        __init__(ISFTracker self, boost::shared_ptr< atomgroup > atoms, ldvector ks, ulongvector ns, bool usecom=False) -> ISFTracker
-        __init__(ISFTracker self, boost::shared_ptr< atomgroup > atoms, ldvector ks, ulongvector ns) -> ISFTracker
+        __init__(ISFTracker self, boost::shared_ptr< AtomGroup > atoms, ldvector ks, ulongvector ns, bool usecom=False) -> ISFTracker
+        __init__(ISFTracker self, boost::shared_ptr< AtomGroup > atoms, ldvector ks, ulongvector ns) -> ISFTracker
         """
         this = _sim3dlong.new_ISFTracker(atoms, ks, ns, usecom)
         try:
@@ -11808,14 +11589,14 @@ class ISFTracker(statetracker):
 ISFTracker_swigregister = _sim3dlong.ISFTracker_swigregister
 ISFTracker_swigregister(ISFTracker)
 
-class SmoothLocs(statetracker):
+class SmoothLocs(StateTracker):
     """Proxy of C++ SmoothLocs class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, SmoothLocs, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, SmoothLocs, name)
     __repr__ = _swig_repr
@@ -11852,11 +11633,11 @@ class SmoothLocs(statetracker):
     if _newclass:
         usecom = _swig_property(_sim3dlong.SmoothLocs_usecom_get, _sim3dlong.SmoothLocs_usecom_set)
 
-    def __init__(self, atoms: 'boost::shared_ptr< atomgroup >', box: 'Box', smoothn: 'uint', skipn: 'uint'=1, usecom: 'bool'=False):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', box: 'Box', smoothn: 'uint', skipn: 'uint'=1, usecom: 'bool'=False):
         """
-        __init__(SmoothLocs self, boost::shared_ptr< atomgroup > atoms, Box box, uint smoothn, uint skipn=1, bool usecom=False) -> SmoothLocs
-        __init__(SmoothLocs self, boost::shared_ptr< atomgroup > atoms, Box box, uint smoothn, uint skipn=1) -> SmoothLocs
-        __init__(SmoothLocs self, boost::shared_ptr< atomgroup > atoms, Box box, uint smoothn) -> SmoothLocs
+        __init__(SmoothLocs self, boost::shared_ptr< AtomGroup > atoms, Box box, uint smoothn, uint skipn=1, bool usecom=False) -> SmoothLocs
+        __init__(SmoothLocs self, boost::shared_ptr< AtomGroup > atoms, Box box, uint smoothn, uint skipn=1) -> SmoothLocs
+        __init__(SmoothLocs self, boost::shared_ptr< AtomGroup > atoms, Box box, uint smoothn) -> SmoothLocs
         """
         this = _sim3dlong.new_SmoothLocs(atoms, box, smoothn, skipn, usecom)
         try:
@@ -11883,14 +11664,14 @@ class SmoothLocs(statetracker):
 SmoothLocs_swigregister = _sim3dlong.SmoothLocs_swigregister
 SmoothLocs_swigregister(SmoothLocs)
 
-class RDiffs(statetracker):
+class RDiffs(StateTracker):
     """Proxy of C++ RDiffs class"""
     __swig_setmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, RDiffs, name, value)
     __swig_getmethods__ = {}
-    for _s in [statetracker]:
+    for _s in [StateTracker]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, RDiffs, name)
     __repr__ = _swig_repr
@@ -11919,10 +11700,10 @@ class RDiffs(statetracker):
     if _newclass:
         usecom = _swig_property(_sim3dlong.RDiffs_usecom_get, _sim3dlong.RDiffs_usecom_set)
 
-    def __init__(self, atoms: 'boost::shared_ptr< atomgroup >', skip: 'unsigned long', usecom: 'bool'=False):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', skip: 'unsigned long', usecom: 'bool'=False):
         """
-        __init__(RDiffs self, boost::shared_ptr< atomgroup > atoms, unsigned long skip, bool usecom=False) -> RDiffs
-        __init__(RDiffs self, boost::shared_ptr< atomgroup > atoms, unsigned long skip) -> RDiffs
+        __init__(RDiffs self, boost::shared_ptr< AtomGroup > atoms, unsigned long skip, bool usecom=False) -> RDiffs
+        __init__(RDiffs self, boost::shared_ptr< AtomGroup > atoms, unsigned long skip) -> RDiffs
         """
         this = _sim3dlong.new_RDiffs(atoms, skip, usecom)
         try:
@@ -11954,59 +11735,59 @@ class RDiffs(statetracker):
 RDiffs_swigregister = _sim3dlong.RDiffs_swigregister
 RDiffs_swigregister(RDiffs)
 
-class jamminglist(_object):
-    """Proxy of C++ jamminglist class"""
+class JammingList(_object):
+    """Proxy of C++ JammingList class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, jamminglist, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, JammingList, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, jamminglist, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, JammingList, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["assigned"] = _sim3dlong.jamminglist_assigned_set
-    __swig_getmethods__["assigned"] = _sim3dlong.jamminglist_assigned_get
+    __swig_setmethods__["assigned"] = _sim3dlong.JammingList_assigned_set
+    __swig_getmethods__["assigned"] = _sim3dlong.JammingList_assigned_get
     if _newclass:
-        assigned = _swig_property(_sim3dlong.jamminglist_assigned_get, _sim3dlong.jamminglist_assigned_set)
-    __swig_setmethods__["distsq"] = _sim3dlong.jamminglist_distsq_set
-    __swig_getmethods__["distsq"] = _sim3dlong.jamminglist_distsq_get
+        assigned = _swig_property(_sim3dlong.JammingList_assigned_get, _sim3dlong.JammingList_assigned_set)
+    __swig_setmethods__["distance_squared"] = _sim3dlong.JammingList_distance_squared_set
+    __swig_getmethods__["distance_squared"] = _sim3dlong.JammingList_distance_squared_get
     if _newclass:
-        distsq = _swig_property(_sim3dlong.jamminglist_distsq_get, _sim3dlong.jamminglist_distsq_set)
+        distance_squared = _swig_property(_sim3dlong.JammingList_distance_squared_get, _sim3dlong.JammingList_distance_squared_set)
 
     def __init__(self, *args):
         """
-        __init__(jamminglist self) -> jamminglist
-        __init__(jamminglist self, jamminglist other) -> jamminglist
-        __init__(jamminglist self, jamminglist other, uint expand, flt addeddist) -> jamminglist
+        __init__(JammingList self) -> JammingList
+        __init__(JammingList self, JammingList other) -> JammingList
+        __init__(JammingList self, JammingList other, uint expand, flt addeddist) -> JammingList
         """
-        this = _sim3dlong.new_jamminglist(*args)
+        this = _sim3dlong.new_JammingList(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def size(self) -> "uint":
-        """size(jamminglist self) -> uint"""
-        return _sim3dlong.jamminglist_size(self)
+        """size(JammingList self) -> uint"""
+        return _sim3dlong.JammingList_size(self)
 
 
-    def __lt__(self, other: 'jamminglist') -> "bool":
-        """__lt__(jamminglist self, jamminglist other) -> bool"""
-        return _sim3dlong.jamminglist___lt__(self, other)
+    def __lt__(self, other: 'JammingList') -> "bool":
+        """__lt__(JammingList self, JammingList other) -> bool"""
+        return _sim3dlong.JammingList___lt__(self, other)
 
-    __swig_destroy__ = _sim3dlong.delete_jamminglist
+    __swig_destroy__ = _sim3dlong.delete_JammingList
     __del__ = lambda self: None
-jamminglist_swigregister = _sim3dlong.jamminglist_swigregister
-jamminglist_swigregister(jamminglist)
+JammingList_swigregister = _sim3dlong.JammingList_swigregister
+JammingList_swigregister(JammingList)
 
-class jammingtree(_object):
-    """Proxy of C++ jammingtree class"""
+class JammingTree(_object):
+    """Proxy of C++ JammingTree class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, jammingtree, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, JammingTree, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, jammingtree, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, JammingTree, name)
     __repr__ = _swig_repr
 
     def __init__(self, box: 'boost::shared_ptr< Box >', A: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,3 > &'):
-        """__init__(jammingtree self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,3 > & A, Eigen::Matrix< flt,Eigen::Dynamic,3 > & B) -> jammingtree"""
-        this = _sim3dlong.new_jammingtree(box, A, B)
+        """__init__(JammingTree self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,3 > & A, Eigen::Matrix< flt,Eigen::Dynamic,3 > & B) -> JammingTree"""
+        this = _sim3dlong.new_JammingTree(box, A, B)
         try:
             self.this.append(this)
         except:
@@ -12014,35 +11795,35 @@ class jammingtree(_object):
 
     def expand(self, *args) -> "bool":
         """
-        expand(jammingtree self) -> bool
-        expand(jammingtree self, uint n) -> bool
+        expand(JammingTree self) -> bool
+        expand(JammingTree self, uint n) -> bool
         """
-        return _sim3dlong.jammingtree_expand(self, *args)
+        return _sim3dlong.JammingTree_expand(self, *args)
 
 
-    def mylist(self) -> "std::list< jamminglist > &":
-        """mylist(jammingtree self) -> std::list< jamminglist > &"""
-        return _sim3dlong.jammingtree_mylist(self)
+    def my_list(self) -> "std::list< JammingList > &":
+        """my_list(JammingTree self) -> std::list< JammingList > &"""
+        return _sim3dlong.JammingTree_my_list(self)
 
 
-    def copylist(self) -> "std::list< jamminglist >":
-        """copylist(jammingtree self) -> std::list< jamminglist >"""
-        return _sim3dlong.jammingtree_copylist(self)
+    def copy_list(self) -> "std::list< JammingList >":
+        """copy_list(JammingTree self) -> std::list< JammingList >"""
+        return _sim3dlong.JammingTree_copy_list(self)
 
 
-    def curbest(self) -> "jamminglist":
-        """curbest(jammingtree self) -> jamminglist"""
-        return _sim3dlong.jammingtree_curbest(self)
+    def current_best(self) -> "JammingList":
+        """current_best(JammingTree self) -> JammingList"""
+        return _sim3dlong.JammingTree_current_best(self)
 
 
     def size(self) -> "uint":
-        """size(jammingtree self) -> uint"""
-        return _sim3dlong.jammingtree_size(self)
+        """size(JammingTree self) -> uint"""
+        return _sim3dlong.JammingTree_size(self)
 
-    __swig_destroy__ = _sim3dlong.delete_jammingtree
+    __swig_destroy__ = _sim3dlong.delete_JammingTree
     __del__ = lambda self: None
-jammingtree_swigregister = _sim3dlong.jammingtree_swigregister
-jammingtree_swigregister(jammingtree)
+JammingTree_swigregister = _sim3dlong.JammingTree_swigregister
+JammingTree_swigregister(JammingTree)
 
 class CNode(_object):
     """Proxy of C++ CNode class"""
@@ -12202,471 +11983,467 @@ class Connectivity(_object):
 Connectivity_swigregister = _sim3dlong.Connectivity_swigregister
 Connectivity_swigregister(Connectivity)
 
-class LJgroup(interaction):
-    """Proxy of C++ NListed<(LJatom,LJpair)> class"""
+class LJRepulse(Interaction):
+    """Proxy of C++ NListed<(EpsSigAtom,LJRepulsePair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJgroup, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJRepulse, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJgroup, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJRepulse, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'LJatom') -> "void":
-        """add(LJgroup self, LJatom atm)"""
-        return _sim3dlong.LJgroup_add(self, atm)
+    def add(self, atm: 'EpsSigAtom') -> "void":
+        """add(LJRepulse self, EpsSigAtom atm)"""
+        return _sim3dlong.LJRepulse_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LJatom,LJpair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJgroup
-        __init__(NListed<(LJatom,LJpair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJgroup
+        __init__(NListed<(EpsSigAtom,LJRepulsePair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJRepulse
+        __init__(NListed<(EpsSigAtom,LJRepulsePair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJRepulse
         """
-        this = _sim3dlong.new_LJgroup(*args)
+        this = _sim3dlong.new_LJRepulse(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update_pairs(self) -> "void":
-        """update_pairs(LJgroup self)"""
-        return _sim3dlong.LJgroup_update_pairs(self)
+        """update_pairs(LJRepulse self)"""
+        return _sim3dlong.LJRepulse_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LJpair":
-        """getpair(LJgroup self, idpair pair) -> LJpair"""
-        return _sim3dlong.LJgroup_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LJRepulsePair":
+        """get_pair(LJRepulse self, IDPair pair) -> LJRepulsePair"""
+        return _sim3dlong.LJRepulse_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "LJatom &":
-        """getatom(LJgroup self, uint n) -> LJatom"""
-        return _sim3dlong.LJgroup_getatom(self, n)
+    def getatom(self, n: 'uint') -> "EpsSigAtom &":
+        """getatom(LJRepulse self, uint n) -> EpsSigAtom"""
+        return _sim3dlong.LJRepulse_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJgroup self, Box box, idpair pair) -> flt
-        energy(LJgroup self, Box box) -> flt
+        energy(LJRepulse self, Box box, IDPair pair) -> flt
+        energy(LJRepulse self, Box box) -> flt
         """
-        return _sim3dlong.LJgroup_energy(self, *args)
+        return _sim3dlong.LJRepulse_energy(self, *args)
 
 
     def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(LJgroup self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJgroup_contacts(self, box)
+        """contacts(LJRepulse self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJRepulse_contacts(self, box)
 
 
     def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(LJgroup self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJgroup_overlaps(self, box)
+        """overlaps(LJRepulse self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJRepulse_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(LJgroup self, Box box) -> flt"""
-        return _sim3dlong.LJgroup_pressure(self, box)
+        """pressure(LJRepulse self, Box box) -> flt"""
+        return _sim3dlong.LJRepulse_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LJpair > &":
-        """pairiter(LJgroup self) -> std::vector< LJpair > &"""
-        return _sim3dlong.LJgroup_pairiter(self)
+    def pair_iter(self) -> "std::vector< LJRepulsePair > &":
+        """pair_iter(LJRepulse self) -> std::vector< LJRepulsePair > &"""
+        return _sim3dlong.LJRepulse_pair_iter(self)
 
 
     def size(self) -> "uint":
-        """size(LJgroup self) -> uint"""
-        return _sim3dlong.LJgroup_size(self)
+        """size(LJRepulse self) -> uint"""
+        return _sim3dlong.LJRepulse_size(self)
 
 
-    def energy_pair(self, pair: 'LJpair', box: 'Box') -> "flt":
-        """energy_pair(LJgroup self, LJpair pair, Box box) -> flt"""
-        return _sim3dlong.LJgroup_energy_pair(self, pair, box)
+    def energy_pair(self, pair: 'LJRepulsePair', box: 'Box') -> "flt":
+        """energy_pair(LJRepulse self, LJRepulsePair pair, Box box) -> flt"""
+        return _sim3dlong.LJRepulse_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJgroup self, Box box)"""
-        return _sim3dlong.LJgroup_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJRepulse self, Box box)"""
+        return _sim3dlong.LJRepulse_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJgroup self, Box box) -> flt"""
-        return _sim3dlong.LJgroup_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJRepulse self, Box box) -> flt"""
+        return _sim3dlong.LJRepulse_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'LJpair', box: 'Box') -> "Vec":
-        """forces_pair(LJgroup self, LJpair pair, Box box) -> Vec"""
-        return _sim3dlong.LJgroup_forces_pair(self, pair, box)
+    def forces_pair(self, pair: 'LJRepulsePair', box: 'Box') -> "Vec":
+        """forces_pair(LJRepulse self, LJRepulsePair pair, Box box) -> Vec"""
+        return _sim3dlong.LJRepulse_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< LJatom > &":
-        """atom_list(LJgroup self) -> std::vector< LJatom > &"""
-        return _sim3dlong.LJgroup_atom_list(self)
+    def atom_list(self) -> "std::vector< EpsSigAtom > &":
+        """atom_list(LJRepulse self) -> std::vector< EpsSigAtom > &"""
+        return _sim3dlong.LJRepulse_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJgroup self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJgroup_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJRepulse self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJRepulse_neighbor_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJgroup
+    __swig_destroy__ = _sim3dlong.delete_LJRepulse
     __del__ = lambda self: None
+LJRepulse_swigregister = _sim3dlong.LJRepulse_swigregister
+LJRepulse_swigregister(LJRepulse)
 
-    def add_atom(self, epsilon, sigma, a):
-        self.add(LJatom(epsilon, sigma, a))
-
-LJgroup_swigregister = _sim3dlong.LJgroup_swigregister
-LJgroup_swigregister(LJgroup)
-
-class Hydrophobicity(interaction):
-    """Proxy of C++ NListed<(HydroAtom,HydroPair)> class"""
+class LJAttractICut(Interaction):
+    """Proxy of C++ NListed<(IEpsSigCutAtom,LJAttractCutPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Hydrophobicity, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractICut, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Hydrophobicity, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractICut, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'HydroAtom') -> "void":
-        """add(Hydrophobicity self, HydroAtom atm)"""
-        return _sim3dlong.Hydrophobicity_add(self, atm)
+    def add(self, atm: 'IEpsSigCutAtom') -> "void":
+        """add(LJAttractICut self, IEpsSigCutAtom atm)"""
+        return _sim3dlong.LJAttractICut_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(HydroAtom,HydroPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> Hydrophobicity
-        __init__(NListed<(HydroAtom,HydroPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> Hydrophobicity
+        __init__(NListed<(IEpsSigCutAtom,LJAttractCutPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJAttractICut
+        __init__(NListed<(IEpsSigCutAtom,LJAttractCutPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJAttractICut
         """
-        this = _sim3dlong.new_Hydrophobicity(*args)
+        this = _sim3dlong.new_LJAttractICut(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update_pairs(self) -> "void":
-        """update_pairs(Hydrophobicity self)"""
-        return _sim3dlong.Hydrophobicity_update_pairs(self)
+        """update_pairs(LJAttractICut self)"""
+        return _sim3dlong.LJAttractICut_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "HydroPair":
-        """getpair(Hydrophobicity self, idpair pair) -> HydroPair"""
-        return _sim3dlong.Hydrophobicity_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LJAttractCutPair":
+        """get_pair(LJAttractICut self, IDPair pair) -> LJAttractCutPair"""
+        return _sim3dlong.LJAttractICut_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "HydroAtom &":
-        """getatom(Hydrophobicity self, uint n) -> HydroAtom"""
-        return _sim3dlong.Hydrophobicity_getatom(self, n)
+    def getatom(self, n: 'uint') -> "IEpsSigCutAtom &":
+        """getatom(LJAttractICut self, uint n) -> IEpsSigCutAtom"""
+        return _sim3dlong.LJAttractICut_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(Hydrophobicity self, Box box, idpair pair) -> flt
-        energy(Hydrophobicity self, Box box) -> flt
+        energy(LJAttractICut self, Box box, IDPair pair) -> flt
+        energy(LJAttractICut self, Box box) -> flt
         """
-        return _sim3dlong.Hydrophobicity_energy(self, *args)
+        return _sim3dlong.LJAttractICut_energy(self, *args)
 
 
     def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(Hydrophobicity self, Box box) -> unsigned long long"""
-        return _sim3dlong.Hydrophobicity_contacts(self, box)
+        """contacts(LJAttractICut self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJAttractICut_contacts(self, box)
 
 
     def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(Hydrophobicity self, Box box) -> unsigned long long"""
-        return _sim3dlong.Hydrophobicity_overlaps(self, box)
+        """overlaps(LJAttractICut self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJAttractICut_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(Hydrophobicity self, Box box) -> flt"""
-        return _sim3dlong.Hydrophobicity_pressure(self, box)
+        """pressure(LJAttractICut self, Box box) -> flt"""
+        return _sim3dlong.LJAttractICut_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< HydroPair > &":
-        """pairiter(Hydrophobicity self) -> std::vector< HydroPair > &"""
-        return _sim3dlong.Hydrophobicity_pairiter(self)
+    def pair_iter(self) -> "std::vector< LJAttractCutPair > &":
+        """pair_iter(LJAttractICut self) -> std::vector< LJAttractCutPair > &"""
+        return _sim3dlong.LJAttractICut_pair_iter(self)
 
 
     def size(self) -> "uint":
-        """size(Hydrophobicity self) -> uint"""
-        return _sim3dlong.Hydrophobicity_size(self)
+        """size(LJAttractICut self) -> uint"""
+        return _sim3dlong.LJAttractICut_size(self)
 
 
-    def energy_pair(self, pair: 'HydroPair', box: 'Box') -> "flt":
-        """energy_pair(Hydrophobicity self, HydroPair pair, Box box) -> flt"""
-        return _sim3dlong.Hydrophobicity_energy_pair(self, pair, box)
+    def energy_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "flt":
+        """energy_pair(LJAttractICut self, LJAttractCutPair pair, Box box) -> flt"""
+        return _sim3dlong.LJAttractICut_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(Hydrophobicity self, Box box)"""
-        return _sim3dlong.Hydrophobicity_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJAttractICut self, Box box)"""
+        return _sim3dlong.LJAttractICut_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(Hydrophobicity self, Box box) -> flt"""
-        return _sim3dlong.Hydrophobicity_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJAttractICut self, Box box) -> flt"""
+        return _sim3dlong.LJAttractICut_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'HydroPair', box: 'Box') -> "Vec":
-        """forces_pair(Hydrophobicity self, HydroPair pair, Box box) -> Vec"""
-        return _sim3dlong.Hydrophobicity_forces_pair(self, pair, box)
+    def forces_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "Vec":
+        """forces_pair(LJAttractICut self, LJAttractCutPair pair, Box box) -> Vec"""
+        return _sim3dlong.LJAttractICut_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< HydroAtom > &":
-        """atom_list(Hydrophobicity self) -> std::vector< HydroAtom > &"""
-        return _sim3dlong.Hydrophobicity_atom_list(self)
+    def atom_list(self) -> "std::vector< IEpsSigCutAtom > &":
+        """atom_list(LJAttractICut self) -> std::vector< IEpsSigCutAtom > &"""
+        return _sim3dlong.LJAttractICut_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(Hydrophobicity self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.Hydrophobicity_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJAttractICut self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJAttractICut_neighbor_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_Hydrophobicity
+    __swig_destroy__ = _sim3dlong.delete_LJAttractICut
     __del__ = lambda self: None
-Hydrophobicity_swigregister = _sim3dlong.Hydrophobicity_swigregister
-Hydrophobicity_swigregister(Hydrophobicity)
+LJAttractICut_swigregister = _sim3dlong.LJAttractICut_swigregister
+LJAttractICut_swigregister(LJAttractICut)
 
-class LJattractix(interaction):
-    """Proxy of C++ NListed<(LJAtomIndexed,LJAttractPair)> class"""
+class LJAttractIICut(Interaction):
+    """Proxy of C++ NListed<(IEpsISigCutAtom,LJAttractCutPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJattractix, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractIICut, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJattractix, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractIICut, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'LJAtomIndexed') -> "void":
-        """add(LJattractix self, LJAtomIndexed atm)"""
-        return _sim3dlong.LJattractix_add(self, atm)
+    def add(self, atm: 'IEpsISigCutAtom') -> "void":
+        """add(LJAttractIICut self, IEpsISigCutAtom atm)"""
+        return _sim3dlong.LJAttractIICut_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LJAtomIndexed,LJAttractPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJattractix
-        __init__(NListed<(LJAtomIndexed,LJAttractPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJattractix
+        __init__(NListed<(IEpsISigCutAtom,LJAttractCutPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJAttractIICut
+        __init__(NListed<(IEpsISigCutAtom,LJAttractCutPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJAttractIICut
         """
-        this = _sim3dlong.new_LJattractix(*args)
+        this = _sim3dlong.new_LJAttractIICut(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update_pairs(self) -> "void":
-        """update_pairs(LJattractix self)"""
-        return _sim3dlong.LJattractix_update_pairs(self)
+        """update_pairs(LJAttractIICut self)"""
+        return _sim3dlong.LJAttractIICut_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LJAttractPair":
-        """getpair(LJattractix self, idpair pair) -> LJAttractPair"""
-        return _sim3dlong.LJattractix_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LJAttractCutPair":
+        """get_pair(LJAttractIICut self, IDPair pair) -> LJAttractCutPair"""
+        return _sim3dlong.LJAttractIICut_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "LJAtomIndexed &":
-        """getatom(LJattractix self, uint n) -> LJAtomIndexed"""
-        return _sim3dlong.LJattractix_getatom(self, n)
+    def getatom(self, n: 'uint') -> "IEpsISigCutAtom &":
+        """getatom(LJAttractIICut self, uint n) -> IEpsISigCutAtom"""
+        return _sim3dlong.LJAttractIICut_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJattractix self, Box box, idpair pair) -> flt
-        energy(LJattractix self, Box box) -> flt
+        energy(LJAttractIICut self, Box box, IDPair pair) -> flt
+        energy(LJAttractIICut self, Box box) -> flt
         """
-        return _sim3dlong.LJattractix_energy(self, *args)
+        return _sim3dlong.LJAttractIICut_energy(self, *args)
 
 
     def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(LJattractix self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJattractix_contacts(self, box)
+        """contacts(LJAttractIICut self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJAttractIICut_contacts(self, box)
 
 
     def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(LJattractix self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJattractix_overlaps(self, box)
+        """overlaps(LJAttractIICut self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJAttractIICut_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(LJattractix self, Box box) -> flt"""
-        return _sim3dlong.LJattractix_pressure(self, box)
+        """pressure(LJAttractIICut self, Box box) -> flt"""
+        return _sim3dlong.LJAttractIICut_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LJAttractPair > &":
-        """pairiter(LJattractix self) -> std::vector< LJAttractPair > &"""
-        return _sim3dlong.LJattractix_pairiter(self)
+    def pair_iter(self) -> "std::vector< LJAttractCutPair > &":
+        """pair_iter(LJAttractIICut self) -> std::vector< LJAttractCutPair > &"""
+        return _sim3dlong.LJAttractIICut_pair_iter(self)
 
 
     def size(self) -> "uint":
-        """size(LJattractix self) -> uint"""
-        return _sim3dlong.LJattractix_size(self)
+        """size(LJAttractIICut self) -> uint"""
+        return _sim3dlong.LJAttractIICut_size(self)
 
 
-    def energy_pair(self, pair: 'LJAttractPair', box: 'Box') -> "flt":
-        """energy_pair(LJattractix self, LJAttractPair pair, Box box) -> flt"""
-        return _sim3dlong.LJattractix_energy_pair(self, pair, box)
+    def energy_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "flt":
+        """energy_pair(LJAttractIICut self, LJAttractCutPair pair, Box box) -> flt"""
+        return _sim3dlong.LJAttractIICut_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJattractix self, Box box)"""
-        return _sim3dlong.LJattractix_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJAttractIICut self, Box box)"""
+        return _sim3dlong.LJAttractIICut_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJattractix self, Box box) -> flt"""
-        return _sim3dlong.LJattractix_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJAttractIICut self, Box box) -> flt"""
+        return _sim3dlong.LJAttractIICut_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'LJAttractPair', box: 'Box') -> "Vec":
-        """forces_pair(LJattractix self, LJAttractPair pair, Box box) -> Vec"""
-        return _sim3dlong.LJattractix_forces_pair(self, pair, box)
+    def forces_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "Vec":
+        """forces_pair(LJAttractIICut self, LJAttractCutPair pair, Box box) -> Vec"""
+        return _sim3dlong.LJAttractIICut_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< LJAtomIndexed > &":
-        """atom_list(LJattractix self) -> std::vector< LJAtomIndexed > &"""
-        return _sim3dlong.LJattractix_atom_list(self)
+    def atom_list(self) -> "std::vector< IEpsISigCutAtom > &":
+        """atom_list(LJAttractIICut self) -> std::vector< IEpsISigCutAtom > &"""
+        return _sim3dlong.LJAttractIICut_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJattractix self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJattractix_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJAttractIICut self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJAttractIICut_neighbor_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJattractix
+    __swig_destroy__ = _sim3dlong.delete_LJAttractIICut
     __del__ = lambda self: None
-LJattractix_swigregister = _sim3dlong.LJattractix_swigregister
-LJattractix_swigregister(LJattractix)
+LJAttractIICut_swigregister = _sim3dlong.LJAttractIICut_swigregister
+LJAttractIICut_swigregister(LJAttractIICut)
 
-class LJfullix(interaction):
-    """Proxy of C++ NListed<(LJAtomIndexed,LJCutPair)> class"""
+class LJIICut(Interaction):
+    """Proxy of C++ NListed<(IEpsISigCutAtom,LennardJonesCutPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJfullix, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJIICut, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJfullix, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, LJIICut, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'LJAtomIndexed') -> "void":
-        """add(LJfullix self, LJAtomIndexed atm)"""
-        return _sim3dlong.LJfullix_add(self, atm)
+    def add(self, atm: 'IEpsISigCutAtom') -> "void":
+        """add(LJIICut self, IEpsISigCutAtom atm)"""
+        return _sim3dlong.LJIICut_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LJAtomIndexed,LJCutPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJfullix
-        __init__(NListed<(LJAtomIndexed,LJCutPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJfullix
+        __init__(NListed<(IEpsISigCutAtom,LennardJonesCutPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJIICut
+        __init__(NListed<(IEpsISigCutAtom,LennardJonesCutPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJIICut
         """
-        this = _sim3dlong.new_LJfullix(*args)
+        this = _sim3dlong.new_LJIICut(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update_pairs(self) -> "void":
-        """update_pairs(LJfullix self)"""
-        return _sim3dlong.LJfullix_update_pairs(self)
+        """update_pairs(LJIICut self)"""
+        return _sim3dlong.LJIICut_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LJCutPair":
-        """getpair(LJfullix self, idpair pair) -> LJCutPair"""
-        return _sim3dlong.LJfullix_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LennardJonesCutPair":
+        """get_pair(LJIICut self, IDPair pair) -> LennardJonesCutPair"""
+        return _sim3dlong.LJIICut_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "LJAtomIndexed &":
-        """getatom(LJfullix self, uint n) -> LJAtomIndexed"""
-        return _sim3dlong.LJfullix_getatom(self, n)
+    def getatom(self, n: 'uint') -> "IEpsISigCutAtom &":
+        """getatom(LJIICut self, uint n) -> IEpsISigCutAtom"""
+        return _sim3dlong.LJIICut_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJfullix self, Box box, idpair pair) -> flt
-        energy(LJfullix self, Box box) -> flt
+        energy(LJIICut self, Box box, IDPair pair) -> flt
+        energy(LJIICut self, Box box) -> flt
         """
-        return _sim3dlong.LJfullix_energy(self, *args)
+        return _sim3dlong.LJIICut_energy(self, *args)
 
 
     def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(LJfullix self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJfullix_contacts(self, box)
+        """contacts(LJIICut self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJIICut_contacts(self, box)
 
 
     def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(LJfullix self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJfullix_overlaps(self, box)
+        """overlaps(LJIICut self, Box box) -> unsigned long long"""
+        return _sim3dlong.LJIICut_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(LJfullix self, Box box) -> flt"""
-        return _sim3dlong.LJfullix_pressure(self, box)
+        """pressure(LJIICut self, Box box) -> flt"""
+        return _sim3dlong.LJIICut_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LJCutPair > &":
-        """pairiter(LJfullix self) -> std::vector< LJCutPair > &"""
-        return _sim3dlong.LJfullix_pairiter(self)
+    def pair_iter(self) -> "std::vector< LennardJonesCutPair > &":
+        """pair_iter(LJIICut self) -> std::vector< LennardJonesCutPair > &"""
+        return _sim3dlong.LJIICut_pair_iter(self)
 
 
     def size(self) -> "uint":
-        """size(LJfullix self) -> uint"""
-        return _sim3dlong.LJfullix_size(self)
+        """size(LJIICut self) -> uint"""
+        return _sim3dlong.LJIICut_size(self)
 
 
-    def energy_pair(self, pair: 'LJCutPair', box: 'Box') -> "flt":
-        """energy_pair(LJfullix self, LJCutPair pair, Box box) -> flt"""
-        return _sim3dlong.LJfullix_energy_pair(self, pair, box)
+    def energy_pair(self, pair: 'LennardJonesCutPair', box: 'Box') -> "flt":
+        """energy_pair(LJIICut self, LennardJonesCutPair pair, Box box) -> flt"""
+        return _sim3dlong.LJIICut_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJfullix self, Box box)"""
-        return _sim3dlong.LJfullix_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJIICut self, Box box)"""
+        return _sim3dlong.LJIICut_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJfullix self, Box box) -> flt"""
-        return _sim3dlong.LJfullix_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJIICut self, Box box) -> flt"""
+        return _sim3dlong.LJIICut_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'LJCutPair', box: 'Box') -> "Vec":
-        """forces_pair(LJfullix self, LJCutPair pair, Box box) -> Vec"""
-        return _sim3dlong.LJfullix_forces_pair(self, pair, box)
+    def forces_pair(self, pair: 'LennardJonesCutPair', box: 'Box') -> "Vec":
+        """forces_pair(LJIICut self, LennardJonesCutPair pair, Box box) -> Vec"""
+        return _sim3dlong.LJIICut_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< LJAtomIndexed > &":
-        """atom_list(LJfullix self) -> std::vector< LJAtomIndexed > &"""
-        return _sim3dlong.LJfullix_atom_list(self)
+    def atom_list(self) -> "std::vector< IEpsISigCutAtom > &":
+        """atom_list(LJIICut self) -> std::vector< IEpsISigCutAtom > &"""
+        return _sim3dlong.LJIICut_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJfullix self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJfullix_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJIICut self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJIICut_neighbor_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_LJfullix
+    __swig_destroy__ = _sim3dlong.delete_LJIICut
     __del__ = lambda self: None
-LJfullix_swigregister = _sim3dlong.LJfullix_swigregister
-LJfullix_swigregister(LJfullix)
+LJIICut_swigregister = _sim3dlong.LJIICut_swigregister
+LJIICut_swigregister(LJIICut)
 
-class LJAttractRepulse(interaction):
-    """Proxy of C++ NListed<(LJAttractRepulseAtom,LJAttractRepulsePair)> class"""
+class LJAttractRepulse(Interaction):
+    """Proxy of C++ NListed<(IEpsSigCutAtom,LJAttractRepulsePair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractRepulse, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJAttractRepulse, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'LJAttractRepulseAtom') -> "void":
-        """add(LJAttractRepulse self, LJAttractRepulseAtom atm)"""
+    def add(self, atm: 'IEpsSigCutAtom') -> "void":
+        """add(LJAttractRepulse self, IEpsSigCutAtom atm)"""
         return _sim3dlong.LJAttractRepulse_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LJAttractRepulseAtom,LJAttractRepulsePair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJAttractRepulse
-        __init__(NListed<(LJAttractRepulseAtom,LJAttractRepulsePair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJAttractRepulse
+        __init__(NListed<(IEpsSigCutAtom,LJAttractRepulsePair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJAttractRepulse
+        __init__(NListed<(IEpsSigCutAtom,LJAttractRepulsePair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJAttractRepulse
         """
         this = _sim3dlong.new_LJAttractRepulse(*args)
         try:
@@ -12679,19 +12456,19 @@ class LJAttractRepulse(interaction):
         return _sim3dlong.LJAttractRepulse_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LJAttractRepulsePair":
-        """getpair(LJAttractRepulse self, idpair pair) -> LJAttractRepulsePair"""
-        return _sim3dlong.LJAttractRepulse_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LJAttractRepulsePair":
+        """get_pair(LJAttractRepulse self, IDPair pair) -> LJAttractRepulsePair"""
+        return _sim3dlong.LJAttractRepulse_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "LJAttractRepulseAtom &":
-        """getatom(LJAttractRepulse self, uint n) -> LJAttractRepulseAtom"""
+    def getatom(self, n: 'uint') -> "IEpsSigCutAtom &":
+        """getatom(LJAttractRepulse self, uint n) -> IEpsSigCutAtom"""
         return _sim3dlong.LJAttractRepulse_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJAttractRepulse self, Box box, idpair pair) -> flt
+        energy(LJAttractRepulse self, Box box, IDPair pair) -> flt
         energy(LJAttractRepulse self, Box box) -> flt
         """
         return _sim3dlong.LJAttractRepulse_energy(self, *args)
@@ -12712,9 +12489,9 @@ class LJAttractRepulse(interaction):
         return _sim3dlong.LJAttractRepulse_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LJAttractRepulsePair > &":
-        """pairiter(LJAttractRepulse self) -> std::vector< LJAttractRepulsePair > &"""
-        return _sim3dlong.LJAttractRepulse_pairiter(self)
+    def pair_iter(self) -> "std::vector< LJAttractRepulsePair > &":
+        """pair_iter(LJAttractRepulse self) -> std::vector< LJAttractRepulsePair > &"""
+        return _sim3dlong.LJAttractRepulse_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -12727,14 +12504,14 @@ class LJAttractRepulse(interaction):
         return _sim3dlong.LJAttractRepulse_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJAttractRepulse self, Box box)"""
-        return _sim3dlong.LJAttractRepulse_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJAttractRepulse self, Box box)"""
+        return _sim3dlong.LJAttractRepulse_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJAttractRepulse self, Box box) -> flt"""
-        return _sim3dlong.LJAttractRepulse_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJAttractRepulse self, Box box) -> flt"""
+        return _sim3dlong.LJAttractRepulse_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LJAttractRepulsePair', box: 'Box') -> "Vec":
@@ -12742,41 +12519,41 @@ class LJAttractRepulse(interaction):
         return _sim3dlong.LJAttractRepulse_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< LJAttractRepulseAtom > &":
-        """atom_list(LJAttractRepulse self) -> std::vector< LJAttractRepulseAtom > &"""
+    def atom_list(self) -> "std::vector< IEpsSigCutAtom > &":
+        """atom_list(LJAttractRepulse self) -> std::vector< IEpsSigCutAtom > &"""
         return _sim3dlong.LJAttractRepulse_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJAttractRepulse self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJAttractRepulse_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJAttractRepulse self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJAttractRepulse_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJAttractRepulse
     __del__ = lambda self: None
 LJAttractRepulse_swigregister = _sim3dlong.LJAttractRepulse_swigregister
 LJAttractRepulse_swigregister(LJAttractRepulse)
 
-class LJAttractFixedRepulse(interaction):
-    """Proxy of C++ NListed<(LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair)> class"""
+class LJAttractFixedRepulse(Interaction):
+    """Proxy of C++ NListed<(IEpsRepsSigCutAtom,LJAttractFixedRepulsePair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractFixedRepulse, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJAttractFixedRepulse, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'LJAttractFixedRepulseAtom') -> "void":
-        """add(LJAttractFixedRepulse self, LJAttractFixedRepulseAtom atm)"""
+    def add(self, atm: 'IEpsRepsSigCutAtom') -> "void":
+        """add(LJAttractFixedRepulse self, IEpsRepsSigCutAtom atm)"""
         return _sim3dlong.LJAttractFixedRepulse_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJAttractFixedRepulse
-        __init__(NListed<(LJAttractFixedRepulseAtom,LJAttractFixedRepulsePair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJAttractFixedRepulse
+        __init__(NListed<(IEpsRepsSigCutAtom,LJAttractFixedRepulsePair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJAttractFixedRepulse
+        __init__(NListed<(IEpsRepsSigCutAtom,LJAttractFixedRepulsePair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJAttractFixedRepulse
         """
         this = _sim3dlong.new_LJAttractFixedRepulse(*args)
         try:
@@ -12789,19 +12566,19 @@ class LJAttractFixedRepulse(interaction):
         return _sim3dlong.LJAttractFixedRepulse_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LJAttractFixedRepulsePair":
-        """getpair(LJAttractFixedRepulse self, idpair pair) -> LJAttractFixedRepulsePair"""
-        return _sim3dlong.LJAttractFixedRepulse_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LJAttractFixedRepulsePair":
+        """get_pair(LJAttractFixedRepulse self, IDPair pair) -> LJAttractFixedRepulsePair"""
+        return _sim3dlong.LJAttractFixedRepulse_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "LJAttractFixedRepulseAtom &":
-        """getatom(LJAttractFixedRepulse self, uint n) -> LJAttractFixedRepulseAtom"""
+    def getatom(self, n: 'uint') -> "IEpsRepsSigCutAtom &":
+        """getatom(LJAttractFixedRepulse self, uint n) -> IEpsRepsSigCutAtom"""
         return _sim3dlong.LJAttractFixedRepulse_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJAttractFixedRepulse self, Box box, idpair pair) -> flt
+        energy(LJAttractFixedRepulse self, Box box, IDPair pair) -> flt
         energy(LJAttractFixedRepulse self, Box box) -> flt
         """
         return _sim3dlong.LJAttractFixedRepulse_energy(self, *args)
@@ -12822,9 +12599,9 @@ class LJAttractFixedRepulse(interaction):
         return _sim3dlong.LJAttractFixedRepulse_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LJAttractFixedRepulsePair > &":
-        """pairiter(LJAttractFixedRepulse self) -> std::vector< LJAttractFixedRepulsePair > &"""
-        return _sim3dlong.LJAttractFixedRepulse_pairiter(self)
+    def pair_iter(self) -> "std::vector< LJAttractFixedRepulsePair > &":
+        """pair_iter(LJAttractFixedRepulse self) -> std::vector< LJAttractFixedRepulsePair > &"""
+        return _sim3dlong.LJAttractFixedRepulse_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -12837,14 +12614,14 @@ class LJAttractFixedRepulse(interaction):
         return _sim3dlong.LJAttractFixedRepulse_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJAttractFixedRepulse self, Box box)"""
-        return _sim3dlong.LJAttractFixedRepulse_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJAttractFixedRepulse self, Box box)"""
+        return _sim3dlong.LJAttractFixedRepulse_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJAttractFixedRepulse self, Box box) -> flt"""
-        return _sim3dlong.LJAttractFixedRepulse_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJAttractFixedRepulse self, Box box) -> flt"""
+        return _sim3dlong.LJAttractFixedRepulse_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LJAttractFixedRepulsePair', box: 'Box') -> "Vec":
@@ -12852,138 +12629,28 @@ class LJAttractFixedRepulse(interaction):
         return _sim3dlong.LJAttractFixedRepulse_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< LJAttractFixedRepulseAtom > &":
-        """atom_list(LJAttractFixedRepulse self) -> std::vector< LJAttractFixedRepulseAtom > &"""
+    def atom_list(self) -> "std::vector< IEpsRepsSigCutAtom > &":
+        """atom_list(LJAttractFixedRepulse self) -> std::vector< IEpsRepsSigCutAtom > &"""
         return _sim3dlong.LJAttractFixedRepulse_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJAttractFixedRepulse self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJAttractFixedRepulse_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJAttractFixedRepulse self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJAttractFixedRepulse_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJAttractFixedRepulse
     __del__ = lambda self: None
 LJAttractFixedRepulse_swigregister = _sim3dlong.LJAttractFixedRepulse_swigregister
 LJAttractFixedRepulse_swigregister(LJAttractFixedRepulse)
 
-class LJDouble(interaction):
-    """Proxy of C++ NListed<(LJDoubleAtom,LJDoublePair)> class"""
-    __swig_setmethods__ = {}
-    for _s in [interaction]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, LJDouble, name, value)
-    __swig_getmethods__ = {}
-    for _s in [interaction]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, LJDouble, name)
-    __repr__ = _swig_repr
-
-    def add(self, atm: 'LJDoubleAtom') -> "void":
-        """add(LJDouble self, LJDoubleAtom atm)"""
-        return _sim3dlong.LJDouble_add(self, atm)
-
-
-    def __init__(self, *args):
-        """
-        __init__(NListed<(LJDoubleAtom,LJDoublePair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJDouble
-        __init__(NListed<(LJDoubleAtom,LJDoublePair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJDouble
-        """
-        this = _sim3dlong.new_LJDouble(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def update_pairs(self) -> "void":
-        """update_pairs(LJDouble self)"""
-        return _sim3dlong.LJDouble_update_pairs(self)
-
-
-    def getpair(self, pair: 'idpair') -> "LJDoublePair":
-        """getpair(LJDouble self, idpair pair) -> LJDoublePair"""
-        return _sim3dlong.LJDouble_getpair(self, pair)
-
-
-    def getatom(self, n: 'uint') -> "LJDoubleAtom &":
-        """getatom(LJDouble self, uint n) -> LJDoubleAtom"""
-        return _sim3dlong.LJDouble_getatom(self, n)
-
-
-    def energy(self, *args) -> "flt":
-        """
-        energy(LJDouble self, Box box, idpair pair) -> flt
-        energy(LJDouble self, Box box) -> flt
-        """
-        return _sim3dlong.LJDouble_energy(self, *args)
-
-
-    def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(LJDouble self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJDouble_contacts(self, box)
-
-
-    def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(LJDouble self, Box box) -> unsigned long long"""
-        return _sim3dlong.LJDouble_overlaps(self, box)
-
-
-    def pressure(self, box: 'Box') -> "flt":
-        """pressure(LJDouble self, Box box) -> flt"""
-        return _sim3dlong.LJDouble_pressure(self, box)
-
-
-    def pairiter(self) -> "std::vector< LJDoublePair > &":
-        """pairiter(LJDouble self) -> std::vector< LJDoublePair > &"""
-        return _sim3dlong.LJDouble_pairiter(self)
-
-
-    def size(self) -> "uint":
-        """size(LJDouble self) -> uint"""
-        return _sim3dlong.LJDouble_size(self)
-
-
-    def energy_pair(self, pair: 'LJDoublePair', box: 'Box') -> "flt":
-        """energy_pair(LJDouble self, LJDoublePair pair, Box box) -> flt"""
-        return _sim3dlong.LJDouble_energy_pair(self, pair, box)
-
-
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJDouble self, Box box)"""
-        return _sim3dlong.LJDouble_setForces(self, box)
-
-
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJDouble self, Box box) -> flt"""
-        return _sim3dlong.LJDouble_setForcesGetPressure(self, box)
-
-
-    def forces_pair(self, pair: 'LJDoublePair', box: 'Box') -> "Vec":
-        """forces_pair(LJDouble self, LJDoublePair pair, Box box) -> Vec"""
-        return _sim3dlong.LJDouble_forces_pair(self, pair, box)
-
-
-    def atom_list(self) -> "std::vector< LJDoubleAtom > &":
-        """atom_list(LJDouble self) -> std::vector< LJDoubleAtom > &"""
-        return _sim3dlong.LJDouble_atom_list(self)
-
-
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJDouble self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJDouble_nlist(self)
-
-    __swig_destroy__ = _sim3dlong.delete_LJDouble
-    __del__ = lambda self: None
-LJDouble_swigregister = _sim3dlong.LJDouble_swigregister
-LJDouble_swigregister(LJDouble)
-
-class EisMclachlan(interaction):
+class EisMclachlan(Interaction):
     """Proxy of C++ NListed<(EisMclachlanAtom,EisMclachlanPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, EisMclachlan, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, EisMclachlan, name)
     __repr__ = _swig_repr
@@ -12995,8 +12662,8 @@ class EisMclachlan(interaction):
 
     def __init__(self, *args):
         """
-        __init__(NListed<(EisMclachlanAtom,EisMclachlanPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> EisMclachlan
-        __init__(NListed<(EisMclachlanAtom,EisMclachlanPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> EisMclachlan
+        __init__(NListed<(EisMclachlanAtom,EisMclachlanPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> EisMclachlan
+        __init__(NListed<(EisMclachlanAtom,EisMclachlanPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> EisMclachlan
         """
         this = _sim3dlong.new_EisMclachlan(*args)
         try:
@@ -13009,9 +12676,9 @@ class EisMclachlan(interaction):
         return _sim3dlong.EisMclachlan_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "EisMclachlanPair":
-        """getpair(EisMclachlan self, idpair pair) -> EisMclachlanPair"""
-        return _sim3dlong.EisMclachlan_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "EisMclachlanPair":
+        """get_pair(EisMclachlan self, IDPair pair) -> EisMclachlanPair"""
+        return _sim3dlong.EisMclachlan_get_pair(self, pair)
 
 
     def getatom(self, n: 'uint') -> "EisMclachlanAtom &":
@@ -13021,7 +12688,7 @@ class EisMclachlan(interaction):
 
     def energy(self, *args) -> "flt":
         """
-        energy(EisMclachlan self, Box box, idpair pair) -> flt
+        energy(EisMclachlan self, Box box, IDPair pair) -> flt
         energy(EisMclachlan self, Box box) -> flt
         """
         return _sim3dlong.EisMclachlan_energy(self, *args)
@@ -13042,9 +12709,9 @@ class EisMclachlan(interaction):
         return _sim3dlong.EisMclachlan_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< EisMclachlanPair > &":
-        """pairiter(EisMclachlan self) -> std::vector< EisMclachlanPair > &"""
-        return _sim3dlong.EisMclachlan_pairiter(self)
+    def pair_iter(self) -> "std::vector< EisMclachlanPair > &":
+        """pair_iter(EisMclachlan self) -> std::vector< EisMclachlanPair > &"""
+        return _sim3dlong.EisMclachlan_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -13057,14 +12724,14 @@ class EisMclachlan(interaction):
         return _sim3dlong.EisMclachlan_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(EisMclachlan self, Box box)"""
-        return _sim3dlong.EisMclachlan_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(EisMclachlan self, Box box)"""
+        return _sim3dlong.EisMclachlan_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(EisMclachlan self, Box box) -> flt"""
-        return _sim3dlong.EisMclachlan_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(EisMclachlan self, Box box) -> flt"""
+        return _sim3dlong.EisMclachlan_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'EisMclachlanPair', box: 'Box') -> "Vec":
@@ -13077,36 +12744,36 @@ class EisMclachlan(interaction):
         return _sim3dlong.EisMclachlan_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(EisMclachlan self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.EisMclachlan_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(EisMclachlan self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.EisMclachlan_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_EisMclachlan
     __del__ = lambda self: None
 EisMclachlan_swigregister = _sim3dlong.EisMclachlan_swigregister
 EisMclachlan_swigregister(EisMclachlan)
 
-class LJish(interaction):
-    """Proxy of C++ NListed<(LJishAtom,LJishPair)> class"""
+class LJish(Interaction):
+    """Proxy of C++ NListed<(IEpsRepsSigExpCutAtom,LJishPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LJish, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LJish, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'LJishAtom') -> "void":
-        """add(LJish self, LJishAtom atm)"""
+    def add(self, atm: 'IEpsRepsSigExpCutAtom') -> "void":
+        """add(LJish self, IEpsRepsSigExpCutAtom atm)"""
         return _sim3dlong.LJish_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LJishAtom,LJishPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LJish
-        __init__(NListed<(LJishAtom,LJishPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LJish
+        __init__(NListed<(IEpsRepsSigExpCutAtom,LJishPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJish
+        __init__(NListed<(IEpsRepsSigExpCutAtom,LJishPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJish
         """
         this = _sim3dlong.new_LJish(*args)
         try:
@@ -13119,19 +12786,19 @@ class LJish(interaction):
         return _sim3dlong.LJish_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LJishPair":
-        """getpair(LJish self, idpair pair) -> LJishPair"""
-        return _sim3dlong.LJish_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LJishPair":
+        """get_pair(LJish self, IDPair pair) -> LJishPair"""
+        return _sim3dlong.LJish_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "LJishAtom &":
-        """getatom(LJish self, uint n) -> LJishAtom"""
+    def getatom(self, n: 'uint') -> "IEpsRepsSigExpCutAtom &":
+        """getatom(LJish self, uint n) -> IEpsRepsSigExpCutAtom"""
         return _sim3dlong.LJish_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(LJish self, Box box, idpair pair) -> flt
+        energy(LJish self, Box box, IDPair pair) -> flt
         energy(LJish self, Box box) -> flt
         """
         return _sim3dlong.LJish_energy(self, *args)
@@ -13152,9 +12819,9 @@ class LJish(interaction):
         return _sim3dlong.LJish_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LJishPair > &":
-        """pairiter(LJish self) -> std::vector< LJishPair > &"""
-        return _sim3dlong.LJish_pairiter(self)
+    def pair_iter(self) -> "std::vector< LJishPair > &":
+        """pair_iter(LJish self) -> std::vector< LJishPair > &"""
+        return _sim3dlong.LJish_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -13167,14 +12834,14 @@ class LJish(interaction):
         return _sim3dlong.LJish_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LJish self, Box box)"""
-        return _sim3dlong.LJish_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJish self, Box box)"""
+        return _sim3dlong.LJish_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LJish self, Box box) -> flt"""
-        return _sim3dlong.LJish_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJish self, Box box) -> flt"""
+        return _sim3dlong.LJish_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LJishPair', box: 'Box') -> "Vec":
@@ -13182,320 +12849,320 @@ class LJish(interaction):
         return _sim3dlong.LJish_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< LJishAtom > &":
-        """atom_list(LJish self) -> std::vector< LJishAtom > &"""
+    def atom_list(self) -> "std::vector< IEpsRepsSigExpCutAtom > &":
+        """atom_list(LJish self) -> std::vector< IEpsRepsSigExpCutAtom > &"""
         return _sim3dlong.LJish_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LJish self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LJish_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJish self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LJish_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LJish
     __del__ = lambda self: None
 LJish_swigregister = _sim3dlong.LJish_swigregister
 LJish_swigregister(LJish)
 
-class HertzianSimple(interaction):
-    """Proxy of C++ SimpleListed<(HertzianAtom,HertzianPair)> class"""
+class RepulsionSimple(Interaction):
+    """Proxy of C++ SimpleListed<(EpsSigExpAtom,RepulsionPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianSimple, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RepulsionSimple, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianSimple, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, RepulsionSimple, name)
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(SimpleListed<(HertzianAtom,HertzianPair)> self) -> HertzianSimple"""
-        this = _sim3dlong.new_HertzianSimple()
+        """__init__(SimpleListed<(EpsSigExpAtom,RepulsionPair)> self) -> RepulsionSimple"""
+        this = _sim3dlong.new_RepulsionSimple()
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def add(self, atm: 'HertzianAtom') -> "void":
-        """add(HertzianSimple self, HertzianAtom atm)"""
-        return _sim3dlong.HertzianSimple_add(self, atm)
+    def add(self, atm: 'EpsSigExpAtom') -> "void":
+        """add(RepulsionSimple self, EpsSigExpAtom atm)"""
+        return _sim3dlong.RepulsionSimple_add(self, atm)
 
 
     def energy(self, box: 'Box') -> "flt":
-        """energy(HertzianSimple self, Box box) -> flt"""
-        return _sim3dlong.HertzianSimple_energy(self, box)
+        """energy(RepulsionSimple self, Box box) -> flt"""
+        return _sim3dlong.RepulsionSimple_energy(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(HertzianSimple self, Box box) -> flt"""
-        return _sim3dlong.HertzianSimple_pressure(self, box)
+        """pressure(RepulsionSimple self, Box box) -> flt"""
+        return _sim3dlong.RepulsionSimple_pressure(self, box)
 
 
     def size(self) -> "uint":
-        """size(HertzianSimple self) -> uint"""
-        return _sim3dlong.HertzianSimple_size(self)
+        """size(RepulsionSimple self) -> uint"""
+        return _sim3dlong.RepulsionSimple_size(self)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(HertzianSimple self, Box box)"""
-        return _sim3dlong.HertzianSimple_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(RepulsionSimple self, Box box)"""
+        return _sim3dlong.RepulsionSimple_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(HertzianSimple self, Box box) -> flt"""
-        return _sim3dlong.HertzianSimple_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(RepulsionSimple self, Box box) -> flt"""
+        return _sim3dlong.RepulsionSimple_set_forces_get_pressure(self, box)
 
 
-    def atom_list(self) -> "std::vector< HertzianAtom > &":
-        """atom_list(HertzianSimple self) -> std::vector< HertzianAtom > &"""
-        return _sim3dlong.HertzianSimple_atom_list(self)
+    def atom_list(self) -> "std::vector< EpsSigExpAtom > &":
+        """atom_list(RepulsionSimple self) -> std::vector< EpsSigExpAtom > &"""
+        return _sim3dlong.RepulsionSimple_atom_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianSimple
+    __swig_destroy__ = _sim3dlong.delete_RepulsionSimple
     __del__ = lambda self: None
-HertzianSimple_swigregister = _sim3dlong.HertzianSimple_swigregister
-HertzianSimple_swigregister(HertzianSimple)
+RepulsionSimple_swigregister = _sim3dlong.RepulsionSimple_swigregister
+RepulsionSimple_swigregister(RepulsionSimple)
 
-class Hertzian(interaction):
-    """Proxy of C++ NListed<(HertzianAtom,HertzianPair)> class"""
+class Repulsion(Interaction):
+    """Proxy of C++ NListed<(EpsSigExpAtom,RepulsionPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, Hertzian, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Repulsion, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, Hertzian, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Repulsion, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'HertzianAtom') -> "void":
-        """add(Hertzian self, HertzianAtom atm)"""
-        return _sim3dlong.Hertzian_add(self, atm)
+    def add(self, atm: 'EpsSigExpAtom') -> "void":
+        """add(Repulsion self, EpsSigExpAtom atm)"""
+        return _sim3dlong.Repulsion_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(HertzianAtom,HertzianPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> Hertzian
-        __init__(NListed<(HertzianAtom,HertzianPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> Hertzian
+        __init__(NListed<(EpsSigExpAtom,RepulsionPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> Repulsion
+        __init__(NListed<(EpsSigExpAtom,RepulsionPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> Repulsion
         """
-        this = _sim3dlong.new_Hertzian(*args)
+        this = _sim3dlong.new_Repulsion(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update_pairs(self) -> "void":
-        """update_pairs(Hertzian self)"""
-        return _sim3dlong.Hertzian_update_pairs(self)
+        """update_pairs(Repulsion self)"""
+        return _sim3dlong.Repulsion_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "HertzianPair":
-        """getpair(Hertzian self, idpair pair) -> HertzianPair"""
-        return _sim3dlong.Hertzian_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "RepulsionPair":
+        """get_pair(Repulsion self, IDPair pair) -> RepulsionPair"""
+        return _sim3dlong.Repulsion_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "HertzianAtom &":
-        """getatom(Hertzian self, uint n) -> HertzianAtom"""
-        return _sim3dlong.Hertzian_getatom(self, n)
+    def getatom(self, n: 'uint') -> "EpsSigExpAtom &":
+        """getatom(Repulsion self, uint n) -> EpsSigExpAtom"""
+        return _sim3dlong.Repulsion_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(Hertzian self, Box box, idpair pair) -> flt
-        energy(Hertzian self, Box box) -> flt
+        energy(Repulsion self, Box box, IDPair pair) -> flt
+        energy(Repulsion self, Box box) -> flt
         """
-        return _sim3dlong.Hertzian_energy(self, *args)
+        return _sim3dlong.Repulsion_energy(self, *args)
 
 
     def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(Hertzian self, Box box) -> unsigned long long"""
-        return _sim3dlong.Hertzian_contacts(self, box)
+        """contacts(Repulsion self, Box box) -> unsigned long long"""
+        return _sim3dlong.Repulsion_contacts(self, box)
 
 
     def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(Hertzian self, Box box) -> unsigned long long"""
-        return _sim3dlong.Hertzian_overlaps(self, box)
+        """overlaps(Repulsion self, Box box) -> unsigned long long"""
+        return _sim3dlong.Repulsion_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(Hertzian self, Box box) -> flt"""
-        return _sim3dlong.Hertzian_pressure(self, box)
+        """pressure(Repulsion self, Box box) -> flt"""
+        return _sim3dlong.Repulsion_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< HertzianPair > &":
-        """pairiter(Hertzian self) -> std::vector< HertzianPair > &"""
-        return _sim3dlong.Hertzian_pairiter(self)
+    def pair_iter(self) -> "std::vector< RepulsionPair > &":
+        """pair_iter(Repulsion self) -> std::vector< RepulsionPair > &"""
+        return _sim3dlong.Repulsion_pair_iter(self)
 
 
     def size(self) -> "uint":
-        """size(Hertzian self) -> uint"""
-        return _sim3dlong.Hertzian_size(self)
+        """size(Repulsion self) -> uint"""
+        return _sim3dlong.Repulsion_size(self)
 
 
-    def energy_pair(self, pair: 'HertzianPair', box: 'Box') -> "flt":
-        """energy_pair(Hertzian self, HertzianPair pair, Box box) -> flt"""
-        return _sim3dlong.Hertzian_energy_pair(self, pair, box)
+    def energy_pair(self, pair: 'RepulsionPair', box: 'Box') -> "flt":
+        """energy_pair(Repulsion self, RepulsionPair pair, Box box) -> flt"""
+        return _sim3dlong.Repulsion_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(Hertzian self, Box box)"""
-        return _sim3dlong.Hertzian_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(Repulsion self, Box box)"""
+        return _sim3dlong.Repulsion_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(Hertzian self, Box box) -> flt"""
-        return _sim3dlong.Hertzian_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(Repulsion self, Box box) -> flt"""
+        return _sim3dlong.Repulsion_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'HertzianPair', box: 'Box') -> "Vec":
-        """forces_pair(Hertzian self, HertzianPair pair, Box box) -> Vec"""
-        return _sim3dlong.Hertzian_forces_pair(self, pair, box)
+    def forces_pair(self, pair: 'RepulsionPair', box: 'Box') -> "Vec":
+        """forces_pair(Repulsion self, RepulsionPair pair, Box box) -> Vec"""
+        return _sim3dlong.Repulsion_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< HertzianAtom > &":
-        """atom_list(Hertzian self) -> std::vector< HertzianAtom > &"""
-        return _sim3dlong.Hertzian_atom_list(self)
+    def atom_list(self) -> "std::vector< EpsSigExpAtom > &":
+        """atom_list(Repulsion self) -> std::vector< EpsSigExpAtom > &"""
+        return _sim3dlong.Repulsion_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(Hertzian self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.Hertzian_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(Repulsion self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.Repulsion_neighbor_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_Hertzian
+    __swig_destroy__ = _sim3dlong.delete_Repulsion
     __del__ = lambda self: None
-Hertzian_swigregister = _sim3dlong.Hertzian_swigregister
-Hertzian_swigregister(Hertzian)
+Repulsion_swigregister = _sim3dlong.Repulsion_swigregister
+Repulsion_swigregister(Repulsion)
 
-class HertzianIdx(interaction):
-    """Proxy of C++ NListed<(HertzianAtomIndexed,HertzianPair)> class"""
+class RepulsionII(Interaction):
+    """Proxy of C++ NListed<(IEpsISigExpAtom,RepulsionPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianIdx, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RepulsionII, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, HertzianIdx, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, RepulsionII, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'HertzianAtomIndexed') -> "void":
-        """add(HertzianIdx self, HertzianAtomIndexed atm)"""
-        return _sim3dlong.HertzianIdx_add(self, atm)
+    def add(self, atm: 'IEpsISigExpAtom') -> "void":
+        """add(RepulsionII self, IEpsISigExpAtom atm)"""
+        return _sim3dlong.RepulsionII_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(HertzianAtomIndexed,HertzianPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> HertzianIdx
-        __init__(NListed<(HertzianAtomIndexed,HertzianPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> HertzianIdx
+        __init__(NListed<(IEpsISigExpAtom,RepulsionPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> RepulsionII
+        __init__(NListed<(IEpsISigExpAtom,RepulsionPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> RepulsionII
         """
-        this = _sim3dlong.new_HertzianIdx(*args)
+        this = _sim3dlong.new_RepulsionII(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def update_pairs(self) -> "void":
-        """update_pairs(HertzianIdx self)"""
-        return _sim3dlong.HertzianIdx_update_pairs(self)
+        """update_pairs(RepulsionII self)"""
+        return _sim3dlong.RepulsionII_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "HertzianPair":
-        """getpair(HertzianIdx self, idpair pair) -> HertzianPair"""
-        return _sim3dlong.HertzianIdx_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "RepulsionPair":
+        """get_pair(RepulsionII self, IDPair pair) -> RepulsionPair"""
+        return _sim3dlong.RepulsionII_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "HertzianAtomIndexed &":
-        """getatom(HertzianIdx self, uint n) -> HertzianAtomIndexed"""
-        return _sim3dlong.HertzianIdx_getatom(self, n)
+    def getatom(self, n: 'uint') -> "IEpsISigExpAtom &":
+        """getatom(RepulsionII self, uint n) -> IEpsISigExpAtom"""
+        return _sim3dlong.RepulsionII_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(HertzianIdx self, Box box, idpair pair) -> flt
-        energy(HertzianIdx self, Box box) -> flt
+        energy(RepulsionII self, Box box, IDPair pair) -> flt
+        energy(RepulsionII self, Box box) -> flt
         """
-        return _sim3dlong.HertzianIdx_energy(self, *args)
+        return _sim3dlong.RepulsionII_energy(self, *args)
 
 
     def contacts(self, box: 'Box') -> "unsigned long long":
-        """contacts(HertzianIdx self, Box box) -> unsigned long long"""
-        return _sim3dlong.HertzianIdx_contacts(self, box)
+        """contacts(RepulsionII self, Box box) -> unsigned long long"""
+        return _sim3dlong.RepulsionII_contacts(self, box)
 
 
     def overlaps(self, box: 'Box') -> "unsigned long long":
-        """overlaps(HertzianIdx self, Box box) -> unsigned long long"""
-        return _sim3dlong.HertzianIdx_overlaps(self, box)
+        """overlaps(RepulsionII self, Box box) -> unsigned long long"""
+        return _sim3dlong.RepulsionII_overlaps(self, box)
 
 
     def pressure(self, box: 'Box') -> "flt":
-        """pressure(HertzianIdx self, Box box) -> flt"""
-        return _sim3dlong.HertzianIdx_pressure(self, box)
+        """pressure(RepulsionII self, Box box) -> flt"""
+        return _sim3dlong.RepulsionII_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< HertzianPair > &":
-        """pairiter(HertzianIdx self) -> std::vector< HertzianPair > &"""
-        return _sim3dlong.HertzianIdx_pairiter(self)
+    def pair_iter(self) -> "std::vector< RepulsionPair > &":
+        """pair_iter(RepulsionII self) -> std::vector< RepulsionPair > &"""
+        return _sim3dlong.RepulsionII_pair_iter(self)
 
 
     def size(self) -> "uint":
-        """size(HertzianIdx self) -> uint"""
-        return _sim3dlong.HertzianIdx_size(self)
+        """size(RepulsionII self) -> uint"""
+        return _sim3dlong.RepulsionII_size(self)
 
 
-    def energy_pair(self, pair: 'HertzianPair', box: 'Box') -> "flt":
-        """energy_pair(HertzianIdx self, HertzianPair pair, Box box) -> flt"""
-        return _sim3dlong.HertzianIdx_energy_pair(self, pair, box)
+    def energy_pair(self, pair: 'RepulsionPair', box: 'Box') -> "flt":
+        """energy_pair(RepulsionII self, RepulsionPair pair, Box box) -> flt"""
+        return _sim3dlong.RepulsionII_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(HertzianIdx self, Box box)"""
-        return _sim3dlong.HertzianIdx_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(RepulsionII self, Box box)"""
+        return _sim3dlong.RepulsionII_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(HertzianIdx self, Box box) -> flt"""
-        return _sim3dlong.HertzianIdx_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(RepulsionII self, Box box) -> flt"""
+        return _sim3dlong.RepulsionII_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'HertzianPair', box: 'Box') -> "Vec":
-        """forces_pair(HertzianIdx self, HertzianPair pair, Box box) -> Vec"""
-        return _sim3dlong.HertzianIdx_forces_pair(self, pair, box)
+    def forces_pair(self, pair: 'RepulsionPair', box: 'Box') -> "Vec":
+        """forces_pair(RepulsionII self, RepulsionPair pair, Box box) -> Vec"""
+        return _sim3dlong.RepulsionII_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< HertzianAtomIndexed > &":
-        """atom_list(HertzianIdx self) -> std::vector< HertzianAtomIndexed > &"""
-        return _sim3dlong.HertzianIdx_atom_list(self)
+    def atom_list(self) -> "std::vector< IEpsISigExpAtom > &":
+        """atom_list(RepulsionII self) -> std::vector< IEpsISigExpAtom > &"""
+        return _sim3dlong.RepulsionII_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(HertzianIdx self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.HertzianIdx_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(RepulsionII self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.RepulsionII_neighbor_list(self)
 
-    __swig_destroy__ = _sim3dlong.delete_HertzianIdx
+    __swig_destroy__ = _sim3dlong.delete_RepulsionII
     __del__ = lambda self: None
-HertzianIdx_swigregister = _sim3dlong.HertzianIdx_swigregister
-HertzianIdx_swigregister(HertzianIdx)
+RepulsionII_swigregister = _sim3dlong.RepulsionII_swigregister
+RepulsionII_swigregister(RepulsionII)
 
-class HertzianDrag(interaction):
-    """Proxy of C++ NListed<(HertzianDragAtom,HertzianDragPair)> class"""
+class HertzianDrag(Interaction):
+    """Proxy of C++ NListed<(EpsSigExpDragAtom,RepulsionDragPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianDrag, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, HertzianDrag, name)
     __repr__ = _swig_repr
 
-    def add(self, atm: 'HertzianDragAtom') -> "void":
-        """add(HertzianDrag self, HertzianDragAtom atm)"""
+    def add(self, atm: 'EpsSigExpDragAtom') -> "void":
+        """add(HertzianDrag self, EpsSigExpDragAtom atm)"""
         return _sim3dlong.HertzianDrag_add(self, atm)
 
 
     def __init__(self, *args):
         """
-        __init__(NListed<(HertzianDragAtom,HertzianDragPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> HertzianDrag
-        __init__(NListed<(HertzianDragAtom,HertzianDragPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> HertzianDrag
+        __init__(NListed<(EpsSigExpDragAtom,RepulsionDragPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> HertzianDrag
+        __init__(NListed<(EpsSigExpDragAtom,RepulsionDragPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> HertzianDrag
         """
         this = _sim3dlong.new_HertzianDrag(*args)
         try:
@@ -13508,19 +13175,19 @@ class HertzianDrag(interaction):
         return _sim3dlong.HertzianDrag_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "HertzianDragPair":
-        """getpair(HertzianDrag self, idpair pair) -> HertzianDragPair"""
-        return _sim3dlong.HertzianDrag_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "RepulsionDragPair":
+        """get_pair(HertzianDrag self, IDPair pair) -> RepulsionDragPair"""
+        return _sim3dlong.HertzianDrag_get_pair(self, pair)
 
 
-    def getatom(self, n: 'uint') -> "HertzianDragAtom &":
-        """getatom(HertzianDrag self, uint n) -> HertzianDragAtom"""
+    def getatom(self, n: 'uint') -> "EpsSigExpDragAtom &":
+        """getatom(HertzianDrag self, uint n) -> EpsSigExpDragAtom"""
         return _sim3dlong.HertzianDrag_getatom(self, n)
 
 
     def energy(self, *args) -> "flt":
         """
-        energy(HertzianDrag self, Box box, idpair pair) -> flt
+        energy(HertzianDrag self, Box box, IDPair pair) -> flt
         energy(HertzianDrag self, Box box) -> flt
         """
         return _sim3dlong.HertzianDrag_energy(self, *args)
@@ -13541,9 +13208,9 @@ class HertzianDrag(interaction):
         return _sim3dlong.HertzianDrag_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< HertzianDragPair > &":
-        """pairiter(HertzianDrag self) -> std::vector< HertzianDragPair > &"""
-        return _sim3dlong.HertzianDrag_pairiter(self)
+    def pair_iter(self) -> "std::vector< RepulsionDragPair > &":
+        """pair_iter(HertzianDrag self) -> std::vector< RepulsionDragPair > &"""
+        return _sim3dlong.HertzianDrag_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -13551,62 +13218,62 @@ class HertzianDrag(interaction):
         return _sim3dlong.HertzianDrag_size(self)
 
 
-    def energy_pair(self, pair: 'HertzianDragPair', box: 'Box') -> "flt":
-        """energy_pair(HertzianDrag self, HertzianDragPair pair, Box box) -> flt"""
+    def energy_pair(self, pair: 'RepulsionDragPair', box: 'Box') -> "flt":
+        """energy_pair(HertzianDrag self, RepulsionDragPair pair, Box box) -> flt"""
         return _sim3dlong.HertzianDrag_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(HertzianDrag self, Box box)"""
-        return _sim3dlong.HertzianDrag_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(HertzianDrag self, Box box)"""
+        return _sim3dlong.HertzianDrag_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(HertzianDrag self, Box box) -> flt"""
-        return _sim3dlong.HertzianDrag_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(HertzianDrag self, Box box) -> flt"""
+        return _sim3dlong.HertzianDrag_set_forces_get_pressure(self, box)
 
 
-    def forces_pair(self, pair: 'HertzianDragPair', box: 'Box') -> "Vec":
-        """forces_pair(HertzianDrag self, HertzianDragPair pair, Box box) -> Vec"""
+    def forces_pair(self, pair: 'RepulsionDragPair', box: 'Box') -> "Vec":
+        """forces_pair(HertzianDrag self, RepulsionDragPair pair, Box box) -> Vec"""
         return _sim3dlong.HertzianDrag_forces_pair(self, pair, box)
 
 
-    def atom_list(self) -> "std::vector< HertzianDragAtom > &":
-        """atom_list(HertzianDrag self) -> std::vector< HertzianDragAtom > &"""
+    def atom_list(self) -> "std::vector< EpsSigExpDragAtom > &":
+        """atom_list(HertzianDrag self) -> std::vector< EpsSigExpDragAtom > &"""
         return _sim3dlong.HertzianDrag_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(HertzianDrag self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.HertzianDrag_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(HertzianDrag self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.HertzianDrag_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_HertzianDrag
     __del__ = lambda self: None
 HertzianDrag_swigregister = _sim3dlong.HertzianDrag_swigregister
 HertzianDrag_swigregister(HertzianDrag)
 
-class HertzianSC(interaction):
-    """Proxy of C++ SCboxed<(HertzianAtom,HertzianPair)> class"""
+class HertzianSC(Interaction):
+    """Proxy of C++ SCBoxed<(EpsSigExpAtom,RepulsionPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianSC, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, HertzianSC, name)
     __repr__ = _swig_repr
 
-    def __init__(self, atomv: 'boost::shared_ptr< atomvec >', box: 'boost::shared_ptr< SCbox >'):
-        """__init__(SCboxed<(HertzianAtom,HertzianPair)> self, boost::shared_ptr< atomvec > atomv, boost::shared_ptr< SCbox > box) -> HertzianSC"""
+    def __init__(self, atomv: 'boost::shared_ptr< AtomVec >', box: 'boost::shared_ptr< SCBox >'):
+        """__init__(SCBoxed<(EpsSigExpAtom,RepulsionPair)> self, boost::shared_ptr< AtomVec > atomv, boost::shared_ptr< SCBox > box) -> HertzianSC"""
         this = _sim3dlong.new_HertzianSC(atomv, box)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def add(self, atm: 'HertzianAtom') -> "void":
-        """add(HertzianSC self, HertzianAtom atm)"""
+    def add(self, atm: 'EpsSigExpAtom') -> "void":
+        """add(HertzianSC self, EpsSigExpAtom atm)"""
         return _sim3dlong.HertzianSC_add(self, atm)
 
 
@@ -13620,18 +13287,18 @@ class HertzianSC(interaction):
         return _sim3dlong.HertzianSC_pressure(self, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(HertzianSC self, Box box)"""
-        return _sim3dlong.HertzianSC_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(HertzianSC self, Box box)"""
+        return _sim3dlong.HertzianSC_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(HertzianSC self, Box box) -> flt"""
-        return _sim3dlong.HertzianSC_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(HertzianSC self, Box box) -> flt"""
+        return _sim3dlong.HertzianSC_set_forces_get_pressure(self, box)
 
 
-    def atom_list(self) -> "std::vector< HertzianAtom > &":
-        """atom_list(HertzianSC self) -> std::vector< HertzianAtom > &"""
+    def atom_list(self) -> "std::vector< EpsSigExpAtom > &":
+        """atom_list(HertzianSC self) -> std::vector< EpsSigExpAtom > &"""
         return _sim3dlong.HertzianSC_atom_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_HertzianSC
@@ -13639,37 +13306,37 @@ class HertzianSC(interaction):
 HertzianSC_swigregister = _sim3dlong.HertzianSC_swigregister
 HertzianSC_swigregister(HertzianSC)
 
-class HertzianVirial(interactionpairsx):
-    """Proxy of C++ NListedVirial<(HertzianAtom,HertzianPair)> class"""
+class HertzianVirial(InteractionPairsX):
+    """Proxy of C++ NListedVirial<(EpsSigExpAtom,RepulsionPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interactionpairsx]:
+    for _s in [InteractionPairsX]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, HertzianVirial, name, value)
     __swig_getmethods__ = {}
-    for _s in [interactionpairsx]:
+    for _s in [InteractionPairsX]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, HertzianVirial, name)
     __repr__ = _swig_repr
 
-    def __init__(self, vec: 'boost::shared_ptr< atomvec >', neighbors: 'boost::shared_ptr< neighborlist >'):
-        """__init__(NListedVirial<(HertzianAtom,HertzianPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> HertzianVirial"""
+    def __init__(self, vec: 'boost::shared_ptr< AtomVec >', neighbors: 'boost::shared_ptr< NeighborList >'):
+        """__init__(NListedVirial<(EpsSigExpAtom,RepulsionPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> HertzianVirial"""
         this = _sim3dlong.new_HertzianVirial(vec, neighbors)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def setForces(self, *args) -> "void":
+    def set_forces(self, *args) -> "void":
         """
-        setForces(HertzianVirial self, Box box)
-        setForces(HertzianVirial self, Box box, fpairxFunct arg3)
+        set_forces(HertzianVirial self, Box box)
+        set_forces(HertzianVirial self, Box box, FPairXFunct arg3)
         """
-        return _sim3dlong.HertzianVirial_setForces(self, *args)
+        return _sim3dlong.HertzianVirial_set_forces(self, *args)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(HertzianVirial self, Box box) -> flt"""
-        return _sim3dlong.HertzianVirial_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(HertzianVirial self, Box box) -> flt"""
+        return _sim3dlong.HertzianVirial_set_forces_get_pressure(self, box)
 
 
     def setForcesGetEnergy(self, box: 'Box') -> "flt":
@@ -13687,28 +13354,28 @@ class HertzianVirial(interactionpairsx):
         return _sim3dlong.HertzianVirial_pressure(self, box)
 
 
-    def add(self, atm: 'HertzianAtom') -> "void":
-        """add(HertzianVirial self, HertzianAtom atm)"""
+    def add(self, atm: 'EpsSigExpAtom') -> "void":
+        """add(HertzianVirial self, EpsSigExpAtom atm)"""
         return _sim3dlong.HertzianVirial_add(self, atm)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(HertzianVirial self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.HertzianVirial_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(HertzianVirial self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.HertzianVirial_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_HertzianVirial
     __del__ = lambda self: None
 HertzianVirial_swigregister = _sim3dlong.HertzianVirial_swigregister
 HertzianVirial_swigregister(HertzianVirial)
 
-class LoisOhern(interaction):
+class LoisOhern(Interaction):
     """Proxy of C++ NListed<(LoisOhernAtom,LoisOhernPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LoisOhern, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LoisOhern, name)
     __repr__ = _swig_repr
@@ -13720,8 +13387,8 @@ class LoisOhern(interaction):
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LoisOhernAtom,LoisOhernPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LoisOhern
-        __init__(NListed<(LoisOhernAtom,LoisOhernPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LoisOhern
+        __init__(NListed<(LoisOhernAtom,LoisOhernPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LoisOhern
+        __init__(NListed<(LoisOhernAtom,LoisOhernPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LoisOhern
         """
         this = _sim3dlong.new_LoisOhern(*args)
         try:
@@ -13734,9 +13401,9 @@ class LoisOhern(interaction):
         return _sim3dlong.LoisOhern_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LoisOhernPair":
-        """getpair(LoisOhern self, idpair pair) -> LoisOhernPair"""
-        return _sim3dlong.LoisOhern_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LoisOhernPair":
+        """get_pair(LoisOhern self, IDPair pair) -> LoisOhernPair"""
+        return _sim3dlong.LoisOhern_get_pair(self, pair)
 
 
     def getatom(self, n: 'uint') -> "LoisOhernAtom &":
@@ -13746,7 +13413,7 @@ class LoisOhern(interaction):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LoisOhern self, Box box, idpair pair) -> flt
+        energy(LoisOhern self, Box box, IDPair pair) -> flt
         energy(LoisOhern self, Box box) -> flt
         """
         return _sim3dlong.LoisOhern_energy(self, *args)
@@ -13767,9 +13434,9 @@ class LoisOhern(interaction):
         return _sim3dlong.LoisOhern_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LoisOhernPair > &":
-        """pairiter(LoisOhern self) -> std::vector< LoisOhernPair > &"""
-        return _sim3dlong.LoisOhern_pairiter(self)
+    def pair_iter(self) -> "std::vector< LoisOhernPair > &":
+        """pair_iter(LoisOhern self) -> std::vector< LoisOhernPair > &"""
+        return _sim3dlong.LoisOhern_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -13782,14 +13449,14 @@ class LoisOhern(interaction):
         return _sim3dlong.LoisOhern_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LoisOhern self, Box box)"""
-        return _sim3dlong.LoisOhern_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LoisOhern self, Box box)"""
+        return _sim3dlong.LoisOhern_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LoisOhern self, Box box) -> flt"""
-        return _sim3dlong.LoisOhern_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LoisOhern self, Box box) -> flt"""
+        return _sim3dlong.LoisOhern_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LoisOhernPair', box: 'Box') -> "Vec":
@@ -13802,23 +13469,23 @@ class LoisOhern(interaction):
         return _sim3dlong.LoisOhern_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LoisOhern self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LoisOhern_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LoisOhern self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LoisOhern_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisOhern
     __del__ = lambda self: None
 LoisOhern_swigregister = _sim3dlong.LoisOhern_swigregister
 LoisOhern_swigregister(LoisOhern)
 
-class LoisLin(interaction):
+class LoisLin(Interaction):
     """Proxy of C++ NListed<(LoisLinAtom,LoisLinPair)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LoisLin, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LoisLin, name)
     __repr__ = _swig_repr
@@ -13830,8 +13497,8 @@ class LoisLin(interaction):
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LoisLinAtom,LoisLinPair)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LoisLin
-        __init__(NListed<(LoisLinAtom,LoisLinPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LoisLin
+        __init__(NListed<(LoisLinAtom,LoisLinPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LoisLin
+        __init__(NListed<(LoisLinAtom,LoisLinPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LoisLin
         """
         this = _sim3dlong.new_LoisLin(*args)
         try:
@@ -13844,9 +13511,9 @@ class LoisLin(interaction):
         return _sim3dlong.LoisLin_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LoisLinPair":
-        """getpair(LoisLin self, idpair pair) -> LoisLinPair"""
-        return _sim3dlong.LoisLin_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LoisLinPair":
+        """get_pair(LoisLin self, IDPair pair) -> LoisLinPair"""
+        return _sim3dlong.LoisLin_get_pair(self, pair)
 
 
     def getatom(self, n: 'uint') -> "LoisLinAtom &":
@@ -13856,7 +13523,7 @@ class LoisLin(interaction):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LoisLin self, Box box, idpair pair) -> flt
+        energy(LoisLin self, Box box, IDPair pair) -> flt
         energy(LoisLin self, Box box) -> flt
         """
         return _sim3dlong.LoisLin_energy(self, *args)
@@ -13877,9 +13544,9 @@ class LoisLin(interaction):
         return _sim3dlong.LoisLin_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LoisLinPair > &":
-        """pairiter(LoisLin self) -> std::vector< LoisLinPair > &"""
-        return _sim3dlong.LoisLin_pairiter(self)
+    def pair_iter(self) -> "std::vector< LoisLinPair > &":
+        """pair_iter(LoisLin self) -> std::vector< LoisLinPair > &"""
+        return _sim3dlong.LoisLin_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -13892,14 +13559,14 @@ class LoisLin(interaction):
         return _sim3dlong.LoisLin_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LoisLin self, Box box)"""
-        return _sim3dlong.LoisLin_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LoisLin self, Box box)"""
+        return _sim3dlong.LoisLin_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LoisLin self, Box box) -> flt"""
-        return _sim3dlong.LoisLin_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LoisLin self, Box box) -> flt"""
+        return _sim3dlong.LoisLin_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LoisLinPair', box: 'Box') -> "Vec":
@@ -13912,23 +13579,23 @@ class LoisLin(interaction):
         return _sim3dlong.LoisLin_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LoisLin self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LoisLin_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LoisLin self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LoisLin_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisLin
     __del__ = lambda self: None
 LoisLin_swigregister = _sim3dlong.LoisLin_swigregister
 LoisLin_swigregister(LoisLin)
 
-class LoisLinMin(interaction):
+class LoisLinMin(Interaction):
     """Proxy of C++ NListed<(LoisLinAtom,LoisLinPairMin)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LoisLinMin, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LoisLinMin, name)
     __repr__ = _swig_repr
@@ -13940,8 +13607,8 @@ class LoisLinMin(interaction):
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LoisLinAtom,LoisLinPairMin)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LoisLinMin
-        __init__(NListed<(LoisLinAtom,LoisLinPairMin)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LoisLinMin
+        __init__(NListed<(LoisLinAtom,LoisLinPairMin)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LoisLinMin
+        __init__(NListed<(LoisLinAtom,LoisLinPairMin)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LoisLinMin
         """
         this = _sim3dlong.new_LoisLinMin(*args)
         try:
@@ -13954,9 +13621,9 @@ class LoisLinMin(interaction):
         return _sim3dlong.LoisLinMin_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LoisLinPairMin":
-        """getpair(LoisLinMin self, idpair pair) -> LoisLinPairMin"""
-        return _sim3dlong.LoisLinMin_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LoisLinPairMin":
+        """get_pair(LoisLinMin self, IDPair pair) -> LoisLinPairMin"""
+        return _sim3dlong.LoisLinMin_get_pair(self, pair)
 
 
     def getatom(self, n: 'uint') -> "LoisLinAtom &":
@@ -13966,7 +13633,7 @@ class LoisLinMin(interaction):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LoisLinMin self, Box box, idpair pair) -> flt
+        energy(LoisLinMin self, Box box, IDPair pair) -> flt
         energy(LoisLinMin self, Box box) -> flt
         """
         return _sim3dlong.LoisLinMin_energy(self, *args)
@@ -13987,9 +13654,9 @@ class LoisLinMin(interaction):
         return _sim3dlong.LoisLinMin_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LoisLinPairMin > &":
-        """pairiter(LoisLinMin self) -> std::vector< LoisLinPairMin > &"""
-        return _sim3dlong.LoisLinMin_pairiter(self)
+    def pair_iter(self) -> "std::vector< LoisLinPairMin > &":
+        """pair_iter(LoisLinMin self) -> std::vector< LoisLinPairMin > &"""
+        return _sim3dlong.LoisLinMin_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -14002,14 +13669,14 @@ class LoisLinMin(interaction):
         return _sim3dlong.LoisLinMin_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LoisLinMin self, Box box)"""
-        return _sim3dlong.LoisLinMin_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LoisLinMin self, Box box)"""
+        return _sim3dlong.LoisLinMin_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LoisLinMin self, Box box) -> flt"""
-        return _sim3dlong.LoisLinMin_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LoisLinMin self, Box box) -> flt"""
+        return _sim3dlong.LoisLinMin_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LoisLinPairMin', box: 'Box') -> "Vec":
@@ -14022,23 +13689,23 @@ class LoisLinMin(interaction):
         return _sim3dlong.LoisLinMin_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LoisLinMin self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LoisLinMin_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LoisLinMin self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LoisLinMin_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisLinMin
     __del__ = lambda self: None
 LoisLinMin_swigregister = _sim3dlong.LoisLinMin_swigregister
 LoisLinMin_swigregister(LoisLinMin)
 
-class LoisOhernMin(interaction):
+class LoisOhernMin(Interaction):
     """Proxy of C++ NListed<(LoisOhernAtom,LoisOhernPairMinCLs)> class"""
     __swig_setmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, LoisOhernMin, name, value)
     __swig_getmethods__ = {}
-    for _s in [interaction]:
+    for _s in [Interaction]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, LoisOhernMin, name)
     __repr__ = _swig_repr
@@ -14050,8 +13717,8 @@ class LoisOhernMin(interaction):
 
     def __init__(self, *args):
         """
-        __init__(NListed<(LoisOhernAtom,LoisOhernPairMinCLs)> self, boost::shared_ptr< atomvec > vec, boost::shared_ptr< neighborlist > neighbors) -> LoisOhernMin
-        __init__(NListed<(LoisOhernAtom,LoisOhernPairMinCLs)> self, boost::shared_ptr< Box > box, boost::shared_ptr< atomvec > atomv, flt const skin) -> LoisOhernMin
+        __init__(NListed<(LoisOhernAtom,LoisOhernPairMinCLs)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LoisOhernMin
+        __init__(NListed<(LoisOhernAtom,LoisOhernPairMinCLs)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LoisOhernMin
         """
         this = _sim3dlong.new_LoisOhernMin(*args)
         try:
@@ -14064,9 +13731,9 @@ class LoisOhernMin(interaction):
         return _sim3dlong.LoisOhernMin_update_pairs(self)
 
 
-    def getpair(self, pair: 'idpair') -> "LoisOhernPairMinCLs":
-        """getpair(LoisOhernMin self, idpair pair) -> LoisOhernPairMinCLs"""
-        return _sim3dlong.LoisOhernMin_getpair(self, pair)
+    def get_pair(self, pair: 'IDPair') -> "LoisOhernPairMinCLs":
+        """get_pair(LoisOhernMin self, IDPair pair) -> LoisOhernPairMinCLs"""
+        return _sim3dlong.LoisOhernMin_get_pair(self, pair)
 
 
     def getatom(self, n: 'uint') -> "LoisOhernAtom &":
@@ -14076,7 +13743,7 @@ class LoisOhernMin(interaction):
 
     def energy(self, *args) -> "flt":
         """
-        energy(LoisOhernMin self, Box box, idpair pair) -> flt
+        energy(LoisOhernMin self, Box box, IDPair pair) -> flt
         energy(LoisOhernMin self, Box box) -> flt
         """
         return _sim3dlong.LoisOhernMin_energy(self, *args)
@@ -14097,9 +13764,9 @@ class LoisOhernMin(interaction):
         return _sim3dlong.LoisOhernMin_pressure(self, box)
 
 
-    def pairiter(self) -> "std::vector< LoisOhernPairMinCLs > &":
-        """pairiter(LoisOhernMin self) -> std::vector< LoisOhernPairMinCLs > &"""
-        return _sim3dlong.LoisOhernMin_pairiter(self)
+    def pair_iter(self) -> "std::vector< LoisOhernPairMinCLs > &":
+        """pair_iter(LoisOhernMin self) -> std::vector< LoisOhernPairMinCLs > &"""
+        return _sim3dlong.LoisOhernMin_pair_iter(self)
 
 
     def size(self) -> "uint":
@@ -14112,14 +13779,14 @@ class LoisOhernMin(interaction):
         return _sim3dlong.LoisOhernMin_energy_pair(self, pair, box)
 
 
-    def setForces(self, box: 'Box') -> "void":
-        """setForces(LoisOhernMin self, Box box)"""
-        return _sim3dlong.LoisOhernMin_setForces(self, box)
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LoisOhernMin self, Box box)"""
+        return _sim3dlong.LoisOhernMin_set_forces(self, box)
 
 
-    def setForcesGetPressure(self, box: 'Box') -> "flt":
-        """setForcesGetPressure(LoisOhernMin self, Box box) -> flt"""
-        return _sim3dlong.LoisOhernMin_setForcesGetPressure(self, box)
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LoisOhernMin self, Box box) -> flt"""
+        return _sim3dlong.LoisOhernMin_set_forces_get_pressure(self, box)
 
 
     def forces_pair(self, pair: 'LoisOhernPairMinCLs', box: 'Box') -> "Vec":
@@ -14132,194 +13799,189 @@ class LoisOhernMin(interaction):
         return _sim3dlong.LoisOhernMin_atom_list(self)
 
 
-    def nlist(self) -> "boost::shared_ptr< neighborlist >":
-        """nlist(LoisOhernMin self) -> boost::shared_ptr< neighborlist >"""
-        return _sim3dlong.LoisOhernMin_nlist(self)
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LoisOhernMin self) -> boost::shared_ptr< NeighborList >"""
+        return _sim3dlong.LoisOhernMin_neighbor_list(self)
 
     __swig_destroy__ = _sim3dlong.delete_LoisOhernMin
     __del__ = lambda self: None
 LoisOhernMin_swigregister = _sim3dlong.LoisOhernMin_swigregister
 LoisOhernMin_swigregister(LoisOhernMin)
 
-class collection(_object):
-    """Proxy of C++ collection class"""
+class Collection(_object):
+    """Proxy of C++ Collection class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collection, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Collection, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, collection, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Collection, name)
 
     def __init__(self, *args, **kwargs):
         raise AttributeError("No constructor defined - class is abstract")
     __repr__ = _swig_repr
 
     def initialize(self) -> "void":
-        """initialize(collection self)"""
-        return _sim3dlong.collection_initialize(self)
+        """initialize(Collection self)"""
+        return _sim3dlong.Collection_initialize(self)
 
 
-    def setForces(self, constraints_and_a: 'bool'=True) -> "void":
+    def set_forces(self, constraints_and_a: 'bool'=True) -> "void":
         """
-        setForces(collection self, bool constraints_and_a=True)
-        setForces(collection self)
+        set_forces(Collection self, bool constraints_and_a=True)
+        set_forces(Collection self)
         """
-        return _sim3dlong.collection_setForces(self, constraints_and_a)
+        return _sim3dlong.Collection_set_forces(self, constraints_and_a)
 
 
     def timestep(self) -> "void":
-        """timestep(collection self)"""
-        return _sim3dlong.collection_timestep(self)
+        """timestep(Collection self)"""
+        return _sim3dlong.Collection_timestep(self)
 
 
-    def dof(self) -> "flt":
-        """dof(collection self) -> flt"""
-        return _sim3dlong.collection_dof(self)
+    def degrees_of_freedom(self) -> "flt":
+        """degrees_of_freedom(Collection self) -> flt"""
+        return _sim3dlong.Collection_degrees_of_freedom(self)
 
 
-    def potentialenergy(self) -> "flt":
-        """potentialenergy(collection self) -> flt"""
-        return _sim3dlong.collection_potentialenergy(self)
+    def potential_energy(self) -> "flt":
+        """potential_energy(Collection self) -> flt"""
+        return _sim3dlong.Collection_potential_energy(self)
 
 
     def energy(self) -> "flt":
-        """energy(collection self) -> flt"""
-        return _sim3dlong.collection_energy(self)
+        """energy(Collection self) -> flt"""
+        return _sim3dlong.Collection_energy(self)
 
 
     def temp(self, minuscomv: 'bool'=True) -> "flt":
         """
-        temp(collection self, bool minuscomv=True) -> flt
-        temp(collection self) -> flt
+        temp(Collection self, bool minuscomv=True) -> flt
+        temp(Collection self) -> flt
         """
-        return _sim3dlong.collection_temp(self, minuscomv)
+        return _sim3dlong.Collection_temp(self, minuscomv)
 
 
-    def kinetic(self) -> "flt":
-        """kinetic(collection self) -> flt"""
-        return _sim3dlong.collection_kinetic(self)
+    def kinetic_energy(self) -> "flt":
+        """kinetic_energy(Collection self) -> flt"""
+        return _sim3dlong.Collection_kinetic_energy(self)
 
 
     def virial(self) -> "flt":
-        """virial(collection self) -> flt"""
-        return _sim3dlong.collection_virial(self)
+        """virial(Collection self) -> flt"""
+        return _sim3dlong.Collection_virial(self)
 
 
     def pressure(self) -> "flt":
-        """pressure(collection self) -> flt"""
-        return _sim3dlong.collection_pressure(self)
+        """pressure(Collection self) -> flt"""
+        return _sim3dlong.Collection_pressure(self)
 
 
-    def getbox(self) -> "boost::shared_ptr< Box >":
-        """getbox(collection self) -> boost::shared_ptr< Box >"""
-        return _sim3dlong.collection_getbox(self)
+    def get_box(self) -> "boost::shared_ptr< Box >":
+        """get_box(Collection self) -> boost::shared_ptr< Box >"""
+        return _sim3dlong.Collection_get_box(self)
 
 
     def com(self) -> "Vec":
-        """com(collection self) -> Vec"""
-        return _sim3dlong.collection_com(self)
+        """com(Collection self) -> Vec"""
+        return _sim3dlong.Collection_com(self)
 
 
-    def comv(self) -> "Vec":
-        """comv(collection self) -> Vec"""
-        return _sim3dlong.collection_comv(self)
+    def com_velocity(self) -> "Vec":
+        """com_velocity(Collection self) -> Vec"""
+        return _sim3dlong.Collection_com_velocity(self)
 
 
-    def angmomentum(self, *args) -> "Vec":
+    def angular_momentum(self, *args) -> "Vec":
         """
-        angmomentum(collection self, Vec const & loc) -> Vec
-        angmomentum(collection self) -> Vec
+        angular_momentum(Collection self, Vec const & loc) -> Vec
+        angular_momentum(Collection self) -> Vec
         """
-        return _sim3dlong.collection_angmomentum(self, *args)
+        return _sim3dlong.Collection_angular_momentum(self, *args)
 
 
     def gyradius(self) -> "flt":
-        """gyradius(collection self) -> flt"""
-        return _sim3dlong.collection_gyradius(self)
+        """gyradius(Collection self) -> flt"""
+        return _sim3dlong.Collection_gyradius(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collection
+    __swig_destroy__ = _sim3dlong.delete_Collection
     __del__ = lambda self: None
 
-    def resetcomv(self) -> "void":
-        """resetcomv(collection self)"""
-        return _sim3dlong.collection_resetcomv(self)
+    def reset_com_velocity(self) -> "void":
+        """reset_com_velocity(Collection self)"""
+        return _sim3dlong.Collection_reset_com_velocity(self)
 
 
-    def resetL(self) -> "void":
-        """resetL(collection self)"""
-        return _sim3dlong.collection_resetL(self)
+    def reset_L(self) -> "void":
+        """reset_L(Collection self)"""
+        return _sim3dlong.Collection_reset_L(self)
 
 
-    def scaleVs(self, scaleby: 'flt') -> "void":
-        """scaleVs(collection self, flt scaleby)"""
-        return _sim3dlong.collection_scaleVs(self, scaleby)
+    def scale_velocities(self, scaleby: 'flt') -> "void":
+        """scale_velocities(Collection self, flt scaleby)"""
+        return _sim3dlong.Collection_scale_velocities(self, scaleby)
 
 
-    def scaleVelocitiesT(self, T: 'flt', minuscomv: 'bool'=True) -> "void":
+    def scale_velocities_to_temp(self, T: 'flt', minuscomv: 'bool'=True) -> "void":
         """
-        scaleVelocitiesT(collection self, flt T, bool minuscomv=True)
-        scaleVelocitiesT(collection self, flt T)
+        scale_velocities_to_temp(Collection self, flt T, bool minuscomv=True)
+        scale_velocities_to_temp(Collection self, flt T)
         """
-        return _sim3dlong.collection_scaleVelocitiesT(self, T, minuscomv)
+        return _sim3dlong.Collection_scale_velocities_to_temp(self, T, minuscomv)
 
 
-    def scaleVelocitiesE(self, E: 'flt') -> "void":
-        """scaleVelocitiesE(collection self, flt E)"""
-        return _sim3dlong.collection_scaleVelocitiesE(self, E)
+    def scale_velocities_to_energy(self, E: 'flt') -> "void":
+        """scale_velocities_to_energy(Collection self, flt E)"""
+        return _sim3dlong.Collection_scale_velocities_to_energy(self, E)
 
 
-    def addInteraction(self, inter: 'boost::shared_ptr< interaction >') -> "void":
-        """addInteraction(collection self, boost::shared_ptr< interaction > inter)"""
-        return _sim3dlong.collection_addInteraction(self, inter)
+    def add_interaction(self, inter: 'boost::shared_ptr< Interaction >') -> "void":
+        """add_interaction(Collection self, boost::shared_ptr< Interaction > inter)"""
+        return _sim3dlong.Collection_add_interaction(self, inter)
 
 
-    def addTracker(self, track: 'boost::shared_ptr< statetracker >') -> "void":
-        """addTracker(collection self, boost::shared_ptr< statetracker > track)"""
-        return _sim3dlong.collection_addTracker(self, track)
+    def add_tracker(self, track: 'boost::shared_ptr< StateTracker >') -> "void":
+        """add_tracker(Collection self, boost::shared_ptr< StateTracker > track)"""
+        return _sim3dlong.Collection_add_tracker(self, track)
 
 
-    def addConstraint(self, c: 'boost::shared_ptr< constraint >') -> "void":
-        """addConstraint(collection self, boost::shared_ptr< constraint > c)"""
-        return _sim3dlong.collection_addConstraint(self, c)
+    def add_constraint(self, c: 'boost::shared_ptr< Constraint >') -> "void":
+        """add_constraint(Collection self, boost::shared_ptr< Constraint > c)"""
+        return _sim3dlong.Collection_add_constraint(self, c)
 
 
     def add(self, *args) -> "void":
         """
-        add(collection self, boost::shared_ptr< interaction > a)
-        add(collection self, boost::shared_ptr< statetracker > a)
-        add(collection self, boost::shared_ptr< constraint > a)
+        add(Collection self, boost::shared_ptr< Interaction > a)
+        add(Collection self, boost::shared_ptr< StateTracker > a)
+        add(Collection self, boost::shared_ptr< Constraint > a)
         """
-        return _sim3dlong.collection_add(self, *args)
+        return _sim3dlong.Collection_add(self, *args)
 
 
-    def getInteractions(self) -> "std::vector< boost::shared_ptr< interaction > >":
-        """getInteractions(collection self) -> std::vector< boost::shared_ptr< interaction > >"""
-        return _sim3dlong.collection_getInteractions(self)
+    def get_interactions(self) -> "std::vector< boost::shared_ptr< Interaction > >":
+        """get_interactions(Collection self) -> std::vector< boost::shared_ptr< Interaction > >"""
+        return _sim3dlong.Collection_get_interactions(self)
 
+Collection_swigregister = _sim3dlong.Collection_swigregister
+Collection_swigregister(Collection)
 
-    def numInteraction(self) -> "uint":
-        """numInteraction(collection self) -> uint"""
-        return _sim3dlong.collection_numInteraction(self)
-
-collection_swigregister = _sim3dlong.collection_swigregister
-collection_swigregister(collection)
-
-class StaticCollec(collection):
+class StaticCollec(Collection):
     """Proxy of C++ StaticCollec class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, StaticCollec, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, StaticCollec, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms) -> StaticCollec
         """
         this = _sim3dlong.new_StaticCollec(*args)
         try:
@@ -14341,920 +14003,920 @@ class StaticCollec(collection):
 StaticCollec_swigregister = _sim3dlong.StaticCollec_swigregister
 StaticCollec_swigregister(StaticCollec)
 
-class collectionSol(collection):
-    """Proxy of C++ collectionSol class"""
+class CollectionSol(Collection):
+    """Proxy of C++ CollectionSol class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionSol, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionSol, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionSol, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionSol, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionSol
-        __init__(collectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionSol
-        __init__(collectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionSol
-        __init__(collectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT) -> collectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature) -> CollectionSol
         """
-        this = _sim3dlong.new_collectionSol(*args)
+        this = _sim3dlong.new_CollectionSol(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def changeT(self, damp: 'flt const', desiredT: 'flt const') -> "void":
-        """changeT(collectionSol self, flt const damp, flt const desiredT)"""
-        return _sim3dlong.collectionSol_changeT(self, damp, desiredT)
+    def change_temperature(self, damp: 'flt const', desired_temperature: 'flt const') -> "void":
+        """change_temperature(CollectionSol self, flt const damp, flt const desired_temperature)"""
+        return _sim3dlong.CollectionSol_change_temperature(self, damp, desired_temperature)
 
 
-    def changeMag(self, damp: 'flt const', fmag: 'flt const', desiredT: 'flt const') -> "void":
-        """changeMag(collectionSol self, flt const damp, flt const fmag, flt const desiredT)"""
-        return _sim3dlong.collectionSol_changeMag(self, damp, fmag, desiredT)
+    def change_force(self, damp: 'flt const', fmag: 'flt const', desired_temperature: 'flt const') -> "void":
+        """change_force(CollectionSol self, flt const damp, flt const fmag, flt const desired_temperature)"""
+        return _sim3dlong.CollectionSol_change_force(self, damp, fmag, desired_temperature)
 
 
-    def setdt(self, newdt: 'flt const') -> "void":
-        """setdt(collectionSol self, flt const newdt)"""
-        return _sim3dlong.collectionSol_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt const') -> "void":
+        """set_dt(CollectionSol self, flt const newdt)"""
+        return _sim3dlong.CollectionSol_set_dt(self, newdt)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionSol self)"""
-        return _sim3dlong.collectionSol_timestep(self)
+        """timestep(CollectionSol self)"""
+        return _sim3dlong.CollectionSol_timestep(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionSol
+    __swig_destroy__ = _sim3dlong.delete_CollectionSol
     __del__ = lambda self: None
-collectionSol_swigregister = _sim3dlong.collectionSol_swigregister
-collectionSol_swigregister(collectionSol)
+CollectionSol_swigregister = _sim3dlong.CollectionSol_swigregister
+CollectionSol_swigregister(CollectionSol)
 
-class collectionDamped(collection):
-    """Proxy of C++ collectionDamped class"""
+class CollectionDamped(Collection):
+    """Proxy of C++ CollectionDamped class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionDamped, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionDamped, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionDamped, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionDamped, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionDamped
-        __init__(collectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionDamped
-        __init__(collectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionDamped
-        __init__(collectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping) -> collectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping) -> CollectionDamped
         """
-        this = _sim3dlong.new_collectionDamped(*args)
+        this = _sim3dlong.new_CollectionDamped(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def changeDamp(self, damp: 'flt const') -> "void":
-        """changeDamp(collectionDamped self, flt const damp)"""
-        return _sim3dlong.collectionDamped_changeDamp(self, damp)
+    def change_damping(self, damp: 'flt const') -> "void":
+        """change_damping(CollectionDamped self, flt const damp)"""
+        return _sim3dlong.CollectionDamped_change_damping(self, damp)
 
 
-    def setdt(self, newdt: 'flt const') -> "void":
-        """setdt(collectionDamped self, flt const newdt)"""
-        return _sim3dlong.collectionDamped_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt const') -> "void":
+        """set_dt(CollectionDamped self, flt const newdt)"""
+        return _sim3dlong.CollectionDamped_set_dt(self, newdt)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionDamped self)"""
-        return _sim3dlong.collectionDamped_timestep(self)
+        """timestep(CollectionDamped self)"""
+        return _sim3dlong.CollectionDamped_timestep(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionDamped
+    __swig_destroy__ = _sim3dlong.delete_CollectionDamped
     __del__ = lambda self: None
-collectionDamped_swigregister = _sim3dlong.collectionDamped_swigregister
-collectionDamped_swigregister(collectionDamped)
+CollectionDamped_swigregister = _sim3dlong.CollectionDamped_swigregister
+CollectionDamped_swigregister(CollectionDamped)
 
-class collectionSolHT(collection):
-    """Proxy of C++ collectionSolHT class"""
+class CollectionSolHT(Collection):
+    """Proxy of C++ CollectionSolHT class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionSolHT, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionSolHT, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionSolHT, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionSolHT, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionSolHT
-        __init__(collectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionSolHT
-        __init__(collectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionSolHT
-        __init__(collectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const damping, flt const desiredT) -> collectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature) -> CollectionSolHT
         """
-        this = _sim3dlong.new_collectionSolHT(*args)
+        this = _sim3dlong.new_CollectionSolHT(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def changeT(self, newdt: 'flt const', damp: 'flt const', desiredT: 'flt const') -> "void":
-        """changeT(collectionSolHT self, flt const newdt, flt const damp, flt const desiredT)"""
-        return _sim3dlong.collectionSolHT_changeT(self, newdt, damp, desiredT)
+    def change_temperature(self, newdt: 'flt const', damp: 'flt const', desired_temperature: 'flt const') -> "void":
+        """change_temperature(CollectionSolHT self, flt const newdt, flt const damp, flt const desired_temperature)"""
+        return _sim3dlong.CollectionSolHT_change_temperature(self, newdt, damp, desired_temperature)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionSolHT self)"""
-        return _sim3dlong.collectionSolHT_timestep(self)
+        """timestep(CollectionSolHT self)"""
+        return _sim3dlong.CollectionSolHT_timestep(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionSolHT
+    __swig_destroy__ = _sim3dlong.delete_CollectionSolHT
     __del__ = lambda self: None
-collectionSolHT_swigregister = _sim3dlong.collectionSolHT_swigregister
-collectionSolHT_swigregister(collectionSolHT)
+CollectionSolHT_swigregister = _sim3dlong.CollectionSolHT_swigregister
+CollectionSolHT_swigregister(CollectionSolHT)
 
-class collectionVerlet(collection):
-    """Proxy of C++ collectionVerlet class"""
+class CollectionVerlet(Collection):
+    """Proxy of C++ CollectionVerlet class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionVerlet, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionVerlet, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionVerlet, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionVerlet, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionVerlet
-        __init__(collectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionVerlet
-        __init__(collectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionVerlet
-        __init__(collectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionVerlet
         """
-        this = _sim3dlong.new_collectionVerlet(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def timestep(self) -> "void":
-        """timestep(collectionVerlet self)"""
-        return _sim3dlong.collectionVerlet_timestep(self)
-
-
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionVerlet self, flt newdt)"""
-        return _sim3dlong.collectionVerlet_setdt(self, newdt)
-
-    __swig_destroy__ = _sim3dlong.delete_collectionVerlet
-    __del__ = lambda self: None
-collectionVerlet_swigregister = _sim3dlong.collectionVerlet_swigregister
-collectionVerlet_swigregister(collectionVerlet)
-
-class collectionOverdamped(collection):
-    """Proxy of C++ collectionOverdamped class"""
-    __swig_setmethods__ = {}
-    for _s in [collection]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionOverdamped, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collection]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionOverdamped, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(collectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionOverdamped
-        __init__(collectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionOverdamped
-        __init__(collectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionOverdamped
-        __init__(collectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const gamma=1.0) -> collectionOverdamped
-        __init__(collectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionOverdamped
-        """
-        this = _sim3dlong.new_collectionOverdamped(*args)
+        this = _sim3dlong.new_CollectionVerlet(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionOverdamped self)"""
-        return _sim3dlong.collectionOverdamped_timestep(self)
+        """timestep(CollectionVerlet self)"""
+        return _sim3dlong.CollectionVerlet_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionOverdamped self, flt newdt)"""
-        return _sim3dlong.collectionOverdamped_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionVerlet self, flt newdt)"""
+        return _sim3dlong.CollectionVerlet_set_dt(self, newdt)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionOverdamped
+    __swig_destroy__ = _sim3dlong.delete_CollectionVerlet
     __del__ = lambda self: None
-collectionOverdamped_swigregister = _sim3dlong.collectionOverdamped_swigregister
-collectionOverdamped_swigregister(collectionOverdamped)
+CollectionVerlet_swigregister = _sim3dlong.CollectionVerlet_swigregister
+CollectionVerlet_swigregister(CollectionVerlet)
 
-class collectionNLCG(collection):
-    """Proxy of C++ collectionNLCG class"""
+class CollectionOverdamped(Collection):
+    """Proxy of C++ CollectionOverdamped class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionNLCG, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionOverdamped, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionNLCG, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionOverdamped, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["dt"] = _sim3dlong.collectionNLCG_dt_set
-    __swig_getmethods__["dt"] = _sim3dlong.collectionNLCG_dt_get
+
+    def __init__(self, *args):
+        """
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionOverdamped
+        """
+        this = _sim3dlong.new_CollectionOverdamped(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def timestep(self) -> "void":
+        """timestep(CollectionOverdamped self)"""
+        return _sim3dlong.CollectionOverdamped_timestep(self)
+
+
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionOverdamped self, flt newdt)"""
+        return _sim3dlong.CollectionOverdamped_set_dt(self, newdt)
+
+    __swig_destroy__ = _sim3dlong.delete_CollectionOverdamped
+    __del__ = lambda self: None
+CollectionOverdamped_swigregister = _sim3dlong.CollectionOverdamped_swigregister
+CollectionOverdamped_swigregister(CollectionOverdamped)
+
+class CollectionNLCG(Collection):
+    """Proxy of C++ CollectionNLCG class"""
+    __swig_setmethods__ = {}
+    for _s in [Collection]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionNLCG, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Collection]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionNLCG, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["dt"] = _sim3dlong.CollectionNLCG_dt_set
+    __swig_getmethods__["dt"] = _sim3dlong.CollectionNLCG_dt_get
     if _newclass:
-        dt = _swig_property(_sim3dlong.collectionNLCG_dt_get, _sim3dlong.collectionNLCG_dt_set)
-    __swig_setmethods__["seceps"] = _sim3dlong.collectionNLCG_seceps_set
-    __swig_getmethods__["seceps"] = _sim3dlong.collectionNLCG_seceps_get
+        dt = _swig_property(_sim3dlong.CollectionNLCG_dt_get, _sim3dlong.CollectionNLCG_dt_set)
+    __swig_setmethods__["seceps"] = _sim3dlong.CollectionNLCG_seceps_set
+    __swig_getmethods__["seceps"] = _sim3dlong.CollectionNLCG_seceps_get
     if _newclass:
-        seceps = _swig_property(_sim3dlong.collectionNLCG_seceps_get, _sim3dlong.collectionNLCG_seceps_set)
-    __swig_setmethods__["secmax"] = _sim3dlong.collectionNLCG_secmax_set
-    __swig_getmethods__["secmax"] = _sim3dlong.collectionNLCG_secmax_get
+        seceps = _swig_property(_sim3dlong.CollectionNLCG_seceps_get, _sim3dlong.CollectionNLCG_seceps_set)
+    __swig_setmethods__["secmax"] = _sim3dlong.CollectionNLCG_secmax_set
+    __swig_getmethods__["secmax"] = _sim3dlong.CollectionNLCG_secmax_get
     if _newclass:
-        secmax = _swig_property(_sim3dlong.collectionNLCG_secmax_get, _sim3dlong.collectionNLCG_secmax_set)
-    __swig_setmethods__["kappa"] = _sim3dlong.collectionNLCG_kappa_set
-    __swig_getmethods__["kappa"] = _sim3dlong.collectionNLCG_kappa_get
+        secmax = _swig_property(_sim3dlong.CollectionNLCG_secmax_get, _sim3dlong.CollectionNLCG_secmax_set)
+    __swig_setmethods__["kappa"] = _sim3dlong.CollectionNLCG_kappa_set
+    __swig_getmethods__["kappa"] = _sim3dlong.CollectionNLCG_kappa_get
     if _newclass:
-        kappa = _swig_property(_sim3dlong.collectionNLCG_kappa_get, _sim3dlong.collectionNLCG_kappa_set)
-    __swig_setmethods__["alphamax"] = _sim3dlong.collectionNLCG_alphamax_set
-    __swig_getmethods__["alphamax"] = _sim3dlong.collectionNLCG_alphamax_get
+        kappa = _swig_property(_sim3dlong.CollectionNLCG_kappa_get, _sim3dlong.CollectionNLCG_kappa_set)
+    __swig_setmethods__["alphamax"] = _sim3dlong.CollectionNLCG_alphamax_set
+    __swig_getmethods__["alphamax"] = _sim3dlong.CollectionNLCG_alphamax_get
     if _newclass:
-        alphamax = _swig_property(_sim3dlong.collectionNLCG_alphamax_get, _sim3dlong.collectionNLCG_alphamax_set)
-    __swig_setmethods__["afrac"] = _sim3dlong.collectionNLCG_afrac_set
-    __swig_getmethods__["afrac"] = _sim3dlong.collectionNLCG_afrac_get
+        alphamax = _swig_property(_sim3dlong.CollectionNLCG_alphamax_get, _sim3dlong.CollectionNLCG_alphamax_set)
+    __swig_setmethods__["afrac"] = _sim3dlong.CollectionNLCG_afrac_set
+    __swig_getmethods__["afrac"] = _sim3dlong.CollectionNLCG_afrac_get
     if _newclass:
-        afrac = _swig_property(_sim3dlong.collectionNLCG_afrac_get, _sim3dlong.collectionNLCG_afrac_set)
-    __swig_setmethods__["dxmax"] = _sim3dlong.collectionNLCG_dxmax_set
-    __swig_getmethods__["dxmax"] = _sim3dlong.collectionNLCG_dxmax_get
+        afrac = _swig_property(_sim3dlong.CollectionNLCG_afrac_get, _sim3dlong.CollectionNLCG_afrac_set)
+    __swig_setmethods__["dxmax"] = _sim3dlong.CollectionNLCG_dxmax_set
+    __swig_getmethods__["dxmax"] = _sim3dlong.CollectionNLCG_dxmax_get
     if _newclass:
-        dxmax = _swig_property(_sim3dlong.collectionNLCG_dxmax_get, _sim3dlong.collectionNLCG_dxmax_set)
-    __swig_setmethods__["stepmax"] = _sim3dlong.collectionNLCG_stepmax_set
-    __swig_getmethods__["stepmax"] = _sim3dlong.collectionNLCG_stepmax_get
+        dxmax = _swig_property(_sim3dlong.CollectionNLCG_dxmax_get, _sim3dlong.CollectionNLCG_dxmax_set)
+    __swig_setmethods__["stepmax"] = _sim3dlong.CollectionNLCG_stepmax_set
+    __swig_getmethods__["stepmax"] = _sim3dlong.CollectionNLCG_stepmax_get
     if _newclass:
-        stepmax = _swig_property(_sim3dlong.collectionNLCG_stepmax_get, _sim3dlong.collectionNLCG_stepmax_set)
-    __swig_setmethods__["kmax"] = _sim3dlong.collectionNLCG_kmax_set
-    __swig_getmethods__["kmax"] = _sim3dlong.collectionNLCG_kmax_get
+        stepmax = _swig_property(_sim3dlong.CollectionNLCG_stepmax_get, _sim3dlong.CollectionNLCG_stepmax_set)
+    __swig_setmethods__["kmax"] = _sim3dlong.CollectionNLCG_kmax_set
+    __swig_getmethods__["kmax"] = _sim3dlong.CollectionNLCG_kmax_get
     if _newclass:
-        kmax = _swig_property(_sim3dlong.collectionNLCG_kmax_get, _sim3dlong.collectionNLCG_kmax_set)
-    __swig_setmethods__["P0"] = _sim3dlong.collectionNLCG_P0_set
-    __swig_getmethods__["P0"] = _sim3dlong.collectionNLCG_P0_get
+        kmax = _swig_property(_sim3dlong.CollectionNLCG_kmax_get, _sim3dlong.CollectionNLCG_kmax_set)
+    __swig_setmethods__["P0"] = _sim3dlong.CollectionNLCG_P0_set
+    __swig_getmethods__["P0"] = _sim3dlong.CollectionNLCG_P0_get
     if _newclass:
-        P0 = _swig_property(_sim3dlong.collectionNLCG_P0_get, _sim3dlong.collectionNLCG_P0_set)
-    __swig_setmethods__["Knew"] = _sim3dlong.collectionNLCG_Knew_set
-    __swig_getmethods__["Knew"] = _sim3dlong.collectionNLCG_Knew_get
+        P0 = _swig_property(_sim3dlong.CollectionNLCG_P0_get, _sim3dlong.CollectionNLCG_P0_set)
+    __swig_setmethods__["Knew"] = _sim3dlong.CollectionNLCG_Knew_set
+    __swig_getmethods__["Knew"] = _sim3dlong.CollectionNLCG_Knew_get
     if _newclass:
-        Knew = _swig_property(_sim3dlong.collectionNLCG_Knew_get, _sim3dlong.collectionNLCG_Knew_set)
-    __swig_setmethods__["k"] = _sim3dlong.collectionNLCG_k_set
-    __swig_getmethods__["k"] = _sim3dlong.collectionNLCG_k_get
+        Knew = _swig_property(_sim3dlong.CollectionNLCG_Knew_get, _sim3dlong.CollectionNLCG_Knew_set)
+    __swig_setmethods__["k"] = _sim3dlong.CollectionNLCG_k_set
+    __swig_getmethods__["k"] = _sim3dlong.CollectionNLCG_k_get
     if _newclass:
-        k = _swig_property(_sim3dlong.collectionNLCG_k_get, _sim3dlong.collectionNLCG_k_set)
-    __swig_setmethods__["vl"] = _sim3dlong.collectionNLCG_vl_set
-    __swig_getmethods__["vl"] = _sim3dlong.collectionNLCG_vl_get
+        k = _swig_property(_sim3dlong.CollectionNLCG_k_get, _sim3dlong.CollectionNLCG_k_set)
+    __swig_setmethods__["vl"] = _sim3dlong.CollectionNLCG_vl_set
+    __swig_getmethods__["vl"] = _sim3dlong.CollectionNLCG_vl_get
     if _newclass:
-        vl = _swig_property(_sim3dlong.collectionNLCG_vl_get, _sim3dlong.collectionNLCG_vl_set)
-    __swig_setmethods__["fl"] = _sim3dlong.collectionNLCG_fl_set
-    __swig_getmethods__["fl"] = _sim3dlong.collectionNLCG_fl_get
+        vl = _swig_property(_sim3dlong.CollectionNLCG_vl_get, _sim3dlong.CollectionNLCG_vl_set)
+    __swig_setmethods__["fl"] = _sim3dlong.CollectionNLCG_fl_set
+    __swig_getmethods__["fl"] = _sim3dlong.CollectionNLCG_fl_get
     if _newclass:
-        fl = _swig_property(_sim3dlong.collectionNLCG_fl_get, _sim3dlong.collectionNLCG_fl_set)
-    __swig_setmethods__["al"] = _sim3dlong.collectionNLCG_al_set
-    __swig_getmethods__["al"] = _sim3dlong.collectionNLCG_al_get
+        fl = _swig_property(_sim3dlong.CollectionNLCG_fl_get, _sim3dlong.CollectionNLCG_fl_set)
+    __swig_setmethods__["al"] = _sim3dlong.CollectionNLCG_al_set
+    __swig_getmethods__["al"] = _sim3dlong.CollectionNLCG_al_get
     if _newclass:
-        al = _swig_property(_sim3dlong.collectionNLCG_al_get, _sim3dlong.collectionNLCG_al_set)
-    __swig_setmethods__["alpha"] = _sim3dlong.collectionNLCG_alpha_set
-    __swig_getmethods__["alpha"] = _sim3dlong.collectionNLCG_alpha_get
+        al = _swig_property(_sim3dlong.CollectionNLCG_al_get, _sim3dlong.CollectionNLCG_al_set)
+    __swig_setmethods__["alpha"] = _sim3dlong.CollectionNLCG_alpha_set
+    __swig_getmethods__["alpha"] = _sim3dlong.CollectionNLCG_alpha_get
     if _newclass:
-        alpha = _swig_property(_sim3dlong.collectionNLCG_alpha_get, _sim3dlong.collectionNLCG_alpha_set)
-    __swig_setmethods__["beta"] = _sim3dlong.collectionNLCG_beta_set
-    __swig_getmethods__["beta"] = _sim3dlong.collectionNLCG_beta_get
+        alpha = _swig_property(_sim3dlong.CollectionNLCG_alpha_get, _sim3dlong.CollectionNLCG_alpha_set)
+    __swig_setmethods__["beta"] = _sim3dlong.CollectionNLCG_beta_set
+    __swig_getmethods__["beta"] = _sim3dlong.CollectionNLCG_beta_get
     if _newclass:
-        beta = _swig_property(_sim3dlong.collectionNLCG_beta_get, _sim3dlong.collectionNLCG_beta_set)
-    __swig_setmethods__["betaused"] = _sim3dlong.collectionNLCG_betaused_set
-    __swig_getmethods__["betaused"] = _sim3dlong.collectionNLCG_betaused_get
+        beta = _swig_property(_sim3dlong.CollectionNLCG_beta_get, _sim3dlong.CollectionNLCG_beta_set)
+    __swig_setmethods__["betaused"] = _sim3dlong.CollectionNLCG_betaused_set
+    __swig_getmethods__["betaused"] = _sim3dlong.CollectionNLCG_betaused_get
     if _newclass:
-        betaused = _swig_property(_sim3dlong.collectionNLCG_betaused_get, _sim3dlong.collectionNLCG_betaused_set)
-    __swig_setmethods__["dxsum"] = _sim3dlong.collectionNLCG_dxsum_set
-    __swig_getmethods__["dxsum"] = _sim3dlong.collectionNLCG_dxsum_get
+        betaused = _swig_property(_sim3dlong.CollectionNLCG_betaused_get, _sim3dlong.CollectionNLCG_betaused_set)
+    __swig_setmethods__["dxsum"] = _sim3dlong.CollectionNLCG_dxsum_set
+    __swig_getmethods__["dxsum"] = _sim3dlong.CollectionNLCG_dxsum_get
     if _newclass:
-        dxsum = _swig_property(_sim3dlong.collectionNLCG_dxsum_get, _sim3dlong.collectionNLCG_dxsum_set)
-    __swig_setmethods__["alphavmax"] = _sim3dlong.collectionNLCG_alphavmax_set
-    __swig_getmethods__["alphavmax"] = _sim3dlong.collectionNLCG_alphavmax_get
+        dxsum = _swig_property(_sim3dlong.CollectionNLCG_dxsum_get, _sim3dlong.CollectionNLCG_dxsum_set)
+    __swig_setmethods__["alphavmax"] = _sim3dlong.CollectionNLCG_alphavmax_set
+    __swig_getmethods__["alphavmax"] = _sim3dlong.CollectionNLCG_alphavmax_get
     if _newclass:
-        alphavmax = _swig_property(_sim3dlong.collectionNLCG_alphavmax_get, _sim3dlong.collectionNLCG_alphavmax_set)
-    __swig_setmethods__["maxdV"] = _sim3dlong.collectionNLCG_maxdV_set
-    __swig_getmethods__["maxdV"] = _sim3dlong.collectionNLCG_maxdV_get
+        alphavmax = _swig_property(_sim3dlong.CollectionNLCG_alphavmax_get, _sim3dlong.CollectionNLCG_alphavmax_set)
+    __swig_setmethods__["maxdV"] = _sim3dlong.CollectionNLCG_maxdV_set
+    __swig_getmethods__["maxdV"] = _sim3dlong.CollectionNLCG_maxdV_get
     if _newclass:
-        maxdV = _swig_property(_sim3dlong.collectionNLCG_maxdV_get, _sim3dlong.collectionNLCG_maxdV_set)
-    __swig_setmethods__["sec"] = _sim3dlong.collectionNLCG_sec_set
-    __swig_getmethods__["sec"] = _sim3dlong.collectionNLCG_sec_get
+        maxdV = _swig_property(_sim3dlong.CollectionNLCG_maxdV_get, _sim3dlong.CollectionNLCG_maxdV_set)
+    __swig_setmethods__["sec"] = _sim3dlong.CollectionNLCG_sec_set
+    __swig_getmethods__["sec"] = _sim3dlong.CollectionNLCG_sec_get
     if _newclass:
-        sec = _swig_property(_sim3dlong.collectionNLCG_sec_get, _sim3dlong.collectionNLCG_sec_set)
+        sec = _swig_property(_sim3dlong.CollectionNLCG_sec_get, _sim3dlong.CollectionNLCG_sec_set)
 
     def stepx(self, dx: 'flt') -> "void":
-        """stepx(collectionNLCG self, flt dx)"""
-        return _sim3dlong.collectionNLCG_stepx(self, dx)
+        """stepx(CollectionNLCG self, flt dx)"""
+        return _sim3dlong.CollectionNLCG_stepx(self, dx)
 
 
-    def getLsq(self) -> "flt":
-        """getLsq(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_getLsq(self)
+    def get_length_squared(self) -> "flt":
+        """get_length_squared(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_get_length_squared(self)
 
 
     def fdota(self) -> "flt":
-        """fdota(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_fdota(self)
+        """fdota(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_fdota(self)
 
 
     def fdotf(self) -> "flt":
-        """fdotf(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_fdotf(self)
+        """fdotf(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_fdotf(self)
 
 
     def fdotv(self) -> "flt":
-        """fdotv(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_fdotv(self)
+        """fdotv(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_fdotv(self)
 
 
     def vdotv(self) -> "flt":
-        """vdotv(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_vdotv(self)
+        """vdotv(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_vdotv(self)
 
 
     def __init__(self, *args):
         """
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kappa=10.0) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionNLCG
-        __init__(collectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P0) -> collectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCG
         """
-        this = _sim3dlong.new_collectionNLCG(*args)
+        this = _sim3dlong.new_CollectionNLCG(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def kinetic(self) -> "flt":
-        """kinetic(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_kinetic(self)
+    def kinetic_energy(self) -> "flt":
+        """kinetic_energy(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_kinetic_energy(self)
 
 
     def pressure(self) -> "flt":
-        """pressure(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_pressure(self)
+        """pressure(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_pressure(self)
 
 
-    def Hamiltonian(self) -> "flt":
-        """Hamiltonian(collectionNLCG self) -> flt"""
-        return _sim3dlong.collectionNLCG_Hamiltonian(self)
+    def hamiltonian(self) -> "flt":
+        """hamiltonian(CollectionNLCG self) -> flt"""
+        return _sim3dlong.CollectionNLCG_hamiltonian(self)
 
 
-    def setForces(self, *args) -> "void":
+    def set_forces(self, *args) -> "void":
         """
-        setForces(collectionNLCG self, bool constraints_and_a=True)
-        setForces(collectionNLCG self)
-        setForces(collectionNLCG self, bool constraints_and_a, bool setV)
+        set_forces(CollectionNLCG self, bool constraints_and_a=True)
+        set_forces(CollectionNLCG self)
+        set_forces(CollectionNLCG self, bool constraints_and_a, bool setV)
         """
-        return _sim3dlong.collectionNLCG_setForces(self, *args)
+        return _sim3dlong.CollectionNLCG_set_forces(self, *args)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionNLCG self)"""
-        return _sim3dlong.collectionNLCG_timestep(self)
+        """timestep(CollectionNLCG self)"""
+        return _sim3dlong.CollectionNLCG_timestep(self)
 
 
     def descend(self) -> "void":
-        """descend(collectionNLCG self)"""
-        return _sim3dlong.collectionNLCG_descend(self)
+        """descend(CollectionNLCG self)"""
+        return _sim3dlong.CollectionNLCG_descend(self)
 
 
     def reset(self) -> "void":
-        """reset(collectionNLCG self)"""
-        return _sim3dlong.collectionNLCG_reset(self)
+        """reset(CollectionNLCG self)"""
+        return _sim3dlong.CollectionNLCG_reset(self)
 
 
     def resize(self, V: 'flt') -> "void":
-        """resize(collectionNLCG self, flt V)"""
-        return _sim3dlong.collectionNLCG_resize(self, V)
+        """resize(CollectionNLCG self, flt V)"""
+        return _sim3dlong.CollectionNLCG_resize(self, V)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionNLCG self, flt newdt)"""
-        return _sim3dlong.collectionNLCG_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionNLCG self, flt newdt)"""
+        return _sim3dlong.CollectionNLCG_set_dt(self, newdt)
 
 
-    def setP(self, P: 'flt') -> "void":
-        """setP(collectionNLCG self, flt P)"""
-        return _sim3dlong.collectionNLCG_setP(self, P)
+    def set_pressure(self, P: 'flt') -> "void":
+        """set_pressure(CollectionNLCG self, flt P)"""
+        return _sim3dlong.CollectionNLCG_set_pressure(self, P)
 
 
-    def setkappa(self, k: 'flt') -> "void":
-        """setkappa(collectionNLCG self, flt k)"""
-        return _sim3dlong.collectionNLCG_setkappa(self, k)
+    def set_kappa(self, k: 'flt') -> "void":
+        """set_kappa(CollectionNLCG self, flt k)"""
+        return _sim3dlong.CollectionNLCG_set_kappa(self, k)
 
 
-    def setamax(self, a: 'flt') -> "void":
-        """setamax(collectionNLCG self, flt a)"""
-        return _sim3dlong.collectionNLCG_setamax(self, a)
+    def set_max_alpha(self, a: 'flt') -> "void":
+        """set_max_alpha(CollectionNLCG self, flt a)"""
+        return _sim3dlong.CollectionNLCG_set_max_alpha(self, a)
 
 
-    def setafrac(self, a: 'flt') -> "void":
-        """setafrac(collectionNLCG self, flt a)"""
-        return _sim3dlong.collectionNLCG_setafrac(self, a)
+    def set_max_alpha_fraction(self, a: 'flt') -> "void":
+        """set_max_alpha_fraction(CollectionNLCG self, flt a)"""
+        return _sim3dlong.CollectionNLCG_set_max_alpha_fraction(self, a)
 
 
-    def setdxmax(self, d: 'flt') -> "void":
-        """setdxmax(collectionNLCG self, flt d)"""
-        return _sim3dlong.collectionNLCG_setdxmax(self, d)
+    def set_max_dx(self, d: 'flt') -> "void":
+        """set_max_dx(CollectionNLCG self, flt d)"""
+        return _sim3dlong.CollectionNLCG_set_max_dx(self, d)
 
 
-    def setstepmax(self, m: 'flt') -> "void":
-        """setstepmax(collectionNLCG self, flt m)"""
-        return _sim3dlong.collectionNLCG_setstepmax(self, m)
+    def set_max_step(self, m: 'flt') -> "void":
+        """set_max_step(CollectionNLCG self, flt m)"""
+        return _sim3dlong.CollectionNLCG_set_max_step(self, m)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionNLCG
+    __swig_destroy__ = _sim3dlong.delete_CollectionNLCG
     __del__ = lambda self: None
-collectionNLCG_swigregister = _sim3dlong.collectionNLCG_swigregister
-collectionNLCG_swigregister(collectionNLCG)
+CollectionNLCG_swigregister = _sim3dlong.CollectionNLCG_swigregister
+CollectionNLCG_swigregister(CollectionNLCG)
 
-class collectionNLCGV(collection):
-    """Proxy of C++ collectionNLCGV class"""
+class CollectionNLCGV(Collection):
+    """Proxy of C++ CollectionNLCGV class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionNLCGV, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionNLCGV, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionNLCGV, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionNLCGV, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["dt"] = _sim3dlong.collectionNLCGV_dt_set
-    __swig_getmethods__["dt"] = _sim3dlong.collectionNLCGV_dt_get
+    __swig_setmethods__["dt"] = _sim3dlong.CollectionNLCGV_dt_set
+    __swig_getmethods__["dt"] = _sim3dlong.CollectionNLCGV_dt_get
     if _newclass:
-        dt = _swig_property(_sim3dlong.collectionNLCGV_dt_get, _sim3dlong.collectionNLCGV_dt_set)
-    __swig_setmethods__["seceps"] = _sim3dlong.collectionNLCGV_seceps_set
-    __swig_getmethods__["seceps"] = _sim3dlong.collectionNLCGV_seceps_get
+        dt = _swig_property(_sim3dlong.CollectionNLCGV_dt_get, _sim3dlong.CollectionNLCGV_dt_set)
+    __swig_setmethods__["seceps"] = _sim3dlong.CollectionNLCGV_seceps_set
+    __swig_getmethods__["seceps"] = _sim3dlong.CollectionNLCGV_seceps_get
     if _newclass:
-        seceps = _swig_property(_sim3dlong.collectionNLCGV_seceps_get, _sim3dlong.collectionNLCGV_seceps_set)
-    __swig_setmethods__["secmax"] = _sim3dlong.collectionNLCGV_secmax_set
-    __swig_getmethods__["secmax"] = _sim3dlong.collectionNLCGV_secmax_get
+        seceps = _swig_property(_sim3dlong.CollectionNLCGV_seceps_get, _sim3dlong.CollectionNLCGV_seceps_set)
+    __swig_setmethods__["secmax"] = _sim3dlong.CollectionNLCGV_secmax_set
+    __swig_getmethods__["secmax"] = _sim3dlong.CollectionNLCGV_secmax_get
     if _newclass:
-        secmax = _swig_property(_sim3dlong.collectionNLCGV_secmax_get, _sim3dlong.collectionNLCGV_secmax_set)
-    __swig_setmethods__["alphamax"] = _sim3dlong.collectionNLCGV_alphamax_set
-    __swig_getmethods__["alphamax"] = _sim3dlong.collectionNLCGV_alphamax_get
+        secmax = _swig_property(_sim3dlong.CollectionNLCGV_secmax_get, _sim3dlong.CollectionNLCGV_secmax_set)
+    __swig_setmethods__["alphamax"] = _sim3dlong.CollectionNLCGV_alphamax_set
+    __swig_getmethods__["alphamax"] = _sim3dlong.CollectionNLCGV_alphamax_get
     if _newclass:
-        alphamax = _swig_property(_sim3dlong.collectionNLCGV_alphamax_get, _sim3dlong.collectionNLCGV_alphamax_set)
-    __swig_setmethods__["afrac"] = _sim3dlong.collectionNLCGV_afrac_set
-    __swig_getmethods__["afrac"] = _sim3dlong.collectionNLCGV_afrac_get
+        alphamax = _swig_property(_sim3dlong.CollectionNLCGV_alphamax_get, _sim3dlong.CollectionNLCGV_alphamax_set)
+    __swig_setmethods__["afrac"] = _sim3dlong.CollectionNLCGV_afrac_set
+    __swig_getmethods__["afrac"] = _sim3dlong.CollectionNLCGV_afrac_get
     if _newclass:
-        afrac = _swig_property(_sim3dlong.collectionNLCGV_afrac_get, _sim3dlong.collectionNLCGV_afrac_set)
-    __swig_setmethods__["dxmax"] = _sim3dlong.collectionNLCGV_dxmax_set
-    __swig_getmethods__["dxmax"] = _sim3dlong.collectionNLCGV_dxmax_get
+        afrac = _swig_property(_sim3dlong.CollectionNLCGV_afrac_get, _sim3dlong.CollectionNLCGV_afrac_set)
+    __swig_setmethods__["dxmax"] = _sim3dlong.CollectionNLCGV_dxmax_set
+    __swig_getmethods__["dxmax"] = _sim3dlong.CollectionNLCGV_dxmax_get
     if _newclass:
-        dxmax = _swig_property(_sim3dlong.collectionNLCGV_dxmax_get, _sim3dlong.collectionNLCGV_dxmax_set)
-    __swig_setmethods__["stepmax"] = _sim3dlong.collectionNLCGV_stepmax_set
-    __swig_getmethods__["stepmax"] = _sim3dlong.collectionNLCGV_stepmax_get
+        dxmax = _swig_property(_sim3dlong.CollectionNLCGV_dxmax_get, _sim3dlong.CollectionNLCGV_dxmax_set)
+    __swig_setmethods__["stepmax"] = _sim3dlong.CollectionNLCGV_stepmax_set
+    __swig_getmethods__["stepmax"] = _sim3dlong.CollectionNLCGV_stepmax_get
     if _newclass:
-        stepmax = _swig_property(_sim3dlong.collectionNLCGV_stepmax_get, _sim3dlong.collectionNLCGV_stepmax_set)
-    __swig_setmethods__["kmax"] = _sim3dlong.collectionNLCGV_kmax_set
-    __swig_getmethods__["kmax"] = _sim3dlong.collectionNLCGV_kmax_get
+        stepmax = _swig_property(_sim3dlong.CollectionNLCGV_stepmax_get, _sim3dlong.CollectionNLCGV_stepmax_set)
+    __swig_setmethods__["kmax"] = _sim3dlong.CollectionNLCGV_kmax_set
+    __swig_getmethods__["kmax"] = _sim3dlong.CollectionNLCGV_kmax_get
     if _newclass:
-        kmax = _swig_property(_sim3dlong.collectionNLCGV_kmax_get, _sim3dlong.collectionNLCGV_kmax_set)
-    __swig_setmethods__["Knew"] = _sim3dlong.collectionNLCGV_Knew_set
-    __swig_getmethods__["Knew"] = _sim3dlong.collectionNLCGV_Knew_get
+        kmax = _swig_property(_sim3dlong.CollectionNLCGV_kmax_get, _sim3dlong.CollectionNLCGV_kmax_set)
+    __swig_setmethods__["Knew"] = _sim3dlong.CollectionNLCGV_Knew_set
+    __swig_getmethods__["Knew"] = _sim3dlong.CollectionNLCGV_Knew_get
     if _newclass:
-        Knew = _swig_property(_sim3dlong.collectionNLCGV_Knew_get, _sim3dlong.collectionNLCGV_Knew_set)
-    __swig_setmethods__["k"] = _sim3dlong.collectionNLCGV_k_set
-    __swig_getmethods__["k"] = _sim3dlong.collectionNLCGV_k_get
+        Knew = _swig_property(_sim3dlong.CollectionNLCGV_Knew_get, _sim3dlong.CollectionNLCGV_Knew_set)
+    __swig_setmethods__["k"] = _sim3dlong.CollectionNLCGV_k_set
+    __swig_getmethods__["k"] = _sim3dlong.CollectionNLCGV_k_get
     if _newclass:
-        k = _swig_property(_sim3dlong.collectionNLCGV_k_get, _sim3dlong.collectionNLCGV_k_set)
-    __swig_setmethods__["vl"] = _sim3dlong.collectionNLCGV_vl_set
-    __swig_getmethods__["vl"] = _sim3dlong.collectionNLCGV_vl_get
+        k = _swig_property(_sim3dlong.CollectionNLCGV_k_get, _sim3dlong.CollectionNLCGV_k_set)
+    __swig_setmethods__["vl"] = _sim3dlong.CollectionNLCGV_vl_set
+    __swig_getmethods__["vl"] = _sim3dlong.CollectionNLCGV_vl_get
     if _newclass:
-        vl = _swig_property(_sim3dlong.collectionNLCGV_vl_get, _sim3dlong.collectionNLCGV_vl_set)
-    __swig_setmethods__["fl"] = _sim3dlong.collectionNLCGV_fl_set
-    __swig_getmethods__["fl"] = _sim3dlong.collectionNLCGV_fl_get
+        vl = _swig_property(_sim3dlong.CollectionNLCGV_vl_get, _sim3dlong.CollectionNLCGV_vl_set)
+    __swig_setmethods__["fl"] = _sim3dlong.CollectionNLCGV_fl_set
+    __swig_getmethods__["fl"] = _sim3dlong.CollectionNLCGV_fl_get
     if _newclass:
-        fl = _swig_property(_sim3dlong.collectionNLCGV_fl_get, _sim3dlong.collectionNLCGV_fl_set)
-    __swig_setmethods__["al"] = _sim3dlong.collectionNLCGV_al_set
-    __swig_getmethods__["al"] = _sim3dlong.collectionNLCGV_al_get
+        fl = _swig_property(_sim3dlong.CollectionNLCGV_fl_get, _sim3dlong.CollectionNLCGV_fl_set)
+    __swig_setmethods__["al"] = _sim3dlong.CollectionNLCGV_al_set
+    __swig_getmethods__["al"] = _sim3dlong.CollectionNLCGV_al_get
     if _newclass:
-        al = _swig_property(_sim3dlong.collectionNLCGV_al_get, _sim3dlong.collectionNLCGV_al_set)
-    __swig_setmethods__["alpha"] = _sim3dlong.collectionNLCGV_alpha_set
-    __swig_getmethods__["alpha"] = _sim3dlong.collectionNLCGV_alpha_get
+        al = _swig_property(_sim3dlong.CollectionNLCGV_al_get, _sim3dlong.CollectionNLCGV_al_set)
+    __swig_setmethods__["alpha"] = _sim3dlong.CollectionNLCGV_alpha_set
+    __swig_getmethods__["alpha"] = _sim3dlong.CollectionNLCGV_alpha_get
     if _newclass:
-        alpha = _swig_property(_sim3dlong.collectionNLCGV_alpha_get, _sim3dlong.collectionNLCGV_alpha_set)
-    __swig_setmethods__["beta"] = _sim3dlong.collectionNLCGV_beta_set
-    __swig_getmethods__["beta"] = _sim3dlong.collectionNLCGV_beta_get
+        alpha = _swig_property(_sim3dlong.CollectionNLCGV_alpha_get, _sim3dlong.CollectionNLCGV_alpha_set)
+    __swig_setmethods__["beta"] = _sim3dlong.CollectionNLCGV_beta_set
+    __swig_getmethods__["beta"] = _sim3dlong.CollectionNLCGV_beta_get
     if _newclass:
-        beta = _swig_property(_sim3dlong.collectionNLCGV_beta_get, _sim3dlong.collectionNLCGV_beta_set)
-    __swig_setmethods__["betaused"] = _sim3dlong.collectionNLCGV_betaused_set
-    __swig_getmethods__["betaused"] = _sim3dlong.collectionNLCGV_betaused_get
+        beta = _swig_property(_sim3dlong.CollectionNLCGV_beta_get, _sim3dlong.CollectionNLCGV_beta_set)
+    __swig_setmethods__["betaused"] = _sim3dlong.CollectionNLCGV_betaused_set
+    __swig_getmethods__["betaused"] = _sim3dlong.CollectionNLCGV_betaused_get
     if _newclass:
-        betaused = _swig_property(_sim3dlong.collectionNLCGV_betaused_get, _sim3dlong.collectionNLCGV_betaused_set)
-    __swig_setmethods__["dxsum"] = _sim3dlong.collectionNLCGV_dxsum_set
-    __swig_getmethods__["dxsum"] = _sim3dlong.collectionNLCGV_dxsum_get
+        betaused = _swig_property(_sim3dlong.CollectionNLCGV_betaused_get, _sim3dlong.CollectionNLCGV_betaused_set)
+    __swig_setmethods__["dxsum"] = _sim3dlong.CollectionNLCGV_dxsum_set
+    __swig_getmethods__["dxsum"] = _sim3dlong.CollectionNLCGV_dxsum_get
     if _newclass:
-        dxsum = _swig_property(_sim3dlong.collectionNLCGV_dxsum_get, _sim3dlong.collectionNLCGV_dxsum_set)
-    __swig_setmethods__["alphavmax"] = _sim3dlong.collectionNLCGV_alphavmax_set
-    __swig_getmethods__["alphavmax"] = _sim3dlong.collectionNLCGV_alphavmax_get
+        dxsum = _swig_property(_sim3dlong.CollectionNLCGV_dxsum_get, _sim3dlong.CollectionNLCGV_dxsum_set)
+    __swig_setmethods__["alphavmax"] = _sim3dlong.CollectionNLCGV_alphavmax_set
+    __swig_getmethods__["alphavmax"] = _sim3dlong.CollectionNLCGV_alphavmax_get
     if _newclass:
-        alphavmax = _swig_property(_sim3dlong.collectionNLCGV_alphavmax_get, _sim3dlong.collectionNLCGV_alphavmax_set)
-    __swig_setmethods__["sec"] = _sim3dlong.collectionNLCGV_sec_set
-    __swig_getmethods__["sec"] = _sim3dlong.collectionNLCGV_sec_get
+        alphavmax = _swig_property(_sim3dlong.CollectionNLCGV_alphavmax_get, _sim3dlong.CollectionNLCGV_alphavmax_set)
+    __swig_setmethods__["sec"] = _sim3dlong.CollectionNLCGV_sec_set
+    __swig_getmethods__["sec"] = _sim3dlong.CollectionNLCGV_sec_get
     if _newclass:
-        sec = _swig_property(_sim3dlong.collectionNLCGV_sec_get, _sim3dlong.collectionNLCGV_sec_set)
+        sec = _swig_property(_sim3dlong.CollectionNLCGV_sec_get, _sim3dlong.CollectionNLCGV_sec_set)
 
     def stepx(self, dx: 'flt') -> "void":
-        """stepx(collectionNLCGV self, flt dx)"""
-        return _sim3dlong.collectionNLCGV_stepx(self, dx)
+        """stepx(CollectionNLCGV self, flt dx)"""
+        return _sim3dlong.CollectionNLCGV_stepx(self, dx)
 
 
     def fdota(self) -> "flt":
-        """fdota(collectionNLCGV self) -> flt"""
-        return _sim3dlong.collectionNLCGV_fdota(self)
+        """fdota(CollectionNLCGV self) -> flt"""
+        return _sim3dlong.CollectionNLCGV_fdota(self)
 
 
     def fdotf(self) -> "flt":
-        """fdotf(collectionNLCGV self) -> flt"""
-        return _sim3dlong.collectionNLCGV_fdotf(self)
+        """fdotf(CollectionNLCGV self) -> flt"""
+        return _sim3dlong.CollectionNLCGV_fdotf(self)
 
 
     def fdotv(self) -> "flt":
-        """fdotv(collectionNLCGV self) -> flt"""
-        return _sim3dlong.collectionNLCGV_fdotv(self)
+        """fdotv(CollectionNLCGV self) -> flt"""
+        return _sim3dlong.CollectionNLCGV_fdotv(self)
 
 
     def vdotv(self) -> "flt":
-        """vdotv(collectionNLCGV self) -> flt"""
-        return _sim3dlong.collectionNLCGV_vdotv(self)
+        """vdotv(CollectionNLCGV self) -> flt"""
+        return _sim3dlong.CollectionNLCGV_vdotv(self)
 
 
     def __init__(self, *args):
         """
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kmax=1000, uint const secmax=10, flt const seceps=1e-4) -> collectionNLCGV
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kmax=1000, uint const secmax=10) -> collectionNLCGV
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints, flt const kmax=1000) -> collectionNLCGV
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionNLCGV
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionNLCGV
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionNLCGV
-        __init__(collectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000, uint const secmax=10, flt const seceps=1e-4) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000, uint const secmax=10) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionNLCGV
         """
-        this = _sim3dlong.new_collectionNLCGV(*args)
+        this = _sim3dlong.new_CollectionNLCGV(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def pressure(self) -> "flt":
-        """pressure(collectionNLCGV self) -> flt"""
-        return _sim3dlong.collectionNLCGV_pressure(self)
+        """pressure(CollectionNLCGV self) -> flt"""
+        return _sim3dlong.CollectionNLCGV_pressure(self)
 
 
     def reset(self) -> "void":
-        """reset(collectionNLCGV self)"""
-        return _sim3dlong.collectionNLCGV_reset(self)
+        """reset(CollectionNLCGV self)"""
+        return _sim3dlong.CollectionNLCGV_reset(self)
 
 
     def descend(self) -> "void":
-        """descend(collectionNLCGV self)"""
-        return _sim3dlong.collectionNLCGV_descend(self)
+        """descend(CollectionNLCGV self)"""
+        return _sim3dlong.CollectionNLCGV_descend(self)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionNLCGV self)"""
-        return _sim3dlong.collectionNLCGV_timestep(self)
+        """timestep(CollectionNLCGV self)"""
+        return _sim3dlong.CollectionNLCGV_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionNLCGV self, flt newdt)"""
-        return _sim3dlong.collectionNLCGV_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionNLCGV self, flt newdt)"""
+        return _sim3dlong.CollectionNLCGV_set_dt(self, newdt)
 
 
-    def setamax(self, a: 'flt') -> "void":
-        """setamax(collectionNLCGV self, flt a)"""
-        return _sim3dlong.collectionNLCGV_setamax(self, a)
+    def set_max_alpha(self, a: 'flt') -> "void":
+        """set_max_alpha(CollectionNLCGV self, flt a)"""
+        return _sim3dlong.CollectionNLCGV_set_max_alpha(self, a)
 
 
-    def setafrac(self, a: 'flt') -> "void":
-        """setafrac(collectionNLCGV self, flt a)"""
-        return _sim3dlong.collectionNLCGV_setafrac(self, a)
+    def set_max_alpha_fraction(self, a: 'flt') -> "void":
+        """set_max_alpha_fraction(CollectionNLCGV self, flt a)"""
+        return _sim3dlong.CollectionNLCGV_set_max_alpha_fraction(self, a)
 
 
-    def setdxmax(self, d: 'flt') -> "void":
-        """setdxmax(collectionNLCGV self, flt d)"""
-        return _sim3dlong.collectionNLCGV_setdxmax(self, d)
+    def set_max_dx(self, d: 'flt') -> "void":
+        """set_max_dx(CollectionNLCGV self, flt d)"""
+        return _sim3dlong.CollectionNLCGV_set_max_dx(self, d)
 
 
-    def setstepmax(self, m: 'flt') -> "void":
-        """setstepmax(collectionNLCGV self, flt m)"""
-        return _sim3dlong.collectionNLCGV_setstepmax(self, m)
+    def set_max_step(self, m: 'flt') -> "void":
+        """set_max_step(CollectionNLCGV self, flt m)"""
+        return _sim3dlong.CollectionNLCGV_set_max_step(self, m)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionNLCGV
+    __swig_destroy__ = _sim3dlong.delete_CollectionNLCGV
     __del__ = lambda self: None
-collectionNLCGV_swigregister = _sim3dlong.collectionNLCGV_swigregister
-collectionNLCGV_swigregister(collectionNLCGV)
+CollectionNLCGV_swigregister = _sim3dlong.CollectionNLCGV_swigregister
+CollectionNLCGV_swigregister(CollectionNLCGV)
 
 
-def solveCubic1(b: 'flt', c: 'flt', d: 'flt') -> "flt":
-    """solveCubic1(flt b, flt c, flt d) -> flt"""
-    return _sim3dlong.solveCubic1(b, c, d)
+def solve_cubic_fast(b: 'flt', c: 'flt', d: 'flt') -> "flt":
+    """solve_cubic_fast(flt b, flt c, flt d) -> flt"""
+    return _sim3dlong.solve_cubic_fast(b, c, d)
 
-def solveCubic(a1: 'flt', a2: 'flt', a3: 'flt', closeto: 'flt'=0) -> "flt":
+def solve_cubic(a1: 'flt', a2: 'flt', a3: 'flt', closeto: 'flt'=0) -> "flt":
     """
-    solveCubic(flt a1, flt a2, flt a3, flt closeto=0) -> flt
-    solveCubic(flt a1, flt a2, flt a3) -> flt
+    solve_cubic(flt a1, flt a2, flt a3, flt closeto=0) -> flt
+    solve_cubic(flt a1, flt a2, flt a3) -> flt
     """
-    return _sim3dlong.solveCubic(a1, a2, a3, closeto)
-class collectionNoseHoover(collection):
-    """Proxy of C++ collectionNoseHoover class"""
+    return _sim3dlong.solve_cubic(a1, a2, a3, closeto)
+class CollectionNoseHoover(Collection):
+    """Proxy of C++ CollectionNoseHoover class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionNoseHoover, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionNoseHoover, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionNoseHoover, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionNoseHoover, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionNoseHoover
-        __init__(collectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, flt const T) -> collectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T) -> CollectionNoseHoover
         """
-        this = _sim3dlong.new_collectionNoseHoover(*args)
+        this = _sim3dlong.new_CollectionNoseHoover(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionNoseHoover self, flt newdt)"""
-        return _sim3dlong.collectionNoseHoover_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionNoseHoover self, flt newdt)"""
+        return _sim3dlong.CollectionNoseHoover_set_dt(self, newdt)
 
 
-    def setQ(self, newQ: 'flt') -> "void":
-        """setQ(collectionNoseHoover self, flt newQ)"""
-        return _sim3dlong.collectionNoseHoover_setQ(self, newQ)
+    def set_Q(self, newQ: 'flt') -> "void":
+        """set_Q(CollectionNoseHoover self, flt newQ)"""
+        return _sim3dlong.CollectionNoseHoover_set_Q(self, newQ)
 
 
-    def resetBath(self) -> "void":
-        """resetBath(collectionNoseHoover self)"""
-        return _sim3dlong.collectionNoseHoover_resetBath(self)
+    def reset_bath(self) -> "void":
+        """reset_bath(CollectionNoseHoover self)"""
+        return _sim3dlong.CollectionNoseHoover_reset_bath(self)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionNoseHoover self)"""
-        return _sim3dlong.collectionNoseHoover_timestep(self)
+        """timestep(CollectionNoseHoover self)"""
+        return _sim3dlong.CollectionNoseHoover_timestep(self)
 
 
-    def Hamiltonian(self) -> "flt":
-        """Hamiltonian(collectionNoseHoover self) -> flt"""
-        return _sim3dlong.collectionNoseHoover_Hamiltonian(self)
+    def hamiltonian(self) -> "flt":
+        """hamiltonian(CollectionNoseHoover self) -> flt"""
+        return _sim3dlong.CollectionNoseHoover_hamiltonian(self)
 
 
-    def getxi(self) -> "flt":
-        """getxi(collectionNoseHoover self) -> flt"""
-        return _sim3dlong.collectionNoseHoover_getxi(self)
+    def get_xi(self) -> "flt":
+        """get_xi(CollectionNoseHoover self) -> flt"""
+        return _sim3dlong.CollectionNoseHoover_get_xi(self)
 
 
-    def getlns(self) -> "flt":
-        """getlns(collectionNoseHoover self) -> flt"""
-        return _sim3dlong.collectionNoseHoover_getlns(self)
+    def get_lns(self) -> "flt":
+        """get_lns(CollectionNoseHoover self) -> flt"""
+        return _sim3dlong.CollectionNoseHoover_get_lns(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionNoseHoover
+    __swig_destroy__ = _sim3dlong.delete_CollectionNoseHoover
     __del__ = lambda self: None
-collectionNoseHoover_swigregister = _sim3dlong.collectionNoseHoover_swigregister
-collectionNoseHoover_swigregister(collectionNoseHoover)
+CollectionNoseHoover_swigregister = _sim3dlong.CollectionNoseHoover_swigregister
+CollectionNoseHoover_swigregister(CollectionNoseHoover)
 
-class collectionGaussianT(collection):
-    """Proxy of C++ collectionGaussianT class"""
+class CollectionGaussianT(Collection):
+    """Proxy of C++ CollectionGaussianT class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGaussianT, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGaussianT, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGaussianT, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGaussianT, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGaussianT
-        __init__(collectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGaussianT
-        __init__(collectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGaussianT
-        __init__(collectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const Q) -> collectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q) -> CollectionGaussianT
         """
-        this = _sim3dlong.new_collectionGaussianT(*args)
+        this = _sim3dlong.new_CollectionGaussianT(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionGaussianT self, flt newdt)"""
-        return _sim3dlong.collectionGaussianT_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionGaussianT self, flt newdt)"""
+        return _sim3dlong.CollectionGaussianT_set_dt(self, newdt)
 
 
-    def setQ(self, newQ: 'flt') -> "void":
-        """setQ(collectionGaussianT self, flt newQ)"""
-        return _sim3dlong.collectionGaussianT_setQ(self, newQ)
+    def set_Q(self, newQ: 'flt') -> "void":
+        """set_Q(CollectionGaussianT self, flt newQ)"""
+        return _sim3dlong.CollectionGaussianT_set_Q(self, newQ)
 
 
-    def setForces(self, *args) -> "void":
+    def set_forces(self, *args) -> "void":
         """
-        setForces(collectionGaussianT self, bool constraints_and_a=True)
-        setForces(collectionGaussianT self)
-        setForces(collectionGaussianT self, bool constraints_and_a, bool setxi)
+        set_forces(CollectionGaussianT self, bool constraints_and_a=True)
+        set_forces(CollectionGaussianT self)
+        set_forces(CollectionGaussianT self, bool constraints_and_a, bool set_xi)
         """
-        return _sim3dlong.collectionGaussianT_setForces(self, *args)
+        return _sim3dlong.CollectionGaussianT_set_forces(self, *args)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionGaussianT self)"""
-        return _sim3dlong.collectionGaussianT_timestep(self)
+        """timestep(CollectionGaussianT self)"""
+        return _sim3dlong.CollectionGaussianT_timestep(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionGaussianT
+    __swig_destroy__ = _sim3dlong.delete_CollectionGaussianT
     __del__ = lambda self: None
-collectionGaussianT_swigregister = _sim3dlong.collectionGaussianT_swigregister
-collectionGaussianT_swigregister(collectionGaussianT)
+CollectionGaussianT_swigregister = _sim3dlong.CollectionGaussianT_swigregister
+CollectionGaussianT_swigregister(CollectionGaussianT)
 
-class collectionGear3A(collection):
-    """Proxy of C++ collectionGear3A class"""
+class CollectionGear3A(Collection):
+    """Proxy of C++ CollectionGear3A class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGear3A, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGear3A, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGear3A, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGear3A, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear3A
-        __init__(collectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear3A
-        __init__(collectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear3A
-        __init__(collectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear3A
         """
-        this = _sim3dlong.new_collectionGear3A(*args)
-        try:
-            self.this.append(this)
-        except:
-            self.this = this
-
-    def timestep(self) -> "void":
-        """timestep(collectionGear3A self)"""
-        return _sim3dlong.collectionGear3A_timestep(self)
-
-
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionGear3A self, flt newdt)"""
-        return _sim3dlong.collectionGear3A_setdt(self, newdt)
-
-    __swig_destroy__ = _sim3dlong.delete_collectionGear3A
-    __del__ = lambda self: None
-collectionGear3A_swigregister = _sim3dlong.collectionGear3A_swigregister
-collectionGear3A_swigregister(collectionGear3A)
-
-class collectionGear4A(collection):
-    """Proxy of C++ collectionGear4A class"""
-    __swig_setmethods__ = {}
-    for _s in [collection]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGear4A, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collection]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGear4A, name)
-    __repr__ = _swig_repr
-
-    def __init__(self, *args):
-        """
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear4A
-        __init__(collectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionGear4A
-        """
-        this = _sim3dlong.new_collectionGear4A(*args)
+        this = _sim3dlong.new_CollectionGear3A(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionGear4A self)"""
-        return _sim3dlong.collectionGear4A_timestep(self)
+        """timestep(CollectionGear3A self)"""
+        return _sim3dlong.CollectionGear3A_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionGear4A self, flt newdt)"""
-        return _sim3dlong.collectionGear4A_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionGear3A self, flt newdt)"""
+        return _sim3dlong.CollectionGear3A_set_dt(self, newdt)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionGear4A
+    __swig_destroy__ = _sim3dlong.delete_CollectionGear3A
     __del__ = lambda self: None
-collectionGear4A_swigregister = _sim3dlong.collectionGear4A_swigregister
-collectionGear4A_swigregister(collectionGear4A)
+CollectionGear3A_swigregister = _sim3dlong.CollectionGear3A_swigregister
+CollectionGear3A_swigregister(CollectionGear3A)
 
-class collectionGear5A(collection):
-    """Proxy of C++ collectionGear5A class"""
+class CollectionGear4A(Collection):
+    """Proxy of C++ CollectionGear4A class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGear5A, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGear4A, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGear5A, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGear4A, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear5A
-        __init__(collectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< atomgroup > atoms) -> collectionGear5A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear4A
         """
-        this = _sim3dlong.new_collectionGear5A(*args)
+        this = _sim3dlong.new_CollectionGear4A(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionGear5A self)"""
-        return _sim3dlong.collectionGear5A_timestep(self)
+        """timestep(CollectionGear4A self)"""
+        return _sim3dlong.CollectionGear4A_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionGear5A self, flt newdt)"""
-        return _sim3dlong.collectionGear5A_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionGear4A self, flt newdt)"""
+        return _sim3dlong.CollectionGear4A_set_dt(self, newdt)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionGear5A
+    __swig_destroy__ = _sim3dlong.delete_CollectionGear4A
     __del__ = lambda self: None
-collectionGear5A_swigregister = _sim3dlong.collectionGear5A_swigregister
-collectionGear5A_swigregister(collectionGear5A)
+CollectionGear4A_swigregister = _sim3dlong.CollectionGear4A_swigregister
+CollectionGear4A_swigregister(CollectionGear4A)
 
-class collectionGear6A(collection):
-    """Proxy of C++ collectionGear6A class"""
+class CollectionGear5A(Collection):
+    """Proxy of C++ CollectionGear5A class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGear6A, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGear5A, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGear6A, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGear5A, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear6A
-        __init__(collectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > atoms, flt const dt) -> collectionGear6A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms) -> CollectionGear5A
         """
-        this = _sim3dlong.new_collectionGear6A(*args)
+        this = _sim3dlong.new_CollectionGear5A(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionGear6A self)"""
-        return _sim3dlong.collectionGear6A_timestep(self)
+        """timestep(CollectionGear5A self)"""
+        return _sim3dlong.CollectionGear5A_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionGear6A self, flt newdt)"""
-        return _sim3dlong.collectionGear6A_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionGear5A self, flt newdt)"""
+        return _sim3dlong.CollectionGear5A_set_dt(self, newdt)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionGear6A
+    __swig_destroy__ = _sim3dlong.delete_CollectionGear5A
     __del__ = lambda self: None
-collectionGear6A_swigregister = _sim3dlong.collectionGear6A_swigregister
-collectionGear6A_swigregister(collectionGear6A)
+CollectionGear5A_swigregister = _sim3dlong.CollectionGear5A_swigregister
+CollectionGear5A_swigregister(CollectionGear5A)
+
+class CollectionGear6A(Collection):
+    """Proxy of C++ CollectionGear6A class"""
+    __swig_setmethods__ = {}
+    for _s in [Collection]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGear6A, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Collection]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGear6A, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear6A
+        """
+        this = _sim3dlong.new_CollectionGear6A(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def timestep(self) -> "void":
+        """timestep(CollectionGear6A self)"""
+        return _sim3dlong.CollectionGear6A_timestep(self)
+
+
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionGear6A self, flt newdt)"""
+        return _sim3dlong.CollectionGear6A_set_dt(self, newdt)
+
+    __swig_destroy__ = _sim3dlong.delete_CollectionGear6A
+    __del__ = lambda self: None
+CollectionGear6A_swigregister = _sim3dlong.CollectionGear6A_swigregister
+CollectionGear6A_swigregister(CollectionGear6A)
 
 class RK4data(_object):
     """Proxy of C++ RK4data class"""
@@ -15308,238 +14970,238 @@ class RK4data(_object):
 RK4data_swigregister = _sim3dlong.RK4data_swigregister
 RK4data_swigregister(RK4data)
 
-class collectionRK4(collection):
-    """Proxy of C++ collectionRK4 class"""
+class CollectionRK4(Collection):
+    """Proxy of C++ CollectionRK4 class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionRK4, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionRK4, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionRK4, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionRK4, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > ratoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionRK4
-        __init__(collectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > ratoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionRK4
-        __init__(collectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > ratoms, flt const dt, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionRK4
-        __init__(collectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< atomgroup > ratoms, flt const dt) -> collectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt) -> CollectionRK4
         """
-        this = _sim3dlong.new_collectionRK4(*args)
+        this = _sim3dlong.new_CollectionRK4(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionRK4 self)"""
-        return _sim3dlong.collectionRK4_timestep(self)
+        """timestep(CollectionRK4 self)"""
+        return _sim3dlong.CollectionRK4_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionRK4 self, flt newdt)"""
-        return _sim3dlong.collectionRK4_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionRK4 self, flt newdt)"""
+        return _sim3dlong.CollectionRK4_set_dt(self, newdt)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionRK4
+    __swig_destroy__ = _sim3dlong.delete_CollectionRK4
     __del__ = lambda self: None
-collectionRK4_swigregister = _sim3dlong.collectionRK4_swigregister
-collectionRK4_swigregister(collectionRK4)
+CollectionRK4_swigregister = _sim3dlong.CollectionRK4_swigregister
+CollectionRK4_swigregister(CollectionRK4)
 
-class collectionGear4NPH(collection):
-    """Proxy of C++ collectionGear4NPH class"""
+class CollectionGear4NPH(Collection):
+    """Proxy of C++ CollectionGear4NPH class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGear4NPH, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGear4NPH, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGear4NPH, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGear4NPH, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionGear4NPH
-        __init__(collectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const Q) -> collectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q) -> CollectionGear4NPH
         """
-        this = _sim3dlong.new_collectionGear4NPH(*args)
+        this = _sim3dlong.new_CollectionGear4NPH(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionGear4NPH self)"""
-        return _sim3dlong.collectionGear4NPH_timestep(self)
+        """timestep(CollectionGear4NPH self)"""
+        return _sim3dlong.CollectionGear4NPH_timestep(self)
 
 
-    def kinetic(self) -> "flt":
-        """kinetic(collectionGear4NPH self) -> flt"""
-        return _sim3dlong.collectionGear4NPH_kinetic(self)
+    def kinetic_energy(self) -> "flt":
+        """kinetic_energy(CollectionGear4NPH self) -> flt"""
+        return _sim3dlong.CollectionGear4NPH_kinetic_energy(self)
 
 
     def temp(self, minuscomv: 'bool'=True) -> "flt":
         """
-        temp(collectionGear4NPH self, bool minuscomv=True) -> flt
-        temp(collectionGear4NPH self) -> flt
+        temp(CollectionGear4NPH self, bool minuscomv=True) -> flt
+        temp(CollectionGear4NPH self) -> flt
         """
-        return _sim3dlong.collectionGear4NPH_temp(self, minuscomv)
+        return _sim3dlong.CollectionGear4NPH_temp(self, minuscomv)
 
 
-    def Hamiltonian(self) -> "flt":
-        """Hamiltonian(collectionGear4NPH self) -> flt"""
-        return _sim3dlong.collectionGear4NPH_Hamiltonian(self)
+    def hamiltonian(self) -> "flt":
+        """hamiltonian(CollectionGear4NPH self) -> flt"""
+        return _sim3dlong.CollectionGear4NPH_hamiltonian(self)
 
 
-    def getdV(self) -> "flt":
-        """getdV(collectionGear4NPH self) -> flt"""
-        return _sim3dlong.collectionGear4NPH_getdV(self)
+    def get_dV(self) -> "flt":
+        """get_dV(CollectionGear4NPH self) -> flt"""
+        return _sim3dlong.CollectionGear4NPH_get_dV(self)
 
 
     def getddV(self) -> "flt":
-        """getddV(collectionGear4NPH self) -> flt"""
-        return _sim3dlong.collectionGear4NPH_getddV(self)
+        """getddV(CollectionGear4NPH self) -> flt"""
+        return _sim3dlong.CollectionGear4NPH_getddV(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionGear4NPH self, flt newdt)"""
-        return _sim3dlong.collectionGear4NPH_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionGear4NPH self, flt newdt)"""
+        return _sim3dlong.CollectionGear4NPH_set_dt(self, newdt)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionGear4NPH
+    __swig_destroy__ = _sim3dlong.delete_CollectionGear4NPH
     __del__ = lambda self: None
-collectionGear4NPH_swigregister = _sim3dlong.collectionGear4NPH_swigregister
-collectionGear4NPH_swigregister(collectionGear4NPH)
+CollectionGear4NPH_swigregister = _sim3dlong.CollectionGear4NPH_swigregister
+CollectionGear4NPH_swigregister(CollectionGear4NPH)
 
-class xrpsummer(fpairxFunct):
-    """Proxy of C++ xrpsummer class"""
+class XRPSummer(FPairXFunct):
+    """Proxy of C++ XRPSummer class"""
     __swig_setmethods__ = {}
-    for _s in [fpairxFunct]:
+    for _s in [FPairXFunct]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, xrpsummer, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, XRPSummer, name, value)
     __swig_getmethods__ = {}
-    for _s in [fpairxFunct]:
+    for _s in [FPairXFunct]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, xrpsummer, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, XRPSummer, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["xsum"] = _sim3dlong.xrpsummer_xsum_set
-    __swig_getmethods__["xsum"] = _sim3dlong.xrpsummer_xsum_get
+    __swig_setmethods__["xsum"] = _sim3dlong.XRPSummer_xsum_set
+    __swig_getmethods__["xsum"] = _sim3dlong.XRPSummer_xsum_get
     if _newclass:
-        xsum = _swig_property(_sim3dlong.xrpsummer_xsum_get, _sim3dlong.xrpsummer_xsum_set)
-    __swig_setmethods__["rpxsum"] = _sim3dlong.xrpsummer_rpxsum_set
-    __swig_getmethods__["rpxsum"] = _sim3dlong.xrpsummer_rpxsum_get
+        xsum = _swig_property(_sim3dlong.XRPSummer_xsum_get, _sim3dlong.XRPSummer_xsum_set)
+    __swig_setmethods__["rpxsum"] = _sim3dlong.XRPSummer_rpxsum_set
+    __swig_getmethods__["rpxsum"] = _sim3dlong.XRPSummer_rpxsum_get
     if _newclass:
-        rpxsum = _swig_property(_sim3dlong.xrpsummer_rpxsum_get, _sim3dlong.xrpsummer_rpxsum_set)
-    __swig_setmethods__["vfsum"] = _sim3dlong.xrpsummer_vfsum_set
-    __swig_getmethods__["vfsum"] = _sim3dlong.xrpsummer_vfsum_get
+        rpxsum = _swig_property(_sim3dlong.XRPSummer_rpxsum_get, _sim3dlong.XRPSummer_rpxsum_set)
+    __swig_setmethods__["vfsum"] = _sim3dlong.XRPSummer_vfsum_set
+    __swig_getmethods__["vfsum"] = _sim3dlong.XRPSummer_vfsum_get
     if _newclass:
-        vfsum = _swig_property(_sim3dlong.xrpsummer_vfsum_get, _sim3dlong.xrpsummer_vfsum_set)
-    __swig_setmethods__["rfsum"] = _sim3dlong.xrpsummer_rfsum_set
-    __swig_getmethods__["rfsum"] = _sim3dlong.xrpsummer_rfsum_get
+        vfsum = _swig_property(_sim3dlong.XRPSummer_vfsum_get, _sim3dlong.XRPSummer_vfsum_set)
+    __swig_setmethods__["rfsum"] = _sim3dlong.XRPSummer_rfsum_set
+    __swig_getmethods__["rfsum"] = _sim3dlong.XRPSummer_rfsum_get
     if _newclass:
-        rfsum = _swig_property(_sim3dlong.xrpsummer_rfsum_get, _sim3dlong.xrpsummer_rfsum_set)
+        rfsum = _swig_property(_sim3dlong.XRPSummer_rfsum_get, _sim3dlong.XRPSummer_rfsum_set)
 
     def __init__(self, box: 'boost::shared_ptr< Box >'):
-        """__init__(xrpsummer self, boost::shared_ptr< Box > box) -> xrpsummer"""
-        this = _sim3dlong.new_xrpsummer(box)
+        """__init__(XRPSummer self, boost::shared_ptr< Box > box) -> XRPSummer"""
+        this = _sim3dlong.new_XRPSummer(box)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def run(self, arg2: 'forcepairx') -> "void":
-        """run(xrpsummer self, forcepairx arg2)"""
-        return _sim3dlong.xrpsummer_run(self, arg2)
+    def run(self, arg2: 'ForcePairX') -> "void":
+        """run(XRPSummer self, ForcePairX arg2)"""
+        return _sim3dlong.XRPSummer_run(self, arg2)
 
 
     def reset(self) -> "void":
-        """reset(xrpsummer self)"""
-        return _sim3dlong.xrpsummer_reset(self)
+        """reset(XRPSummer self)"""
+        return _sim3dlong.XRPSummer_reset(self)
 
-    __swig_destroy__ = _sim3dlong.delete_xrpsummer
+    __swig_destroy__ = _sim3dlong.delete_XRPSummer
     __del__ = lambda self: None
-xrpsummer_swigregister = _sim3dlong.xrpsummer_swigregister
-xrpsummer_swigregister(xrpsummer)
+XRPSummer_swigregister = _sim3dlong.XRPSummer_swigregister
+XRPSummer_swigregister(XRPSummer)
 
-class collectionGear4NPT(collection):
-    """Proxy of C++ collectionGear4NPT class"""
+class CollectionGear4NPT(Collection):
+    """Proxy of C++ CollectionGear4NPT class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionGear4NPT, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionGear4NPT, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionGear4NPT, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionGear4NPT, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["dt"] = _sim3dlong.collectionGear4NPT_dt_set
-    __swig_getmethods__["dt"] = _sim3dlong.collectionGear4NPT_dt_get
+    __swig_setmethods__["dt"] = _sim3dlong.CollectionGear4NPT_dt_set
+    __swig_getmethods__["dt"] = _sim3dlong.CollectionGear4NPT_dt_get
     if _newclass:
-        dt = _swig_property(_sim3dlong.collectionGear4NPT_dt_get, _sim3dlong.collectionGear4NPT_dt_set)
-    __swig_setmethods__["xrpsums"] = _sim3dlong.collectionGear4NPT_xrpsums_set
-    __swig_getmethods__["xrpsums"] = _sim3dlong.collectionGear4NPT_xrpsums_get
+        dt = _swig_property(_sim3dlong.CollectionGear4NPT_dt_get, _sim3dlong.CollectionGear4NPT_dt_set)
+    __swig_setmethods__["xrpsums"] = _sim3dlong.CollectionGear4NPT_xrpsums_set
+    __swig_getmethods__["xrpsums"] = _sim3dlong.CollectionGear4NPT_xrpsums_get
     if _newclass:
-        xrpsums = _swig_property(_sim3dlong.collectionGear4NPT_xrpsums_get, _sim3dlong.collectionGear4NPT_xrpsums_set)
-    __swig_setmethods__["ncorrec"] = _sim3dlong.collectionGear4NPT_ncorrec_set
-    __swig_getmethods__["ncorrec"] = _sim3dlong.collectionGear4NPT_ncorrec_get
+        xrpsums = _swig_property(_sim3dlong.CollectionGear4NPT_xrpsums_get, _sim3dlong.CollectionGear4NPT_xrpsums_set)
+    __swig_setmethods__["ncorrec"] = _sim3dlong.CollectionGear4NPT_ncorrec_set
+    __swig_getmethods__["ncorrec"] = _sim3dlong.CollectionGear4NPT_ncorrec_get
     if _newclass:
-        ncorrec = _swig_property(_sim3dlong.collectionGear4NPT_ncorrec_get, _sim3dlong.collectionGear4NPT_ncorrec_set)
-    __swig_setmethods__["V1"] = _sim3dlong.collectionGear4NPT_V1_set
-    __swig_getmethods__["V1"] = _sim3dlong.collectionGear4NPT_V1_get
+        ncorrec = _swig_property(_sim3dlong.CollectionGear4NPT_ncorrec_get, _sim3dlong.CollectionGear4NPT_ncorrec_set)
+    __swig_setmethods__["V1"] = _sim3dlong.CollectionGear4NPT_V1_set
+    __swig_getmethods__["V1"] = _sim3dlong.CollectionGear4NPT_V1_get
     if _newclass:
-        V1 = _swig_property(_sim3dlong.collectionGear4NPT_V1_get, _sim3dlong.collectionGear4NPT_V1_set)
-    __swig_setmethods__["V2"] = _sim3dlong.collectionGear4NPT_V2_set
-    __swig_getmethods__["V2"] = _sim3dlong.collectionGear4NPT_V2_get
+        V1 = _swig_property(_sim3dlong.CollectionGear4NPT_V1_get, _sim3dlong.CollectionGear4NPT_V1_set)
+    __swig_setmethods__["V2"] = _sim3dlong.CollectionGear4NPT_V2_set
+    __swig_getmethods__["V2"] = _sim3dlong.CollectionGear4NPT_V2_get
     if _newclass:
-        V2 = _swig_property(_sim3dlong.collectionGear4NPT_V2_get, _sim3dlong.collectionGear4NPT_V2_set)
-    __swig_setmethods__["V3"] = _sim3dlong.collectionGear4NPT_V3_set
-    __swig_getmethods__["V3"] = _sim3dlong.collectionGear4NPT_V3_get
+        V2 = _swig_property(_sim3dlong.CollectionGear4NPT_V2_get, _sim3dlong.CollectionGear4NPT_V2_set)
+    __swig_setmethods__["V3"] = _sim3dlong.CollectionGear4NPT_V3_set
+    __swig_getmethods__["V3"] = _sim3dlong.CollectionGear4NPT_V3_get
     if _newclass:
-        V3 = _swig_property(_sim3dlong.collectionGear4NPT_V3_get, _sim3dlong.collectionGear4NPT_V3_set)
-    __swig_setmethods__["chi"] = _sim3dlong.collectionGear4NPT_chi_set
-    __swig_getmethods__["chi"] = _sim3dlong.collectionGear4NPT_chi_get
+        V3 = _swig_property(_sim3dlong.CollectionGear4NPT_V3_get, _sim3dlong.CollectionGear4NPT_V3_set)
+    __swig_setmethods__["chi"] = _sim3dlong.CollectionGear4NPT_chi_set
+    __swig_getmethods__["chi"] = _sim3dlong.CollectionGear4NPT_chi_get
     if _newclass:
-        chi = _swig_property(_sim3dlong.collectionGear4NPT_chi_get, _sim3dlong.collectionGear4NPT_chi_set)
-    __swig_setmethods__["chixi"] = _sim3dlong.collectionGear4NPT_chixi_set
-    __swig_getmethods__["chixi"] = _sim3dlong.collectionGear4NPT_chixi_get
+        chi = _swig_property(_sim3dlong.CollectionGear4NPT_chi_get, _sim3dlong.CollectionGear4NPT_chi_set)
+    __swig_setmethods__["chixi"] = _sim3dlong.CollectionGear4NPT_chixi_set
+    __swig_getmethods__["chixi"] = _sim3dlong.CollectionGear4NPT_chixi_get
     if _newclass:
-        chixi = _swig_property(_sim3dlong.collectionGear4NPT_chixi_get, _sim3dlong.collectionGear4NPT_chixi_set)
-    __swig_setmethods__["xs1"] = _sim3dlong.collectionGear4NPT_xs1_set
-    __swig_getmethods__["xs1"] = _sim3dlong.collectionGear4NPT_xs1_get
+        chixi = _swig_property(_sim3dlong.CollectionGear4NPT_chixi_get, _sim3dlong.CollectionGear4NPT_chixi_set)
+    __swig_setmethods__["xs1"] = _sim3dlong.CollectionGear4NPT_xs1_set
+    __swig_getmethods__["xs1"] = _sim3dlong.CollectionGear4NPT_xs1_get
     if _newclass:
-        xs1 = _swig_property(_sim3dlong.collectionGear4NPT_xs1_get, _sim3dlong.collectionGear4NPT_xs1_set)
-    __swig_setmethods__["xs2"] = _sim3dlong.collectionGear4NPT_xs2_set
-    __swig_getmethods__["xs2"] = _sim3dlong.collectionGear4NPT_xs2_get
+        xs1 = _swig_property(_sim3dlong.CollectionGear4NPT_xs1_get, _sim3dlong.CollectionGear4NPT_xs1_set)
+    __swig_setmethods__["xs2"] = _sim3dlong.CollectionGear4NPT_xs2_set
+    __swig_getmethods__["xs2"] = _sim3dlong.CollectionGear4NPT_xs2_get
     if _newclass:
-        xs2 = _swig_property(_sim3dlong.collectionGear4NPT_xs2_get, _sim3dlong.collectionGear4NPT_xs2_set)
-    __swig_setmethods__["xs3"] = _sim3dlong.collectionGear4NPT_xs3_set
-    __swig_getmethods__["xs3"] = _sim3dlong.collectionGear4NPT_xs3_get
+        xs2 = _swig_property(_sim3dlong.CollectionGear4NPT_xs2_get, _sim3dlong.CollectionGear4NPT_xs2_set)
+    __swig_setmethods__["xs3"] = _sim3dlong.CollectionGear4NPT_xs3_set
+    __swig_getmethods__["xs3"] = _sim3dlong.CollectionGear4NPT_xs3_get
     if _newclass:
-        xs3 = _swig_property(_sim3dlong.collectionGear4NPT_xs3_get, _sim3dlong.collectionGear4NPT_xs3_set)
-    __swig_setmethods__["vs2"] = _sim3dlong.collectionGear4NPT_vs2_set
-    __swig_getmethods__["vs2"] = _sim3dlong.collectionGear4NPT_vs2_get
+        xs3 = _swig_property(_sim3dlong.CollectionGear4NPT_xs3_get, _sim3dlong.CollectionGear4NPT_xs3_set)
+    __swig_setmethods__["vs2"] = _sim3dlong.CollectionGear4NPT_vs2_set
+    __swig_getmethods__["vs2"] = _sim3dlong.CollectionGear4NPT_vs2_get
     if _newclass:
-        vs2 = _swig_property(_sim3dlong.collectionGear4NPT_vs2_get, _sim3dlong.collectionGear4NPT_vs2_set)
-    __swig_setmethods__["vs3"] = _sim3dlong.collectionGear4NPT_vs3_set
-    __swig_getmethods__["vs3"] = _sim3dlong.collectionGear4NPT_vs3_get
+        vs2 = _swig_property(_sim3dlong.CollectionGear4NPT_vs2_get, _sim3dlong.CollectionGear4NPT_vs2_set)
+    __swig_setmethods__["vs3"] = _sim3dlong.CollectionGear4NPT_vs3_set
+    __swig_getmethods__["vs3"] = _sim3dlong.CollectionGear4NPT_vs3_get
     if _newclass:
-        vs3 = _swig_property(_sim3dlong.collectionGear4NPT_vs3_get, _sim3dlong.collectionGear4NPT_vs3_set)
+        vs3 = _swig_property(_sim3dlong.CollectionGear4NPT_vs3_get, _sim3dlong.CollectionGear4NPT_vs3_set)
 
     def resetbs(self) -> "void":
-        """resetbs(collectionGear4NPT self)"""
-        return _sim3dlong.collectionGear4NPT_resetbs(self)
+        """resetbs(CollectionGear4NPT self)"""
+        return _sim3dlong.CollectionGear4NPT_resetbs(self)
 
 
-    def tointerpair(arg1: 'std::vector< boost::shared_ptr< interactionpairsx > > &') -> "std::vector< boost::shared_ptr< interaction > >":
-        """tointerpair(std::vector< boost::shared_ptr< interactionpairsx > > & arg1) -> std::vector< boost::shared_ptr< interaction > >"""
-        return _sim3dlong.collectionGear4NPT_tointerpair(arg1)
+    def tointerpair(arg1: 'std::vector< boost::shared_ptr< InteractionPairsX > > &') -> "std::vector< boost::shared_ptr< Interaction > >":
+        """tointerpair(std::vector< boost::shared_ptr< InteractionPairsX > > & arg1) -> std::vector< boost::shared_ptr< Interaction > >"""
+        return _sim3dlong.CollectionGear4NPT_tointerpair(arg1)
 
     if _newclass:
         tointerpair = staticmethod(tointerpair)
@@ -15547,304 +15209,304 @@ class collectionGear4NPT(collection):
 
     def __init__(self, *args):
         """
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interactionpairsx > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interactionpairsx > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< interactionpairsx > > interactions) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, uint ncorrectionsteps) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interactionpairsx > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interactionpairsx > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< atomgroup > atoms, std::vector< boost::shared_ptr< interactionpairsx > > interactions) -> collectionGear4NPT
-        __init__(collectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< atomgroup > atoms) -> collectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms) -> CollectionGear4NPT
         """
-        this = _sim3dlong.new_collectionGear4NPT(*args)
+        this = _sim3dlong.new_CollectionGear4NPT(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
-    def setForces(self, constraints_and_a: 'bool'=True) -> "void":
+    def set_forces(self, constraints_and_a: 'bool'=True) -> "void":
         """
-        setForces(collectionGear4NPT self, bool constraints_and_a=True)
-        setForces(collectionGear4NPT self)
+        set_forces(CollectionGear4NPT self, bool constraints_and_a=True)
+        set_forces(CollectionGear4NPT self)
         """
-        return _sim3dlong.collectionGear4NPT_setForces(self, constraints_and_a)
+        return _sim3dlong.CollectionGear4NPT_set_forces(self, constraints_and_a)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionGear4NPT self)"""
-        return _sim3dlong.collectionGear4NPT_timestep(self)
+        """timestep(CollectionGear4NPT self)"""
+        return _sim3dlong.CollectionGear4NPT_timestep(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionGear4NPT
+    __swig_destroy__ = _sim3dlong.delete_CollectionGear4NPT
     __del__ = lambda self: None
-collectionGear4NPT_swigregister = _sim3dlong.collectionGear4NPT_swigregister
-collectionGear4NPT_swigregister(collectionGear4NPT)
+CollectionGear4NPT_swigregister = _sim3dlong.CollectionGear4NPT_swigregister
+CollectionGear4NPT_swigregister(CollectionGear4NPT)
 
-def collectionGear4NPT_tointerpair(arg2: 'std::vector< boost::shared_ptr< interactionpairsx > > &') -> "std::vector< boost::shared_ptr< interaction > >":
-    """collectionGear4NPT_tointerpair(std::vector< boost::shared_ptr< interactionpairsx > > & arg2) -> std::vector< boost::shared_ptr< interaction > >"""
-    return _sim3dlong.collectionGear4NPT_tointerpair(arg2)
+def CollectionGear4NPT_tointerpair(arg2: 'std::vector< boost::shared_ptr< InteractionPairsX > > &') -> "std::vector< boost::shared_ptr< Interaction > >":
+    """CollectionGear4NPT_tointerpair(std::vector< boost::shared_ptr< InteractionPairsX > > & arg2) -> std::vector< boost::shared_ptr< Interaction > >"""
+    return _sim3dlong.CollectionGear4NPT_tointerpair(arg2)
 
-class collectionVerletNPT(collection):
-    """Proxy of C++ collectionVerletNPT class"""
+class CollectionVerletNPT(Collection):
+    """Proxy of C++ CollectionVerletNPT class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionVerletNPT, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionVerletNPT, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionVerletNPT, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionVerletNPT, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["dt"] = _sim3dlong.collectionVerletNPT_dt_set
-    __swig_getmethods__["dt"] = _sim3dlong.collectionVerletNPT_dt_get
+    __swig_setmethods__["dt"] = _sim3dlong.CollectionVerletNPT_dt_set
+    __swig_getmethods__["dt"] = _sim3dlong.CollectionVerletNPT_dt_get
     if _newclass:
-        dt = _swig_property(_sim3dlong.collectionVerletNPT_dt_get, _sim3dlong.collectionVerletNPT_dt_set)
-    __swig_setmethods__["eta"] = _sim3dlong.collectionVerletNPT_eta_set
-    __swig_getmethods__["eta"] = _sim3dlong.collectionVerletNPT_eta_get
+        dt = _swig_property(_sim3dlong.CollectionVerletNPT_dt_get, _sim3dlong.CollectionVerletNPT_dt_set)
+    __swig_setmethods__["eta"] = _sim3dlong.CollectionVerletNPT_eta_set
+    __swig_getmethods__["eta"] = _sim3dlong.CollectionVerletNPT_eta_get
     if _newclass:
-        eta = _swig_property(_sim3dlong.collectionVerletNPT_eta_get, _sim3dlong.collectionVerletNPT_eta_set)
-    __swig_setmethods__["xidot"] = _sim3dlong.collectionVerletNPT_xidot_set
-    __swig_getmethods__["xidot"] = _sim3dlong.collectionVerletNPT_xidot_get
+        eta = _swig_property(_sim3dlong.CollectionVerletNPT_eta_get, _sim3dlong.CollectionVerletNPT_eta_set)
+    __swig_setmethods__["xidot"] = _sim3dlong.CollectionVerletNPT_xidot_set
+    __swig_getmethods__["xidot"] = _sim3dlong.CollectionVerletNPT_xidot_get
     if _newclass:
-        xidot = _swig_property(_sim3dlong.collectionVerletNPT_xidot_get, _sim3dlong.collectionVerletNPT_xidot_set)
-    __swig_setmethods__["lastxidot"] = _sim3dlong.collectionVerletNPT_lastxidot_set
-    __swig_getmethods__["lastxidot"] = _sim3dlong.collectionVerletNPT_lastxidot_get
+        xidot = _swig_property(_sim3dlong.CollectionVerletNPT_xidot_get, _sim3dlong.CollectionVerletNPT_xidot_set)
+    __swig_setmethods__["lastxidot"] = _sim3dlong.CollectionVerletNPT_lastxidot_set
+    __swig_getmethods__["lastxidot"] = _sim3dlong.CollectionVerletNPT_lastxidot_get
     if _newclass:
-        lastxidot = _swig_property(_sim3dlong.collectionVerletNPT_lastxidot_get, _sim3dlong.collectionVerletNPT_lastxidot_set)
-    __swig_setmethods__["lastV"] = _sim3dlong.collectionVerletNPT_lastV_set
-    __swig_getmethods__["lastV"] = _sim3dlong.collectionVerletNPT_lastV_get
+        lastxidot = _swig_property(_sim3dlong.CollectionVerletNPT_lastxidot_get, _sim3dlong.CollectionVerletNPT_lastxidot_set)
+    __swig_setmethods__["lastV"] = _sim3dlong.CollectionVerletNPT_lastV_set
+    __swig_getmethods__["lastV"] = _sim3dlong.CollectionVerletNPT_lastV_get
     if _newclass:
-        lastV = _swig_property(_sim3dlong.collectionVerletNPT_lastV_get, _sim3dlong.collectionVerletNPT_lastV_set)
-    __swig_setmethods__["etasum"] = _sim3dlong.collectionVerletNPT_etasum_set
-    __swig_getmethods__["etasum"] = _sim3dlong.collectionVerletNPT_etasum_get
+        lastV = _swig_property(_sim3dlong.CollectionVerletNPT_lastV_get, _sim3dlong.CollectionVerletNPT_lastV_set)
+    __swig_setmethods__["etasum"] = _sim3dlong.CollectionVerletNPT_etasum_set
+    __swig_getmethods__["etasum"] = _sim3dlong.CollectionVerletNPT_etasum_get
     if _newclass:
-        etasum = _swig_property(_sim3dlong.collectionVerletNPT_etasum_get, _sim3dlong.collectionVerletNPT_etasum_set)
-    __swig_setmethods__["vhalf"] = _sim3dlong.collectionVerletNPT_vhalf_set
-    __swig_getmethods__["vhalf"] = _sim3dlong.collectionVerletNPT_vhalf_get
+        etasum = _swig_property(_sim3dlong.CollectionVerletNPT_etasum_get, _sim3dlong.CollectionVerletNPT_etasum_set)
+    __swig_setmethods__["vhalf"] = _sim3dlong.CollectionVerletNPT_vhalf_set
+    __swig_getmethods__["vhalf"] = _sim3dlong.CollectionVerletNPT_vhalf_get
     if _newclass:
-        vhalf = _swig_property(_sim3dlong.collectionVerletNPT_vhalf_get, _sim3dlong.collectionVerletNPT_vhalf_set)
-    __swig_setmethods__["P"] = _sim3dlong.collectionVerletNPT_P_set
-    __swig_getmethods__["P"] = _sim3dlong.collectionVerletNPT_P_get
+        vhalf = _swig_property(_sim3dlong.CollectionVerletNPT_vhalf_get, _sim3dlong.CollectionVerletNPT_vhalf_set)
+    __swig_setmethods__["P"] = _sim3dlong.CollectionVerletNPT_P_set
+    __swig_getmethods__["P"] = _sim3dlong.CollectionVerletNPT_P_get
     if _newclass:
-        P = _swig_property(_sim3dlong.collectionVerletNPT_P_get, _sim3dlong.collectionVerletNPT_P_set)
-    __swig_setmethods__["QP"] = _sim3dlong.collectionVerletNPT_QP_set
-    __swig_getmethods__["QP"] = _sim3dlong.collectionVerletNPT_QP_get
+        P = _swig_property(_sim3dlong.CollectionVerletNPT_P_get, _sim3dlong.CollectionVerletNPT_P_set)
+    __swig_setmethods__["QP"] = _sim3dlong.CollectionVerletNPT_QP_set
+    __swig_getmethods__["QP"] = _sim3dlong.CollectionVerletNPT_QP_get
     if _newclass:
-        QP = _swig_property(_sim3dlong.collectionVerletNPT_QP_get, _sim3dlong.collectionVerletNPT_QP_set)
-    __swig_setmethods__["T"] = _sim3dlong.collectionVerletNPT_T_set
-    __swig_getmethods__["T"] = _sim3dlong.collectionVerletNPT_T_get
+        QP = _swig_property(_sim3dlong.CollectionVerletNPT_QP_get, _sim3dlong.CollectionVerletNPT_QP_set)
+    __swig_setmethods__["T"] = _sim3dlong.CollectionVerletNPT_T_set
+    __swig_getmethods__["T"] = _sim3dlong.CollectionVerletNPT_T_get
     if _newclass:
-        T = _swig_property(_sim3dlong.collectionVerletNPT_T_get, _sim3dlong.collectionVerletNPT_T_set)
-    __swig_setmethods__["QT"] = _sim3dlong.collectionVerletNPT_QT_set
-    __swig_getmethods__["QT"] = _sim3dlong.collectionVerletNPT_QT_get
+        T = _swig_property(_sim3dlong.CollectionVerletNPT_T_get, _sim3dlong.CollectionVerletNPT_T_set)
+    __swig_setmethods__["QT"] = _sim3dlong.CollectionVerletNPT_QT_set
+    __swig_getmethods__["QT"] = _sim3dlong.CollectionVerletNPT_QT_get
     if _newclass:
-        QT = _swig_property(_sim3dlong.collectionVerletNPT_QT_get, _sim3dlong.collectionVerletNPT_QT_set)
-    __swig_setmethods__["curP"] = _sim3dlong.collectionVerletNPT_curP_set
-    __swig_getmethods__["curP"] = _sim3dlong.collectionVerletNPT_curP_get
+        QT = _swig_property(_sim3dlong.CollectionVerletNPT_QT_get, _sim3dlong.CollectionVerletNPT_QT_set)
+    __swig_setmethods__["curP"] = _sim3dlong.CollectionVerletNPT_curP_set
+    __swig_getmethods__["curP"] = _sim3dlong.CollectionVerletNPT_curP_get
     if _newclass:
-        curP = _swig_property(_sim3dlong.collectionVerletNPT_curP_get, _sim3dlong.collectionVerletNPT_curP_set)
+        curP = _swig_property(_sim3dlong.CollectionVerletNPT_curP_get, _sim3dlong.CollectionVerletNPT_curP_set)
 
     def resetvhalf(self) -> "void":
-        """resetvhalf(collectionVerletNPT self)"""
-        return _sim3dlong.collectionVerletNPT_resetvhalf(self)
+        """resetvhalf(CollectionVerletNPT self)"""
+        return _sim3dlong.CollectionVerletNPT_resetvhalf(self)
 
 
     def __init__(self, *args):
         """
-        __init__(collectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionVerletNPT
-        __init__(collectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT) -> collectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT) -> CollectionVerletNPT
         """
-        this = _sim3dlong.new_collectionVerletNPT(*args)
+        this = _sim3dlong.new_CollectionVerletNPT(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def timestep(self) -> "void":
-        """timestep(collectionVerletNPT self)"""
-        return _sim3dlong.collectionVerletNPT_timestep(self)
+        """timestep(CollectionVerletNPT self)"""
+        return _sim3dlong.CollectionVerletNPT_timestep(self)
 
 
-    def setdt(self, newdt: 'flt') -> "void":
-        """setdt(collectionVerletNPT self, flt newdt)"""
-        return _sim3dlong.collectionVerletNPT_setdt(self, newdt)
+    def set_dt(self, newdt: 'flt') -> "void":
+        """set_dt(CollectionVerletNPT self, flt newdt)"""
+        return _sim3dlong.CollectionVerletNPT_set_dt(self, newdt)
 
 
-    def resetcomv(self) -> "void":
-        """resetcomv(collectionVerletNPT self)"""
-        return _sim3dlong.collectionVerletNPT_resetcomv(self)
+    def reset_com_velocity(self) -> "void":
+        """reset_com_velocity(CollectionVerletNPT self)"""
+        return _sim3dlong.CollectionVerletNPT_reset_com_velocity(self)
 
 
-    def resetL(self) -> "void":
-        """resetL(collectionVerletNPT self)"""
-        return _sim3dlong.collectionVerletNPT_resetL(self)
+    def reset_L(self) -> "void":
+        """reset_L(CollectionVerletNPT self)"""
+        return _sim3dlong.CollectionVerletNPT_reset_L(self)
 
 
-    def scaleVs(self, scaleby: 'flt') -> "void":
-        """scaleVs(collectionVerletNPT self, flt scaleby)"""
-        return _sim3dlong.collectionVerletNPT_scaleVs(self, scaleby)
+    def scale_velocities(self, scaleby: 'flt') -> "void":
+        """scale_velocities(CollectionVerletNPT self, flt scaleby)"""
+        return _sim3dlong.CollectionVerletNPT_scale_velocities(self, scaleby)
 
 
-    def scaleVelocitiesT(self, T: 'flt') -> "void":
-        """scaleVelocitiesT(collectionVerletNPT self, flt T)"""
-        return _sim3dlong.collectionVerletNPT_scaleVelocitiesT(self, T)
+    def scale_velocities_to_temp(self, T: 'flt') -> "void":
+        """scale_velocities_to_temp(CollectionVerletNPT self, flt T)"""
+        return _sim3dlong.CollectionVerletNPT_scale_velocities_to_temp(self, T)
 
 
-    def scaleVelocitiesE(self, E: 'flt') -> "void":
-        """scaleVelocitiesE(collectionVerletNPT self, flt E)"""
-        return _sim3dlong.collectionVerletNPT_scaleVelocitiesE(self, E)
+    def scale_velocities_to_energy(self, E: 'flt') -> "void":
+        """scale_velocities_to_energy(CollectionVerletNPT self, flt E)"""
+        return _sim3dlong.CollectionVerletNPT_scale_velocities_to_energy(self, E)
 
 
-    def geteta(self) -> "flt":
-        """geteta(collectionVerletNPT self) -> flt"""
-        return _sim3dlong.collectionVerletNPT_geteta(self)
+    def get_eta(self) -> "flt":
+        """get_eta(CollectionVerletNPT self) -> flt"""
+        return _sim3dlong.CollectionVerletNPT_get_eta(self)
 
 
-    def getxidot(self) -> "flt":
-        """getxidot(collectionVerletNPT self) -> flt"""
-        return _sim3dlong.collectionVerletNPT_getxidot(self)
+    def det_xi_dot(self) -> "flt":
+        """det_xi_dot(CollectionVerletNPT self) -> flt"""
+        return _sim3dlong.CollectionVerletNPT_det_xi_dot(self)
 
 
-    def getP(self) -> "flt":
-        """getP(collectionVerletNPT self) -> flt"""
-        return _sim3dlong.collectionVerletNPT_getP(self)
+    def get_pressure(self) -> "flt":
+        """get_pressure(CollectionVerletNPT self) -> flt"""
+        return _sim3dlong.CollectionVerletNPT_get_pressure(self)
 
 
-    def getvhalf(self, n: 'uint') -> "Vec":
-        """getvhalf(collectionVerletNPT self, uint n) -> Vec"""
-        return _sim3dlong.collectionVerletNPT_getvhalf(self, n)
+    def get_vhalf(self, n: 'uint') -> "Vec":
+        """get_vhalf(CollectionVerletNPT self, uint n) -> Vec"""
+        return _sim3dlong.CollectionVerletNPT_get_vhalf(self, n)
 
 
-    def Hamiltonian(self) -> "flt":
-        """Hamiltonian(collectionVerletNPT self) -> flt"""
-        return _sim3dlong.collectionVerletNPT_Hamiltonian(self)
+    def hamiltonian(self) -> "flt":
+        """hamiltonian(CollectionVerletNPT self) -> flt"""
+        return _sim3dlong.CollectionVerletNPT_hamiltonian(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionVerletNPT
+    __swig_destroy__ = _sim3dlong.delete_CollectionVerletNPT
     __del__ = lambda self: None
-collectionVerletNPT_swigregister = _sim3dlong.collectionVerletNPT_swigregister
-collectionVerletNPT_swigregister(collectionVerletNPT)
+CollectionVerletNPT_swigregister = _sim3dlong.CollectionVerletNPT_swigregister
+CollectionVerletNPT_swigregister(CollectionVerletNPT)
 
-class event(_object):
-    """Proxy of C++ event class"""
+class Event(_object):
+    """Proxy of C++ Event class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, event, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Event, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, event, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, Event, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["t"] = _sim3dlong.event_t_set
-    __swig_getmethods__["t"] = _sim3dlong.event_t_get
+    __swig_setmethods__["t"] = _sim3dlong.Event_t_set
+    __swig_getmethods__["t"] = _sim3dlong.Event_t_get
     if _newclass:
-        t = _swig_property(_sim3dlong.event_t_get, _sim3dlong.event_t_set)
-    __swig_setmethods__["a"] = _sim3dlong.event_a_set
-    __swig_getmethods__["a"] = _sim3dlong.event_a_get
+        t = _swig_property(_sim3dlong.Event_t_get, _sim3dlong.Event_t_set)
+    __swig_setmethods__["a"] = _sim3dlong.Event_a_set
+    __swig_getmethods__["a"] = _sim3dlong.Event_a_get
     if _newclass:
-        a = _swig_property(_sim3dlong.event_a_get, _sim3dlong.event_a_set)
-    __swig_setmethods__["b"] = _sim3dlong.event_b_set
-    __swig_getmethods__["b"] = _sim3dlong.event_b_get
+        a = _swig_property(_sim3dlong.Event_a_get, _sim3dlong.Event_a_set)
+    __swig_setmethods__["b"] = _sim3dlong.Event_b_set
+    __swig_getmethods__["b"] = _sim3dlong.Event_b_get
     if _newclass:
-        b = _swig_property(_sim3dlong.event_b_get, _sim3dlong.event_b_set)
+        b = _swig_property(_sim3dlong.Event_b_get, _sim3dlong.Event_b_set)
 
-    def __lt__(self, other: 'event') -> "bool":
-        """__lt__(event self, event other) -> bool"""
-        return _sim3dlong.event___lt__(self, other)
+    def __lt__(self, other: 'Event') -> "bool":
+        """__lt__(Event self, Event other) -> bool"""
+        return _sim3dlong.Event___lt__(self, other)
 
 
     def __init__(self):
-        """__init__(event self) -> event"""
-        this = _sim3dlong.new_event()
+        """__init__(Event self) -> Event"""
+        this = _sim3dlong.new_Event()
         try:
             self.this.append(this)
         except:
             self.this = this
-    __swig_destroy__ = _sim3dlong.delete_event
+    __swig_destroy__ = _sim3dlong.delete_Event
     __del__ = lambda self: None
-event_swigregister = _sim3dlong.event_swigregister
-event_swigregister(event)
+Event_swigregister = _sim3dlong.Event_swigregister
+Event_swigregister(Event)
 
 
 def get_max(v: 'ldvector') -> "flt":
     """get_max(ldvector v) -> flt"""
     return _sim3dlong.get_max(v)
-class collectionCDBDgrid(collection):
-    """Proxy of C++ collectionCDBDgrid class"""
+class CollectionCDBDgrid(Collection):
+    """Proxy of C++ CollectionCDBDgrid class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionCDBDgrid, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCDBDgrid, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionCDBDgrid, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionCDBDgrid, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["T"] = _sim3dlong.collectionCDBDgrid_T_set
-    __swig_getmethods__["T"] = _sim3dlong.collectionCDBDgrid_T_get
+    __swig_setmethods__["T"] = _sim3dlong.CollectionCDBDgrid_T_set
+    __swig_getmethods__["T"] = _sim3dlong.CollectionCDBDgrid_T_get
     if _newclass:
-        T = _swig_property(_sim3dlong.collectionCDBDgrid_T_get, _sim3dlong.collectionCDBDgrid_T_set)
-    __swig_setmethods__["dt"] = _sim3dlong.collectionCDBDgrid_dt_set
-    __swig_getmethods__["dt"] = _sim3dlong.collectionCDBDgrid_dt_get
+        T = _swig_property(_sim3dlong.CollectionCDBDgrid_T_get, _sim3dlong.CollectionCDBDgrid_T_set)
+    __swig_setmethods__["dt"] = _sim3dlong.CollectionCDBDgrid_dt_set
+    __swig_getmethods__["dt"] = _sim3dlong.CollectionCDBDgrid_dt_get
     if _newclass:
-        dt = _swig_property(_sim3dlong.collectionCDBDgrid_dt_get, _sim3dlong.collectionCDBDgrid_dt_set)
-    __swig_setmethods__["curt"] = _sim3dlong.collectionCDBDgrid_curt_set
-    __swig_getmethods__["curt"] = _sim3dlong.collectionCDBDgrid_curt_get
+        dt = _swig_property(_sim3dlong.CollectionCDBDgrid_dt_get, _sim3dlong.CollectionCDBDgrid_dt_set)
+    __swig_setmethods__["curt"] = _sim3dlong.CollectionCDBDgrid_curt_set
+    __swig_getmethods__["curt"] = _sim3dlong.CollectionCDBDgrid_curt_get
     if _newclass:
-        curt = _swig_property(_sim3dlong.collectionCDBDgrid_curt_get, _sim3dlong.collectionCDBDgrid_curt_set)
-    __swig_setmethods__["numevents"] = _sim3dlong.collectionCDBDgrid_numevents_set
-    __swig_getmethods__["numevents"] = _sim3dlong.collectionCDBDgrid_numevents_get
+        curt = _swig_property(_sim3dlong.CollectionCDBDgrid_curt_get, _sim3dlong.CollectionCDBDgrid_curt_set)
+    __swig_setmethods__["numevents"] = _sim3dlong.CollectionCDBDgrid_numevents_set
+    __swig_getmethods__["numevents"] = _sim3dlong.CollectionCDBDgrid_numevents_get
     if _newclass:
-        numevents = _swig_property(_sim3dlong.collectionCDBDgrid_numevents_get, _sim3dlong.collectionCDBDgrid_numevents_set)
-    __swig_setmethods__["events"] = _sim3dlong.collectionCDBDgrid_events_set
-    __swig_getmethods__["events"] = _sim3dlong.collectionCDBDgrid_events_get
+        numevents = _swig_property(_sim3dlong.CollectionCDBDgrid_numevents_get, _sim3dlong.CollectionCDBDgrid_numevents_set)
+    __swig_setmethods__["events"] = _sim3dlong.CollectionCDBDgrid_events_set
+    __swig_getmethods__["events"] = _sim3dlong.CollectionCDBDgrid_events_get
     if _newclass:
-        events = _swig_property(_sim3dlong.collectionCDBDgrid_events_get, _sim3dlong.collectionCDBDgrid_events_set)
-    __swig_setmethods__["atomsizes"] = _sim3dlong.collectionCDBDgrid_atomsizes_set
-    __swig_getmethods__["atomsizes"] = _sim3dlong.collectionCDBDgrid_atomsizes_get
+        events = _swig_property(_sim3dlong.CollectionCDBDgrid_events_get, _sim3dlong.CollectionCDBDgrid_events_set)
+    __swig_setmethods__["atomsizes"] = _sim3dlong.CollectionCDBDgrid_atomsizes_set
+    __swig_getmethods__["atomsizes"] = _sim3dlong.CollectionCDBDgrid_atomsizes_get
     if _newclass:
-        atomsizes = _swig_property(_sim3dlong.collectionCDBDgrid_atomsizes_get, _sim3dlong.collectionCDBDgrid_atomsizes_set)
-    __swig_setmethods__["edge_epsilon"] = _sim3dlong.collectionCDBDgrid_edge_epsilon_set
-    __swig_getmethods__["edge_epsilon"] = _sim3dlong.collectionCDBDgrid_edge_epsilon_get
+        atomsizes = _swig_property(_sim3dlong.CollectionCDBDgrid_atomsizes_get, _sim3dlong.CollectionCDBDgrid_atomsizes_set)
+    __swig_setmethods__["edge_epsilon"] = _sim3dlong.CollectionCDBDgrid_edge_epsilon_set
+    __swig_getmethods__["edge_epsilon"] = _sim3dlong.CollectionCDBDgrid_edge_epsilon_get
     if _newclass:
-        edge_epsilon = _swig_property(_sim3dlong.collectionCDBDgrid_edge_epsilon_get, _sim3dlong.collectionCDBDgrid_edge_epsilon_set)
+        edge_epsilon = _swig_property(_sim3dlong.CollectionCDBDgrid_edge_epsilon_get, _sim3dlong.CollectionCDBDgrid_edge_epsilon_set)
 
     def reset_events(self, force: 'bool'=True) -> "void":
         """
-        reset_events(collectionCDBDgrid self, bool force=True)
-        reset_events(collectionCDBDgrid self)
+        reset_events(CollectionCDBDgrid self, bool force=True)
+        reset_events(CollectionCDBDgrid self)
         """
-        return _sim3dlong.collectionCDBDgrid_reset_events(self, force)
+        return _sim3dlong.CollectionCDBDgrid_reset_events(self, force)
 
 
     def line_advance(self, deltat: 'flt') -> "void":
-        """line_advance(collectionCDBDgrid self, flt deltat)"""
-        return _sim3dlong.collectionCDBDgrid_line_advance(self, deltat)
+        """line_advance(CollectionCDBDgrid self, flt deltat)"""
+        return _sim3dlong.CollectionCDBDgrid_line_advance(self, deltat)
 
-    __swig_setmethods__["grid"] = _sim3dlong.collectionCDBDgrid_grid_set
-    __swig_getmethods__["grid"] = _sim3dlong.collectionCDBDgrid_grid_get
+    __swig_setmethods__["grid"] = _sim3dlong.CollectionCDBDgrid_grid_set
+    __swig_getmethods__["grid"] = _sim3dlong.CollectionCDBDgrid_grid_get
     if _newclass:
-        grid = _swig_property(_sim3dlong.collectionCDBDgrid_grid_get, _sim3dlong.collectionCDBDgrid_grid_set)
-    __swig_setmethods__["gridt"] = _sim3dlong.collectionCDBDgrid_gridt_set
-    __swig_getmethods__["gridt"] = _sim3dlong.collectionCDBDgrid_gridt_get
+        grid = _swig_property(_sim3dlong.CollectionCDBDgrid_grid_get, _sim3dlong.CollectionCDBDgrid_grid_set)
+    __swig_setmethods__["gridt"] = _sim3dlong.CollectionCDBDgrid_gridt_set
+    __swig_getmethods__["gridt"] = _sim3dlong.CollectionCDBDgrid_gridt_get
     if _newclass:
-        gridt = _swig_property(_sim3dlong.collectionCDBDgrid_gridt_get, _sim3dlong.collectionCDBDgrid_gridt_set)
+        gridt = _swig_property(_sim3dlong.CollectionCDBDgrid_gridt_get, _sim3dlong.CollectionCDBDgrid_gridt_set)
 
-    def next_event(self, a: 'atomid') -> "event":
-        """next_event(collectionCDBDgrid self, atomid a) -> event"""
-        return _sim3dlong.collectionCDBDgrid_next_event(self, a)
+    def next_event(self, a: 'AtomID') -> "Event":
+        """next_event(CollectionCDBDgrid self, AtomID a) -> Event"""
+        return _sim3dlong.CollectionCDBDgrid_next_event(self, a)
 
 
     def __init__(self, *args):
         """
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionCDBDgrid
-        __init__(collectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes) -> collectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes) -> CollectionCDBDgrid
         """
-        this = _sim3dlong.new_collectionCDBDgrid(*args)
+        this = _sim3dlong.new_CollectionCDBDgrid(*args)
         try:
             self.this.append(this)
         except:
@@ -15852,118 +15514,118 @@ class collectionCDBDgrid(collection):
 
     def update_grid(self, force: 'bool'=True) -> "void":
         """
-        update_grid(collectionCDBDgrid self, bool force=True)
-        update_grid(collectionCDBDgrid self)
+        update_grid(CollectionCDBDgrid self, bool force=True)
+        update_grid(CollectionCDBDgrid self)
         """
-        return _sim3dlong.collectionCDBDgrid_update_grid(self, force)
+        return _sim3dlong.CollectionCDBDgrid_update_grid(self, force)
 
 
     def get_grid(self) -> "Grid &":
-        """get_grid(collectionCDBDgrid self) -> Grid"""
-        return _sim3dlong.collectionCDBDgrid_get_grid(self)
+        """get_grid(CollectionCDBDgrid self) -> Grid"""
+        return _sim3dlong.CollectionCDBDgrid_get_grid(self)
 
 
     def get_epsilon(self) -> "flt":
-        """get_epsilon(collectionCDBDgrid self) -> flt"""
-        return _sim3dlong.collectionCDBDgrid_get_epsilon(self)
+        """get_epsilon(CollectionCDBDgrid self) -> flt"""
+        return _sim3dlong.CollectionCDBDgrid_get_epsilon(self)
 
 
     def set_epsilon(self, eps: 'flt') -> "void":
-        """set_epsilon(collectionCDBDgrid self, flt eps)"""
-        return _sim3dlong.collectionCDBDgrid_set_epsilon(self, eps)
+        """set_epsilon(CollectionCDBDgrid self, flt eps)"""
+        return _sim3dlong.CollectionCDBDgrid_set_epsilon(self, eps)
 
 
     def reset_velocities(self) -> "void":
-        """reset_velocities(collectionCDBDgrid self)"""
-        return _sim3dlong.collectionCDBDgrid_reset_velocities(self)
+        """reset_velocities(CollectionCDBDgrid self)"""
+        return _sim3dlong.CollectionCDBDgrid_reset_velocities(self)
 
 
     def take_step(self, tlim: 'flt'=-1) -> "bool":
         """
-        take_step(collectionCDBDgrid self, flt tlim=-1) -> bool
-        take_step(collectionCDBDgrid self) -> bool
+        take_step(CollectionCDBDgrid self, flt tlim=-1) -> bool
+        take_step(CollectionCDBDgrid self) -> bool
         """
-        return _sim3dlong.collectionCDBDgrid_take_step(self, tlim)
+        return _sim3dlong.CollectionCDBDgrid_take_step(self, tlim)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionCDBDgrid self)"""
-        return _sim3dlong.collectionCDBDgrid_timestep(self)
+        """timestep(CollectionCDBDgrid self)"""
+        return _sim3dlong.CollectionCDBDgrid_timestep(self)
 
 
     def events_processed(self) -> "long long":
-        """events_processed(collectionCDBDgrid self) -> long long"""
-        return _sim3dlong.collectionCDBDgrid_events_processed(self)
+        """events_processed(CollectionCDBDgrid self) -> long long"""
+        return _sim3dlong.CollectionCDBDgrid_events_processed(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionCDBDgrid
+    __swig_destroy__ = _sim3dlong.delete_CollectionCDBDgrid
     __del__ = lambda self: None
-collectionCDBDgrid_swigregister = _sim3dlong.collectionCDBDgrid_swigregister
-collectionCDBDgrid_swigregister(collectionCDBDgrid)
+CollectionCDBDgrid_swigregister = _sim3dlong.CollectionCDBDgrid_swigregister
+CollectionCDBDgrid_swigregister(CollectionCDBDgrid)
 
-class collectionCDBD(collection):
-    """Proxy of C++ collectionCDBD class"""
+class CollectionCDBD(Collection):
+    """Proxy of C++ CollectionCDBD class"""
     __swig_setmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, collectionCDBD, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCDBD, name, value)
     __swig_getmethods__ = {}
-    for _s in [collection]:
+    for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, collectionCDBD, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionCDBD, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, ldvector sizes) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers, std::vector< boost::shared_ptr< constraint > > constraints) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< interaction > > interactions, std::vector< boost::shared_ptr< statetracker > > trackers) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< interaction > > interactions) -> collectionCDBD
-        __init__(collectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< atomgroup > atoms, flt const dt, flt const T, flt sizes) -> collectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes) -> CollectionCDBD
         """
-        this = _sim3dlong.new_collectionCDBD(*args)
+        this = _sim3dlong.new_CollectionCDBD(*args)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def reset_velocities(self) -> "void":
-        """reset_velocities(collectionCDBD self)"""
-        return _sim3dlong.collectionCDBD_reset_velocities(self)
+        """reset_velocities(CollectionCDBD self)"""
+        return _sim3dlong.CollectionCDBD_reset_velocities(self)
 
 
     def take_step(self, tlim: 'flt'=-1) -> "bool":
         """
-        take_step(collectionCDBD self, flt tlim=-1) -> bool
-        take_step(collectionCDBD self) -> bool
+        take_step(CollectionCDBD self, flt tlim=-1) -> bool
+        take_step(CollectionCDBD self) -> bool
         """
-        return _sim3dlong.collectionCDBD_take_step(self, tlim)
+        return _sim3dlong.CollectionCDBD_take_step(self, tlim)
 
 
     def timestep(self) -> "void":
-        """timestep(collectionCDBD self)"""
-        return _sim3dlong.collectionCDBD_timestep(self)
+        """timestep(CollectionCDBD self)"""
+        return _sim3dlong.CollectionCDBD_timestep(self)
 
 
     def events_processed(self) -> "long long":
-        """events_processed(collectionCDBD self) -> long long"""
-        return _sim3dlong.collectionCDBD_events_processed(self)
+        """events_processed(CollectionCDBD self) -> long long"""
+        return _sim3dlong.CollectionCDBD_events_processed(self)
 
-    __swig_destroy__ = _sim3dlong.delete_collectionCDBD
+    __swig_destroy__ = _sim3dlong.delete_CollectionCDBD
     __del__ = lambda self: None
-collectionCDBD_swigregister = _sim3dlong.collectionCDBD_swigregister
-collectionCDBD_swigregister(collectionCDBD)
+CollectionCDBD_swigregister = _sim3dlong.CollectionCDBD_swigregister
+CollectionCDBD_swigregister(CollectionCDBD)
 
 
-def make_event(box: 'Box', e: 'event', a: 'atomid', b: 'atomid', sigma: 'flt', curt: 'flt') -> "bool":
-    """make_event(Box box, event e, atomid a, atomid b, flt sigma, flt curt) -> bool"""
+def make_event(box: 'Box', e: 'Event', a: 'AtomID', b: 'AtomID', sigma: 'flt', curt: 'flt') -> "bool":
+    """make_event(Box box, Event e, AtomID a, AtomID b, flt sigma, flt curt) -> bool"""
     return _sim3dlong.make_event(box, e, a, b, sigma, curt)
 
-def collide(box: 'Box', a: 'atom', b: 'atom') -> "void":
-    """collide(Box box, atom a, atom b)"""
+def collide(box: 'Box', a: 'Atom', b: 'Atom') -> "void":
+    """collide(Box box, Atom a, Atom b)"""
     return _sim3dlong.collide(box, a, b)
 # This file is compatible with both classic and new-style classes.
 
