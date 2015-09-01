@@ -901,13 +901,41 @@ flt get_max(vector<flt> v){
     return mx;
 };
 
+/// Collision-Driven Dynamics
+class CollectionCD : public Collection {
+    protected:
+        flt dt, curt;
+        long long numevents;
+        set<Event> events; // note that this a sorted binary tree
+        vector<flt> atomsizes; /// diameters
+
+        void reset_events();
+        void line_advance(flt deltat);
+
+    public:
+        CollectionCD(sptr<OriginBox> box, sptr<AtomGroup> atoms,
+                const flt dt,
+                vector<flt> sizes = vector<flt>(),
+                vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
+                vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
+                vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
+            Collection(box, atoms, interactions, trackers, constraints),
+            dt(dt), curt(0), numevents(0), atomsizes(sizes) {
+            assert(atomsizes.size() == atoms->size());
+        };
+
+        void reset_velocities(flt T);
+        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
+        void timestep();
+        long long events_processed(){return numevents;}; // only counts collision-type events
+};
+
 /** Collision-Driven Brownian-Dynamics
 
 \example hardspheres.cpp
 */
-class CollectionCDBDgrid : public Collection {
+class CollectionCDgrid : public Collection {
     public:
-        flt T;
         flt dt, curt;
         long long numevents;
         set<Event> events; // note that this a sorted binary tree
@@ -923,27 +951,16 @@ class CollectionCDBDgrid : public Collection {
         Event next_event(AtomID a);
 
     public:
-        CollectionCDBDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
-                const flt dt, const flt T,
+        CollectionCDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
+                const flt dt,
                 vector<flt> sizes = vector<flt>(),
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
             Collection(box, atoms, interactions, trackers, constraints),
-            T(T), dt(dt), curt(0), numevents(0), atomsizes(sizes), edge_epsilon(1e-8),
+            dt(dt), curt(0), numevents(0), atomsizes(sizes), edge_epsilon(1e-8),
             grid(box, atoms, get_max(sizes) * (1 + edge_epsilon*10), 2.0),
             gridt(0) {
-            assert(atomsizes.size() == atoms->size());
-        };
-        CollectionCDBDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms, const flt dt, const flt T,
-                flt sizes,
-                vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
-                vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
-                vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
-            Collection(box, atoms, interactions, trackers, constraints),
-            T(T), dt(dt), curt(0), numevents(0), atomsizes(atoms->size(), sizes),
-            edge_epsilon(1e-8),
-            grid(box, atoms, sizes * (1 + edge_epsilon*10), 2.0), gridt(0) {
             assert(atomsizes.size() == atoms->size());
         };
 
@@ -951,48 +968,49 @@ class CollectionCDBDgrid : public Collection {
         Grid &get_grid(){return grid;};
         flt get_epsilon(){return edge_epsilon;};
         void set_epsilon(flt eps){edge_epsilon = eps;};
-        void reset_velocities();
+        void reset_velocities(flt T);
         bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
         void timestep();
         long long events_processed(){return numevents;}; // only counts collision-type events
 };
 
 /// Collision-Driven Brownian-Dynamics
-class CollectionCDBD : public Collection {
+class CollectionCDBD : public CollectionCD {
     protected:
         flt T;
-        flt dt, curt;
-        long long numevents;
-        set<Event> events; // note that this a sorted binary tree
-        vector<flt> atomsizes; /// diameters
-
-        void reset_events();
-        void line_advance(flt deltat);
-
     public:
         CollectionCDBD(sptr<OriginBox> box, sptr<AtomGroup> atoms,
-                const flt dt, const flt T,
-                vector<flt> sizes = vector<flt>(),
-                vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
-                vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
-                vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
-            Collection(box, atoms, interactions, trackers, constraints),
-            T(T), dt(dt), curt(0), numevents(0), atomsizes(sizes) {
-            assert(atomsizes.size() == atoms->size());
+            const flt dt, const flt T,
+            vector<flt> sizes = vector<flt>(),
+            vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
+            vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
+            vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
+            CollectionCD(box, atoms, dt, sizes, interactions, trackers, constraints),
+            T(T){};
+            
+        void timestep(){
+            reset_velocities(T);
+            CollectionCD::timestep();
         };
-        CollectionCDBD(sptr<OriginBox> box, sptr<AtomGroup> atoms,
-                const flt dt, const flt T, flt sizes,
-                vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
-                vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
-                vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
-            Collection(box, atoms, interactions, trackers, constraints),
-            T(T), dt(dt), curt(0), numevents(0), atomsizes(atoms->size(), sizes) {
-            assert(atomsizes.size() == atoms->size());
-        };
+};
 
-        void reset_velocities();
-        bool take_step(flt tlim=-1); // returns true if it collides, false if it hits the tlim
-        void timestep();
-        long long events_processed(){return numevents;}; // only counts collision-type events
+/// Collision-Driven Brownian-Dynamics
+class CollectionCDBDgrid : public CollectionCDgrid {
+    protected:
+        flt T;
+    public:
+        CollectionCDBDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
+            const flt dt, const flt T,
+            vector<flt> sizes = vector<flt>(),
+            vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
+            vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
+            vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
+            CollectionCDgrid(box, atoms, dt, sizes, interactions, trackers, constraints),
+            T(T){};
+            
+        void timestep(){
+            reset_velocities(T);
+            CollectionCDgrid::timestep();
+        };
 };
 #endif
