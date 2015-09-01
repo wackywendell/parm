@@ -1031,3 +1031,48 @@ void SCSpringList::setForces(Box &box){
         }
     }
 };
+
+flt SCSpringList::setForcesGetPressure(Box &box){
+    flt P=0;
+    array<uint, 2> pair;
+    for(uint i = 0; i < scs->pairs() - 1; ++i){
+        idpair pi = scs->pair(i);
+        flt l1 = ls[i];
+        pair[0] = i;
+        for(uint j = i+1; j < scs->pairs(); ++j){
+            pair[1] = j;
+            if(ignore_list.count(pair) > 0) continue;
+            idpair pj = scs->pair(j);
+            flt l2 = ls[j];
+            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
+            SpheroCylinderDiff diff = scp.NearestLoc(box);
+            Vec f = scp.forces(box, diff);
+            scp.applyForce(box, f, diff, l1*l1/4, l2*l2/4);
+            flt rdotf = diff.delta.dot(f);
+            P += rdotf;
+        }
+    }
+    return P;
+};
+
+flt SCSpringList::pressure(Box &box){
+    flt P=0;
+    array<uint, 2> pair;
+    for(uint i = 0; i < scs->pairs() - 1; ++i){
+        idpair pi = scs->pair(i);
+        flt l1 = ls[i];
+        pair[0] = i;
+        for(uint j = i+1; j < scs->pairs(); ++j){
+            pair[1] = j;
+            if(ignore_list.count(pair) > 0) continue;
+            idpair pj = scs->pair(j);
+            flt l2 = ls[j];
+            SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
+            SpheroCylinderDiff diff = scp.NearestLoc(box);
+            Vec f = scp.forces(box, diff);
+            flt rdotf = diff.delta.dot(f);
+            P += rdotf;
+        }
+    }
+    return P;
+};
