@@ -1,4 +1,5 @@
 import numpy as np
+from .util import norm
 
 class Minimizer:
     def __init__(self, locs, diameters, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
@@ -46,7 +47,7 @@ class Minimizer:
         self.hertz = self.sim.Hertzian(self.atoms, self.neighbors)
 
         for a, s, loc in zip(self.atoms, self.diameters, locs):
-            a.x = self.sim.Vec(*loc)
+            a.x = self.sim.vec(*loc)
             self.hertz.add(self.sim.HertzianAtom(a, 1.0, float(s), 2.0))
             
         collec = self.collec = self.sim.collectionNLCG(self.box, self.atoms, dt, P, 
@@ -72,7 +73,7 @@ class Minimizer:
                    mass_func=None, **kw):
         if mass_func is None:
             mass_func = cls.proportionate_mass
-        if ratios == None:
+        if ratios is None:
             ratios = [1.] * len(sizes)
         if len(ratios) != len(sizes):
             raise ValueError("`ratios` list must be same length as `sizes` list")
@@ -123,7 +124,7 @@ class Minimizer:
         self.collec.setForces(True, True)
     
     def err(self):
-        return (self.collec.pressure() / self.collec.P0 - 1, max([a.f.mag() for a in self.atoms]))
+        return (self.collec.pressure() / self.collec.P0 - 1, max([norm(a.f) for a in self.atoms]))
     
     def done(self):
         Perr, CGerr = self.err()
