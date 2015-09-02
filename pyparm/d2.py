@@ -15260,10 +15260,10 @@ class CollectionGaussianT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGaussianT
         """
         this = _sim2d.new_CollectionGaussianT(*args)
         try:
@@ -15274,11 +15274,6 @@ class CollectionGaussianT(Collection):
     def set_dt(self, newdt: 'flt') -> "void":
         """set_dt(CollectionGaussianT self, flt newdt)"""
         return _sim2d.CollectionGaussianT_set_dt(self, newdt)
-
-
-    def set_Q(self, newQ: 'flt') -> "void":
-        """set_Q(CollectionGaussianT self, flt newQ)"""
-        return _sim2d.CollectionGaussianT_set_Q(self, newQ)
 
 
     def set_forces(self, *args) -> "void":
@@ -15977,85 +15972,130 @@ Event_swigregister(Event)
 def get_max(v: 'dvector') -> "flt":
     """get_max(dvector v) -> flt"""
     return _sim2d.get_max(v)
-class CollectionCDBDgrid(Collection):
-    """Proxy of C++ CollectionCDBDgrid class"""
+class CollectionCD(Collection):
+    """Proxy of C++ CollectionCD class"""
     __swig_setmethods__ = {}
     for _s in [Collection]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCDBDgrid, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCD, name, value)
     __swig_getmethods__ = {}
     for _s in [Collection]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, CollectionCDBDgrid, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionCD, name)
     __repr__ = _swig_repr
-    __swig_setmethods__["T"] = _sim2d.CollectionCDBDgrid_T_set
-    __swig_getmethods__["T"] = _sim2d.CollectionCDBDgrid_T_get
+
+    def __init__(self, *args):
+        """
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionCD
+        """
+        this = _sim2d.new_CollectionCD(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def reset_velocities(self, T: 'flt') -> "void":
+        """reset_velocities(CollectionCD self, flt T)"""
+        return _sim2d.CollectionCD_reset_velocities(self, T)
+
+
+    def take_step(self, tlim: 'flt'=-1) -> "bool":
+        """
+        take_step(CollectionCD self, flt tlim=-1) -> bool
+        take_step(CollectionCD self) -> bool
+        """
+        return _sim2d.CollectionCD_take_step(self, tlim)
+
+
+    def timestep(self) -> "void":
+        """timestep(CollectionCD self)"""
+        return _sim2d.CollectionCD_timestep(self)
+
+
+    def events_processed(self) -> "long long":
+        """events_processed(CollectionCD self) -> long long"""
+        return _sim2d.CollectionCD_events_processed(self)
+
+    __swig_destroy__ = _sim2d.delete_CollectionCD
+    __del__ = lambda self: None
+CollectionCD_swigregister = _sim2d.CollectionCD_swigregister
+CollectionCD_swigregister(CollectionCD)
+
+class CollectionCDgrid(Collection):
+    """Proxy of C++ CollectionCDgrid class"""
+    __swig_setmethods__ = {}
+    for _s in [Collection]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCDgrid, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Collection]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionCDgrid, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["dt"] = _sim2d.CollectionCDgrid_dt_set
+    __swig_getmethods__["dt"] = _sim2d.CollectionCDgrid_dt_get
     if _newclass:
-        T = _swig_property(_sim2d.CollectionCDBDgrid_T_get, _sim2d.CollectionCDBDgrid_T_set)
-    __swig_setmethods__["dt"] = _sim2d.CollectionCDBDgrid_dt_set
-    __swig_getmethods__["dt"] = _sim2d.CollectionCDBDgrid_dt_get
+        dt = _swig_property(_sim2d.CollectionCDgrid_dt_get, _sim2d.CollectionCDgrid_dt_set)
+    __swig_setmethods__["curt"] = _sim2d.CollectionCDgrid_curt_set
+    __swig_getmethods__["curt"] = _sim2d.CollectionCDgrid_curt_get
     if _newclass:
-        dt = _swig_property(_sim2d.CollectionCDBDgrid_dt_get, _sim2d.CollectionCDBDgrid_dt_set)
-    __swig_setmethods__["curt"] = _sim2d.CollectionCDBDgrid_curt_set
-    __swig_getmethods__["curt"] = _sim2d.CollectionCDBDgrid_curt_get
+        curt = _swig_property(_sim2d.CollectionCDgrid_curt_get, _sim2d.CollectionCDgrid_curt_set)
+    __swig_setmethods__["numevents"] = _sim2d.CollectionCDgrid_numevents_set
+    __swig_getmethods__["numevents"] = _sim2d.CollectionCDgrid_numevents_get
     if _newclass:
-        curt = _swig_property(_sim2d.CollectionCDBDgrid_curt_get, _sim2d.CollectionCDBDgrid_curt_set)
-    __swig_setmethods__["numevents"] = _sim2d.CollectionCDBDgrid_numevents_set
-    __swig_getmethods__["numevents"] = _sim2d.CollectionCDBDgrid_numevents_get
+        numevents = _swig_property(_sim2d.CollectionCDgrid_numevents_get, _sim2d.CollectionCDgrid_numevents_set)
+    __swig_setmethods__["events"] = _sim2d.CollectionCDgrid_events_set
+    __swig_getmethods__["events"] = _sim2d.CollectionCDgrid_events_get
     if _newclass:
-        numevents = _swig_property(_sim2d.CollectionCDBDgrid_numevents_get, _sim2d.CollectionCDBDgrid_numevents_set)
-    __swig_setmethods__["events"] = _sim2d.CollectionCDBDgrid_events_set
-    __swig_getmethods__["events"] = _sim2d.CollectionCDBDgrid_events_get
+        events = _swig_property(_sim2d.CollectionCDgrid_events_get, _sim2d.CollectionCDgrid_events_set)
+    __swig_setmethods__["atomsizes"] = _sim2d.CollectionCDgrid_atomsizes_set
+    __swig_getmethods__["atomsizes"] = _sim2d.CollectionCDgrid_atomsizes_get
     if _newclass:
-        events = _swig_property(_sim2d.CollectionCDBDgrid_events_get, _sim2d.CollectionCDBDgrid_events_set)
-    __swig_setmethods__["atomsizes"] = _sim2d.CollectionCDBDgrid_atomsizes_set
-    __swig_getmethods__["atomsizes"] = _sim2d.CollectionCDBDgrid_atomsizes_get
+        atomsizes = _swig_property(_sim2d.CollectionCDgrid_atomsizes_get, _sim2d.CollectionCDgrid_atomsizes_set)
+    __swig_setmethods__["edge_epsilon"] = _sim2d.CollectionCDgrid_edge_epsilon_set
+    __swig_getmethods__["edge_epsilon"] = _sim2d.CollectionCDgrid_edge_epsilon_get
     if _newclass:
-        atomsizes = _swig_property(_sim2d.CollectionCDBDgrid_atomsizes_get, _sim2d.CollectionCDBDgrid_atomsizes_set)
-    __swig_setmethods__["edge_epsilon"] = _sim2d.CollectionCDBDgrid_edge_epsilon_set
-    __swig_getmethods__["edge_epsilon"] = _sim2d.CollectionCDBDgrid_edge_epsilon_get
-    if _newclass:
-        edge_epsilon = _swig_property(_sim2d.CollectionCDBDgrid_edge_epsilon_get, _sim2d.CollectionCDBDgrid_edge_epsilon_set)
+        edge_epsilon = _swig_property(_sim2d.CollectionCDgrid_edge_epsilon_get, _sim2d.CollectionCDgrid_edge_epsilon_set)
 
     def reset_events(self, force: 'bool'=True) -> "void":
         """
-        reset_events(CollectionCDBDgrid self, bool force=True)
-        reset_events(CollectionCDBDgrid self)
+        reset_events(CollectionCDgrid self, bool force=True)
+        reset_events(CollectionCDgrid self)
         """
-        return _sim2d.CollectionCDBDgrid_reset_events(self, force)
+        return _sim2d.CollectionCDgrid_reset_events(self, force)
 
 
     def line_advance(self, deltat: 'flt') -> "void":
-        """line_advance(CollectionCDBDgrid self, flt deltat)"""
-        return _sim2d.CollectionCDBDgrid_line_advance(self, deltat)
+        """line_advance(CollectionCDgrid self, flt deltat)"""
+        return _sim2d.CollectionCDgrid_line_advance(self, deltat)
 
-    __swig_setmethods__["grid"] = _sim2d.CollectionCDBDgrid_grid_set
-    __swig_getmethods__["grid"] = _sim2d.CollectionCDBDgrid_grid_get
+    __swig_setmethods__["grid"] = _sim2d.CollectionCDgrid_grid_set
+    __swig_getmethods__["grid"] = _sim2d.CollectionCDgrid_grid_get
     if _newclass:
-        grid = _swig_property(_sim2d.CollectionCDBDgrid_grid_get, _sim2d.CollectionCDBDgrid_grid_set)
-    __swig_setmethods__["gridt"] = _sim2d.CollectionCDBDgrid_gridt_set
-    __swig_getmethods__["gridt"] = _sim2d.CollectionCDBDgrid_gridt_get
+        grid = _swig_property(_sim2d.CollectionCDgrid_grid_get, _sim2d.CollectionCDgrid_grid_set)
+    __swig_setmethods__["gridt"] = _sim2d.CollectionCDgrid_gridt_set
+    __swig_getmethods__["gridt"] = _sim2d.CollectionCDgrid_gridt_get
     if _newclass:
-        gridt = _swig_property(_sim2d.CollectionCDBDgrid_gridt_get, _sim2d.CollectionCDBDgrid_gridt_set)
+        gridt = _swig_property(_sim2d.CollectionCDgrid_gridt_get, _sim2d.CollectionCDgrid_gridt_set)
 
     def next_event(self, a: 'AtomID') -> "Event":
-        """next_event(CollectionCDBDgrid self, AtomID a) -> Event"""
-        return _sim2d.CollectionCDBDgrid_next_event(self, a)
+        """next_event(CollectionCDgrid self, AtomID a) -> Event"""
+        return _sim2d.CollectionCDgrid_next_event(self, a)
 
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes) -> CollectionCDBDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionCDgrid
         """
-        this = _sim2d.new_CollectionCDBDgrid(*args)
+        this = _sim2d.new_CollectionCDgrid(*args)
         try:
             self.this.append(this)
         except:
@@ -16063,62 +16103,62 @@ class CollectionCDBDgrid(Collection):
 
     def update_grid(self, force: 'bool'=True) -> "void":
         """
-        update_grid(CollectionCDBDgrid self, bool force=True)
-        update_grid(CollectionCDBDgrid self)
+        update_grid(CollectionCDgrid self, bool force=True)
+        update_grid(CollectionCDgrid self)
         """
-        return _sim2d.CollectionCDBDgrid_update_grid(self, force)
+        return _sim2d.CollectionCDgrid_update_grid(self, force)
 
 
     def get_grid(self) -> "Grid &":
-        """get_grid(CollectionCDBDgrid self) -> Grid"""
-        return _sim2d.CollectionCDBDgrid_get_grid(self)
+        """get_grid(CollectionCDgrid self) -> Grid"""
+        return _sim2d.CollectionCDgrid_get_grid(self)
 
 
     def get_epsilon(self) -> "flt":
-        """get_epsilon(CollectionCDBDgrid self) -> flt"""
-        return _sim2d.CollectionCDBDgrid_get_epsilon(self)
+        """get_epsilon(CollectionCDgrid self) -> flt"""
+        return _sim2d.CollectionCDgrid_get_epsilon(self)
 
 
     def set_epsilon(self, eps: 'flt') -> "void":
-        """set_epsilon(CollectionCDBDgrid self, flt eps)"""
-        return _sim2d.CollectionCDBDgrid_set_epsilon(self, eps)
+        """set_epsilon(CollectionCDgrid self, flt eps)"""
+        return _sim2d.CollectionCDgrid_set_epsilon(self, eps)
 
 
-    def reset_velocities(self) -> "void":
-        """reset_velocities(CollectionCDBDgrid self)"""
-        return _sim2d.CollectionCDBDgrid_reset_velocities(self)
+    def reset_velocities(self, T: 'flt') -> "void":
+        """reset_velocities(CollectionCDgrid self, flt T)"""
+        return _sim2d.CollectionCDgrid_reset_velocities(self, T)
 
 
     def take_step(self, tlim: 'flt'=-1) -> "bool":
         """
-        take_step(CollectionCDBDgrid self, flt tlim=-1) -> bool
-        take_step(CollectionCDBDgrid self) -> bool
+        take_step(CollectionCDgrid self, flt tlim=-1) -> bool
+        take_step(CollectionCDgrid self) -> bool
         """
-        return _sim2d.CollectionCDBDgrid_take_step(self, tlim)
+        return _sim2d.CollectionCDgrid_take_step(self, tlim)
 
 
     def timestep(self) -> "void":
-        """timestep(CollectionCDBDgrid self)"""
-        return _sim2d.CollectionCDBDgrid_timestep(self)
+        """timestep(CollectionCDgrid self)"""
+        return _sim2d.CollectionCDgrid_timestep(self)
 
 
     def events_processed(self) -> "long long":
-        """events_processed(CollectionCDBDgrid self) -> long long"""
-        return _sim2d.CollectionCDBDgrid_events_processed(self)
+        """events_processed(CollectionCDgrid self) -> long long"""
+        return _sim2d.CollectionCDgrid_events_processed(self)
 
-    __swig_destroy__ = _sim2d.delete_CollectionCDBDgrid
+    __swig_destroy__ = _sim2d.delete_CollectionCDgrid
     __del__ = lambda self: None
-CollectionCDBDgrid_swigregister = _sim2d.CollectionCDBDgrid_swigregister
-CollectionCDBDgrid_swigregister(CollectionCDBDgrid)
+CollectionCDgrid_swigregister = _sim2d.CollectionCDgrid_swigregister
+CollectionCDgrid_swigregister(CollectionCDgrid)
 
-class CollectionCDBD(Collection):
+class CollectionCDBD(CollectionCD):
     """Proxy of C++ CollectionCDBD class"""
     __swig_setmethods__ = {}
-    for _s in [Collection]:
+    for _s in [CollectionCD]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCDBD, name, value)
     __swig_getmethods__ = {}
-    for _s in [Collection]:
+    for _s in [CollectionCD]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, CollectionCDBD, name)
     __repr__ = _swig_repr
@@ -16130,10 +16170,6 @@ class CollectionCDBD(Collection):
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBD
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes) -> CollectionCDBD
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, flt sizes) -> CollectionCDBD
         """
         this = _sim2d.new_CollectionCDBD(*args)
         try:
@@ -16141,32 +16177,49 @@ class CollectionCDBD(Collection):
         except:
             self.this = this
 
-    def reset_velocities(self) -> "void":
-        """reset_velocities(CollectionCDBD self)"""
-        return _sim2d.CollectionCDBD_reset_velocities(self)
-
-
-    def take_step(self, tlim: 'flt'=-1) -> "bool":
-        """
-        take_step(CollectionCDBD self, flt tlim=-1) -> bool
-        take_step(CollectionCDBD self) -> bool
-        """
-        return _sim2d.CollectionCDBD_take_step(self, tlim)
-
-
     def timestep(self) -> "void":
         """timestep(CollectionCDBD self)"""
         return _sim2d.CollectionCDBD_timestep(self)
-
-
-    def events_processed(self) -> "long long":
-        """events_processed(CollectionCDBD self) -> long long"""
-        return _sim2d.CollectionCDBD_events_processed(self)
 
     __swig_destroy__ = _sim2d.delete_CollectionCDBD
     __del__ = lambda self: None
 CollectionCDBD_swigregister = _sim2d.CollectionCDBD_swigregister
 CollectionCDBD_swigregister(CollectionCDBD)
+
+class CollectionCDBDgrid(CollectionCDgrid):
+    """Proxy of C++ CollectionCDBDgrid class"""
+    __swig_setmethods__ = {}
+    for _s in [CollectionCDgrid]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionCDBDgrid, name, value)
+    __swig_getmethods__ = {}
+    for _s in [CollectionCDgrid]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionCDBDgrid, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBDgrid
+        """
+        this = _sim2d.new_CollectionCDBDgrid(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def timestep(self) -> "void":
+        """timestep(CollectionCDBDgrid self)"""
+        return _sim2d.CollectionCDBDgrid_timestep(self)
+
+    __swig_destroy__ = _sim2d.delete_CollectionCDBDgrid
+    __del__ = lambda self: None
+CollectionCDBDgrid_swigregister = _sim2d.CollectionCDBDgrid_swigregister
+CollectionCDBDgrid_swigregister(CollectionCDBDgrid)
 
 
 def make_event(box: 'Box', e: 'Event', a: 'AtomID', b: 'AtomID', sigma: 'flt', curt: 'flt') -> "bool":
