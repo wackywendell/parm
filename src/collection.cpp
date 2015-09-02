@@ -1164,8 +1164,8 @@ flt CollectionGaussianT::set_xi(){
     flt xiNumerator = 0, xiDenominator = 0;
     for(uint i=0; i<atoms->size(); i++){
             flt m = (*atoms)[i].m;
-            xiNumerator += (*atoms)[i].f.dot((*atoms)[i].v) * m;
-            xiDenominator += ((*atoms)[i].v.squaredNorm()) * m*m;
+            xiNumerator += (*atoms)[i].f.dot((*atoms)[i].v);
+            xiDenominator += ((*atoms)[i].v.squaredNorm())*m;
     }
     xi = xiNumerator / xiDenominator;
     return xi;
@@ -1179,8 +1179,9 @@ void CollectionGaussianT::set_forces(bool constraints_and_a, bool shouldwesetxi)
 void CollectionGaussianT::timestep(){
     //~ flt oldT = temp();
     for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].x += (*atoms)[i].v * dt + (*atoms)[i].a * (dt*dt/2);
-        (*atoms)[i].v += ((*atoms)[i].a - ((*atoms)[i].v*xi)) * (dt/2);
+        Atom &a = (*atoms)[i];
+        a.x += a.v * dt + a.a * (dt*dt/2);
+        a.v += (a.a - (a.v*xi)) * (dt/2);
     }
     update_constraint_positions();
     // Now we set forces and accelerations
@@ -1188,9 +1189,10 @@ void CollectionGaussianT::timestep(){
     update_constraint_forces();
     
     for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].a = (*atoms)[i].f / (*atoms)[i].m;
+        Atom &a = (*atoms)[i];
+        a.a = a.f / a.m;
         // And finish y
-        (*atoms)[i].v += (*atoms)[i].a * (dt/2);
+        a.v +=a.a * (dt/2);
     }
     
     // now we get z and set xi

@@ -570,20 +570,19 @@ class CollectionGaussianT : public Collection {
     // Gaussian Constraint thermostat
     // NVT
     protected:
-        flt dt, Q;
+        flt dt;
         flt xi;
         flt set_xi();
 
     public:
         CollectionGaussianT(sptr<Box> box, sptr<AtomGroup> atoms,
-                const flt dt, const flt Q,
+                const flt dt,
                 vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
                 vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
                 vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >()) :
             Collection(box, atoms, interactions, trackers, constraints),
-            dt(dt), Q(Q), xi(0){};
+            dt(dt), xi(0){};
         void set_dt(flt newdt){dt=newdt;};
-        void set_Q(flt newQ){Q=newQ;};
         void set_forces(bool constraints_and_a=true){set_forces(true,true);};
         void set_forces(bool constraints_and_a, bool set_xi);
         void timestep();
