@@ -24,6 +24,8 @@ fixedForce	FixedForce
 angletriples	AngleTriples
 bondpairs	BondPairs
 collection	Collection
+potentialenergy potential_energy
+kinetic kinetic_energy
 collectionCDBD	CollectionCDBD
 collectionCDBDgrid	CollectionCDBDgrid
 collectionConjGradient	CollectionConjGradient

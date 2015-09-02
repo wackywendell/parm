@@ -203,11 +203,11 @@ flt Collection::set_forces_get_pressure(bool constraints_and_a){
 }
 
 CollectionSol::CollectionSol(sptr<Box> box, sptr<AtomGroup> atoms,
-        const flt dt, const flt damp, const flt T,
+        const flt dt0, const flt damp, const flt T,
         vector<sptr<Interaction> > interactions,
         vector<sptr<StateTracker> > trackers, vector<sptr<Constraint> > constraints) : 
             Collection::Collection(box, atoms, interactions, trackers, constraints, false),
-            dt(dt), damping(damp), force_mag(damp), desT(T){
+            dt(dt0), damping(damp), force_mag(damp), desT(T){
     // because that should be done *after* set_constants()
     if(dt <= 0){
 		throw std::invalid_argument("Collection::CollectionSol: dt >= 0");
@@ -304,11 +304,11 @@ void CollectionSol::timestep(){
 };
 
 CollectionDamped::CollectionDamped(sptr<Box> box, sptr<AtomGroup> atoms,
-        const flt dt, const flt damp,
+        const flt dt0, const flt damp,
         vector<sptr<Interaction> > interactions,
         vector<sptr<StateTracker> > trackers, vector<sptr<Constraint> > constraints) : 
             Collection::Collection(box, atoms, interactions, trackers, constraints, false),
-            dt(dt), damping(damp){
+            dt(dt0), damping(damp){
     // because that should be done *after* set_constants()
     if(dt <= 0){
 		throw std::invalid_argument("Collection::CollectionSol: dt >= 0");
@@ -1164,8 +1164,8 @@ flt CollectionGaussianT::set_xi(){
     flt xiNumerator = 0, xiDenominator = 0;
     for(uint i=0; i<atoms->size(); i++){
             flt m = (*atoms)[i].m;
-            xiNumerator += (*atoms)[i].f.dot((*atoms)[i].v) * m;
-            xiDenominator += ((*atoms)[i].v.squaredNorm()) * m*m;
+            xiNumerator += (*atoms)[i].f.dot((*atoms)[i].v);
+            xiDenominator += ((*atoms)[i].v.squaredNorm())*m;
     }
     xi = xiNumerator / xiDenominator;
     return xi;
@@ -1179,8 +1179,9 @@ void CollectionGaussianT::set_forces(bool constraints_and_a, bool shouldwesetxi)
 void CollectionGaussianT::timestep(){
     //~ flt oldT = temp();
     for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].x += (*atoms)[i].v * dt + (*atoms)[i].a * (dt*dt/2);
-        (*atoms)[i].v += ((*atoms)[i].a - ((*atoms)[i].v*xi)) * (dt/2);
+        Atom &a = (*atoms)[i];
+        a.x += a.v * dt + a.a * (dt*dt/2);
+        a.v += (a.a - (a.v*xi)) * (dt/2);
     }
     update_constraint_positions();
     // Now we set forces and accelerations
@@ -1188,9 +1189,10 @@ void CollectionGaussianT::timestep(){
     update_constraint_forces();
     
     for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].a = (*atoms)[i].f / (*atoms)[i].m;
+        Atom &a = (*atoms)[i];
+        a.a = a.f / a.m;
         // And finish y
-        (*atoms)[i].v += (*atoms)[i].a * (dt/2);
+        a.v +=a.a * (dt/2);
     }
     
     // now we get z and set xi
@@ -1757,7 +1759,7 @@ void CollectionVerletNPT::timestep(){
     update_trackers();
 };
 
-void CollectionCDBDgrid::reset_velocities(){
+void CollectionCDgrid::reset_velocities(flt T){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
         (*atoms)[i].v = randVec() * sqrt(T/mi);
@@ -1765,7 +1767,7 @@ void CollectionCDBDgrid::reset_velocities(){
     reset_events();
 };
 
-void CollectionCDBDgrid::line_advance(flt deltat){
+void CollectionCDgrid::line_advance(flt deltat){
     if(deltat == 0) return;
     
     //~ assert(deltat > 0);
@@ -1803,16 +1805,17 @@ bool make_event(Box &box, Event& e, AtomID a, AtomID b, flt sigma, flt curt){
     return true;
 }
 
-void CollectionCDBDgrid::update_grid(bool force){
+void CollectionCDgrid::update_grid(bool force){
     if(!force && (gridt == curt)) return;
     grid.optimize_widths();
     grid.make_grid();
 };
 
-Event CollectionCDBDgrid::next_event(AtomID a){
+Event CollectionCDgrid::next_event(AtomID a){
     Event e;
     flt vmag = a->v.norm();
-    if(!isfinite(vmag) or vmag <= 0) vmag = sqrt(T/a->m) * edge_epsilon;
+    // This next line keeps things finite, but its a bit weird
+    if(!isfinite(vmag) or vmag <= 0) vmag = edge_epsilon;
     flt epsilon_t = atomsizes[a.n()]*edge_epsilon/vmag;
     assert(epsilon_t > 0);
     
@@ -1832,7 +1835,7 @@ Event CollectionCDBDgrid::next_event(AtomID a){
     return e;
 }
 
-void CollectionCDBDgrid::reset_events(bool force){
+void CollectionCDgrid::reset_events(bool force){
     //~ std::cerr << "CDBD::reset_events...\n";
     events.clear();
     //~ std::cerr << "CDBD::reset_events cleared...\n";
@@ -1860,7 +1863,7 @@ inline void collide(Box &box, Atom& a, Atom &b){
     b.v -= p / b.m;
 };
 
-bool CollectionCDBDgrid::take_step(flt tlim){
+bool CollectionCDgrid::take_step(flt tlim){
     // TODO: more efficient looping and merging
     
     // If we have a limit, and we've already passed it, stop.
@@ -1932,14 +1935,13 @@ bool CollectionCDBDgrid::take_step(flt tlim){
     return true;
 };
 
-void CollectionCDBDgrid::timestep() {
-    reset_velocities();
+void CollectionCDgrid::timestep() {
     flt newt = curt + dt;
     while(take_step(newt)){};
     update_trackers();
 };
 
-void CollectionCDBD::reset_velocities(){
+void CollectionCD::reset_velocities(flt T){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
         (*atoms)[i].v = randVec() * sqrt(T/mi);
@@ -1947,7 +1949,7 @@ void CollectionCDBD::reset_velocities(){
     reset_events();
 };
 
-void CollectionCDBD::line_advance(flt deltat){
+void CollectionCD::line_advance(flt deltat){
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].x += (*atoms)[i].v * deltat;
     }
@@ -1955,7 +1957,7 @@ void CollectionCDBD::line_advance(flt deltat){
     curt += deltat;
 };
 
-void CollectionCDBD::reset_events(){
+void CollectionCD::reset_events(){
     events.clear();
     
     for(uint i=1; i<atoms->size(); i++){
@@ -1974,7 +1976,7 @@ void CollectionCDBD::reset_events(){
     //~ std::cerr << " Done, events " << events.size() << "\n";
 };
 
-bool CollectionCDBD::take_step(flt tlim){
+bool CollectionCD::take_step(flt tlim){
     // TODO: more efficient looping and merging
     
     // If we have a limit, and we've already passed it, stop.
@@ -2088,8 +2090,7 @@ bool CollectionCDBD::take_step(flt tlim){
     return true;
 };
 
-void CollectionCDBD::timestep() {
-    reset_velocities();
+void CollectionCD::timestep() {
     flt newt = curt + dt;
     while(take_step(newt)){};
     update_trackers();

@@ -189,11 +189,11 @@ class Minimizer:
         return np.array([a.x for a in self.atoms], dtype=float)
     
     def as_packing(self):
-        from . import jammed
+        import spack
         L = self.L
         locs = np.remainder(self.locs + L/2., L) - L/2.
         
-        return jammed.Packing(locs, self.diameters, L=L)
+        return spack.Packing(locs, self.diameters, L=L)
         
     def pack_stats(self):
         """Returns (number of backbone contacts, stable number, number of floaters)"""
