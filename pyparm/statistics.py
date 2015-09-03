@@ -157,11 +157,11 @@ class StatSet(OrderedDict):
 
         @self.add_func
         def U(time):
-            return collec.potentialenergy()
+            return collec.potential_energy()
 
         @self.add_func
         def K(time):
-            return collec.kinetic()
+            return collec.kinetic_energy()
 
         @self.add_func
         def E(time):

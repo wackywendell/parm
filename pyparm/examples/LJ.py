@@ -63,7 +63,7 @@ collec = sim.CollectionVerlet(box, atoms, dt, [LJ], [neighbors]) # the integrato
 E0 = 0
 for a,s in zip(atoms, sigmas):
     E = E0 + 10
-    a.v = sim.randVec() # from a gaussian distribution
+    a.v = sim.rand_vec() # from a gaussian distribution
     LJ.add(sim.EpsSigAtom(a, 1, s))
     while E > E0 + 0.1:
         a.x = box.rand_loc()

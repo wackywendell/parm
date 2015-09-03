@@ -42,7 +42,7 @@ class XYZwriter:
             'time':t,
             'E':collec.energy(),
             'T':collec.temp(),
-            'K':collec.kinetic(),
+            'K':collec.kinetic_energy(),
             'L':collec.angular_momentum().mag(),
             'v':collec.com_velocity().mag(),
             }

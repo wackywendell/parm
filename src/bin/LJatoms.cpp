@@ -55,7 +55,7 @@ int main(){
         // we track energy to see if things are overlapping
         flt E0 = LJ->energy(*obox);
         atoms[i].x = obox->rand_loc(); // random location in the box
-        atoms[i].v = randVec(); // from a Gaussian
+        atoms[i].v = rand_vec(); // from a Gaussian
         atoms[i].f = Vec::Zero();
         atoms[i].a = Vec::Zero();
         
@@ -93,7 +93,7 @@ int main(){
     outfile.open("LJatoms.xyz", ios::out);
     writefile(outfile, atoms, *obox);
     
-    //Print out total energy, kinetic energy, and potential energy
+    //Print out total energy, kinetic_energy energy, and potential energy
     cout << "E: " << collec.energy() << " K: " << collec.kinetic_energy() 
         << " U: " << LJ->energy(*obox) << "\n";
     // Run the simulation! And every _ steps, write a frame to the .xyz

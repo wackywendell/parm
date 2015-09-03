@@ -169,7 +169,7 @@ class Minimizer:
     
     @property
     def U(self):
-        return self.collec.potentialenergy() / self.N
+        return self.collec.potential_energy() / self.N
     
     @property
     def pressure(self):
