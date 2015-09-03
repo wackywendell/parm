@@ -90,7 +90,7 @@ Vec SCBox::rand_loc(flt min_dist_to_wall){
     flt Rmin = R - min_dist_to_wall;
     flt Rminsq = pow(Rmin, 2.0);
     while(true){
-        v = randVecBoxed();
+        v = rand_vec_boxed();
         v[0] -= 0.5;
         v[0] *= (L + 2*Rmin);
 
@@ -312,7 +312,7 @@ void AtomGroup::randomize_velocities(flt T){
     for(uint i=0; i<size(); i++){
         Atom& a = (*this)[i];
         if(a.m == 0 or isinf(a.m)) continue;
-        a.v = randVec() * sqrt(T/a.m);
+        a.v = rand_vec() * sqrt(T/a.m);
     }
 };
 
