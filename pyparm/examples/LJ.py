@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # A simple script for running a Lennard-Jones simulation.
 
 # Statistics such as energy, (instantaneous) temperature, and (instantaneous) pressure are

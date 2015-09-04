@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import argparse
 from collections import OrderedDict
 from array import array as pyarray

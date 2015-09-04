@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # A basic example of a polymer simulation.
 
 # Statistics such as energy, (instantaneous) temperature, and (instantaneous) pressure are

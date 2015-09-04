@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from . import d2 as sim2
 from . import d3 as sim3
 from unittest import TestCase

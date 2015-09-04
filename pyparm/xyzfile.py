@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re, math, numpy as np
 import hashlib, logging
 import pyparm.d3 as sim
