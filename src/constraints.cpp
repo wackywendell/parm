@@ -14,7 +14,7 @@ void CoordCOMConstraint::apply_positions(Box &box){
     
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
-        for(uint j=0; j<3; j++){
+        for(uint j=0; j<NDIM; j++){
             if(not fixed[j]) continue;
             atm.x[j] -= com[j];
         }
@@ -26,7 +26,7 @@ void CoordCOMConstraint::apply_velocities(Box &box){
     
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
-        for(uint j=0; j<3; j++){
+        for(uint j=0; j<NDIM; j++){
             if(not fixed[j]) continue;
             atm.v[j] -= com_velocity[j];
         }
@@ -43,7 +43,7 @@ void CoordCOMConstraint::apply_forces(Box &box){
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
         Vec df = (tota * (atm.m));
-        for(uint j=0; j<3; j++){
+        for(uint j=0; j<NDIM; j++){
             if(not fixed[j]) continue;
             atm.f[j] -= df[j];
         }
