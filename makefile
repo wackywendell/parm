@@ -1,3 +1,13 @@
+# In short: this is very close to supporting Python 2, but supporting 2 and 3 at
+# the same time was too much for me and my `makefile`.
+
+# Most of this library is Python-version agnostic, except for the `makefile`,
+# which includes `-py3` as a swig option by default. I did not want to remove
+# this, as it adds useful functionality, but I also could not find a good way to
+# include it only when Python 3 is wanted.
+
+# I tried using a setup.py that invokes swig, but that was even more difficult.
+
 UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
