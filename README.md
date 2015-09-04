@@ -95,6 +95,35 @@ Dependencies
  - (optional) Python: for generating Python bindings
     - Known to compile for python 3.2-3.4, and probably with 2.6-2.7
 
+On Ubuntu, the following packages should suffice for Python 3:
+
+```
+build-essential
+libeigen3-dev
+libboost-all-dev
+swig
+python3-dev
+python3-numpy
+python3-nose
+python3-setuptools 
+python3-pip
+```
+
+For Python 2, simply use the same packages but with the `python-` prefix instead
+of `python3-`.
+
+Note that you will need to make sure you include Boost and Eigen in you
+"include" path. On Ubuntu, Boost will be by default, but you may need to add
+Eigen:
+
+```bash
+export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/eigen3"
+```
+
+Note that the attached `.travis.yml` file are computer-readable instructions for
+automatically building and testing this module on an Ubuntu machine, so that
+should always be up to date.
+
 Python
 ----
 
@@ -102,9 +131,13 @@ This library includes a `sim.i` file for use with SWIG for generating
 Python bindings.
 
 #### To Generate Python module
-
-Run `make 2d` or `make 3d` to generate bindings for a 2D or 3D library;
-run `make pyparm` to generate bindings for both.
+ 
+ * Make sure you have the dependencies and include paths set, as above.
+ * Run `make wraps` to generate the SWIG wrappers. 
+ * Run `python3 setup.py build_ext --inplace` to build it in place, or 
+   `python3 setup.py install` to install.
+    * There are many option for Python `setup.py` files; run 
+      `python3 setup.py --help` to see more options.
 
 #### Using the Python module
 
