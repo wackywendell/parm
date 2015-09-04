@@ -8,7 +8,7 @@ Purpose
 
 The purpose of this library is to provide methods to produce *any* MD
 simulation, with any type of integrator, any type of particles, and any
-type of interaction in 2D or 3D.
+type of force in 2D or 3D.
 
 It is currently single-core only, and provides objects for many
 different integrators, and many different forces, which can be composed
@@ -39,50 +39,50 @@ Basic Concepts
  * `Vec`: this is a "vector" in the physics sense, having either 2 or 3
  dimensions.
 
- *  `atom`: an `atom` is the basic unit of the simulation; it
+ *  `Atom`: an `Atom` is the basic unit of the simulation; it
  represents a particle with mass,
     position, velocity, etc.
 
- *  `atomgroup`: an `atomgroup` is a set of atoms, grouped together for
+ *  `AtomGroup`: an `AtomGroup` is a set of atoms, grouped together for
  the sake of utility.
-    * Note that `atomvec` is a concrete type, and `atomgroup` is an
+    * Note that `AtomVec` is a concrete type, and `AtomGroup` is an
     abstract class
 
- *  `interaction`: an `interaction` is a definition of a force and
+ *  `Interaction`: an `Interaction` is a definition of a force and
  energy, such as a Lennard-Jones potential (use
- `NListed<LJAttractRepulseAtom, LJAttractRepulsePair>`), springs for
- bonds (`bondpairs`), etc.
+ `NListed<IEpsSigCutAtom, LJAttractRepulsePair>`), springs for
+ bonds (`BondPairs`), etc.
 
     * Note that the neighbor list has been "abstracted" to work with
-    many potentials; to use it, you create a `neighborlist`, then use
-    `NListed<FooAtom, FooPair>` as the interaction
+    many potentials; to use it, you create a `NeighborList`, then use
+    `NListed<FooAtom, FooPair>` as the Interaction
 
  *  `Box`: a box is either infinite (`InfiniteBox`) or periodic
  (`OriginBox`), and takes care of the boundary conditions
 
- *  `collection`: a grouping together of a `Box`, `atomgroup`, and
- `interaction`s, with an integrator (such as velocity Verlet,
- `collectionVerlet`, or browian motion, `CollectionSol`).
+ *  `Collection`: a grouping together of a `Box`, `AtomGroup`, and
+ `Interaction`s, with an integrator (such as velocity Verlet,
+ `CollectionVerlet`, or brownian motion, `CollectionSol`).
 
 Standard Steps
 ----
 
 1.  Make a `Box`. `OriginBox` is a good standard choice for periodic boundary conditions.
-2.  Make an `atomvec`.
+2.  Make an `AtomVec`.
 3.  Set masses, positions and velocities
-    1. Positions might be set using `box.randLoc()`, for a random point inside the box
-    2. Velocities may be set using `randVec()`, which generates a Gaussian distribution, like the expected Boltzmann distribution
-3.  Make `interaction`s. For neighborlisted interactions, make
-`neighborlist` first, then make interactions.
-    1. `NListed<LJatom, LJpair>` (`LJgroup` in Python) is a repulsive Lennard-Jones interaction
-    2. `NListed<HertzianAtom, HertzianPair>` (`Hertzian` in Python) is a Hertzian or Harmonic interaction (exponent can be chosen)
-    3.   Add atoms / pairs to interaction
-4.  Make a `collection`. Note that the neighborlist has to be added to
+    1. Positions might be set using `box.rand_loc()`, for a random point inside the box
+    2. Velocities may be set using `rand_vec()`, which generates a Gaussian distribution, like the expected Boltzmann distribution
+3.  Make `Interaction`s. For neighborlisted interactions, make
+`NeighborList` first, then make interactions.
+    1. `NListed<EpsSigAtom, LJRepulsivePair>` (`LJRepulsive` in Python) is a repulsive Lennard-Jones Interaction
+    2. `NListed<EpsSigExpAtom, RepulsionPair>` (`Repulsion` in Python) is a Repulsion or Harmonic Interaction (exponent can be chosen)
+    3.   Add atoms / pairs to Interaction
+4.  Make a `Collection`. Note that the NeighborList has to be added to
 `trackers`
-    1. `collectionVerlet` is a good NVE collection
-5.  Run `collection.timestep()` many, many times
-    1.   Use methods such as `collection.kinetic()` or
-    `collection.temp()` to get statistics
+    1. `CollectionVerlet` is a good NVE Collection
+5.  Run `Collection.timestep()` many, many times
+    1.   Use methods such as `Collection.kinetic_energy()` or
+    `Collection.temp()` to get statistics
     2. Or use `tracker`s like `RsqTracker` to track running statistics
 6.  Write output to files
 
