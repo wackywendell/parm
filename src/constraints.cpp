@@ -1,14 +1,5 @@
 #include "constraints.hpp"
 
-template<typename T>
-void finite_or_throw(T &m){
-    if(!m.allFinite()) {
-        std::cerr << "Matrix !Finite ERROR" << std::endl;
-        std::cerr << m << std::endl;
-        throw std::invalid_argument("Matrix was not finite, cannot continue.");
-    }
-}
-
 void CoordCOMConstraint::apply_positions(Box &box){
     Vec com = a->com() - loc;
     

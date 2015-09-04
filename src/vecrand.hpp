@@ -197,6 +197,34 @@ long double to_LD(double e); /**< Go to and from Long Doubles. Useful from Pytho
 double from_LD(long double e); /**< Go to and from Long Doubles. Useful from Python.*/
 vector<long double> LDVector(vector<double> dists); /**< Go to and from Long Doubles. Useful from Python.*/
 
+/// Is there a NaN in this matrix?
+/// Eigen has an allFinite and hasNan function as of version 3.2, but
+/// Ubuntu libeigen3-dev is not up that far.
+template<typename Derived>
+inline bool hasNaN(const Eigen::DenseBase<Derived> &m) {
+    // return m.hasNan();
+    return !((m.derived().array()==m.derived().array()).all());
+}
+
+
+/// Are all values finite, i.e. not NaN and not +/- Inf?
+/// Eigen has an allFinite and hasNan function as of version 3.2, but
+/// Ubuntu libeigen3-dev is not up that far.
+template<typename Derived>
+inline bool allFinite(const Eigen::DenseBase<Derived> &m){
+    // return m.allFinite();
+    return !hasNaN(((m.derived()-m.derived())));
+}
+
+template<typename Derived>
+void finite_or_throw(const Eigen::DenseBase<Derived> &m){
+    if(!allFinite(m)) {
+        std::cerr << "Matrix !Finite ERROR" << std::endl;
+        std::cerr << m << std::endl;
+        throw std::invalid_argument("Matrix was not finite, cannot continue.");
+    }
+}
+
 
 #ifdef VEC3D
 Matrix best_rotation_matrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &to);

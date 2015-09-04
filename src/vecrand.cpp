@@ -109,7 +109,7 @@ Matrix best_rotation_matrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eige
     Eigen::JacobiSVD<Matrix> svd(from.adjoint() * to, Eigen::ComputeFullU | Eigen::ComputeFullV);
     
     Matrix VWprod(svd.matrixV() * svd.matrixU().adjoint());
-    if(!VWprod.allFinite()) {
+    if(!allFinite(VWprod)) {
         std::cerr << "BestRotationMatrix ERROR" << std::endl;
         std::cerr << "from:" << std::endl;
         std::cerr << from << std:: endl;
