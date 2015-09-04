@@ -206,6 +206,7 @@ class RigidConstraintExtendedTwce(RigidConstraintCube):
 class PairedCollectionTest(NPTestCase):
     seed = None  # should be set by descendants
     collection_type = None  # should be set by descendants
+    collection_args = None  # should be set by descendants
     pair_type = None  # should be set by descendants
     atom_type = None  # should be set by descendants
     atom_args = None  # should be set by descendants
@@ -214,7 +215,7 @@ class PairedCollectionTest(NPTestCase):
     N = 12
     
     def makePairAtoms(self):
-        for args in zip(self.atoms, *self.atomArgs()):
+        for args in zip(self.atoms, *self.atom_args):
             self.interaction.add(self.atom_type(*args))
         
     def getMasses(self):
@@ -229,13 +230,14 @@ class PairedCollectionTest(NPTestCase):
         # for consistency
         np.random.seed(self.seed)
         
-        Vs = np.sum(self.radii**3)*4/3*np.pi
+        radii = np.asarray(self.getSigmas()) / 2.
+        Vs = np.sum(radii**3)*4/3*np.pi
         V = Vs / self.phi
         self.L = float(V**(1./3.))
         self.box = sim3.OriginBox(self.L)
         
-        self.atoms = sim3.AtomVec(self.masses)
-        self.interaction = sim3.pair_type(self.box, self.atoms, 0.4)
+        self.atoms = sim3.AtomVec(self.getMasses())
+        self.interaction = self.pair_type(self.box, self.atoms, 0.4)
         
         self.makePairAtoms()
         self.resetPositions()
@@ -243,19 +245,20 @@ class PairedCollectionTest(NPTestCase):
         collection_args = ([self.box, self.atoms] +
             list(self.collection_args) +
             [[self.interaction], [self.interaction.neighbor_list()], []])
-        collec = self.collec = sim3.collection_type(collection_args)
+            
+        collec = self.collec = self.collection_type(*collection_args)
         
         print('EKUT:', collec.energy(), collec.kinetic_energy(),
             collec.potential_energy(), collec.temp())
     
     def resetPositions(self):
         np.random.seed(131)
-        for a, radius, mass in zip(self.atoms, self.radii, self.masses):
+        for a, m in zip(self.atoms, self.getMasses()):
             a.x = np.random.uniform(0., self.L, size=(3,))
-            a.v = np.random.normal(size=(3,))
+            a.v = np.random.normal(size=(3,)) / m
             a.f = np.random.normal(size=(3,))
         
-        nl = self.hertz.neighbor_list()
+        nl = self.interaction.neighbor_list()
         nl.update_list(True)
     
     def reset(self):
@@ -304,7 +307,7 @@ class RandomHertzianVerletTest(PairedCollectionTest):
 
 class RandomHertzianGCTest(PairedCollectionTest):
     seed = 19372  # should be set by descendants
-    collection_type = sim3.CollectionGaussianConstraint  # should be set by descendants
+    collection_type = sim3.CollectionGaussianT  # should be set by descendants
     pair_type = sim3.Repulsion  # should be set by descendants
     atom_type = sim3.EpsSigExpAtom  # should be set by descendants
     
