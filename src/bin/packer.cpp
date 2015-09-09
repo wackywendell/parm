@@ -110,8 +110,8 @@ int main(){
     
     writefile(atoms, *obox);
     
-    //Print out total energy, kinetic energy, and potential energy
-    cout << "H: " << collec.hamiltonian() << " K: " << collec.kinetic()
+    //Print out total energy, kinetic_energy energy, and potential energy
+    cout << "H: " << collec.hamiltonian() << " K: " << collec.kinetic_energy()
         << " U: " << hertzian->energy(*obox) << " phi: " << (Vs/obox->V()) << "\n";
     
     // Run the simulation! And every _ steps, write a frame to the .xyz
@@ -136,7 +136,7 @@ int main(){
             }
 
             cout.precision(sizeof(flt));
-            cout << i << " H: " << collec.hamiltonian() << " K: " << collec.kinetic() 
+            cout << i << " H: " << collec.hamiltonian() << " K: " << collec.kinetic_energy() 
                 << " U: " << hertzian->energy(*obox) << " phi: " << (Vs/obox->V()) << "\n";
             cout.precision(6);
             cout << "        Pdiff: " << pdiff << " force_err: " << force_err << "\n";

@@ -2027,7 +2027,7 @@ class WalledBox2D : public OriginBox {
             Vec bxvec = boxsize;
             if(xwalls) bxvec[0] -= walldist/2.0;
             if(ywalls) bxvec[1] -= walldist/2.0;
-            Vec v = randVecBoxed();
+            Vec v = rand_vec_boxed();
             for(uint i=0; i<NDIM; ++i){
                 v[i] *= bxvec[i];
             }

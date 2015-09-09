@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys, os.path
 sys.path.append(os.path.expanduser('~/idp/src'))
 import numpy as np

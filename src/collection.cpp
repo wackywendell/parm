@@ -267,7 +267,7 @@ void CollectionSol::timestep(){
         flt v0 = sqrt(desT/m[i].m);
         flt r0 = dt * v0;
         VecPair vecpair;
-        if (damping > 0) vecpair = gauss.genVecs();
+        if (damping > 0) vecpair = gauss.gen_vecs();
         else vecpair.setZero();
         // vecpair[0] is drG, and vecpair[1] is dvG
         m[i].x += m[i].v * (c1 * dt) + m[i].a * (c2*dt*dt) + vecpair.col(0)*r0;
@@ -1491,7 +1491,7 @@ flt CollectionGear4NPH::kinetic_energy(){
 }
 
 flt CollectionGear4NPH::temp(bool minuscomv){
-    flt totkinetic2 = 0; // kinetic * 2
+    flt totkinetic2 = 0; // kinetic_energy * 2
     Vec cv = Vec::Zero();
     if(minuscomv) cv = com_velocity();
     flt Vfac = dV/box->V()/flt(NDIM);
@@ -1762,7 +1762,7 @@ void CollectionVerletNPT::timestep(){
 void CollectionCDgrid::reset_velocities(flt T){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
-        (*atoms)[i].v = randVec() * sqrt(T/mi);
+        (*atoms)[i].v = rand_vec() * sqrt(T/mi);
     }
     reset_events();
 };
@@ -1944,7 +1944,7 @@ void CollectionCDgrid::timestep() {
 void CollectionCD::reset_velocities(flt T){
     for(uint i=0; i<atoms->size(); i++){
         flt mi = (*atoms)[i].m;
-        (*atoms)[i].v = randVec() * sqrt(T/mi);
+        (*atoms)[i].v = rand_vec() * sqrt(T/mi);
     }
     reset_events();
 };

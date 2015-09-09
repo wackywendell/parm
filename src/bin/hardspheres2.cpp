@@ -188,7 +188,7 @@ int main(int argc, char **argv){
     
     // Potential energy per Atom
     int swtch = 0; //Switch to help terminate simulations of unattainable packing fractions
-    flt U = collec0.potentialenergy()/Natoms;
+    flt U = collec0.potential_energy()/Natoms;
     flt U1 = U; //U at prior timestep
     flt U0 = U; //Initial potential energy
     cout    << "Energy0:  " << U << "\n";
@@ -202,7 +202,7 @@ int main(int argc, char **argv){
 	else if (U<=U0){
 		for(uint i=0; i<1000; ++i) collec0.timestep();
 		U1=U;
-		U = collec0.potentialenergy()/Natoms;
+		U = collec0.potential_energy()/Natoms;
 		cout    << "Energy:  " << U << "\n";
 		}
 	else if (U>.99*U1){

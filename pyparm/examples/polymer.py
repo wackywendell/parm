@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # A basic example of a polymer simulation.
 
 # Statistics such as energy, (instantaneous) temperature, and (instantaneous) pressure are
@@ -81,7 +83,7 @@ lasta = None
 preva = None
 for n, a, s in zip(range(N), atoms, sigmas):
     E = E0 + 10
-    a.v = sim.randVec()  # from a gaussian distribution
+    a.v = sim.rand_vec()  # from a gaussian distribution
     repulse.add(sim.EpsSigExpAtom(a, 1.0, s, 2.0))
     if n % opts.perpoly != 0:
         bonds.add(opts.bondk, s, lasta, a)
@@ -91,7 +93,7 @@ for n, a, s in zip(range(N), atoms, sigmas):
         neighbors.ignore(preva, a)
     while E > E0 + 0.1:
         if n % opts.perpoly > 1:
-            dx = sim.randVec()
+            dx = sim.rand_vec()
             lastdx = lasta.x - preva.x
             lastdx /= np.linalg.norm(lastdx)
             perp = np.cross(dx, lastdx)
@@ -100,7 +102,7 @@ for n, a, s in zip(range(N), atoms, sigmas):
                   perp * np.sin(np.pi - angle))
             a.x = lasta.x + dx
         elif n % opts.perpoly > 0:
-            dx = sim.randVec()
+            dx = sim.rand_vec()
             dx /= np.linalg.norm(dx)
             a.x = lasta.x + dx
         else:

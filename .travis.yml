@@ -1,0 +1,28 @@
+sudo: false
+language: python
+
+python:
+  - "3.3"
+  - "3.4"
+
+# For Ubuntu, in general the following packages are needed (for Python 3): 
+# swig libeigen3-dev python3-dev python3-numpy python3-nose python3-setuptools 
+# build-essential libboost-all-dev python3-pip
+# Most of these should come with the Travis install.
+
+addons:
+  apt:
+    packages:
+    - swig
+    - libeigen3-dev
+    - libboost-all-dev
+before_install:
+  - pip install --upgrade pip setuptools # Upgrade pip and setuptools to get ones with `wheel` support
+  - pip install numpy nose transforms3d
+  - pip --version
+  - export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/eigen3"
+install:
+  - make all wraps
+  - python setup.py build_ext --inplace
+script:
+  - nosetests .

@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 # System imports
-from distutils.core import Extension, setup
+from setuptools import Extension, setup
 
 # Third-party modules - we depend on numpy for everything
 import numpy
@@ -12,22 +12,32 @@ try:
 except AttributeError:
     numpy_include = numpy.get_numpy_include()
 
-# ezrange extension module
-_d2 = Extension("_sim2d",
-    ["src/sim.i", "src/array.i", "src/collection.hpp", "src/constraints.hpp",
+module_opts = [
+    ("_sim2d", "pyparm/sim_wrap2d.cxx", ["-DVEC2D"]),
+    ("_sim3d", "pyparm/sim_wrap3d.cxx", ["-DVEC3D"]),
+    ("_sim2dlong", "pyparm/sim_wrap2dlong.cxx", ["-DVEC2D", "-DLONGFLOAT"]),
+    ("_sim3dlong", "pyparm/sim_wrap3dlong.cxx", ["-DVEC3D", "-DLONGFLOAT"])
+]
+hpp_files = ["src/collection.hpp", "src/constraints.hpp",
     "src/interaction.hpp", "src/trackers.hpp", "src/box.hpp",
-    "src/vecrand.hpp", "src/collection.cpp", "src/constraints.cpp",
+    "src/vecrand.hpp"]
+cpp_files = ["src/collection.cpp", "src/constraints.cpp",
     "src/interaction.cpp", "src/trackers.cpp", "src/box.cpp",
-    "src/vecrand.cpp"],
-    include_dirs=[numpy_include],
-    swig_opts=["-py3", "-shadow", "-c++", "-DVEC2D"]
-)
+    "src/vecrand.cpp"]
 
-# ezrange setup
+swigged_modules = [
+    Extension(
+        name,
+        [swig_file],
+        include_dirs=[numpy_include, "src"],
+        extra_compile_args=compile_opts,
+    ) for name, swig_file, compile_opts in module_opts
+]
+
 setup(
     name="pyparm",
     description="None",
     author="Wendell Smith",
     version="0.2",
-    ext_modules=[_d2]
+    ext_modules=swigged_modules
 )

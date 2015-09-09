@@ -61,7 +61,7 @@ class Collection {
 
         //Statistical Methods //////////////////////////////////////////////////////////////////////
         flt potential_energy();
-        //! Total energy, including both potential and kinetic
+        //! Total energy, including both potential and kinetic_energy
         flt energy();
         virtual flt temp(bool minuscomv=true);
         virtual flt kinetic_energy(){return atoms->kinetic_energy();};

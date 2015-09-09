@@ -12,24 +12,24 @@ lingenerator uniformrand(randengine, mylineardistribution);
 flt rand01(){return uniformrand();};
 
 #ifdef VEC2D
-Vec randVec(){
+Vec rand_vec(){
     return Vec(gauss(), gauss());
 }
 
-Vec randVecBoxed(){
+Vec rand_vec_boxed(){
     return Vec(uniformrand(), uniformrand());
 }
 #else
-Vec randVec(){
+Vec rand_vec(){
     return Vec(gauss(), gauss(), gauss());
 }
 
-Vec randVecBoxed(){
+Vec rand_vec_boxed(){
     return Vec(uniformrand(), uniformrand(), uniformrand());
 }
 
-Vec randVecSphere(flt radius){
-    return randVec().normalized() * (cbrt(uniformrand()) * radius);
+Vec rand_vec_sphere(flt radius){
+    return rand_vec().normalized() * (cbrt(uniformrand()) * radius);
 }
 #endif
 
@@ -79,7 +79,7 @@ Eigen::Matrix<flt, 1, 2> BivariateGauss::generate(){
     return p;
 }
 
-VecPair BivariateGauss::genVecs(){
+VecPair BivariateGauss::gen_vecs(){
 #ifdef VEC2D
     Vec x1 = Vec(gauss(), gauss());
     Vec x2 = Vec(gauss(), gauss());
@@ -94,8 +94,8 @@ VecPair BivariateGauss::genVecs(){
     return p;
 }
 
-long double toLD(double e){return (long double) e;};
-double fromLD(long double e){return (double) e;};
+long double to_LD(double e){return (long double) e;};
+double from_LD(long double e){return (double) e;};
 vector<long double> LDVector(vector<double> dists){
     vector<long double> newdists = vector<long double>();
     for(uint i=0; i<dists.size(); i++){
@@ -109,7 +109,7 @@ Matrix best_rotation_matrix(Eigen::Matrix<flt, Eigen::Dynamic, NDIM> &from, Eige
     Eigen::JacobiSVD<Matrix> svd(from.adjoint() * to, Eigen::ComputeFullU | Eigen::ComputeFullV);
     
     Matrix VWprod(svd.matrixV() * svd.matrixU().adjoint());
-    if(!VWprod.allFinite()) {
+    if(!allFinite(VWprod)) {
         std::cerr << "BestRotationMatrix ERROR" << std::endl;
         std::cerr << "from:" << std::endl;
         std::cerr << from << std:: endl;

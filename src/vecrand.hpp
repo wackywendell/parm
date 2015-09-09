@@ -117,14 +117,14 @@ flt rand01();
 In terms of spherical coordinates, directionality is uniform on a sphere, and the radial
 distribution is a Chi Distribution with \f$\sigma=1\f$.
 */
-Vec randVec();
+Vec rand_vec();
 /** Generate a random vector inside a box with sides of length 1.
 */
-Vec randVecBoxed();
+Vec rand_vec_boxed();
 #ifdef VEC3D
 /** Generate a random vector inside a sphere.
 */
-Vec randVecSphere(flt radius=1);
+Vec rand_vec_sphere(flt radius=1);
 #endif
 
 /** Seed the global random number generator with a given integer.
@@ -182,20 +182,48 @@ class BivariateGauss {
         /**
         Generate a single Vec
         */
-        Vec genVec(){return Vec(gauss(), gauss());};
+        Vec gen_vec(){return Vec(gauss(), gauss());};
 #else
         /**
         Generate a single Vec
         */
-        Vec genVec(){return Vec(gauss(), gauss(), gauss());};
+        Vec gen_vec(){return Vec(gauss(), gauss(), gauss());};
 #endif
         /** Randomly generate two correlated Vec objects. */
-        VecPair genVecs();
+        VecPair gen_vecs();
 };
 
-long double toLD(double e); /**< Go to and from Long Doubles. Useful from Python.*/
-double fromLD(long double e); /**< Go to and from Long Doubles. Useful from Python.*/
+long double to_LD(double e); /**< Go to and from Long Doubles. Useful from Python.*/
+double from_LD(long double e); /**< Go to and from Long Doubles. Useful from Python.*/
 vector<long double> LDVector(vector<double> dists); /**< Go to and from Long Doubles. Useful from Python.*/
+
+/// Is there a NaN in this matrix?
+/// Eigen has an allFinite and hasNan function as of version 3.2, but
+/// Ubuntu libeigen3-dev is not up that far.
+template<typename Derived>
+inline bool hasNaN(const Eigen::DenseBase<Derived> &m) {
+    // return m.hasNan();
+    return !((m.derived().array()==m.derived().array()).all());
+}
+
+
+/// Are all values finite, i.e. not NaN and not +/- Inf?
+/// Eigen has an allFinite and hasNan function as of version 3.2, but
+/// Ubuntu libeigen3-dev is not up that far.
+template<typename Derived>
+inline bool allFinite(const Eigen::DenseBase<Derived> &m){
+    // return m.allFinite();
+    return !hasNaN(((m.derived()-m.derived())));
+}
+
+template<typename Derived>
+void finite_or_throw(const Eigen::DenseBase<Derived> &m){
+    if(!allFinite(m)) {
+        std::cerr << "Matrix !Finite ERROR" << std::endl;
+        std::cerr << m << std::endl;
+        throw std::invalid_argument("Matrix was not finite, cannot continue.");
+    }
+}
 
 
 #ifdef VEC3D

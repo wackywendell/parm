@@ -341,7 +341,7 @@ void RandomForce::set_forces(Box &box){
     for(it = group.begin(); it < group.end(); ++it){
         if(rand01() < 1.0/it->freq){
             RandomForceAtom &a = *it;
-            Vec v = randVec();
+            Vec v = rand_vec();
             switch(a.force_type){
                 case FIXED:
                     a->f += v * (a.force_mag / v.norm());

@@ -143,7 +143,7 @@ class OriginBox : public Box {
         }
         //! Get a random point in the box.
         Vec rand_loc(){
-            Vec v = randVecBoxed();
+            Vec v = rand_vec_boxed();
             for(uint i=0; i<NDIM; i++){
                 v[i] *= boxsize[i];
             }
@@ -319,7 +319,7 @@ class AtomGroup {
 
         //! Mass of the whole group
         flt mass() const;
-        //! Total kinetic energy of the group.
+        //! Total kinetic_energy energy of the group.
         /*!
         This is normally with reference to a "lab" reference frame (velocity (0,0,0)), but
         can optionally take a different origin velocity, e.g. `com_velocity()`.

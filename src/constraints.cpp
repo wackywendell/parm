@@ -1,20 +1,11 @@
 #include "constraints.hpp"
 
-template<typename T>
-void finite_or_throw(T &m){
-    if(!m.allFinite()) {
-        std::cerr << "Matrix !Finite ERROR" << std::endl;
-        std::cerr << m << std::endl;
-        throw std::invalid_argument("Matrix was not finite, cannot continue.");
-    }
-}
-
 void CoordCOMConstraint::apply_positions(Box &box){
     Vec com = a->com() - loc;
     
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
-        for(uint j=0; j<3; j++){
+        for(uint j=0; j<NDIM; j++){
             if(not fixed[j]) continue;
             atm.x[j] -= com[j];
         }
@@ -26,7 +17,7 @@ void CoordCOMConstraint::apply_velocities(Box &box){
     
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
-        for(uint j=0; j<3; j++){
+        for(uint j=0; j<NDIM; j++){
             if(not fixed[j]) continue;
             atm.v[j] -= com_velocity[j];
         }
@@ -43,7 +34,7 @@ void CoordCOMConstraint::apply_forces(Box &box){
     for(uint i=0; i< a->size(); i++){
         Atom &atm = (*a)[i];
         Vec df = (tota * (atm.m));
-        for(uint j=0; j<3; j++){
+        for(uint j=0; j<NDIM; j++){
             if(not fixed[j]) continue;
             atm.f[j] -= df[j];
         }

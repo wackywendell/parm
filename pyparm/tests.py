@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from . import d2 as sim2
 from . import d3 as sim3
 from unittest import TestCase
@@ -203,55 +205,84 @@ class RigidConstraintExtendedTwce(RigidConstraintCube):
     dtheta = np.pi*1.28
 
 
-class RandomHertzianVerletTest(NPTestCase):
+class PairedCollectionTest(NPTestCase):
+    seed = None  # should be set by descendants
+    collection_type = None  # should be set by descendants
+    collection_args = None  # should be set by descendants
+    pair_type = None  # should be set by descendants
+    atom_type = None  # should be set by descendants
+    atom_args = None  # should be set by descendants
+    
     phi = 0.3
-    N_per_mol = 5
-    N_mol = 12
-    N = N_per_mol * N_mol
-    dt = 0.01
+    N = 12
+    
+    def makePairAtoms(self):
+        for args in zip(self.atoms, *self.atom_args):
+            self.interaction.add(self.atom_type(*args))
+        
+    def getMasses(self):
+        return [s**3 for s in self.getSigmas()]
+        
+    def getSigmas(self):
+        N1 = self.N // 2
+        N2 = self.N - N1
+        return [1.] * N1 + [1.4] * N2
     
     def setUp(self):
         # for consistency
-        np.random.seed(131)
-        self.radii = np.random.uniform(1.0, 2.0, size=(self.N,))
-        self.masses = self.radii**3
+        np.random.seed(self.seed)
         
-        Vs = np.sum(self.radii**3)*4/3*np.pi
+        radii = np.asarray(self.getSigmas()) / 2.
+        Vs = np.sum(radii**3)*4/3*np.pi
         V = Vs / self.phi
         self.L = float(V**(1./3.))
         self.box = sim3.OriginBox(self.L)
         
-        self.atoms = sim3.AtomVec(self.masses)
-        self.hertz = sim3.Repulsion(self.box, self.atoms, 0.4)
-
-        for a, radius, mass in zip(self.atoms, self.radii, self.masses):
-            self.hertz.add(sim3.EpsSigExpAtom(a, 100.0, radius*2.0, 2.0))
+        self.atoms = sim3.AtomVec(self.getMasses())
+        self.interaction = self.pair_type(self.box, self.atoms, 0.4)
         
-        self.reset_positions()
+        self.makePairAtoms()
+        self.resetPositions()
         
-        collec = self.collec = sim3.CollectionVerlet(
-            self.box, self.atoms, self.dt,
-            [self.hertz], [self.hertz.neighbor_list()], [])
+        collection_args = ([self.box, self.atoms] +
+            list(self.collection_args) +
+            [[self.interaction], [self.interaction.neighbor_list()], []])
+            
+        collec = self.collec = self.collection_type(*collection_args)
         
         print('EKUT:', collec.energy(), collec.kinetic_energy(),
             collec.potential_energy(), collec.temp())
     
-    def reset_positions(self):
+    def resetPositions(self):
         np.random.seed(131)
-        for a, radius, mass in zip(self.atoms, self.radii, self.masses):
+        for a, m in zip(self.atoms, self.getMasses()):
             a.x = np.random.uniform(0., self.L, size=(3,))
-            a.v = np.random.normal(size=(3,))
+            a.v = np.random.normal(size=(3,)) / m
             a.f = np.random.normal(size=(3,))
         
-        nl = self.hertz.neighbor_list()
+        nl = self.interaction.neighbor_list()
         nl.update_list(True)
     
     def reset(self):
-        self.reset_positions()
+        self.resetPositions()
         self.collec.scale_velocities_to_temp(1.0)
         for _ in range(1000):
             self.collec.timestep()
             self.collec.scale_velocities_to_temp(1.0)
+
+
+class RandomHertzianVerletTest(PairedCollectionTest):
+    seed = 131  # should be set by descendants
+    collection_type = sim3.CollectionVerlet  # should be set by descendants
+    pair_type = sim3.Repulsion  # should be set by descendants
+    atom_type = sim3.EpsSigExpAtom  # should be set by descendants
+    
+    dt = 0.01
+    collection_args = [dt]
+    
+    @property
+    def atom_args(self):
+        return [1.2] * self.N, self.getSigmas(), [2.0]*self.N
     
     def testEnergy(self):
         self.reset()
@@ -273,6 +304,39 @@ class RandomHertzianVerletTest(NPTestCase):
         self.assertClose(mean_T, 1.0, rtol=1e-1)
         
         som = np.std(E) / np.mean(E)
+        self.assertClose(som, 0.0, atol=1e-2)
+
+
+class RandomHertzianGCTest(PairedCollectionTest):
+    seed = 19372  # should be set by descendants
+    collection_type = sim3.CollectionGaussianT  # should be set by descendants
+    pair_type = sim3.Repulsion  # should be set by descendants
+    atom_type = sim3.EpsSigExpAtom  # should be set by descendants
+    
+    dt = 0.01
+    collection_args = [dt]
+    
+    @property
+    def atom_args(self):
+        return [1.2] * self.N, self.getSigmas(), [2.0]*self.N
+    
+    def testEnergy(self):
+        self.reset()
+        collec = self.collec
+        EKUTs = []
+        lastE = collec.energy()
+        for _ in range(1000):
+            for _ in range(10):
+                collec.timestep()
+                self.assertClose(collec.energy(), lastE, rtol=1e-2)
+                lastE = collec.energy()
+            EKUTs.append((collec.energy(), collec.kinetic_energy(),
+                          collec.potential_energy(), collec.temp()))
+            
+        EKUTs = np.asarray(EKUTs)
+        E, K, U, T = EKUTs.T
+        
+        som = np.std(T) / np.mean(T)
         self.assertClose(som, 0.0, atol=1e-2)
 
 

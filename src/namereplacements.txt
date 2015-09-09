@@ -195,3 +195,10 @@ HertzianDragAtom    EpsSigExpDragAtom
 HertzianDragPair    RepulsionDragPair
 LJgroup LJRepulsive
 Hertzian    Repulsion
+randVec rand_vec
+randVecBoxed    rand_vec_boxed
+randVecSphere   rand_vec_sphere
+genVec  gen_vec
+genVecs gen_vecs
+toLD    to_LD
+fromLD  from_LD
