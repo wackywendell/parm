@@ -6200,20 +6200,20 @@ def rand01() -> "flt":
     """rand01() -> flt"""
     return _sim3dlong.rand01()
 
-def randVec() -> "Vec":
-    """randVec() -> Vec"""
-    return _sim3dlong.randVec()
+def rand_vec() -> "Vec":
+    """rand_vec() -> Vec"""
+    return _sim3dlong.rand_vec()
 
-def randVecBoxed() -> "Vec":
-    """randVecBoxed() -> Vec"""
-    return _sim3dlong.randVecBoxed()
+def rand_vec_boxed() -> "Vec":
+    """rand_vec_boxed() -> Vec"""
+    return _sim3dlong.rand_vec_boxed()
 
-def randVecSphere(radius: 'flt'=1) -> "Vec":
+def rand_vec_sphere(radius: 'flt'=1) -> "Vec":
     """
-    randVecSphere(flt radius=1) -> Vec
-    randVecSphere() -> Vec
+    rand_vec_sphere(flt radius=1) -> Vec
+    rand_vec_sphere() -> Vec
     """
-    return _sim3dlong.randVecSphere(radius)
+    return _sim3dlong.rand_vec_sphere(radius)
 
 def seed(*args) -> "unsigned int":
     """
@@ -6284,14 +6284,14 @@ class BivariateGauss(_object):
         return _sim3dlong.BivariateGauss_generate(self)
 
 
-    def genVec(self) -> "Vec":
-        """genVec(BivariateGauss self) -> Vec"""
-        return _sim3dlong.BivariateGauss_genVec(self)
+    def gen_vec(self) -> "Vec":
+        """gen_vec(BivariateGauss self) -> Vec"""
+        return _sim3dlong.BivariateGauss_gen_vec(self)
 
 
-    def genVecs(self) -> "VecPair":
-        """genVecs(BivariateGauss self) -> VecPair"""
-        return _sim3dlong.BivariateGauss_genVecs(self)
+    def gen_vecs(self) -> "VecPair":
+        """gen_vecs(BivariateGauss self) -> VecPair"""
+        return _sim3dlong.BivariateGauss_gen_vecs(self)
 
     __swig_destroy__ = _sim3dlong.delete_BivariateGauss
     __del__ = lambda self: None
@@ -6299,13 +6299,13 @@ BivariateGauss_swigregister = _sim3dlong.BivariateGauss_swigregister
 BivariateGauss_swigregister(BivariateGauss)
 
 
-def toLD(e: 'double') -> "long double":
-    """toLD(double e) -> long double"""
-    return _sim3dlong.toLD(e)
+def to_LD(e: 'double') -> "long double":
+    """to_LD(double e) -> long double"""
+    return _sim3dlong.to_LD(e)
 
-def fromLD(e: 'long double') -> "double":
-    """fromLD(long double e) -> double"""
-    return _sim3dlong.fromLD(e)
+def from_LD(e: 'long double') -> "double":
+    """from_LD(long double e) -> double"""
+    return _sim3dlong.from_LD(e)
 
 def LDVector(dists: 'dvector') -> "std::vector< long double,std::allocator< long double > >":
     """LDVector(dvector dists) -> ldvector"""
