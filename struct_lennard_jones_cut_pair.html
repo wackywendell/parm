@@ -103,6 +103,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>Truncated and shifted Lennard-Jones, in the form \(V(r) = \epsilon \left(\frac{\sigma^6}{r^6} - 1\right)^2\).  
+ <a href="struct_lennard_jones_cut_pair.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="interaction_8hpp_source.html">interaction.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -125,7 +128,11 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a8c59e631fe676fbd28fa26d12fbd325c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_atom_i_d.html">AtomID</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_lennard_jones_cut_pair.html#a8c59e631fe676fbd28fa26d12fbd325c">atom2</a></td></tr>
 <tr class="separator:a8c59e631fe676fbd28fa26d12fbd325c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Truncated and shifted Lennard-Jones, in the form \(V(r) = \epsilon \left(\frac{\sigma^6}{r^6} - 1\right)^2\). </p>
+<p>Epsilons and sigmas are resolved with \(\epsilon_{ij} = \sqrt{\epsilon_i \epsilon_j}\) and \(\sigma_{ij} = \frac{\sigma_i + \sigma_2}{2}\).</p>
+<p>A cut of 1.0 is a cut at the minimum; a cut at 2.5 is typical. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aec0aca934f1d9b1bdf79b96ddb44af57"></a>
 <div class="memitem">
 <div class="memproto">
@@ -286,7 +293,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 17 2015 11:22:21 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 17 2015 11:55:45 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
