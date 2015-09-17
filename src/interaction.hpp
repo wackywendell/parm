@@ -743,10 +743,6 @@ struct ChargePair {
     ChargePair(Charged a1, Charged a2) : q1q2(a1.q*a2.q){};
 };
 
-////////////////////////////////////////////////////////////////////////
-// Repulsive LJ, with ε = √(ε₁ ε₂) and σ = (σ₁+σ₂)/2
-// Potential is V(r) = ε (σ⁶/r⁶ - 1)²
-// cutoff at sigma
 struct EpsSigAtom : public AtomID {
     flt epsilon, sigma;
     EpsSigAtom(){};
@@ -757,6 +753,13 @@ struct EpsSigAtom : public AtomID {
     flt max_size(){return sigma;};
 };
 
+//! Repulsive LJ: \f$V(r) = \epsilon \left(\frac{\sigma^6}{r^6} - 1\right)^2\f$
+//!
+//! Epsilons and sigmas are resolved with
+//! \f$\epsilon_{ij} = \sqrt{\epsilon_i  \epsilon_j}\f$ and \f$\sigma_{ij} = \frac{\sigma_i + \sigma_2}{2}\f$.
+//! 
+//! cutoff is at sigma, where the potential minimum is.
+//!
 struct LJRepulsePair {
     flt epsilon, sigma;
     AtomID atom1, atom2;
@@ -828,6 +831,13 @@ struct IEpsISigCutAtom : public AtomID {
     };
 };
 
+//! Truncated and shifted Lennard-Jones, in the form \f$V(r) = \epsilon \left(\frac{\sigma^6}{r^6} - 1\right)^2\f$.
+//!
+//! Epsilons and sigmas are resolved with 
+//! \f$\epsilon_{ij} = \sqrt{\epsilon_i \epsilon_j}\f$ and \f$\sigma_{ij} = \frac{\sigma_i + \sigma_2}{2}\f$.
+//! 
+//! A cut of 1.0 is a cut at the minimum; a cut at 2.5 is typical.
+//!
 struct LennardJonesCutPair {
     LennardJonesCut inter;
     AtomID atom1, atom2;
