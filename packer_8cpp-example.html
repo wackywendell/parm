@@ -203,9 +203,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    </div>
 <div class="line">    writefile(atoms, *obox);</div>
 <div class="line">    </div>
-<div class="line">    <span class="comment">//Print out total energy, kinetic energy, and potential energy</span></div>
-<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;H: &quot;</span> &lt;&lt; collec.<a name="a13"></a><a class="code" href="class_collection_n_l_c_g.html#a07ab52df4b4fa79b8ef031aaaae8b0e8">hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.kinetic()</div>
-<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;<a name="a14"></a><a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">    <span class="comment">//Print out total energy, kinetic_energy energy, and potential energy</span></div>
+<div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;H: &quot;</span> &lt;&lt; collec.<a name="a13"></a><a class="code" href="class_collection_n_l_c_g.html#a07ab52df4b4fa79b8ef031aaaae8b0e8">hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a14"></a><a class="code" href="class_collection_n_l_c_g.html#a35daaad5c950121c78291e2ffaa30ddd">kinetic_energy</a>()</div>
+<div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">    </div>
 <div class="line">    <span class="comment">// Run the simulation! And every _ steps, write a frame to the .xyz</span></div>
 <div class="line">    <span class="comment">// file and print out the energies again</span></div>
@@ -229,8 +229,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">            }</div>
 <div class="line"></div>
 <div class="line">            cout.precision(<span class="keyword">sizeof</span>(<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>));</div>
-<div class="line">            cout &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; H: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection_n_l_c_g.html#a07ab52df4b4fa79b8ef031aaaae8b0e8">hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.kinetic() </div>
-<div class="line">                &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;<a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line">            cout &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot; H: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection_n_l_c_g.html#a07ab52df4b4fa79b8ef031aaaae8b0e8">hamiltonian</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a class="code" href="class_collection_n_l_c_g.html#a35daaad5c950121c78291e2ffaa30ddd">kinetic_energy</a>() </div>
+<div class="line">                &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; hertzian-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot; phi: &quot;</span> &lt;&lt; (Vs/obox-&gt;V()) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">            cout.precision(6);</div>
 <div class="line">            cout &lt;&lt; <span class="stringliteral">&quot;        Pdiff: &quot;</span> &lt;&lt; pdiff &lt;&lt; <span class="stringliteral">&quot; force_err: &quot;</span> &lt;&lt; force_err &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line"></div>
@@ -305,7 +305,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 1 2015 12:35:25 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 17 2015 11:22:21 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

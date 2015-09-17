@@ -33,7 +33,7 @@ var searchData=
   ['set_5fmax_5fstep',['set_max_step',['../class_collection_n_l_c_g.html#a73c9f41463696070a35cb217b03db8ed',1,'CollectionNLCG::set_max_step()'],['../class_collection_n_l_c_g_v.html#a4ac6a754dd4cc48cafff65f9e1e9910b',1,'CollectionNLCGV::set_max_step()']]],
   ['set_5fnormal',['set_normal',['../class_soft_wall.html#a46a094d6e13f876a93ba9a874c5d504e',1,'SoftWall']]],
   ['set_5fpressure',['set_pressure',['../class_collection_n_l_c_g.html#abdeaae756baa226831b3b023ea8f37ca',1,'CollectionNLCG']]],
-  ['set_5fq',['set_Q',['../class_collection_nose_hoover.html#ab89ba693b7c7c0e2317a3e06f8e21b6f',1,'CollectionNoseHoover::set_Q()'],['../class_collection_gaussian_t.html#ac928f3d077210dbe1f91bb96c3188fc1',1,'CollectionGaussianT::set_Q()']]],
+  ['set_5fq',['set_Q',['../class_collection_nose_hoover.html#ab89ba693b7c7c0e2317a3e06f8e21b6f',1,'CollectionNoseHoover']]],
   ['set_5fu0',['set_U0',['../class_energy_tracker.html#a53a9ffd374e7c55843bc7d381ed6f392',1,'EnergyTracker::set_U0(flt newU0)'],['../class_energy_tracker.html#a14ecf1459e5364833c91c9959ee0042a',1,'EnergyTracker::set_U0(Box &amp;box)']]],
   ['set_5fxi',['set_xi',['../class_collection_gaussian_t.html#a12674e7dc4daa3cba171cd47a82c2c3e',1,'CollectionGaussianT']]],
   ['setforcesgetenergy',['setForcesGetEnergy',['../class_n_listed_virial.html#a2fdedb32b878e49e972db4fd18fd6139',1,'NListedVirial']]],

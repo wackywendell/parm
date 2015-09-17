@@ -200,7 +200,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keywordflow">return</span> V();</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        }</div>
 <div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="class_origin_box.html#adb4b8286053f260f6fc4d76811112bd8">  145</a></span>&#160;        <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> <a class="code" href="class_origin_box.html#adb4b8286053f260f6fc4d76811112bd8">rand_loc</a>(){</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> v = <a class="code" href="vecrand_8cpp.html#a41702d1ad93648042aaf2d9f6014d75e">randVecBoxed</a>();</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> v = <a class="code" href="vecrand_8cpp.html#ac350315ad12fc05c940f3083aca74fa9">rand_vec_boxed</a>();</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; i++){</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                v[i] *= boxsize[i];</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;            }</div>
@@ -538,8 +538,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="class_box_html"><div class="ttname"><a href="class_box.html">Box</a></div><div class="ttdoc">The virtual interface for the shape of the space and its boundaries. </div><div class="ttdef"><b>Definition:</b> box.hpp:50</div></div>
 <div class="ttc" id="class_atom_vec_html_ae5aa622458b8205bf01571ef15f7750f"><div class="ttname"><a href="class_atom_vec.html#ae5aa622458b8205bf01571ef15f7750f">AtomVec::vec</a></div><div class="ttdeci">AtomVec &amp; vec()</div><div class="ttdef"><b>Definition:</b> box.hpp:426</div></div>
 <div class="ttc" id="vecrand_8hpp_html_aa0c2bcbdfaf637fa46ae67b5685ce75c"><div class="ttname"><a href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a></div><div class="ttdeci">Eigen::Matrix&lt; flt, NDIM, 1 &gt; Vec</div><div class="ttdoc">The basic physics vector. </div><div class="ttdef"><b>Definition:</b> vecrand.hpp:51</div></div>
-<div class="ttc" id="vecrand_8cpp_html_a41702d1ad93648042aaf2d9f6014d75e"><div class="ttname"><a href="vecrand_8cpp.html#a41702d1ad93648042aaf2d9f6014d75e">randVecBoxed</a></div><div class="ttdeci">Vec randVecBoxed()</div><div class="ttdoc">Generate a random vector inside a box with sides of length 1. </div><div class="ttdef"><b>Definition:</b> vecrand.cpp:19</div></div>
 <div class="ttc" id="class_sub_group_html"><div class="ttname"><a href="class_sub_group.html">SubGroup</a></div><div class="ttdef"><b>Definition:</b> box.hpp:441</div></div>
+<div class="ttc" id="vecrand_8cpp_html_ac350315ad12fc05c940f3083aca74fa9"><div class="ttname"><a href="vecrand_8cpp.html#ac350315ad12fc05c940f3083aca74fa9">rand_vec_boxed</a></div><div class="ttdeci">Vec rand_vec_boxed()</div><div class="ttdoc">Generate a random vector inside a box with sides of length 1. </div><div class="ttdef"><b>Definition:</b> vecrand.cpp:19</div></div>
 <div class="ttc" id="class_atom_group_html_a4d662b54af136642addf10e3e328f7d2"><div class="ttname"><a href="class_atom_group.html#a4d662b54af136642addf10e3e328f7d2">AtomGroup::omega</a></div><div class="ttdeci">Vec omega() const </div><div class="ttdef"><b>Definition:</b> box.hpp:347</div></div>
 <div class="ttc" id="class_s_c_box_html_af7d6958995b37950831421b957e70bff"><div class="ttname"><a href="class_s_c_box.html#af7d6958995b37950831421b957e70bff">SCBox::radius</a></div><div class="ttdeci">flt radius()</div><div class="ttdef"><b>Definition:</b> box.hpp:207</div></div>
 <div class="ttc" id="vecrand_8hpp_html_aa4c4eddddfed65be9edd9a5d04d9b93e"><div class="ttname"><a href="vecrand_8hpp.html#aa4c4eddddfed65be9edd9a5d04d9b93e">OVERNDIM</a></div><div class="ttdeci">const flt OVERNDIM</div><div class="ttdoc">A constant equal to , where  is the number of dimensions. </div><div class="ttdef"><b>Definition:</b> vecrand.hpp:62</div></div>
@@ -552,7 +552,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 1 2015 12:35:25 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 17 2015 11:22:21 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

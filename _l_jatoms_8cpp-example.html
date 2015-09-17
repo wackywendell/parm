@@ -147,7 +147,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">        <span class="comment">// we track energy to see if things are overlapping</span></div>
 <div class="line">        <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> E0 = LJ-&gt;energy(*obox);</div>
 <div class="line">        atoms[i].x = obox-&gt;rand_loc(); <span class="comment">// random location in the box</span></div>
-<div class="line">        atoms[i].v = <a name="a8"></a><a class="code" href="vecrand_8cpp.html#a2f2700f1adbe0f5a574b2eb16cca8453">randVec</a>(); <span class="comment">// from a Gaussian</span></div>
+<div class="line">        atoms[i].v = <a name="a8"></a><a class="code" href="vecrand_8cpp.html#aa8530fb2f185f57ff9e9e84806be97ef">rand_vec</a>(); <span class="comment">// from a Gaussian</span></div>
 <div class="line">        atoms[i].f = Vec::Zero();</div>
 <div class="line">        atoms[i].a = Vec::Zero();</div>
 <div class="line">        </div>
@@ -185,7 +185,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    outfile.open(<span class="stringliteral">&quot;LJatoms.xyz&quot;</span>, ios::out);</div>
 <div class="line">    writefile(outfile, atoms, *obox);</div>
 <div class="line">    </div>
-<div class="line">    <span class="comment">//Print out total energy, kinetic energy, and potential energy</span></div>
+<div class="line">    <span class="comment">//Print out total energy, kinetic_energy energy, and potential energy</span></div>
 <div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;E: &quot;</span> &lt;&lt; collec.<a name="a16"></a><a class="code" href="class_collection.html#a10ab4de939ad025ca5bc04555d5c0aa4">energy</a>() &lt;&lt; <span class="stringliteral">&quot; K: &quot;</span> &lt;&lt; collec.<a name="a17"></a><a class="code" href="class_collection.html#a805247cb09432efe60719f254912192f">kinetic_energy</a>() </div>
 <div class="line">        &lt;&lt; <span class="stringliteral">&quot; U: &quot;</span> &lt;&lt; LJ-&gt;energy(*obox) &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">    <span class="comment">// Run the simulation! And every _ steps, write a frame to the .xyz</span></div>
@@ -251,7 +251,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 1 2015 12:35:25 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 17 2015 11:22:21 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
