@@ -573,3 +573,45 @@ class RSQTest(NPTestCase):
             np.shape(ISFxyz),
             (len(self.ns), len(self.ks), len(self.atoms), 3)
         )
+
+
+class ShearTest2D(NPTestCase):
+    N = 8
+    L = 3.2
+    d = 2
+    
+    def setUp(self):
+        sim = sim2 if self.d == 2 else sim3
+        
+        self.box = sim.OriginBox(self.L)
+        self.le_box = sim.LeesEdwardsBox(self.L)
+        self.atoms = sim.AtomVec(self.N, 1.0)
+        self.reset()
+    
+    def reset(self):
+        np.random.seed(2556)
+        for a in self.atoms:
+            a.x = np.random.uniform(size=(self.d,)) * self.L * 2
+            a.v = np.zeros(self.d)
+        self.locs0 = np.asarray([a.x for a in self.atoms])
+    
+    def test_pure_shear(self):
+        self.reset()
+        for eps in np.logspace(-4, 1, 400):
+            xfac = 1.0 + eps
+            yfac = 1.0 / xfac
+            self.box.pure_shear(eps, self.atoms)
+            self.assertClose(self.box.V(), self.L**self.d)
+            box_shape = self.box.box_shape()
+            Lx, Ly = box_shape[:2]
+            self.assertClose(Lx, self.L * xfac)
+            self.assertClose(Ly, self.L * yfac)
+            locs = np.asarray([a.x for a in self.atoms])
+            x, y = locs.T[:2, :]
+            x0, y0 = self.locs0.T[:2, :]
+            self.assertClose(x, x0*xfac)
+            self.assertClose(y, y0*yfac)
+
+
+class ShearTest3D(ShearTest2D):
+    d = 3
