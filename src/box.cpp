@@ -1,5 +1,74 @@
 #include "box.hpp"
 
+flt OriginBox::resize(flt factor){
+    boxsize *= factor;
+    return V();
+}
+
+flt OriginBox::resize(flt factor, AtomGroup &atoms){
+    boxsize *= factor;
+    for(uint i=0; i<atoms.size(); i++){
+        atoms[i].x *= factor;
+    }
+    return V();
+}
+
+flt OriginBox::resize_to(Vec newsize){
+    boxsize = newsize;
+    return V();
+}
+
+flt OriginBox::resize_to(Vec newsize, AtomGroup &atoms){
+    Vec oldsize = boxsize;
+    boxsize = newsize;
+    Vec factor = newsize.cwiseQuotient(oldsize);
+    
+    for(uint i=0; i<atoms.size(); i++){
+        atoms[i].x = atoms[i].x.cwiseProduct(factor);
+    }
+    return V();
+}
+
+flt OriginBox::resize_to_V(flt newV){
+    flt curV = V();
+    flt factor = pow(newV/curV, OVERNDIM);
+    return resize(factor);
+}
+
+flt OriginBox::resize_to_V(flt newV, AtomGroup &atoms){
+    flt curV = V();
+    flt factor = pow(newV/curV, OVERNDIM);
+    return resize(factor, atoms);
+}
+
+flt OriginBox::resize_to_L(flt newL){
+    flt curL = pow(V(), OVERNDIM);
+    flt factor = newL/curL;
+    return resize(factor);
+};
+
+flt OriginBox::resize_to_L(flt newL, AtomGroup &atoms){
+    flt curL = pow(V(), OVERNDIM);
+    flt factor = newL/curL;
+    return resize(factor, atoms);
+};
+
+void OriginBox::pure_shear(flt epsilon){
+    flt curL = pow(V(), OVERNDIM);
+    Vec new_size = boxsize;
+    new_size[0] = curL * (1.0 + epsilon);
+    new_size[1] = curL / (1.0 + epsilon);
+    resize_to(new_size);
+};
+
+void OriginBox::pure_shear(flt epsilon, AtomGroup &atoms){
+    flt curL = pow(V(), OVERNDIM);
+    Vec new_size = boxsize;
+    new_size[0] = curL * (1.0 + epsilon);
+    new_size[1] = curL / (1.0 + epsilon);
+    resize_to(new_size, atoms);
+};
+
 Vec LeesEdwardsBox::diff(Vec r1, Vec r2){
     flt Ly = boxsize[1];
     flt dy = r1[1]-r2[1];
@@ -19,9 +88,9 @@ Vec LeesEdwardsBox::diff(Vec r1, Vec r2){
     #endif
 };
 
-array<int,NDIM> LeesEdwardsBox::box_round(Vec r1, Vec r2){
+boost::array<int,NDIM> LeesEdwardsBox::box_round(Vec r1, Vec r2){
     Vec dr = r1 - r2;
-    array<int,NDIM> boxes;
+    boost::array<int,NDIM> boxes;
     boxes[1] = (int) round(dr[1] / boxsize[1]);
     boxes[0] = (int) round((dr[0]/boxsize[0])-boxes[1]*gamma);
     #ifdef VEC3D
@@ -30,7 +99,7 @@ array<int,NDIM> LeesEdwardsBox::box_round(Vec r1, Vec r2){
     return boxes;
 };
 
-Vec LeesEdwardsBox::diff(Vec r1, Vec r2, array<int,NDIM> boxes){
+Vec LeesEdwardsBox::diff(Vec r1, Vec r2, boost::array<int,NDIM> boxes){
     Vec dr = r1 - r2;
     dr[0] -= (boxes[0] + boxes[1]*gamma)*boxsize[0];
     dr[1] -= boxes[1]*boxsize[1];

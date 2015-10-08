@@ -669,7 +669,7 @@ void CollectionNLCG::timestep(){
     set_forces(false, true); // sets both Atom.f and fl, but not Atom.a or al
     update_constraint_forces();
     flt eta0 = -fdotv(); // slope at x0 - dt
-    flt eta = eta0;
+    flt eta;
     stepx(-dt);
     update_constraint_positions();
 
@@ -946,7 +946,7 @@ void CollectionNLCGV::timestep(){
     set_forces(false);
     update_constraint_forces();
     flt eta0 = -fdotv();
-    flt eta = eta0;
+    flt eta;
     //~ cout << "NLCGV::timestep 1:"
              //~ << " eta0 = " << eta0;
         //~ cout << " -- E = " << energy();

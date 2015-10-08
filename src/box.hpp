@@ -103,14 +103,14 @@ class OriginBox : public Box {
         Vec diff(Vec r1, Vec r2){
             return vec_mod((r1-r2), boxsize);
         };
-        virtual Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes){
+        virtual Vec diff(Vec r1, Vec r2, boost::array<int,NDIM> boxes){
             Vec dr = r1 - r2;
             for(uint i=0; i<NDIM; i++) dr[i] -= boxsize[i] * boxes[i];
             return dr;
         };
         //! The `div` function to go with `diff`.
-        virtual array<int,NDIM> box_round(Vec r1, Vec r2){
-            array<int,NDIM> boxes;
+        virtual boost::array<int,NDIM> box_round(Vec r1, Vec r2){
+            boost::array<int,NDIM> boxes;
             Vec dr = r1 - r2;
             for(uint i=0; i<NDIM; i++) boxes[i] = (int) round(dr[i] / boxsize[i]);
             return boxes;
@@ -126,21 +126,22 @@ class OriginBox : public Box {
         flt L(){return (boxsize[0] + boxsize[1])/2.0;};
         #endif
         //! Resize by a factor. Does not move atoms.
-        flt resize(flt factor){boxsize *= factor; return V();}
-        //! Resize to a specific shape.
-        flt resize(Vec newsize){boxsize = newsize; return V();}
-        //! Resize to a specific volume.
-        flt resize_to_V(flt newV){
-            flt curV = V();
-            boxsize *= pow(newV/curV, OVERNDIM);
-            return V();
-        }
-        //! Resize to a specific volume.
-        flt resize_to_L(flt newL){
-            flt curL = pow(V(), OVERNDIM);
-            boxsize *= newL/curL;
-            return V();
-        }
+        flt resize(flt factor);
+        //! Resize by a factor, and move atoms in the affine direction.
+        flt resize(flt factor, AtomGroup &atoms);
+        //! Resize to a specific shape. Does not move atoms.
+        flt resize_to(Vec newsize);
+        //! Resize to a specific shape, and move atoms in the affine direction.
+        flt resize_to(Vec newsize, AtomGroup &atoms);
+        //! Resize to a specific volume. Does not move atoms.
+        flt resize_to_V(flt newV);
+        //! Resize to a specific volume, and move atoms in the affine direction.
+        flt resize_to_V(flt newV, AtomGroup &atoms);
+        
+        //! Resize to a specific length. Does not move atoms.
+        flt resize_to_L(flt newL);
+        //! Resize to a specific length, and move atoms in the affine direction.
+        flt resize_to_L(flt newL, AtomGroup &atoms);
         //! Get a random point in the box.
         Vec rand_loc(){
             Vec v = rand_vec_boxed();
@@ -150,6 +151,11 @@ class OriginBox : public Box {
             return diff(v, Vec::Zero());
         };
         Vec box_shape(){return boxsize;};
+        
+        //! Apply a pure shear of epsilon to reshape box.
+        void pure_shear(flt epsilon);
+        //! Apply a pure shear of epsilon, moving atoms.
+        void pure_shear(flt epsilon, AtomGroup &atoms);
 };
 
 //! Lees-Edwards boundary conditions, with shear in the x-direction, relative to y.
@@ -161,9 +167,10 @@ class LeesEdwardsBox : public OriginBox {
         flt gamma;
     public:
         LeesEdwardsBox(Vec size, flt gamma=0.0) : OriginBox(size), gamma(gamma){};
+        LeesEdwardsBox(flt L, flt gamma=0.0) : OriginBox(L), gamma(gamma){};
         Vec diff(Vec r1, Vec r2);
-        virtual Vec diff(Vec r1, Vec r2, array<int,NDIM> boxes);
-        virtual array<int,NDIM> box_round(Vec r1, Vec r2);
+        virtual Vec diff(Vec r1, Vec r2, boost::array<int,NDIM> boxes);
+        virtual boost::array<int,NDIM> box_round(Vec r1, Vec r2);
 
         //! The current shear amount.
         flt get_gamma(){return gamma;};

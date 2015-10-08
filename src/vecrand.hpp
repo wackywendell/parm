@@ -51,7 +51,9 @@ typedef std::complex<flt> cmplx; // need the std:: for SWIG complex.i, not sure 
 typedef Eigen::Matrix<flt, NDIM, 1> Vec;
 typedef Eigen::Matrix<flt, 2, 1> Vec2;
 typedef Eigen::Matrix<flt, 3, 1> Vec3;
-typedef Eigen::Matrix<flt, 3, 3> Matrix;
+typedef Eigen::Matrix<flt, NDIM, NDIM> Matrix;
+typedef Eigen::Matrix<flt, 2, 2> Matrix2;
+typedef Eigen::Matrix<flt, 3, 3> Matrix3;
 typedef Eigen::Matrix<flt, NDIM, 2> VecPair;
 
 using namespace std;

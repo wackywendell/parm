@@ -98,25 +98,29 @@ void DistConstraint::apply_velocities(Box &box){
 }
 
 void DistConstraint::apply_forces(Box &box){
-    flt M = (a1->m + a2->m);
-    flt mratio1 = a1->m / M;
-    flt mratio2 = a2->m / M;
-    
     Vec dx = a2->x - a1->x;
     flt dxmag = dx.norm();
     Vec dxnorm = dx / dxmag;
     
-    a1->x += dx * ((1 - dist/dxmag)*mratio2);
-    a2->x -= dx * ((1 - dist/dxmag)*mratio1);
     
     // TODO: Fix mass ratio stuff
-    Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2);
+    #ifdef VEC2D
+    flt omega = (a1->v.dot(dxnorm) - a2->v.dot(dxnorm)) / (2*dxmag);
+    Vec omega_cross_omega_cross_r = -omega*omega*dx;
+    #else
+    // TODO: test this
+    Vec omega = (a1->v.cross(dx) + a2->v.cross(dx)) / (2*dxmag*dxmag);
+    Vec omega_cross_omega_cross_r = omega.cross(omega.cross(dx));
+    #endif
+    
+    Vec baddf = dxnorm * ((a2->f - a1->f).dot(dxnorm)/2) +
+                omega_cross_omega_cross_r;
     a1->f += baddf;
     a2->f -= baddf;
     // assert((a2->f - a1->f).dot(dxnorm) < 1e-8);
-    if((a2->f - a1->f).dot(dxnorm) > 1e-8){
-        throw std::overflow_error("Forces are not minimal.");
-    }
+    // if((a2->f - a1->f).dot(dxnorm) > 1e-8){
+    //     throw std::overflow_error("Forces are not minimal.");
+    // }
 }
 
 void LinearConstraint::set_lvec_com(){

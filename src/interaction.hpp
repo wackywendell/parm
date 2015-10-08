@@ -66,7 +66,11 @@ class Interaction {
         Set forces (`Atom.f`) and return \f$P = \sum_{\left<i,j \right>} \vec r_{ij} \cdot \vec F_{ij}\f$
         at the same time (see `pressure()`).
         */
-        virtual flt set_forces_get_pressure(Box &box){return NAN;};
+        virtual flt set_forces_get_pressure(Box &box){
+            std::string s = std::string("set_forces_get_pressure not defined for class ");
+            s.append(typeid(*this).name());
+            throw std::runtime_error(s);
+        };
         /**
         Partial pressure due to this Interaction.
 
@@ -75,6 +79,13 @@ class Interaction {
         Note that the full pressure involves *all* interactions and temperature
         */
         virtual flt pressure(Box &box)=0;
+#ifdef VEC2D
+        virtual Matrix2 stress(Box &box){
+            std::string s = std::string("stress not defined for class ");
+            s.append(typeid(*this).name());
+            throw std::runtime_error(s);
+        }
+#endif
         virtual ~Interaction(){};
 };
 
@@ -1586,6 +1597,10 @@ class NListed : public Interaction {
         inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
         void set_forces(Box &box);
         flt set_forces_get_pressure(Box &box);
+#ifdef VEC2D
+        Matrix2 stress(Box &box);
+        Matrix2 set_forces_get_stress(Box &box);
+#endif
         inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         inline sptr<NeighborList> neighbor_list(){return neighbors;};
@@ -1895,6 +1910,38 @@ flt NListed<A, P>::pressure(Box &box){
     }
     return p;
 };
+
+#ifdef VEC2D
+template <class A, class P>
+Matrix2 NListed<A, P>::set_forces_get_stress(Box &box){
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    Matrix2 stress = Matrix2::Zero();
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        Vec f = forces_pair(*it, box);
+        it->atom1->f += f;
+        it->atom2->f -= f;
+        Vec r = box.diff(it->atom1->x, it->atom2->x);
+        stress += r * f.transpose();
+    }
+    //~ cout << "Set forces, got pressure" << p << '\n';
+    return stress;
+};
+
+template <class A, class P>
+Matrix2 NListed<A, P>::stress(Box &box){
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    Matrix2 stress = Matrix2::Zero();
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        Vec f = forces_pair(*it, box);
+        Vec r = box.diff(it->atom1->x, it->atom2->x);
+        stress += r * f.transpose();
+    }
+    //~ cout << "Set forces, got pressure" << p << '\n';
+    return stress;
+};
+#endif
 
 class Charges : public Interaction {
     protected:
