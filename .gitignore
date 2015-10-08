@@ -19,6 +19,7 @@ pyparm/d2.py*
 pyparm/d3.py*
 pyparm/d2long.py*
 pyparm/d3long.py*
+pyparm.egg-info
 *.sublime*
 *.tsv
 *.png
