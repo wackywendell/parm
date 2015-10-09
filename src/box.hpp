@@ -153,9 +153,9 @@ class OriginBox : public Box {
         Vec box_shape(){return boxsize;};
         
         //! Apply a pure shear of epsilon to reshape box.
-        void pure_shear(flt epsilon);
+        void pure_shear_to(flt epsilon);
         //! Apply a pure shear of epsilon, moving atoms.
-        void pure_shear(flt epsilon, AtomGroup &atoms);
+        void pure_shear_to(flt epsilon, AtomGroup &atoms);
 };
 
 //! Lees-Edwards boundary conditions, with shear in the x-direction, relative to y.
@@ -175,8 +175,14 @@ class LeesEdwardsBox : public OriginBox {
         //! The current shear amount.
         flt get_gamma(){return gamma;};
 
+        //! Change the shear by dgamma.
+        void shear(flt dgamma);
         //! Change the shear by dgamma, and move the atoms as necessary.
         void shear(flt dgamma, AtomGroup &atoms);
+        //! Change the shear to gamma.
+        void shear_to(flt gamma);
+        //! Change the shear to gamma, and move the atoms as necessary.
+        void shear_to(flt gamma, AtomGroup &atoms);
         Vec non_affine(Vec v){
             v[0] -= gamma * v[1];
             return v;

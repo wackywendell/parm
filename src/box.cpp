@@ -53,7 +53,7 @@ flt OriginBox::resize_to_L(flt newL, AtomGroup &atoms){
     return resize(factor, atoms);
 };
 
-void OriginBox::pure_shear(flt epsilon){
+void OriginBox::pure_shear_to(flt epsilon){
     flt curL = pow(V(), OVERNDIM);
     Vec new_size = boxsize;
     new_size[0] = curL * (1.0 + epsilon);
@@ -61,7 +61,7 @@ void OriginBox::pure_shear(flt epsilon){
     resize_to(new_size);
 };
 
-void OriginBox::pure_shear(flt epsilon, AtomGroup &atoms){
+void OriginBox::pure_shear_to(flt epsilon, AtomGroup &atoms){
     flt curL = pow(V(), OVERNDIM);
     Vec new_size = boxsize;
     new_size[0] = curL * (1.0 + epsilon);
@@ -108,6 +108,41 @@ Vec LeesEdwardsBox::diff(Vec r1, Vec r2, boost::array<int,NDIM> boxes){
     #endif
     return dr;
 }
+
+void LeesEdwardsBox::shear(flt dgamma, AtomGroup &atoms){
+    // TODO: is this right for non-square boxes?
+    // Is gamma Δx / Lx or Δx / Ly?
+    for(uint i=0; i<atoms.size(); i++){
+        //flt dy = remainder(atoms[i].x[1], boxsize[1]);
+        flt dy = atoms[i].x[1];
+        atoms[i].x[0] += dy * dgamma;
+    }
+
+    gamma += dgamma;
+};
+
+void LeesEdwardsBox::shear(flt dgamma){
+    // TODO: is this right for non-square boxes?
+    // Is gamma Δx / Lx or Δx / Ly?
+    gamma += dgamma;
+};
+
+void LeesEdwardsBox::shear_to(flt new_gamma, AtomGroup &atoms){
+    // TODO: is this right for non-square boxes?
+    // Is gamma Δx / Lx or Δx / Ly?
+    for(uint i=0; i<atoms.size(); i++){
+        //flt dy = remainder(atoms[i].x[1], boxsize[1]);
+        flt dy = atoms[i].x[1];
+        atoms[i].x[0] += dy * (new_gamma - gamma);
+    }
+    
+    gamma = new_gamma;
+};
+
+void LeesEdwardsBox::shear_to(flt new_gamma){
+    gamma = new_gamma;
+};
+
 
 SCBox::SCBox(flt L, flt R) : L(L), R(R){};
 
@@ -403,15 +438,3 @@ void AtomGroup::reset_forces(){
         //~ (*this)[i].v += (*this)[i].a * (dt/2);
     //~ }
 //~ };
-
-void LeesEdwardsBox::shear(flt dgamma, AtomGroup &atoms){
-    // TODO: is this right for non-square boxes?
-    // Is gamma Δx / Lx or Δx / Ly?
-    for(uint i=0; i<atoms.size(); i++){
-        //flt dy = remainder(atoms[i].x[1], boxsize[1]);
-        flt dy = atoms[i].x[1];
-        atoms[i].x[0] += dy * dgamma;
-    }
-
-    gamma += dgamma;
-};
