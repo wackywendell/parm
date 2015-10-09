@@ -20,6 +20,16 @@ class NPTestCase(TestCase):
             '%s\n') % (rtol, atol, self._indent('A:  ', repr(x)), self._indent('B:  ', repr(y)))
         msg = self._formatMessage(msg, standardMsg)
         raise self.failureException(msg)
+    
+    def assertNotClose(self, x, y, rtol=1e-05, atol=1e-08, msg=None):
+        if not np.allclose(x, y, rtol=rtol, atol=atol):
+            return
+        
+        standardMsg = ('The following were within %s rtol and %s atol:\n'
+            '%s\n'
+            '%s\n') % (rtol, atol, self._indent('A:  ', repr(x)), self._indent('B:  ', repr(y)))
+        msg = self._formatMessage(msg, standardMsg)
+        raise self.failureException(msg)
         
     def _indent(self, prefix, msg):
         lines = str(msg).splitlines()
@@ -600,7 +610,7 @@ class ShearTest2D(NPTestCase):
         for eps in np.logspace(-4, 1, 400):
             xfac = 1.0 + eps
             yfac = 1.0 / xfac
-            self.box.pure_shear(eps, self.atoms)
+            self.box.pure_shear_to(eps, self.atoms)
             self.assertClose(self.box.V(), self.L**self.d)
             box_shape = self.box.box_shape()
             Lx, Ly = box_shape[:2]
@@ -611,6 +621,17 @@ class ShearTest2D(NPTestCase):
             x0, y0 = self.locs0.T[:2, :]
             self.assertClose(x, x0*xfac)
             self.assertClose(y, y0*yfac)
+            
+    def test_simple_shear(self):
+        self.reset()
+        for g in np.linspace(0, 2, 400):
+            self.le_box.shear_to(g, self.atoms)
+            self.assertClose(self.box.V(), self.L**self.d)
+            locs = np.asarray([a.x for a in self.atoms])
+            for r, r0 in zip(locs, self.locs0):
+                self.assertClose(r0, self.le_box.non_affine(r))
+                if r0[1] > self.L / 10 and g > 0.1:
+                    self.assertNotClose(r0, r)
 
 
 class ShearTest3D(ShearTest2D):
