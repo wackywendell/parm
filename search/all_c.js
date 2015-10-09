@@ -12,7 +12,7 @@ var searchData=
   ['lastv',['lastV',['../class_collection_verlet_n_p_t.html#a43cddd74654fb476a17a0fc68a62d269',1,'CollectionVerletNPT']]],
   ['lastxidot',['lastxidot',['../class_collection_verlet_n_p_t.html#a7e805b7882102b996620469b9462462f',1,'CollectionVerletNPT']]],
   ['ldvector',['LDVector',['../vecrand_8cpp.html#ab75b19a15b2f1bc00c5005a33f6b8409',1,'LDVector(vector&lt; double &gt; dists):&#160;vecrand.cpp'],['../vecrand_8hpp.html#ab75b19a15b2f1bc00c5005a33f6b8409',1,'LDVector(vector&lt; double &gt; dists):&#160;vecrand.cpp']]],
-  ['leesedwardsbox',['LeesEdwardsBox',['../class_lees_edwards_box.html',1,'LeesEdwardsBox'],['../class_lees_edwards_box.html#a77b41932a8f4ccdc01d0222469f00499',1,'LeesEdwardsBox::LeesEdwardsBox()']]],
+  ['leesedwardsbox',['LeesEdwardsBox',['../class_lees_edwards_box.html',1,'LeesEdwardsBox'],['../class_lees_edwards_box.html#a77b41932a8f4ccdc01d0222469f00499',1,'LeesEdwardsBox::LeesEdwardsBox(Vec size, flt gamma=0.0)'],['../class_lees_edwards_box.html#a19a7d708f44f9fbbefdb8a1f92ee4de6',1,'LeesEdwardsBox::LeesEdwardsBox(flt L, flt gamma=0.0)']]],
   ['len',['len',['../class_array.html#a9c9c0a8151b2e1903af3c828ee73e91e',1,'Array::len()'],['../class_n_vector.html#abd4e12cb9a4aba58844ceb24d93cb6a0',1,'NVector::len()']]],
   ['length',['length',['../class_s_c_box.html#af8f5d2b8b91f417e10f6f19854d086e8',1,'SCBox']]],
   ['lennardjonescut',['LennardJonesCut',['../class_lennard_jones_cut.html',1,'LennardJonesCut'],['../class_lennard_jones_cut.html#a7d22d55312c5d2cf123ad45cb66bb696',1,'LennardJonesCut::LennardJonesCut()']]],

@@ -302,7 +302,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>itersteps</em> = <code>1000</code>&#160;</td>
+          <td class="paramname"><em>itersteps</em> = <code>1000</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>use_lees_edwards</em> = <code>False</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -451,7 +457,11 @@ masses : mass of the particles; if None, will be diameters**3
         </tr>
       </table>
 </div><div class="memdoc">
+<pre class="fragment">Returns (delta_pressure, max_force), where delta_pressure = (P / P0) - 1 and max_force is the maximum of all total forces on each atom.
 
+When abs(delta_pressure) &lt; self.Pfrac and max_force &lt; self.CGerr, the
+simulation is done (unless need_contacts is also enabled).
+</pre> 
 </div>
 </div>
 <a class="anchor" id="a8aec45c7206f0c4670161577046999cd"></a>
@@ -717,7 +727,19 @@ masses : mass of the particles; if None, will be diameters**3
         </tr>
       </table>
 </div><div class="memdoc">
+<pre class="fragment">Minimizer to find a packing.
 
+Params
+------
+N : Number of particles
+sizes : Diameters of particles
+ratios : Number ratio of particles. Defaults to [1.0, 1.0, ...]
+ndim : Number of dimensions (2 or 3)
+phi0 : Initial packing fraction
+mass_func : a function that takes (diameters, ndim) and returns a list
+    of masses. Defaults to Minimizer.proportionate_mass
+kw : Extra keyword arguments for Minimizer __init__
+</pre> 
 </div>
 </div>
 <a class="anchor" id="ae25d4052312edcbb2b2d3c2d665ab084"></a>
@@ -951,7 +973,7 @@ masses : mass of the particles; if None, will be diameters**3
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 17 2015 11:55:45 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Oct 9 2015 15:55:28 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

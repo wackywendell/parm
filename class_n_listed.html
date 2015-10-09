@@ -153,6 +153,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a995276ccb7b825ebc8c7bd31b4dac325"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#a995276ccb7b825ebc8c7bd31b4dac325">set_forces_get_pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:a995276ccb7b825ebc8c7bd31b4dac325"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_n_listed.html#ad84c04869edada2261f6ef9ad7166b8e" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#a995276ccb7b825ebc8c7bd31b4dac325">More...</a><br /></td></tr>
 <tr class="separator:a995276ccb7b825ebc8c7bd31b4dac325"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ab5b8e29827e6b51a7c726e45d69165"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#a2ab5b8e29827e6b51a7c726e45d69165">stress</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a2ab5b8e29827e6b51a7c726e45d69165"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4511cff5cc812b28f5cb7d7eb349b0af"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#a4511cff5cc812b28f5cb7d7eb349b0af">set_forces_get_stress</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="separator:a4511cff5cc812b28f5cb7d7eb349b0af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc3aefd5596b6984828010fe1f806de3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#abc3aefd5596b6984828010fe1f806de3">forces_pair</a> (P pair, <a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="separator:abc3aefd5596b6984828010fe1f806de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac47dbdcf078356bbf29810e75acf37e0"><td class="memItemLeft" align="right" valign="top">vector&lt; A &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_listed.html#ac47dbdcf078356bbf29810e75acf37e0">atom_list</a> ()</td></tr>
@@ -698,6 +702,24 @@ template&lt;class A , class P &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a4511cff5cc812b28f5cb7d7eb349b0af"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class A , class P &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a> <a class="el" href="class_n_listed.html">NListed</a>&lt; A, P &gt;::set_forces_get_stress </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a7fc1e776796286dbf53a44fd71ba9e9b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -720,6 +742,34 @@ template&lt;class A, class P&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2ab5b8e29827e6b51a7c726e45d69165"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class A , class P &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a> <a class="el" href="class_n_listed.html">NListed</a>&lt; A, P &gt;::stress </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
+          <td class="paramname"><em>box</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="class_interaction.html#acf418cb3cfe03497d63d311369282433">Interaction</a>.</p>
 
 </div>
 </div>
@@ -835,7 +885,7 @@ template&lt;class A, class P&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 17 2015 11:55:45 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Oct 9 2015 15:55:28 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

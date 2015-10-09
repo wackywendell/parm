@@ -3,7 +3,7 @@ var searchData=
   ['l',['L',['../class_origin_box.html#ab5bea4538104e31ca940d90b8ffa4c49',1,'OriginBox::L()'],['../class_origin_box.html#ab5bea4538104e31ca940d90b8ffa4c49',1,'OriginBox::L()'],['../class_walled_box2_d.html#ac2c00f93f7b72737b7c6ea7781a6a891',1,'WalledBox2D::L()'],['../classpyparm_1_1packmin_1_1_minimizer.html#a0bdb902398f059f2eba4e4f5ac7a9d54',1,'pyparm.packmin.Minimizer.L(self)'],['../classpyparm_1_1packmin_1_1_minimizer.html#a0ca138e3df621c1880334db1d6232317',1,'pyparm.packmin.Minimizer.L(self, newL)']]],
   ['last',['last',['../class_i_d_pair.html#a3f04548b91cf8b881749f90538ee61da',1,'IDPair']]],
   ['ldvector',['LDVector',['../vecrand_8cpp.html#ab75b19a15b2f1bc00c5005a33f6b8409',1,'LDVector(vector&lt; double &gt; dists):&#160;vecrand.cpp'],['../vecrand_8hpp.html#ab75b19a15b2f1bc00c5005a33f6b8409',1,'LDVector(vector&lt; double &gt; dists):&#160;vecrand.cpp']]],
-  ['leesedwardsbox',['LeesEdwardsBox',['../class_lees_edwards_box.html#a77b41932a8f4ccdc01d0222469f00499',1,'LeesEdwardsBox']]],
+  ['leesedwardsbox',['LeesEdwardsBox',['../class_lees_edwards_box.html#a77b41932a8f4ccdc01d0222469f00499',1,'LeesEdwardsBox::LeesEdwardsBox(Vec size, flt gamma=0.0)'],['../class_lees_edwards_box.html#a19a7d708f44f9fbbefdb8a1f92ee4de6',1,'LeesEdwardsBox::LeesEdwardsBox(flt L, flt gamma=0.0)']]],
   ['len',['len',['../class_array.html#a9c9c0a8151b2e1903af3c828ee73e91e',1,'Array::len()'],['../class_n_vector.html#abd4e12cb9a4aba58844ceb24d93cb6a0',1,'NVector::len()']]],
   ['length',['length',['../class_s_c_box.html#af8f5d2b8b91f417e10f6f19854d086e8',1,'SCBox']]],
   ['lennardjonescut',['LennardJonesCut',['../class_lennard_jones_cut.html#a7d22d55312c5d2cf123ad45cb66bb696',1,'LennardJonesCut']]],
