@@ -72,14 +72,18 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 # The python modules
 py$(SFX): pyparm/_sim$(SFX).so
 
+# We use -DSWIG_TYPE_TABLE=sim$(SFX) so that types from sim2d and sim3d with the
+# same names do not end up treated as the same types. This can cause issues with
+# e.g. AtomVec, if both sim2d and sim3d are imported at the same time.
+# There isn't any need for the two to interoperate, so we keep them separate.
 wrap$(SFX):
-	cd src ; $(SWIG) $(OPTSET) sim.i
+	cd src ; $(SWIG) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) sim.i
 	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
 	rm src/sim_wrap.cxx
 	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
 pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
-	$(CXX) $(CCOPTS) $(OPTSET) -I src/ -c pyparm/sim_wrap$(SFX).cxx -o pyparm/sim_wrap$(SFX).o $(INC)
+	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) -I src/ -c pyparm/sim_wrap$(SFX).cxx -o pyparm/sim_wrap$(SFX).o $(INC)
 
 pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
 	$(CXX) $(CCOPTS) $(OPTSET) -shared pyparm/sim_wrap$(SFX).o -o pyparm/_sim$(SFX).so $(LIB)

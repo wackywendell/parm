@@ -66,7 +66,11 @@ class Interaction {
         Set forces (`Atom.f`) and return \f$P = \sum_{\left<i,j \right>} \vec r_{ij} \cdot \vec F_{ij}\f$
         at the same time (see `pressure()`).
         */
-        virtual flt set_forces_get_pressure(Box &box){return NAN;};
+        virtual flt set_forces_get_pressure(Box &box){
+            std::string s = std::string("set_forces_get_pressure not defined for class ");
+            s.append(typeid(*this).name());
+            throw std::runtime_error(s);
+        };
         /**
         Partial pressure due to this Interaction.
 
@@ -75,6 +79,13 @@ class Interaction {
         Note that the full pressure involves *all* interactions and temperature
         */
         virtual flt pressure(Box &box)=0;
+#ifdef VEC2D
+        virtual Matrix2 stress(Box &box){
+            std::string s = std::string("stress not defined for class ");
+            s.append(typeid(*this).name());
+            throw std::runtime_error(s);
+        }
+#endif
         virtual ~Interaction(){};
 };
 
@@ -743,10 +754,6 @@ struct ChargePair {
     ChargePair(Charged a1, Charged a2) : q1q2(a1.q*a2.q){};
 };
 
-////////////////////////////////////////////////////////////////////////
-// Repulsive LJ, with ε = √(ε₁ ε₂) and σ = (σ₁+σ₂)/2
-// Potential is V(r) = ε (σ⁶/r⁶ - 1)²
-// cutoff at sigma
 struct EpsSigAtom : public AtomID {
     flt epsilon, sigma;
     EpsSigAtom(){};
@@ -757,6 +764,13 @@ struct EpsSigAtom : public AtomID {
     flt max_size(){return sigma;};
 };
 
+//! Repulsive LJ: \f$V(r) = \epsilon \left(\frac{\sigma^6}{r^6} - 1\right)^2\f$
+//!
+//! Epsilons and sigmas are resolved with
+//! \f$\epsilon_{ij} = \sqrt{\epsilon_i  \epsilon_j}\f$ and \f$\sigma_{ij} = \frac{\sigma_i + \sigma_2}{2}\f$.
+//! 
+//! cutoff is at sigma, where the potential minimum is.
+//!
 struct LJRepulsePair {
     flt epsilon, sigma;
     AtomID atom1, atom2;
@@ -828,6 +842,13 @@ struct IEpsISigCutAtom : public AtomID {
     };
 };
 
+//! Truncated and shifted Lennard-Jones, in the form \f$V(r) = \epsilon \left(\frac{\sigma^6}{r^6} - 1\right)^2\f$.
+//!
+//! Epsilons and sigmas are resolved with 
+//! \f$\epsilon_{ij} = \sqrt{\epsilon_i \epsilon_j}\f$ and \f$\sigma_{ij} = \frac{\sigma_i + \sigma_2}{2}\f$.
+//! 
+//! A cut of 1.0 is a cut at the minimum; a cut at 2.5 is typical.
+//!
 struct LennardJonesCutPair {
     LennardJonesCut inter;
     AtomID atom1, atom2;
@@ -1576,6 +1597,10 @@ class NListed : public Interaction {
         inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
         void set_forces(Box &box);
         flt set_forces_get_pressure(Box &box);
+#ifdef VEC2D
+        Matrix2 stress(Box &box);
+        Matrix2 set_forces_get_stress(Box &box);
+#endif
         inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         inline sptr<NeighborList> neighbor_list(){return neighbors;};
@@ -1885,6 +1910,38 @@ flt NListed<A, P>::pressure(Box &box){
     }
     return p;
 };
+
+#ifdef VEC2D
+template <class A, class P>
+Matrix2 NListed<A, P>::set_forces_get_stress(Box &box){
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    Matrix2 stress = Matrix2::Zero();
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        Vec f = forces_pair(*it, box);
+        it->atom1->f += f;
+        it->atom2->f -= f;
+        Vec r = box.diff(it->atom1->x, it->atom2->x);
+        stress += r * f.transpose();
+    }
+    //~ cout << "Set forces, got pressure" << p << '\n';
+    return stress;
+};
+
+template <class A, class P>
+Matrix2 NListed<A, P>::stress(Box &box){
+    update_pairs(); // make sure the LJpairs match the neighbor list ones
+    Matrix2 stress = Matrix2::Zero();
+    typename vector<P>::iterator it;
+    for(it = pairs.begin(); it != pairs.end(); ++it){
+        Vec f = forces_pair(*it, box);
+        Vec r = box.diff(it->atom1->x, it->atom2->x);
+        stress += r * f.transpose();
+    }
+    //~ cout << "Set forces, got pressure" << p << '\n';
+    return stress;
+};
+#endif
 
 class Charges : public Interaction {
     protected:

@@ -3,6 +3,8 @@ ParM
 
 #### The PARticle Molecular dynamics library
 
+[![Build Status](https://travis-ci.org/wackywendell/parm.svg?branch=master)](https://travis-ci.org/wackywendell/parm)
+
 Purpose
 ----
 

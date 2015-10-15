@@ -169,13 +169,25 @@ static int myErr = 0;
     $result = array; 
 };
 
-%typemap(out) Matrix { 
-    npy_intp dims[2] = {NDIM,NDIM}; 
+%typemap(out) Matrix2 { 
+    npy_intp dims[2] = {2,2}; 
     PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
     double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
-    for(uint i=0; i<NDIM; i++){
-        for(uint j=0; j<NDIM; j++){
-            data[i*NDIM+j] = (double) $1(i, j);
+    for(uint i=0; i<2; i++){
+        for(uint j=0; j<2; j++){
+            data[i*2+j] = (double) $1(i, j);
+        }
+    }
+    $result = array; 
+};
+
+%typemap(out) Matrix3 { 
+    npy_intp dims[2] = {3,3}; 
+    PyObject* array = PyArray_SimpleNew(2, dims, NPY_DOUBLE);
+    double* data = ((double *)PyArray_DATA((PyArrayObject *) array));
+    for(uint i=0; i<3; i++){
+        for(uint j=0; j<3; j++){
+            data[i*3+j] = (double) $1(i, j);
         }
     }
     $result = array; 
@@ -332,12 +344,14 @@ static int myErr = 0;
 %typemap(typecheck) Vec = Vec2;
 %typemap(in) Vec& = Vec2&;
 %typemap(typecheck) Vec& = Vec2&;
+%typemap(out) Matrix = Matrix2;
 #else 
 %typemap(in) Vec = Vec3;
 %typemap(out) Vec = Vec3;
 %typemap(typecheck) Vec = Vec3;
 %typemap(in) Vec& = Vec3&;
 %typemap(typecheck) Vec& = Vec3&;
+%typemap(out) Matrix = Matrix3;
 #endif 
 
 #ifdef VEC2D

@@ -64,8 +64,6 @@ int main(){
     // Harmonic Interaction
     // Its called "Repulsion" for historical reasons
     // It takes a pointer to the box, a pointer to the atoms, and a "skin depth" for the NeighborList
-    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> > 
-    boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> >
     boost::shared_ptr<NListed<EpsSigExpAtom, RepulsionPair> >
         hertzian(new NListed<EpsSigExpAtom, RepulsionPair>(obox, atomptr, 0.1*sigma));
     boost::shared_ptr<NeighborList> nl = hertzian->neighbor_list();
@@ -131,7 +129,7 @@ int main(){
             flt force_err = 0;
 
             for(uint k=0; k<atoms.size(); k++){
-                flt fmag = atoms[k].f.mag();
+                flt fmag = atoms[k].f.norm();
                 if(fmag > force_err) force_err = fmag;
             }
 

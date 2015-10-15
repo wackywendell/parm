@@ -370,7 +370,7 @@ class CollectionNLCG : public Collection {
         flt alpha, beta, betaused, dxsum, alphavmax, maxdV;
         uint sec;
 
-        void stepx(flt dx);
+        virtual void stepx(flt dx);
         flt get_length_squared();
         flt fdota();
         flt fdotf();
@@ -396,7 +396,6 @@ class CollectionNLCG : public Collection {
         void timestep();
         void descend(); // use steepest descent
         void reset();
-        void resize(flt V);
 
         void set_dt(flt newdt){dt=newdt; reset();};
         void set_pressure(flt P){P0 = P; reset();};
@@ -408,7 +407,19 @@ class CollectionNLCG : public Collection {
 
 };
 
-
+class CollectionNLCGFixedL : public CollectionNLCG {
+    public:
+        CollectionNLCGFixedL(sptr<OriginBox> box, sptr<AtomGroup> atoms,
+                const flt dt, const flt P0,
+                vector<sptr<Interaction> > interactions=vector<sptr<Interaction> >(),
+                vector<sptr<StateTracker> > trackers=vector<sptr<StateTracker> >(),
+                vector<sptr<Constraint> > constraints=vector<sptr<Constraint> >(),
+                const flt kappa=10.0, const flt kmax=1000,
+                const uint secmax=40, const flt seceps = 1e-20) : 
+            CollectionNLCG(box, atoms, dt, P0, interactions, trackers, 
+                    constraints, kappa, kmax, secmax, seceps){};
+        void stepx(flt dx);
+};
 
 class CollectionNLCGV : public Collection {
     // Conjugate-Gradient energy minimization, with
