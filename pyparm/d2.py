@@ -7033,19 +7033,33 @@ class OriginBox(Box):
     def resize(self, *args) -> "flt":
         """
         resize(OriginBox self, flt factor) -> flt
-        resize(OriginBox self, Vec newsize) -> flt
+        resize(OriginBox self, flt factor, AtomGroup atoms) -> flt
         """
         return _sim2d.OriginBox_resize(self, *args)
 
 
-    def resize_to_V(self, newV: 'flt') -> "flt":
-        """resize_to_V(OriginBox self, flt newV) -> flt"""
-        return _sim2d.OriginBox_resize_to_V(self, newV)
+    def resize_to(self, *args) -> "flt":
+        """
+        resize_to(OriginBox self, Vec newsize) -> flt
+        resize_to(OriginBox self, Vec newsize, AtomGroup atoms) -> flt
+        """
+        return _sim2d.OriginBox_resize_to(self, *args)
 
 
-    def resize_to_L(self, newL: 'flt') -> "flt":
-        """resize_to_L(OriginBox self, flt newL) -> flt"""
-        return _sim2d.OriginBox_resize_to_L(self, newL)
+    def resize_to_V(self, *args) -> "flt":
+        """
+        resize_to_V(OriginBox self, flt newV) -> flt
+        resize_to_V(OriginBox self, flt newV, AtomGroup atoms) -> flt
+        """
+        return _sim2d.OriginBox_resize_to_V(self, *args)
+
+
+    def resize_to_L(self, *args) -> "flt":
+        """
+        resize_to_L(OriginBox self, flt newL) -> flt
+        resize_to_L(OriginBox self, flt newL, AtomGroup atoms) -> flt
+        """
+        return _sim2d.OriginBox_resize_to_L(self, *args)
 
 
     def rand_loc(self) -> "Vec":
@@ -7056,6 +7070,14 @@ class OriginBox(Box):
     def box_shape(self) -> "Vec":
         """box_shape(OriginBox self) -> Vec"""
         return _sim2d.OriginBox_box_shape(self)
+
+
+    def pure_shear_to(self, *args) -> "void":
+        """
+        pure_shear_to(OriginBox self, flt epsilon)
+        pure_shear_to(OriginBox self, flt epsilon, AtomGroup atoms)
+        """
+        return _sim2d.OriginBox_pure_shear_to(self, *args)
 
     __swig_destroy__ = _sim2d.delete_OriginBox
     __del__ = lambda self: None
@@ -7074,12 +7096,14 @@ class LeesEdwardsBox(OriginBox):
     __getattr__ = lambda self, name: _swig_getattr(self, LeesEdwardsBox, name)
     __repr__ = _swig_repr
 
-    def __init__(self, size: 'Vec', gamma: 'flt'=0.0):
+    def __init__(self, *args):
         """
         __init__(LeesEdwardsBox self, Vec size, flt gamma=0.0) -> LeesEdwardsBox
         __init__(LeesEdwardsBox self, Vec size) -> LeesEdwardsBox
+        __init__(LeesEdwardsBox self, flt L, flt gamma=0.0) -> LeesEdwardsBox
+        __init__(LeesEdwardsBox self, flt L) -> LeesEdwardsBox
         """
-        this = _sim2d.new_LeesEdwardsBox(size, gamma)
+        this = _sim2d.new_LeesEdwardsBox(*args)
         try:
             self.this.append(this)
         except:
@@ -7103,9 +7127,20 @@ class LeesEdwardsBox(OriginBox):
         return _sim2d.LeesEdwardsBox_get_gamma(self)
 
 
-    def shear(self, dgamma: 'flt', atoms: 'AtomGroup') -> "void":
-        """shear(LeesEdwardsBox self, flt dgamma, AtomGroup atoms)"""
-        return _sim2d.LeesEdwardsBox_shear(self, dgamma, atoms)
+    def shear(self, *args) -> "void":
+        """
+        shear(LeesEdwardsBox self, flt dgamma)
+        shear(LeesEdwardsBox self, flt dgamma, AtomGroup atoms)
+        """
+        return _sim2d.LeesEdwardsBox_shear(self, *args)
+
+
+    def shear_to(self, *args) -> "void":
+        """
+        shear_to(LeesEdwardsBox self, flt gamma)
+        shear_to(LeesEdwardsBox self, flt gamma, AtomGroup atoms)
+        """
+        return _sim2d.LeesEdwardsBox_shear_to(self, *args)
 
 
     def non_affine(self, v: 'Vec') -> "Vec":
@@ -8107,6 +8142,11 @@ class Interaction(_object):
     def pressure(self, box: 'Box') -> "flt":
         """pressure(Interaction self, Box box) -> flt"""
         return _sim2d.Interaction_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(Interaction self, Box box) -> Matrix2"""
+        return _sim2d.Interaction_stress(self, box)
 
     __swig_destroy__ = _sim2d.delete_Interaction
     __del__ = lambda self: None
@@ -12623,6 +12663,16 @@ class LJRepulse(Interaction):
         return _sim2d.LJRepulse_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJRepulse self, Box box) -> Matrix2"""
+        return _sim2d.LJRepulse_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJRepulse self, Box box) -> Matrix2"""
+        return _sim2d.LJRepulse_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LJRepulsePair', box: 'Box') -> "Vec":
         """forces_pair(LJRepulse self, LJRepulsePair pair, Box box) -> Vec"""
         return _sim2d.LJRepulse_forces_pair(self, pair, box)
@@ -12731,6 +12781,16 @@ class LJAttractICut(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJAttractICut self, Box box) -> flt"""
         return _sim2d.LJAttractICut_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJAttractICut self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractICut_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJAttractICut self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractICut_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "Vec":
@@ -12843,6 +12903,16 @@ class LJAttractIICut(Interaction):
         return _sim2d.LJAttractIICut_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJAttractIICut self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractIICut_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJAttractIICut self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractIICut_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "Vec":
         """forces_pair(LJAttractIICut self, LJAttractCutPair pair, Box box) -> Vec"""
         return _sim2d.LJAttractIICut_forces_pair(self, pair, box)
@@ -12951,6 +13021,16 @@ class LJIICut(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJIICut self, Box box) -> flt"""
         return _sim2d.LJIICut_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJIICut self, Box box) -> Matrix2"""
+        return _sim2d.LJIICut_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJIICut self, Box box) -> Matrix2"""
+        return _sim2d.LJIICut_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LennardJonesCutPair', box: 'Box') -> "Vec":
@@ -13063,6 +13143,16 @@ class LJAttractRepulse(Interaction):
         return _sim2d.LJAttractRepulse_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJAttractRepulse self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractRepulse_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJAttractRepulse self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractRepulse_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LJAttractRepulsePair', box: 'Box') -> "Vec":
         """forces_pair(LJAttractRepulse self, LJAttractRepulsePair pair, Box box) -> Vec"""
         return _sim2d.LJAttractRepulse_forces_pair(self, pair, box)
@@ -13171,6 +13261,16 @@ class LJAttractFixedRepulse(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJAttractFixedRepulse self, Box box) -> flt"""
         return _sim2d.LJAttractFixedRepulse_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJAttractFixedRepulse self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractFixedRepulse_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJAttractFixedRepulse self, Box box) -> Matrix2"""
+        return _sim2d.LJAttractFixedRepulse_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LJAttractFixedRepulsePair', box: 'Box') -> "Vec":
@@ -13283,6 +13383,16 @@ class EisMclachlan(Interaction):
         return _sim2d.EisMclachlan_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(EisMclachlan self, Box box) -> Matrix2"""
+        return _sim2d.EisMclachlan_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(EisMclachlan self, Box box) -> Matrix2"""
+        return _sim2d.EisMclachlan_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'EisMclachlanPair', box: 'Box') -> "Vec":
         """forces_pair(EisMclachlan self, EisMclachlanPair pair, Box box) -> Vec"""
         return _sim2d.EisMclachlan_forces_pair(self, pair, box)
@@ -13391,6 +13501,16 @@ class LJish(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJish self, Box box) -> flt"""
         return _sim2d.LJish_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LJish self, Box box) -> Matrix2"""
+        return _sim2d.LJish_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LJish self, Box box) -> Matrix2"""
+        return _sim2d.LJish_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LJishPair', box: 'Box') -> "Vec":
@@ -13562,6 +13682,16 @@ class Repulsion(Interaction):
         return _sim2d.Repulsion_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(Repulsion self, Box box) -> Matrix2"""
+        return _sim2d.Repulsion_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(Repulsion self, Box box) -> Matrix2"""
+        return _sim2d.Repulsion_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'RepulsionPair', box: 'Box') -> "Vec":
         """forces_pair(Repulsion self, RepulsionPair pair, Box box) -> Vec"""
         return _sim2d.Repulsion_forces_pair(self, pair, box)
@@ -13672,6 +13802,16 @@ class RepulsionII(Interaction):
         return _sim2d.RepulsionII_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(RepulsionII self, Box box) -> Matrix2"""
+        return _sim2d.RepulsionII_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(RepulsionII self, Box box) -> Matrix2"""
+        return _sim2d.RepulsionII_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'RepulsionPair', box: 'Box') -> "Vec":
         """forces_pair(RepulsionII self, RepulsionPair pair, Box box) -> Vec"""
         return _sim2d.RepulsionII_forces_pair(self, pair, box)
@@ -13780,6 +13920,16 @@ class HertzianDrag(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(HertzianDrag self, Box box) -> flt"""
         return _sim2d.HertzianDrag_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(HertzianDrag self, Box box) -> Matrix2"""
+        return _sim2d.HertzianDrag_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(HertzianDrag self, Box box) -> Matrix2"""
+        return _sim2d.HertzianDrag_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'RepulsionDragPair', box: 'Box') -> "Vec":
@@ -14008,6 +14158,16 @@ class LoisOhern(Interaction):
         return _sim2d.LoisOhern_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LoisOhern self, Box box) -> Matrix2"""
+        return _sim2d.LoisOhern_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LoisOhern self, Box box) -> Matrix2"""
+        return _sim2d.LoisOhern_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LoisOhernPair', box: 'Box') -> "Vec":
         """forces_pair(LoisOhern self, LoisOhernPair pair, Box box) -> Vec"""
         return _sim2d.LoisOhern_forces_pair(self, pair, box)
@@ -14116,6 +14276,16 @@ class LoisLin(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LoisLin self, Box box) -> flt"""
         return _sim2d.LoisLin_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LoisLin self, Box box) -> Matrix2"""
+        return _sim2d.LoisLin_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LoisLin self, Box box) -> Matrix2"""
+        return _sim2d.LoisLin_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LoisLinPair', box: 'Box') -> "Vec":
@@ -14228,6 +14398,16 @@ class LoisLinMin(Interaction):
         return _sim2d.LoisLinMin_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LoisLinMin self, Box box) -> Matrix2"""
+        return _sim2d.LoisLinMin_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LoisLinMin self, Box box) -> Matrix2"""
+        return _sim2d.LoisLinMin_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LoisLinPairMin', box: 'Box') -> "Vec":
         """forces_pair(LoisLinMin self, LoisLinPairMin pair, Box box) -> Vec"""
         return _sim2d.LoisLinMin_forces_pair(self, pair, box)
@@ -14336,6 +14516,16 @@ class LoisOhernMin(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LoisOhernMin self, Box box) -> flt"""
         return _sim2d.LoisOhernMin_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(LoisOhernMin self, Box box) -> Matrix2"""
+        return _sim2d.LoisOhernMin_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(LoisOhernMin self, Box box) -> Matrix2"""
+        return _sim2d.LoisOhernMin_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LoisOhernPairMinCLs', box: 'Box') -> "Vec":
@@ -14949,11 +15139,6 @@ class CollectionNLCG(Collection):
         return _sim2d.CollectionNLCG_reset(self)
 
 
-    def resize(self, V: 'flt') -> "void":
-        """resize(CollectionNLCG self, flt V)"""
-        return _sim2d.CollectionNLCG_resize(self, V)
-
-
     def set_dt(self, newdt: 'flt') -> "void":
         """set_dt(CollectionNLCG self, flt newdt)"""
         return _sim2d.CollectionNLCG_set_dt(self, newdt)
@@ -14992,6 +15177,44 @@ class CollectionNLCG(Collection):
     __del__ = lambda self: None
 CollectionNLCG_swigregister = _sim2d.CollectionNLCG_swigregister
 CollectionNLCG_swigregister(CollectionNLCG)
+
+class CollectionNLCGFixedL(CollectionNLCG):
+    """Proxy of C++ CollectionNLCGFixedL class"""
+    __swig_setmethods__ = {}
+    for _s in [CollectionNLCG]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionNLCGFixedL, name, value)
+    __swig_getmethods__ = {}
+    for _s in [CollectionNLCG]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionNLCGFixedL, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCGFixedL
+        """
+        this = _sim2d.new_CollectionNLCGFixedL(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def stepx(self, dx: 'flt') -> "void":
+        """stepx(CollectionNLCGFixedL self, flt dx)"""
+        return _sim2d.CollectionNLCGFixedL_stepx(self, dx)
+
+    __swig_destroy__ = _sim2d.delete_CollectionNLCGFixedL
+    __del__ = lambda self: None
+CollectionNLCGFixedL_swigregister = _sim2d.CollectionNLCGFixedL_swigregister
+CollectionNLCGFixedL_swigregister(CollectionNLCGFixedL)
 
 class CollectionNLCGV(Collection):
     """Proxy of C++ CollectionNLCGV class"""

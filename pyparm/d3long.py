@@ -6430,19 +6430,33 @@ class OriginBox(Box):
     def resize(self, *args) -> "flt":
         """
         resize(OriginBox self, flt factor) -> flt
-        resize(OriginBox self, Vec newsize) -> flt
+        resize(OriginBox self, flt factor, AtomGroup atoms) -> flt
         """
         return _sim3dlong.OriginBox_resize(self, *args)
 
 
-    def resize_to_V(self, newV: 'flt') -> "flt":
-        """resize_to_V(OriginBox self, flt newV) -> flt"""
-        return _sim3dlong.OriginBox_resize_to_V(self, newV)
+    def resize_to(self, *args) -> "flt":
+        """
+        resize_to(OriginBox self, Vec newsize) -> flt
+        resize_to(OriginBox self, Vec newsize, AtomGroup atoms) -> flt
+        """
+        return _sim3dlong.OriginBox_resize_to(self, *args)
 
 
-    def resize_to_L(self, newL: 'flt') -> "flt":
-        """resize_to_L(OriginBox self, flt newL) -> flt"""
-        return _sim3dlong.OriginBox_resize_to_L(self, newL)
+    def resize_to_V(self, *args) -> "flt":
+        """
+        resize_to_V(OriginBox self, flt newV) -> flt
+        resize_to_V(OriginBox self, flt newV, AtomGroup atoms) -> flt
+        """
+        return _sim3dlong.OriginBox_resize_to_V(self, *args)
+
+
+    def resize_to_L(self, *args) -> "flt":
+        """
+        resize_to_L(OriginBox self, flt newL) -> flt
+        resize_to_L(OriginBox self, flt newL, AtomGroup atoms) -> flt
+        """
+        return _sim3dlong.OriginBox_resize_to_L(self, *args)
 
 
     def rand_loc(self) -> "Vec":
@@ -6453,6 +6467,14 @@ class OriginBox(Box):
     def box_shape(self) -> "Vec":
         """box_shape(OriginBox self) -> Vec"""
         return _sim3dlong.OriginBox_box_shape(self)
+
+
+    def pure_shear_to(self, *args) -> "void":
+        """
+        pure_shear_to(OriginBox self, flt epsilon)
+        pure_shear_to(OriginBox self, flt epsilon, AtomGroup atoms)
+        """
+        return _sim3dlong.OriginBox_pure_shear_to(self, *args)
 
     __swig_destroy__ = _sim3dlong.delete_OriginBox
     __del__ = lambda self: None
@@ -6471,12 +6493,14 @@ class LeesEdwardsBox(OriginBox):
     __getattr__ = lambda self, name: _swig_getattr(self, LeesEdwardsBox, name)
     __repr__ = _swig_repr
 
-    def __init__(self, size: 'Vec', gamma: 'flt'=0.0):
+    def __init__(self, *args):
         """
         __init__(LeesEdwardsBox self, Vec size, flt gamma=0.0) -> LeesEdwardsBox
         __init__(LeesEdwardsBox self, Vec size) -> LeesEdwardsBox
+        __init__(LeesEdwardsBox self, flt L, flt gamma=0.0) -> LeesEdwardsBox
+        __init__(LeesEdwardsBox self, flt L) -> LeesEdwardsBox
         """
-        this = _sim3dlong.new_LeesEdwardsBox(size, gamma)
+        this = _sim3dlong.new_LeesEdwardsBox(*args)
         try:
             self.this.append(this)
         except:
@@ -6500,9 +6524,20 @@ class LeesEdwardsBox(OriginBox):
         return _sim3dlong.LeesEdwardsBox_get_gamma(self)
 
 
-    def shear(self, dgamma: 'flt', atoms: 'AtomGroup') -> "void":
-        """shear(LeesEdwardsBox self, flt dgamma, AtomGroup atoms)"""
-        return _sim3dlong.LeesEdwardsBox_shear(self, dgamma, atoms)
+    def shear(self, *args) -> "void":
+        """
+        shear(LeesEdwardsBox self, flt dgamma)
+        shear(LeesEdwardsBox self, flt dgamma, AtomGroup atoms)
+        """
+        return _sim3dlong.LeesEdwardsBox_shear(self, *args)
+
+
+    def shear_to(self, *args) -> "void":
+        """
+        shear_to(LeesEdwardsBox self, flt gamma)
+        shear_to(LeesEdwardsBox self, flt gamma, AtomGroup atoms)
+        """
+        return _sim3dlong.LeesEdwardsBox_shear_to(self, *args)
 
 
     def non_affine(self, v: 'Vec') -> "Vec":
@@ -14400,11 +14435,6 @@ class CollectionNLCG(Collection):
         return _sim3dlong.CollectionNLCG_reset(self)
 
 
-    def resize(self, V: 'flt') -> "void":
-        """resize(CollectionNLCG self, flt V)"""
-        return _sim3dlong.CollectionNLCG_resize(self, V)
-
-
     def set_dt(self, newdt: 'flt') -> "void":
         """set_dt(CollectionNLCG self, flt newdt)"""
         return _sim3dlong.CollectionNLCG_set_dt(self, newdt)
@@ -14443,6 +14473,44 @@ class CollectionNLCG(Collection):
     __del__ = lambda self: None
 CollectionNLCG_swigregister = _sim3dlong.CollectionNLCG_swigregister
 CollectionNLCG_swigregister(CollectionNLCG)
+
+class CollectionNLCGFixedL(CollectionNLCG):
+    """Proxy of C++ CollectionNLCGFixedL class"""
+    __swig_setmethods__ = {}
+    for _s in [CollectionNLCG]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, CollectionNLCGFixedL, name, value)
+    __swig_getmethods__ = {}
+    for _s in [CollectionNLCG]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, CollectionNLCGFixedL, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCGFixedL
+        """
+        this = _sim3dlong.new_CollectionNLCGFixedL(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def stepx(self, dx: 'flt') -> "void":
+        """stepx(CollectionNLCGFixedL self, flt dx)"""
+        return _sim3dlong.CollectionNLCGFixedL_stepx(self, dx)
+
+    __swig_destroy__ = _sim3dlong.delete_CollectionNLCGFixedL
+    __del__ = lambda self: None
+CollectionNLCGFixedL_swigregister = _sim3dlong.CollectionNLCGFixedL_swigregister
+CollectionNLCGFixedL_swigregister(CollectionNLCGFixedL)
 
 class CollectionNLCGV(Collection):
     """Proxy of C++ CollectionNLCGV class"""
