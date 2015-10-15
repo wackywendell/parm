@@ -3,12 +3,16 @@
 import numpy as np
 from .util import norm
 
+from collections import namedtuple
+
+MinimizerErr = namedtuple('MinimizerErr', ['delta_pressure', 'maxforce'])
+
 class Minimizer:
     def __init__(self, locs, diameters, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
                     need_contacts=False,
                     kappa=10.0, kmax=1000, secmax=40, 
                     seceps=1e-20, amax=2.0, dxmax=100, stepmax=1e-3,
-                    itersteps=1000):
+                    itersteps=1000, use_lees_edwards = False):
         """
         Minimizer to find a packing.
         
@@ -41,7 +45,10 @@ class Minimizer:
         else:
             raise ValueError("Number of dimensions must be 2 or 3; got {}".format(self.ndim))
         
-        self.box = self.sim.OriginBox(L)
+        if use_lees_edwards:
+            self.box = self.sim.LeesEdwardsBox(L)
+        else:
+            self.box = self.sim.OriginBox(L)
         
         self.masses = self.diameters**self.ndim if masses is None else masses
         self.atoms = self.sim.AtomVec([float(n) for n in self.masses])
@@ -73,6 +80,20 @@ class Minimizer:
     @classmethod
     def randomized(cls, N=10, sizes=[1.0,1.4], ratios=None, ndim=3, phi0=0.01, 
                    mass_func=None, **kw):
+        """
+        Minimizer to find a packing.
+
+        Params
+        ------
+        N : Number of particles
+        sizes : Diameters of particles
+        ratios : Number ratio of particles. Defaults to [1.0, 1.0, ...]
+        ndim : Number of dimensions (2 or 3)
+        phi0 : Initial packing fraction
+        mass_func : a function that takes (diameters, ndim) and returns a list
+            of masses. Defaults to Minimizer.proportionate_mass
+        kw : Extra keyword arguments for Minimizer __init__
+        """
         if mass_func is None:
             mass_func = cls.proportionate_mass
         if ratios is None:
@@ -126,7 +147,13 @@ class Minimizer:
         self.collec.set_forces(True, True)
     
     def err(self):
-        return (self.collec.pressure() / self.collec.P0 - 1, max([norm(a.f) for a in self.atoms]))
+        """
+        Returns (delta_pressure, max_force), where delta_pressure = (P / P0) - 1 and max_force is the maximum of all total forces on each atom.
+        
+        When abs(delta_pressure) < self.Pfrac and max_force < self.CGerr, the
+        simulation is done (unless need_contacts is also enabled).
+        """
+        return MinimizerErr(self.collec.pressure() / self.collec.P0 - 1, max([norm(a.f) for a in self.atoms]))
     
     def done(self):
         Perr, CGerr = self.err()
