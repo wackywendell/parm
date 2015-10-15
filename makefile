@@ -9,7 +9,7 @@
 # I tried using a setup.py that invokes swig, but that was even more difficult.
 
 UNAME := $(shell uname)
-CXX=icpc
+#CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
 CCOPTS=-I src -Wall -O2 -fPIC -std=c++98
 
@@ -70,6 +70,7 @@ $(eval MODNAME:=d$(NDIM)$(FLT))
 
 #-------------------------------------------------------------------------------
 # The python modules
+
 py$(SFX): pyparm/_sim$(SFX).so
 
 # We use -DSWIG_TYPE_TABLE=sim$(SFX) so that types from sim2d and sim3d with the
