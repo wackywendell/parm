@@ -531,25 +531,6 @@ flt CollectionNLCG::hamiltonian(){
     return potential_energy() + P0*(box->V());
 };
 
-void CollectionNLCG::resize(flt V){
-    reset();
-    OriginBox& obox = (OriginBox&) *box;
-    flt oldV = obox.V();
-    #ifdef VEC3D
-    flt Lfac = pow(V/oldV, 1.0/3.0);
-    #endif
-    #ifdef VEC2D
-    flt Lfac = sqrt(V/oldV);
-    #endif
-    
-    for(uint i=0; i<atoms->size(); i++){
-        (*atoms)[i].x *= Lfac;
-        (*atoms)[i].v = Vec::Zero();
-    }
-    
-    obox.resize_to_V(V);
-}
-
 flt CollectionNLCG::kinetic_energy(){
     flt E=0;
     flt Lfac = exp(vl / (kappa*NDIM));
@@ -582,6 +563,9 @@ void CollectionNLCG::stepx(flt dx){
     
     for(uint i=0; i<atoms->size(); i++){
         (*atoms)[i].x *= Lfac;
+        // (*atoms)[i].v *= Lfac;
+        // (*atoms)[i].f *= Lfac;
+        // (*atoms)[i].a *= Lfac;
         (*atoms)[i].x += (*atoms)[i].v * dx;
     }
     
@@ -809,6 +793,23 @@ void CollectionNLCG::descend(){
     stepx(dt);
     update_constraint_positions();
     update_trackers();
+}
+
+void CollectionNLCGFixedL::stepx(flt dx){
+    OriginBox& obox = (OriginBox&) *box;
+    flt Lfac = exp(dx * vl / kappa);
+    
+    for(uint i=0; i<atoms->size(); i++){
+        (*atoms)[i].x[0] *= Lfac;
+        (*atoms)[i].x += (*atoms)[i].v * dx;
+    }
+    
+    //~ cout << "NLCGFixedL::stepx: V0 = " << obox->V() << " -- dx = " << dx 
+         //~ << " -- Vfac = " << Vfac;
+    Vec shape = obox.box_shape();
+    shape[0] *= Lfac;
+    obox.resize_to(shape);
+    //~ cout << " -- V = " << obox->V() << '\n';
 }
 
 CollectionNLCGV::CollectionNLCGV(sptr<Box> box, sptr<AtomGroup> atoms,
