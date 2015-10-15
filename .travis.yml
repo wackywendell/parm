@@ -13,7 +13,6 @@ python:
 addons:
   apt:
     packages:
-    - swig
     - libeigen3-dev
     - libboost-all-dev
 before_install:
@@ -22,7 +21,6 @@ before_install:
   - pip --version
   - export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/eigen3"
 install:
-  - make all wraps
   - python setup.py build_ext --inplace
 script:
   - nosetests .
