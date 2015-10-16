@@ -157,8 +157,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <span class="comment">// Harmonic Interaction</span></div>
 <div class="line">    <span class="comment">// Its called &quot;Repulsion&quot; for historical reasons</span></div>
 <div class="line">    <span class="comment">// It takes a pointer to the box, a pointer to the atoms, and a &quot;skin depth&quot; for the NeighborList</span></div>
-<div class="line">    boost::shared_ptr&lt;NListed&lt;EpsSigExpAtom, RepulsionPair&gt; &gt; </div>
-<div class="line">    boost::shared_ptr&lt;NListed&lt;EpsSigExpAtom, RepulsionPair&gt; &gt;</div>
 <div class="line">    boost::shared_ptr&lt;NListed&lt;EpsSigExpAtom, RepulsionPair&gt; &gt;</div>
 <div class="line">        hertzian(<span class="keyword">new</span> <a name="_a6"></a><a class="code" href="class_n_listed.html">NListed&lt;EpsSigExpAtom, RepulsionPair&gt;</a>(obox, atomptr, 0.1*sigma));</div>
 <div class="line">    boost::shared_ptr&lt;NeighborList&gt; nl = hertzian-&gt;neighbor_list();</div>
@@ -224,7 +222,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">            <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> force_err = 0;</div>
 <div class="line"></div>
 <div class="line">            <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> k=0; k&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); k++){</div>
-<div class="line">                <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> fmag = atoms[k].f.mag();</div>
+<div class="line">                <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> fmag = atoms[k].f.norm();</div>
 <div class="line">                <span class="keywordflow">if</span>(fmag &gt; force_err) force_err = fmag;</div>
 <div class="line">            }</div>
 <div class="line"></div>
@@ -305,7 +303,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 9 2015 15:55:28 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Oct 16 2015 17:16:37 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

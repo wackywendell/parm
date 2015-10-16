@@ -19,6 +19,7 @@ var searchData=
   ['collectiongear5a',['CollectionGear5A',['../class_collection_gear5_a.html',1,'']]],
   ['collectiongear6a',['CollectionGear6A',['../class_collection_gear6_a.html',1,'']]],
   ['collectionnlcg',['CollectionNLCG',['../class_collection_n_l_c_g.html',1,'']]],
+  ['collectionnlcgfixedl',['CollectionNLCGFixedL',['../class_collection_n_l_c_g_fixed_l.html',1,'']]],
   ['collectionnlcgv',['CollectionNLCGV',['../class_collection_n_l_c_g_v.html',1,'']]],
   ['collectionnosehoover',['CollectionNoseHoover',['../class_collection_nose_hoover.html',1,'']]],
   ['collectionoverdamped',['CollectionOverdamped',['../class_collection_overdamped.html',1,'']]],

@@ -79,7 +79,7 @@ var searchData=
   ['status_5fstr',['status_str',['../classpyparm_1_1packmin_1_1_minimizer.html#ae25d4052312edcbb2b2d3c2d665ab084',1,'pyparm::packmin::Minimizer']]],
   ['std_5fdists',['std_dists',['../class_bond_pairs.html#a9de1490d81b1d709477aa7df7c9351a5',1,'BondPairs::std_dists()'],['../class_angle_triples.html#a7e1eae7b38411c1e30c3e7d1386628c2',1,'AngleTriples::std_dists()']]],
   ['stepmax',['stepmax',['../class_collection_n_l_c_g.html#a440c30ecf44fa0704c98175b0c054475',1,'CollectionNLCG::stepmax()'],['../class_collection_n_l_c_g_v.html#abd101c22d47791cc559746ca32aa2459',1,'CollectionNLCGV::stepmax()']]],
-  ['stepx',['stepx',['../class_collection_n_l_c_g.html#aead681fa22d52a7b1a59bedc0130a1c0',1,'CollectionNLCG::stepx()'],['../class_collection_n_l_c_g_v.html#a229eb50356c7a18c716572b913e496ff',1,'CollectionNLCGV::stepx()']]],
+  ['stepx',['stepx',['../class_collection_n_l_c_g.html#aead681fa22d52a7b1a59bedc0130a1c0',1,'CollectionNLCG::stepx()'],['../class_collection_n_l_c_g_fixed_l.html#a7e75b7a00b25199c8086e58442087c66',1,'CollectionNLCGFixedL::stepx()'],['../class_collection_n_l_c_g_v.html#a229eb50356c7a18c716572b913e496ff',1,'CollectionNLCGV::stepx()']]],
   ['straight_5fdiff',['straight_diff',['../class_jamming_tree2.html#a9adfda151b9d07ef6416ac7c72126e08',1,'JammingTree2']]],
   ['straight_5fdistsq',['straight_distsq',['../class_jamming_tree2.html#ae4bb0df1a4c2979cc4d32ee97d75748a',1,'JammingTree2']]],
   ['stress',['stress',['../class_interaction.html#acf418cb3cfe03497d63d311369282433',1,'Interaction::stress()'],['../class_n_listed.html#a2ab5b8e29827e6b51a7c726e45d69165',1,'NListed::stress()']]],
