@@ -820,6 +820,20 @@ flt SoftWallCylinder::pressure(Box &box){
     return 0;
 };
 
+flt SCAtomVec::volume(flt diameter, flt length, uint dim){
+    flt cap_V = M_PI * pow(diameter, dim) / (2*dim);
+    flt shaft_V;
+    if(dim == 2) {
+        shaft_V = diameter * (length - diameter);
+    } else if(dim == 3) {
+        shaft_V = diameter * diameter * M_PI / 4 * length;
+    } else {
+        throw std::invalid_argument("SCAtomVec::volume: needs dim=2 or dim=3");
+        return 0;
+    }
+    return cap_V + shaft_V;
+};
+
 SpheroCylinderDiff SCPair::nearest_location(Box &box){
     // see Abreu, Charlles RA and Tavares, Frederico W. and Castier, Marcelo, "Influence of particle shape on the packing and on the segregation of spherocylinders via Monte Carlo simulations", Powder Technology 134, 1 (2003), pp. 167–180.
     // Uses that notation, just i -> 1, j -> 2, adds s1,s2
@@ -1001,4 +1015,12 @@ flt SCSpringList::pressure(Box &box){
         }
     }
     return P;
+};
+
+flt SCSpringList::volume(){
+    flt V = 0;
+    for(uint i = 0; i < scs->pairs(); ++i){
+        V += SCAtomVec::volume(sig, ls[i]);
+    };
+    return V;
 };
