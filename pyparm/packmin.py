@@ -28,7 +28,6 @@ class Minimizer:
         self.need_contacts = need_contacts
         self.CGerr = CGerr
         self.Pfrac = Pfrac
-        self._L = L
         locs = np.array(locs)
         self._diameters = np.array(diameters)
         Ns, = self.diameters.shape
