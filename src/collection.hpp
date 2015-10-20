@@ -398,7 +398,8 @@ class CollectionNLCG : public Collection {
         void reset();
 
         void set_dt(flt newdt){dt=newdt; reset();};
-        void set_pressure(flt P){P0 = P; reset();};
+        void set_pressure_goal(flt P){P0 = P; reset();};
+        flt get_pressure_goal(){return P0;};
         void set_kappa(flt k){kappa=k; reset();};
         void set_max_alpha(flt a){alphamax=a;};
         void set_max_alpha_fraction(flt a){afrac=a;};
