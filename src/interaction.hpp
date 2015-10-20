@@ -76,9 +76,20 @@ class Interaction {
 
         \f$P = \sum_{\left<i,j \right>} \vec r_{ij} \cdot \vec F_{ij}\f$, or equivalently
         \f$P = \sum_i \vec r_i \cdot \vec F_i\f$
-        Note that the full pressure involves *all* interactions and temperature
+        
+        Note that the full pressure involves *all* interactions and temperature,
+        and needs to be normalized by \f$ \frac{1}{dV} \f$ where \f$d\f$ is the
+        number of dimensions and \f$V\f$ is the volume.
         */
         virtual flt pressure(Box &box)=0;
+        
+        /**
+        The force-moment tensor for the current simulation:
+
+        \f$\tau^{\alpha \beta} = \sum_{\left<i,j \right>}  r_{ij}^\alpha  F_{ij}^\beta\f$.
+        
+        At \f$T=0\f$, the stress tensor \f$\Sigma = \frac{1}{dV} \tau \f$.
+        */
         virtual Matrix stress(Box &box){
             std::string s = std::string("stress not defined for class ");
             s.append(typeid(*this).name());
