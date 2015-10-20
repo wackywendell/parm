@@ -2201,6 +2201,8 @@ class SCSpringList : public Interaction {
         void set_forces(Box &box);
         flt set_forces_get_pressure(Box &box);
         flt pressure(Box &box);
+        Matrix2 set_forces_get_stress(Box &box);
+        Matrix2 stress(Box &box);
         void ignore(uint n1, uint n2){
             if(n1 > n2){uint n3=n1; n1=n2; n2=n3;}
             array<uint, 2> pair;
