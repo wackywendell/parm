@@ -10610,6 +10610,17 @@ class SCAtomVec(AtomGroup):
         """pairs(SCAtomVec self) -> uint"""
         return _sim3d.SCAtomVec_pairs(self)
 
+
+    def volume(diameter: 'flt', length: 'flt', dim: 'uint'=3) -> "flt":
+        """
+        volume(flt diameter, flt length, uint dim=3) -> flt
+        volume(flt diameter, flt length) -> flt
+        """
+        return _sim3d.SCAtomVec_volume(diameter, length, dim)
+
+    if _newclass:
+        volume = staticmethod(volume)
+    __swig_getmethods__["volume"] = lambda x: volume
     __swig_destroy__ = _sim3d.delete_SCAtomVec
     __del__ = lambda self: None
 
@@ -10632,6 +10643,13 @@ class SCAtomVec(AtomGroup):
 
 SCAtomVec_swigregister = _sim3d.SCAtomVec_swigregister
 SCAtomVec_swigregister(SCAtomVec)
+
+def SCAtomVec_volume(diameter: 'flt', length: 'flt', dim: 'uint'=3) -> "flt":
+    """
+    volume(flt diameter, flt length, uint dim=3) -> flt
+    SCAtomVec_volume(flt diameter, flt length) -> flt
+    """
+    return _sim3d.SCAtomVec_volume(diameter, length, dim)
 
 class SpheroCylinderDiff(_object):
     """Proxy of C++ SpheroCylinderDiff class"""
@@ -10818,6 +10836,26 @@ class SCSpringList(Interaction):
     def pressure(self, box: 'Box') -> "flt":
         """pressure(SCSpringList self, Box box) -> flt"""
         return _sim3d.SCSpringList_pressure(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
+        """set_forces_get_stress(SCSpringList self, Box box) -> Matrix2"""
+        return _sim3d.SCSpringList_set_forces_get_stress(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix2":
+        """stress(SCSpringList self, Box box) -> Matrix2"""
+        return _sim3d.SCSpringList_stress(self, box)
+
+
+    def volume(self) -> "flt":
+        """volume(SCSpringList self) -> flt"""
+        return _sim3d.SCSpringList_volume(self)
+
+
+    def phi(self, box: 'Box') -> "flt":
+        """phi(SCSpringList self, Box box) -> flt"""
+        return _sim3d.SCSpringList_phi(self, box)
 
 
     def ignore(self, *args) -> "void":
@@ -14420,9 +14458,14 @@ class CollectionNLCG(Collection):
         return _sim3d.CollectionNLCG_set_dt(self, newdt)
 
 
-    def set_pressure(self, P: 'flt') -> "void":
-        """set_pressure(CollectionNLCG self, flt P)"""
-        return _sim3d.CollectionNLCG_set_pressure(self, P)
+    def set_pressure_goal(self, P: 'flt') -> "void":
+        """set_pressure_goal(CollectionNLCG self, flt P)"""
+        return _sim3d.CollectionNLCG_set_pressure_goal(self, P)
+
+
+    def get_pressure_goal(self) -> "flt":
+        """get_pressure_goal(CollectionNLCG self) -> flt"""
+        return _sim3d.CollectionNLCG_get_pressure_goal(self)
 
 
     def set_kappa(self, k: 'flt') -> "void":
