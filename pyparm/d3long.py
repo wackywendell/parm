@@ -7551,6 +7551,11 @@ class Interaction(_object):
         """pressure(Interaction self, Box box) -> flt"""
         return _sim3dlong.Interaction_pressure(self, box)
 
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(Interaction self, Box box) -> Matrix"""
+        return _sim3dlong.Interaction_stress(self, box)
+
     __swig_destroy__ = _sim3dlong.delete_Interaction
     __del__ = lambda self: None
 Interaction_swigregister = _sim3dlong.Interaction_swigregister
@@ -10858,13 +10863,13 @@ class SCSpringList(Interaction):
         return _sim3dlong.SCSpringList_pressure(self, box)
 
 
-    def set_forces_get_stress(self, box: 'Box') -> "Matrix2":
-        """set_forces_get_stress(SCSpringList self, Box box) -> Matrix2"""
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(SCSpringList self, Box box) -> Matrix"""
         return _sim3dlong.SCSpringList_set_forces_get_stress(self, box)
 
 
-    def stress(self, box: 'Box') -> "Matrix2":
-        """stress(SCSpringList self, Box box) -> Matrix2"""
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(SCSpringList self, Box box) -> Matrix"""
         return _sim3dlong.SCSpringList_stress(self, box)
 
 
@@ -12147,6 +12152,16 @@ class LJRepulse(Interaction):
         return _sim3dlong.LJRepulse_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJRepulse self, Box box) -> Matrix"""
+        return _sim3dlong.LJRepulse_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJRepulse self, Box box) -> Matrix"""
+        return _sim3dlong.LJRepulse_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LJRepulsePair', box: 'Box') -> "Vec":
         """forces_pair(LJRepulse self, LJRepulsePair pair, Box box) -> Vec"""
         return _sim3dlong.LJRepulse_forces_pair(self, pair, box)
@@ -12255,6 +12270,16 @@ class LJAttractICut(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJAttractICut self, Box box) -> flt"""
         return _sim3dlong.LJAttractICut_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJAttractICut self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractICut_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJAttractICut self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractICut_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "Vec":
@@ -12367,6 +12392,16 @@ class LJAttractIICut(Interaction):
         return _sim3dlong.LJAttractIICut_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJAttractIICut self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractIICut_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJAttractIICut self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractIICut_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LJAttractCutPair', box: 'Box') -> "Vec":
         """forces_pair(LJAttractIICut self, LJAttractCutPair pair, Box box) -> Vec"""
         return _sim3dlong.LJAttractIICut_forces_pair(self, pair, box)
@@ -12475,6 +12510,16 @@ class LJIICut(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJIICut self, Box box) -> flt"""
         return _sim3dlong.LJIICut_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJIICut self, Box box) -> Matrix"""
+        return _sim3dlong.LJIICut_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJIICut self, Box box) -> Matrix"""
+        return _sim3dlong.LJIICut_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LennardJonesCutPair', box: 'Box') -> "Vec":
@@ -12587,6 +12632,16 @@ class LJAttractRepulse(Interaction):
         return _sim3dlong.LJAttractRepulse_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJAttractRepulse self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractRepulse_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJAttractRepulse self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractRepulse_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LJAttractRepulsePair', box: 'Box') -> "Vec":
         """forces_pair(LJAttractRepulse self, LJAttractRepulsePair pair, Box box) -> Vec"""
         return _sim3dlong.LJAttractRepulse_forces_pair(self, pair, box)
@@ -12695,6 +12750,16 @@ class LJAttractFixedRepulse(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJAttractFixedRepulse self, Box box) -> flt"""
         return _sim3dlong.LJAttractFixedRepulse_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJAttractFixedRepulse self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractFixedRepulse_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJAttractFixedRepulse self, Box box) -> Matrix"""
+        return _sim3dlong.LJAttractFixedRepulse_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LJAttractFixedRepulsePair', box: 'Box') -> "Vec":
@@ -12807,6 +12872,16 @@ class EisMclachlan(Interaction):
         return _sim3dlong.EisMclachlan_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(EisMclachlan self, Box box) -> Matrix"""
+        return _sim3dlong.EisMclachlan_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(EisMclachlan self, Box box) -> Matrix"""
+        return _sim3dlong.EisMclachlan_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'EisMclachlanPair', box: 'Box') -> "Vec":
         """forces_pair(EisMclachlan self, EisMclachlanPair pair, Box box) -> Vec"""
         return _sim3dlong.EisMclachlan_forces_pair(self, pair, box)
@@ -12915,6 +12990,16 @@ class LJish(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LJish self, Box box) -> flt"""
         return _sim3dlong.LJish_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJish self, Box box) -> Matrix"""
+        return _sim3dlong.LJish_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJish self, Box box) -> Matrix"""
+        return _sim3dlong.LJish_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LJishPair', box: 'Box') -> "Vec":
@@ -13086,6 +13171,16 @@ class Repulsion(Interaction):
         return _sim3dlong.Repulsion_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(Repulsion self, Box box) -> Matrix"""
+        return _sim3dlong.Repulsion_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(Repulsion self, Box box) -> Matrix"""
+        return _sim3dlong.Repulsion_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'RepulsionPair', box: 'Box') -> "Vec":
         """forces_pair(Repulsion self, RepulsionPair pair, Box box) -> Vec"""
         return _sim3dlong.Repulsion_forces_pair(self, pair, box)
@@ -13196,6 +13291,16 @@ class RepulsionII(Interaction):
         return _sim3dlong.RepulsionII_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(RepulsionII self, Box box) -> Matrix"""
+        return _sim3dlong.RepulsionII_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(RepulsionII self, Box box) -> Matrix"""
+        return _sim3dlong.RepulsionII_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'RepulsionPair', box: 'Box') -> "Vec":
         """forces_pair(RepulsionII self, RepulsionPair pair, Box box) -> Vec"""
         return _sim3dlong.RepulsionII_forces_pair(self, pair, box)
@@ -13304,6 +13409,16 @@ class HertzianDrag(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(HertzianDrag self, Box box) -> flt"""
         return _sim3dlong.HertzianDrag_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(HertzianDrag self, Box box) -> Matrix"""
+        return _sim3dlong.HertzianDrag_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(HertzianDrag self, Box box) -> Matrix"""
+        return _sim3dlong.HertzianDrag_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'RepulsionDragPair', box: 'Box') -> "Vec":
@@ -13532,6 +13647,16 @@ class LoisOhern(Interaction):
         return _sim3dlong.LoisOhern_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LoisOhern self, Box box) -> Matrix"""
+        return _sim3dlong.LoisOhern_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LoisOhern self, Box box) -> Matrix"""
+        return _sim3dlong.LoisOhern_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LoisOhernPair', box: 'Box') -> "Vec":
         """forces_pair(LoisOhern self, LoisOhernPair pair, Box box) -> Vec"""
         return _sim3dlong.LoisOhern_forces_pair(self, pair, box)
@@ -13640,6 +13765,16 @@ class LoisLin(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LoisLin self, Box box) -> flt"""
         return _sim3dlong.LoisLin_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LoisLin self, Box box) -> Matrix"""
+        return _sim3dlong.LoisLin_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LoisLin self, Box box) -> Matrix"""
+        return _sim3dlong.LoisLin_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LoisLinPair', box: 'Box') -> "Vec":
@@ -13752,6 +13887,16 @@ class LoisLinMin(Interaction):
         return _sim3dlong.LoisLinMin_set_forces_get_pressure(self, box)
 
 
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LoisLinMin self, Box box) -> Matrix"""
+        return _sim3dlong.LoisLinMin_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LoisLinMin self, Box box) -> Matrix"""
+        return _sim3dlong.LoisLinMin_set_forces_get_stress(self, box)
+
+
     def forces_pair(self, pair: 'LoisLinPairMin', box: 'Box') -> "Vec":
         """forces_pair(LoisLinMin self, LoisLinPairMin pair, Box box) -> Vec"""
         return _sim3dlong.LoisLinMin_forces_pair(self, pair, box)
@@ -13860,6 +14005,16 @@ class LoisOhernMin(Interaction):
     def set_forces_get_pressure(self, box: 'Box') -> "flt":
         """set_forces_get_pressure(LoisOhernMin self, Box box) -> flt"""
         return _sim3dlong.LoisOhernMin_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LoisOhernMin self, Box box) -> Matrix"""
+        return _sim3dlong.LoisOhernMin_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LoisOhernMin self, Box box) -> Matrix"""
+        return _sim3dlong.LoisOhernMin_set_forces_get_stress(self, box)
 
 
     def forces_pair(self, pair: 'LoisOhernPairMinCLs', box: 'Box') -> "Vec":
