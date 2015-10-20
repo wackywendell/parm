@@ -28,7 +28,6 @@ class Minimizer:
         self.need_contacts = need_contacts
         self.CGerr = CGerr
         self.Pfrac = Pfrac
-        self._L = L
         locs = np.array(locs)
         self._diameters = np.array(diameters)
         Ns, = self.diameters.shape
@@ -145,6 +144,14 @@ class Minimizer:
     def L(self, newL):
         self.box.resize_to_L(newL)
         self.collec.set_forces(True, True)
+    
+    @property
+    def goal_pressure(self):
+        return self.collec.get_pressure_goal()
+    
+    @goal_pressure.setter
+    def goal_pressure(self, P):
+        self.collec.set_pressure_goal(P)
     
     def err(self):
         """

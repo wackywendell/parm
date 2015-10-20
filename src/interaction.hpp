@@ -2125,6 +2125,10 @@ class SCAtomVec : public virtual AtomGroup {
         inline IDPair pair(cuint n){return IDPair(atoms.get_id(n*2), atoms.get_id(n*2 + 1));};
         inline uint size() const {return atoms.size();};
         inline uint pairs() const {return atoms.size()/2;};
+        //! The volume of a single spherocylinder
+        //! diameter: the width of the spherocylinder
+        //! length: the end-to-end length
+        static flt volume(flt diameter, flt length, uint dim=NDIM);
         ~SCAtomVec(){};
 };
 
@@ -2187,6 +2191,8 @@ class SCSpringList : public Interaction {
         vector<flt> ls;
         set<array<uint, 2> > ignore_list;
     public:
+        //! Create an SCSpringList based on scs, using an epsilon of eps,
+        //! a diameter of sigma, and a "length" of l, where l is cap center-to-cap center distance.
         SCSpringList(SCAtomVec *scs, flt eps, flt sig, flt l) :
             scs(scs), eps(eps), sig(sig), ls(scs->pairs(), l){};
         SCSpringList(SCAtomVec *scs, flt eps, flt sig, vector<flt> ls) :
@@ -2195,6 +2201,8 @@ class SCSpringList : public Interaction {
         void set_forces(Box &box);
         flt set_forces_get_pressure(Box &box);
         flt pressure(Box &box);
+        Matrix2 set_forces_get_stress(Box &box);
+        Matrix2 stress(Box &box);
         void ignore(uint n1, uint n2){
             if(n1 > n2){uint n3=n1; n1=n2; n2=n3;}
             array<uint, 2> pair;
@@ -2202,6 +2210,8 @@ class SCSpringList : public Interaction {
             pair[1] = n2;
             ignore_list.insert(pair);
         }
+        flt volume();
+        flt phi(Box &box){return volume() / box.V();};
         void ignore(AtomID a1, AtomID a2){ignore(a1.n() / 2, a2.n() / 2);}
 
         ~SCSpringList(){};
