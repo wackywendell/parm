@@ -79,13 +79,11 @@ class Interaction {
         Note that the full pressure involves *all* interactions and temperature
         */
         virtual flt pressure(Box &box)=0;
-#ifdef VEC2D
-        virtual Matrix2 stress(Box &box){
+        virtual Matrix stress(Box &box){
             std::string s = std::string("stress not defined for class ");
             s.append(typeid(*this).name());
             throw std::runtime_error(s);
         }
-#endif
         virtual ~Interaction(){};
 };
 
@@ -1597,10 +1595,8 @@ class NListed : public Interaction {
         inline flt energy_pair(P pair, Box &box){return pair.energy(box);}; // This may need to be written!
         void set_forces(Box &box);
         flt set_forces_get_pressure(Box &box);
-#ifdef VEC2D
-        Matrix2 stress(Box &box);
-        Matrix2 set_forces_get_stress(Box &box);
-#endif
+        Matrix stress(Box &box);
+        Matrix set_forces_get_stress(Box &box);
         inline Vec forces_pair(P pair, Box &box){return pair.forces(box);}; // This may need to be written!
         inline vector<A> &atom_list(){return atoms;};
         inline sptr<NeighborList> neighbor_list(){return neighbors;};
@@ -1911,11 +1907,10 @@ flt NListed<A, P>::pressure(Box &box){
     return p;
 };
 
-#ifdef VEC2D
 template <class A, class P>
-Matrix2 NListed<A, P>::set_forces_get_stress(Box &box){
+Matrix NListed<A, P>::set_forces_get_stress(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
-    Matrix2 stress = Matrix2::Zero();
+    Matrix stress = Matrix::Zero();
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); ++it){
         Vec f = forces_pair(*it, box);
@@ -1929,9 +1924,9 @@ Matrix2 NListed<A, P>::set_forces_get_stress(Box &box){
 };
 
 template <class A, class P>
-Matrix2 NListed<A, P>::stress(Box &box){
+Matrix NListed<A, P>::stress(Box &box){
     update_pairs(); // make sure the LJpairs match the neighbor list ones
-    Matrix2 stress = Matrix2::Zero();
+    Matrix stress = Matrix::Zero();
     typename vector<P>::iterator it;
     for(it = pairs.begin(); it != pairs.end(); ++it){
         Vec f = forces_pair(*it, box);
@@ -1941,7 +1936,6 @@ Matrix2 NListed<A, P>::stress(Box &box){
     //~ cout << "Set forces, got pressure" << p << '\n';
     return stress;
 };
-#endif
 
 class Charges : public Interaction {
     protected:
@@ -2201,8 +2195,8 @@ class SCSpringList : public Interaction {
         void set_forces(Box &box);
         flt set_forces_get_pressure(Box &box);
         flt pressure(Box &box);
-        Matrix2 set_forces_get_stress(Box &box);
-        Matrix2 stress(Box &box);
+        Matrix set_forces_get_stress(Box &box);
+        Matrix stress(Box &box);
         void ignore(uint n1, uint n2){
             if(n1 > n2){uint n3=n1; n1=n2; n2=n3;}
             array<uint, 2> pair;

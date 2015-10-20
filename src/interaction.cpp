@@ -1017,9 +1017,8 @@ flt SCSpringList::pressure(Box &box){
     return P;
 };
 
-#ifdef VEC2D
-Matrix2 SCSpringList::set_forces_get_stress(Box &box){
-    Matrix2 stress = Matrix2::Zero();
+Matrix SCSpringList::set_forces_get_stress(Box &box){
+    Matrix stress = Matrix::Zero();
     array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
         IDPair pi = scs->pair(i);
@@ -1040,8 +1039,8 @@ Matrix2 SCSpringList::set_forces_get_stress(Box &box){
     return stress;
 };
 
-Matrix2 SCSpringList::stress(Box &box){
-    Matrix2 stress = Matrix2::Zero();
+Matrix SCSpringList::stress(Box &box){
+    Matrix stress = Matrix::Zero();
     array<uint, 2> pair;
     for(uint i = 0; i < scs->pairs() - 1; ++i){
         IDPair pi = scs->pair(i);
@@ -1060,7 +1059,6 @@ Matrix2 SCSpringList::stress(Box &box){
     }
     return stress;
 };
-#endif
 
 flt SCSpringList::volume(){
     flt V = 0;
