@@ -144,8 +144,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3448dd63ebb53811b8150096e47e0eb2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a3448dd63ebb53811b8150096e47e0eb2">pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)=0</td></tr>
 <tr class="memdesc:a3448dd63ebb53811b8150096e47e0eb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partial pressure due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>.  <a href="#a3448dd63ebb53811b8150096e47e0eb2">More...</a><br /></td></tr>
 <tr class="separator:a3448dd63ebb53811b8150096e47e0eb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf418cb3cfe03497d63d311369282433"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#acf418cb3cfe03497d63d311369282433">stress</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="separator:acf418cb3cfe03497d63d311369282433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6343a257d41c757d1a013c4547e43b9a"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a6343a257d41c757d1a013c4547e43b9a">stress</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:a6343a257d41c757d1a013c4547e43b9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The force-moment tensor for the current simulation:  <a href="#a6343a257d41c757d1a013c4547e43b9a">More...</a><br /></td></tr>
+<tr class="separator:a6343a257d41c757d1a013c4547e43b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98522b3c97be621b78e14b3afd5b16bf"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a98522b3c97be621b78e14b3afd5b16bf">~Interaction</a> ()</td></tr>
 <tr class="separator:a98522b3c97be621b78e14b3afd5b16bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -228,7 +229,8 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Partial pressure due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>. </p>
-<p>\(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\), or equivalently \(P = \sum_i \vec r_i \cdot \vec F_i\) Note that the full pressure involves <em>all</em> interactions and temperature </p>
+<p>\(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\), or equivalently \(P = \sum_i \vec r_i \cdot \vec F_i\)</p>
+<p>Note that the full pressure involves <em>all</em> interactions and temperature, and needs to be normalized by \( \frac{1}{dV} \) where \(d\) is the number of dimensions and \(V\) is the volume. </p>
 
 <p>Implemented in <a class="el" href="class_s_c_spring_list.html#ac5773544bfe4e001c308abff151c4d03">SCSpringList</a>, <a class="el" href="class_soft_wall_cylinder.html#a3f9755e68171cd34bf5fa8cbc7e03762">SoftWallCylinder</a>, <a class="el" href="class_soft_wall.html#a846915b9c18b58ee9a7eea6344dc5923">SoftWall</a>, <a class="el" href="class_charges.html#a3050d204e8ad3bd024ef34b5f09d48f3">Charges</a>, <a class="el" href="class_n_listed_virial.html#a704b8d4ddcb2fefe45155d90499afc4e">NListedVirial&lt; A, P &gt;</a>, <a class="el" href="class_n_listed.html#ad84c04869edada2261f6ef9ad7166b8e">NListed&lt; A, P &gt;</a>, <a class="el" href="class_simple_listed.html#ad441f7f4bd169903e966774f5f2b4e99">SimpleListed&lt; A, P &gt;</a>, <a class="el" href="class_s_c_boxed.html#acfa0e69c44b82adff580bedafca939e8">SCBoxed&lt; A, P &gt;</a>, <a class="el" href="class_dihedrals.html#ab4a26c866dad2cb93acd33f7d352b822">Dihedrals</a>, <a class="el" href="class_angle_triples.html#a6dda3e05882a08063c5513ad28e6f5fb">AngleTriples</a>, <a class="el" href="class_bond_pairs.html#a3ca24ce9e8644ecc48f26187b95e2ca0">BondPairs</a>, <a class="el" href="class_random_force.html#a1cd0f083537cf1b9a2a015fb835b0672">RandomForce</a>, <a class="el" href="class_c_o_m_spring.html#ad915d0f2c6785d95e0c23df8bbdf2bd9">COMSpring</a>, <a class="el" href="class_fixed_spring.html#a8311cd93f6ff699249ed15bd3c03c995">FixedSpring</a>, <a class="el" href="class_fixed_force_region.html#ae031333809c8260b71668a41643e1e7c">FixedForceRegion</a>, and <a class="el" href="class_fixed_force.html#afbfef63727fbd2bef14259eb8049cbe6">FixedForce</a>.</p>
 
@@ -288,7 +290,7 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="acf418cb3cfe03497d63d311369282433"></a>
+<a class="anchor" id="a6343a257d41c757d1a013c4547e43b9a"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -296,7 +298,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a> Interaction::stress </td>
+          <td class="memname">virtual <a class="el" href="class_matrix.html">Matrix</a> Interaction::stress </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_box.html">Box</a> &amp;&#160;</td>
           <td class="paramname"><em>box</em></td><td>)</td>
@@ -310,7 +312,11 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented in <a class="el" href="class_n_listed.html#a2ab5b8e29827e6b51a7c726e45d69165">NListed&lt; A, P &gt;</a>.</p>
+<p>The force-moment tensor for the current simulation: </p>
+<p>\(\tau^{\alpha \beta} = \sum_{\left&lt;i,j \right&gt;} r_{ij}^\alpha F_{ij}^\beta\).</p>
+<p>At \(T=0\), the stress tensor \(\Sigma = \frac{1}{dV} \tau \). </p>
+
+<p>Reimplemented in <a class="el" href="class_s_c_spring_list.html#afe56e5cb343cb4677c4e90e422fc1f79">SCSpringList</a>, and <a class="el" href="class_n_listed.html#ae1a0b3db0eafe166ab5c2490991de8e3">NListed&lt; A, P &gt;</a>.</p>
 
 </div>
 </div>
@@ -320,7 +326,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 16 2015 17:16:37 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 20 2015 14:16:33 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

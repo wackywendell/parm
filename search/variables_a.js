@@ -4,7 +4,7 @@ var searchData=
   ['kappa',['kappa',['../class_collection_n_l_c_g.html#ab8bebd687d115d41799cf759b7f148bd',1,'CollectionNLCG']]],
   ['kmax',['kmax',['../class_collection_n_l_c_g.html#a55965f91e541a7bf2b79124bea82077a',1,'CollectionNLCG::kmax()'],['../class_collection_n_l_c_g_v.html#ad84d4b5e39fce04c4365d187a7db3699',1,'CollectionNLCGV::kmax()']]],
   ['knew',['Knew',['../class_collection_n_l_c_g.html#aa7ae326760a999c44dc8bd7bc35d8b59',1,'CollectionNLCG::Knew()'],['../class_collection_n_l_c_g_v.html#add474cb738f1e5587332c2cb0079afcf',1,'CollectionNLCGV::Knew()']]],
-  ['ks',['ks',['../class_i_s_f_tracker1.html#a12ac8e995f34d0a08245c86e0ccee90f',1,'ISFTracker1::ks()'],['../class_energy_tracker.html#a829baa10c9e3ee7903f7cee96283a583',1,'EnergyTracker::Ks()']]],
+  ['ks',['Ks',['../class_energy_tracker.html#a829baa10c9e3ee7903f7cee96283a583',1,'EnergyTracker::Ks()'],['../class_i_s_f_tracker1.html#a12ac8e995f34d0a08245c86e0ccee90f',1,'ISFTracker1::ks()']]],
   ['ksq',['Ksq',['../class_energy_tracker.html#a3ec8dc5c33361e98227286585cafde77',1,'EnergyTracker']]],
   ['kva',['Kva',['../struct_r_k4data.html#a4a4f57a3417229738d269d7704cbda75',1,'RK4data']]],
   ['kvb',['Kvb',['../struct_r_k4data.html#ab7edaad411d11799e6dc68f351b000df',1,'RK4data']]],

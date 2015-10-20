@@ -210,15 +210,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    <a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i = 0;</div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> curP=startP; curP&gt;P0; curP/=10){</div>
 <div class="line">        cout &lt;&lt; <span class="stringliteral">&quot;P: &quot;</span> &lt;&lt; curP &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line">        collec.<a name="a15"></a><a class="code" href="class_collection_n_l_c_g.html#abdeaae756baa226831b3b023ea8f37ca">set_pressure</a>(curP);</div>
+<div class="line">        collec.set_pressure(curP);</div>
 <div class="line">        <span class="keywordflow">while</span> (<span class="keyword">true</span>) {</div>
 <div class="line">            <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;1000; j++){</div>
-<div class="line">                collec.<a name="a16"></a><a class="code" href="class_collection_n_l_c_g.html#a3807eba99b56917461e757e23f5e2fe3">timestep</a>();</div>
+<div class="line">                collec.<a name="a15"></a><a class="code" href="class_collection_n_l_c_g.html#a3807eba99b56917461e757e23f5e2fe3">timestep</a>();</div>
 <div class="line">            }</div>
 <div class="line">            i++;</div>
 <div class="line">            writefile(atoms, *obox);</div>
 <div class="line"></div>
-<div class="line">            <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> pdiff = collec.<a name="a17"></a><a class="code" href="class_collection_n_l_c_g.html#a48363f9835a4f180f7caa3c51ff3658c">pressure</a>() / curP - 1.0;</div>
+<div class="line">            <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> pdiff = collec.<a name="a16"></a><a class="code" href="class_collection_n_l_c_g.html#a48363f9835a4f180f7caa3c51ff3658c">pressure</a>() / curP - 1.0;</div>
 <div class="line">            <a class="code" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> force_err = 0;</div>
 <div class="line"></div>
 <div class="line">            <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> k=0; k&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); k++){</div>
@@ -263,14 +263,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    outf.precision(24);</div>
 <div class="line">    </div>
 <div class="line">    outf &lt;&lt; atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>() &lt;&lt; endl;</div>
-<div class="line">    outf &lt;&lt; <span class="stringliteral">&quot;L=&quot;</span> &lt;&lt; obox.<a name="a18"></a><a class="code" href="class_origin_box.html#ab5bea4538104e31ca940d90b8ffa4c49">L</a>() &lt;&lt; endl; <span class="comment">// blank line for comment</span></div>
+<div class="line">    outf &lt;&lt; <span class="stringliteral">&quot;L=&quot;</span> &lt;&lt; obox.<a name="a17"></a><a class="code" href="class_origin_box.html#ab5bea4538104e31ca940d90b8ffa4c49">L</a>() &lt;&lt; endl; <span class="comment">// blank line for comment</span></div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> i=0; i&lt;atoms.<a class="code" href="class_atom_vec.html#ab7eb6c6b80bf5c7dad8fbd649c342ce0">size</a>(); i++){</div>
 <div class="line">        <span class="keywordflow">if</span>(i &lt; Ns){</div>
 <div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;C&quot;</span>;</div>
 <div class="line">        } <span class="keywordflow">else</span> {</div>
 <div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;O&quot;</span>;</div>
 <div class="line">        }</div>
-<div class="line">        <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> normloc = obox.<a name="a19"></a><a class="code" href="class_origin_box.html#a2926768c18c2a14ef1742a9be12a8033">diff</a>(Vec::Zero(), atoms[i].x);</div>
+<div class="line">        <a class="code" href="vecrand_8hpp.html#aa0c2bcbdfaf637fa46ae67b5685ce75c">Vec</a> normloc = obox.<a name="a18"></a><a class="code" href="class_origin_box.html#a2926768c18c2a14ef1742a9be12a8033">diff</a>(Vec::Zero(), atoms[i].x);</div>
 <div class="line">        <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
 <div class="line">            outf &lt;&lt; <span class="stringliteral">&quot;\t&quot;</span> &lt;&lt; normloc[j];</div>
 <div class="line">        }</div>
@@ -284,7 +284,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">    pbcfile.open(<span class="stringliteral">&quot;packing.tcl&quot;</span>, ios::out);</div>
 <div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;set cell [pbc set {&quot;</span>;</div>
 <div class="line">    <span class="keywordflow">for</span>(<a class="code" href="vec_8hpp.html#a91ad9478d81a7aaf2593e8d9c3d06a14">uint</a> j=0; j&lt;<a class="code" href="vecrand_8hpp.html#a2b1fd2d28c6a7d4a3f7027cc1b6466f3">NDIM</a>; j++){</div>
-<div class="line">        pbcfile &lt;&lt; obox.<a name="a20"></a><a class="code" href="class_origin_box.html#a407a156bec5a1381fcba58e1087073de">box_shape</a>()[j] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line">        pbcfile &lt;&lt; obox.<a name="a19"></a><a class="code" href="class_origin_box.html#a407a156bec5a1381fcba58e1087073de">box_shape</a>()[j] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
 <div class="line">    }</div>
 <div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;} -all];\n&quot;</span>;</div>
 <div class="line">    pbcfile &lt;&lt; <span class="stringliteral">&quot;pbc box -toggle -center origin -color red;\n&quot;</span>;</div>
@@ -303,7 +303,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --> </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 16 2015 17:16:37 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 20 2015 14:16:32 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

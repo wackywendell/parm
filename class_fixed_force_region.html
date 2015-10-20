@@ -136,8 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8f82720f2121b026442422f9fe8c32a5 inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a8f82720f2121b026442422f9fe8c32a5">set_forces_get_pressure</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
 <tr class="memdesc:a8f82720f2121b026442422f9fe8c32a5 inherit pub_methods_class_interaction"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set forces (<code><a class="el" href="struct_atom.html#a670588d361624516b330574fcfcb3e1a" title="forces ">Atom.f</a></code>) and return \(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\) at the same time (see <code><a class="el" href="class_interaction.html#a3448dd63ebb53811b8150096e47e0eb2" title="Partial pressure due to this Interaction. ">pressure()</a></code>).  <a href="#a8f82720f2121b026442422f9fe8c32a5">More...</a><br /></td></tr>
 <tr class="separator:a8f82720f2121b026442422f9fe8c32a5 inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf418cb3cfe03497d63d311369282433 inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="vecrand_8hpp.html#aed1b5de8551242de88260bc59d57a6d2">Matrix2</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#acf418cb3cfe03497d63d311369282433">stress</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
-<tr class="separator:acf418cb3cfe03497d63d311369282433 inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6343a257d41c757d1a013c4547e43b9a inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_matrix.html">Matrix</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a6343a257d41c757d1a013c4547e43b9a">stress</a> (<a class="el" href="class_box.html">Box</a> &amp;box)</td></tr>
+<tr class="memdesc:a6343a257d41c757d1a013c4547e43b9a inherit pub_methods_class_interaction"><td class="mdescLeft">&#160;</td><td class="mdescRight">The force-moment tensor for the current simulation:  <a href="#a6343a257d41c757d1a013c4547e43b9a">More...</a><br /></td></tr>
+<tr class="separator:a6343a257d41c757d1a013c4547e43b9a inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98522b3c97be621b78e14b3afd5b16bf inherit pub_methods_class_interaction"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_interaction.html#a98522b3c97be621b78e14b3afd5b16bf">~Interaction</a> ()</td></tr>
 <tr class="separator:a98522b3c97be621b78e14b3afd5b16bf inherit pub_methods_class_interaction"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -293,7 +294,8 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Partial pressure due to this <a class="el" href="class_interaction.html" title="The basic Interaction class, used to represent a potential function. ">Interaction</a>. </p>
-<p>\(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\), or equivalently \(P = \sum_i \vec r_i \cdot \vec F_i\) Note that the full pressure involves <em>all</em> interactions and temperature </p>
+<p>\(P = \sum_{\left&lt;i,j \right&gt;} \vec r_{ij} \cdot \vec F_{ij}\), or equivalently \(P = \sum_i \vec r_i \cdot \vec F_i\)</p>
+<p>Note that the full pressure involves <em>all</em> interactions and temperature, and needs to be normalized by \( \frac{1}{dV} \) where \(d\) is the number of dimensions and \(V\) is the volume. </p>
 
 <p>Implements <a class="el" href="class_interaction.html#a3448dd63ebb53811b8150096e47e0eb2">Interaction</a>.</p>
 
@@ -375,7 +377,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 16 2015 17:16:37 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 20 2015 14:16:32 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

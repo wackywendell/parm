@@ -152,8 +152,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a06fd6796d0e6d2f9d5fd62bef7ad6329"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad51a521aaff24d35518bd8bdb4288348"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_collection_n_l_c_g.html#ad51a521aaff24d35518bd8bdb4288348">set_dt</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> newdt)</td></tr>
 <tr class="separator:ad51a521aaff24d35518bd8bdb4288348"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdeaae756baa226831b3b023ea8f37ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_collection_n_l_c_g.html#abdeaae756baa226831b3b023ea8f37ca">set_pressure</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> P)</td></tr>
-<tr class="separator:abdeaae756baa226831b3b023ea8f37ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4b37bdd4cefe352c49624459e4c8af4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_collection_n_l_c_g.html#ad4b37bdd4cefe352c49624459e4c8af4">set_pressure_goal</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> P)</td></tr>
+<tr class="separator:ad4b37bdd4cefe352c49624459e4c8af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11e4f0121361181e44202b8ef573b3c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_collection_n_l_c_g.html#a11e4f0121361181e44202b8ef573b3c1">get_pressure_goal</a> ()</td></tr>
+<tr class="separator:a11e4f0121361181e44202b8ef573b3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57d2715151dbab8bda51b4e2c2e02704"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_collection_n_l_c_g.html#a57d2715151dbab8bda51b4e2c2e02704">set_kappa</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> <a class="el" href="class_collection_n_l_c_g.html#a4edc310aba97ecc72d2a232f8b182218">k</a>)</td></tr>
 <tr class="separator:a57d2715151dbab8bda51b4e2c2e02704"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31547d4ad3b944f9ed5ca7696d3bd818"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_collection_n_l_c_g.html#a31547d4ad3b944f9ed5ca7696d3bd818">set_max_alpha</a> (<a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> a)</td></tr>
@@ -460,6 +462,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a11e4f0121361181e44202b8ef573b3c1"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a> CollectionNLCG::get_pressure_goal </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a07ab52df4b4fa79b8ef031aaaae8b0e8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -526,7 +551,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Returns (1/d V) Σ ri dot fi where d is number of dimensions note that Interaction-&gt;pressure just returns Σ ri dot fi. </p>
 
 <p>Reimplemented from <a class="el" href="class_collection.html#ada4549415d57d9207d73f21cb77912ad">Collection</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="packer_8cpp-example.html#a17">packer.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="packer_8cpp-example.html#a16">packer.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -744,7 +769,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abdeaae756baa226831b3b023ea8f37ca"></a>
+<a class="anchor" id="ad4b37bdd4cefe352c49624459e4c8af4"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -752,7 +777,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void CollectionNLCG::set_pressure </td>
+          <td class="memname">void CollectionNLCG::set_pressure_goal </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="vecrand_8hpp.html#aba18dc05b48d6b6580d8b1b77a876a81">flt</a>&#160;</td>
           <td class="paramname"><em>P</em></td><td>)</td>
@@ -765,8 +790,7 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="packer_8cpp-example.html#a15">packer.cpp</a>.</dd>
-</dl>
+
 </div>
 </div>
 <a class="anchor" id="aead681fa22d52a7b1a59bedc0130a1c0"></a>
@@ -820,7 +844,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Secant stepping </p>
 
 <p>Implements <a class="el" href="class_collection.html#ac8ee77eb6c7aec95f9a6041096d80ff2">Collection</a>.</p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="packer_8cpp-example.html#a16">packer.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="packer_8cpp-example.html#a15">packer.cpp</a>.</dd>
 </dl>
 </div>
 </div>
@@ -1111,7 +1135,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 16 2015 17:16:37 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 20 2015 14:16:32 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>

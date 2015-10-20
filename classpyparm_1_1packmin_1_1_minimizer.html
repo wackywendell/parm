@@ -122,6 +122,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0bdb902398f059f2eba4e4f5ac7a9d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0ca138e3df621c1880334db1d6232317"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#a0ca138e3df621c1880334db1d6232317">L</a> (self, newL)</td></tr>
 <tr class="separator:a0ca138e3df621c1880334db1d6232317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa4f3ed618b02a9c6ae0636dfc170c6f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#afa4f3ed618b02a9c6ae0636dfc170c6f">goal_pressure</a> (self)</td></tr>
+<tr class="separator:afa4f3ed618b02a9c6ae0636dfc170c6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebdc332b55216670982848e516654691"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#aebdc332b55216670982848e516654691">goal_pressure</a> (self, P)</td></tr>
+<tr class="separator:aebdc332b55216670982848e516654691"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38f46a781e32e9b54549e1d73e2fa7ad"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#a38f46a781e32e9b54549e1d73e2fa7ad">err</a> (self)</td></tr>
 <tr class="separator:a38f46a781e32e9b54549e1d73e2fa7ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af309ade9ee6179a78b09e29d9b355b58"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpyparm_1_1packmin_1_1_minimizer.html#af309ade9ee6179a78b09e29d9b355b58">done</a> (self)</td></tr>
@@ -462,6 +466,48 @@ masses : mass of the particles; if None, will be diameters**3
 When abs(delta_pressure) &lt; self.Pfrac and max_force &lt; self.CGerr, the
 simulation is done (unless need_contacts is also enabled).
 </pre> 
+</div>
+</div>
+<a class="anchor" id="afa4f3ed618b02a9c6ae0636dfc170c6f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def pyparm.packmin.Minimizer.goal_pressure </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aebdc332b55216670982848e516654691"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def pyparm.packmin.Minimizer.goal_pressure </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>P</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a class="anchor" id="a8aec45c7206f0c4670161577046999cd"></a>
@@ -973,7 +1019,7 @@ kw : Extra keyword arguments for Minimizer __init__
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Oct 16 2015 17:16:37 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 20 2015 14:16:33 for ParM by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.10
 </small></address>
