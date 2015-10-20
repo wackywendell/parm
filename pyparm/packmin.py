@@ -145,6 +145,14 @@ class Minimizer:
         self.box.resize_to_L(newL)
         self.collec.set_forces(True, True)
     
+    @property
+    def goal_pressure(self):
+        return self.collec.get_pressure_goal()
+    
+    @goal_pressure.setter
+    def goal_pressure(self, P):
+        self.collec.set_pressure_goal(P)
+    
     def err(self):
         """
         Returns (delta_pressure, max_force), where delta_pressure = (P / P0) - 1 and max_force is the maximum of all total forces on each atom.
