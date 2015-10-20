@@ -988,7 +988,7 @@ flt SCSpringList::set_forces_get_pressure(Box &box){
             SpheroCylinderDiff diff = scp.nearest_location(box);
             Vec f = scp.forces(box, diff);
             scp.apply_force(box, f, diff, l1*l1/4, l2*l2/4);
-            flt rdotf = diff.delta.dot(f);
+            flt rdotf = diff.r.dot(f);
             P += rdotf;
         }
     }
@@ -1010,7 +1010,7 @@ flt SCSpringList::pressure(Box &box){
             SCSpringPair scp = SCSpringPair(pi, pj, eps, sig, l1, l2);
             SpheroCylinderDiff diff = scp.nearest_location(box);
             Vec f = scp.forces(box, diff);
-            flt rdotf = diff.delta.dot(f);
+            flt rdotf = diff.r.dot(f);
             P += rdotf;
         }
     }
