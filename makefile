@@ -24,11 +24,10 @@ all: py2d py3d
 
 py: py2d py3d py2dlong py3dlong
 
-
 wraps: wrap2d wrap3d wrap2dlong wrap3dlong
 
 printout:
-	@echo Running \"$(CXX)\" on \"$(UNAME)\"
+	@echo Running on \"$(UNAME)\"
 	
 ghp: doc
 	echo 'parm.lostinmyterminal.com' > doc/html/CNAME
@@ -78,14 +77,17 @@ py$(SFX): pyparm/_sim$(SFX).so
 # same names do not end up treated as the same types. This can cause issues with
 # e.g. AtomVec, if both sim2d and sim3d are imported at the same time.
 # There isn't any need for the two to interoperate, so we keep them separate.
-wrap$(SFX):
+	
+
+wrap$(SFX): pyparm/sim_wrap$(SFX).cxx
+pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/array.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
 	cd src ; $(SWIG) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) sim.i
 	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > $$@
 	rm src/sim_wrap.cxx
 	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
-pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
-	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) $(INC) -I src/ -c $$< -o $$@
+pyparm/sim_wrap$(SFX).o: | pyparm/sim_wrap$(SFX).cxx
+	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) $(INC) -I src/ -c $$| -o $$@
 
 pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
 	$(CXX) $(CCOPTS) $(OPTSET) -shared $$< -o $$@ $(LIB)
