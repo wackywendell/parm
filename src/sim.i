@@ -12,7 +12,7 @@
 %module sim3d
 #endif
 #endif
-#pragma SWIG nowarn=302,321,389
+#pragma SWIG nowarn=302,321,389,322
 %feature("autodoc", "1");
 
 %include pyabc.i
