@@ -12,7 +12,7 @@ UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
 CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
-BINOPTS:=-Llib -Wl,-rpath "$(shell readlink -f lib)"
+BINOPTS:=-Llib -Wl,-rpath "$(realpath lib)"
 
 INC=`python3-config --includes`
 
@@ -122,7 +122,7 @@ endef
 $(foreach target1,$(VECOPTS), $(foreach target2,$(FLOATOPTS),$(eval $(call TARGET_RULES,$(target1),$(target2)))))
 
 bin/hardspheres: lib/libsim3d.so src/bin/hardspheres.cpp | bin
-	$(CXX) $(CCOPTS) $(BINOPTS)-lsim3d -DVEC3D src/bin/hardspheres.cpp -o bin/hardspheres
+	$(CXX) $(CCOPTS) $(BINOPTS) -lsim3d -DVEC3D src/bin/hardspheres.cpp -o bin/hardspheres
 
 bin/hardspheres2: lib/libsim3d.so src/bin/hardspheres2.cpp | bin
 	$(CXX) $(CCOPTS) $(BINOPTS) -lsim3d -DVEC3D src/bin/hardspheres2.cpp -o bin/hardspheres2
