@@ -117,7 +117,7 @@ int main(){
     uint i = 0;
     for(flt curP=startP; curP>P0; curP/=10){
         cout << "P: " << curP << "\n";
-        collec.set_pressure(curP);
+        collec.set_pressure_goal(curP);
         while (true) {
             for(uint j=0; j<1000; j++){
                 collec.timestep();

@@ -821,7 +821,7 @@ flt SoftWallCylinder::pressure(Box &box){
 };
 
 flt SCAtomVec::volume(flt diameter, flt length, uint dim){
-    flt cap_V = M_PI * pow(diameter, dim) / (2*dim);
+    flt cap_V = M_PI * pow(diameter, (flt)dim) / (2*dim);
     flt shaft_V;
     if(dim == 2) {
         shaft_V = diameter * (length - diameter);

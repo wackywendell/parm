@@ -12,6 +12,7 @@ UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
 CCOPTS=-I src -Wall -O2 -fPIC -std=c++98
+BINOPTS:=-Llib
 
 INC=`python3-config --includes`
 LIB=`python3-config --ldflags`
@@ -79,51 +80,54 @@ py$(SFX): pyparm/_sim$(SFX).so
 # There isn't any need for the two to interoperate, so we keep them separate.
 wrap$(SFX):
 	cd src ; $(SWIG) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) sim.i
-	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > pyparm/sim_wrap$(SFX).cxx
+	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > $$@
 	rm src/sim_wrap.cxx
 	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
 pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
-	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) -I src/ -c pyparm/sim_wrap$(SFX).cxx -o pyparm/sim_wrap$(SFX).o $(INC)
+	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) $(INC) -I src/ -c $$< -o $$@
 
 pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
-	$(CXX) $(CCOPTS) $(OPTSET) -shared pyparm/sim_wrap$(SFX).o -o pyparm/_sim$(SFX).so $(LIB)
+	$(CXX) $(CCOPTS) $(OPTSET) -shared $$< -o $$@ $(LIB)
 
 #-------------------------------------------------------------------------------
 # The C++ modules
-lib/vecrand$(SFX).o: src/vecrand.hpp src/vecrand.cpp | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -c src/vecrand.cpp -o lib/vecrand$(SFX).o
+lib/vecrand$(SFX).o: src/vecrand.cpp src/vecrand.hpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c $$< -o $$@
 
-lib/box$(SFX).o: src/vecrand.hpp src/box.hpp src/box.cpp | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -c src/box.cpp -o lib/box$(SFX).o
+lib/box$(SFX).o: src/box.cpp src/vecrand.hpp src/box.hpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c $$< -o $$@
 
-lib/trackers$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/trackers.cpp | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -c src/trackers.cpp -o lib/trackers$(SFX).o
+lib/trackers$(SFX).o: src/trackers.cpp src/vecrand.hpp src/box.hpp src/trackers.hpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c $$< -o $$@
 
-lib/interaction$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/interaction.cpp | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -c src/interaction.cpp -o lib/interaction$(SFX).o
+lib/interaction$(SFX).o: src/interaction.cpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c $$< -o $$@
 
-lib/constraints$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp src/constraints.cpp | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -c src/constraints.cpp -o lib/constraints$(SFX).o
+lib/constraints$(SFX).o: src/constraints.cpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/constraints.hpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c $$< -o $$@
 
-lib/collection$(SFX).o: src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp src/collection.cpp | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -c src/collection.cpp -o lib/collection$(SFX).o
+lib/collection$(SFX).o: src/collection.cpp src/vecrand.hpp src/box.hpp src/trackers.hpp src/interaction.hpp src/collection.hpp src/constraints.hpp | lib
+	$(CXX) $(CCOPTS) $(OPTSET) -c $$< -o $$@
 
 lib/libsim$(SFX).so: lib/vecrand$(SFX).o lib/box$(SFX).o lib/trackers$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o | lib
-	$(CXX) $(CCOPTS) $(OPTSET) -shared -o lib/libsim$(SFX).so lib/box$(SFX).o lib/trackers$(SFX).o lib/vecrand$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o
+	$(CXX) $(CCOPTS) $(OPTSET) -shared $$^ -o $$@
 
-bin/LJatoms$(SFX): lib/libsim$(SFX).so src/bin/LJatoms.cpp | bin
-	$(CXX) $(CCOPTS) $(OPTSET) src/bin/LJatoms.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/LJatoms$(SFX)
+lib/libsim$(SFX).a: lib/vecrand$(SFX).o lib/box$(SFX).o lib/trackers$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o | lib
+	ar -r $$@ $$^
 
-bin/packer$(SFX): lib/libsim$(SFX).so src/bin/packer.cpp | bin
-	$(CXX) $(CCOPTS) $(OPTSET) src/bin/packer.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/packer$(SFX)
+bin/LJatoms$(SFX): src/bin/LJatoms.cpp lib/libsim$(SFX).a | bin
+	$(CXX) $(CCOPTS) $(OPTSET) $(BINOPTS) $$^ -o $$@
+
+bin/packer$(SFX): src/bin/packer.cpp lib/libsim$(SFX).a | bin
+	$(CXX) $(CCOPTS) $(OPTSET) $(BINOPTS) $$^ -o $$@
 
 endef
 
 $(foreach target1,$(VECOPTS), $(foreach target2,$(FLOATOPTS),$(eval $(call TARGET_RULES,$(target1),$(target2)))))
 
-bin/hardspheres: lib/libsim3d.so src/bin/hardspheres.cpp | bin
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres
+bin/hardspheres: src/bin/hardspheres.cpp lib/libsim3d.a | bin
+	$(CXX) $(CCOPTS) $(BINOPTS) -DVEC3D $^ -o $@
 
-bin/hardspheres2: lib/libsim3d.so src/bin/hardspheres2.cpp | bin
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres2.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres2
+bin/hardspheres2: src/bin/hardspheres2.cpp lib/libsim3d.a | bin
+	$(CXX) $(CCOPTS) $(BINOPTS) -DVEC3D $^ -o $@
