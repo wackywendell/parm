@@ -79,15 +79,19 @@ py$(SFX): pyparm/_sim$(SFX).so
 # There isn't any need for the two to interoperate, so we keep them separate.
 	
 
-wrap$(SFX): pyparm/sim_wrap$(SFX).cxx
-pyparm/sim_wrap$(SFX).cxx: src/swig_header.h src/sim.i src/array.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
+wrap$(SFX): clean_wrap$(SFX) pyparm/sim_wrap$(SFX).cxx
+
+clean_wrap$(SFX):
+	rm pyparm/sim_wrap$(SFX).cxx
+	
+pyparm/sim_wrap$(SFX).cxx: | src/swig_header.h src/sim.i src/array.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
 	cd src ; $(SWIG) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) sim.i
 	(cat src/swig_header.h ; echo ; echo ; cat src/sim_wrap.cxx) > $$@
 	rm src/sim_wrap.cxx
 	mv src/sim$(SFX).py pyparm/$(MODNAME).py
 
-pyparm/sim_wrap$(SFX).o: | pyparm/sim_wrap$(SFX).cxx
-	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) $(INC) -I src/ -c $$| -o $$@
+pyparm/sim_wrap$(SFX).o: pyparm/sim_wrap$(SFX).cxx
+	$(CXX) $(CCOPTS) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) $(INC) -I src/ -c $$< -o $$@
 
 pyparm/_sim$(SFX).so: pyparm/sim_wrap$(SFX).o
 	$(CXX) $(CCOPTS) $(OPTSET) -shared $$< -o $$@ $(LIB)
