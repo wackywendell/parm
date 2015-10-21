@@ -12,6 +12,7 @@ UNAME := $(shell uname)
 #CXX=${CXX}
 SWIG=swig -Wextra -shadow -python -py3 -c++
 CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
+BINOPTS:=-Llib -Wl,-rpath "$(shell readlink -f lib)"
 
 INC=`python3-config --includes`
 
@@ -111,17 +112,17 @@ lib/libsim$(SFX).so: lib/vecrand$(SFX).o lib/box$(SFX).o lib/trackers$(SFX).o li
 	$(CXX) $(CCOPTS) $(OPTSET) -shared -o lib/libsim$(SFX).so lib/box$(SFX).o lib/trackers$(SFX).o lib/vecrand$(SFX).o lib/interaction$(SFX).o lib/constraints$(SFX).o lib/collection$(SFX).o
 
 bin/LJatoms$(SFX): lib/libsim$(SFX).so src/bin/LJatoms.cpp | bin
-	$(CXX) $(CCOPTS) $(OPTSET) src/bin/LJatoms.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/LJatoms$(SFX)
+	$(CXX) $(CCOPTS) $(OPTSET) $(BINOPTS) -lsim$(SFX) src/bin/LJatoms.cpp -o bin/LJatoms$(SFX)
 
 bin/packer$(SFX): lib/libsim$(SFX).so src/bin/packer.cpp | bin
-	$(CXX) $(CCOPTS) $(OPTSET) src/bin/packer.cpp -Llib -lsim$(SFX) -Wl,-rpath "lib" -o bin/packer$(SFX)
+	$(CXX) $(CCOPTS) $(OPTSET) $(BINOPTS) -lsim$(SFX) src/bin/packer.cpp -o bin/packer$(SFX)
 
 endef
 
 $(foreach target1,$(VECOPTS), $(foreach target2,$(FLOATOPTS),$(eval $(call TARGET_RULES,$(target1),$(target2)))))
 
 bin/hardspheres: lib/libsim3d.so src/bin/hardspheres.cpp | bin
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres
+	$(CXX) $(CCOPTS) $(BINOPTS)-lsim3d -DVEC3D src/bin/hardspheres.cpp -o bin/hardspheres
 
 bin/hardspheres2: lib/libsim3d.so src/bin/hardspheres2.cpp | bin
-	$(CXX) $(CCOPTS) -DVEC3D src/bin/hardspheres2.cpp -Llib -lsim3d -Wl,-rpath "lib" -o bin/hardspheres2
+	$(CXX) $(CCOPTS) $(BINOPTS) -lsim3d -DVEC3D src/bin/hardspheres2.cpp -o bin/hardspheres2
