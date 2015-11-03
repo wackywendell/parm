@@ -636,3 +636,55 @@ class ShearTest2D(NPTestCase):
 
 class ShearTest3D(ShearTest2D):
     d = 3
+
+
+class RotateTest2D(NPTestCase):
+    nrots = 4
+    d = 2
+    arr = np.array([3.0, 2.2])
+    
+    def setUp(self):
+        self.sim = sim2 if self.d == 2 else sim3
+        
+    def test_rotations(self):
+        rots = [self.sim.rotate(self.arr, n) for n in range(self.nrots)]
+        for r1, r2 in itertools.combinations(rots, 2):
+            self.assertNotClose(r1, r2)
+    
+    def test_rotoflips(self):
+        rots = [self.sim.rotate_flip(self.arr, n) for n in range(2*self.nrots)]
+        for r1, r2 in itertools.combinations(rots, 2):
+            self.assertNotClose(r1, r2)
+    
+    def test_rotate_inv(self):
+        for n in range(self.nrots):
+            rot = self.sim.rotate(self.arr, n)
+            print(n)
+            if n == 0:
+                print(n, rot, '=?', self.arr)
+                self.assertClose(rot, self.arr)
+            else:
+                print(n, rot, '!=?', self.arr)
+                self.assertNotClose(rot, self.arr)
+            
+            inv = self.sim.rotate_inv(rot, n)
+            print(n, rot, inv, '=?', self.arr)
+            self.assertClose(inv, self.arr)
+    
+    def test_rotate_flip_inv(self):
+        for n in range(self.nrots*2):
+            rot = self.sim.rotate_flip(self.arr, n)
+            print(n)
+            if n == 0:
+                self.assertClose(rot, self.arr)
+            else:
+                self.assertNotClose(rot, self.arr)
+            
+            inv = self.sim.rotate_flip_inv(rot, n)
+            self.assertClose(inv, self.arr)
+
+
+class RotateTest3D(RotateTest2D):
+    nrots = 24
+    d = 3
+    arr = np.array([3.0, 2.2, 4.6])
