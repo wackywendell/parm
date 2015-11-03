@@ -89,7 +89,10 @@ inline Vec2 rotate(Vec2 v, uint i){
     else if(i % 4 == 3) return Vec2(v(1), -v(0));
     else if(i % 4 == 2) return Vec2(-v(0), -v(1));
     else return Vec2(-v(1), v(0));
-}
+};
+inline Vec2 rotate_inv(Vec2 v, uint i){
+    return rotate(v, 4 - i);
+};
 inline Vec2 flip(Vec2 v){return Vec2(v(1), v(0));};
 inline Vec2 rotate_flip(Vec2 v, uint i){
     if((i / 4) % 2 == 1) return rotate(flip(v), i%4);
@@ -101,6 +104,53 @@ inline Vec2 rotate_flip_inv(Vec2 v, uint i){
     if((i / 4) % 2 == 0) return inv;
     return flip(inv);
 };
+
+inline Vec3 rotate(Vec3 v, uint i){
+    i %= 24;
+    if(i == 0) return v;
+    else if(i ==  1) return Vec3( v(0),-v(1),-v(2));
+    else if(i ==  2) return Vec3( v(1), v(0),-v(2));
+    else if(i ==  3) return Vec3( v(2),-v(1), v(0));
+    else if(i ==  4) return Vec3(-v(2),-v(1),-v(0));
+    else if(i ==  5) return Vec3(-v(1),-v(0),-v(2));
+    else if(i ==  6) return Vec3(-v(0), v(1),-v(2));
+    else if(i ==  7) return Vec3(-v(0), v(2), v(1));
+    else if(i ==  8) return Vec3(-v(0),-v(2),-v(1));
+    else if(i ==  9) return Vec3(-v(0),-v(1), v(2));
+    else if(i == 10) return Vec3( v(0), v(2),-v(1));
+    else if(i == 11) return Vec3( v(1), v(2), v(0));
+    else if(i == 12) return Vec3( v(1),-v(2),-v(0));
+    else if(i == 13) return Vec3( v(1),-v(0), v(2));
+    else if(i == 14) return Vec3( v(2), v(1),-v(0));
+    else if(i == 15) return Vec3( v(2),-v(0),-v(1));
+    else if(i == 16) return Vec3(-v(2),-v(0), v(1));
+    else if(i == 17) return Vec3(-v(1), v(2),-v(0));
+    else if(i == 18) return Vec3(-v(1),-v(2), v(0));
+    else if(i == 19) return Vec3(-v(2), v(1), v(0));
+    else if(i == 20) return Vec3(-v(1), v(0), v(2));
+    else if(i == 21) return Vec3(-v(2), v(0),-v(1));
+    else if(i == 22) return Vec3( v(2), v(0), v(1));
+    else if(i == 23) return Vec3( v(0),-v(2), v(1));
+    throw std::runtime_error("This should be impossible to reach.");
+};
+
+inline Vec3 rotate_inv(Vec3 v, uint i){
+    i %= 24;
+    if(i < 10) return rotate(v, i);
+    else return rotate(v, 33 - i);
+};
+inline Vec3 flip(Vec3 v){return -v;};
+inline Vec3 rotate_flip(Vec3 v, uint i){
+    if((i / 24) % 2 == 1) return rotate(flip(v), i%24);
+    return rotate(v, i%24);
+};
+
+inline Vec3 rotate_flip_inv(Vec3 v, uint i){
+    Vec3 inv = rotate_inv(v, i%24);
+    if((i / 24) % 2 == 0) return inv;
+    return flip(inv);
+};
+
 
 inline uint vecsize(){return sizeof(Vec);}
 
