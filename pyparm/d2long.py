@@ -6766,6 +6766,9 @@ _cccavector3_swigregister(_cccavector3)
 _sim2dlong.NDIM_swigconstant(_sim2dlong)
 NDIM = _sim2dlong.NDIM
 
+_sim2dlong.DIMROTATIONS_swigconstant(_sim2dlong)
+DIMROTATIONS = _sim2dlong.DIMROTATIONS
+
 def cbrt(n: 'flt') -> "flt":
     """cbrt(flt n) -> flt"""
     return _sim2dlong.cbrt(n)
@@ -6810,21 +6813,40 @@ def perpto(r: 'Vec', to: 'Vec') -> "Vec":
     """perpto(Vec r, Vec to) -> Vec"""
     return _sim2dlong.perpto(r, to)
 
-def rotate(v: 'Vec2', i: 'uint') -> "Vec2":
-    """rotate(Vec2 v, uint i) -> Vec2"""
-    return _sim2dlong.rotate(v, i)
+def rotate(*args) -> "Vec3":
+    """
+    rotate(Vec2 v, uint i) -> Vec2
+    rotate(Vec3 v, uint i) -> Vec3
+    """
+    return _sim2dlong.rotate(*args)
 
-def flip(v: 'Vec2') -> "Vec2":
-    """flip(Vec2 v) -> Vec2"""
-    return _sim2dlong.flip(v)
+def rotate_inv(*args) -> "Vec3":
+    """
+    rotate_inv(Vec2 v, uint i) -> Vec2
+    rotate_inv(Vec3 v, uint i) -> Vec3
+    """
+    return _sim2dlong.rotate_inv(*args)
 
-def rotate_flip(v: 'Vec2', i: 'uint') -> "Vec2":
-    """rotate_flip(Vec2 v, uint i) -> Vec2"""
-    return _sim2dlong.rotate_flip(v, i)
+def flip(*args) -> "Vec3":
+    """
+    flip(Vec2 v) -> Vec2
+    flip(Vec3 v) -> Vec3
+    """
+    return _sim2dlong.flip(*args)
 
-def rotate_flip_inv(v: 'Vec2', i: 'uint') -> "Vec2":
-    """rotate_flip_inv(Vec2 v, uint i) -> Vec2"""
-    return _sim2dlong.rotate_flip_inv(v, i)
+def rotate_flip(*args) -> "Vec3":
+    """
+    rotate_flip(Vec2 v, uint i) -> Vec2
+    rotate_flip(Vec3 v, uint i) -> Vec3
+    """
+    return _sim2dlong.rotate_flip(*args)
+
+def rotate_flip_inv(*args) -> "Vec3":
+    """
+    rotate_flip_inv(Vec2 v, uint i) -> Vec2
+    rotate_flip_inv(Vec3 v, uint i) -> Vec3
+    """
+    return _sim2dlong.rotate_flip_inv(*args)
 
 def vecsize() -> "uint":
     """vecsize() -> uint"""
@@ -12334,44 +12356,48 @@ class JammingListRot(JammingList):
 JammingListRot_swigregister = _sim2dlong.JammingListRot_swigregister
 JammingListRot_swigregister(JammingListRot)
 
-class JammingTree2(_object):
-    """Proxy of C++ JammingTree2 class"""
+class JammingTreeRot(_object):
+    """Proxy of C++ JammingTreeRot class"""
     __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, JammingTree2, name, value)
+    __setattr__ = lambda self, name, value: _swig_setattr(self, JammingTreeRot, name, value)
     __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, JammingTree2, name)
+    __getattr__ = lambda self, name: _swig_getattr(self, JammingTreeRot, name)
     __repr__ = _swig_repr
 
-    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &'):
-        """__init__(JammingTree2 self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> JammingTree2"""
-        this = _sim2dlong.new_JammingTree2(box, A, B)
+    def __init__(self, box: 'boost::shared_ptr< Box >', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', use_rotations: 'bool'=True, use_inversions: 'bool'=True):
+        """
+        __init__(JammingTreeRot self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, bool use_rotations=True, bool use_inversions=True) -> JammingTreeRot
+        __init__(JammingTreeRot self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, bool use_rotations=True) -> JammingTreeRot
+        __init__(JammingTreeRot self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> JammingTreeRot
+        """
+        this = _sim2dlong.new_JammingTreeRot(box, A, B, use_rotations, use_inversions)
         try:
             self.this.append(this)
         except:
             self.this = this
 
     def distance(self, jlist: 'JammingListRot') -> "flt":
-        """distance(JammingTree2 self, JammingListRot jlist) -> flt"""
-        return _sim2dlong.JammingTree2_distance(self, jlist)
+        """distance(JammingTreeRot self, JammingListRot jlist) -> flt"""
+        return _sim2dlong.JammingTreeRot_distance(self, jlist)
 
 
     def expand(self, *args) -> "bool":
         """
-        expand(JammingTree2 self, JammingListRot curjlist) -> _JammingListRot
-        expand(JammingTree2 self) -> bool
-        expand(JammingTree2 self, uint n) -> bool
+        expand(JammingTreeRot self, JammingListRot curjlist) -> _JammingListRot
+        expand(JammingTreeRot self) -> bool
+        expand(JammingTreeRot self, uint n) -> bool
         """
-        return _sim2dlong.JammingTree2_expand(self, *args)
+        return _sim2dlong.JammingTreeRot_expand(self, *args)
 
 
     def expand_to(self, maxdistsq: 'flt') -> "bool":
-        """expand_to(JammingTree2 self, flt maxdistsq) -> bool"""
-        return _sim2dlong.JammingTree2_expand_to(self, maxdistsq)
+        """expand_to(JammingTreeRot self, flt maxdistsq) -> bool"""
+        return _sim2dlong.JammingTreeRot_expand_to(self, maxdistsq)
 
 
     def straight_diff(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "Vec":
         """straight_diff(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> Vec"""
-        return _sim2dlong.JammingTree2_straight_diff(bx, A, B)
+        return _sim2dlong.JammingTreeRot_straight_diff(bx, A, B)
 
     if _newclass:
         straight_diff = staticmethod(straight_diff)
@@ -12379,78 +12405,82 @@ class JammingTree2(_object):
 
     def straight_distsq(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "flt":
         """straight_distsq(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> flt"""
-        return _sim2dlong.JammingTree2_straight_distsq(bx, A, B)
+        return _sim2dlong.JammingTreeRot_straight_distsq(bx, A, B)
 
     if _newclass:
         straight_distsq = staticmethod(straight_distsq)
     __swig_getmethods__["straight_distsq"] = lambda x: straight_distsq
 
     def my_list(self) -> "std::list< JammingListRot > &":
-        """my_list(JammingTree2 self) -> _JammingListRot"""
-        return _sim2dlong.JammingTree2_my_list(self)
+        """my_list(JammingTreeRot self) -> _JammingListRot"""
+        return _sim2dlong.JammingTreeRot_my_list(self)
 
 
     def copy_list(self, *args) -> "std::list< JammingListRot >":
         """
-        copy_list(JammingTree2 self) -> _JammingListRot
-        copy_list(JammingTree2 self, uint n) -> _JammingListRot
+        copy_list(JammingTreeRot self) -> _JammingListRot
+        copy_list(JammingTreeRot self, uint n) -> _JammingListRot
         """
-        return _sim2dlong.JammingTree2_copy_list(self, *args)
+        return _sim2dlong.JammingTreeRot_copy_list(self, *args)
 
 
     def current_best(self) -> "JammingListRot":
-        """current_best(JammingTree2 self) -> JammingListRot"""
-        return _sim2dlong.JammingTree2_current_best(self)
+        """current_best(JammingTreeRot self) -> JammingListRot"""
+        return _sim2dlong.JammingTreeRot_current_best(self)
 
 
     def size(self) -> "uint":
-        """size(JammingTree2 self) -> uint"""
-        return _sim2dlong.JammingTree2_size(self)
+        """size(JammingTreeRot self) -> uint"""
+        return _sim2dlong.JammingTreeRot_size(self)
 
 
     def locations_B(self, *args) -> "Eigen::Matrix< flt,Eigen::Dynamic,2 >":
         """
-        locations_B(JammingTree2 self, JammingListRot jlist) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
-        locations_B(JammingTree2 self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
+        locations_B(JammingTreeRot self, JammingListRot jlist) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
+        locations_B(JammingTreeRot self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
         """
-        return _sim2dlong.JammingTree2_locations_B(self, *args)
+        return _sim2dlong.JammingTreeRot_locations_B(self, *args)
 
 
     def locations_A(self, *args) -> "Eigen::Matrix< flt,Eigen::Dynamic,2 >":
         """
-        locations_A(JammingTree2 self, JammingListRot jlist) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
-        locations_A(JammingTree2 self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
+        locations_A(JammingTreeRot self, JammingListRot jlist) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
+        locations_A(JammingTreeRot self) -> Eigen::Matrix< flt,Eigen::Dynamic,2 >
         """
-        return _sim2dlong.JammingTree2_locations_A(self, *args)
+        return _sim2dlong.JammingTreeRot_locations_A(self, *args)
 
-    __swig_destroy__ = _sim2dlong.delete_JammingTree2
+    __swig_destroy__ = _sim2dlong.delete_JammingTreeRot
     __del__ = lambda self: None
-JammingTree2_swigregister = _sim2dlong.JammingTree2_swigregister
-JammingTree2_swigregister(JammingTree2)
+JammingTreeRot_swigregister = _sim2dlong.JammingTreeRot_swigregister
+JammingTreeRot_swigregister(JammingTreeRot)
 
-def JammingTree2_straight_diff(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "Vec":
-    """JammingTree2_straight_diff(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> Vec"""
-    return _sim2dlong.JammingTree2_straight_diff(bx, A, B)
+def JammingTreeRot_straight_diff(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "Vec":
+    """JammingTreeRot_straight_diff(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> Vec"""
+    return _sim2dlong.JammingTreeRot_straight_diff(bx, A, B)
 
-def JammingTree2_straight_distsq(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "flt":
-    """JammingTree2_straight_distsq(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> flt"""
-    return _sim2dlong.JammingTree2_straight_distsq(bx, A, B)
+def JammingTreeRot_straight_distsq(bx: 'Box', A: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &', B: 'Eigen::Matrix< flt,Eigen::Dynamic,2 > &') -> "flt":
+    """JammingTreeRot_straight_distsq(Box bx, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B) -> flt"""
+    return _sim2dlong.JammingTreeRot_straight_distsq(bx, A, B)
 
-class JammingTreeBD(JammingTree2):
+class JammingTreeBD(JammingTreeRot):
     """Proxy of C++ JammingTreeBD class"""
     __swig_setmethods__ = {}
-    for _s in [JammingTree2]:
+    for _s in [JammingTreeRot]:
         __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
     __setattr__ = lambda self, name, value: _swig_setattr(self, JammingTreeBD, name, value)
     __swig_getmethods__ = {}
-    for _s in [JammingTree2]:
+    for _s in [JammingTreeRot]:
         __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
     __getattr__ = lambda self, name: _swig_getattr(self, JammingTreeBD, name)
     __repr__ = _swig_repr
 
     def __init__(self, *args):
         """
+        __init__(JammingTreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoff, bool use_rotations=True, bool use_inversions=True) -> JammingTreeBD
+        __init__(JammingTreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoff, bool use_rotations=True) -> JammingTreeBD
         __init__(JammingTreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoff) -> JammingTreeBD
+        __init__(JammingTreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoffA, uint cutoffB, bool use_rotations=True, bool use_inversions=True) -> JammingTreeBD
+        __init__(JammingTreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoffA, uint cutoffB, bool use_rotations=True) -> JammingTreeBD
         __init__(JammingTreeBD self, boost::shared_ptr< Box > box, Eigen::Matrix< flt,Eigen::Dynamic,2 > & A, Eigen::Matrix< flt,Eigen::Dynamic,2 > & B, uint cutoffA, uint cutoffB) -> JammingTreeBD
         """
         this = _sim2dlong.new_JammingTreeBD(*args)
