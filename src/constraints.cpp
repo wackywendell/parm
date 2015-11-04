@@ -775,7 +775,6 @@ bool JammingList::operator<(const JammingList& other ) const{
     return false; // consider them equal
 };
 
-#ifdef VEC2D
 /* There are two ways of looking at the different arrangements.
  * In both cases, we leave A the same as it was, and rotate / flip / translate B.
  * Also in both cases, we wrap A, then subtract off its COM (in an infinite box).
@@ -824,18 +823,25 @@ bool JammingListRot::operator<(const JammingListRot& other ) const {
     return false; // consider them equal
 };
 
-JammingTree2::JammingTree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A0, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B0)
-            : box(box), jlists(), A(A0), Bs(8, B0){
-    for(uint rot=0; rot < 8; ++rot){
-        for(uint i=0; i<B0.size(); ++i){
-                        Bs[rot].row(i) = rotate_flip(B0.row(i), rot); }
-        if(A0.size() <= B0.size()) jlists.push_back(JammingListRot(rot));
+JammingTreeRot::JammingTreeRot(
+        sptr<Box>box, 
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A0,
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B0, 
+        bool use_rotations, bool use_inversions
+    ) : box(box), jlists(), A(A0), Bs(DIMROTATIONS, B0){
+    for(uint rot=0; rot < DIMROTATIONS; ++rot){
+        if(!use_rotations and (rot % DIMROTATIONS != 0)) continue;
+        if(!use_inversions and (rot >= DIMROTATIONS)) continue;
+        for(uint i=0; i<B0.rows(); ++i){
+            Vec loc = B0.row(i);
+            Bs[rot].row(i) = rotate_flip(loc, rot);
+        }
+        if(A0.rows() <= B0.rows()) jlists.push_back(JammingListRot(rot));
         //~ cout << "Created, now size " << jlists.size() << endl;
     }
-    
 };
 
-flt JammingTree2::distance(JammingListRot& jlist){
+flt JammingTreeRot::distance(JammingListRot& jlist){
     flt dist = 0;
     uint rot = jlist.rotation;
     for(uint i=1; i<jlist.size(); ++i){
@@ -850,7 +856,7 @@ flt JammingTree2::distance(JammingListRot& jlist){
     return dist / ((flt) jlist.assigned.size());
 };
 
-list<JammingListRot> JammingTree2::expand(JammingListRot curjlist){
+list<JammingListRot> JammingTreeRot::expand(JammingListRot curjlist){
     vector<uint>& curlist = curjlist.assigned;
     list<JammingListRot> newlists = list<JammingListRot>();
     if(curlist.size() >= (uint) A.rows()){
@@ -870,7 +876,7 @@ list<JammingListRot> JammingTree2::expand(JammingListRot curjlist){
     return newlists;
 };
 
-bool JammingTree2::expand(){
+bool JammingTreeRot::expand(){
     JammingListRot curjlist = jlists.front();
     list<JammingListRot> newlists = expand(curjlist);
     
@@ -889,9 +895,14 @@ bool JammingTree2::expand(){
 };
 
 
-JammingTreeBD::JammingTreeBD(sptr<Box> box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
-                    uint cutoffA, uint cutoffB) :
-            JammingTree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){
+JammingTreeBD::JammingTreeBD(
+        sptr<Box> box,
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A,
+        Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
+        uint cutoffA, uint cutoffB, 
+        bool use_rotations, bool use_inversions) :
+            JammingTreeRot(box, A, B, use_rotations, use_inversions), cutoff1(cutoffA), cutoff2(cutoffB){
+                
     if(cutoffA > cutoffB){jlists.clear();}
     if(A.rows() - cutoffA > B.rows() - cutoffB){jlists.clear();}
 };
@@ -933,7 +944,7 @@ bool JammingTreeBD::expand(){
 };
 
 
-Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_B(JammingListRot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTreeRot::locations_B(JammingListRot jlist){
     uint rot = jlist.rotation;
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(jlist.size(), NDIM);
     
@@ -952,7 +963,7 @@ Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_B(JammingListRo
 };
 
 
-Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_A(JammingListRot jlist){
+Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTreeRot::locations_A(JammingListRot jlist){
     uint rot = jlist.rotation;
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locs = Eigen::Matrix<flt, Eigen::Dynamic, NDIM>(Bs[rot].rows(), NDIM);
     
@@ -968,14 +979,18 @@ Eigen::Matrix<flt, Eigen::Dynamic, NDIM> JammingTree2::locations_A(JammingListRo
         }
         
         // this is an inverse rotateflip
-        locs.row(si) = rotate_flip_inv(locs.row(si), rot);
+        
+        Vec loc = locs.row(si);
+        locs.row(si) = rotate_flip_inv(loc, rot);
     }
     return locs;
 };
 
-Vec JammingTree2::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
+Vec JammingTreeRot::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
     uint N = (uint) As.rows();
-    if(Bs.rows() != N) return vec(NAN,NAN);
+    if(Bs.rows() != N){
+        throw std::runtime_error("As and Bs are not of the same shape");
+    }
     
     Vec loc = Vec::Zero();
     for(uint i=0; i<N; ++i){
@@ -988,7 +1003,7 @@ Vec JammingTree2::straight_diff(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM
     return loc / N;
 };
 
-flt JammingTree2::straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
+flt JammingTreeRot::straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& As, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& Bs){
     long int N = As.rows();
     if(Bs.rows() != N) return NAN;
     
@@ -1002,10 +1017,6 @@ flt JammingTree2::straight_distsq(Box &bx, Eigen::Matrix<flt, Eigen::Dynamic, ND
     }
     return dist / ((flt) N);
 };
-
-
-
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

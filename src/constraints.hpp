@@ -417,6 +417,10 @@ class JammingList {
         bool operator<(const JammingList& other) const;
 };
 
+//! A class for determining if two packings are the same.
+//! Given a list of particle positions A and a second list of particle positions
+//! B, after repeated calls to expand, this will (after repeated calls to 
+//! expand) return a JammingList that 
 class JammingTree {
     private:
         sptr<Box> box;
@@ -487,8 +491,6 @@ class JammingTree {
         uint size(){return (uint) jlists.size();};
 };
 
-#ifdef VEC2D
-
 class JammingListRot : public JammingList {
     public:
         uint rotation;
@@ -504,7 +506,7 @@ class JammingListRot : public JammingList {
 };
 
 // Includes rotations, flips, and translations.
-class JammingTree2 {
+class JammingTreeRot {
     protected:
         sptr<Box> box;
         list<JammingListRot> jlists;
@@ -513,7 +515,7 @@ class JammingTree2 {
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        JammingTree2(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
+        JammingTreeRot(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, bool use_rotations=true, bool use_inversions=true);
         flt distance(JammingListRot& jlist);
         list<JammingListRot> expand(JammingListRot curjlist);
 
@@ -571,11 +573,11 @@ class JammingTree2 {
         Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_B(){return locations_B(current_best());};
         Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_A(JammingListRot jlist);
         Eigen::Matrix<flt, Eigen::Dynamic, NDIM> locations_A(){return locations_A(current_best());};
-        virtual ~JammingTree2(){};
+        virtual ~JammingTreeRot(){};
 };
 
 
-class JammingTreeBD : public JammingTree2 {
+class JammingTreeBD : public JammingTreeRot {
     /* For a bi-disperse packing.
      * 'cutoff' is the number of particles of the first kind; i.e., the
      * A vector should have A[0]..A[cutoff-1] be of particle type 1,
@@ -593,17 +595,29 @@ class JammingTreeBD : public JammingTree2 {
     protected:
         uint cutoff1,cutoff2;
     public:
-        JammingTreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, uint cutoff) :
-            JammingTree2(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        JammingTreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
-                    uint cutoffA, uint cutoffB);// :
+        JammingTreeBD(
+            sptr<Box>box, 
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, 
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B,
+            uint cutoff,
+            bool use_rotations=true,
+            bool use_inversions=true
+        ) : JammingTreeRot(box, A, B, use_rotations, use_inversions),
+            cutoff1(cutoff), cutoff2(cutoff){};
+        JammingTreeBD(
+            sptr<Box>box,
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, 
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
+            uint cutoffA, 
+            uint cutoffB, 
+            bool use_rotations=true, 
+            bool use_inversions=true);// :
             //JammingTree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
 
         list<JammingListRot> expand(JammingListRot curjlist);
         bool expand();
-        bool expand(uint n){return JammingTree2::expand(n);};
+        bool expand(uint n){return JammingTreeRot::expand(n);};
 };
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Finding Percolation
