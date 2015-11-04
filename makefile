@@ -82,7 +82,7 @@ py$(SFX): pyparm/_sim$(SFX).so
 wrap$(SFX): clean_wrap$(SFX) pyparm/sim_wrap$(SFX).cxx
 
 clean_wrap$(SFX):
-	rm pyparm/sim_wrap$(SFX).cxx
+	rm -f pyparm/sim_wrap$(SFX).cxx
 	
 pyparm/sim_wrap$(SFX).cxx: | src/swig_header.h src/sim.i src/array.i src/collection.hpp src/constraints.hpp src/interaction.hpp src/trackers.hpp src/box.hpp src/vecrand.hpp src/collection.cpp src/constraints.cpp src/interaction.cpp src/trackers.cpp src/box.cpp src/vecrand.cpp
 	cd src ; $(SWIG) $(OPTSET) -DSWIG_TYPE_TABLE=sim$(SFX) sim.i
