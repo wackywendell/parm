@@ -338,6 +338,19 @@ static int myErr = 0;
     $1 = (PySequence_Check($input) && (PySequence_Size($input) == 3)) ? 1 : 0;
 };
 
+%typecheck(SWIG_TYPECHECK_DOUBLE_ARRAY) Eigen::Matrix<flt, Eigen::Dynamic, 3>, Eigen::Matrix<flt, Eigen::Dynamic, 3>&, Eigen::Matrix<flt, Eigen::Dynamic, 3>* {
+    bool is_nonzero_sequence = PySequence_Check($input) && (PySequence_Length($input) > 0);
+    if (is_nonzero_sequence) {
+        PyObject *obj_0 = PySequence_GetItem($input, 0);
+        bool has_correct_subsequence =
+            PySequence_Check(obj_0) && (PySequence_Size(obj_0) == 3);
+        $1 = has_correct_subsequence ? 1 : 0;
+        
+    } else {
+        $1 = 0;
+    }
+};
+
 #ifdef VEC2D
 %typemap(in) Vec = Vec2;
 %typemap(out) Vec = Vec2;
