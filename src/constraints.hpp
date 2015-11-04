@@ -417,6 +417,10 @@ class JammingList {
         bool operator<(const JammingList& other) const;
 };
 
+//! A class for determining if two packings are the same.
+//! Given a list of particle positions A and a second list of particle positions
+//! B, after repeated calls to expand, this will (after repeated calls to 
+//! expand) return a JammingList that 
 class JammingTree {
     private:
         sptr<Box> box;
@@ -487,8 +491,6 @@ class JammingTree {
         uint size(){return (uint) jlists.size();};
 };
 
-#ifdef VEC2D
-
 class JammingListRot : public JammingList {
     public:
         uint rotation;
@@ -513,7 +515,7 @@ class JammingTreeRot {
     public:
         // make all 8 possible rotations / flips
         // then subtract off all possible COMVs
-        JammingTreeRot(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B);
+        JammingTreeRot(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, bool use_rotations=true, bool use_inversions=true);
         flt distance(JammingListRot& jlist);
         list<JammingListRot> expand(JammingListRot curjlist);
 
@@ -593,17 +595,29 @@ class JammingTreeBD : public JammingTreeRot {
     protected:
         uint cutoff1,cutoff2;
     public:
-        JammingTreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, uint cutoff) :
-            JammingTreeRot(box, A, B), cutoff1(cutoff), cutoff2(cutoff){};
-        JammingTreeBD(sptr<Box>box, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
-                    uint cutoffA, uint cutoffB);// :
+        JammingTreeBD(
+            sptr<Box>box, 
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, 
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B,
+            uint cutoff,
+            bool use_rotations=true,
+            bool use_inversions=true
+        ) : JammingTreeRot(box, A, B, use_rotations, use_inversions),
+            cutoff1(cutoff), cutoff2(cutoff){};
+        JammingTreeBD(
+            sptr<Box>box,
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A, 
+            Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B, 
+            uint cutoffA, 
+            uint cutoffB, 
+            bool use_rotations=true, 
+            bool use_inversions=true);// :
             //JammingTree2(box, A, B), cutoff1(cutoffA), cutoff2(cutoffB){};
 
         list<JammingListRot> expand(JammingListRot curjlist);
         bool expand();
         bool expand(uint n){return JammingTreeRot::expand(n);};
 };
-#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Finding Percolation

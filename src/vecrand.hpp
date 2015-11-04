@@ -2,6 +2,7 @@
 #define VECRAND_H
 #ifdef VEC2D
 #define NDIM 2
+#define DIMROTATIONS 4
 #else
 #ifndef VEC3D
 #define VEC3D
@@ -9,6 +10,7 @@
 #endif
 #ifdef VEC3D
 #define NDIM 3
+#define DIMROTATIONS 24
 #endif
 #include <iostream>
 #include <ctime>
