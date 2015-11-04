@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tol',['tol',['../collection_8hpp.html#ab319cb41d2e6faf11ec8cfbc3e291967',1,'collection.hpp']]]
+  ['sptr',['sptr',['../box_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502',1,'sptr():&#160;box.hpp'],['../interaction_8hpp.html#a2aa2218b0c6b2fc2b32926d2a3a20502',1,'sptr():&#160;interaction.hpp']]]
 ];

@@ -11,7 +11,7 @@ var searchData=
   ['_7einteraction',['~Interaction',['../class_interaction.html#a98522b3c97be621b78e14b3afd5b16bf',1,'Interaction']]],
   ['_7einteractionpairsx',['~InteractionPairsX',['../class_interaction_pairs_x.html#ab3e6538e6bf68a675a34c100dfb22530',1,'InteractionPairsX']]],
   ['_7einteractpair',['~InteractPair',['../class_interact_pair.html#abb53ebb4068f4f99364cc12f1751abb4',1,'InteractPair']]],
-  ['_7ejammingtree2',['~JammingTree2',['../class_jamming_tree2.html#a56c397c705d88ab4aebe80ba391aaf43',1,'JammingTree2']]],
+  ['_7ejammingtreerot',['~JammingTreeRot',['../class_jamming_tree_rot.html#a5ea06dce3751c0d392f042176777d561',1,'JammingTreeRot']]],
   ['_7eneighborlist',['~NeighborList',['../class_neighbor_list.html#a9f66cfc09ee295ce155310e64cb892c8',1,'NeighborList']]],
   ['_7enlisted',['~NListed',['../class_n_listed.html#a8e0b1af77a6b560f9539295111bb9a11',1,'NListed']]],
   ['_7enumvector',['~NumVector',['../class_num_vector.html#a54e2044742521861ee415e4846c42e97',1,'NumVector']]],

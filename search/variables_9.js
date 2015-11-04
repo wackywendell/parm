@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jlists',['jlists',['../class_jamming_tree2.html#a3d708531e96a7e2667b12e870849c75e',1,'JammingTree2']]]
+  ['jlists',['jlists',['../class_jamming_tree_rot.html#aa49e608eb0b1a379de29fc666c7fcb7e',1,'JammingTreeRot']]]
 ];

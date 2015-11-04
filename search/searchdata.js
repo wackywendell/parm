@@ -10,7 +10,7 @@ var indexSectionsWithContent =
   7: "br",
   8: "bfgu",
   9: "go",
-  10: "nst",
+  10: "dnst",
   11: "ab",
   12: "qt"
 };

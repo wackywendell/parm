@@ -23,7 +23,7 @@ var searchData=
   ['moment',['moment',['../class_atom_group.html#a4e01464b648e99cc2b6a71725ff6aa53',1,'AtomGroup::moment(const Vec loc) const '],['../class_atom_group.html#a01224ff770e5c9cfc220dd7a325116d6',1,'AtomGroup::moment() const ']]],
   ['moment_5fabout',['moment_about',['../class_atom_group.html#af46d27563594a446f10b8134311b4ce7',1,'AtomGroup::moment_about(const Vec axis, const Vec loc) const '],['../class_atom_group.html#a45650a8767084aa6347202a9d8f77e9d',1,'AtomGroup::moment_about(const Vec axis) const ']]],
   ['momentum',['momentum',['../class_atom_group.html#a7692e36ca308cedee6d9124c246b31e0',1,'AtomGroup']]],
-  ['my_5flist',['my_list',['../class_jamming_tree.html#a3e6975800512507fa74a78fd4902dbb2',1,'JammingTree::my_list()'],['../class_jamming_tree2.html#a3404baf5d4967f1ecf1b2e780ffccaf8',1,'JammingTree2::my_list()']]],
+  ['my_5flist',['my_list',['../class_jamming_tree.html#a3e6975800512507fa74a78fd4902dbb2',1,'JammingTree::my_list()'],['../class_jamming_tree_rot.html#ac966f217e3a3bf7340e495527ce6f15e',1,'JammingTreeRot::my_list()']]],
   ['mylineardistribution',['mylineardistribution',['../vecrand_8cpp.html#ac8f9e5bb9820f0592fe954dc45c97296',1,'vecrand.cpp']]],
   ['mynormaldistribution',['mynormaldistribution',['../vecrand_8cpp.html#a32319198f8127e49c72876dbb0cb1f99',1,'vecrand.cpp']]]
 ];

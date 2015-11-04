@@ -25,7 +25,7 @@ var searchData=
   ['get_5flns',['get_lns',['../class_collection_nose_hoover.html#a472c44296bd80ba7a2f0d893e4ae073e',1,'CollectionNoseHoover']]],
   ['get_5floc',['get_loc',['../class_grid.html#a6278e6278e486dac332233d4b7c8d093',1,'Grid']]],
   ['get_5flocation',['get_location',['../class_soft_wall.html#aec92d3de7234abb9009e5b79fb7bd7e6',1,'SoftWall::get_location()'],['../class_soft_wall_cylinder.html#ac3197fde1207d63a5ae893b9a0552812',1,'SoftWallCylinder::get_location()']]],
-  ['get_5fmax',['get_max',['../collection_8hpp.html#a534f7925648de0133f850ace13e48964',1,'collection.hpp']]],
+  ['get_5fmax',['get_max',['../collection_8cpp.html#a534f7925648de0133f850ace13e48964',1,'get_max(vector&lt; flt &gt; v):&#160;collection.cpp'],['../collection_8hpp.html#a534f7925648de0133f850ace13e48964',1,'get_max(vector&lt; flt &gt; v):&#160;collection.cpp']]],
   ['get_5fmoi',['get_MoI',['../class_rigid_constraint.html#ab8459c4f7191fab6c8b5f4230f3c41ea',1,'RigidConstraint']]],
   ['get_5fnormal',['get_normal',['../class_soft_wall.html#a8ef20126aad22c09b397f8fc5126b859',1,'SoftWall']]],
   ['get_5fpair',['get_pair',['../class_n_listed.html#adb4117efa02c5b352f64fb1a212c601d',1,'NListed']]],
