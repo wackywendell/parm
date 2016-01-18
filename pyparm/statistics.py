@@ -6,6 +6,7 @@ from array import array as pyarray
 
 import numpy as np
 
+
 class Statistic:
     """a class that updates itself with gather(), and will return
     a numpy Array (or dict of numpy arrays) with stats()"""
@@ -18,19 +19,21 @@ class Statistic:
     def __getitem(self, ix):
         return self.stats()[ix]
 
-def get_order(atoms, box, local=True, weighted=True):
+
+def get_order(atoms, box, radii, local=True, weighted=True):
     import tess
     locs = [tuple(a.x) for a in atoms]
     limits = tuple(box.box_shape())
-    cntr = tess.Container(locs, limits, radii=sigmas/2., periodic=True)
+    cntr = tess.Container(locs, limits, radii=radii, periodic=True)
     return cntr.order(local=local, weighted=weighted)
+
 
 class SimpleStat(Statistic):
     """A statistic that is a simple function of time. This class calls a given function
     at each `gather()` time, and manages the array of previous values."""
     def __init__(self, func, name=None):
         """
-        func: a function that returns a simple Statistic when run as func(atoms, box, Collection, time)
+        func: a function that returns a simple Statistic when run as func(time)
         name: the name of the statistic; defaults to function name"""
         self.func = func
         self.arr = []
@@ -38,7 +41,8 @@ class SimpleStat(Statistic):
 
     def gather(self, time):
         values = self.func(time)
-        if values is None: return
+        if values is None:
+            return
         if len(self.arr) == 0:
             if np.shape(values) != ():
                 self.arr = [pyarray('d') for _ in values]
@@ -50,11 +54,11 @@ class SimpleStat(Statistic):
         if self.arr_flat:
             self.arr.append(values)
         else:
-            for v,a in zip(values, self.arr):
+            for v, a in zip(values, self.arr):
                 a.append(v)
 
     def stats(self):
-        return np.array(self.arr, dtype=float)
+        return np.asarray(self.arr, dtype=float)
 
     @classmethod
     def get_Ql(cls, atoms, box, weighted=True, name=None):
@@ -74,6 +78,7 @@ class SimpleStat(Statistic):
             return collec.events_processed
         return cls(events, name=name)
 
+
 class ReturnStat(Statistic):
     """A statistic that is self-updating, and only needs to call a simple function to get its values.
 
@@ -92,6 +97,7 @@ class ReturnStat(Statistic):
     def stats(self):
         return self.func()
 
+
 class FixedStat(Statistic):
     """
     A class that simply returns the same thing every time.
@@ -106,6 +112,7 @@ class FixedStat(Statistic):
 
     def stats(self):
         return self.val
+
 
 class StatSet(OrderedDict):
     def __init__(self, fname, statdt, writestep=20):
@@ -133,13 +140,13 @@ class StatSet(OrderedDict):
 
     def add_fixed(self, dtype=None, **kw):
         stats = {}
-        for k,v in kw.items():
+        for k, v in kw.items():
             stat = stats[k] = FixedStat(np.array(v, dtype=dtype), name=k)
             self.add(stat)
         return stats
 
     def update(self, time, write=None):
-        for name,s in self.items():
+        for name, s in self.items():
             s.gather(time)
 
         self.writen += 1
@@ -182,19 +189,22 @@ class StatSet(OrderedDict):
             return box.V()
 
     def get_statistics(self):
-        return {name:s.stats() for name,s in self.items()}
+        return {name: s.stats() for name, s in self.items()}
 
     def safe_write(self):
         if self.print_on_write:
             print('Writing to', self.fname)
         try:
-            np.savez_compressed(str(self.fname), **self.get_statistics())
+            self.write()
             self.writes += 1
         except:
             print("Interrupted in save, retrying...")
-            np.savez_compressed(str(self.fname), **self.get_statistics())
+            self.write()
             self.writes += 1
             raise
+    
+    def write(self):
+        np.savez_compressed(str(self.fname), **self.get_statistics())
 
     @staticmethod
     def arg_parser(*stats, parser=None, title=None, description=None, defaultn=1000):
@@ -204,10 +214,13 @@ class StatSet(OrderedDict):
             group = parser.add_argument_group('{} Settings'.format(stat))
 
             tgroup = group.add_mutually_exclusive_group()
-            tgroup.add_argument('--{}time'.format(stat), type=float, help='amount of time between taking statistics')
-            tgroup.add_argument('--{}n'.format(stat), type=int, default=defaultn, help='Number of statistics to take')
+            tgroup.add_argument('--{}time'.format(stat), type=float,
+                help='amount of time between taking statistics')
+            tgroup.add_argument('--{}n'.format(stat), type=int,
+                default=defaultn, help='Number of statistics to take')
 
-            group.add_argument('--{}writen'.format(stat), type=int, default=20, help='Number of updates between disk writes')
+            group.add_argument('--{}writen'.format(stat), type=int, default=20,
+                help='Number of updates between disk writes')
 
         def new_parse_args(*args, **kwargs):
             parsed_args = argparse.ArgumentParser.parse_args(parser, *args, **kwargs)
