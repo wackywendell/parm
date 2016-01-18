@@ -58,9 +58,10 @@ class Minimizer:
             a.x = self.sim.vec(*loc)
             self.hertz.add(self.sim.EpsSigExpAtom(a, 1.0, float(s), 2.0))
             
-        collec = self.collec = self.sim.CollectionNLCG(self.box, self.atoms, dt, P, 
-                [self.hertz], [self.neighbors], [], 
-                kappa, kmax, secmax, seceps)
+        collec = self.collec = self.sim.CollectionNLCG(
+            self.box, self.atoms, dt, P,
+            [self.hertz], [self.neighbors], [],
+            kappa, kmax, secmax, seceps)
         collec.set_max_alpha(amax)
         collec.set_max_dx(dxmax)
         collec.set_max_step(stepmax)
@@ -138,6 +139,7 @@ class Minimizer:
     
     @property
     def L(self):
+        """Get or set the box length."""
         return self.box.L()
     
     @L.setter
@@ -189,6 +191,7 @@ class Minimizer:
     
     @property
     def Vspheres(self):
+        """Volume of the spheres in the box."""
         return np.sum(self.diameters**self.sim.NDIM)*np.pi/(2*self.sim.NDIM*self.N)
     
     @property
@@ -222,7 +225,16 @@ class Minimizer:
     
     @property
     def locs(self):
+        """Get or set the locations of the atoms."""
         return np.array([a.x for a in self.atoms], dtype=float)
+    
+    @locs.setter
+    def locs(self, new_locs):
+        locs = np.asarray(new_locs)
+        assert locs.shape == (self.N, self.ndim)
+        for atom, loc in zip(self.atoms, locs):
+            atom.x = loc
+        self.collec.set_forces(True, True)
     
     def as_packing(self):
         import spack
@@ -240,5 +252,7 @@ class Minimizer:
         Pdiff, CGerr = self.err()
         Nc, Nc_min, fl = self.pack_stats()
         Nc_min = max(Nc_min, 1)
-        return 'dP: {:8.2g}, CGerr: {:7.2g}, phi: {:6.4f}. {:4d} Floaters, {:4d} / {:4d}'.format(
-            Pdiff, CGerr, self.phi, fl, Nc, Nc_min)
+        is_done = '=' if self.done() else 'X'
+        return 'dP: {:8.2g}, CGerr: {:7.2g}, phi: {:6.4f}. {:4d} Floaters, {:4d} / {:4d} {}'.format(
+            Pdiff, CGerr, self.phi, fl, Nc, Nc_min, is_done)
+            

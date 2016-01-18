@@ -6,7 +6,7 @@ from array import array as pyarray
 
 import numpy as np
 
-from .statistics import StatSet
+from .statistics import StatSet, Statistic
 from . import util
 
 class Simulation:
@@ -17,6 +17,7 @@ class Simulation:
         """
         self.collec = collec
         self.statsets = []
+        self.statts = []
 
         self.dt = dt
         self.steps_done = 0 # steps completed
@@ -57,6 +58,7 @@ class Simulation:
     def add_stats(self, statset):
         assert statset.statdt != None
         self.statsets.append(statset)
+        self.statts.append((self.cut, statset))
 
     @property
     def time(self):
@@ -87,31 +89,32 @@ class Simulation:
 
     def progress_str(self, time):
         return '{:9.6g} ---- '.format(time)
+        
+    def step(self, progress=True, print_updates=False):
+        if self.steps_done != self.cut: self.collec.timestep()
+        self.steps_done += 1
+        t = self.steps_done
 
+        for n, (stime, statset) in enumerate(self.statts):
+            if t >= stime:
+                if statset.statdt <= 0:
+                    # ignore these
+                    self.statts[n] = stime = self.steps_total
+                    continue
+                while t >= stime:
+                    stime += statset.statdt / self.dt
+                    self.statts[n] = (stime, statset)
+                if print_updates:
+                    self.output('Updating', statset, 'time', t, 'dt', statset.statdt)
+                statset.update(t * self.dt)
+
+        if progress:
+            self.progress_out()
+    
     def run(self, progress=True, print_updates=False):
         self.equilibrate(progress=progress)
-        # t, statts, stime are all in units of steps
-        statts = [self.steps_done for _ in self.statsets]
-        
-        startt = self.steps_done
         for t in range(self.steps_done, self.steps_total+1):
-            if t > startt: self.collec.timestep()
-            self.steps_done = t
-
-            for n, stime in enumerate(statts):
-                if t >= stime:
-                    statset = self.statsets[n]
-                    if statset.statdt <= 0:
-                        # ignore these
-                        statts[n] = stime = self.steps_total
-                        continue
-                    while t >= stime:
-                        stime += statset.statdt / self.dt
-                        statts[n] = stime
-                    if print_updates: self.output('Updating', statset, 'time', t, 'dt', statset.statdt)
-                    statset.update(t * self.dt)
-
-            if progress: self.progress_out()
+            self.step(progress=True, print_updates=False)
             
         for statset in self.statsets:
             statset.safe_write()
