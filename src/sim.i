@@ -231,6 +231,43 @@ static int myErr = 0;
     $1 = &temp;
 };
 
+%typemap(in) Eigen::Matrix<flt, Eigen::Dynamic, 2> & (Eigen::Matrix<flt, Eigen::Dynamic, 2> temp) {
+    if (!PySequence_Check($input)) {
+        PyErr_SetString(PyExc_TypeError,"expected a sequence.");
+        return NULL;
+    }
+    int len = PySequence_Length($input);
+    if(len == 0){
+        PyErr_SetString(PyExc_TypeError,"expected a sequence of length greather than 0.");
+        return NULL;
+    } else if (len == -1){
+        PyErr_SetString(PyExc_TypeError, "Failure converting.");
+        return NULL;
+    }
+    
+    temp = Eigen::Matrix<flt, Eigen::Dynamic, 2>(len, 2);
+    for(int i=0; i < len; i++){
+        PyObject *obj_i = PySequence_GetItem($input, i);
+        if (obj_i == NULL) {
+            PyErr_SetString(PyExc_TypeError, "Failure parsing sequence.");
+            return NULL;
+        }
+        if (!PySequence_Check(obj_i)) {
+            PyErr_SetString(PyExc_TypeError, "expected a sequence of sequences.");
+            return NULL;
+        }
+        
+        PyObject* tup = PySequence_Tuple(obj_i);
+        if (!PyArg_ParseTuple(tup,"dd", 
+                &temp(i, 0), &temp(i, 1))){
+            PyErr_SetString(PyExc_TypeError,"inner sequences must have 2 doubles.");
+            return NULL;
+        }
+    }
+    
+    $1 = &temp;
+};
+
 %typemap(out) Eigen::Matrix<flt, Eigen::Dynamic, 3> { 
     unsigned int rows = ($1.rows());
     npy_intp dims[2] = {rows,NDIM};
@@ -344,6 +381,19 @@ static int myErr = 0;
         PyObject *obj_0 = PySequence_GetItem($input, 0);
         bool has_correct_subsequence =
             PySequence_Check(obj_0) && (PySequence_Size(obj_0) == 3);
+        $1 = has_correct_subsequence ? 1 : 0;
+        
+    } else {
+        $1 = 0;
+    }
+};
+
+%typecheck(SWIG_TYPECHECK_FLOAT_ARRAY) Eigen::Matrix<flt, Eigen::Dynamic, 2>, Eigen::Matrix<flt, Eigen::Dynamic, 2>&, Eigen::Matrix<flt, Eigen::Dynamic, 2>* {
+    bool is_nonzero_sequence = PySequence_Check($input) && (PySequence_Length($input) > 0);
+    if (is_nonzero_sequence) {
+        PyObject *obj_0 = PySequence_GetItem($input, 0);
+        bool has_correct_subsequence =
+            PySequence_Check(obj_0) && (PySequence_Size(obj_0) == 2);
         $1 = has_correct_subsequence ? 1 : 0;
         
     } else {
