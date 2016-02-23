@@ -5,14 +5,21 @@ from .util import norm
 
 from collections import namedtuple
 
-MinimizerErr = namedtuple('MinimizerErr', ['delta_pressure', 'maxforce'])
+
+class MinimizerErr(namedtuple('MinimizerErr', ['delta_pressure', 'maxforce'])):
+    def __str__(self):
+        return 'ΔP:{:9.3g} max F:{:9.3g}'.format(*self)
+
 
 class Minimizer:
+    """
+    Minimizer to find a packing.
+    """
     def __init__(self, locs, diameters, masses=None, L=1.0, P=1e-4, dt=.1, CGerr=1e-12, Pfrac=1e-4,
-                    need_contacts=False,
-                    kappa=10.0, kmax=1000, secmax=40, 
-                    seceps=1e-20, amax=2.0, dxmax=100, stepmax=1e-3,
-                    itersteps=1000, use_lees_edwards = False):
+                need_contacts=False,
+                kappa=10.0, kmax=1000, secmax=40,
+                seceps=1e-20, amax=2.0, dxmax=100, stepmax=1e-3,
+                itersteps=1000, use_lees_edwards=False):
         """
         Minimizer to find a packing.
         
@@ -33,8 +40,9 @@ class Minimizer:
         Ns, = self.diameters.shape
         Nl, ndim = np.shape(locs)
         if Nl != Ns:
-            raise ValueError("Need shape N for diameters, Nx2 or Nx3 for locs; got {} and {}x{}".format(
-                Ns, Nl, ndim))
+            raise ValueError(
+                "Need shape N for diameters, Nx2 or Nx3 for locs; " +
+                "got {} and {}x{}".format(Ns, Nl, ndim))
         if ndim == 2:
             from . import d2 as sim
             self.sim = sim
@@ -78,10 +86,12 @@ class Minimizer:
         return np.array(diameters)**ndim
     
     @classmethod
-    def randomized(cls, N=10, sizes=[1.0,1.4], ratios=None, ndim=3, phi0=0.01, 
+    def randomized(cls, N=10, sizes=[1.0, 1.4], ratios=None, ndim=3, phi0=0.01,
                    mass_func=None, **kw):
         """
         Minimizer to find a packing.
+        
+        Uses np.random to generate locations.
 
         Params
         ------
@@ -100,7 +110,7 @@ class Minimizer:
             ratios = [1.] * len(sizes)
         if len(ratios) != len(sizes):
             raise ValueError("`ratios` list must be same length as `sizes` list")
-        if ndim not in (2,3):
+        if ndim not in (2, 3):
             raise ValueError("`ndim` must be 2 or 3")
         if not 0. < phi0 < 1.:
             raise ValueError("`phi0` must be 2 or 3")
@@ -116,7 +126,7 @@ class Minimizer:
         ratios = np.array(rints, dtype=int)
         assert sum(ratios) == N
 
-        diameters = np.array([s for s,r in zip(sizes, ratios) for _ in range(r)])
+        diameters = np.array([s for s, r in zip(sizes, ratios) for _ in range(r)])
         assert diameters.shape == (N,)
         
         masses = np.array(mass_func(diameters, ndim), dtype=float)
@@ -157,12 +167,14 @@ class Minimizer:
     
     def err(self):
         """
-        Returns (delta_pressure, max_force), where delta_pressure = (P / P0) - 1 and max_force is the maximum of all total forces on each atom.
+        Returns (delta_pressure, max_force), where delta_pressure = (P/P0) - 1
+        and max_force is the maximum of all total forces on each atom.
         
         When abs(delta_pressure) < self.Pfrac and max_force < self.CGerr, the
         simulation is done (unless need_contacts is also enabled).
         """
-        return MinimizerErr(self.collec.pressure() / self.collec.P0 - 1, max([norm(a.f) for a in self.atoms]))
+        return MinimizerErr(self.collec.pressure() / self.collec.P0 - 1,
+            max([norm(a.f) for a in self.atoms]))
     
     def done(self):
         Perr, CGerr = self.err()
@@ -183,7 +195,7 @@ class Minimizer:
         self.timesteps += self.itersteps
         return self.err()
     
-    #-----------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------
     # Statistics (all intrinsic, i.e. divided by N)
     @property
     def N(self):
@@ -255,4 +267,3 @@ class Minimizer:
         is_done = '=' if self.done() else 'X'
         return 'dP: {:8.2g}, CGerr: {:7.2g}, phi: {:6.4f}. {:4d} Floaters, {:4d} / {:4d} {}'.format(
             Pdiff, CGerr, self.phi, fl, Nc, Nc_min, is_done)
-            
