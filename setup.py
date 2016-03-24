@@ -39,5 +39,6 @@ setup(
     description="None",
     author="Wendell Smith",
     version="0.2",
+    packages=['pyparm'],
     ext_modules=swigged_modules
 )
