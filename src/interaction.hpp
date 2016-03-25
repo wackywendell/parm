@@ -1117,13 +1117,13 @@ struct LJishPair {
         flt rsq = rij.squaredNorm() / (sigma * sigma);
         if (rsq > cut_distance * cut_distance) {
             //~ printf("LJish: dx=%.2f, σ=%.2f, rsq=%.2f, cutR²=%.2f\n",
-            //rij.norm(), sigma, rsq, cut_distance);
+            // rij.norm(), sigma, rsq, cut_distance);
             return 0;
         }
 
         flt mid = (1 - pow(rsq, -n / 2));
         //~ printf("LJish: rsq=%.2f, mid %.2f, epsilon %.2f, repeps %.2f\n",
-        //rsq, mid, epsilon, repeps);
+        // rsq, mid, epsilon, repeps);
         if (rsq > 1) return epsilon * (mid * mid) - cut_energy;
         return repeps * (mid * mid) - cut_energy;
     };
@@ -1171,17 +1171,17 @@ struct LJAttractRepulsePair {
         flt rsq = rij.squaredNorm() / (sig * sig);
         if (rsq > cut_distance * cut_distance) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
-            //cut_energy: %.2f)\n",
+            // cut_energy: %.2f)\n",
             //~ sqrt(rij.squaredNorm()), 0.0, eps, sig, cut_distance,
-            //cut_energy);
+            // cut_energy);
             return 0;
         }
         flt mid = (1 - pow(rsq, -3));
         //~ if(eps*(mid*mid) - cut_energy < 0) {
         //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
-        //cut_energy: %.2f)\n",
+        // cut_energy: %.2f)\n",
         //~ rij.norm(), eps*(mid*mid) - cut_energy, eps, sig, cut_distance,
-        //cut_energy);
+        // cut_energy);
         //~ }
         return eps * (mid * mid) - cut_energy;
     };
@@ -1268,16 +1268,16 @@ struct LJAttractFixedRepulsePair {
         flt rsq = rij.squaredNorm() / (sig * sig);
         if (rsq > cut_distance * cut_distance) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
-            //cut_energy: %.2f)\n",
+            // cut_energy: %.2f)\n",
             //~ sqrt(rij.squaredNorm()), 0.0, eps, sig, cut_distance,
-            //cut_energy);
+            // cut_energy);
             return 0;
         }
         flt mid = (1 - pow(rsq, -3));  // # 1 - σ⁶/r⁶
         //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
-        //cut_energy: %.2f)\n",
+        // cut_energy: %.2f)\n",
         //~ sqrt(rij.squaredNorm()), eps*(mid*mid) - cut_energy, eps, sig,
-        //cut_distance, cut_energy);
+        // cut_distance, cut_energy);
         if (rsq > 1) return eps * (mid * mid) - cut_energy;
         return repeps * (mid * mid) - cut_energy;
         //~ flt E;
@@ -1285,9 +1285,9 @@ struct LJAttractFixedRepulsePair {
         //~ else E = repeps*(mid*mid) - cut_energy;
         //~ if(E > 1e4)
         //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f,%.2f σ: %.2f cut: %.2f
-        //cut_energy: %.2f)\n",
+        // cut_energy: %.2f)\n",
         //~ sqrt(rij.squaredNorm()), E, eps, repeps, sig, cut_distance,
-        //cut_energy);
+        // cut_energy);
         //~ return E;
     };
     inline Vec forces(Box &box) {
@@ -1304,9 +1304,9 @@ struct LJAttractFixedRepulsePair {
         //~ else fmag = eps * fmagTimesR / dsq;
         //~ if(fmag * rij.norm() > 1e4)
         //~ printf("Distance: %.2f Force: %.2f (ε: %.2f,%.2f σ: %.2f cut: %.2f
-        //cut_energy: %.2f)\n",
+        // cut_energy: %.2f)\n",
         //~ sqrt(rij.squaredNorm()), fmag * rij.norm(), eps, repeps, sig,
-        //cut_distance, cut_energy);
+        // cut_distance, cut_energy);
         //~ return rij * fmag;
     };
 };

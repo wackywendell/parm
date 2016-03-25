@@ -542,7 +542,7 @@ class JammingTree {
         //~ cout << "Popped.\n";
         jlists.merge(newlists);
         //~ cout << "Merged to size " << jlists.size() << "best dist now " <<
-        //jlists.front().distance_squared << "\n";
+        // jlists.front().distance_squared << "\n";
         return true;
     }
     bool expand(uint n) {
@@ -558,9 +558,9 @@ class JammingTree {
     JammingList current_best() {
         JammingList j = JammingList(jlists.front());
         //~ cout << "Best size: " << j.size() << " dist: " <<
-        //j.distance_squared;
+        // j.distance_squared;
         //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " <<
-        //j.assigned[j.size()-1] << "]";
+        // j.assigned[j.size()-1] << "]";
         //~ cout << '\n';
         return j;
         // return JammingList(jlists.front());
@@ -641,9 +641,9 @@ class JammingTreeRot {
         }
         JammingListRot j = JammingListRot(jlists.front());
         //~ cout << "Best size: " << j.size() << " dist: " <<
-        //j.distance_squared;
+        // j.distance_squared;
         //~ if(j.size() > 0) cout << " Elements: [" << j.assigned[0] << ", " <<
-        //j.assigned[j.size()-1] << "]";
+        // j.assigned[j.size()-1] << "]";
         //~ cout << '\n';
         return j;
         // return JammingList(jlists.front());

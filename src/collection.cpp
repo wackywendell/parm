@@ -764,7 +764,7 @@ void CollectionNLCG::timestep() {
         flt newdxsum = abs(dxsum + alpha);
         if (dxmax > 0 and newdxsum > dxmax) {
             //~ cout << "dxmaxed: " << newdxsum << "  step: " <<
-            //sqrt(dxsum*dxsum*vdv) << '\n';
+            // sqrt(dxsum*dxsum*vdv) << '\n';
             k = 0;
             break;
         }
@@ -1099,7 +1099,7 @@ void CollectionNLCGV::timestep() {
         flt newdxsum = abs(dxsum + alpha);
         if (dxmax > 0 and newdxsum > dxmax) {
             //~ cout << "dxmaxed: " << newdxsum << "  step: " <<
-            //sqrt(dxsum*dxsum*vdv) << '\n';
+            // sqrt(dxsum*dxsum*vdv) << '\n';
             k = 0;
             break;
         }
@@ -1235,7 +1235,7 @@ void CollectionNoseHoover::timestep() {
     //~ flt xicheck2 = z0 + z1 / ((2/dt) + xi) / ((2/dt) + xi);
     //~ if (abs(xi-xicheck) > 1e-4){
     //~ printf("new xi: %10.5f  xicheck: %10.5f  zs: %10.5f\n", xi, xicheck,
-    //xicheck2);
+    // xicheck2);
     //~ }
 
     update_trackers();
@@ -1342,7 +1342,7 @@ void CollectionGear4A::timestep() {
     // Now we set forces and accelerations
     for (uint m = 0; m < ncorrec; m++) {
         //~ cout << "Gear 4A setting forces, m = " << m << ", ncorrec = " <<
-        //ncorrec << "\n";
+        // ncorrec << "\n";
         set_forces(false);
         update_constraint_forces();
 
@@ -1458,15 +1458,15 @@ void CollectionGear6A::timestep() {
             cs[n] += correction * c4;
             ds[n] += correction * c5;
             //~ if(correction.norm()*dt2 > .05) cout << "|c[" << i << "]| = " <<
-            //correction.norm()*dt2 << '\n';
+            // correction.norm()*dt2 << '\n';
             //~ if(a.norm()*dt2 > .1) cout << "|a[" << i << "]| = " <<
-            //a.norm()*dt2 << '\n';
+            // a.norm()*dt2 << '\n';
             //~ if(bs[n].norm()*dt3 > .1) cout << "|bs[" << n << "]| = " <<
-            //bs[n].norm()*dt3 << '\n';
+            // bs[n].norm()*dt3 << '\n';
             //~ if(cs[n].norm()*dt4 > .1) cout << "|cs[" << n << "]| = " <<
-            //cs[n].norm()*dt4 << '\n';
+            // cs[n].norm()*dt4 << '\n';
             //~ if(ds[n].norm()*dt5 > .1) cout << "|ds[" << n << "]| = " <<
-            //ds[n].norm()*dt5 << '\n';
+            // ds[n].norm()*dt5 << '\n';
             //~ assert(correction.norm()*dt2 < 1);
             //~ assert(a.norm()*dt2 < 3);
             //~ assert(bs[n].norm()*dt3 < 3);
@@ -2229,7 +2229,7 @@ flt solve_cubic(flt a1, flt a2, flt a3, flt closeto) {
         //~ printf("theta %.4f : %.4f, %.4f, %.4f\n", theta,
         //~ theta/3, (theta + (2*M_PI))/3, (theta + (4*M_PI))/3);
         //~ printf("%.4f (%.4f), %.4f (%.4f), %.4f (%.4f)\n",
-        //x1,d1,x2,d2,x3,d3);
+        // x1,d1,x2,d2,x3,d3);
 
         //~ if(d1 < d2 and d1 < d3) return x1;
         //~ if(d2 < d1 and d2 < d3) return x2;

@@ -71,7 +71,7 @@ bool NeighborList::update_list(bool force) {
     // print stuff about the current update
     //~ set<AtomID> curset = (ignorepairs.get_pairs(atoms.back()));
     //~ cout << "NeighborList | atoms: " << atoms.size() <<  "pairs: " <<
-    //curpairs.size() << " ignored -1: "
+    // curpairs.size() << " ignored -1: "
     //~ << curset.size() << "\n";
     //~ cout << "ignored -1:";
     //~ for(set<AtomID>::iterator it=curset.begin(); it!=curset.end(); it++)

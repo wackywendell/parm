@@ -240,13 +240,13 @@ array<Vec, 4> Dihedral::forces(const Vec &r1, const Vec &r2,
 
     for (uint i = 0; i < 4; i++)
         dd.derivs[i] *= -dcostheta;  // F = -dU/d(costheta)
-    //~ assert(derivs[0].squaredNorm() < 1e8);
-    //~ assert(derivs[1].squaredNorm() < 1e8);
-    //~ assert(derivs[2].squaredNorm() < 1e8);
-    //~ assert(derivs[3].squaredNorm() < 1e8);
+                                     //~ assert(derivs[0].squaredNorm() < 1e8);
+                                     //~ assert(derivs[1].squaredNorm() < 1e8);
+                                     //~ assert(derivs[2].squaredNorm() < 1e8);
+                                     //~ assert(derivs[3].squaredNorm() < 1e8);
 
     //~ flt mag = sqrt(derivs[0].squaredNorm() +derivs[1].squaredNorm() +
-    //derivs[2].squaredNorm() +
+    // derivs[2].squaredNorm() +
     //~ derivs[3].squaredNorm());
     //~
     //~ std::cout << "costheta:" << costheta << " dcos:" << dcostheta
@@ -645,12 +645,12 @@ void Dihedrals::set_forces(Box &box) {
         atom4.f += f[3];
         //~ flt maxf = 1000000;
         //~ if(f[0].squaredNorm() > maxf or f[1].squaredNorm() > maxf or
-        //f[2].squaredNorm() > maxf
+        // f[2].squaredNorm() > maxf
         //~ or f[3].squaredNorm() > maxf){
         //~ cout << "Dihedral overload: " << r1 << r2 << r3 << " :: " <<
         //~ f[0] << f[1] << f[2] << f[3] << "\n";
         //~ cout << "Dihedral overload energy: " <<
-        //Dihedral(it->nums).energy(r1,r2,r3) << "\n";
+        // Dihedral(it->nums).energy(r1,r2,r3) << "\n";
         //~ }
     }
 };

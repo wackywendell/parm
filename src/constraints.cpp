@@ -938,7 +938,7 @@ bool JammingTreeRot::expand() {
     //~ cout << "Popped.\n";
     jlists.merge(newlists);
     //~ cout << "Merged to size " << jlists.size() << "best dist now " <<
-    //jlists.front().distance_squared << "\n";
+    // jlists.front().distance_squared << "\n";
     return true;
 };
 
