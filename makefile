@@ -16,7 +16,7 @@ BINOPTS:=-Llib
 
 INC=`python3-config --includes`
 
-.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py doc ghp
+.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py doc ghp format
 
 all: bin/LJatoms2d bin/LJatoms3dlong bin/hardspheres
 	@echo "making all."
@@ -36,6 +36,9 @@ doc: doc/html/index.html
 	
 doc/html/index.html: src/*.cpp src/*.hpp src/*.md src/bin/*.cpp pyparm/examples/*.py Doxyfile README.md
 	doxygen Doxyfile >/dev/null
+	
+format:
+	clang-format -i src/*.hpp src/*.cpp
 	
 clean:
 	rm -f bin/* lib/*
