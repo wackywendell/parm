@@ -1142,6 +1142,75 @@ struct LJishPair {
 };
 
 ////////////////////////////////////////////////////////////////////////
+// LJ repulsive for the first part
+// For the second part (1 - n/(r/σ + n - 1))^2
+// n controls the width and depth; as n -> 0, it becomes just LJ repulsive
+
+struct EpsDepthSigNCutAtom : public AtomID {
+    flt eps_r, depth, sigma, n;
+    flt sigcut;  // sigma units
+    EpsDepthSigNCutAtom(){};
+    EpsDepthSigNCutAtom(AtomID a, flt repeps, flt depth, flt sigma, flt n,
+                        flt cut)
+        : AtomID(a),
+          eps_r(repeps),
+          depth(depth),
+          sigma(sigma),
+          n(n),
+          sigcut(cut){};
+    EpsDepthSigNCutAtom(AtomID a, EpsDepthSigNCutAtom other)
+        : AtomID(a),
+          eps_r(other.eps_r),
+          depth(other.depth),
+          sigma(other.sigma),
+          n(other.n),
+          sigcut(other.sigcut){};
+    flt max_size() { return sigma * sigcut; };
+};
+
+struct LJAndAttractivePair {
+    flt eps_r, depth, sig, n;
+    flt cut_distance, cut_energy;  // cut distance in units of sigma
+    AtomID atom1, atom2;
+    LJAndAttractivePair(EpsDepthSigNCutAtom a1, EpsDepthSigNCutAtom a2)
+        : eps_r(sqrt(a1.eps_r * a2.eps_r)),
+          sig((a1.sigma + a2.sigma) / 2.0),
+          cut_distance(max(a1.sigcut, a2.sigcut)),
+          atom1(a1),
+          atom2(a2) {
+        cut_energy = attract_energy(cut_distance);
+    };
+
+    inline flt attract_energy(flt r_over_sig) {
+        flt parenthetical = 1 - n / (r_over_sig + n - 1);
+        return depth * n * (pow(parenthetical, 2) - 1);
+    };
+
+    inline flt LJ_energy(flt r_over_sig) {
+        return eps_r * pow(1 - pow(r_over_sig, -6), 2) - depth * n;
+    };
+
+    flt energy(Box &box) {
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt rsq = rij.squaredNorm() / (sig * sig);
+        if (rsq > cut_distance * cut_distance) {
+            //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
+            //cut_energy: %.2f)\n",
+            //~ sqrt(rij.squaredNorm()), 0.0, eps, sig, cut_distance,
+            //cut_energy);
+            return 0;
+        }
+
+        flt r_over_sig = sqrt(rsq);
+        if (r_over_sig <= 1) {
+            return LJ_energy(r_over_sig) - cut_energy;
+        } else {
+            return attract_energy(r_over_sig) - cut_energy;
+        }
+    };
+};
+
+////////////////////////////////////////////////////////////////////////
 // Full LJ, with ε = ε₁₂ (indexed) and σ = (σ₁ + σ₂)/2
 // Potential is V(r) = ε (σ⁶/r⁶ - 1)² - ε (r₀⁻⁶ - 1)²
 // cutoff at some sigcut r₀
