@@ -4,7 +4,7 @@
 #define INTERACTION_H
 
 #define sptr boost::shared_ptr
-using namespace boost;  // required for SWIG for some reason
+#define barray boost::array
 
 /***********************************************************************
  * L-J Note:
@@ -311,13 +311,13 @@ class BondAngle {
         return acos(costheta);
     };
     flt energy(const Vec &diff1, const Vec &diff2);
-    array<Vec, 3> forces(const Vec &diff1, const Vec &diff2);
+    barray<Vec, 3> forces(const Vec &diff1, const Vec &diff2);
     ~BondAngle(){};
 };
 
 #ifdef VEC3D
 struct DihedralDerivs {
-    array<Vec, 4> derivs;
+    barray<Vec, 4> derivs;
     flt costheta;
 };
 
@@ -346,7 +346,7 @@ class Dihedral {
         return energy(get_angle(diff1, diff2, diff3));
     };
     flt energy(flt ang) const;
-    array<Vec, 4> forces(const Vec &diff1, const Vec &diff2,
+    barray<Vec, 4> forces(const Vec &diff1, const Vec &diff2,
                          const Vec &diff3) const;
 };
 #endif
@@ -655,7 +655,7 @@ struct BondGrouping {
     flt k, x0;
     AtomID a1, a2;
     BondDiffType diff_type;
-    array<int, NDIM> fixed_box;
+    barray<int, NDIM> fixed_box;
     BondGrouping(flt k, flt x0, AtomID a1, AtomID a2,
                  BondDiffType diff = UNBOXED, OriginBox *box = NULL);
     Vec diff(Box &box) const;
@@ -2318,7 +2318,7 @@ class WalledBox2D : public OriginBox {
         if (!ywalls) dr[1] = remainder(r1[1], boxsize[1]);
         return dr;
     }
-    Vec diff(Vec r1, Vec r2, array<int, NDIM> boxes) {
+    Vec diff(Vec r1, Vec r2, barray<int, NDIM> boxes) {
         Vec dr = r1 - r2;
         if (!xwalls) dr[0] -= boxes[0] * boxsize[0];
         if (!ywalls) dr[1] -= boxes[1] * boxsize[1];
@@ -2451,7 +2451,7 @@ class SCSpringList : public Interaction {
     SCAtomVec *scs;
     flt eps, sig;
     vector<flt> ls;
-    set<array<uint, 2> > ignore_list;
+    set<barray<uint, 2> > ignore_list;
 
    public:
     //! Create an SCSpringList based on scs, using an epsilon of eps,
@@ -2473,7 +2473,7 @@ class SCSpringList : public Interaction {
             n1 = n2;
             n2 = n3;
         }
-        array<uint, 2> pair;
+        barray<uint, 2> pair;
         pair[0] = n1;
         pair[1] = n2;
         ignore_list.insert(pair);

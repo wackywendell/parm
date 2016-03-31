@@ -371,7 +371,7 @@ class ISFTracker1 {
     // Tracks only a single dt (skip)
    public:
     Eigen::Matrix<flt, Eigen::Dynamic, NDIM> pastlocs;
-    vector<vector<array<cmplx, NDIM> > >
+    vector<vector<barray<cmplx, NDIM> > >
         ISFsums;  // (number of ks x number of particles x number of dimensions)
     vector<flt> ks;
     unsigned long skip, count;
@@ -384,7 +384,7 @@ class ISFTracker1 {
     bool update(Box& box, AtomGroup& atoms, unsigned long t,
                 Vec com);  // updates if necessary.
     vector<vector<cmplx> > ISFs();
-    vector<vector<array<cmplx, NDIM> > > ISFxyz();
+    vector<vector<barray<cmplx, NDIM> > > ISFxyz();
 
     unsigned long get_skip() { return skip; };
     unsigned long get_count() { return count; };
@@ -404,7 +404,7 @@ class ISFTracker : public StateTracker {
     void reset();
     void update(Box& box);
 
-    vector<vector<vector<array<cmplx, NDIM> > > > ISFxyz();
+    vector<vector<vector<barray<cmplx, NDIM> > > > ISFxyz();
     vector<vector<vector<cmplx> > > ISFs();
     vector<flt> counts();
 };
@@ -812,7 +812,7 @@ class Connectivity {
     set<CNode> nodes;
     map<int, vector<CNode> > neighbors;
 
-    array<bool, NDIM> nonzero(
+    barray<bool, NDIM> nonzero(
         Vec diff_vec);  // is it nonzero. Specifically, is any dimension >  L/2?
     CNodePath make_cycle(CNodePath forward, CNodePath backward);
 

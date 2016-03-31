@@ -567,7 +567,7 @@ vector<flt> RsqTracker::counts() {
 ISFTracker1::ISFTracker1(AtomGroup& atoms, unsigned long skip, vector<flt> ks,
                          Vec com)
     : pastlocs(atoms.size(), NDIM),
-      ISFsums(ks.size(), vector<array<cmplx, NDIM> >()),
+      ISFsums(ks.size(), vector<barray<cmplx, NDIM> >()),
       ks(ks),
       skip(skip),
       count(0) {
@@ -577,14 +577,14 @@ ISFTracker1::ISFTracker1(AtomGroup& atoms, unsigned long skip, vector<flt> ks,
 
     for (uint ki = 0; ki < ks.size(); ++ki) {
         ISFsums[ki] =
-            vector<array<cmplx, NDIM> >(atoms.size(), array<cmplx, NDIM>());
+            vector<barray<cmplx, NDIM> >(atoms.size(), barray<cmplx, NDIM>());
     };
 };
 
 void ISFTracker1::reset(AtomGroup& atoms, Vec com) {
     pastlocs.resize(atoms.size(), Eigen::NoChange);
     for (uint ki = 0; ki < ks.size(); ki++) {
-        ISFsums[ki].assign(atoms.size(), array<cmplx, NDIM>());
+        ISFsums[ki].assign(atoms.size(), barray<cmplx, NDIM>());
     }
     for (uint i = 0; i < atoms.size(); ++i) {
         pastlocs.row(i) = atoms[i].x - com;
@@ -634,11 +634,11 @@ vector<vector<cmplx> > ISFTracker1::ISFs() {
     return means;
 };
 
-vector<vector<array<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
-    vector<vector<array<cmplx, NDIM> > > means(ks.size(),
-                                               vector<array<cmplx, NDIM> >());
+vector<vector<barray<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
+    vector<vector<barray<cmplx, NDIM> > > means(ks.size(),
+                                               vector<barray<cmplx, NDIM> >());
     for (uint ki = 0; ki < ks.size(); ++ki) {
-        means[ki].assign(ISFsums[ki].size(), array<cmplx, NDIM>());
+        means[ki].assign(ISFsums[ki].size(), barray<cmplx, NDIM>());
         for (uint i = 0; i < ISFsums[ki].size(); ++i) {
             for (uint j = 0; j < NDIM; ++j)
                 means[ki][i][j] = ISFsums[ki][i][j] / (cmplx((flt)count, 0));
@@ -687,8 +687,8 @@ vector<vector<vector<cmplx> > > ISFTracker::ISFs() {
     return vals;
 };
 
-vector<vector<vector<array<cmplx, NDIM> > > > ISFTracker::ISFxyz() {
-    vector<vector<vector<array<cmplx, NDIM> > > > vals;
+vector<vector<vector<barray<cmplx, NDIM> > > > ISFTracker::ISFxyz() {
+    vector<vector<vector<barray<cmplx, NDIM> > > > vals;
     vals.reserve(singles.size());
     for (vector<ISFTracker1>::iterator it = singles.begin();
          it != singles.end(); ++it) {
@@ -1097,8 +1097,8 @@ void Connectivity::add_edge(CNode node1, CNode node2) {
     std::sort(neighbors[node2.n].begin(), neighbors[node2.n].end());
 };
 
-array<bool, NDIM> Connectivity::nonzero(Vec diff_vec) {
-    array<bool, NDIM> nonzeros;
+barray<bool, NDIM> Connectivity::nonzero(Vec diff_vec) {
+    barray<bool, NDIM> nonzeros;
     Vec half_shape = box->box_shape() / 2;
     for (uint i = 0; i < NDIM; i++) {
         nonzeros[i] = (abs(diff_vec[i]) > half_shape[i]);
@@ -1193,7 +1193,7 @@ map<uint, CNodePath> Connectivity::circular_from(CNode node, set<uint>& visited,
                 CNodePath& found_path = found_path_it->second;
 
                 Vec pathdiff = found_path.distance - newpath.distance;
-                array<bool, NDIM> nonzeros = nonzero(pathdiff);
+                barray<bool, NDIM> nonzeros = nonzero(pathdiff);
                 for (uint i = 0; i < NDIM; i++) {
                     if (nonzeros[i]) {
                         found_nonzero = true;

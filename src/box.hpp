@@ -8,8 +8,6 @@
 
 #define sptr boost::shared_ptr
 
-using namespace boost;  // required for SWIG for some reason
-
 typedef const unsigned int cuint;
 
 inline bool to_buffer(vector<Vec*> arr, double* buffer, size_t sizet) {
