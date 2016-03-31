@@ -17,7 +17,7 @@ BINOPTS:=-Llib
 INC=`python3-config --includes`
 LIB=`python3-config --ldflags`
 
-.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py wrap2d wrap3d wrap2dlong wrap3dlong doc ghp
+.PHONY: all py2d py3d py2dlong py3dlong printout clean wraps py wrap2d wrap3d wrap2dlong wrap3dlong doc ghp format
 
 all: py2d py3d
 	@echo "making 2d and 3d."
@@ -37,6 +37,9 @@ doc: doc/html/index.html
 	
 doc/html/index.html: src/*.cpp src/*.hpp src/*.md src/bin/*.cpp pyparm/examples/*.py Doxyfile README.md
 	doxygen Doxyfile >/dev/null
+	
+format:
+	clang-format -i src/*.hpp src/*.cpp
 	
 clean:
 	rm -f bin/* lib/*
