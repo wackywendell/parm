@@ -30,7 +30,7 @@ swigged_modules = [
         "_" + name,
         [swig_file],
         include_dirs=[numpy_include, "src"],
-        extra_compile_args=compile_opts + ["-DSWIG_TYPE_TABLE=" + name],
+        extra_compile_args=compile_opts + ["-DSWIG_TYPE_TABLE=" + name, '-std=c++98'],
     ) for name, swig_file, compile_opts in module_opts
 ]
 

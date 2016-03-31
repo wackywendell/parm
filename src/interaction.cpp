@@ -87,7 +87,7 @@ flt BondAngle::energy(const Vec &r1, const Vec &r2) {
         return springk * pow(costheta - cos(theta0), 2) / 2;
 }
 
-array<Vec, 3> BondAngle::forces(const Vec &r1, const Vec &r2) {
+barray<Vec, 3> BondAngle::forces(const Vec &r1, const Vec &r2) {
     flt r1mag = r1.norm();
     flt r2mag = r2.norm();
     flt costheta = r1.dot(r2) / r1mag / r2mag;
@@ -106,7 +106,7 @@ array<Vec, 3> BondAngle::forces(const Vec &r1, const Vec &r2) {
     // We have V = \frac{1}{2}k(\theta-\theta_{0})^{2}
     // Then -f = grad V = \frac{k}{r}(\theta-\theta_{0})\hat{\theta}
     // first we get the direction:
-    array<Vec, 3> force;
+    barray<Vec, 3> force;
     if (fmag == 0) {
         return force;
     }
@@ -228,7 +228,7 @@ sides of the bond. */
     return dd;
 }
 
-array<Vec, 4> Dihedral::forces(const Vec &r1, const Vec &r2,
+barray<Vec, 4> Dihedral::forces(const Vec &r1, const Vec &r2,
                                const Vec &r3) const {
     DihedralDerivs dd = dr_dcostheta(r1, r2, r3);
     flt dcostheta;
@@ -554,7 +554,7 @@ void AngleTriples::set_forces(Box &box) {
         Atom &atom3 = *it->a3;
         Vec r1 = diff(atom2.x, atom1.x);
         Vec r2 = diff(atom2.x, atom3.x);
-        array<Vec, 3> f = BondAngle(it->k, it->x0).forces(r1, r2);
+        barray<Vec, 3> f = BondAngle(it->k, it->x0).forces(r1, r2);
         assert(f[0].squaredNorm() < 1e8);
         assert(f[1].squaredNorm() < 1e8);
         assert(f[2].squaredNorm() < 1e8);
@@ -638,7 +638,7 @@ void Dihedrals::set_forces(Box &box) {
         Vec r1 = DihedralGrouping::diff(atom2.x, atom1.x);
         Vec r2 = DihedralGrouping::diff(atom3.x, atom2.x);
         Vec r3 = DihedralGrouping::diff(atom4.x, atom3.x);
-        array<Vec, 4> f = it->dih.forces(r1, r2, r3);
+        barray<Vec, 4> f = it->dih.forces(r1, r2, r3);
         atom1.f += f[0];
         atom2.f += f[1];
         atom3.f += f[2];
@@ -970,7 +970,7 @@ void SCPair::apply_force(Box &box, Vec f, SpheroCylinderDiff diff, flt IoverM1,
 
 flt SCSpringList::energy(Box &box) {
     flt E = 0;
-    array<uint, 2> pair;
+    barray<uint, 2> pair;
     for (uint i = 0; i < scs->pairs() - 1; ++i) {
         IDPair pi = scs->pair(i);
         pair[0] = i;
@@ -991,7 +991,7 @@ flt SCSpringList::energy(Box &box) {
 };
 
 void SCSpringList::set_forces(Box &box) {
-    array<uint, 2> pair;
+    barray<uint, 2> pair;
     for (uint i = 0; i < scs->pairs() - 1; ++i) {
         IDPair pi = scs->pair(i);
         flt l1 = ls[i];
@@ -1011,7 +1011,7 @@ void SCSpringList::set_forces(Box &box) {
 
 flt SCSpringList::set_forces_get_pressure(Box &box) {
     flt P = 0;
-    array<uint, 2> pair;
+    barray<uint, 2> pair;
     for (uint i = 0; i < scs->pairs() - 1; ++i) {
         IDPair pi = scs->pair(i);
         flt l1 = ls[i];
@@ -1034,7 +1034,7 @@ flt SCSpringList::set_forces_get_pressure(Box &box) {
 
 flt SCSpringList::pressure(Box &box) {
     flt P = 0;
-    array<uint, 2> pair;
+    barray<uint, 2> pair;
     for (uint i = 0; i < scs->pairs() - 1; ++i) {
         IDPair pi = scs->pair(i);
         flt l1 = ls[i];
@@ -1056,7 +1056,7 @@ flt SCSpringList::pressure(Box &box) {
 
 Matrix SCSpringList::set_forces_get_stress(Box &box) {
     Matrix stress = Matrix::Zero();
-    array<uint, 2> pair;
+    barray<uint, 2> pair;
     for (uint i = 0; i < scs->pairs() - 1; ++i) {
         IDPair pi = scs->pair(i);
         flt l1 = ls[i];
@@ -1078,7 +1078,7 @@ Matrix SCSpringList::set_forces_get_stress(Box &box) {
 
 Matrix SCSpringList::stress(Box &box) {
     Matrix stress = Matrix::Zero();
-    array<uint, 2> pair;
+    barray<uint, 2> pair;
     for (uint i = 0; i < scs->pairs() - 1; ++i) {
         IDPair pi = scs->pair(i);
         flt l1 = ls[i];
