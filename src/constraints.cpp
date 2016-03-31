@@ -872,18 +872,18 @@ bool JammingListRot::operator<(const JammingListRot& other) const {
 };
 
 JammingTreeRot::JammingTreeRot(sptr<Box> box,
-                               Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& A0,
-                               Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& B0,
+                               Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& locsA0,
+                               Eigen::Matrix<flt, Eigen::Dynamic, NDIM>& locsB0,
                                bool use_rotations, bool use_inversions)
-    : box(box), jlists(), A(A0), Bs(DIMROTATIONS, B0) {
+    : box(box), jlists(), A(locsA0), Bs(DIMROTATIONS, locsB0) {
     for (uint rot = 0; rot < DIMROTATIONS; ++rot) {
         if (!use_rotations and (rot % DIMROTATIONS != 0)) continue;
         if (!use_inversions and (rot >= DIMROTATIONS)) continue;
-        for (uint i = 0; i < B0.rows(); ++i) {
-            Vec loc = B0.row(i);
+        for (uint i = 0; i < locsB0.rows(); ++i) {
+            Vec loc = locsB0.row(i);
             Bs[rot].row(i) = rotate_flip(loc, rot);
         }
-        if (A0.rows() <= B0.rows()) jlists.push_back(JammingListRot(rot));
+        if (locsA0.rows() <= locsB0.rows()) jlists.push_back(JammingListRot(rot));
         //~ cout << "Created, now size " << jlists.size() << endl;
     }
 };
