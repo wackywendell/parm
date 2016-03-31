@@ -440,14 +440,14 @@ static int myErr = 0;
 // %template(_vvector3) std::vector<Vec3>;
 // %template(_vvvector3) vector<vector<Vec3> >;
 // %template(_vvvvector3) vector<vector<vector<Vec3> > >;
-//%template(avector) vector<shared_ptr<Atomgroup> >;
-//%template(aptrvector) vector<shared_ptr<Atom> >;
-%template(ivector) std::vector<shared_ptr<Interaction> >;
-%template(ifxvector) std::vector<shared_ptr<InteractionPairsX> >;
-%template(tvector) std::vector<shared_ptr<StateTracker> >;
-%template(constraintvector) std::vector<shared_ptr<Constraint> >;
+//%template(avector) vector<boost::shared_ptr<Atomgroup> >;
+//%template(aptrvector) vector<boost::shared_ptr<Atom> >;
+%template(ivector) std::vector<boost::shared_ptr<Interaction> >;
+%template(ifxvector) std::vector<boost::shared_ptr<InteractionPairsX> >;
+%template(tvector) std::vector<boost::shared_ptr<StateTracker> >;
+%template(constraintvector) std::vector<boost::shared_ptr<Constraint> >;
 #ifdef VEC2D
-%template(wallvector) std::vector<shared_ptr<SoftWall> >;
+%template(wallvector) std::vector<boost::shared_ptr<SoftWall> >;
 #endif
 %template(idvector) std::vector<AtomID>;
 %template(idpairvector) std::vector<IDPair>;
@@ -622,9 +622,9 @@ static int myErr = 0;
 //%rename(__lt__) JammingList::operator<;
 
 //%{
-//    shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> > Repulsion(NeighborList *neighbors){
+//    boost::shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> > Repulsion(NeighborList *neighbors){
 //        NListedVirial<EpsSigExpAtom, RepulsionPair> *h = new NListedVirial<EpsSigExpAtom, RepulsionPair>(neighbors);
-//        return shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> >(h);
+//        return boost::shared_ptr<NListedVirial<EpsSigExpAtom, RepulsionPair> >(h);
 //    };
 //%}
 
