@@ -2083,7 +2083,7 @@ ldvector_swigregister = _sim3d.ldvector_swigregister
 ldvector_swigregister(ldvector)
 
 class ivector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(Interaction)>)> class."""
+    """Proxy of C++ std::vector<(boost::shared_ptr<(Interaction)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2112,61 +2112,61 @@ class ivector(collections.MutableSequence):
         return _sim3d.ivector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< Interaction > >::size_type":
-        """__len__(ivector self) -> std::vector< shared_ptr< Interaction > >::size_type"""
+    def __len__(self) -> "std::vector< boost::shared_ptr< Interaction > >::size_type":
+        """__len__(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::size_type"""
         return _sim3d.ivector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< Interaction > >::difference_type', j: 'std::vector< shared_ptr< Interaction > >::difference_type') -> "std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *":
-        """__getslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j) -> std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *"""
+    def __getslice__(self, i: 'std::vector< boost::shared_ptr< Interaction > >::difference_type', j: 'std::vector< boost::shared_ptr< Interaction > >::difference_type') -> "std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *":
+        """__getslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j) -> ivector"""
         return _sim3d.ivector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j)
-        __setslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j, std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > const & v)
+        __setslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j)
+        __setslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j, ivector v)
         """
         return _sim3d.ivector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< Interaction > >::difference_type', j: 'std::vector< shared_ptr< Interaction > >::difference_type') -> "void":
-        """__delslice__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< boost::shared_ptr< Interaction > >::difference_type', j: 'std::vector< boost::shared_ptr< Interaction > >::difference_type') -> "void":
+        """__delslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j)"""
         return _sim3d.ivector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i)
+        __delitem__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i)
         __delitem__(ivector self, PySliceObject * slice)
         """
         return _sim3d.ivector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< Interaction > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< Interaction > >::value_type const &":
         """
-        __getitem__(ivector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > >
-        __getitem__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i) -> std::vector< shared_ptr< Interaction > >::value_type const &
+        __getitem__(ivector self, PySliceObject * slice) -> ivector
+        __getitem__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i) -> std::vector< boost::shared_ptr< Interaction > >::value_type const &
         """
         return _sim3d.ivector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(ivector self, PySliceObject * slice, std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > const & v)
+        __setitem__(ivector self, PySliceObject * slice, ivector v)
         __setitem__(ivector self, PySliceObject * slice)
-        __setitem__(ivector self, std::vector< shared_ptr< Interaction > >::difference_type i, std::vector< shared_ptr< Interaction > >::value_type const & x)
+        __setitem__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim3d.ivector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< shared_ptr< Interaction > >::value_type":
-        """pop(ivector self) -> std::vector< shared_ptr< Interaction > >::value_type"""
+    def pop(self) -> "std::vector< boost::shared_ptr< Interaction > >::value_type":
+        """pop(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::value_type"""
         return _sim3d.ivector_pop(self)
 
 
-    def append(self, x: 'std::vector< shared_ptr< Interaction > >::value_type const &') -> "void":
-        """append(ivector self, std::vector< shared_ptr< Interaction > >::value_type const & x)"""
+    def append(self, x: 'std::vector< boost::shared_ptr< Interaction > >::value_type const &') -> "void":
+        """append(ivector self, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)"""
         return _sim3d.ivector_append(self, x)
 
 
@@ -2175,8 +2175,8 @@ class ivector(collections.MutableSequence):
         return _sim3d.ivector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< Interaction > >::size_type":
-        """size(ivector self) -> std::vector< shared_ptr< Interaction > >::size_type"""
+    def size(self) -> "std::vector< boost::shared_ptr< Interaction > >::size_type":
+        """size(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::size_type"""
         return _sim3d.ivector_size(self)
 
 
@@ -2185,23 +2185,23 @@ class ivector(collections.MutableSequence):
         return _sim3d.ivector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< shared_ptr< Interaction > >::iterator":
-        """begin(ivector self) -> std::vector< shared_ptr< Interaction > >::iterator"""
+    def begin(self) -> "std::vector< boost::shared_ptr< Interaction > >::iterator":
+        """begin(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::iterator"""
         return _sim3d.ivector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< Interaction > >::iterator":
-        """end(ivector self) -> std::vector< shared_ptr< Interaction > >::iterator"""
+    def end(self) -> "std::vector< boost::shared_ptr< Interaction > >::iterator":
+        """end(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::iterator"""
         return _sim3d.ivector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< Interaction > >::reverse_iterator":
-        """rbegin(ivector self) -> std::vector< shared_ptr< Interaction > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< boost::shared_ptr< Interaction > >::reverse_iterator":
+        """rbegin(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::reverse_iterator"""
         return _sim3d.ivector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< Interaction > >::reverse_iterator":
-        """rend(ivector self) -> std::vector< shared_ptr< Interaction > >::reverse_iterator"""
+    def rend(self) -> "std::vector< boost::shared_ptr< Interaction > >::reverse_iterator":
+        """rend(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::reverse_iterator"""
         return _sim3d.ivector_rend(self)
 
 
@@ -2210,8 +2210,8 @@ class ivector(collections.MutableSequence):
         return _sim3d.ivector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< Interaction > >::allocator_type":
-        """get_allocator(ivector self) -> std::vector< shared_ptr< Interaction > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< boost::shared_ptr< Interaction > >::allocator_type":
+        """get_allocator(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::allocator_type"""
         return _sim3d.ivector_get_allocator(self)
 
 
@@ -2220,20 +2220,20 @@ class ivector(collections.MutableSequence):
         return _sim3d.ivector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< Interaction > >::iterator":
+    def erase(self, *args) -> "std::vector< boost::shared_ptr< Interaction > >::iterator":
         """
-        erase(ivector self, std::vector< shared_ptr< Interaction > >::iterator pos) -> std::vector< shared_ptr< Interaction > >::iterator
-        erase(ivector self, std::vector< shared_ptr< Interaction > >::iterator first, std::vector< shared_ptr< Interaction > >::iterator last) -> std::vector< shared_ptr< Interaction > >::iterator
+        erase(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator pos) -> std::vector< boost::shared_ptr< Interaction > >::iterator
+        erase(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator first, std::vector< boost::shared_ptr< Interaction > >::iterator last) -> std::vector< boost::shared_ptr< Interaction > >::iterator
         """
         return _sim3d.ivector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(Interaction)>)> self) -> ivector
-        __init__(std::vector<(shared_ptr<(Interaction)>)> self, ivector arg2) -> ivector
-        __init__(std::vector<(shared_ptr<(Interaction)>)> self, std::vector< shared_ptr< Interaction > >::size_type size) -> ivector
-        __init__(std::vector<(shared_ptr<(Interaction)>)> self, std::vector< shared_ptr< Interaction > >::size_type size, std::vector< shared_ptr< Interaction > >::value_type const & value) -> ivector
+        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self) -> ivector
+        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self, ivector arg2) -> ivector
+        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self, std::vector< boost::shared_ptr< Interaction > >::size_type size) -> ivector
+        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self, std::vector< boost::shared_ptr< Interaction > >::size_type size, std::vector< boost::shared_ptr< Interaction > >::value_type const & value) -> ivector
         """
         this = _sim3d.new_ivector(*args)
         try:
@@ -2241,49 +2241,49 @@ class ivector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< Interaction > >::value_type const &') -> "void":
-        """push_back(ivector self, std::vector< shared_ptr< Interaction > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< boost::shared_ptr< Interaction > >::value_type const &') -> "void":
+        """push_back(ivector self, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)"""
         return _sim3d.ivector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< Interaction > >::value_type const &":
-        """front(ivector self) -> std::vector< shared_ptr< Interaction > >::value_type const &"""
+    def front(self) -> "std::vector< boost::shared_ptr< Interaction > >::value_type const &":
+        """front(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::value_type const &"""
         return _sim3d.ivector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< Interaction > >::value_type const &":
-        """back(ivector self) -> std::vector< shared_ptr< Interaction > >::value_type const &"""
+    def back(self) -> "std::vector< boost::shared_ptr< Interaction > >::value_type const &":
+        """back(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::value_type const &"""
         return _sim3d.ivector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< Interaction > >::size_type', x: 'std::vector< shared_ptr< Interaction > >::value_type const &') -> "void":
-        """assign(ivector self, std::vector< shared_ptr< Interaction > >::size_type n, std::vector< shared_ptr< Interaction > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< boost::shared_ptr< Interaction > >::size_type', x: 'std::vector< boost::shared_ptr< Interaction > >::value_type const &') -> "void":
+        """assign(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type n, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)"""
         return _sim3d.ivector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(ivector self, std::vector< shared_ptr< Interaction > >::size_type new_size)
-        resize(ivector self, std::vector< shared_ptr< Interaction > >::size_type new_size, std::vector< shared_ptr< Interaction > >::value_type const & x)
+        resize(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type new_size)
+        resize(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type new_size, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim3d.ivector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(ivector self, std::vector< shared_ptr< Interaction > >::iterator pos, std::vector< shared_ptr< Interaction > >::value_type const & x) -> std::vector< shared_ptr< Interaction > >::iterator
-        insert(ivector self, std::vector< shared_ptr< Interaction > >::iterator pos, std::vector< shared_ptr< Interaction > >::size_type n, std::vector< shared_ptr< Interaction > >::value_type const & x)
+        insert(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator pos, std::vector< boost::shared_ptr< Interaction > >::value_type const & x) -> std::vector< boost::shared_ptr< Interaction > >::iterator
+        insert(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator pos, std::vector< boost::shared_ptr< Interaction > >::size_type n, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim3d.ivector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< Interaction > >::size_type') -> "void":
-        """reserve(ivector self, std::vector< shared_ptr< Interaction > >::size_type n)"""
+    def reserve(self, n: 'std::vector< boost::shared_ptr< Interaction > >::size_type') -> "void":
+        """reserve(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type n)"""
         return _sim3d.ivector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< Interaction > >::size_type":
-        """capacity(ivector self) -> std::vector< shared_ptr< Interaction > >::size_type"""
+    def capacity(self) -> "std::vector< boost::shared_ptr< Interaction > >::size_type":
+        """capacity(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::size_type"""
         return _sim3d.ivector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete_ivector
@@ -2292,7 +2292,7 @@ ivector_swigregister = _sim3d.ivector_swigregister
 ivector_swigregister(ivector)
 
 class ifxvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(InteractionPairsX)>)> class."""
+    """Proxy of C++ std::vector<(boost::shared_ptr<(InteractionPairsX)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2321,61 +2321,61 @@ class ifxvector(collections.MutableSequence):
         return _sim3d.ifxvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< InteractionPairsX > >::size_type":
-        """__len__(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::size_type"""
+    def __len__(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::size_type":
+        """__len__(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::size_type"""
         return _sim3d.ifxvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type') -> "std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *":
-        """__getslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j) -> std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *"""
+    def __getslice__(self, i: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type') -> "std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *":
+        """__getslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j) -> ifxvector"""
         return _sim3d.ifxvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j)
-        __setslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j, std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > const & v)
+        __setslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j)
+        __setslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j, ifxvector v)
         """
         return _sim3d.ifxvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< shared_ptr< InteractionPairsX > >::difference_type') -> "void":
-        """__delslice__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type') -> "void":
+        """__delslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j)"""
         return _sim3d.ifxvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i)
+        __delitem__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i)
         __delitem__(ifxvector self, PySliceObject * slice)
         """
         return _sim3d.ifxvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &":
         """
-        __getitem__(ifxvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > >
-        __getitem__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i) -> std::vector< shared_ptr< InteractionPairsX > >::value_type const &
+        __getitem__(ifxvector self, PySliceObject * slice) -> ifxvector
+        __getitem__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &
         """
         return _sim3d.ifxvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(ifxvector self, PySliceObject * slice, std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > const & v)
+        __setitem__(ifxvector self, PySliceObject * slice, ifxvector v)
         __setitem__(ifxvector self, PySliceObject * slice)
-        __setitem__(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::difference_type i, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)
+        __setitem__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim3d.ifxvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type":
-        """pop(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::value_type"""
+    def pop(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type":
+        """pop(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type"""
         return _sim3d.ifxvector_pop(self)
 
 
-    def append(self, x: 'std::vector< shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
-        """append(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)"""
+    def append(self, x: 'std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """append(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim3d.ifxvector_append(self, x)
 
 
@@ -2384,8 +2384,8 @@ class ifxvector(collections.MutableSequence):
         return _sim3d.ifxvector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< InteractionPairsX > >::size_type":
-        """size(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::size_type"""
+    def size(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::size_type":
+        """size(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::size_type"""
         return _sim3d.ifxvector_size(self)
 
 
@@ -2394,23 +2394,23 @@ class ifxvector(collections.MutableSequence):
         return _sim3d.ifxvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< shared_ptr< InteractionPairsX > >::iterator":
-        """begin(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::iterator"""
+    def begin(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::iterator":
+        """begin(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator"""
         return _sim3d.ifxvector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< InteractionPairsX > >::iterator":
-        """end(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::iterator"""
+    def end(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::iterator":
+        """end(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator"""
         return _sim3d.ifxvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator":
-        """rbegin(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator":
+        """rbegin(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator"""
         return _sim3d.ifxvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator":
-        """rend(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::reverse_iterator"""
+    def rend(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator":
+        """rend(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator"""
         return _sim3d.ifxvector_rend(self)
 
 
@@ -2419,8 +2419,8 @@ class ifxvector(collections.MutableSequence):
         return _sim3d.ifxvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< InteractionPairsX > >::allocator_type":
-        """get_allocator(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::allocator_type":
+        """get_allocator(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::allocator_type"""
         return _sim3d.ifxvector_get_allocator(self)
 
 
@@ -2429,20 +2429,20 @@ class ifxvector(collections.MutableSequence):
         return _sim3d.ifxvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< InteractionPairsX > >::iterator":
+    def erase(self, *args) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::iterator":
         """
-        erase(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator pos) -> std::vector< shared_ptr< InteractionPairsX > >::iterator
-        erase(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator first, std::vector< shared_ptr< InteractionPairsX > >::iterator last) -> std::vector< shared_ptr< InteractionPairsX > >::iterator
+        erase(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator pos) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator
+        erase(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator first, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator last) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator
         """
         return _sim3d.ifxvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self) -> ifxvector
-        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self, ifxvector arg2) -> ifxvector
-        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self, std::vector< shared_ptr< InteractionPairsX > >::size_type size) -> ifxvector
-        __init__(std::vector<(shared_ptr<(InteractionPairsX)>)> self, std::vector< shared_ptr< InteractionPairsX > >::size_type size, std::vector< shared_ptr< InteractionPairsX > >::value_type const & value) -> ifxvector
+        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self) -> ifxvector
+        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self, ifxvector arg2) -> ifxvector
+        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type size) -> ifxvector
+        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type size, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & value) -> ifxvector
         """
         this = _sim3d.new_ifxvector(*args)
         try:
@@ -2450,49 +2450,49 @@ class ifxvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
-        """push_back(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """push_back(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim3d.ifxvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type const &":
-        """front(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::value_type const &"""
+    def front(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &":
+        """front(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &"""
         return _sim3d.ifxvector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< InteractionPairsX > >::value_type const &":
-        """back(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::value_type const &"""
+    def back(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &":
+        """back(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &"""
         return _sim3d.ifxvector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< InteractionPairsX > >::size_type', x: 'std::vector< shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
-        """assign(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type n, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< boost::shared_ptr< InteractionPairsX > >::size_type', x: 'std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """assign(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type n, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim3d.ifxvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type new_size)
-        resize(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type new_size, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)
+        resize(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type new_size)
+        resize(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type new_size, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim3d.ifxvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator pos, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x) -> std::vector< shared_ptr< InteractionPairsX > >::iterator
-        insert(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::iterator pos, std::vector< shared_ptr< InteractionPairsX > >::size_type n, std::vector< shared_ptr< InteractionPairsX > >::value_type const & x)
+        insert(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator pos, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator
+        insert(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator pos, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type n, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim3d.ifxvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< InteractionPairsX > >::size_type') -> "void":
-        """reserve(ifxvector self, std::vector< shared_ptr< InteractionPairsX > >::size_type n)"""
+    def reserve(self, n: 'std::vector< boost::shared_ptr< InteractionPairsX > >::size_type') -> "void":
+        """reserve(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type n)"""
         return _sim3d.ifxvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< InteractionPairsX > >::size_type":
-        """capacity(ifxvector self) -> std::vector< shared_ptr< InteractionPairsX > >::size_type"""
+    def capacity(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::size_type":
+        """capacity(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::size_type"""
         return _sim3d.ifxvector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete_ifxvector
@@ -2501,7 +2501,7 @@ ifxvector_swigregister = _sim3d.ifxvector_swigregister
 ifxvector_swigregister(ifxvector)
 
 class tvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(StateTracker)>)> class."""
+    """Proxy of C++ std::vector<(boost::shared_ptr<(StateTracker)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2530,61 +2530,61 @@ class tvector(collections.MutableSequence):
         return _sim3d.tvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< StateTracker > >::size_type":
-        """__len__(tvector self) -> std::vector< shared_ptr< StateTracker > >::size_type"""
+    def __len__(self) -> "std::vector< boost::shared_ptr< StateTracker > >::size_type":
+        """__len__(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::size_type"""
         return _sim3d.tvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< StateTracker > >::difference_type', j: 'std::vector< shared_ptr< StateTracker > >::difference_type') -> "std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *":
-        """__getslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j) -> std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *"""
+    def __getslice__(self, i: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type', j: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type') -> "std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *":
+        """__getslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j) -> tvector"""
         return _sim3d.tvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j)
-        __setslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j, std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > const & v)
+        __setslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j)
+        __setslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j, tvector v)
         """
         return _sim3d.tvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< StateTracker > >::difference_type', j: 'std::vector< shared_ptr< StateTracker > >::difference_type') -> "void":
-        """__delslice__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type', j: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type') -> "void":
+        """__delslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j)"""
         return _sim3d.tvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i)
+        __delitem__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i)
         __delitem__(tvector self, PySliceObject * slice)
         """
         return _sim3d.tvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< StateTracker > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type const &":
         """
-        __getitem__(tvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > >
-        __getitem__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i) -> std::vector< shared_ptr< StateTracker > >::value_type const &
+        __getitem__(tvector self, PySliceObject * slice) -> tvector
+        __getitem__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i) -> std::vector< boost::shared_ptr< StateTracker > >::value_type const &
         """
         return _sim3d.tvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(tvector self, PySliceObject * slice, std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > const & v)
+        __setitem__(tvector self, PySliceObject * slice, tvector v)
         __setitem__(tvector self, PySliceObject * slice)
-        __setitem__(tvector self, std::vector< shared_ptr< StateTracker > >::difference_type i, std::vector< shared_ptr< StateTracker > >::value_type const & x)
+        __setitem__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim3d.tvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< shared_ptr< StateTracker > >::value_type":
-        """pop(tvector self) -> std::vector< shared_ptr< StateTracker > >::value_type"""
+    def pop(self) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type":
+        """pop(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::value_type"""
         return _sim3d.tvector_pop(self)
 
 
-    def append(self, x: 'std::vector< shared_ptr< StateTracker > >::value_type const &') -> "void":
-        """append(tvector self, std::vector< shared_ptr< StateTracker > >::value_type const & x)"""
+    def append(self, x: 'std::vector< boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """append(tvector self, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim3d.tvector_append(self, x)
 
 
@@ -2593,8 +2593,8 @@ class tvector(collections.MutableSequence):
         return _sim3d.tvector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< StateTracker > >::size_type":
-        """size(tvector self) -> std::vector< shared_ptr< StateTracker > >::size_type"""
+    def size(self) -> "std::vector< boost::shared_ptr< StateTracker > >::size_type":
+        """size(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::size_type"""
         return _sim3d.tvector_size(self)
 
 
@@ -2603,23 +2603,23 @@ class tvector(collections.MutableSequence):
         return _sim3d.tvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< shared_ptr< StateTracker > >::iterator":
-        """begin(tvector self) -> std::vector< shared_ptr< StateTracker > >::iterator"""
+    def begin(self) -> "std::vector< boost::shared_ptr< StateTracker > >::iterator":
+        """begin(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::iterator"""
         return _sim3d.tvector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< StateTracker > >::iterator":
-        """end(tvector self) -> std::vector< shared_ptr< StateTracker > >::iterator"""
+    def end(self) -> "std::vector< boost::shared_ptr< StateTracker > >::iterator":
+        """end(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::iterator"""
         return _sim3d.tvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< StateTracker > >::reverse_iterator":
-        """rbegin(tvector self) -> std::vector< shared_ptr< StateTracker > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator":
+        """rbegin(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator"""
         return _sim3d.tvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< StateTracker > >::reverse_iterator":
-        """rend(tvector self) -> std::vector< shared_ptr< StateTracker > >::reverse_iterator"""
+    def rend(self) -> "std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator":
+        """rend(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator"""
         return _sim3d.tvector_rend(self)
 
 
@@ -2628,8 +2628,8 @@ class tvector(collections.MutableSequence):
         return _sim3d.tvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< StateTracker > >::allocator_type":
-        """get_allocator(tvector self) -> std::vector< shared_ptr< StateTracker > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< boost::shared_ptr< StateTracker > >::allocator_type":
+        """get_allocator(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::allocator_type"""
         return _sim3d.tvector_get_allocator(self)
 
 
@@ -2638,20 +2638,20 @@ class tvector(collections.MutableSequence):
         return _sim3d.tvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< StateTracker > >::iterator":
+    def erase(self, *args) -> "std::vector< boost::shared_ptr< StateTracker > >::iterator":
         """
-        erase(tvector self, std::vector< shared_ptr< StateTracker > >::iterator pos) -> std::vector< shared_ptr< StateTracker > >::iterator
-        erase(tvector self, std::vector< shared_ptr< StateTracker > >::iterator first, std::vector< shared_ptr< StateTracker > >::iterator last) -> std::vector< shared_ptr< StateTracker > >::iterator
+        erase(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator pos) -> std::vector< boost::shared_ptr< StateTracker > >::iterator
+        erase(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator first, std::vector< boost::shared_ptr< StateTracker > >::iterator last) -> std::vector< boost::shared_ptr< StateTracker > >::iterator
         """
         return _sim3d.tvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(StateTracker)>)> self) -> tvector
-        __init__(std::vector<(shared_ptr<(StateTracker)>)> self, tvector arg2) -> tvector
-        __init__(std::vector<(shared_ptr<(StateTracker)>)> self, std::vector< shared_ptr< StateTracker > >::size_type size) -> tvector
-        __init__(std::vector<(shared_ptr<(StateTracker)>)> self, std::vector< shared_ptr< StateTracker > >::size_type size, std::vector< shared_ptr< StateTracker > >::value_type const & value) -> tvector
+        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self) -> tvector
+        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self, tvector arg2) -> tvector
+        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self, std::vector< boost::shared_ptr< StateTracker > >::size_type size) -> tvector
+        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self, std::vector< boost::shared_ptr< StateTracker > >::size_type size, std::vector< boost::shared_ptr< StateTracker > >::value_type const & value) -> tvector
         """
         this = _sim3d.new_tvector(*args)
         try:
@@ -2659,49 +2659,49 @@ class tvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< StateTracker > >::value_type const &') -> "void":
-        """push_back(tvector self, std::vector< shared_ptr< StateTracker > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """push_back(tvector self, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim3d.tvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< StateTracker > >::value_type const &":
-        """front(tvector self) -> std::vector< shared_ptr< StateTracker > >::value_type const &"""
+    def front(self) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type const &":
+        """front(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::value_type const &"""
         return _sim3d.tvector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< StateTracker > >::value_type const &":
-        """back(tvector self) -> std::vector< shared_ptr< StateTracker > >::value_type const &"""
+    def back(self) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type const &":
+        """back(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::value_type const &"""
         return _sim3d.tvector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< StateTracker > >::size_type', x: 'std::vector< shared_ptr< StateTracker > >::value_type const &') -> "void":
-        """assign(tvector self, std::vector< shared_ptr< StateTracker > >::size_type n, std::vector< shared_ptr< StateTracker > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< boost::shared_ptr< StateTracker > >::size_type', x: 'std::vector< boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """assign(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type n, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim3d.tvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(tvector self, std::vector< shared_ptr< StateTracker > >::size_type new_size)
-        resize(tvector self, std::vector< shared_ptr< StateTracker > >::size_type new_size, std::vector< shared_ptr< StateTracker > >::value_type const & x)
+        resize(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type new_size)
+        resize(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type new_size, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim3d.tvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(tvector self, std::vector< shared_ptr< StateTracker > >::iterator pos, std::vector< shared_ptr< StateTracker > >::value_type const & x) -> std::vector< shared_ptr< StateTracker > >::iterator
-        insert(tvector self, std::vector< shared_ptr< StateTracker > >::iterator pos, std::vector< shared_ptr< StateTracker > >::size_type n, std::vector< shared_ptr< StateTracker > >::value_type const & x)
+        insert(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator pos, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x) -> std::vector< boost::shared_ptr< StateTracker > >::iterator
+        insert(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator pos, std::vector< boost::shared_ptr< StateTracker > >::size_type n, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim3d.tvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< StateTracker > >::size_type') -> "void":
-        """reserve(tvector self, std::vector< shared_ptr< StateTracker > >::size_type n)"""
+    def reserve(self, n: 'std::vector< boost::shared_ptr< StateTracker > >::size_type') -> "void":
+        """reserve(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type n)"""
         return _sim3d.tvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< StateTracker > >::size_type":
-        """capacity(tvector self) -> std::vector< shared_ptr< StateTracker > >::size_type"""
+    def capacity(self) -> "std::vector< boost::shared_ptr< StateTracker > >::size_type":
+        """capacity(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::size_type"""
         return _sim3d.tvector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete_tvector
@@ -2710,7 +2710,7 @@ tvector_swigregister = _sim3d.tvector_swigregister
 tvector_swigregister(tvector)
 
 class constraintvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(shared_ptr<(Constraint)>)> class."""
+    """Proxy of C++ std::vector<(boost::shared_ptr<(Constraint)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2739,61 +2739,61 @@ class constraintvector(collections.MutableSequence):
         return _sim3d.constraintvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< shared_ptr< Constraint > >::size_type":
-        """__len__(constraintvector self) -> std::vector< shared_ptr< Constraint > >::size_type"""
+    def __len__(self) -> "std::vector< boost::shared_ptr< Constraint > >::size_type":
+        """__len__(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::size_type"""
         return _sim3d.constraintvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< shared_ptr< Constraint > >::difference_type', j: 'std::vector< shared_ptr< Constraint > >::difference_type') -> "std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *":
-        """__getslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j) -> std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *"""
+    def __getslice__(self, i: 'std::vector< boost::shared_ptr< Constraint > >::difference_type', j: 'std::vector< boost::shared_ptr< Constraint > >::difference_type') -> "std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *":
+        """__getslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j) -> constraintvector"""
         return _sim3d.constraintvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j)
-        __setslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j, std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > const & v)
+        __setslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j)
+        __setslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j, constraintvector v)
         """
         return _sim3d.constraintvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< shared_ptr< Constraint > >::difference_type', j: 'std::vector< shared_ptr< Constraint > >::difference_type') -> "void":
-        """__delslice__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< boost::shared_ptr< Constraint > >::difference_type', j: 'std::vector< boost::shared_ptr< Constraint > >::difference_type') -> "void":
+        """__delslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j)"""
         return _sim3d.constraintvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i)
+        __delitem__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i)
         __delitem__(constraintvector self, PySliceObject * slice)
         """
         return _sim3d.constraintvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< shared_ptr< Constraint > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< Constraint > >::value_type const &":
         """
-        __getitem__(constraintvector self, PySliceObject * slice) -> std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > >
-        __getitem__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i) -> std::vector< shared_ptr< Constraint > >::value_type const &
+        __getitem__(constraintvector self, PySliceObject * slice) -> constraintvector
+        __getitem__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i) -> std::vector< boost::shared_ptr< Constraint > >::value_type const &
         """
         return _sim3d.constraintvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(constraintvector self, PySliceObject * slice, std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > const & v)
+        __setitem__(constraintvector self, PySliceObject * slice, constraintvector v)
         __setitem__(constraintvector self, PySliceObject * slice)
-        __setitem__(constraintvector self, std::vector< shared_ptr< Constraint > >::difference_type i, std::vector< shared_ptr< Constraint > >::value_type const & x)
+        __setitem__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim3d.constraintvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< shared_ptr< Constraint > >::value_type":
-        """pop(constraintvector self) -> std::vector< shared_ptr< Constraint > >::value_type"""
+    def pop(self) -> "std::vector< boost::shared_ptr< Constraint > >::value_type":
+        """pop(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::value_type"""
         return _sim3d.constraintvector_pop(self)
 
 
-    def append(self, x: 'std::vector< shared_ptr< Constraint > >::value_type const &') -> "void":
-        """append(constraintvector self, std::vector< shared_ptr< Constraint > >::value_type const & x)"""
+    def append(self, x: 'std::vector< boost::shared_ptr< Constraint > >::value_type const &') -> "void":
+        """append(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)"""
         return _sim3d.constraintvector_append(self, x)
 
 
@@ -2802,8 +2802,8 @@ class constraintvector(collections.MutableSequence):
         return _sim3d.constraintvector_empty(self)
 
 
-    def size(self) -> "std::vector< shared_ptr< Constraint > >::size_type":
-        """size(constraintvector self) -> std::vector< shared_ptr< Constraint > >::size_type"""
+    def size(self) -> "std::vector< boost::shared_ptr< Constraint > >::size_type":
+        """size(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::size_type"""
         return _sim3d.constraintvector_size(self)
 
 
@@ -2812,23 +2812,23 @@ class constraintvector(collections.MutableSequence):
         return _sim3d.constraintvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< shared_ptr< Constraint > >::iterator":
-        """begin(constraintvector self) -> std::vector< shared_ptr< Constraint > >::iterator"""
+    def begin(self) -> "std::vector< boost::shared_ptr< Constraint > >::iterator":
+        """begin(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::iterator"""
         return _sim3d.constraintvector_begin(self)
 
 
-    def end(self) -> "std::vector< shared_ptr< Constraint > >::iterator":
-        """end(constraintvector self) -> std::vector< shared_ptr< Constraint > >::iterator"""
+    def end(self) -> "std::vector< boost::shared_ptr< Constraint > >::iterator":
+        """end(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::iterator"""
         return _sim3d.constraintvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< shared_ptr< Constraint > >::reverse_iterator":
-        """rbegin(constraintvector self) -> std::vector< shared_ptr< Constraint > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< boost::shared_ptr< Constraint > >::reverse_iterator":
+        """rbegin(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::reverse_iterator"""
         return _sim3d.constraintvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< shared_ptr< Constraint > >::reverse_iterator":
-        """rend(constraintvector self) -> std::vector< shared_ptr< Constraint > >::reverse_iterator"""
+    def rend(self) -> "std::vector< boost::shared_ptr< Constraint > >::reverse_iterator":
+        """rend(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::reverse_iterator"""
         return _sim3d.constraintvector_rend(self)
 
 
@@ -2837,8 +2837,8 @@ class constraintvector(collections.MutableSequence):
         return _sim3d.constraintvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< shared_ptr< Constraint > >::allocator_type":
-        """get_allocator(constraintvector self) -> std::vector< shared_ptr< Constraint > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< boost::shared_ptr< Constraint > >::allocator_type":
+        """get_allocator(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::allocator_type"""
         return _sim3d.constraintvector_get_allocator(self)
 
 
@@ -2847,20 +2847,20 @@ class constraintvector(collections.MutableSequence):
         return _sim3d.constraintvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< shared_ptr< Constraint > >::iterator":
+    def erase(self, *args) -> "std::vector< boost::shared_ptr< Constraint > >::iterator":
         """
-        erase(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator pos) -> std::vector< shared_ptr< Constraint > >::iterator
-        erase(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator first, std::vector< shared_ptr< Constraint > >::iterator last) -> std::vector< shared_ptr< Constraint > >::iterator
+        erase(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator pos) -> std::vector< boost::shared_ptr< Constraint > >::iterator
+        erase(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator first, std::vector< boost::shared_ptr< Constraint > >::iterator last) -> std::vector< boost::shared_ptr< Constraint > >::iterator
         """
         return _sim3d.constraintvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(shared_ptr<(Constraint)>)> self) -> constraintvector
-        __init__(std::vector<(shared_ptr<(Constraint)>)> self, constraintvector arg2) -> constraintvector
-        __init__(std::vector<(shared_ptr<(Constraint)>)> self, std::vector< shared_ptr< Constraint > >::size_type size) -> constraintvector
-        __init__(std::vector<(shared_ptr<(Constraint)>)> self, std::vector< shared_ptr< Constraint > >::size_type size, std::vector< shared_ptr< Constraint > >::value_type const & value) -> constraintvector
+        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self) -> constraintvector
+        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self, constraintvector arg2) -> constraintvector
+        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self, std::vector< boost::shared_ptr< Constraint > >::size_type size) -> constraintvector
+        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self, std::vector< boost::shared_ptr< Constraint > >::size_type size, std::vector< boost::shared_ptr< Constraint > >::value_type const & value) -> constraintvector
         """
         this = _sim3d.new_constraintvector(*args)
         try:
@@ -2868,49 +2868,49 @@ class constraintvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< shared_ptr< Constraint > >::value_type const &') -> "void":
-        """push_back(constraintvector self, std::vector< shared_ptr< Constraint > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< boost::shared_ptr< Constraint > >::value_type const &') -> "void":
+        """push_back(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)"""
         return _sim3d.constraintvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< shared_ptr< Constraint > >::value_type const &":
-        """front(constraintvector self) -> std::vector< shared_ptr< Constraint > >::value_type const &"""
+    def front(self) -> "std::vector< boost::shared_ptr< Constraint > >::value_type const &":
+        """front(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::value_type const &"""
         return _sim3d.constraintvector_front(self)
 
 
-    def back(self) -> "std::vector< shared_ptr< Constraint > >::value_type const &":
-        """back(constraintvector self) -> std::vector< shared_ptr< Constraint > >::value_type const &"""
+    def back(self) -> "std::vector< boost::shared_ptr< Constraint > >::value_type const &":
+        """back(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::value_type const &"""
         return _sim3d.constraintvector_back(self)
 
 
-    def assign(self, n: 'std::vector< shared_ptr< Constraint > >::size_type', x: 'std::vector< shared_ptr< Constraint > >::value_type const &') -> "void":
-        """assign(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type n, std::vector< shared_ptr< Constraint > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< boost::shared_ptr< Constraint > >::size_type', x: 'std::vector< boost::shared_ptr< Constraint > >::value_type const &') -> "void":
+        """assign(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type n, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)"""
         return _sim3d.constraintvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type new_size)
-        resize(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type new_size, std::vector< shared_ptr< Constraint > >::value_type const & x)
+        resize(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type new_size)
+        resize(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type new_size, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim3d.constraintvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator pos, std::vector< shared_ptr< Constraint > >::value_type const & x) -> std::vector< shared_ptr< Constraint > >::iterator
-        insert(constraintvector self, std::vector< shared_ptr< Constraint > >::iterator pos, std::vector< shared_ptr< Constraint > >::size_type n, std::vector< shared_ptr< Constraint > >::value_type const & x)
+        insert(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator pos, std::vector< boost::shared_ptr< Constraint > >::value_type const & x) -> std::vector< boost::shared_ptr< Constraint > >::iterator
+        insert(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator pos, std::vector< boost::shared_ptr< Constraint > >::size_type n, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim3d.constraintvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< shared_ptr< Constraint > >::size_type') -> "void":
-        """reserve(constraintvector self, std::vector< shared_ptr< Constraint > >::size_type n)"""
+    def reserve(self, n: 'std::vector< boost::shared_ptr< Constraint > >::size_type') -> "void":
+        """reserve(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type n)"""
         return _sim3d.constraintvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< shared_ptr< Constraint > >::size_type":
-        """capacity(constraintvector self) -> std::vector< shared_ptr< Constraint > >::size_type"""
+    def capacity(self) -> "std::vector< boost::shared_ptr< Constraint > >::size_type":
+        """capacity(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::size_type"""
         return _sim3d.constraintvector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete_constraintvector
@@ -11415,10 +11415,10 @@ class EnergyTracker(StateTracker):
     __getattr__ = lambda self, name: _swig_getattr(self, EnergyTracker, name)
     __repr__ = _swig_repr
 
-    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', interactions: 'std::vector< boost::shared_ptr< Interaction > >', n_skip: 'uint'=1):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', interactions: 'ivector', n_skip: 'uint'=1):
         """
-        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, uint n_skip=1) -> EnergyTracker
-        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> EnergyTracker
+        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, ivector interactions, uint n_skip=1) -> EnergyTracker
+        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, ivector interactions) -> EnergyTracker
         """
         this = _sim3d.new_EnergyTracker(atoms, interactions, n_skip)
         try:
@@ -14534,7 +14534,7 @@ class Collection(_object):
 
 
     def get_interactions(self) -> "std::vector< boost::shared_ptr< Interaction > >":
-        """get_interactions(Collection self) -> std::vector< boost::shared_ptr< Interaction > >"""
+        """get_interactions(Collection self) -> ivector"""
         return _sim3d.Collection_get_interactions(self)
 
 Collection_swigregister = _sim3d.Collection_swigregister
@@ -14555,9 +14555,9 @@ class StaticCollec(Collection):
 
     def __init__(self, *args):
         """
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers, constraintvector constraints) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ivector interactions) -> StaticCollec
         __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms) -> StaticCollec
         """
         this = _sim3d.new_StaticCollec(*args)
@@ -14595,9 +14595,9 @@ class CollectionSol(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionSol
-        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionSol
-        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions) -> CollectionSol
         __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature) -> CollectionSol
         """
         this = _sim3d.new_CollectionSol(*args)
@@ -14645,9 +14645,9 @@ class CollectionDamped(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionDamped
-        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionDamped
-        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, ivector interactions, tvector trackers) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, ivector interactions) -> CollectionDamped
         __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping) -> CollectionDamped
         """
         this = _sim3d.new_CollectionDamped(*args)
@@ -14690,9 +14690,9 @@ class CollectionSolHT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionSolHT
-        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionSolHT
-        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions) -> CollectionSolHT
         __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature) -> CollectionSolHT
         """
         this = _sim3d.new_CollectionSolHT(*args)
@@ -14730,9 +14730,9 @@ class CollectionVerlet(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionVerlet
-        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionVerlet
-        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionVerlet
         __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionVerlet
         """
         this = _sim3d.new_CollectionVerlet(*args)
@@ -14770,9 +14770,9 @@ class CollectionOverdamped(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionOverdamped
-        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionOverdamped
-        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, ivector interactions, tvector trackers) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, ivector interactions) -> CollectionOverdamped
         __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0) -> CollectionOverdamped
         __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionOverdamped
         """
@@ -14929,13 +14929,13 @@ class CollectionNLCG(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions) -> CollectionNLCG
         __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCG
         """
         this = _sim3d.new_CollectionNLCG(*args)
@@ -15042,13 +15042,13 @@ class CollectionNLCGFixedL(CollectionNLCG):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions) -> CollectionNLCGFixedL
         __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCGFixedL
         """
         this = _sim3d.new_CollectionNLCGFixedL(*args)
@@ -15182,12 +15182,12 @@ class CollectionNLCGV(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000, uint const secmax=10, flt const seceps=1e-4) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000, uint const secmax=10) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints, flt const kmax=1000, uint const secmax=10, flt const seceps=1e-4) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints, flt const kmax=1000, uint const secmax=10) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints, flt const kmax=1000) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionNLCGV
         __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionNLCGV
         """
         this = _sim3d.new_CollectionNLCGV(*args)
@@ -15271,9 +15271,9 @@ class CollectionNoseHoover(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNoseHoover
-        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNoseHoover
-        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, ivector interactions, tvector trackers) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, ivector interactions) -> CollectionNoseHoover
         __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T) -> CollectionNoseHoover
         """
         this = _sim3d.new_CollectionNoseHoover(*args)
@@ -15336,9 +15336,9 @@ class CollectionGaussianT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGaussianT
         __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGaussianT
         """
         this = _sim3d.new_CollectionGaussianT(*args)
@@ -15385,9 +15385,9 @@ class CollectionGear3A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear3A
-        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear3A
-        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGear3A
         __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear3A
         """
         this = _sim3d.new_CollectionGear3A(*args)
@@ -15425,13 +15425,13 @@ class CollectionGear4A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions) -> CollectionGear4A
         __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGear4A
         __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear4A
         """
         this = _sim3d.new_CollectionGear4A(*args)
@@ -15469,13 +15469,13 @@ class CollectionGear5A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions) -> CollectionGear5A
         __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ivector interactions) -> CollectionGear5A
         __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms) -> CollectionGear5A
         """
         this = _sim3d.new_CollectionGear5A(*args)
@@ -15513,13 +15513,13 @@ class CollectionGear6A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions) -> CollectionGear6A
         __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGear6A
         __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear6A
         """
         this = _sim3d.new_CollectionGear6A(*args)
@@ -15610,9 +15610,9 @@ class CollectionRK4(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionRK4
-        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionRK4
-        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, ivector interactions, tvector trackers) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, ivector interactions) -> CollectionRK4
         __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt) -> CollectionRK4
         """
         this = _sim3d.new_CollectionRK4(*args)
@@ -15650,13 +15650,13 @@ class CollectionGear4NPH(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, ivector interactions) -> CollectionGear4NPH
         __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, ivector interactions, tvector trackers) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, ivector interactions) -> CollectionGear4NPH
         __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q) -> CollectionGear4NPH
         """
         this = _sim3d.new_CollectionGear4NPH(*args)
@@ -15828,8 +15828,8 @@ class CollectionGear4NPT(Collection):
         return _sim3d.CollectionGear4NPT_resetbs(self)
 
 
-    def tointerpair(arg1: 'std::vector< boost::shared_ptr< InteractionPairsX > > &') -> "std::vector< boost::shared_ptr< Interaction > >":
-        """tointerpair(std::vector< boost::shared_ptr< InteractionPairsX > > & arg1) -> std::vector< boost::shared_ptr< Interaction > >"""
+    def tointerpair(arg1: 'ifxvector') -> "std::vector< boost::shared_ptr< Interaction > >":
+        """tointerpair(ifxvector arg1) -> ivector"""
         return _sim3d.CollectionGear4NPT_tointerpair(arg1)
 
     if _newclass:
@@ -15838,13 +15838,13 @@ class CollectionGear4NPT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ifxvector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ifxvector interactions, tvector trackers) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ifxvector interactions) -> CollectionGear4NPT
         __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ifxvector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ifxvector interactions, tvector trackers) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ifxvector interactions) -> CollectionGear4NPT
         __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms) -> CollectionGear4NPT
         """
         this = _sim3d.new_CollectionGear4NPT(*args)
@@ -15870,8 +15870,8 @@ class CollectionGear4NPT(Collection):
 CollectionGear4NPT_swigregister = _sim3d.CollectionGear4NPT_swigregister
 CollectionGear4NPT_swigregister(CollectionGear4NPT)
 
-def CollectionGear4NPT_tointerpair(arg2: 'std::vector< boost::shared_ptr< InteractionPairsX > > &') -> "std::vector< boost::shared_ptr< Interaction > >":
-    """CollectionGear4NPT_tointerpair(std::vector< boost::shared_ptr< InteractionPairsX > > & arg2) -> std::vector< boost::shared_ptr< Interaction > >"""
+def CollectionGear4NPT_tointerpair(arg2: 'ifxvector') -> "std::vector< boost::shared_ptr< Interaction > >":
+    """CollectionGear4NPT_tointerpair(ifxvector arg2) -> ivector"""
     return _sim3d.CollectionGear4NPT_tointerpair(arg2)
 
 class CollectionVerletNPT(Collection):
@@ -15942,9 +15942,9 @@ class CollectionVerletNPT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionVerletNPT
-        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionVerletNPT
-        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, ivector interactions, tvector trackers) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, ivector interactions) -> CollectionVerletNPT
         __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT) -> CollectionVerletNPT
         """
         this = _sim3d.new_CollectionVerletNPT(*args)
@@ -16074,9 +16074,9 @@ class CollectionCD(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCD
-        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCD
-        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, ivector interactions, tvector trackers) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, ivector interactions) -> CollectionCD
         __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes) -> CollectionCD
         __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionCD
         """
@@ -16178,9 +16178,9 @@ class CollectionCDgrid(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDgrid
-        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDgrid
-        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, ivector interactions, tvector trackers) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes, ivector interactions) -> CollectionCDgrid
         __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, dvector sizes) -> CollectionCDgrid
         __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionCDgrid
         """
@@ -16255,9 +16255,9 @@ class CollectionCDBD(CollectionCD):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, ivector interactions, tvector trackers) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, ivector interactions) -> CollectionCDBD
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes) -> CollectionCDBD
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBD
         """
@@ -16291,9 +16291,9 @@ class CollectionCDBDgrid(CollectionCDgrid):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, ivector interactions, tvector trackers) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes, ivector interactions) -> CollectionCDBDgrid
         __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, dvector sizes) -> CollectionCDBDgrid
         __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBDgrid
         """
