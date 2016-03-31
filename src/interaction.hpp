@@ -1147,7 +1147,7 @@ struct LJishPair {
 // n controls the width and depth; as n -> 0, it becomes just LJ repulsive
 
 struct EpsDepthSigNCutAtom : public AtomID {
-    flt eps_r, depth, sigma, n;
+    flt eps_r, depth, sigma, un;  // use un instead of n, because AtomID.n exists
     flt sigcut;  // sigma units
     EpsDepthSigNCutAtom(){};
     EpsDepthSigNCutAtom(AtomID a, flt repeps, flt depth, flt sigma, flt n,
@@ -1156,14 +1156,14 @@ struct EpsDepthSigNCutAtom : public AtomID {
           eps_r(repeps),
           depth(depth),
           sigma(sigma),
-          n(n),
+          un(n),
           sigcut(cut){};
     EpsDepthSigNCutAtom(AtomID a, EpsDepthSigNCutAtom other)
         : AtomID(a),
           eps_r(other.eps_r),
           depth(other.depth),
           sigma(other.sigma),
-          n(other.n),
+          un(other.un),
           sigcut(other.sigcut){};
     flt max_size() { return sigma * sigcut; };
 };
@@ -1174,7 +1174,9 @@ struct LJAndAttractivePair {
     AtomID atom1, atom2;
     LJAndAttractivePair(EpsDepthSigNCutAtom a1, EpsDepthSigNCutAtom a2)
         : eps_r(sqrt(a1.eps_r * a2.eps_r)),
+          depth(sqrt(a1.depth * a2.depth)),
           sig((a1.sigma + a2.sigma) / 2.0),
+          n((a1.un + a2.un) / 2.0),
           cut_distance(max(a1.sigcut, a2.sigcut)),
           atom1(a1),
           atom2(a2) {
@@ -1182,18 +1184,18 @@ struct LJAndAttractivePair {
     };
 
     inline flt attract_energy(flt r_over_sig) {
-        flt parenthetical = 1 - n / (r_over_sig + n - 1);
-        return depth * n * (pow(parenthetical, 2) - 1);
+        flt parenthetical = 1.0 - n / (r_over_sig + n - 1.0);
+        return depth * (pow(parenthetical, 2.0) - 1.0);
     };
 
     inline flt LJ_energy(flt r_over_sig) {
-        return eps_r * pow(1 - pow(r_over_sig, -6), 2) - depth * n;
+        return eps_r * pow(1.0 - pow(r_over_sig, -6.0), 2.0) - depth;
     };
 
-    flt energy(Box &box) {
+    inline flt energy(Box &box) {
         Vec rij = box.diff(atom1->x, atom2->x);
         flt rsq = rij.squaredNorm() / (sig * sig);
-        if (rsq > cut_distance * cut_distance) {
+        if (cut_distance > 0 and rsq > cut_distance * cut_distance) {
             //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
             //cut_energy: %.2f)\n",
             //~ sqrt(rij.squaredNorm()), 0.0, eps, sig, cut_distance,
@@ -1207,6 +1209,25 @@ struct LJAndAttractivePair {
         } else {
             return attract_energy(r_over_sig) - cut_energy;
         }
+    };
+    
+    inline Vec forces(Box &box) {
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt dsq = rij.squaredNorm();
+        flt rsq = dsq / (sig * sig);
+        if (cut_distance > 0 and rsq > (cut_distance * cut_distance)) return Vec::Zero();
+        flt r_over_sig = sqrt(rsq);
+        flt fmagTimesR;
+        flt rsix = pow(rsq, -3);  // σ⁶/r⁶
+        
+        if(r_over_sig <= 1) {
+            fmagTimesR = 12 * eps_r * rsix * (1 - rsix);
+        } else {
+            flt denom = pow(r_over_sig + n - 1, 3);
+            fmagTimesR = 2*r_over_sig * depth * n * (r_over_sig - 1) / denom;
+        }
+        
+        return rij * (fmagTimesR / dsq);
     };
 };
 
