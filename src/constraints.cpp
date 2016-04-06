@@ -636,7 +636,7 @@ vector<vector<cmplx> > ISFTracker1::ISFs() {
 
 vector<vector<barray<cmplx, NDIM> > > ISFTracker1::ISFxyz() {
     vector<vector<barray<cmplx, NDIM> > > means(ks.size(),
-                                               vector<barray<cmplx, NDIM> >());
+                                                vector<barray<cmplx, NDIM> >());
     for (uint ki = 0; ki < ks.size(); ++ki) {
         means[ki].assign(ISFsums[ki].size(), barray<cmplx, NDIM>());
         for (uint i = 0; i < ISFsums[ki].size(); ++i) {
@@ -883,7 +883,8 @@ JammingTreeRot::JammingTreeRot(sptr<Box> box,
             Vec loc = locsB0.row(i);
             Bs[rot].row(i) = rotate_flip(loc, rot);
         }
-        if (locsA0.rows() <= locsB0.rows()) jlists.push_back(JammingListRot(rot));
+        if (locsA0.rows() <= locsB0.rows())
+            jlists.push_back(JammingListRot(rot));
         //~ cout << "Created, now size " << jlists.size() << endl;
     }
 };

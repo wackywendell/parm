@@ -87,7 +87,7 @@
 %shared_ptr(NListed< LJDoubleAtom,LJDoublePair >)
 %shared_ptr(NListed< EisMclachlanAtom,EisMclachlanPair >)
 %shared_ptr(NListed< IEpsRepsSigExpCutAtom,LJishPair >)
-%shared_ptr(NListed< EpsDepthSigNCutAtom,LJAndAttractivePair >)
+%shared_ptr(NListed< EpsEpsSigSigCutAtom,LJAttractRepulseSigsPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPair >)
 %shared_ptr(NListed< LoisOhernAtom,LoisOhernPairMinCLs >)
 %shared_ptr(NListed< LoisLinAtom,LoisLinPair >)
@@ -610,7 +610,7 @@ static int myErr = 0;
 %template(LJAttractFixedRepulse) NListed<IEpsRepsSigCutAtom, LJAttractFixedRepulsePair>;
 %template(EisMclachlan) NListed<EisMclachlanAtom, EisMclachlanPair>;
 %template(LJish) NListed<IEpsRepsSigExpCutAtom, LJishPair>;
-%template(LJAndAttraction) NListed<EpsDepthSigNCutAtom, LJAndAttractivePair>;
+%template(LJAttractRepulseSigs) NListed<EpsEpsSigSigCutAtom, LJAttractRepulseSigsPair>;
 %template(RepulsionSimple) SimpleListed<EpsSigExpAtom, RepulsionPair>;
 %template(Repulsion) NListed<EpsSigExpAtom, RepulsionPair>;
 %template(RepulsionII) NListed<IEpsISigExpAtom, RepulsionPair>;

@@ -347,7 +347,7 @@ class Dihedral {
     };
     flt energy(flt ang) const;
     barray<Vec, 4> forces(const Vec &diff1, const Vec &diff2,
-                         const Vec &diff3) const;
+                          const Vec &diff3) const;
 };
 #endif
 
@@ -1146,88 +1146,99 @@ struct LJishPair {
 // For the second part (1 - n/(r/σ + n - 1))^2
 // n controls the width and depth; as n -> 0, it becomes just LJ repulsive
 
-struct EpsDepthSigNCutAtom : public AtomID {
-    flt eps_r, depth, sigma, un;  // use un instead of n, because AtomID.n exists
-    flt sigcut;  // sigma units
-    EpsDepthSigNCutAtom(){};
-    EpsDepthSigNCutAtom(AtomID a, flt repeps, flt depth, flt sigma, flt n,
-                        flt cut)
+struct EpsEpsSigSigCutAtom : public AtomID {
+    flt eps_r, eps_a, sig_r, sig_a;
+    flt sigcut;  // sigma units. Cutd = sig_r + sig_a * (sigcut - 1);
+    EpsEpsSigSigCutAtom(){};
+    EpsEpsSigSigCutAtom(AtomID a, flt eps_r, flt eps_a, flt sigma_r,
+                        flt sigma_a, flt cut)
         : AtomID(a),
-          eps_r(repeps),
-          depth(depth),
-          sigma(sigma),
-          un(n),
+          eps_r(eps_r),
+          eps_a(eps_a),
+          sig_r(sigma_r),
+          sig_a(sigma_a),
           sigcut(cut){};
-    EpsDepthSigNCutAtom(AtomID a, EpsDepthSigNCutAtom other)
+    EpsEpsSigSigCutAtom(AtomID a, EpsEpsSigSigCutAtom other)
         : AtomID(a),
           eps_r(other.eps_r),
-          depth(other.depth),
-          sigma(other.sigma),
-          un(other.un),
+          eps_a(other.eps_a),
+          sig_r(other.sig_r),
+          sig_a(other.sig_a),
           sigcut(other.sigcut){};
-    flt max_size() { return sigma * sigcut; };
+    flt max_size() { return sig_r + sig_a * (sigcut - 1); };
 };
 
-struct LJAndAttractivePair {
-    flt eps_r, depth, sig, n;
+struct LJAttractRepulseSigsPair {
+    flt eps_r, eps_a, sig_r, sig_a;
     flt cut_distance, cut_energy;  // cut distance in units of sigma
     AtomID atom1, atom2;
-    LJAndAttractivePair(EpsDepthSigNCutAtom a1, EpsDepthSigNCutAtom a2)
+    LJAttractRepulseSigsPair(EpsEpsSigSigCutAtom a1, EpsEpsSigSigCutAtom a2)
         : eps_r(sqrt(a1.eps_r * a2.eps_r)),
-          depth(sqrt(a1.depth * a2.depth)),
-          sig((a1.sigma + a2.sigma) / 2.0),
-          n((a1.un + a2.un) / 2.0),
+          eps_a(sqrt(a1.eps_a * a2.eps_a)),
+          sig_r((a1.sig_r + a2.sig_r) / 2.0),
+          sig_a((a1.sig_a + a2.sig_a) / 2.0),
           cut_distance(max(a1.sigcut, a2.sigcut)),
           atom1(a1),
           atom2(a2) {
-        cut_energy = attract_energy(cut_distance);
+        if (cut_distance <= 0) {
+            return;
+        }
+
+        flt cut_distance_units = sig_r + sig_a * (cut_distance - 1);
+        if (cut_distance >= 1) {
+            cut_energy = attract_energy(cut_distance_units);
+        } else {
+            cut_energy = repulse_energy(cut_distance_units);
+        }
     };
 
-    inline flt attract_energy(flt r_over_sig) {
-        flt parenthetical = 1.0 - n / (r_over_sig + n - 1.0);
-        return depth * (pow(parenthetical, 2.0) - 1.0);
+    inline flt attract_energy(flt r) {
+        flt r_over_sig = (r - sig_r + sig_a) / sig_a;
+        flt mid = (1 - pow(r_over_sig, -6));  // # 1 - σ⁶/r⁶
+        return eps_a * (mid * mid) - eps_a;
     };
 
-    inline flt LJ_energy(flt r_over_sig) {
-        return eps_r * pow(1.0 - pow(r_over_sig, -6.0), 2.0) - depth;
+    inline flt repulse_energy(flt r) {
+        flt r_over_sig = r / sig_r;
+        flt mid = (1 - pow(r_over_sig, -6));  // # 1 - σ⁶/r⁶
+        return eps_r * (mid * mid) - eps_a;
     };
 
     inline flt energy(Box &box) {
         Vec rij = box.diff(atom1->x, atom2->x);
-        flt rsq = rij.squaredNorm() / (sig * sig);
-        if (cut_distance > 0 and rsq > cut_distance * cut_distance) {
-            //~ printf("Distance: %.2f Energy: %.2f (ε: %.2f σ: %.2f cut: %.2f
-            //cut_energy: %.2f)\n",
-            //~ sqrt(rij.squaredNorm()), 0.0, eps, sig, cut_distance,
-            //cut_energy);
+        flt dist = rij.norm();
+        flt cut_distance_units = sig_r + sig_a * (cut_distance - 1);
+        if (cut_distance > 0 and dist > cut_distance_units) {
             return 0;
         }
 
-        flt r_over_sig = sqrt(rsq);
-        if (r_over_sig <= 1) {
-            return LJ_energy(r_over_sig) - cut_energy;
+        if (dist <= sig_r) {
+            return repulse_energy(dist) - cut_energy;
         } else {
-            return attract_energy(r_over_sig) - cut_energy;
+            return attract_energy(dist) - cut_energy;
         }
     };
-    
+
     inline Vec forces(Box &box) {
         Vec rij = box.diff(atom1->x, atom2->x);
-        flt dsq = rij.squaredNorm();
-        flt rsq = dsq / (sig * sig);
-        if (cut_distance > 0 and rsq > (cut_distance * cut_distance)) return Vec::Zero();
-        flt r_over_sig = sqrt(rsq);
-        flt fmagTimesR;
-        flt rsix = pow(rsq, -3);  // σ⁶/r⁶
-        
-        if(r_over_sig <= 1) {
-            fmagTimesR = 12 * eps_r * rsix * (1 - rsix);
+        flt rsq = rij.squaredNorm();
+        flt cut_distance_units = sig_r + sig_a * (cut_distance - 1);
+        if (cut_distance > 0 and rsq > cut_distance_units * cut_distance_units)
+            return Vec::Zero();
+
+        if (rsq > sig_r * sig_r) {
+            flt dist = sqrt(rsq);
+            flt rminus = dist - sig_r + sig_a;
+            flt r_over_sig = rminus / sig_a;
+            flt rsix = pow(r_over_sig, -6);  // σ⁶/r⁶
+            flt fmag_over_r = 12 * rsix * (rsix - 1) / (dist * rminus);
+            return rij * (eps_a * fmag_over_r);
         } else {
-            flt denom = pow(r_over_sig + n - 1, 3);
-            fmagTimesR = 2*r_over_sig * depth * n * (r_over_sig - 1) / denom;
+            flt r_over_sigsq = rsq / (sig_r * sig_r);
+            flt rsix = pow(r_over_sigsq, -3);  // σ⁶/r⁶
+            flt fmagTimesR = 12 * rsix * (rsix - 1);
+            return rij * (eps_r * fmagTimesR / rsq);
         }
-        
-        return rij * (fmagTimesR / dsq);
     };
 };
 
