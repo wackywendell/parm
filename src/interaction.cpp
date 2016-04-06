@@ -229,7 +229,7 @@ sides of the bond. */
 }
 
 barray<Vec, 4> Dihedral::forces(const Vec &r1, const Vec &r2,
-                               const Vec &r3) const {
+                                const Vec &r3) const {
     DihedralDerivs dd = dr_dcostheta(r1, r2, r3);
     flt dcostheta;
     if (sincoeffs.empty() and !usepow) {

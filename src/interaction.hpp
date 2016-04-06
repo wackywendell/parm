@@ -347,7 +347,7 @@ class Dihedral {
     };
     flt energy(flt ang) const;
     barray<Vec, 4> forces(const Vec &diff1, const Vec &diff2,
-                         const Vec &diff3) const;
+                          const Vec &diff3) const;
 };
 #endif
 
@@ -1139,6 +1139,107 @@ struct LJishPair {
                                                     // / r² = 2 n r^-(n-1) *
                                                     // (r^-n - 1) r̂
     }
+};
+
+////////////////////////////////////////////////////////////////////////
+// LJ repulsive for the first part
+// For the second part (1 - n/(r/σ + n - 1))^2
+// n controls the width and depth; as n -> 0, it becomes just LJ repulsive
+
+struct EpsEpsSigSigCutAtom : public AtomID {
+    flt eps_r, eps_a, sig_r, sig_a;
+    flt sigcut;  // sigma units. Cutd = sig_r + sig_a * (sigcut - 1);
+    EpsEpsSigSigCutAtom(){};
+    EpsEpsSigSigCutAtom(AtomID a, flt eps_r, flt eps_a, flt sigma_r,
+                        flt sigma_a, flt cut)
+        : AtomID(a),
+          eps_r(eps_r),
+          eps_a(eps_a),
+          sig_r(sigma_r),
+          sig_a(sigma_a),
+          sigcut(cut){};
+    EpsEpsSigSigCutAtom(AtomID a, EpsEpsSigSigCutAtom other)
+        : AtomID(a),
+          eps_r(other.eps_r),
+          eps_a(other.eps_a),
+          sig_r(other.sig_r),
+          sig_a(other.sig_a),
+          sigcut(other.sigcut){};
+    flt max_size() { return sig_r + sig_a * (sigcut - 1); };
+};
+
+struct LJAttractRepulseSigsPair {
+    flt eps_r, eps_a, sig_r, sig_a;
+    flt cut_distance, cut_energy;  // cut distance in units of sigma
+    AtomID atom1, atom2;
+    LJAttractRepulseSigsPair(EpsEpsSigSigCutAtom a1, EpsEpsSigSigCutAtom a2)
+        : eps_r(sqrt(a1.eps_r * a2.eps_r)),
+          eps_a(sqrt(a1.eps_a * a2.eps_a)),
+          sig_r((a1.sig_r + a2.sig_r) / 2.0),
+          sig_a((a1.sig_a + a2.sig_a) / 2.0),
+          cut_distance(max(a1.sigcut, a2.sigcut)),
+          atom1(a1),
+          atom2(a2) {
+        if (cut_distance <= 0) {
+            return;
+        }
+
+        flt cut_distance_units = sig_r + sig_a * (cut_distance - 1);
+        if (cut_distance >= 1) {
+            cut_energy = attract_energy(cut_distance_units);
+        } else {
+            cut_energy = repulse_energy(cut_distance_units);
+        }
+    };
+
+    inline flt attract_energy(flt r) {
+        flt r_over_sig = (r - sig_r + sig_a) / sig_a;
+        flt mid = (1 - pow(r_over_sig, -6));  // # 1 - σ⁶/r⁶
+        return eps_a * (mid * mid) - eps_a;
+    };
+
+    inline flt repulse_energy(flt r) {
+        flt r_over_sig = r / sig_r;
+        flt mid = (1 - pow(r_over_sig, -6));  // # 1 - σ⁶/r⁶
+        return eps_r * (mid * mid) - eps_a;
+    };
+
+    inline flt energy(Box &box) {
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt dist = rij.norm();
+        flt cut_distance_units = sig_r + sig_a * (cut_distance - 1);
+        if (cut_distance > 0 and dist > cut_distance_units) {
+            return 0;
+        }
+
+        if (dist <= sig_r) {
+            return repulse_energy(dist) - cut_energy;
+        } else {
+            return attract_energy(dist) - cut_energy;
+        }
+    };
+
+    inline Vec forces(Box &box) {
+        Vec rij = box.diff(atom1->x, atom2->x);
+        flt rsq = rij.squaredNorm();
+        flt cut_distance_units = sig_r + sig_a * (cut_distance - 1);
+        if (cut_distance > 0 and rsq > cut_distance_units * cut_distance_units)
+            return Vec::Zero();
+
+        if (rsq > sig_r * sig_r) {
+            flt dist = sqrt(rsq);
+            flt rminus = dist - sig_r + sig_a;
+            flt r_over_sig = rminus / sig_a;
+            flt rsix = pow(r_over_sig, -6);  // σ⁶/r⁶
+            flt fmag_over_r = 12 * rsix * (rsix - 1) / (dist * rminus);
+            return rij * (eps_a * fmag_over_r);
+        } else {
+            flt r_over_sigsq = rsq / (sig_r * sig_r);
+            flt rsix = pow(r_over_sigsq, -3);  // σ⁶/r⁶
+            flt fmagTimesR = 12 * rsix * (rsix - 1);
+            return rij * (eps_r * fmagTimesR / rsq);
+        }
+    };
 };
 
 ////////////////////////////////////////////////////////////////////////
