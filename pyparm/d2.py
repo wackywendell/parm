@@ -9963,6 +9963,133 @@ class LJishPair(_object):
 LJishPair_swigregister = _sim2d.LJishPair_swigregister
 LJishPair_swigregister(LJishPair)
 
+class EpsEpsSigSigCutAtom(AtomID):
+    """Proxy of C++ EpsEpsSigSigCutAtom class."""
+
+    __swig_setmethods__ = {}
+    for _s in [AtomID]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, EpsEpsSigSigCutAtom, name, value)
+    __swig_getmethods__ = {}
+    for _s in [AtomID]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, EpsEpsSigSigCutAtom, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["eps_r"] = _sim2d.EpsEpsSigSigCutAtom_eps_r_set
+    __swig_getmethods__["eps_r"] = _sim2d.EpsEpsSigSigCutAtom_eps_r_get
+    if _newclass:
+        eps_r = _swig_property(_sim2d.EpsEpsSigSigCutAtom_eps_r_get, _sim2d.EpsEpsSigSigCutAtom_eps_r_set)
+    __swig_setmethods__["eps_a"] = _sim2d.EpsEpsSigSigCutAtom_eps_a_set
+    __swig_getmethods__["eps_a"] = _sim2d.EpsEpsSigSigCutAtom_eps_a_get
+    if _newclass:
+        eps_a = _swig_property(_sim2d.EpsEpsSigSigCutAtom_eps_a_get, _sim2d.EpsEpsSigSigCutAtom_eps_a_set)
+    __swig_setmethods__["sig_r"] = _sim2d.EpsEpsSigSigCutAtom_sig_r_set
+    __swig_getmethods__["sig_r"] = _sim2d.EpsEpsSigSigCutAtom_sig_r_get
+    if _newclass:
+        sig_r = _swig_property(_sim2d.EpsEpsSigSigCutAtom_sig_r_get, _sim2d.EpsEpsSigSigCutAtom_sig_r_set)
+    __swig_setmethods__["sig_a"] = _sim2d.EpsEpsSigSigCutAtom_sig_a_set
+    __swig_getmethods__["sig_a"] = _sim2d.EpsEpsSigSigCutAtom_sig_a_get
+    if _newclass:
+        sig_a = _swig_property(_sim2d.EpsEpsSigSigCutAtom_sig_a_get, _sim2d.EpsEpsSigSigCutAtom_sig_a_set)
+    __swig_setmethods__["sigcut"] = _sim2d.EpsEpsSigSigCutAtom_sigcut_set
+    __swig_getmethods__["sigcut"] = _sim2d.EpsEpsSigSigCutAtom_sigcut_get
+    if _newclass:
+        sigcut = _swig_property(_sim2d.EpsEpsSigSigCutAtom_sigcut_get, _sim2d.EpsEpsSigSigCutAtom_sigcut_set)
+
+    def __init__(self, *args):
+        """
+        __init__(EpsEpsSigSigCutAtom self) -> EpsEpsSigSigCutAtom
+        __init__(EpsEpsSigSigCutAtom self, AtomID a, flt eps_r, flt eps_a, flt sigma_r, flt sigma_a, flt cut) -> EpsEpsSigSigCutAtom
+        __init__(EpsEpsSigSigCutAtom self, AtomID a, EpsEpsSigSigCutAtom other) -> EpsEpsSigSigCutAtom
+        """
+        this = _sim2d.new_EpsEpsSigSigCutAtom(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def max_size(self) -> "flt":
+        """max_size(EpsEpsSigSigCutAtom self) -> flt"""
+        return _sim2d.EpsEpsSigSigCutAtom_max_size(self)
+
+    __swig_destroy__ = _sim2d.delete_EpsEpsSigSigCutAtom
+    __del__ = lambda self: None
+EpsEpsSigSigCutAtom_swigregister = _sim2d.EpsEpsSigSigCutAtom_swigregister
+EpsEpsSigSigCutAtom_swigregister(EpsEpsSigSigCutAtom)
+
+class LJAttractRepulseSigsPair(_object):
+    """Proxy of C++ LJAttractRepulseSigsPair class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractRepulseSigsPair, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractRepulseSigsPair, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["eps_r"] = _sim2d.LJAttractRepulseSigsPair_eps_r_set
+    __swig_getmethods__["eps_r"] = _sim2d.LJAttractRepulseSigsPair_eps_r_get
+    if _newclass:
+        eps_r = _swig_property(_sim2d.LJAttractRepulseSigsPair_eps_r_get, _sim2d.LJAttractRepulseSigsPair_eps_r_set)
+    __swig_setmethods__["eps_a"] = _sim2d.LJAttractRepulseSigsPair_eps_a_set
+    __swig_getmethods__["eps_a"] = _sim2d.LJAttractRepulseSigsPair_eps_a_get
+    if _newclass:
+        eps_a = _swig_property(_sim2d.LJAttractRepulseSigsPair_eps_a_get, _sim2d.LJAttractRepulseSigsPair_eps_a_set)
+    __swig_setmethods__["sig_r"] = _sim2d.LJAttractRepulseSigsPair_sig_r_set
+    __swig_getmethods__["sig_r"] = _sim2d.LJAttractRepulseSigsPair_sig_r_get
+    if _newclass:
+        sig_r = _swig_property(_sim2d.LJAttractRepulseSigsPair_sig_r_get, _sim2d.LJAttractRepulseSigsPair_sig_r_set)
+    __swig_setmethods__["sig_a"] = _sim2d.LJAttractRepulseSigsPair_sig_a_set
+    __swig_getmethods__["sig_a"] = _sim2d.LJAttractRepulseSigsPair_sig_a_get
+    if _newclass:
+        sig_a = _swig_property(_sim2d.LJAttractRepulseSigsPair_sig_a_get, _sim2d.LJAttractRepulseSigsPair_sig_a_set)
+    __swig_setmethods__["cut_distance"] = _sim2d.LJAttractRepulseSigsPair_cut_distance_set
+    __swig_getmethods__["cut_distance"] = _sim2d.LJAttractRepulseSigsPair_cut_distance_get
+    if _newclass:
+        cut_distance = _swig_property(_sim2d.LJAttractRepulseSigsPair_cut_distance_get, _sim2d.LJAttractRepulseSigsPair_cut_distance_set)
+    __swig_setmethods__["cut_energy"] = _sim2d.LJAttractRepulseSigsPair_cut_energy_set
+    __swig_getmethods__["cut_energy"] = _sim2d.LJAttractRepulseSigsPair_cut_energy_get
+    if _newclass:
+        cut_energy = _swig_property(_sim2d.LJAttractRepulseSigsPair_cut_energy_get, _sim2d.LJAttractRepulseSigsPair_cut_energy_set)
+    __swig_setmethods__["atom1"] = _sim2d.LJAttractRepulseSigsPair_atom1_set
+    __swig_getmethods__["atom1"] = _sim2d.LJAttractRepulseSigsPair_atom1_get
+    if _newclass:
+        atom1 = _swig_property(_sim2d.LJAttractRepulseSigsPair_atom1_get, _sim2d.LJAttractRepulseSigsPair_atom1_set)
+    __swig_setmethods__["atom2"] = _sim2d.LJAttractRepulseSigsPair_atom2_set
+    __swig_getmethods__["atom2"] = _sim2d.LJAttractRepulseSigsPair_atom2_get
+    if _newclass:
+        atom2 = _swig_property(_sim2d.LJAttractRepulseSigsPair_atom2_get, _sim2d.LJAttractRepulseSigsPair_atom2_set)
+
+    def __init__(self, a1: 'EpsEpsSigSigCutAtom', a2: 'EpsEpsSigSigCutAtom'):
+        """__init__(LJAttractRepulseSigsPair self, EpsEpsSigSigCutAtom a1, EpsEpsSigSigCutAtom a2) -> LJAttractRepulseSigsPair"""
+        this = _sim2d.new_LJAttractRepulseSigsPair(a1, a2)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def attract_energy(self, r: 'flt') -> "flt":
+        """attract_energy(LJAttractRepulseSigsPair self, flt r) -> flt"""
+        return _sim2d.LJAttractRepulseSigsPair_attract_energy(self, r)
+
+
+    def repulse_energy(self, r: 'flt') -> "flt":
+        """repulse_energy(LJAttractRepulseSigsPair self, flt r) -> flt"""
+        return _sim2d.LJAttractRepulseSigsPair_repulse_energy(self, r)
+
+
+    def energy(self, box: 'Box') -> "flt":
+        """energy(LJAttractRepulseSigsPair self, Box box) -> flt"""
+        return _sim2d.LJAttractRepulseSigsPair_energy(self, box)
+
+
+    def forces(self, box: 'Box') -> "Vec":
+        """forces(LJAttractRepulseSigsPair self, Box box) -> Vec"""
+        return _sim2d.LJAttractRepulseSigsPair_forces(self, box)
+
+    __swig_destroy__ = _sim2d.delete_LJAttractRepulseSigsPair
+    __del__ = lambda self: None
+LJAttractRepulseSigsPair_swigregister = _sim2d.LJAttractRepulseSigsPair_swigregister
+LJAttractRepulseSigsPair_swigregister(LJAttractRepulseSigsPair)
+
 class LJAttractRepulsePair(_object):
     """Proxy of C++ LJAttractRepulsePair class."""
 
@@ -13749,6 +13876,127 @@ class LJish(Interaction):
     __del__ = lambda self: None
 LJish_swigregister = _sim2d.LJish_swigregister
 LJish_swigregister(LJish)
+
+class LJAttractRepulseSigs(Interaction):
+    """Proxy of C++ NListed<(EpsEpsSigSigCutAtom,LJAttractRepulseSigsPair)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [Interaction]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, LJAttractRepulseSigs, name, value)
+    __swig_getmethods__ = {}
+    for _s in [Interaction]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, LJAttractRepulseSigs, name)
+    __repr__ = _swig_repr
+
+    def add(self, atm: 'EpsEpsSigSigCutAtom') -> "void":
+        """add(LJAttractRepulseSigs self, EpsEpsSigSigCutAtom atm)"""
+        return _sim2d.LJAttractRepulseSigs_add(self, atm)
+
+
+    def __init__(self, *args):
+        """
+        __init__(NListed<(EpsEpsSigSigCutAtom,LJAttractRepulseSigsPair)> self, boost::shared_ptr< AtomVec > vec, boost::shared_ptr< NeighborList > neighbors) -> LJAttractRepulseSigs
+        __init__(NListed<(EpsEpsSigSigCutAtom,LJAttractRepulseSigsPair)> self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomVec > atomv, flt const skin) -> LJAttractRepulseSigs
+        """
+        this = _sim2d.new_LJAttractRepulseSigs(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def update_pairs(self) -> "void":
+        """update_pairs(LJAttractRepulseSigs self)"""
+        return _sim2d.LJAttractRepulseSigs_update_pairs(self)
+
+
+    def get_pair(self, pair: 'IDPair') -> "LJAttractRepulseSigsPair":
+        """get_pair(LJAttractRepulseSigs self, IDPair pair) -> LJAttractRepulseSigsPair"""
+        return _sim2d.LJAttractRepulseSigs_get_pair(self, pair)
+
+
+    def getatom(self, n: 'uint') -> "EpsEpsSigSigCutAtom &":
+        """getatom(LJAttractRepulseSigs self, uint n) -> EpsEpsSigSigCutAtom"""
+        return _sim2d.LJAttractRepulseSigs_getatom(self, n)
+
+
+    def energy(self, *args) -> "flt":
+        """
+        energy(LJAttractRepulseSigs self, Box box, IDPair pair) -> flt
+        energy(LJAttractRepulseSigs self, Box box) -> flt
+        """
+        return _sim2d.LJAttractRepulseSigs_energy(self, *args)
+
+
+    def contacts(self, box: 'Box') -> "unsigned long long":
+        """contacts(LJAttractRepulseSigs self, Box box) -> unsigned long long"""
+        return _sim2d.LJAttractRepulseSigs_contacts(self, box)
+
+
+    def overlaps(self, box: 'Box') -> "unsigned long long":
+        """overlaps(LJAttractRepulseSigs self, Box box) -> unsigned long long"""
+        return _sim2d.LJAttractRepulseSigs_overlaps(self, box)
+
+
+    def pressure(self, box: 'Box') -> "flt":
+        """pressure(LJAttractRepulseSigs self, Box box) -> flt"""
+        return _sim2d.LJAttractRepulseSigs_pressure(self, box)
+
+
+    def pair_iter(self) -> "std::vector< LJAttractRepulseSigsPair > &":
+        """pair_iter(LJAttractRepulseSigs self) -> std::vector< LJAttractRepulseSigsPair > &"""
+        return _sim2d.LJAttractRepulseSigs_pair_iter(self)
+
+
+    def size(self) -> "uint":
+        """size(LJAttractRepulseSigs self) -> uint"""
+        return _sim2d.LJAttractRepulseSigs_size(self)
+
+
+    def energy_pair(self, pair: 'LJAttractRepulseSigsPair', box: 'Box') -> "flt":
+        """energy_pair(LJAttractRepulseSigs self, LJAttractRepulseSigsPair pair, Box box) -> flt"""
+        return _sim2d.LJAttractRepulseSigs_energy_pair(self, pair, box)
+
+
+    def set_forces(self, box: 'Box') -> "void":
+        """set_forces(LJAttractRepulseSigs self, Box box)"""
+        return _sim2d.LJAttractRepulseSigs_set_forces(self, box)
+
+
+    def set_forces_get_pressure(self, box: 'Box') -> "flt":
+        """set_forces_get_pressure(LJAttractRepulseSigs self, Box box) -> flt"""
+        return _sim2d.LJAttractRepulseSigs_set_forces_get_pressure(self, box)
+
+
+    def stress(self, box: 'Box') -> "Matrix":
+        """stress(LJAttractRepulseSigs self, Box box) -> Matrix"""
+        return _sim2d.LJAttractRepulseSigs_stress(self, box)
+
+
+    def set_forces_get_stress(self, box: 'Box') -> "Matrix":
+        """set_forces_get_stress(LJAttractRepulseSigs self, Box box) -> Matrix"""
+        return _sim2d.LJAttractRepulseSigs_set_forces_get_stress(self, box)
+
+
+    def forces_pair(self, pair: 'LJAttractRepulseSigsPair', box: 'Box') -> "Vec":
+        """forces_pair(LJAttractRepulseSigs self, LJAttractRepulseSigsPair pair, Box box) -> Vec"""
+        return _sim2d.LJAttractRepulseSigs_forces_pair(self, pair, box)
+
+
+    def atom_list(self) -> "std::vector< EpsEpsSigSigCutAtom > &":
+        """atom_list(LJAttractRepulseSigs self) -> std::vector< EpsEpsSigSigCutAtom > &"""
+        return _sim2d.LJAttractRepulseSigs_atom_list(self)
+
+
+    def neighbor_list(self) -> "boost::shared_ptr< NeighborList >":
+        """neighbor_list(LJAttractRepulseSigs self) -> boost::shared_ptr< NeighborList >"""
+        return _sim2d.LJAttractRepulseSigs_neighbor_list(self)
+
+    __swig_destroy__ = _sim2d.delete_LJAttractRepulseSigs
+    __del__ = lambda self: None
+LJAttractRepulseSigs_swigregister = _sim2d.LJAttractRepulseSigs_swigregister
+LJAttractRepulseSigs_swigregister(LJAttractRepulseSigs)
 
 class RepulsionSimple(Interaction):
     """Proxy of C++ SimpleListed<(EpsSigExpAtom,RepulsionPair)> class."""
