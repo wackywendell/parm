@@ -418,58 +418,60 @@ static int myErr = 0;
 %typemap(out) Matrix = Matrix3;
 #endif 
 
-#ifdef VEC2D
-%template(_JammingList) std::list<JammingList>;
-%template(_JammingListRot) std::list<JammingListRot>;
-#endif
+namespace std {
+    #ifdef VEC2D
+    %template(_JammingList) list<JammingList>;
+    %template(_JammingListRot) list<JammingListRot>;
+    #endif
 
-%template(fvector) std::vector<float>;
-%template(_ffvector) std::vector<std::vector<float> >;
-%template(dvector) std::vector<double>;
-%template(_ddvector) std::vector<std::vector<double> >;
-%template(_dddvector) std::vector<std::vector<std::vector<double> > >;
-%template(cvector) std::vector<std::complex<double> >;
-%template(_ccvector) std::vector<std::vector<std::complex<double> > >;
-%template(_cccvector) std::vector<std::vector<std::vector<std::complex<double> > > >;
-%template(ldvector) std::vector<long double>;
-// %template(_vvector) vector<Vec>;
-// %template(_vvvector) vector<vector<Vec> >;
-// %template(_vvvvector) vector<vector<vector<Vec> > >;
-// %template(_vvector2) vector<Vec2>;
-// %template(_vvvector2) vector<vector<Vec2> >;
-// %template(_vvvvector2) vector<vector<vector<Vec2> > >;
-// %template(_vvector3) std::vector<Vec3>;
-// %template(_vvvector3) vector<vector<Vec3> >;
-// %template(_vvvvector3) vector<vector<vector<Vec3> > >;
-//%template(avector) vector<boost::shared_ptr<Atomgroup> >;
-//%template(aptrvector) vector<boost::shared_ptr<Atom> >;
-%template(ivector) std::vector<boost::shared_ptr<Interaction> >;
-%template(ifxvector) std::vector<boost::shared_ptr<InteractionPairsX> >;
-%template(tvector) std::vector<boost::shared_ptr<StateTracker> >;
-%template(constraintvector) std::vector<boost::shared_ptr<Constraint> >;
-#ifdef VEC2D
-%template(wallvector) std::vector<boost::shared_ptr<SoftWall> >;
-#endif
-%template(idvector) std::vector<AtomID>;
-%template(idpairvector) std::vector<IDPair>;
-%template(intvector) std::vector<int>;
-%template(uintvector) std::vector<unsigned int>;
-%template(ulongvector) std::vector<unsigned long>;
-%template(_eventset) std::set<Event>;
-%template(pair_uint_CNodePath) std::pair<unsigned int, CNodePath>;
-%template(map_uint_CNodePath) std::map<unsigned int, CNodePath>;
-%template(vector_CNode) std::vector<CNode>;
-%template(pair_int_CNode) std::pair<int, vector<CNode> >;
-%template(map_int_CNode) std::map<int, vector<CNode> >;
+    %template(fvector) vector<float>;
+    %template(_ffvector) vector<vector<float> >;
+    %template(dvector) vector<double>;
+    %template(_ddvector) vector<vector<double> >;
+    %template(_dddvector) vector<vector<vector<double> > >;
+    %template(cvector) vector<complex<double> >;
+    %template(_ccvector) vector<vector<complex<double> > >;
+    %template(_cccvector) vector<vector<vector<complex<double> > > >;
+    %template(ldvector) vector<long double>;
+    // %template(_vvector) vector<Vec>;
+    // %template(_vvvector) vector<vector<Vec> >;
+    // %template(_vvvvector) vector<vector<vector<Vec> > >;
+    // %template(_vvector2) vector<Vec2>;
+    // %template(_vvvector2) vector<vector<Vec2> >;
+    // %template(_vvvvector2) vector<vector<vector<Vec2> > >;
+    // %template(_vvector3) vector<Vec3>;
+    // %template(_vvvector3) vector<vector<Vec3> >;
+    // %template(_vvvvector3) vector<vector<vector<Vec3> > >;
+    //%template(avector) vector<::boost::shared_ptr<Atomgroup> >;
+    //%template(aptrvector) vector<::boost::shared_ptr<Atom> >;
+    %template(ivector) vector<::boost::shared_ptr<Interaction> >;
+    %template(ifxvector) vector<::boost::shared_ptr<InteractionPairsX> >;
+    %template(tvector) vector<::boost::shared_ptr<StateTracker> >;
+    %template(constraintvector) vector<::boost::shared_ptr<Constraint> >;
+    #ifdef VEC2D
+    %template(wallvector) vector<::boost::shared_ptr<SoftWall> >;
+    #endif
+    %template(idvector) vector<AtomID>;
+    %template(idpairvector) vector<IDPair>;
+    %template(intvector) vector<int>;
+    %template(uintvector) vector<unsigned int>;
+    %template(ulongvector) vector<unsigned long>;
+    %template(_eventset) set<Event>;
+    %template(pair_uint_CNodePath) pair<unsigned int, CNodePath>;
+    %template(map_uint_CNodePath) map<unsigned int, CNodePath>;
+    %template(vector_CNode) vector<CNode>;
+    %template(pair_int_CNode) pair<int, vector<CNode> >;
+    %template(map_int_CNode) map<int, vector<CNode> >;
 
-%template(_carray2) boost::array<std::complex<double>, 2>;
-%template(_cavector2) std::vector<boost::array<std::complex<double>, 2> >;
-%template(_ccavector2) std::vector<std::vector<boost::array<std::complex<double>, 2> > >;
-%template(_cccavector2) std::vector<std::vector<std::vector<boost::array<std::complex<double>, 2> > > >;
-%template(_carray3) boost::array<std::complex<double>, 3>;
-%template(_cavector3) std::vector<boost::array<std::complex<double>, 3> >;
-%template(_ccavector3) std::vector<std::vector<boost::array<std::complex<double>, 3> > >;
-%template(_cccavector3) std::vector<std::vector<std::vector<boost::array<std::complex<double>, 3> > > >;
+    %template(_carray2) ::boost::array<complex<double>, 2>;
+    // %template(_cavector2) vector<::boost::array<complex<double>, 2> >;
+    // %template(_ccavector2) vector<vector<::boost::array<complex<double>, 2> > >;
+    // %template(_cccavector2) vector<vector<vector<::boost::array<complex<double>, 2> > > >;
+    // %template(_carray3) ::boost::array<complex<double>, 3>;
+    // %template(_cavector3) vector<::boost::array<complex<double>, 3> >;
+    // %template(_ccavector3) vector<vector<::boost::array<complex<double>, 3> > >;
+    // %template(_cccavector3) vector<vector<vector<::boost::array<complex<double>, 3> > > >;
+}
 
 %extend Atom {
     %insert("python") %{
