@@ -1675,7 +1675,7 @@ _dddvector_swigregister = _sim2dlong._dddvector_swigregister
 _dddvector_swigregister(_dddvector)
 
 class cvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::complex<(double)>)> class."""
+    """Proxy of C++ std::vector<(complex<(double)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -1704,41 +1704,41 @@ class cvector(collections.MutableSequence):
         return _sim2dlong.cvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< std::complex< double > >::size_type":
-        """__len__(cvector self) -> std::vector< std::complex< double > >::size_type"""
+    def __len__(self) -> "std::vector< complex< double > >::size_type":
+        """__len__(cvector self) -> std::vector< complex< double > >::size_type"""
         return _sim2dlong.cvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< std::complex< double > >::difference_type', j: 'std::vector< std::complex< double > >::difference_type') -> "std::vector< std::complex< double >,std::allocator< std::complex< double > > > *":
-        """__getslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j) -> cvector"""
+    def __getslice__(self, i: 'std::vector< complex< double > >::difference_type', j: 'std::vector< complex< double > >::difference_type') -> "std::vector< complex< double >,std::allocator< complex< double > > > *":
+        """__getslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j) -> cvector"""
         return _sim2dlong.cvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j)
-        __setslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j, cvector v)
+        __setslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j)
+        __setslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j, cvector v)
         """
         return _sim2dlong.cvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< std::complex< double > >::difference_type', j: 'std::vector< std::complex< double > >::difference_type') -> "void":
-        """__delslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< complex< double > >::difference_type', j: 'std::vector< complex< double > >::difference_type') -> "void":
+        """__delslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j)"""
         return _sim2dlong.cvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(cvector self, std::vector< std::complex< double > >::difference_type i)
+        __delitem__(cvector self, std::vector< complex< double > >::difference_type i)
         __delitem__(cvector self, PySliceObject * slice)
         """
         return _sim2dlong.cvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< std::complex< double > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< complex< double > >::value_type const &":
         """
         __getitem__(cvector self, PySliceObject * slice) -> cvector
-        __getitem__(cvector self, std::vector< std::complex< double > >::difference_type i) -> std::vector< std::complex< double > >::value_type const &
+        __getitem__(cvector self, std::vector< complex< double > >::difference_type i) -> std::vector< complex< double > >::value_type const &
         """
         return _sim2dlong.cvector___getitem__(self, *args)
 
@@ -1747,18 +1747,18 @@ class cvector(collections.MutableSequence):
         """
         __setitem__(cvector self, PySliceObject * slice, cvector v)
         __setitem__(cvector self, PySliceObject * slice)
-        __setitem__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::value_type const & x)
+        __setitem__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::value_type const & x)
         """
         return _sim2dlong.cvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< std::complex< double > >::value_type":
-        """pop(cvector self) -> std::vector< std::complex< double > >::value_type"""
+    def pop(self) -> "std::vector< complex< double > >::value_type":
+        """pop(cvector self) -> std::vector< complex< double > >::value_type"""
         return _sim2dlong.cvector_pop(self)
 
 
-    def append(self, x: 'std::vector< std::complex< double > >::value_type const &') -> "void":
-        """append(cvector self, std::vector< std::complex< double > >::value_type const & x)"""
+    def append(self, x: 'std::vector< complex< double > >::value_type const &') -> "void":
+        """append(cvector self, std::vector< complex< double > >::value_type const & x)"""
         return _sim2dlong.cvector_append(self, x)
 
 
@@ -1767,8 +1767,8 @@ class cvector(collections.MutableSequence):
         return _sim2dlong.cvector_empty(self)
 
 
-    def size(self) -> "std::vector< std::complex< double > >::size_type":
-        """size(cvector self) -> std::vector< std::complex< double > >::size_type"""
+    def size(self) -> "std::vector< complex< double > >::size_type":
+        """size(cvector self) -> std::vector< complex< double > >::size_type"""
         return _sim2dlong.cvector_size(self)
 
 
@@ -1777,23 +1777,23 @@ class cvector(collections.MutableSequence):
         return _sim2dlong.cvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< std::complex< double > >::iterator":
-        """begin(cvector self) -> std::vector< std::complex< double > >::iterator"""
+    def begin(self) -> "std::vector< complex< double > >::iterator":
+        """begin(cvector self) -> std::vector< complex< double > >::iterator"""
         return _sim2dlong.cvector_begin(self)
 
 
-    def end(self) -> "std::vector< std::complex< double > >::iterator":
-        """end(cvector self) -> std::vector< std::complex< double > >::iterator"""
+    def end(self) -> "std::vector< complex< double > >::iterator":
+        """end(cvector self) -> std::vector< complex< double > >::iterator"""
         return _sim2dlong.cvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< std::complex< double > >::reverse_iterator":
-        """rbegin(cvector self) -> std::vector< std::complex< double > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< complex< double > >::reverse_iterator":
+        """rbegin(cvector self) -> std::vector< complex< double > >::reverse_iterator"""
         return _sim2dlong.cvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< std::complex< double > >::reverse_iterator":
-        """rend(cvector self) -> std::vector< std::complex< double > >::reverse_iterator"""
+    def rend(self) -> "std::vector< complex< double > >::reverse_iterator":
+        """rend(cvector self) -> std::vector< complex< double > >::reverse_iterator"""
         return _sim2dlong.cvector_rend(self)
 
 
@@ -1802,8 +1802,8 @@ class cvector(collections.MutableSequence):
         return _sim2dlong.cvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< std::complex< double > >::allocator_type":
-        """get_allocator(cvector self) -> std::vector< std::complex< double > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< complex< double > >::allocator_type":
+        """get_allocator(cvector self) -> std::vector< complex< double > >::allocator_type"""
         return _sim2dlong.cvector_get_allocator(self)
 
 
@@ -1812,20 +1812,20 @@ class cvector(collections.MutableSequence):
         return _sim2dlong.cvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< std::complex< double > >::iterator":
+    def erase(self, *args) -> "std::vector< complex< double > >::iterator":
         """
-        erase(cvector self, std::vector< std::complex< double > >::iterator pos) -> std::vector< std::complex< double > >::iterator
-        erase(cvector self, std::vector< std::complex< double > >::iterator first, std::vector< std::complex< double > >::iterator last) -> std::vector< std::complex< double > >::iterator
+        erase(cvector self, std::vector< complex< double > >::iterator pos) -> std::vector< complex< double > >::iterator
+        erase(cvector self, std::vector< complex< double > >::iterator first, std::vector< complex< double > >::iterator last) -> std::vector< complex< double > >::iterator
         """
         return _sim2dlong.cvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(std::complex<(double)>)> self) -> cvector
-        __init__(std::vector<(std::complex<(double)>)> self, cvector arg2) -> cvector
-        __init__(std::vector<(std::complex<(double)>)> self, std::vector< std::complex< double > >::size_type size) -> cvector
-        __init__(std::vector<(std::complex<(double)>)> self, std::vector< std::complex< double > >::size_type size, std::vector< std::complex< double > >::value_type const & value) -> cvector
+        __init__(std::vector<(complex<(double)>)> self) -> cvector
+        __init__(std::vector<(complex<(double)>)> self, cvector arg2) -> cvector
+        __init__(std::vector<(complex<(double)>)> self, std::vector< complex< double > >::size_type size) -> cvector
+        __init__(std::vector<(complex<(double)>)> self, std::vector< complex< double > >::size_type size, std::vector< complex< double > >::value_type const & value) -> cvector
         """
         this = _sim2dlong.new_cvector(*args)
         try:
@@ -1833,49 +1833,49 @@ class cvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< std::complex< double > >::value_type const &') -> "void":
-        """push_back(cvector self, std::vector< std::complex< double > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< complex< double > >::value_type const &') -> "void":
+        """push_back(cvector self, std::vector< complex< double > >::value_type const & x)"""
         return _sim2dlong.cvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< std::complex< double > >::value_type const &":
-        """front(cvector self) -> std::vector< std::complex< double > >::value_type const &"""
+    def front(self) -> "std::vector< complex< double > >::value_type const &":
+        """front(cvector self) -> std::vector< complex< double > >::value_type const &"""
         return _sim2dlong.cvector_front(self)
 
 
-    def back(self) -> "std::vector< std::complex< double > >::value_type const &":
-        """back(cvector self) -> std::vector< std::complex< double > >::value_type const &"""
+    def back(self) -> "std::vector< complex< double > >::value_type const &":
+        """back(cvector self) -> std::vector< complex< double > >::value_type const &"""
         return _sim2dlong.cvector_back(self)
 
 
-    def assign(self, n: 'std::vector< std::complex< double > >::size_type', x: 'std::vector< std::complex< double > >::value_type const &') -> "void":
-        """assign(cvector self, std::vector< std::complex< double > >::size_type n, std::vector< std::complex< double > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< complex< double > >::size_type', x: 'std::vector< complex< double > >::value_type const &') -> "void":
+        """assign(cvector self, std::vector< complex< double > >::size_type n, std::vector< complex< double > >::value_type const & x)"""
         return _sim2dlong.cvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(cvector self, std::vector< std::complex< double > >::size_type new_size)
-        resize(cvector self, std::vector< std::complex< double > >::size_type new_size, std::vector< std::complex< double > >::value_type const & x)
+        resize(cvector self, std::vector< complex< double > >::size_type new_size)
+        resize(cvector self, std::vector< complex< double > >::size_type new_size, std::vector< complex< double > >::value_type const & x)
         """
         return _sim2dlong.cvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(cvector self, std::vector< std::complex< double > >::iterator pos, std::vector< std::complex< double > >::value_type const & x) -> std::vector< std::complex< double > >::iterator
-        insert(cvector self, std::vector< std::complex< double > >::iterator pos, std::vector< std::complex< double > >::size_type n, std::vector< std::complex< double > >::value_type const & x)
+        insert(cvector self, std::vector< complex< double > >::iterator pos, std::vector< complex< double > >::value_type const & x) -> std::vector< complex< double > >::iterator
+        insert(cvector self, std::vector< complex< double > >::iterator pos, std::vector< complex< double > >::size_type n, std::vector< complex< double > >::value_type const & x)
         """
         return _sim2dlong.cvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< std::complex< double > >::size_type') -> "void":
-        """reserve(cvector self, std::vector< std::complex< double > >::size_type n)"""
+    def reserve(self, n: 'std::vector< complex< double > >::size_type') -> "void":
+        """reserve(cvector self, std::vector< complex< double > >::size_type n)"""
         return _sim2dlong.cvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< std::complex< double > >::size_type":
-        """capacity(cvector self) -> std::vector< std::complex< double > >::size_type"""
+    def capacity(self) -> "std::vector< complex< double > >::size_type":
+        """capacity(cvector self) -> std::vector< complex< double > >::size_type"""
         return _sim2dlong.cvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete_cvector
@@ -1884,7 +1884,7 @@ cvector_swigregister = _sim2dlong.cvector_swigregister
 cvector_swigregister(cvector)
 
 class _ccvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(std::complex<(double)>)>)> class."""
+    """Proxy of C++ std::vector<(std::vector<(complex<(double)>)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -1913,41 +1913,41 @@ class _ccvector(collections.MutableSequence):
         return _sim2dlong._ccvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< std::vector< std::complex< double > > >::size_type":
-        """__len__(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::size_type"""
+    def __len__(self) -> "std::vector< std::vector< complex< double > > >::size_type":
+        """__len__(_ccvector self) -> std::vector< std::vector< complex< double > > >::size_type"""
         return _sim2dlong._ccvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< std::vector< std::complex< double > > >::difference_type', j: 'std::vector< std::vector< std::complex< double > > >::difference_type') -> "std::vector< std::vector< std::complex< double >,std::allocator< std::complex< double > > >,std::allocator< std::vector< std::complex< double >,std::allocator< std::complex< double > > > > > *":
-        """__getslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j) -> _ccvector"""
+    def __getslice__(self, i: 'std::vector< std::vector< complex< double > > >::difference_type', j: 'std::vector< std::vector< complex< double > > >::difference_type') -> "std::vector< std::vector< complex< double >,std::allocator< complex< double > > >,std::allocator< std::vector< complex< double >,std::allocator< complex< double > > > > > *":
+        """__getslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j) -> _ccvector"""
         return _sim2dlong._ccvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j)
-        __setslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j, _ccvector v)
+        __setslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j)
+        __setslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j, _ccvector v)
         """
         return _sim2dlong._ccvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< std::vector< std::complex< double > > >::difference_type', j: 'std::vector< std::vector< std::complex< double > > >::difference_type') -> "void":
-        """__delslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< std::vector< complex< double > > >::difference_type', j: 'std::vector< std::vector< complex< double > > >::difference_type') -> "void":
+        """__delslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j)"""
         return _sim2dlong._ccvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i)
+        __delitem__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i)
         __delitem__(_ccvector self, PySliceObject * slice)
         """
         return _sim2dlong._ccvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< std::vector< std::complex< double > > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< std::vector< complex< double > > >::value_type const &":
         """
         __getitem__(_ccvector self, PySliceObject * slice) -> _ccvector
-        __getitem__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i) -> cvector
+        __getitem__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i) -> cvector
         """
         return _sim2dlong._ccvector___getitem__(self, *args)
 
@@ -1956,12 +1956,12 @@ class _ccvector(collections.MutableSequence):
         """
         __setitem__(_ccvector self, PySliceObject * slice, _ccvector v)
         __setitem__(_ccvector self, PySliceObject * slice)
-        __setitem__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, cvector x)
+        __setitem__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, cvector x)
         """
         return _sim2dlong._ccvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< std::vector< std::complex< double > > >::value_type":
+    def pop(self) -> "std::vector< std::vector< complex< double > > >::value_type":
         """pop(_ccvector self) -> cvector"""
         return _sim2dlong._ccvector_pop(self)
 
@@ -1976,8 +1976,8 @@ class _ccvector(collections.MutableSequence):
         return _sim2dlong._ccvector_empty(self)
 
 
-    def size(self) -> "std::vector< std::vector< std::complex< double > > >::size_type":
-        """size(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::size_type"""
+    def size(self) -> "std::vector< std::vector< complex< double > > >::size_type":
+        """size(_ccvector self) -> std::vector< std::vector< complex< double > > >::size_type"""
         return _sim2dlong._ccvector_size(self)
 
 
@@ -1986,23 +1986,23 @@ class _ccvector(collections.MutableSequence):
         return _sim2dlong._ccvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< std::vector< std::complex< double > > >::iterator":
-        """begin(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::iterator"""
+    def begin(self) -> "std::vector< std::vector< complex< double > > >::iterator":
+        """begin(_ccvector self) -> std::vector< std::vector< complex< double > > >::iterator"""
         return _sim2dlong._ccvector_begin(self)
 
 
-    def end(self) -> "std::vector< std::vector< std::complex< double > > >::iterator":
-        """end(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::iterator"""
+    def end(self) -> "std::vector< std::vector< complex< double > > >::iterator":
+        """end(_ccvector self) -> std::vector< std::vector< complex< double > > >::iterator"""
         return _sim2dlong._ccvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< std::vector< std::complex< double > > >::reverse_iterator":
-        """rbegin(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< std::vector< complex< double > > >::reverse_iterator":
+        """rbegin(_ccvector self) -> std::vector< std::vector< complex< double > > >::reverse_iterator"""
         return _sim2dlong._ccvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< std::vector< std::complex< double > > >::reverse_iterator":
-        """rend(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::reverse_iterator"""
+    def rend(self) -> "std::vector< std::vector< complex< double > > >::reverse_iterator":
+        """rend(_ccvector self) -> std::vector< std::vector< complex< double > > >::reverse_iterator"""
         return _sim2dlong._ccvector_rend(self)
 
 
@@ -2011,8 +2011,8 @@ class _ccvector(collections.MutableSequence):
         return _sim2dlong._ccvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< std::vector< std::complex< double > > >::allocator_type":
-        """get_allocator(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< std::vector< complex< double > > >::allocator_type":
+        """get_allocator(_ccvector self) -> std::vector< std::vector< complex< double > > >::allocator_type"""
         return _sim2dlong._ccvector_get_allocator(self)
 
 
@@ -2021,20 +2021,20 @@ class _ccvector(collections.MutableSequence):
         return _sim2dlong._ccvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< std::vector< std::complex< double > > >::iterator":
+    def erase(self, *args) -> "std::vector< std::vector< complex< double > > >::iterator":
         """
-        erase(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator pos) -> std::vector< std::vector< std::complex< double > > >::iterator
-        erase(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator first, std::vector< std::vector< std::complex< double > > >::iterator last) -> std::vector< std::vector< std::complex< double > > >::iterator
+        erase(_ccvector self, std::vector< std::vector< complex< double > > >::iterator pos) -> std::vector< std::vector< complex< double > > >::iterator
+        erase(_ccvector self, std::vector< std::vector< complex< double > > >::iterator first, std::vector< std::vector< complex< double > > >::iterator last) -> std::vector< std::vector< complex< double > > >::iterator
         """
         return _sim2dlong._ccvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self) -> _ccvector
-        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self, _ccvector arg2) -> _ccvector
-        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self, std::vector< std::vector< std::complex< double > > >::size_type size) -> _ccvector
-        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self, std::vector< std::vector< std::complex< double > > >::size_type size, cvector value) -> _ccvector
+        __init__(std::vector<(std::vector<(complex<(double)>)>)> self) -> _ccvector
+        __init__(std::vector<(std::vector<(complex<(double)>)>)> self, _ccvector arg2) -> _ccvector
+        __init__(std::vector<(std::vector<(complex<(double)>)>)> self, std::vector< std::vector< complex< double > > >::size_type size) -> _ccvector
+        __init__(std::vector<(std::vector<(complex<(double)>)>)> self, std::vector< std::vector< complex< double > > >::size_type size, cvector value) -> _ccvector
         """
         this = _sim2dlong.new__ccvector(*args)
         try:
@@ -2047,44 +2047,44 @@ class _ccvector(collections.MutableSequence):
         return _sim2dlong._ccvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< std::vector< std::complex< double > > >::value_type const &":
+    def front(self) -> "std::vector< std::vector< complex< double > > >::value_type const &":
         """front(_ccvector self) -> cvector"""
         return _sim2dlong._ccvector_front(self)
 
 
-    def back(self) -> "std::vector< std::vector< std::complex< double > > >::value_type const &":
+    def back(self) -> "std::vector< std::vector< complex< double > > >::value_type const &":
         """back(_ccvector self) -> cvector"""
         return _sim2dlong._ccvector_back(self)
 
 
-    def assign(self, n: 'std::vector< std::vector< std::complex< double > > >::size_type', x: 'cvector') -> "void":
-        """assign(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type n, cvector x)"""
+    def assign(self, n: 'std::vector< std::vector< complex< double > > >::size_type', x: 'cvector') -> "void":
+        """assign(_ccvector self, std::vector< std::vector< complex< double > > >::size_type n, cvector x)"""
         return _sim2dlong._ccvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type new_size)
-        resize(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type new_size, cvector x)
+        resize(_ccvector self, std::vector< std::vector< complex< double > > >::size_type new_size)
+        resize(_ccvector self, std::vector< std::vector< complex< double > > >::size_type new_size, cvector x)
         """
         return _sim2dlong._ccvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator pos, cvector x) -> std::vector< std::vector< std::complex< double > > >::iterator
-        insert(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator pos, std::vector< std::vector< std::complex< double > > >::size_type n, cvector x)
+        insert(_ccvector self, std::vector< std::vector< complex< double > > >::iterator pos, cvector x) -> std::vector< std::vector< complex< double > > >::iterator
+        insert(_ccvector self, std::vector< std::vector< complex< double > > >::iterator pos, std::vector< std::vector< complex< double > > >::size_type n, cvector x)
         """
         return _sim2dlong._ccvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< std::vector< std::complex< double > > >::size_type') -> "void":
-        """reserve(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type n)"""
+    def reserve(self, n: 'std::vector< std::vector< complex< double > > >::size_type') -> "void":
+        """reserve(_ccvector self, std::vector< std::vector< complex< double > > >::size_type n)"""
         return _sim2dlong._ccvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< std::vector< std::complex< double > > >::size_type":
-        """capacity(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::size_type"""
+    def capacity(self) -> "std::vector< std::vector< complex< double > > >::size_type":
+        """capacity(_ccvector self) -> std::vector< std::vector< complex< double > > >::size_type"""
         return _sim2dlong._ccvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete__ccvector
@@ -2093,7 +2093,7 @@ _ccvector_swigregister = _sim2dlong._ccvector_swigregister
 _ccvector_swigregister(_ccvector)
 
 class _cccvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> class."""
+    """Proxy of C++ std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2122,41 +2122,41 @@ class _cccvector(collections.MutableSequence):
         return _sim2dlong._cccvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::size_type":
-        """__len__(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::size_type"""
+    def __len__(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::size_type":
+        """__len__(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::size_type"""
         return _sim2dlong._cccvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type') -> "std::vector< std::vector< std::vector< std::complex< double >,std::allocator< std::complex< double > > >,std::allocator< std::vector< std::complex< double >,std::allocator< std::complex< double > > > > >,std::allocator< std::vector< std::vector< std::complex< double >,std::allocator< std::complex< double > > >,std::allocator< std::vector< std::complex< double >,std::allocator< std::complex< double > > > > > > > *":
-        """__getslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j) -> _cccvector"""
+    def __getslice__(self, i: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type') -> "std::vector< std::vector< std::vector< complex< double >,std::allocator< complex< double > > >,std::allocator< std::vector< complex< double >,std::allocator< complex< double > > > > >,std::allocator< std::vector< std::vector< complex< double >,std::allocator< complex< double > > >,std::allocator< std::vector< complex< double >,std::allocator< complex< double > > > > > > > *":
+        """__getslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j) -> _cccvector"""
         return _sim2dlong._cccvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j)
-        __setslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j, _cccvector v)
+        __setslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j)
+        __setslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j, _cccvector v)
         """
         return _sim2dlong._cccvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type') -> "void":
-        """__delslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type') -> "void":
+        """__delslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j)"""
         return _sim2dlong._cccvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i)
+        __delitem__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i)
         __delitem__(_cccvector self, PySliceObject * slice)
         """
         return _sim2dlong._cccvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type const &":
         """
         __getitem__(_cccvector self, PySliceObject * slice) -> _cccvector
-        __getitem__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i) -> _ccvector
+        __getitem__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i) -> _ccvector
         """
         return _sim2dlong._cccvector___getitem__(self, *args)
 
@@ -2165,12 +2165,12 @@ class _cccvector(collections.MutableSequence):
         """
         __setitem__(_cccvector self, PySliceObject * slice, _cccvector v)
         __setitem__(_cccvector self, PySliceObject * slice)
-        __setitem__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, _ccvector x)
+        __setitem__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, _ccvector x)
         """
         return _sim2dlong._cccvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type":
+    def pop(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type":
         """pop(_cccvector self) -> _ccvector"""
         return _sim2dlong._cccvector_pop(self)
 
@@ -2185,8 +2185,8 @@ class _cccvector(collections.MutableSequence):
         return _sim2dlong._cccvector_empty(self)
 
 
-    def size(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::size_type":
-        """size(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::size_type"""
+    def size(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::size_type":
+        """size(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::size_type"""
         return _sim2dlong._cccvector_size(self)
 
 
@@ -2195,23 +2195,23 @@ class _cccvector(collections.MutableSequence):
         return _sim2dlong._cccvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::iterator":
-        """begin(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator"""
+    def begin(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::iterator":
+        """begin(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator"""
         return _sim2dlong._cccvector_begin(self)
 
 
-    def end(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::iterator":
-        """end(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator"""
+    def end(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::iterator":
+        """end(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator"""
         return _sim2dlong._cccvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator":
-        """rbegin(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator":
+        """rbegin(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator"""
         return _sim2dlong._cccvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator":
-        """rend(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator"""
+    def rend(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator":
+        """rend(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator"""
         return _sim2dlong._cccvector_rend(self)
 
 
@@ -2220,8 +2220,8 @@ class _cccvector(collections.MutableSequence):
         return _sim2dlong._cccvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::allocator_type":
-        """get_allocator(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::allocator_type":
+        """get_allocator(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::allocator_type"""
         return _sim2dlong._cccvector_get_allocator(self)
 
 
@@ -2230,20 +2230,20 @@ class _cccvector(collections.MutableSequence):
         return _sim2dlong._cccvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::iterator":
+    def erase(self, *args) -> "std::vector< std::vector< std::vector< complex< double > > > >::iterator":
         """
-        erase(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator pos) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator
-        erase(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator first, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator last) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator
+        erase(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator pos) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator
+        erase(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator first, std::vector< std::vector< std::vector< complex< double > > > >::iterator last) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator
         """
         return _sim2dlong._cccvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self) -> _cccvector
-        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self, _cccvector arg2) -> _cccvector
-        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type size) -> _cccvector
-        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type size, _ccvector value) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self, _cccvector arg2) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< complex< double > > > >::size_type size) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< complex< double > > > >::size_type size, _ccvector value) -> _cccvector
         """
         this = _sim2dlong.new__cccvector(*args)
         try:
@@ -2256,44 +2256,44 @@ class _cccvector(collections.MutableSequence):
         return _sim2dlong._cccvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type const &":
+    def front(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type const &":
         """front(_cccvector self) -> _ccvector"""
         return _sim2dlong._cccvector_front(self)
 
 
-    def back(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type const &":
+    def back(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type const &":
         """back(_cccvector self) -> _ccvector"""
         return _sim2dlong._cccvector_back(self)
 
 
-    def assign(self, n: 'std::vector< std::vector< std::vector< std::complex< double > > > >::size_type', x: '_ccvector') -> "void":
-        """assign(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type n, _ccvector x)"""
+    def assign(self, n: 'std::vector< std::vector< std::vector< complex< double > > > >::size_type', x: '_ccvector') -> "void":
+        """assign(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type n, _ccvector x)"""
         return _sim2dlong._cccvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type new_size)
-        resize(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type new_size, _ccvector x)
+        resize(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type new_size)
+        resize(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type new_size, _ccvector x)
         """
         return _sim2dlong._cccvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator pos, _ccvector x) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator
-        insert(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator pos, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type n, _ccvector x)
+        insert(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator pos, _ccvector x) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator
+        insert(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator pos, std::vector< std::vector< std::vector< complex< double > > > >::size_type n, _ccvector x)
         """
         return _sim2dlong._cccvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< std::vector< std::vector< std::complex< double > > > >::size_type') -> "void":
-        """reserve(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type n)"""
+    def reserve(self, n: 'std::vector< std::vector< std::vector< complex< double > > > >::size_type') -> "void":
+        """reserve(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type n)"""
         return _sim2dlong._cccvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::size_type":
-        """capacity(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::size_type"""
+    def capacity(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::size_type":
+        """capacity(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::size_type"""
         return _sim2dlong._cccvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete__cccvector
@@ -2511,7 +2511,7 @@ ldvector_swigregister = _sim2dlong.ldvector_swigregister
 ldvector_swigregister(ldvector)
 
 class ivector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::shared_ptr<(Interaction)>)> class."""
+    """Proxy of C++ std::vector<(::boost::shared_ptr<(Interaction)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2540,61 +2540,61 @@ class ivector(collections.MutableSequence):
         return _sim2dlong.ivector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< boost::shared_ptr< Interaction > >::size_type":
-        """__len__(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::size_type"""
+    def __len__(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::size_type":
+        """__len__(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::size_type"""
         return _sim2dlong.ivector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< boost::shared_ptr< Interaction > >::difference_type', j: 'std::vector< boost::shared_ptr< Interaction > >::difference_type') -> "std::vector< boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *":
-        """__getslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j) -> ivector"""
+    def __getslice__(self, i: 'std::vector< ::boost::shared_ptr< Interaction > >::difference_type', j: 'std::vector< ::boost::shared_ptr< Interaction > >::difference_type') -> "std::vector< ::boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *":
+        """__getslice__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i, std::vector< ::boost::shared_ptr< Interaction > >::difference_type j) -> std::vector< ::boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > *"""
         return _sim2dlong.ivector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j)
-        __setslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j, ivector v)
+        __setslice__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i, std::vector< ::boost::shared_ptr< Interaction > >::difference_type j)
+        __setslice__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i, std::vector< ::boost::shared_ptr< Interaction > >::difference_type j, std::vector< ::boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > const & v)
         """
         return _sim2dlong.ivector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< boost::shared_ptr< Interaction > >::difference_type', j: 'std::vector< boost::shared_ptr< Interaction > >::difference_type') -> "void":
-        """__delslice__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< ::boost::shared_ptr< Interaction > >::difference_type', j: 'std::vector< ::boost::shared_ptr< Interaction > >::difference_type') -> "void":
+        """__delslice__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i, std::vector< ::boost::shared_ptr< Interaction > >::difference_type j)"""
         return _sim2dlong.ivector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i)
+        __delitem__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i)
         __delitem__(ivector self, PySliceObject * slice)
         """
         return _sim2dlong.ivector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< Interaction > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< ::boost::shared_ptr< Interaction > >::value_type const &":
         """
-        __getitem__(ivector self, PySliceObject * slice) -> ivector
-        __getitem__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i) -> std::vector< boost::shared_ptr< Interaction > >::value_type const &
+        __getitem__(ivector self, PySliceObject * slice) -> std::vector< ::boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > >
+        __getitem__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i) -> std::vector< ::boost::shared_ptr< Interaction > >::value_type const &
         """
         return _sim2dlong.ivector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(ivector self, PySliceObject * slice, ivector v)
+        __setitem__(ivector self, PySliceObject * slice, std::vector< ::boost::shared_ptr< Interaction >,std::allocator< boost::shared_ptr< Interaction > > > const & v)
         __setitem__(ivector self, PySliceObject * slice)
-        __setitem__(ivector self, std::vector< boost::shared_ptr< Interaction > >::difference_type i, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)
+        __setitem__(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::difference_type i, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim2dlong.ivector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< boost::shared_ptr< Interaction > >::value_type":
-        """pop(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::value_type"""
+    def pop(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::value_type":
+        """pop(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::value_type"""
         return _sim2dlong.ivector_pop(self)
 
 
-    def append(self, x: 'std::vector< boost::shared_ptr< Interaction > >::value_type const &') -> "void":
-        """append(ivector self, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)"""
+    def append(self, x: 'std::vector< ::boost::shared_ptr< Interaction > >::value_type const &') -> "void":
+        """append(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x)"""
         return _sim2dlong.ivector_append(self, x)
 
 
@@ -2603,8 +2603,8 @@ class ivector(collections.MutableSequence):
         return _sim2dlong.ivector_empty(self)
 
 
-    def size(self) -> "std::vector< boost::shared_ptr< Interaction > >::size_type":
-        """size(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::size_type"""
+    def size(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::size_type":
+        """size(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::size_type"""
         return _sim2dlong.ivector_size(self)
 
 
@@ -2613,23 +2613,23 @@ class ivector(collections.MutableSequence):
         return _sim2dlong.ivector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< boost::shared_ptr< Interaction > >::iterator":
-        """begin(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::iterator"""
+    def begin(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::iterator":
+        """begin(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::iterator"""
         return _sim2dlong.ivector_begin(self)
 
 
-    def end(self) -> "std::vector< boost::shared_ptr< Interaction > >::iterator":
-        """end(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::iterator"""
+    def end(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::iterator":
+        """end(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::iterator"""
         return _sim2dlong.ivector_end(self)
 
 
-    def rbegin(self) -> "std::vector< boost::shared_ptr< Interaction > >::reverse_iterator":
-        """rbegin(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::reverse_iterator":
+        """rbegin(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::reverse_iterator"""
         return _sim2dlong.ivector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< boost::shared_ptr< Interaction > >::reverse_iterator":
-        """rend(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::reverse_iterator"""
+    def rend(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::reverse_iterator":
+        """rend(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::reverse_iterator"""
         return _sim2dlong.ivector_rend(self)
 
 
@@ -2638,8 +2638,8 @@ class ivector(collections.MutableSequence):
         return _sim2dlong.ivector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< boost::shared_ptr< Interaction > >::allocator_type":
-        """get_allocator(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::allocator_type":
+        """get_allocator(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::allocator_type"""
         return _sim2dlong.ivector_get_allocator(self)
 
 
@@ -2648,20 +2648,20 @@ class ivector(collections.MutableSequence):
         return _sim2dlong.ivector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< boost::shared_ptr< Interaction > >::iterator":
+    def erase(self, *args) -> "std::vector< ::boost::shared_ptr< Interaction > >::iterator":
         """
-        erase(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator pos) -> std::vector< boost::shared_ptr< Interaction > >::iterator
-        erase(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator first, std::vector< boost::shared_ptr< Interaction > >::iterator last) -> std::vector< boost::shared_ptr< Interaction > >::iterator
+        erase(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::iterator pos) -> std::vector< ::boost::shared_ptr< Interaction > >::iterator
+        erase(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::iterator first, std::vector< ::boost::shared_ptr< Interaction > >::iterator last) -> std::vector< ::boost::shared_ptr< Interaction > >::iterator
         """
         return _sim2dlong.ivector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self) -> ivector
-        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self, ivector arg2) -> ivector
-        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self, std::vector< boost::shared_ptr< Interaction > >::size_type size) -> ivector
-        __init__(std::vector<(boost::shared_ptr<(Interaction)>)> self, std::vector< boost::shared_ptr< Interaction > >::size_type size, std::vector< boost::shared_ptr< Interaction > >::value_type const & value) -> ivector
+        __init__(std::vector<(::boost::shared_ptr<(Interaction)>)> self) -> ivector
+        __init__(std::vector<(::boost::shared_ptr<(Interaction)>)> self, ivector arg2) -> ivector
+        __init__(std::vector<(::boost::shared_ptr<(Interaction)>)> self, std::vector< ::boost::shared_ptr< Interaction > >::size_type size) -> ivector
+        __init__(std::vector<(::boost::shared_ptr<(Interaction)>)> self, std::vector< ::boost::shared_ptr< Interaction > >::size_type size, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & value) -> ivector
         """
         this = _sim2dlong.new_ivector(*args)
         try:
@@ -2669,49 +2669,49 @@ class ivector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< boost::shared_ptr< Interaction > >::value_type const &') -> "void":
-        """push_back(ivector self, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< ::boost::shared_ptr< Interaction > >::value_type const &') -> "void":
+        """push_back(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x)"""
         return _sim2dlong.ivector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< boost::shared_ptr< Interaction > >::value_type const &":
-        """front(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::value_type const &"""
+    def front(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::value_type const &":
+        """front(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::value_type const &"""
         return _sim2dlong.ivector_front(self)
 
 
-    def back(self) -> "std::vector< boost::shared_ptr< Interaction > >::value_type const &":
-        """back(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::value_type const &"""
+    def back(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::value_type const &":
+        """back(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::value_type const &"""
         return _sim2dlong.ivector_back(self)
 
 
-    def assign(self, n: 'std::vector< boost::shared_ptr< Interaction > >::size_type', x: 'std::vector< boost::shared_ptr< Interaction > >::value_type const &') -> "void":
-        """assign(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type n, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< ::boost::shared_ptr< Interaction > >::size_type', x: 'std::vector< ::boost::shared_ptr< Interaction > >::value_type const &') -> "void":
+        """assign(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::size_type n, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x)"""
         return _sim2dlong.ivector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type new_size)
-        resize(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type new_size, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)
+        resize(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::size_type new_size)
+        resize(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::size_type new_size, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim2dlong.ivector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator pos, std::vector< boost::shared_ptr< Interaction > >::value_type const & x) -> std::vector< boost::shared_ptr< Interaction > >::iterator
-        insert(ivector self, std::vector< boost::shared_ptr< Interaction > >::iterator pos, std::vector< boost::shared_ptr< Interaction > >::size_type n, std::vector< boost::shared_ptr< Interaction > >::value_type const & x)
+        insert(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::iterator pos, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x) -> std::vector< ::boost::shared_ptr< Interaction > >::iterator
+        insert(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::iterator pos, std::vector< ::boost::shared_ptr< Interaction > >::size_type n, std::vector< ::boost::shared_ptr< Interaction > >::value_type const & x)
         """
         return _sim2dlong.ivector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< boost::shared_ptr< Interaction > >::size_type') -> "void":
-        """reserve(ivector self, std::vector< boost::shared_ptr< Interaction > >::size_type n)"""
+    def reserve(self, n: 'std::vector< ::boost::shared_ptr< Interaction > >::size_type') -> "void":
+        """reserve(ivector self, std::vector< ::boost::shared_ptr< Interaction > >::size_type n)"""
         return _sim2dlong.ivector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< boost::shared_ptr< Interaction > >::size_type":
-        """capacity(ivector self) -> std::vector< boost::shared_ptr< Interaction > >::size_type"""
+    def capacity(self) -> "std::vector< ::boost::shared_ptr< Interaction > >::size_type":
+        """capacity(ivector self) -> std::vector< ::boost::shared_ptr< Interaction > >::size_type"""
         return _sim2dlong.ivector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete_ivector
@@ -2720,7 +2720,7 @@ ivector_swigregister = _sim2dlong.ivector_swigregister
 ivector_swigregister(ivector)
 
 class ifxvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::shared_ptr<(InteractionPairsX)>)> class."""
+    """Proxy of C++ std::vector<(::boost::shared_ptr<(InteractionPairsX)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2749,61 +2749,61 @@ class ifxvector(collections.MutableSequence):
         return _sim2dlong.ifxvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::size_type":
-        """__len__(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::size_type"""
+    def __len__(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type":
+        """__len__(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type"""
         return _sim2dlong.ifxvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type') -> "std::vector< boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *":
-        """__getslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j) -> ifxvector"""
+    def __getslice__(self, i: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type') -> "std::vector< ::boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *":
+        """__getslice__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type j) -> std::vector< ::boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > *"""
         return _sim2dlong.ifxvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j)
-        __setslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j, ifxvector v)
+        __setslice__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type j)
+        __setslice__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type j, std::vector< ::boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > const & v)
         """
         return _sim2dlong.ifxvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type') -> "void":
-        """__delslice__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type', j: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type') -> "void":
+        """__delslice__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type j)"""
         return _sim2dlong.ifxvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i)
+        __delitem__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i)
         __delitem__(ifxvector self, PySliceObject * slice)
         """
         return _sim2dlong.ifxvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &":
         """
-        __getitem__(ifxvector self, PySliceObject * slice) -> ifxvector
-        __getitem__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &
+        __getitem__(ifxvector self, PySliceObject * slice) -> std::vector< ::boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > >
+        __getitem__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &
         """
         return _sim2dlong.ifxvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(ifxvector self, PySliceObject * slice, ifxvector v)
+        __setitem__(ifxvector self, PySliceObject * slice, std::vector< ::boost::shared_ptr< InteractionPairsX >,std::allocator< boost::shared_ptr< InteractionPairsX > > > const & v)
         __setitem__(ifxvector self, PySliceObject * slice)
-        __setitem__(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)
+        __setitem__(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::difference_type i, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim2dlong.ifxvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type":
-        """pop(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type"""
+    def pop(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type":
+        """pop(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type"""
         return _sim2dlong.ifxvector_pop(self)
 
 
-    def append(self, x: 'std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
-        """append(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
+    def append(self, x: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """append(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim2dlong.ifxvector_append(self, x)
 
 
@@ -2812,8 +2812,8 @@ class ifxvector(collections.MutableSequence):
         return _sim2dlong.ifxvector_empty(self)
 
 
-    def size(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::size_type":
-        """size(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::size_type"""
+    def size(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type":
+        """size(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type"""
         return _sim2dlong.ifxvector_size(self)
 
 
@@ -2822,23 +2822,23 @@ class ifxvector(collections.MutableSequence):
         return _sim2dlong.ifxvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::iterator":
-        """begin(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator"""
+    def begin(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator":
+        """begin(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator"""
         return _sim2dlong.ifxvector_begin(self)
 
 
-    def end(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::iterator":
-        """end(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator"""
+    def end(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator":
+        """end(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator"""
         return _sim2dlong.ifxvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator":
-        """rbegin(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::reverse_iterator":
+        """rbegin(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::reverse_iterator"""
         return _sim2dlong.ifxvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator":
-        """rend(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::reverse_iterator"""
+    def rend(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::reverse_iterator":
+        """rend(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::reverse_iterator"""
         return _sim2dlong.ifxvector_rend(self)
 
 
@@ -2847,8 +2847,8 @@ class ifxvector(collections.MutableSequence):
         return _sim2dlong.ifxvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::allocator_type":
-        """get_allocator(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::allocator_type":
+        """get_allocator(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::allocator_type"""
         return _sim2dlong.ifxvector_get_allocator(self)
 
 
@@ -2857,20 +2857,20 @@ class ifxvector(collections.MutableSequence):
         return _sim2dlong.ifxvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::iterator":
+    def erase(self, *args) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator":
         """
-        erase(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator pos) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator
-        erase(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator first, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator last) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator
+        erase(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator pos) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator
+        erase(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator first, std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator last) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator
         """
         return _sim2dlong.ifxvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self) -> ifxvector
-        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self, ifxvector arg2) -> ifxvector
-        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type size) -> ifxvector
-        __init__(std::vector<(boost::shared_ptr<(InteractionPairsX)>)> self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type size, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & value) -> ifxvector
+        __init__(std::vector<(::boost::shared_ptr<(InteractionPairsX)>)> self) -> ifxvector
+        __init__(std::vector<(::boost::shared_ptr<(InteractionPairsX)>)> self, ifxvector arg2) -> ifxvector
+        __init__(std::vector<(::boost::shared_ptr<(InteractionPairsX)>)> self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type size) -> ifxvector
+        __init__(std::vector<(::boost::shared_ptr<(InteractionPairsX)>)> self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type size, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & value) -> ifxvector
         """
         this = _sim2dlong.new_ifxvector(*args)
         try:
@@ -2878,49 +2878,49 @@ class ifxvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
-        """push_back(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """push_back(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim2dlong.ifxvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &":
-        """front(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &"""
+    def front(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &":
+        """front(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &"""
         return _sim2dlong.ifxvector_front(self)
 
 
-    def back(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &":
-        """back(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &"""
+    def back(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &":
+        """back(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &"""
         return _sim2dlong.ifxvector_back(self)
 
 
-    def assign(self, n: 'std::vector< boost::shared_ptr< InteractionPairsX > >::size_type', x: 'std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
-        """assign(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type n, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type', x: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const &') -> "void":
+        """assign(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type n, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x)"""
         return _sim2dlong.ifxvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type new_size)
-        resize(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type new_size, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)
+        resize(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type new_size)
+        resize(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type new_size, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim2dlong.ifxvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator pos, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x) -> std::vector< boost::shared_ptr< InteractionPairsX > >::iterator
-        insert(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::iterator pos, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type n, std::vector< boost::shared_ptr< InteractionPairsX > >::value_type const & x)
+        insert(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator pos, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator
+        insert(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::iterator pos, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type n, std::vector< ::boost::shared_ptr< InteractionPairsX > >::value_type const & x)
         """
         return _sim2dlong.ifxvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< boost::shared_ptr< InteractionPairsX > >::size_type') -> "void":
-        """reserve(ifxvector self, std::vector< boost::shared_ptr< InteractionPairsX > >::size_type n)"""
+    def reserve(self, n: 'std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type') -> "void":
+        """reserve(ifxvector self, std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type n)"""
         return _sim2dlong.ifxvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< boost::shared_ptr< InteractionPairsX > >::size_type":
-        """capacity(ifxvector self) -> std::vector< boost::shared_ptr< InteractionPairsX > >::size_type"""
+    def capacity(self) -> "std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type":
+        """capacity(ifxvector self) -> std::vector< ::boost::shared_ptr< InteractionPairsX > >::size_type"""
         return _sim2dlong.ifxvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete_ifxvector
@@ -2929,7 +2929,7 @@ ifxvector_swigregister = _sim2dlong.ifxvector_swigregister
 ifxvector_swigregister(ifxvector)
 
 class tvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::shared_ptr<(StateTracker)>)> class."""
+    """Proxy of C++ std::vector<(::boost::shared_ptr<(StateTracker)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -2958,61 +2958,61 @@ class tvector(collections.MutableSequence):
         return _sim2dlong.tvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< boost::shared_ptr< StateTracker > >::size_type":
-        """__len__(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::size_type"""
+    def __len__(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::size_type":
+        """__len__(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::size_type"""
         return _sim2dlong.tvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type', j: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type') -> "std::vector< boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *":
-        """__getslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j) -> tvector"""
+    def __getslice__(self, i: 'std::vector< ::boost::shared_ptr< StateTracker > >::difference_type', j: 'std::vector< ::boost::shared_ptr< StateTracker > >::difference_type') -> "std::vector< ::boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *":
+        """__getslice__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type j) -> std::vector< ::boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > *"""
         return _sim2dlong.tvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j)
-        __setslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j, tvector v)
+        __setslice__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type j)
+        __setslice__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type j, std::vector< ::boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > const & v)
         """
         return _sim2dlong.tvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type', j: 'std::vector< boost::shared_ptr< StateTracker > >::difference_type') -> "void":
-        """__delslice__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< ::boost::shared_ptr< StateTracker > >::difference_type', j: 'std::vector< ::boost::shared_ptr< StateTracker > >::difference_type') -> "void":
+        """__delslice__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type j)"""
         return _sim2dlong.tvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i)
+        __delitem__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i)
         __delitem__(tvector self, PySliceObject * slice)
         """
         return _sim2dlong.tvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &":
         """
-        __getitem__(tvector self, PySliceObject * slice) -> tvector
-        __getitem__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i) -> std::vector< boost::shared_ptr< StateTracker > >::value_type const &
+        __getitem__(tvector self, PySliceObject * slice) -> std::vector< ::boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > >
+        __getitem__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i) -> std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &
         """
         return _sim2dlong.tvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(tvector self, PySliceObject * slice, tvector v)
+        __setitem__(tvector self, PySliceObject * slice, std::vector< ::boost::shared_ptr< StateTracker >,std::allocator< boost::shared_ptr< StateTracker > > > const & v)
         __setitem__(tvector self, PySliceObject * slice)
-        __setitem__(tvector self, std::vector< boost::shared_ptr< StateTracker > >::difference_type i, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)
+        __setitem__(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::difference_type i, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim2dlong.tvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type":
-        """pop(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::value_type"""
+    def pop(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::value_type":
+        """pop(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::value_type"""
         return _sim2dlong.tvector_pop(self)
 
 
-    def append(self, x: 'std::vector< boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
-        """append(tvector self, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)"""
+    def append(self, x: 'std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """append(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim2dlong.tvector_append(self, x)
 
 
@@ -3021,8 +3021,8 @@ class tvector(collections.MutableSequence):
         return _sim2dlong.tvector_empty(self)
 
 
-    def size(self) -> "std::vector< boost::shared_ptr< StateTracker > >::size_type":
-        """size(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::size_type"""
+    def size(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::size_type":
+        """size(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::size_type"""
         return _sim2dlong.tvector_size(self)
 
 
@@ -3031,23 +3031,23 @@ class tvector(collections.MutableSequence):
         return _sim2dlong.tvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< boost::shared_ptr< StateTracker > >::iterator":
-        """begin(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::iterator"""
+    def begin(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::iterator":
+        """begin(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::iterator"""
         return _sim2dlong.tvector_begin(self)
 
 
-    def end(self) -> "std::vector< boost::shared_ptr< StateTracker > >::iterator":
-        """end(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::iterator"""
+    def end(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::iterator":
+        """end(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::iterator"""
         return _sim2dlong.tvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator":
-        """rbegin(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::reverse_iterator":
+        """rbegin(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::reverse_iterator"""
         return _sim2dlong.tvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator":
-        """rend(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::reverse_iterator"""
+    def rend(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::reverse_iterator":
+        """rend(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::reverse_iterator"""
         return _sim2dlong.tvector_rend(self)
 
 
@@ -3056,8 +3056,8 @@ class tvector(collections.MutableSequence):
         return _sim2dlong.tvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< boost::shared_ptr< StateTracker > >::allocator_type":
-        """get_allocator(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::allocator_type":
+        """get_allocator(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::allocator_type"""
         return _sim2dlong.tvector_get_allocator(self)
 
 
@@ -3066,20 +3066,20 @@ class tvector(collections.MutableSequence):
         return _sim2dlong.tvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< boost::shared_ptr< StateTracker > >::iterator":
+    def erase(self, *args) -> "std::vector< ::boost::shared_ptr< StateTracker > >::iterator":
         """
-        erase(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator pos) -> std::vector< boost::shared_ptr< StateTracker > >::iterator
-        erase(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator first, std::vector< boost::shared_ptr< StateTracker > >::iterator last) -> std::vector< boost::shared_ptr< StateTracker > >::iterator
+        erase(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::iterator pos) -> std::vector< ::boost::shared_ptr< StateTracker > >::iterator
+        erase(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::iterator first, std::vector< ::boost::shared_ptr< StateTracker > >::iterator last) -> std::vector< ::boost::shared_ptr< StateTracker > >::iterator
         """
         return _sim2dlong.tvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self) -> tvector
-        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self, tvector arg2) -> tvector
-        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self, std::vector< boost::shared_ptr< StateTracker > >::size_type size) -> tvector
-        __init__(std::vector<(boost::shared_ptr<(StateTracker)>)> self, std::vector< boost::shared_ptr< StateTracker > >::size_type size, std::vector< boost::shared_ptr< StateTracker > >::value_type const & value) -> tvector
+        __init__(std::vector<(::boost::shared_ptr<(StateTracker)>)> self) -> tvector
+        __init__(std::vector<(::boost::shared_ptr<(StateTracker)>)> self, tvector arg2) -> tvector
+        __init__(std::vector<(::boost::shared_ptr<(StateTracker)>)> self, std::vector< ::boost::shared_ptr< StateTracker > >::size_type size) -> tvector
+        __init__(std::vector<(::boost::shared_ptr<(StateTracker)>)> self, std::vector< ::boost::shared_ptr< StateTracker > >::size_type size, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & value) -> tvector
         """
         this = _sim2dlong.new_tvector(*args)
         try:
@@ -3087,49 +3087,49 @@ class tvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
-        """push_back(tvector self, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """push_back(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim2dlong.tvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type const &":
-        """front(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::value_type const &"""
+    def front(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &":
+        """front(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &"""
         return _sim2dlong.tvector_front(self)
 
 
-    def back(self) -> "std::vector< boost::shared_ptr< StateTracker > >::value_type const &":
-        """back(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::value_type const &"""
+    def back(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &":
+        """back(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &"""
         return _sim2dlong.tvector_back(self)
 
 
-    def assign(self, n: 'std::vector< boost::shared_ptr< StateTracker > >::size_type', x: 'std::vector< boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
-        """assign(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type n, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< ::boost::shared_ptr< StateTracker > >::size_type', x: 'std::vector< ::boost::shared_ptr< StateTracker > >::value_type const &') -> "void":
+        """assign(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::size_type n, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x)"""
         return _sim2dlong.tvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type new_size)
-        resize(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type new_size, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)
+        resize(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::size_type new_size)
+        resize(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::size_type new_size, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim2dlong.tvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator pos, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x) -> std::vector< boost::shared_ptr< StateTracker > >::iterator
-        insert(tvector self, std::vector< boost::shared_ptr< StateTracker > >::iterator pos, std::vector< boost::shared_ptr< StateTracker > >::size_type n, std::vector< boost::shared_ptr< StateTracker > >::value_type const & x)
+        insert(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::iterator pos, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x) -> std::vector< ::boost::shared_ptr< StateTracker > >::iterator
+        insert(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::iterator pos, std::vector< ::boost::shared_ptr< StateTracker > >::size_type n, std::vector< ::boost::shared_ptr< StateTracker > >::value_type const & x)
         """
         return _sim2dlong.tvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< boost::shared_ptr< StateTracker > >::size_type') -> "void":
-        """reserve(tvector self, std::vector< boost::shared_ptr< StateTracker > >::size_type n)"""
+    def reserve(self, n: 'std::vector< ::boost::shared_ptr< StateTracker > >::size_type') -> "void":
+        """reserve(tvector self, std::vector< ::boost::shared_ptr< StateTracker > >::size_type n)"""
         return _sim2dlong.tvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< boost::shared_ptr< StateTracker > >::size_type":
-        """capacity(tvector self) -> std::vector< boost::shared_ptr< StateTracker > >::size_type"""
+    def capacity(self) -> "std::vector< ::boost::shared_ptr< StateTracker > >::size_type":
+        """capacity(tvector self) -> std::vector< ::boost::shared_ptr< StateTracker > >::size_type"""
         return _sim2dlong.tvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete_tvector
@@ -3138,7 +3138,7 @@ tvector_swigregister = _sim2dlong.tvector_swigregister
 tvector_swigregister(tvector)
 
 class constraintvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::shared_ptr<(Constraint)>)> class."""
+    """Proxy of C++ std::vector<(::boost::shared_ptr<(Constraint)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -3167,61 +3167,61 @@ class constraintvector(collections.MutableSequence):
         return _sim2dlong.constraintvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< boost::shared_ptr< Constraint > >::size_type":
-        """__len__(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::size_type"""
+    def __len__(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::size_type":
+        """__len__(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::size_type"""
         return _sim2dlong.constraintvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< boost::shared_ptr< Constraint > >::difference_type', j: 'std::vector< boost::shared_ptr< Constraint > >::difference_type') -> "std::vector< boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *":
-        """__getslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j) -> constraintvector"""
+    def __getslice__(self, i: 'std::vector< ::boost::shared_ptr< Constraint > >::difference_type', j: 'std::vector< ::boost::shared_ptr< Constraint > >::difference_type') -> "std::vector< ::boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *":
+        """__getslice__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i, std::vector< ::boost::shared_ptr< Constraint > >::difference_type j) -> std::vector< ::boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > *"""
         return _sim2dlong.constraintvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j)
-        __setslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j, constraintvector v)
+        __setslice__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i, std::vector< ::boost::shared_ptr< Constraint > >::difference_type j)
+        __setslice__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i, std::vector< ::boost::shared_ptr< Constraint > >::difference_type j, std::vector< ::boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > const & v)
         """
         return _sim2dlong.constraintvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< boost::shared_ptr< Constraint > >::difference_type', j: 'std::vector< boost::shared_ptr< Constraint > >::difference_type') -> "void":
-        """__delslice__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< ::boost::shared_ptr< Constraint > >::difference_type', j: 'std::vector< ::boost::shared_ptr< Constraint > >::difference_type') -> "void":
+        """__delslice__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i, std::vector< ::boost::shared_ptr< Constraint > >::difference_type j)"""
         return _sim2dlong.constraintvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i)
+        __delitem__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i)
         __delitem__(constraintvector self, PySliceObject * slice)
         """
         return _sim2dlong.constraintvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< Constraint > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< ::boost::shared_ptr< Constraint > >::value_type const &":
         """
-        __getitem__(constraintvector self, PySliceObject * slice) -> constraintvector
-        __getitem__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i) -> std::vector< boost::shared_ptr< Constraint > >::value_type const &
+        __getitem__(constraintvector self, PySliceObject * slice) -> std::vector< ::boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > >
+        __getitem__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i) -> std::vector< ::boost::shared_ptr< Constraint > >::value_type const &
         """
         return _sim2dlong.constraintvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(constraintvector self, PySliceObject * slice, constraintvector v)
+        __setitem__(constraintvector self, PySliceObject * slice, std::vector< ::boost::shared_ptr< Constraint >,std::allocator< boost::shared_ptr< Constraint > > > const & v)
         __setitem__(constraintvector self, PySliceObject * slice)
-        __setitem__(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::difference_type i, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)
+        __setitem__(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::difference_type i, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim2dlong.constraintvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< boost::shared_ptr< Constraint > >::value_type":
-        """pop(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::value_type"""
+    def pop(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::value_type":
+        """pop(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::value_type"""
         return _sim2dlong.constraintvector_pop(self)
 
 
-    def append(self, x: 'std::vector< boost::shared_ptr< Constraint > >::value_type const &') -> "void":
-        """append(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)"""
+    def append(self, x: 'std::vector< ::boost::shared_ptr< Constraint > >::value_type const &') -> "void":
+        """append(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x)"""
         return _sim2dlong.constraintvector_append(self, x)
 
 
@@ -3230,8 +3230,8 @@ class constraintvector(collections.MutableSequence):
         return _sim2dlong.constraintvector_empty(self)
 
 
-    def size(self) -> "std::vector< boost::shared_ptr< Constraint > >::size_type":
-        """size(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::size_type"""
+    def size(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::size_type":
+        """size(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::size_type"""
         return _sim2dlong.constraintvector_size(self)
 
 
@@ -3240,23 +3240,23 @@ class constraintvector(collections.MutableSequence):
         return _sim2dlong.constraintvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< boost::shared_ptr< Constraint > >::iterator":
-        """begin(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::iterator"""
+    def begin(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::iterator":
+        """begin(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::iterator"""
         return _sim2dlong.constraintvector_begin(self)
 
 
-    def end(self) -> "std::vector< boost::shared_ptr< Constraint > >::iterator":
-        """end(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::iterator"""
+    def end(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::iterator":
+        """end(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::iterator"""
         return _sim2dlong.constraintvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< boost::shared_ptr< Constraint > >::reverse_iterator":
-        """rbegin(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::reverse_iterator":
+        """rbegin(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::reverse_iterator"""
         return _sim2dlong.constraintvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< boost::shared_ptr< Constraint > >::reverse_iterator":
-        """rend(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::reverse_iterator"""
+    def rend(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::reverse_iterator":
+        """rend(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::reverse_iterator"""
         return _sim2dlong.constraintvector_rend(self)
 
 
@@ -3265,8 +3265,8 @@ class constraintvector(collections.MutableSequence):
         return _sim2dlong.constraintvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< boost::shared_ptr< Constraint > >::allocator_type":
-        """get_allocator(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::allocator_type":
+        """get_allocator(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::allocator_type"""
         return _sim2dlong.constraintvector_get_allocator(self)
 
 
@@ -3275,20 +3275,20 @@ class constraintvector(collections.MutableSequence):
         return _sim2dlong.constraintvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< boost::shared_ptr< Constraint > >::iterator":
+    def erase(self, *args) -> "std::vector< ::boost::shared_ptr< Constraint > >::iterator":
         """
-        erase(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator pos) -> std::vector< boost::shared_ptr< Constraint > >::iterator
-        erase(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator first, std::vector< boost::shared_ptr< Constraint > >::iterator last) -> std::vector< boost::shared_ptr< Constraint > >::iterator
+        erase(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::iterator pos) -> std::vector< ::boost::shared_ptr< Constraint > >::iterator
+        erase(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::iterator first, std::vector< ::boost::shared_ptr< Constraint > >::iterator last) -> std::vector< ::boost::shared_ptr< Constraint > >::iterator
         """
         return _sim2dlong.constraintvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self) -> constraintvector
-        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self, constraintvector arg2) -> constraintvector
-        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self, std::vector< boost::shared_ptr< Constraint > >::size_type size) -> constraintvector
-        __init__(std::vector<(boost::shared_ptr<(Constraint)>)> self, std::vector< boost::shared_ptr< Constraint > >::size_type size, std::vector< boost::shared_ptr< Constraint > >::value_type const & value) -> constraintvector
+        __init__(std::vector<(::boost::shared_ptr<(Constraint)>)> self) -> constraintvector
+        __init__(std::vector<(::boost::shared_ptr<(Constraint)>)> self, constraintvector arg2) -> constraintvector
+        __init__(std::vector<(::boost::shared_ptr<(Constraint)>)> self, std::vector< ::boost::shared_ptr< Constraint > >::size_type size) -> constraintvector
+        __init__(std::vector<(::boost::shared_ptr<(Constraint)>)> self, std::vector< ::boost::shared_ptr< Constraint > >::size_type size, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & value) -> constraintvector
         """
         this = _sim2dlong.new_constraintvector(*args)
         try:
@@ -3296,49 +3296,49 @@ class constraintvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< boost::shared_ptr< Constraint > >::value_type const &') -> "void":
-        """push_back(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< ::boost::shared_ptr< Constraint > >::value_type const &') -> "void":
+        """push_back(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x)"""
         return _sim2dlong.constraintvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< boost::shared_ptr< Constraint > >::value_type const &":
-        """front(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::value_type const &"""
+    def front(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::value_type const &":
+        """front(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::value_type const &"""
         return _sim2dlong.constraintvector_front(self)
 
 
-    def back(self) -> "std::vector< boost::shared_ptr< Constraint > >::value_type const &":
-        """back(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::value_type const &"""
+    def back(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::value_type const &":
+        """back(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::value_type const &"""
         return _sim2dlong.constraintvector_back(self)
 
 
-    def assign(self, n: 'std::vector< boost::shared_ptr< Constraint > >::size_type', x: 'std::vector< boost::shared_ptr< Constraint > >::value_type const &') -> "void":
-        """assign(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type n, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< ::boost::shared_ptr< Constraint > >::size_type', x: 'std::vector< ::boost::shared_ptr< Constraint > >::value_type const &') -> "void":
+        """assign(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::size_type n, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x)"""
         return _sim2dlong.constraintvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type new_size)
-        resize(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type new_size, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)
+        resize(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::size_type new_size)
+        resize(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::size_type new_size, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim2dlong.constraintvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator pos, std::vector< boost::shared_ptr< Constraint > >::value_type const & x) -> std::vector< boost::shared_ptr< Constraint > >::iterator
-        insert(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::iterator pos, std::vector< boost::shared_ptr< Constraint > >::size_type n, std::vector< boost::shared_ptr< Constraint > >::value_type const & x)
+        insert(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::iterator pos, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x) -> std::vector< ::boost::shared_ptr< Constraint > >::iterator
+        insert(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::iterator pos, std::vector< ::boost::shared_ptr< Constraint > >::size_type n, std::vector< ::boost::shared_ptr< Constraint > >::value_type const & x)
         """
         return _sim2dlong.constraintvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< boost::shared_ptr< Constraint > >::size_type') -> "void":
-        """reserve(constraintvector self, std::vector< boost::shared_ptr< Constraint > >::size_type n)"""
+    def reserve(self, n: 'std::vector< ::boost::shared_ptr< Constraint > >::size_type') -> "void":
+        """reserve(constraintvector self, std::vector< ::boost::shared_ptr< Constraint > >::size_type n)"""
         return _sim2dlong.constraintvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< boost::shared_ptr< Constraint > >::size_type":
-        """capacity(constraintvector self) -> std::vector< boost::shared_ptr< Constraint > >::size_type"""
+    def capacity(self) -> "std::vector< ::boost::shared_ptr< Constraint > >::size_type":
+        """capacity(constraintvector self) -> std::vector< ::boost::shared_ptr< Constraint > >::size_type"""
         return _sim2dlong.constraintvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete_constraintvector
@@ -3347,7 +3347,7 @@ constraintvector_swigregister = _sim2dlong.constraintvector_swigregister
 constraintvector_swigregister(constraintvector)
 
 class wallvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::shared_ptr<(SoftWall)>)> class."""
+    """Proxy of C++ std::vector<(::boost::shared_ptr<(SoftWall)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -3376,61 +3376,61 @@ class wallvector(collections.MutableSequence):
         return _sim2dlong.wallvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< boost::shared_ptr< SoftWall > >::size_type":
-        """__len__(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::size_type"""
+    def __len__(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::size_type":
+        """__len__(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::size_type"""
         return _sim2dlong.wallvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< boost::shared_ptr< SoftWall > >::difference_type', j: 'std::vector< boost::shared_ptr< SoftWall > >::difference_type') -> "std::vector< boost::shared_ptr< SoftWall >,std::allocator< boost::shared_ptr< SoftWall > > > *":
-        """__getslice__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i, std::vector< boost::shared_ptr< SoftWall > >::difference_type j) -> wallvector"""
+    def __getslice__(self, i: 'std::vector< ::boost::shared_ptr< SoftWall > >::difference_type', j: 'std::vector< ::boost::shared_ptr< SoftWall > >::difference_type') -> "std::vector< ::boost::shared_ptr< SoftWall >,std::allocator< boost::shared_ptr< SoftWall > > > *":
+        """__getslice__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type j) -> std::vector< ::boost::shared_ptr< SoftWall >,std::allocator< boost::shared_ptr< SoftWall > > > *"""
         return _sim2dlong.wallvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i, std::vector< boost::shared_ptr< SoftWall > >::difference_type j)
-        __setslice__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i, std::vector< boost::shared_ptr< SoftWall > >::difference_type j, wallvector v)
+        __setslice__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type j)
+        __setslice__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type j, std::vector< ::boost::shared_ptr< SoftWall >,std::allocator< boost::shared_ptr< SoftWall > > > const & v)
         """
         return _sim2dlong.wallvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< boost::shared_ptr< SoftWall > >::difference_type', j: 'std::vector< boost::shared_ptr< SoftWall > >::difference_type') -> "void":
-        """__delslice__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i, std::vector< boost::shared_ptr< SoftWall > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< ::boost::shared_ptr< SoftWall > >::difference_type', j: 'std::vector< ::boost::shared_ptr< SoftWall > >::difference_type') -> "void":
+        """__delslice__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type j)"""
         return _sim2dlong.wallvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i)
+        __delitem__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i)
         __delitem__(wallvector self, PySliceObject * slice)
         """
         return _sim2dlong.wallvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< boost::shared_ptr< SoftWall > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &":
         """
-        __getitem__(wallvector self, PySliceObject * slice) -> wallvector
-        __getitem__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i) -> std::vector< boost::shared_ptr< SoftWall > >::value_type const &
+        __getitem__(wallvector self, PySliceObject * slice) -> std::vector< ::boost::shared_ptr< SoftWall >,std::allocator< boost::shared_ptr< SoftWall > > >
+        __getitem__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i) -> std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &
         """
         return _sim2dlong.wallvector___getitem__(self, *args)
 
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(wallvector self, PySliceObject * slice, wallvector v)
+        __setitem__(wallvector self, PySliceObject * slice, std::vector< ::boost::shared_ptr< SoftWall >,std::allocator< boost::shared_ptr< SoftWall > > > const & v)
         __setitem__(wallvector self, PySliceObject * slice)
-        __setitem__(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::difference_type i, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x)
+        __setitem__(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::difference_type i, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x)
         """
         return _sim2dlong.wallvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< boost::shared_ptr< SoftWall > >::value_type":
-        """pop(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::value_type"""
+    def pop(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::value_type":
+        """pop(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::value_type"""
         return _sim2dlong.wallvector_pop(self)
 
 
-    def append(self, x: 'std::vector< boost::shared_ptr< SoftWall > >::value_type const &') -> "void":
-        """append(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x)"""
+    def append(self, x: 'std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &') -> "void":
+        """append(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x)"""
         return _sim2dlong.wallvector_append(self, x)
 
 
@@ -3439,8 +3439,8 @@ class wallvector(collections.MutableSequence):
         return _sim2dlong.wallvector_empty(self)
 
 
-    def size(self) -> "std::vector< boost::shared_ptr< SoftWall > >::size_type":
-        """size(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::size_type"""
+    def size(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::size_type":
+        """size(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::size_type"""
         return _sim2dlong.wallvector_size(self)
 
 
@@ -3449,23 +3449,23 @@ class wallvector(collections.MutableSequence):
         return _sim2dlong.wallvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< boost::shared_ptr< SoftWall > >::iterator":
-        """begin(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::iterator"""
+    def begin(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::iterator":
+        """begin(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::iterator"""
         return _sim2dlong.wallvector_begin(self)
 
 
-    def end(self) -> "std::vector< boost::shared_ptr< SoftWall > >::iterator":
-        """end(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::iterator"""
+    def end(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::iterator":
+        """end(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::iterator"""
         return _sim2dlong.wallvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< boost::shared_ptr< SoftWall > >::reverse_iterator":
-        """rbegin(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::reverse_iterator":
+        """rbegin(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::reverse_iterator"""
         return _sim2dlong.wallvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< boost::shared_ptr< SoftWall > >::reverse_iterator":
-        """rend(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::reverse_iterator"""
+    def rend(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::reverse_iterator":
+        """rend(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::reverse_iterator"""
         return _sim2dlong.wallvector_rend(self)
 
 
@@ -3474,8 +3474,8 @@ class wallvector(collections.MutableSequence):
         return _sim2dlong.wallvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< boost::shared_ptr< SoftWall > >::allocator_type":
-        """get_allocator(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::allocator_type":
+        """get_allocator(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::allocator_type"""
         return _sim2dlong.wallvector_get_allocator(self)
 
 
@@ -3484,20 +3484,20 @@ class wallvector(collections.MutableSequence):
         return _sim2dlong.wallvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< boost::shared_ptr< SoftWall > >::iterator":
+    def erase(self, *args) -> "std::vector< ::boost::shared_ptr< SoftWall > >::iterator":
         """
-        erase(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::iterator pos) -> std::vector< boost::shared_ptr< SoftWall > >::iterator
-        erase(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::iterator first, std::vector< boost::shared_ptr< SoftWall > >::iterator last) -> std::vector< boost::shared_ptr< SoftWall > >::iterator
+        erase(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::iterator pos) -> std::vector< ::boost::shared_ptr< SoftWall > >::iterator
+        erase(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::iterator first, std::vector< ::boost::shared_ptr< SoftWall > >::iterator last) -> std::vector< ::boost::shared_ptr< SoftWall > >::iterator
         """
         return _sim2dlong.wallvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(boost::shared_ptr<(SoftWall)>)> self) -> wallvector
-        __init__(std::vector<(boost::shared_ptr<(SoftWall)>)> self, wallvector arg2) -> wallvector
-        __init__(std::vector<(boost::shared_ptr<(SoftWall)>)> self, std::vector< boost::shared_ptr< SoftWall > >::size_type size) -> wallvector
-        __init__(std::vector<(boost::shared_ptr<(SoftWall)>)> self, std::vector< boost::shared_ptr< SoftWall > >::size_type size, std::vector< boost::shared_ptr< SoftWall > >::value_type const & value) -> wallvector
+        __init__(std::vector<(::boost::shared_ptr<(SoftWall)>)> self) -> wallvector
+        __init__(std::vector<(::boost::shared_ptr<(SoftWall)>)> self, wallvector arg2) -> wallvector
+        __init__(std::vector<(::boost::shared_ptr<(SoftWall)>)> self, std::vector< ::boost::shared_ptr< SoftWall > >::size_type size) -> wallvector
+        __init__(std::vector<(::boost::shared_ptr<(SoftWall)>)> self, std::vector< ::boost::shared_ptr< SoftWall > >::size_type size, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & value) -> wallvector
         """
         this = _sim2dlong.new_wallvector(*args)
         try:
@@ -3505,49 +3505,49 @@ class wallvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< boost::shared_ptr< SoftWall > >::value_type const &') -> "void":
-        """push_back(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &') -> "void":
+        """push_back(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x)"""
         return _sim2dlong.wallvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< boost::shared_ptr< SoftWall > >::value_type const &":
-        """front(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::value_type const &"""
+    def front(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &":
+        """front(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &"""
         return _sim2dlong.wallvector_front(self)
 
 
-    def back(self) -> "std::vector< boost::shared_ptr< SoftWall > >::value_type const &":
-        """back(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::value_type const &"""
+    def back(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &":
+        """back(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &"""
         return _sim2dlong.wallvector_back(self)
 
 
-    def assign(self, n: 'std::vector< boost::shared_ptr< SoftWall > >::size_type', x: 'std::vector< boost::shared_ptr< SoftWall > >::value_type const &') -> "void":
-        """assign(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::size_type n, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< ::boost::shared_ptr< SoftWall > >::size_type', x: 'std::vector< ::boost::shared_ptr< SoftWall > >::value_type const &') -> "void":
+        """assign(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::size_type n, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x)"""
         return _sim2dlong.wallvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::size_type new_size)
-        resize(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::size_type new_size, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x)
+        resize(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::size_type new_size)
+        resize(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::size_type new_size, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x)
         """
         return _sim2dlong.wallvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::iterator pos, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x) -> std::vector< boost::shared_ptr< SoftWall > >::iterator
-        insert(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::iterator pos, std::vector< boost::shared_ptr< SoftWall > >::size_type n, std::vector< boost::shared_ptr< SoftWall > >::value_type const & x)
+        insert(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::iterator pos, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x) -> std::vector< ::boost::shared_ptr< SoftWall > >::iterator
+        insert(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::iterator pos, std::vector< ::boost::shared_ptr< SoftWall > >::size_type n, std::vector< ::boost::shared_ptr< SoftWall > >::value_type const & x)
         """
         return _sim2dlong.wallvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< boost::shared_ptr< SoftWall > >::size_type') -> "void":
-        """reserve(wallvector self, std::vector< boost::shared_ptr< SoftWall > >::size_type n)"""
+    def reserve(self, n: 'std::vector< ::boost::shared_ptr< SoftWall > >::size_type') -> "void":
+        """reserve(wallvector self, std::vector< ::boost::shared_ptr< SoftWall > >::size_type n)"""
         return _sim2dlong.wallvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< boost::shared_ptr< SoftWall > >::size_type":
-        """capacity(wallvector self) -> std::vector< boost::shared_ptr< SoftWall > >::size_type"""
+    def capacity(self) -> "std::vector< ::boost::shared_ptr< SoftWall > >::size_type":
+        """capacity(wallvector self) -> std::vector< ::boost::shared_ptr< SoftWall > >::size_type"""
         return _sim2dlong.wallvector_capacity(self)
 
     __swig_destroy__ = _sim2dlong.delete_wallvector
@@ -5203,7 +5203,7 @@ vector_CNode_swigregister = _sim2dlong.vector_CNode_swigregister
 vector_CNode_swigregister(vector_CNode)
 
 class pair_int_CNode(_object):
-    """Proxy of C++ std::pair<(int,vector<(CNode)>)> class."""
+    """Proxy of C++ std::pair<(int,std::vector<(CNode)>)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, pair_int_CNode, name, value)
@@ -5213,9 +5213,9 @@ class pair_int_CNode(_object):
 
     def __init__(self, *args):
         """
-        __init__(std::pair<(int,vector<(CNode)>)> self) -> pair_int_CNode
-        __init__(std::pair<(int,vector<(CNode)>)> self, int first, vector_CNode second) -> pair_int_CNode
-        __init__(std::pair<(int,vector<(CNode)>)> self, pair_int_CNode p) -> pair_int_CNode
+        __init__(std::pair<(int,std::vector<(CNode)>)> self) -> pair_int_CNode
+        __init__(std::pair<(int,std::vector<(CNode)>)> self, int first, vector_CNode second) -> pair_int_CNode
+        __init__(std::pair<(int,std::vector<(CNode)>)> self, pair_int_CNode p) -> pair_int_CNode
         """
         this = _sim2dlong.new_pair_int_CNode(*args)
         try:
@@ -5250,7 +5250,7 @@ pair_int_CNode_swigregister = _sim2dlong.pair_int_CNode_swigregister
 pair_int_CNode_swigregister(pair_int_CNode)
 
 class map_int_CNode(collections.MutableMapping):
-    """Proxy of C++ std::map<(int,vector<(CNode)>)> class."""
+    """Proxy of C++ std::map<(int,std::vector<(CNode)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableMapping]:
@@ -5279,8 +5279,8 @@ class map_int_CNode(collections.MutableMapping):
         return _sim2dlong.map_int_CNode___bool__(self)
 
 
-    def __len__(self) -> "std::map< int,vector< CNode > >::size_type":
-        """__len__(map_int_CNode self) -> std::map< int,vector< CNode > >::size_type"""
+    def __len__(self) -> "std::map< int,std::vector< CNode > >::size_type":
+        """__len__(map_int_CNode self) -> std::map< int,std::vector< CNode > >::size_type"""
         return _sim2dlong.map_int_CNode___len__(self)
 
     def __iter__(self):
@@ -5292,18 +5292,18 @@ class map_int_CNode(collections.MutableMapping):
     def iteritems(self):
         return self.iterator()
 
-    def __getitem__(self, key: 'std::map< int,vector< CNode > >::key_type const &') -> "std::map< int,vector< CNode > >::mapped_type const &":
-        """__getitem__(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & key) -> vector_CNode"""
+    def __getitem__(self, key: 'std::map< int,std::vector< CNode > >::key_type const &') -> "std::map< int,std::vector< CNode > >::mapped_type const &":
+        """__getitem__(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & key) -> vector_CNode"""
         return _sim2dlong.map_int_CNode___getitem__(self, key)
 
 
-    def __delitem__(self, key: 'std::map< int,vector< CNode > >::key_type const &') -> "void":
-        """__delitem__(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & key)"""
+    def __delitem__(self, key: 'std::map< int,std::vector< CNode > >::key_type const &') -> "void":
+        """__delitem__(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & key)"""
         return _sim2dlong.map_int_CNode___delitem__(self, key)
 
 
-    def has_key(self, key: 'std::map< int,vector< CNode > >::key_type const &') -> "bool":
-        """has_key(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & key) -> bool"""
+    def has_key(self, key: 'std::map< int,std::vector< CNode > >::key_type const &') -> "bool":
+        """has_key(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & key) -> bool"""
         return _sim2dlong.map_int_CNode_has_key(self, key)
 
 
@@ -5322,8 +5322,8 @@ class map_int_CNode(collections.MutableMapping):
         return _sim2dlong.map_int_CNode_items(self)
 
 
-    def __contains__(self, key: 'std::map< int,vector< CNode > >::key_type const &') -> "bool":
-        """__contains__(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & key) -> bool"""
+    def __contains__(self, key: 'std::map< int,std::vector< CNode > >::key_type const &') -> "bool":
+        """__contains__(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & key) -> bool"""
         return _sim2dlong.map_int_CNode___contains__(self, key)
 
 
@@ -5339,8 +5339,8 @@ class map_int_CNode(collections.MutableMapping):
 
     def __setitem__(self, *args) -> "void":
         """
-        __setitem__(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & key)
-        __setitem__(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & key, vector_CNode x)
+        __setitem__(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & key)
+        __setitem__(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & key, vector_CNode x)
         """
         return _sim2dlong.map_int_CNode___setitem__(self, *args)
 
@@ -5352,9 +5352,9 @@ class map_int_CNode(collections.MutableMapping):
 
     def __init__(self, *args):
         """
-        __init__(std::map<(int,vector<(CNode)>)> self, std::less< int > const & arg2) -> map_int_CNode
-        __init__(std::map<(int,vector<(CNode)>)> self) -> map_int_CNode
-        __init__(std::map<(int,vector<(CNode)>)> self, map_int_CNode arg2) -> map_int_CNode
+        __init__(std::map<(int,std::vector<(CNode)>)> self, std::less< int > const & arg2) -> map_int_CNode
+        __init__(std::map<(int,std::vector<(CNode)>)> self) -> map_int_CNode
+        __init__(std::map<(int,std::vector<(CNode)>)> self, map_int_CNode arg2) -> map_int_CNode
         """
         this = _sim2dlong.new_map_int_CNode(*args)
         try:
@@ -5367,8 +5367,8 @@ class map_int_CNode(collections.MutableMapping):
         return _sim2dlong.map_int_CNode_empty(self)
 
 
-    def size(self) -> "std::map< int,vector< CNode > >::size_type":
-        """size(map_int_CNode self) -> std::map< int,vector< CNode > >::size_type"""
+    def size(self) -> "std::map< int,std::vector< CNode > >::size_type":
+        """size(map_int_CNode self) -> std::map< int,std::vector< CNode > >::size_type"""
         return _sim2dlong.map_int_CNode_size(self)
 
 
@@ -5377,23 +5377,23 @@ class map_int_CNode(collections.MutableMapping):
         return _sim2dlong.map_int_CNode_swap(self, v)
 
 
-    def begin(self) -> "std::map< int,vector< CNode > >::iterator":
-        """begin(map_int_CNode self) -> std::map< int,vector< CNode > >::iterator"""
+    def begin(self) -> "std::map< int,std::vector< CNode > >::iterator":
+        """begin(map_int_CNode self) -> std::map< int,std::vector< CNode > >::iterator"""
         return _sim2dlong.map_int_CNode_begin(self)
 
 
-    def end(self) -> "std::map< int,vector< CNode > >::iterator":
-        """end(map_int_CNode self) -> std::map< int,vector< CNode > >::iterator"""
+    def end(self) -> "std::map< int,std::vector< CNode > >::iterator":
+        """end(map_int_CNode self) -> std::map< int,std::vector< CNode > >::iterator"""
         return _sim2dlong.map_int_CNode_end(self)
 
 
-    def rbegin(self) -> "std::map< int,vector< CNode > >::reverse_iterator":
-        """rbegin(map_int_CNode self) -> std::map< int,vector< CNode > >::reverse_iterator"""
+    def rbegin(self) -> "std::map< int,std::vector< CNode > >::reverse_iterator":
+        """rbegin(map_int_CNode self) -> std::map< int,std::vector< CNode > >::reverse_iterator"""
         return _sim2dlong.map_int_CNode_rbegin(self)
 
 
-    def rend(self) -> "std::map< int,vector< CNode > >::reverse_iterator":
-        """rend(map_int_CNode self) -> std::map< int,vector< CNode > >::reverse_iterator"""
+    def rend(self) -> "std::map< int,std::vector< CNode > >::reverse_iterator":
+        """rend(map_int_CNode self) -> std::map< int,std::vector< CNode > >::reverse_iterator"""
         return _sim2dlong.map_int_CNode_rend(self)
 
 
@@ -5402,37 +5402,37 @@ class map_int_CNode(collections.MutableMapping):
         return _sim2dlong.map_int_CNode_clear(self)
 
 
-    def get_allocator(self) -> "std::map< int,vector< CNode > >::allocator_type":
-        """get_allocator(map_int_CNode self) -> std::map< int,vector< CNode > >::allocator_type"""
+    def get_allocator(self) -> "std::map< int,std::vector< CNode > >::allocator_type":
+        """get_allocator(map_int_CNode self) -> std::map< int,std::vector< CNode > >::allocator_type"""
         return _sim2dlong.map_int_CNode_get_allocator(self)
 
 
-    def count(self, x: 'std::map< int,vector< CNode > >::key_type const &') -> "std::map< int,vector< CNode > >::size_type":
-        """count(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & x) -> std::map< int,vector< CNode > >::size_type"""
+    def count(self, x: 'std::map< int,std::vector< CNode > >::key_type const &') -> "std::map< int,std::vector< CNode > >::size_type":
+        """count(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & x) -> std::map< int,std::vector< CNode > >::size_type"""
         return _sim2dlong.map_int_CNode_count(self, x)
 
 
     def erase(self, *args) -> "void":
         """
-        erase(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & x) -> std::map< int,vector< CNode > >::size_type
-        erase(map_int_CNode self, std::map< int,vector< CNode > >::iterator position)
-        erase(map_int_CNode self, std::map< int,vector< CNode > >::iterator first, std::map< int,vector< CNode > >::iterator last)
+        erase(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & x) -> std::map< int,std::vector< CNode > >::size_type
+        erase(map_int_CNode self, std::map< int,std::vector< CNode > >::iterator position)
+        erase(map_int_CNode self, std::map< int,std::vector< CNode > >::iterator first, std::map< int,std::vector< CNode > >::iterator last)
         """
         return _sim2dlong.map_int_CNode_erase(self, *args)
 
 
-    def find(self, x: 'std::map< int,vector< CNode > >::key_type const &') -> "std::map< int,vector< CNode > >::iterator":
-        """find(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & x) -> std::map< int,vector< CNode > >::iterator"""
+    def find(self, x: 'std::map< int,std::vector< CNode > >::key_type const &') -> "std::map< int,std::vector< CNode > >::iterator":
+        """find(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & x) -> std::map< int,std::vector< CNode > >::iterator"""
         return _sim2dlong.map_int_CNode_find(self, x)
 
 
-    def lower_bound(self, x: 'std::map< int,vector< CNode > >::key_type const &') -> "std::map< int,vector< CNode > >::iterator":
-        """lower_bound(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & x) -> std::map< int,vector< CNode > >::iterator"""
+    def lower_bound(self, x: 'std::map< int,std::vector< CNode > >::key_type const &') -> "std::map< int,std::vector< CNode > >::iterator":
+        """lower_bound(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & x) -> std::map< int,std::vector< CNode > >::iterator"""
         return _sim2dlong.map_int_CNode_lower_bound(self, x)
 
 
-    def upper_bound(self, x: 'std::map< int,vector< CNode > >::key_type const &') -> "std::map< int,vector< CNode > >::iterator":
-        """upper_bound(map_int_CNode self, std::map< int,vector< CNode > >::key_type const & x) -> std::map< int,vector< CNode > >::iterator"""
+    def upper_bound(self, x: 'std::map< int,std::vector< CNode > >::key_type const &') -> "std::map< int,std::vector< CNode > >::iterator":
+        """upper_bound(map_int_CNode self, std::map< int,std::vector< CNode > >::key_type const & x) -> std::map< int,std::vector< CNode > >::iterator"""
         return _sim2dlong.map_int_CNode_upper_bound(self, x)
 
     __swig_destroy__ = _sim2dlong.delete_map_int_CNode
@@ -5441,7 +5441,7 @@ map_int_CNode_swigregister = _sim2dlong.map_int_CNode_swigregister
 map_int_CNode_swigregister(map_int_CNode)
 
 class _carray2(_object):
-    """Proxy of C++ boost::array<(std::complex<(double)>,2)> class."""
+    """Proxy of C++ boost::array<(complex<(double)>,2)> class."""
 
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, _carray2, name, value)
@@ -5450,7 +5450,7 @@ class _carray2(_object):
     __repr__ = _swig_repr
 
     def __init__(self):
-        """__init__(boost::array<(std::complex<(double)>,2)> self) -> _carray2"""
+        """__init__(boost::array<(complex<(double)>,2)> self) -> _carray2"""
         this = _sim2dlong.new__carray2()
         try:
             self.this.append(this)
@@ -5464,13 +5464,13 @@ class _carray2(_object):
         return _sim2dlong._carray2_swap(self, b)
 
 
-    def __getitem__(self, idx: 'unsigned int') -> "std::complex< double >":
-        """__getitem__(_carray2 self, unsigned int idx) -> std::complex< double >"""
+    def __getitem__(self, idx: 'unsigned int') -> "complex< double >":
+        """__getitem__(_carray2 self, unsigned int idx) -> complex< double >"""
         return _sim2dlong._carray2___getitem__(self, idx)
 
 
-    def __setitem__(self, idx: 'unsigned int', val: 'std::complex< double >') -> "void":
-        """__setitem__(_carray2 self, unsigned int idx, std::complex< double > val)"""
+    def __setitem__(self, idx: 'unsigned int', val: 'complex< double >') -> "void":
+        """__setitem__(_carray2 self, unsigned int idx, complex< double > val)"""
         return _sim2dlong._carray2___setitem__(self, idx, val)
 
 
@@ -5491,1312 +5491,6 @@ class _carray2(_object):
 
 _carray2_swigregister = _sim2dlong._carray2_swigregister
 _carray2_swigregister(_carray2)
-
-class _cavector2(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::array<(std::complex<(double)>,2)>)> class."""
-
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _cavector2, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _cavector2, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(_cavector2 self) -> SwigPyIterator"""
-        return _sim2dlong._cavector2_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(_cavector2 self) -> bool"""
-        return _sim2dlong._cavector2___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(_cavector2 self) -> bool"""
-        return _sim2dlong._cavector2___bool__(self)
-
-
-    def __len__(self) -> "std::vector< boost::array< std::complex< double >,2 > >::size_type":
-        """__len__(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::size_type"""
-        return _sim2dlong._cavector2___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< boost::array< std::complex< double >,2 > >::difference_type', j: 'std::vector< boost::array< std::complex< double >,2 > >::difference_type') -> "std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > > *":
-        """__getslice__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i, std::vector< boost::array< std::complex< double >,2 > >::difference_type j) -> _cavector2"""
-        return _sim2dlong._cavector2___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i, std::vector< boost::array< std::complex< double >,2 > >::difference_type j)
-        __setslice__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i, std::vector< boost::array< std::complex< double >,2 > >::difference_type j, _cavector2 v)
-        """
-        return _sim2dlong._cavector2___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< boost::array< std::complex< double >,2 > >::difference_type', j: 'std::vector< boost::array< std::complex< double >,2 > >::difference_type') -> "void":
-        """__delslice__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i, std::vector< boost::array< std::complex< double >,2 > >::difference_type j)"""
-        return _sim2dlong._cavector2___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i)
-        __delitem__(_cavector2 self, PySliceObject * slice)
-        """
-        return _sim2dlong._cavector2___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< boost::array< std::complex< double >,2 > >::value_type const &":
-        """
-        __getitem__(_cavector2 self, PySliceObject * slice) -> _cavector2
-        __getitem__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i) -> _carray2
-        """
-        return _sim2dlong._cavector2___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(_cavector2 self, PySliceObject * slice, _cavector2 v)
-        __setitem__(_cavector2 self, PySliceObject * slice)
-        __setitem__(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::difference_type i, _carray2 x)
-        """
-        return _sim2dlong._cavector2___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< boost::array< std::complex< double >,2 > >::value_type":
-        """pop(_cavector2 self) -> _carray2"""
-        return _sim2dlong._cavector2_pop(self)
-
-
-    def append(self, x: '_carray2') -> "void":
-        """append(_cavector2 self, _carray2 x)"""
-        return _sim2dlong._cavector2_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(_cavector2 self) -> bool"""
-        return _sim2dlong._cavector2_empty(self)
-
-
-    def size(self) -> "std::vector< boost::array< std::complex< double >,2 > >::size_type":
-        """size(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::size_type"""
-        return _sim2dlong._cavector2_size(self)
-
-
-    def swap(self, v: '_cavector2') -> "void":
-        """swap(_cavector2 self, _cavector2 v)"""
-        return _sim2dlong._cavector2_swap(self, v)
-
-
-    def begin(self) -> "std::vector< boost::array< std::complex< double >,2 > >::iterator":
-        """begin(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::iterator"""
-        return _sim2dlong._cavector2_begin(self)
-
-
-    def end(self) -> "std::vector< boost::array< std::complex< double >,2 > >::iterator":
-        """end(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::iterator"""
-        return _sim2dlong._cavector2_end(self)
-
-
-    def rbegin(self) -> "std::vector< boost::array< std::complex< double >,2 > >::reverse_iterator":
-        """rbegin(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::reverse_iterator"""
-        return _sim2dlong._cavector2_rbegin(self)
-
-
-    def rend(self) -> "std::vector< boost::array< std::complex< double >,2 > >::reverse_iterator":
-        """rend(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::reverse_iterator"""
-        return _sim2dlong._cavector2_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(_cavector2 self)"""
-        return _sim2dlong._cavector2_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< boost::array< std::complex< double >,2 > >::allocator_type":
-        """get_allocator(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::allocator_type"""
-        return _sim2dlong._cavector2_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(_cavector2 self)"""
-        return _sim2dlong._cavector2_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< boost::array< std::complex< double >,2 > >::iterator":
-        """
-        erase(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::iterator pos) -> std::vector< boost::array< std::complex< double >,2 > >::iterator
-        erase(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::iterator first, std::vector< boost::array< std::complex< double >,2 > >::iterator last) -> std::vector< boost::array< std::complex< double >,2 > >::iterator
-        """
-        return _sim2dlong._cavector2_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(boost::array<(std::complex<(double)>,2)>)> self) -> _cavector2
-        __init__(std::vector<(boost::array<(std::complex<(double)>,2)>)> self, _cavector2 arg2) -> _cavector2
-        __init__(std::vector<(boost::array<(std::complex<(double)>,2)>)> self, std::vector< boost::array< std::complex< double >,2 > >::size_type size) -> _cavector2
-        __init__(std::vector<(boost::array<(std::complex<(double)>,2)>)> self, std::vector< boost::array< std::complex< double >,2 > >::size_type size, _carray2 value) -> _cavector2
-        """
-        this = _sim2dlong.new__cavector2(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def push_back(self, x: '_carray2') -> "void":
-        """push_back(_cavector2 self, _carray2 x)"""
-        return _sim2dlong._cavector2_push_back(self, x)
-
-
-    def front(self) -> "std::vector< boost::array< std::complex< double >,2 > >::value_type const &":
-        """front(_cavector2 self) -> _carray2"""
-        return _sim2dlong._cavector2_front(self)
-
-
-    def back(self) -> "std::vector< boost::array< std::complex< double >,2 > >::value_type const &":
-        """back(_cavector2 self) -> _carray2"""
-        return _sim2dlong._cavector2_back(self)
-
-
-    def assign(self, n: 'std::vector< boost::array< std::complex< double >,2 > >::size_type', x: '_carray2') -> "void":
-        """assign(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::size_type n, _carray2 x)"""
-        return _sim2dlong._cavector2_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::size_type new_size)
-        resize(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::size_type new_size, _carray2 x)
-        """
-        return _sim2dlong._cavector2_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::iterator pos, _carray2 x) -> std::vector< boost::array< std::complex< double >,2 > >::iterator
-        insert(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::iterator pos, std::vector< boost::array< std::complex< double >,2 > >::size_type n, _carray2 x)
-        """
-        return _sim2dlong._cavector2_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< boost::array< std::complex< double >,2 > >::size_type') -> "void":
-        """reserve(_cavector2 self, std::vector< boost::array< std::complex< double >,2 > >::size_type n)"""
-        return _sim2dlong._cavector2_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< boost::array< std::complex< double >,2 > >::size_type":
-        """capacity(_cavector2 self) -> std::vector< boost::array< std::complex< double >,2 > >::size_type"""
-        return _sim2dlong._cavector2_capacity(self)
-
-    __swig_destroy__ = _sim2dlong.delete__cavector2
-    __del__ = lambda self: None
-_cavector2_swigregister = _sim2dlong._cavector2_swigregister
-_cavector2_swigregister(_cavector2)
-
-class _ccavector2(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)> class."""
-
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _ccavector2, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _ccavector2, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(_ccavector2 self) -> SwigPyIterator"""
-        return _sim2dlong._ccavector2_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(_ccavector2 self) -> bool"""
-        return _sim2dlong._ccavector2___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(_ccavector2 self) -> bool"""
-        return _sim2dlong._ccavector2___bool__(self)
-
-
-    def __len__(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type":
-        """__len__(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type"""
-        return _sim2dlong._ccavector2___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type', j: 'std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type') -> "std::vector< std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > >,std::allocator< std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > > > > *":
-        """__getslice__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type j) -> _ccavector2"""
-        return _sim2dlong._ccavector2___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type j)
-        __setslice__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type j, _ccavector2 v)
-        """
-        return _sim2dlong._ccavector2___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type', j: 'std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type') -> "void":
-        """__delslice__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type j)"""
-        return _sim2dlong._ccavector2___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i)
-        __delitem__(_ccavector2 self, PySliceObject * slice)
-        """
-        return _sim2dlong._ccavector2___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::value_type const &":
-        """
-        __getitem__(_ccavector2 self, PySliceObject * slice) -> _ccavector2
-        __getitem__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i) -> _cavector2
-        """
-        return _sim2dlong._ccavector2___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(_ccavector2 self, PySliceObject * slice, _ccavector2 v)
-        __setitem__(_ccavector2 self, PySliceObject * slice)
-        __setitem__(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::difference_type i, _cavector2 x)
-        """
-        return _sim2dlong._ccavector2___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::value_type":
-        """pop(_ccavector2 self) -> _cavector2"""
-        return _sim2dlong._ccavector2_pop(self)
-
-
-    def append(self, x: '_cavector2') -> "void":
-        """append(_ccavector2 self, _cavector2 x)"""
-        return _sim2dlong._ccavector2_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(_ccavector2 self) -> bool"""
-        return _sim2dlong._ccavector2_empty(self)
-
-
-    def size(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type":
-        """size(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type"""
-        return _sim2dlong._ccavector2_size(self)
-
-
-    def swap(self, v: '_ccavector2') -> "void":
-        """swap(_ccavector2 self, _ccavector2 v)"""
-        return _sim2dlong._ccavector2_swap(self, v)
-
-
-    def begin(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator":
-        """begin(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator"""
-        return _sim2dlong._ccavector2_begin(self)
-
-
-    def end(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator":
-        """end(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator"""
-        return _sim2dlong._ccavector2_end(self)
-
-
-    def rbegin(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::reverse_iterator":
-        """rbegin(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::reverse_iterator"""
-        return _sim2dlong._ccavector2_rbegin(self)
-
-
-    def rend(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::reverse_iterator":
-        """rend(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::reverse_iterator"""
-        return _sim2dlong._ccavector2_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(_ccavector2 self)"""
-        return _sim2dlong._ccavector2_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::allocator_type":
-        """get_allocator(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::allocator_type"""
-        return _sim2dlong._ccavector2_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(_ccavector2 self)"""
-        return _sim2dlong._ccavector2_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator":
-        """
-        erase(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator pos) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator
-        erase(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator first, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator last) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator
-        """
-        return _sim2dlong._ccavector2_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)> self) -> _ccavector2
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)> self, _ccavector2 arg2) -> _ccavector2
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)> self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type size) -> _ccavector2
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)> self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type size, _cavector2 value) -> _ccavector2
-        """
-        this = _sim2dlong.new__ccavector2(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def push_back(self, x: '_cavector2') -> "void":
-        """push_back(_ccavector2 self, _cavector2 x)"""
-        return _sim2dlong._ccavector2_push_back(self, x)
-
-
-    def front(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::value_type const &":
-        """front(_ccavector2 self) -> _cavector2"""
-        return _sim2dlong._ccavector2_front(self)
-
-
-    def back(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::value_type const &":
-        """back(_ccavector2 self) -> _cavector2"""
-        return _sim2dlong._ccavector2_back(self)
-
-
-    def assign(self, n: 'std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type', x: '_cavector2') -> "void":
-        """assign(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type n, _cavector2 x)"""
-        return _sim2dlong._ccavector2_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type new_size)
-        resize(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type new_size, _cavector2 x)
-        """
-        return _sim2dlong._ccavector2_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator pos, _cavector2 x) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator
-        insert(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::iterator pos, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type n, _cavector2 x)
-        """
-        return _sim2dlong._ccavector2_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type') -> "void":
-        """reserve(_ccavector2 self, std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type n)"""
-        return _sim2dlong._ccavector2_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type":
-        """capacity(_ccavector2 self) -> std::vector< std::vector< boost::array< std::complex< double >,2 > > >::size_type"""
-        return _sim2dlong._ccavector2_capacity(self)
-
-    __swig_destroy__ = _sim2dlong.delete__ccavector2
-    __del__ = lambda self: None
-_ccavector2_swigregister = _sim2dlong._ccavector2_swigregister
-_ccavector2_swigregister(_ccavector2)
-
-class _cccavector2(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)>)> class."""
-
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _cccavector2, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _cccavector2, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(_cccavector2 self) -> SwigPyIterator"""
-        return _sim2dlong._cccavector2_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(_cccavector2 self) -> bool"""
-        return _sim2dlong._cccavector2___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(_cccavector2 self) -> bool"""
-        return _sim2dlong._cccavector2___bool__(self)
-
-
-    def __len__(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type":
-        """__len__(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type"""
-        return _sim2dlong._cccavector2___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type', j: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type') -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > >,std::allocator< std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > > > >,std::allocator< std::vector< std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > >,std::allocator< std::vector< boost::array< std::complex< double >,2 >,std::allocator< boost::array< std::complex< double >,2 > > > > > > > *":
-        """__getslice__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type j) -> _cccavector2"""
-        return _sim2dlong._cccavector2___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type j)
-        __setslice__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type j, _cccavector2 v)
-        """
-        return _sim2dlong._cccavector2___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type', j: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type') -> "void":
-        """__delslice__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type j)"""
-        return _sim2dlong._cccavector2___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i)
-        __delitem__(_cccavector2 self, PySliceObject * slice)
-        """
-        return _sim2dlong._cccavector2___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::value_type const &":
-        """
-        __getitem__(_cccavector2 self, PySliceObject * slice) -> _cccavector2
-        __getitem__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i) -> _ccavector2
-        """
-        return _sim2dlong._cccavector2___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(_cccavector2 self, PySliceObject * slice, _cccavector2 v)
-        __setitem__(_cccavector2 self, PySliceObject * slice)
-        __setitem__(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::difference_type i, _ccavector2 x)
-        """
-        return _sim2dlong._cccavector2___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::value_type":
-        """pop(_cccavector2 self) -> _ccavector2"""
-        return _sim2dlong._cccavector2_pop(self)
-
-
-    def append(self, x: '_ccavector2') -> "void":
-        """append(_cccavector2 self, _ccavector2 x)"""
-        return _sim2dlong._cccavector2_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(_cccavector2 self) -> bool"""
-        return _sim2dlong._cccavector2_empty(self)
-
-
-    def size(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type":
-        """size(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type"""
-        return _sim2dlong._cccavector2_size(self)
-
-
-    def swap(self, v: '_cccavector2') -> "void":
-        """swap(_cccavector2 self, _cccavector2 v)"""
-        return _sim2dlong._cccavector2_swap(self, v)
-
-
-    def begin(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator":
-        """begin(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator"""
-        return _sim2dlong._cccavector2_begin(self)
-
-
-    def end(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator":
-        """end(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator"""
-        return _sim2dlong._cccavector2_end(self)
-
-
-    def rbegin(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::reverse_iterator":
-        """rbegin(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::reverse_iterator"""
-        return _sim2dlong._cccavector2_rbegin(self)
-
-
-    def rend(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::reverse_iterator":
-        """rend(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::reverse_iterator"""
-        return _sim2dlong._cccavector2_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(_cccavector2 self)"""
-        return _sim2dlong._cccavector2_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::allocator_type":
-        """get_allocator(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::allocator_type"""
-        return _sim2dlong._cccavector2_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(_cccavector2 self)"""
-        return _sim2dlong._cccavector2_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator":
-        """
-        erase(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator pos) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator
-        erase(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator first, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator last) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator
-        """
-        return _sim2dlong._cccavector2_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)>)> self) -> _cccavector2
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)>)> self, _cccavector2 arg2) -> _cccavector2
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)>)> self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type size) -> _cccavector2
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,2)>)>)>)> self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type size, _ccavector2 value) -> _cccavector2
-        """
-        this = _sim2dlong.new__cccavector2(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def push_back(self, x: '_ccavector2') -> "void":
-        """push_back(_cccavector2 self, _ccavector2 x)"""
-        return _sim2dlong._cccavector2_push_back(self, x)
-
-
-    def front(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::value_type const &":
-        """front(_cccavector2 self) -> _ccavector2"""
-        return _sim2dlong._cccavector2_front(self)
-
-
-    def back(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::value_type const &":
-        """back(_cccavector2 self) -> _ccavector2"""
-        return _sim2dlong._cccavector2_back(self)
-
-
-    def assign(self, n: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type', x: '_ccavector2') -> "void":
-        """assign(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type n, _ccavector2 x)"""
-        return _sim2dlong._cccavector2_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type new_size)
-        resize(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type new_size, _ccavector2 x)
-        """
-        return _sim2dlong._cccavector2_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator pos, _ccavector2 x) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator
-        insert(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::iterator pos, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type n, _ccavector2 x)
-        """
-        return _sim2dlong._cccavector2_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type') -> "void":
-        """reserve(_cccavector2 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type n)"""
-        return _sim2dlong._cccavector2_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type":
-        """capacity(_cccavector2 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,2 > > > >::size_type"""
-        return _sim2dlong._cccavector2_capacity(self)
-
-    __swig_destroy__ = _sim2dlong.delete__cccavector2
-    __del__ = lambda self: None
-_cccavector2_swigregister = _sim2dlong._cccavector2_swigregister
-_cccavector2_swigregister(_cccavector2)
-
-class _carray3(_object):
-    """Proxy of C++ boost::array<(std::complex<(double)>,3)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _carray3, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, _carray3, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(boost::array<(std::complex<(double)>,3)> self) -> _carray3"""
-        this = _sim2dlong.new__carray3()
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _sim2dlong.delete__carray3
-    __del__ = lambda self: None
-
-    def swap(self, b: '_carray3') -> "void":
-        """swap(_carray3 self, _carray3 b)"""
-        return _sim2dlong._carray3_swap(self, b)
-
-
-    def __getitem__(self, idx: 'unsigned int') -> "std::complex< double >":
-        """__getitem__(_carray3 self, unsigned int idx) -> std::complex< double >"""
-        return _sim2dlong._carray3___getitem__(self, idx)
-
-
-    def __setitem__(self, idx: 'unsigned int', val: 'std::complex< double >') -> "void":
-        """__setitem__(_carray3 self, unsigned int idx, std::complex< double > val)"""
-        return _sim2dlong._carray3___setitem__(self, idx, val)
-
-
-    def __len__(self) -> "unsigned int":
-        """__len__(_carray3 self) -> unsigned int"""
-        return _sim2dlong._carray3___len__(self)
-
-
-    def __iter__(self):
-        for i in range(len(self)):
-            yield self[i]
-
-    def __str__(self):
-        return str(tuple(self))
-
-    def __repr__(self):
-        return repr(tuple(self))
-
-_carray3_swigregister = _sim2dlong._carray3_swigregister
-_carray3_swigregister(_carray3)
-
-class _cavector3(collections.MutableSequence):
-    """Proxy of C++ std::vector<(boost::array<(std::complex<(double)>,3)>)> class."""
-
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _cavector3, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _cavector3, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(_cavector3 self) -> SwigPyIterator"""
-        return _sim2dlong._cavector3_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(_cavector3 self) -> bool"""
-        return _sim2dlong._cavector3___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(_cavector3 self) -> bool"""
-        return _sim2dlong._cavector3___bool__(self)
-
-
-    def __len__(self) -> "std::vector< boost::array< std::complex< double >,3 > >::size_type":
-        """__len__(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::size_type"""
-        return _sim2dlong._cavector3___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< boost::array< std::complex< double >,3 > >::difference_type', j: 'std::vector< boost::array< std::complex< double >,3 > >::difference_type') -> "std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > > *":
-        """__getslice__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i, std::vector< boost::array< std::complex< double >,3 > >::difference_type j) -> _cavector3"""
-        return _sim2dlong._cavector3___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i, std::vector< boost::array< std::complex< double >,3 > >::difference_type j)
-        __setslice__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i, std::vector< boost::array< std::complex< double >,3 > >::difference_type j, _cavector3 v)
-        """
-        return _sim2dlong._cavector3___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< boost::array< std::complex< double >,3 > >::difference_type', j: 'std::vector< boost::array< std::complex< double >,3 > >::difference_type') -> "void":
-        """__delslice__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i, std::vector< boost::array< std::complex< double >,3 > >::difference_type j)"""
-        return _sim2dlong._cavector3___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i)
-        __delitem__(_cavector3 self, PySliceObject * slice)
-        """
-        return _sim2dlong._cavector3___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< boost::array< std::complex< double >,3 > >::value_type const &":
-        """
-        __getitem__(_cavector3 self, PySliceObject * slice) -> _cavector3
-        __getitem__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i) -> _carray3
-        """
-        return _sim2dlong._cavector3___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(_cavector3 self, PySliceObject * slice, _cavector3 v)
-        __setitem__(_cavector3 self, PySliceObject * slice)
-        __setitem__(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::difference_type i, _carray3 x)
-        """
-        return _sim2dlong._cavector3___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< boost::array< std::complex< double >,3 > >::value_type":
-        """pop(_cavector3 self) -> _carray3"""
-        return _sim2dlong._cavector3_pop(self)
-
-
-    def append(self, x: '_carray3') -> "void":
-        """append(_cavector3 self, _carray3 x)"""
-        return _sim2dlong._cavector3_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(_cavector3 self) -> bool"""
-        return _sim2dlong._cavector3_empty(self)
-
-
-    def size(self) -> "std::vector< boost::array< std::complex< double >,3 > >::size_type":
-        """size(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::size_type"""
-        return _sim2dlong._cavector3_size(self)
-
-
-    def swap(self, v: '_cavector3') -> "void":
-        """swap(_cavector3 self, _cavector3 v)"""
-        return _sim2dlong._cavector3_swap(self, v)
-
-
-    def begin(self) -> "std::vector< boost::array< std::complex< double >,3 > >::iterator":
-        """begin(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::iterator"""
-        return _sim2dlong._cavector3_begin(self)
-
-
-    def end(self) -> "std::vector< boost::array< std::complex< double >,3 > >::iterator":
-        """end(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::iterator"""
-        return _sim2dlong._cavector3_end(self)
-
-
-    def rbegin(self) -> "std::vector< boost::array< std::complex< double >,3 > >::reverse_iterator":
-        """rbegin(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::reverse_iterator"""
-        return _sim2dlong._cavector3_rbegin(self)
-
-
-    def rend(self) -> "std::vector< boost::array< std::complex< double >,3 > >::reverse_iterator":
-        """rend(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::reverse_iterator"""
-        return _sim2dlong._cavector3_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(_cavector3 self)"""
-        return _sim2dlong._cavector3_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< boost::array< std::complex< double >,3 > >::allocator_type":
-        """get_allocator(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::allocator_type"""
-        return _sim2dlong._cavector3_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(_cavector3 self)"""
-        return _sim2dlong._cavector3_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< boost::array< std::complex< double >,3 > >::iterator":
-        """
-        erase(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::iterator pos) -> std::vector< boost::array< std::complex< double >,3 > >::iterator
-        erase(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::iterator first, std::vector< boost::array< std::complex< double >,3 > >::iterator last) -> std::vector< boost::array< std::complex< double >,3 > >::iterator
-        """
-        return _sim2dlong._cavector3_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(boost::array<(std::complex<(double)>,3)>)> self) -> _cavector3
-        __init__(std::vector<(boost::array<(std::complex<(double)>,3)>)> self, _cavector3 arg2) -> _cavector3
-        __init__(std::vector<(boost::array<(std::complex<(double)>,3)>)> self, std::vector< boost::array< std::complex< double >,3 > >::size_type size) -> _cavector3
-        __init__(std::vector<(boost::array<(std::complex<(double)>,3)>)> self, std::vector< boost::array< std::complex< double >,3 > >::size_type size, _carray3 value) -> _cavector3
-        """
-        this = _sim2dlong.new__cavector3(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def push_back(self, x: '_carray3') -> "void":
-        """push_back(_cavector3 self, _carray3 x)"""
-        return _sim2dlong._cavector3_push_back(self, x)
-
-
-    def front(self) -> "std::vector< boost::array< std::complex< double >,3 > >::value_type const &":
-        """front(_cavector3 self) -> _carray3"""
-        return _sim2dlong._cavector3_front(self)
-
-
-    def back(self) -> "std::vector< boost::array< std::complex< double >,3 > >::value_type const &":
-        """back(_cavector3 self) -> _carray3"""
-        return _sim2dlong._cavector3_back(self)
-
-
-    def assign(self, n: 'std::vector< boost::array< std::complex< double >,3 > >::size_type', x: '_carray3') -> "void":
-        """assign(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::size_type n, _carray3 x)"""
-        return _sim2dlong._cavector3_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::size_type new_size)
-        resize(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::size_type new_size, _carray3 x)
-        """
-        return _sim2dlong._cavector3_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::iterator pos, _carray3 x) -> std::vector< boost::array< std::complex< double >,3 > >::iterator
-        insert(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::iterator pos, std::vector< boost::array< std::complex< double >,3 > >::size_type n, _carray3 x)
-        """
-        return _sim2dlong._cavector3_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< boost::array< std::complex< double >,3 > >::size_type') -> "void":
-        """reserve(_cavector3 self, std::vector< boost::array< std::complex< double >,3 > >::size_type n)"""
-        return _sim2dlong._cavector3_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< boost::array< std::complex< double >,3 > >::size_type":
-        """capacity(_cavector3 self) -> std::vector< boost::array< std::complex< double >,3 > >::size_type"""
-        return _sim2dlong._cavector3_capacity(self)
-
-    __swig_destroy__ = _sim2dlong.delete__cavector3
-    __del__ = lambda self: None
-_cavector3_swigregister = _sim2dlong._cavector3_swigregister
-_cavector3_swigregister(_cavector3)
-
-class _ccavector3(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)> class."""
-
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _ccavector3, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _ccavector3, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(_ccavector3 self) -> SwigPyIterator"""
-        return _sim2dlong._ccavector3_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(_ccavector3 self) -> bool"""
-        return _sim2dlong._ccavector3___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(_ccavector3 self) -> bool"""
-        return _sim2dlong._ccavector3___bool__(self)
-
-
-    def __len__(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type":
-        """__len__(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type"""
-        return _sim2dlong._ccavector3___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type', j: 'std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type') -> "std::vector< std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > >,std::allocator< std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > > > > *":
-        """__getslice__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type j) -> _ccavector3"""
-        return _sim2dlong._ccavector3___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type j)
-        __setslice__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type j, _ccavector3 v)
-        """
-        return _sim2dlong._ccavector3___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type', j: 'std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type') -> "void":
-        """__delslice__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type j)"""
-        return _sim2dlong._ccavector3___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i)
-        __delitem__(_ccavector3 self, PySliceObject * slice)
-        """
-        return _sim2dlong._ccavector3___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::value_type const &":
-        """
-        __getitem__(_ccavector3 self, PySliceObject * slice) -> _ccavector3
-        __getitem__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i) -> _cavector3
-        """
-        return _sim2dlong._ccavector3___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(_ccavector3 self, PySliceObject * slice, _ccavector3 v)
-        __setitem__(_ccavector3 self, PySliceObject * slice)
-        __setitem__(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::difference_type i, _cavector3 x)
-        """
-        return _sim2dlong._ccavector3___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::value_type":
-        """pop(_ccavector3 self) -> _cavector3"""
-        return _sim2dlong._ccavector3_pop(self)
-
-
-    def append(self, x: '_cavector3') -> "void":
-        """append(_ccavector3 self, _cavector3 x)"""
-        return _sim2dlong._ccavector3_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(_ccavector3 self) -> bool"""
-        return _sim2dlong._ccavector3_empty(self)
-
-
-    def size(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type":
-        """size(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type"""
-        return _sim2dlong._ccavector3_size(self)
-
-
-    def swap(self, v: '_ccavector3') -> "void":
-        """swap(_ccavector3 self, _ccavector3 v)"""
-        return _sim2dlong._ccavector3_swap(self, v)
-
-
-    def begin(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator":
-        """begin(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator"""
-        return _sim2dlong._ccavector3_begin(self)
-
-
-    def end(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator":
-        """end(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator"""
-        return _sim2dlong._ccavector3_end(self)
-
-
-    def rbegin(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::reverse_iterator":
-        """rbegin(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::reverse_iterator"""
-        return _sim2dlong._ccavector3_rbegin(self)
-
-
-    def rend(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::reverse_iterator":
-        """rend(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::reverse_iterator"""
-        return _sim2dlong._ccavector3_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(_ccavector3 self)"""
-        return _sim2dlong._ccavector3_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::allocator_type":
-        """get_allocator(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::allocator_type"""
-        return _sim2dlong._ccavector3_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(_ccavector3 self)"""
-        return _sim2dlong._ccavector3_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator":
-        """
-        erase(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator pos) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator
-        erase(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator first, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator last) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator
-        """
-        return _sim2dlong._ccavector3_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)> self) -> _ccavector3
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)> self, _ccavector3 arg2) -> _ccavector3
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)> self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type size) -> _ccavector3
-        __init__(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)> self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type size, _cavector3 value) -> _ccavector3
-        """
-        this = _sim2dlong.new__ccavector3(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def push_back(self, x: '_cavector3') -> "void":
-        """push_back(_ccavector3 self, _cavector3 x)"""
-        return _sim2dlong._ccavector3_push_back(self, x)
-
-
-    def front(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::value_type const &":
-        """front(_ccavector3 self) -> _cavector3"""
-        return _sim2dlong._ccavector3_front(self)
-
-
-    def back(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::value_type const &":
-        """back(_ccavector3 self) -> _cavector3"""
-        return _sim2dlong._ccavector3_back(self)
-
-
-    def assign(self, n: 'std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type', x: '_cavector3') -> "void":
-        """assign(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type n, _cavector3 x)"""
-        return _sim2dlong._ccavector3_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type new_size)
-        resize(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type new_size, _cavector3 x)
-        """
-        return _sim2dlong._ccavector3_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator pos, _cavector3 x) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator
-        insert(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::iterator pos, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type n, _cavector3 x)
-        """
-        return _sim2dlong._ccavector3_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type') -> "void":
-        """reserve(_ccavector3 self, std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type n)"""
-        return _sim2dlong._ccavector3_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type":
-        """capacity(_ccavector3 self) -> std::vector< std::vector< boost::array< std::complex< double >,3 > > >::size_type"""
-        return _sim2dlong._ccavector3_capacity(self)
-
-    __swig_destroy__ = _sim2dlong.delete__ccavector3
-    __del__ = lambda self: None
-_ccavector3_swigregister = _sim2dlong._ccavector3_swigregister
-_ccavector3_swigregister(_ccavector3)
-
-class _cccavector3(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)>)> class."""
-
-    __swig_setmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _cccavector3, name, value)
-    __swig_getmethods__ = {}
-    for _s in [collections.MutableSequence]:
-        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
-    __getattr__ = lambda self, name: _swig_getattr(self, _cccavector3, name)
-    __repr__ = _swig_repr
-
-    def iterator(self) -> "swig::SwigPyIterator *":
-        """iterator(_cccavector3 self) -> SwigPyIterator"""
-        return _sim2dlong._cccavector3_iterator(self)
-
-    def __iter__(self):
-        return self.iterator()
-
-    def __nonzero__(self) -> "bool":
-        """__nonzero__(_cccavector3 self) -> bool"""
-        return _sim2dlong._cccavector3___nonzero__(self)
-
-
-    def __bool__(self) -> "bool":
-        """__bool__(_cccavector3 self) -> bool"""
-        return _sim2dlong._cccavector3___bool__(self)
-
-
-    def __len__(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type":
-        """__len__(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type"""
-        return _sim2dlong._cccavector3___len__(self)
-
-
-    def __getslice__(self, i: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type', j: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type') -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > >,std::allocator< std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > > > >,std::allocator< std::vector< std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > >,std::allocator< std::vector< boost::array< std::complex< double >,3 >,std::allocator< boost::array< std::complex< double >,3 > > > > > > > *":
-        """__getslice__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type j) -> _cccavector3"""
-        return _sim2dlong._cccavector3___getslice__(self, i, j)
-
-
-    def __setslice__(self, *args) -> "void":
-        """
-        __setslice__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type j)
-        __setslice__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type j, _cccavector3 v)
-        """
-        return _sim2dlong._cccavector3___setslice__(self, *args)
-
-
-    def __delslice__(self, i: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type', j: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type') -> "void":
-        """__delslice__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type j)"""
-        return _sim2dlong._cccavector3___delslice__(self, i, j)
-
-
-    def __delitem__(self, *args) -> "void":
-        """
-        __delitem__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i)
-        __delitem__(_cccavector3 self, PySliceObject * slice)
-        """
-        return _sim2dlong._cccavector3___delitem__(self, *args)
-
-
-    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::value_type const &":
-        """
-        __getitem__(_cccavector3 self, PySliceObject * slice) -> _cccavector3
-        __getitem__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i) -> _ccavector3
-        """
-        return _sim2dlong._cccavector3___getitem__(self, *args)
-
-
-    def __setitem__(self, *args) -> "void":
-        """
-        __setitem__(_cccavector3 self, PySliceObject * slice, _cccavector3 v)
-        __setitem__(_cccavector3 self, PySliceObject * slice)
-        __setitem__(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::difference_type i, _ccavector3 x)
-        """
-        return _sim2dlong._cccavector3___setitem__(self, *args)
-
-
-    def pop(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::value_type":
-        """pop(_cccavector3 self) -> _ccavector3"""
-        return _sim2dlong._cccavector3_pop(self)
-
-
-    def append(self, x: '_ccavector3') -> "void":
-        """append(_cccavector3 self, _ccavector3 x)"""
-        return _sim2dlong._cccavector3_append(self, x)
-
-
-    def empty(self) -> "bool":
-        """empty(_cccavector3 self) -> bool"""
-        return _sim2dlong._cccavector3_empty(self)
-
-
-    def size(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type":
-        """size(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type"""
-        return _sim2dlong._cccavector3_size(self)
-
-
-    def swap(self, v: '_cccavector3') -> "void":
-        """swap(_cccavector3 self, _cccavector3 v)"""
-        return _sim2dlong._cccavector3_swap(self, v)
-
-
-    def begin(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator":
-        """begin(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator"""
-        return _sim2dlong._cccavector3_begin(self)
-
-
-    def end(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator":
-        """end(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator"""
-        return _sim2dlong._cccavector3_end(self)
-
-
-    def rbegin(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::reverse_iterator":
-        """rbegin(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::reverse_iterator"""
-        return _sim2dlong._cccavector3_rbegin(self)
-
-
-    def rend(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::reverse_iterator":
-        """rend(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::reverse_iterator"""
-        return _sim2dlong._cccavector3_rend(self)
-
-
-    def clear(self) -> "void":
-        """clear(_cccavector3 self)"""
-        return _sim2dlong._cccavector3_clear(self)
-
-
-    def get_allocator(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::allocator_type":
-        """get_allocator(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::allocator_type"""
-        return _sim2dlong._cccavector3_get_allocator(self)
-
-
-    def pop_back(self) -> "void":
-        """pop_back(_cccavector3 self)"""
-        return _sim2dlong._cccavector3_pop_back(self)
-
-
-    def erase(self, *args) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator":
-        """
-        erase(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator pos) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator
-        erase(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator first, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator last) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator
-        """
-        return _sim2dlong._cccavector3_erase(self, *args)
-
-
-    def __init__(self, *args):
-        """
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)>)> self) -> _cccavector3
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)>)> self, _cccavector3 arg2) -> _cccavector3
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)>)> self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type size) -> _cccavector3
-        __init__(std::vector<(std::vector<(std::vector<(boost::array<(std::complex<(double)>,3)>)>)>)> self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type size, _ccavector3 value) -> _cccavector3
-        """
-        this = _sim2dlong.new__cccavector3(*args)
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-
-    def push_back(self, x: '_ccavector3') -> "void":
-        """push_back(_cccavector3 self, _ccavector3 x)"""
-        return _sim2dlong._cccavector3_push_back(self, x)
-
-
-    def front(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::value_type const &":
-        """front(_cccavector3 self) -> _ccavector3"""
-        return _sim2dlong._cccavector3_front(self)
-
-
-    def back(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::value_type const &":
-        """back(_cccavector3 self) -> _ccavector3"""
-        return _sim2dlong._cccavector3_back(self)
-
-
-    def assign(self, n: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type', x: '_ccavector3') -> "void":
-        """assign(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type n, _ccavector3 x)"""
-        return _sim2dlong._cccavector3_assign(self, n, x)
-
-
-    def resize(self, *args) -> "void":
-        """
-        resize(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type new_size)
-        resize(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type new_size, _ccavector3 x)
-        """
-        return _sim2dlong._cccavector3_resize(self, *args)
-
-
-    def insert(self, *args) -> "void":
-        """
-        insert(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator pos, _ccavector3 x) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator
-        insert(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::iterator pos, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type n, _ccavector3 x)
-        """
-        return _sim2dlong._cccavector3_insert(self, *args)
-
-
-    def reserve(self, n: 'std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type') -> "void":
-        """reserve(_cccavector3 self, std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type n)"""
-        return _sim2dlong._cccavector3_reserve(self, n)
-
-
-    def capacity(self) -> "std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type":
-        """capacity(_cccavector3 self) -> std::vector< std::vector< std::vector< boost::array< std::complex< double >,3 > > > >::size_type"""
-        return _sim2dlong._cccavector3_capacity(self)
-
-    __swig_destroy__ = _sim2dlong.delete__cccavector3
-    __del__ = lambda self: None
-_cccavector3_swigregister = _sim2dlong._cccavector3_swigregister
-_cccavector3_swigregister(_cccavector3)
 
 
 _sim2dlong.NDIM_swigconstant(_sim2dlong)
@@ -11954,10 +10648,10 @@ class EnergyTracker(StateTracker):
     __getattr__ = lambda self, name: _swig_getattr(self, EnergyTracker, name)
     __repr__ = _swig_repr
 
-    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', interactions: 'ivector', n_skip: 'uint'=1):
+    def __init__(self, atoms: 'boost::shared_ptr< AtomGroup >', interactions: 'std::vector< boost::shared_ptr< Interaction > >', n_skip: 'uint'=1):
         """
-        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, ivector interactions, uint n_skip=1) -> EnergyTracker
-        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, ivector interactions) -> EnergyTracker
+        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, uint n_skip=1) -> EnergyTracker
+        __init__(EnergyTracker self, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> EnergyTracker
         """
         this = _sim2dlong.new_EnergyTracker(atoms, interactions, n_skip)
         try:
@@ -15194,7 +13888,7 @@ class Collection(_object):
 
 
     def get_interactions(self) -> "std::vector< boost::shared_ptr< Interaction > >":
-        """get_interactions(Collection self) -> ivector"""
+        """get_interactions(Collection self) -> std::vector< boost::shared_ptr< Interaction > >"""
         return _sim2dlong.Collection_get_interactions(self)
 
 Collection_swigregister = _sim2dlong.Collection_swigregister
@@ -15215,9 +13909,9 @@ class StaticCollec(Collection):
 
     def __init__(self, *args):
         """
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers, constraintvector constraints) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers) -> StaticCollec
-        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, ivector interactions) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> StaticCollec
+        __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> StaticCollec
         __init__(StaticCollec self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms) -> StaticCollec
         """
         this = _sim2dlong.new_StaticCollec(*args)
@@ -15255,9 +13949,9 @@ class CollectionSol(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionSol
-        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers) -> CollectionSol
-        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionSol
+        __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionSol
         __init__(CollectionSol self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature) -> CollectionSol
         """
         this = _sim2dlong.new_CollectionSol(*args)
@@ -15305,9 +13999,9 @@ class CollectionDamped(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionDamped
-        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, ivector interactions, tvector trackers) -> CollectionDamped
-        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, ivector interactions) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionDamped
+        __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionDamped
         __init__(CollectionDamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping) -> CollectionDamped
         """
         this = _sim2dlong.new_CollectionDamped(*args)
@@ -15350,9 +14044,9 @@ class CollectionSolHT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionSolHT
-        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions, tvector trackers) -> CollectionSolHT
-        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, ivector interactions) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionSolHT
+        __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionSolHT
         __init__(CollectionSolHT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const damping, flt const desired_temperature) -> CollectionSolHT
         """
         this = _sim2dlong.new_CollectionSolHT(*args)
@@ -15390,9 +14084,9 @@ class CollectionVerlet(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionVerlet
-        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionVerlet
-        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionVerlet
+        __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionVerlet
         __init__(CollectionVerlet self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionVerlet
         """
         this = _sim2dlong.new_CollectionVerlet(*args)
@@ -15430,9 +14124,9 @@ class CollectionOverdamped(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionOverdamped
-        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, ivector interactions, tvector trackers) -> CollectionOverdamped
-        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, ivector interactions) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionOverdamped
+        __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionOverdamped
         __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const gamma=1.0) -> CollectionOverdamped
         __init__(CollectionOverdamped self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionOverdamped
         """
@@ -15589,13 +14283,13 @@ class CollectionNLCG(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers) -> CollectionNLCG
-        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCG
+        __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCG
         __init__(CollectionNLCG self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCG
         """
         this = _sim2dlong.new_CollectionNLCG(*args)
@@ -15702,13 +14396,13 @@ class CollectionNLCGFixedL(CollectionNLCG):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints, flt const kappa=10.0) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions, tvector trackers) -> CollectionNLCGFixedL
-        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, ivector interactions) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40, flt const seceps=1e-20) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000, uint const secmax=40) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0, flt const kmax=1000) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kappa=10.0) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGFixedL
+        __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGFixedL
         __init__(CollectionNLCGFixedL self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P0) -> CollectionNLCGFixedL
         """
         this = _sim2dlong.new_CollectionNLCGFixedL(*args)
@@ -15842,12 +14536,12 @@ class CollectionNLCGV(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints, flt const kmax=1000, uint const secmax=10, flt const seceps=1e-4) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints, flt const kmax=1000, uint const secmax=10) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints, flt const kmax=1000) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionNLCGV
-        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000, uint const secmax=10, flt const seceps=1e-4) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000, uint const secmax=10) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints, flt const kmax=1000) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNLCGV
+        __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNLCGV
         __init__(CollectionNLCGV self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionNLCGV
         """
         this = _sim2dlong.new_CollectionNLCGV(*args)
@@ -15931,9 +14625,9 @@ class CollectionNoseHoover(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionNoseHoover
-        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, ivector interactions, tvector trackers) -> CollectionNoseHoover
-        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, ivector interactions) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionNoseHoover
+        __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionNoseHoover
         __init__(CollectionNoseHoover self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const Q, flt const T) -> CollectionNoseHoover
         """
         this = _sim2dlong.new_CollectionNoseHoover(*args)
@@ -15996,9 +14690,9 @@ class CollectionGaussianT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGaussianT
-        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGaussianT
+        __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGaussianT
         __init__(CollectionGaussianT self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGaussianT
         """
         this = _sim2dlong.new_CollectionGaussianT(*args)
@@ -16045,9 +14739,9 @@ class CollectionGear3A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear3A
-        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGear3A
-        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear3A
+        __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear3A
         __init__(CollectionGear3A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear3A
         """
         this = _sim2dlong.new_CollectionGear3A(*args)
@@ -16085,13 +14779,13 @@ class CollectionGear4A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4A
         __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGear4A
-        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4A
+        __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4A
         __init__(CollectionGear4A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear4A
         """
         this = _sim2dlong.new_CollectionGear4A(*args)
@@ -16129,13 +14823,13 @@ class CollectionGear5A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear5A
         __init__(CollectionGear5A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ivector interactions, tvector trackers) -> CollectionGear5A
-        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ivector interactions) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear5A
+        __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear5A
         __init__(CollectionGear5A self, boost::shared_ptr< Box > box, flt const dt, boost::shared_ptr< AtomGroup > atoms) -> CollectionGear5A
         """
         this = _sim2dlong.new_CollectionGear5A(*args)
@@ -16173,13 +14867,13 @@ class CollectionGear6A(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ivector interactions) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear6A
         __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions, tvector trackers) -> CollectionGear6A
-        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ivector interactions) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear6A
+        __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear6A
         __init__(CollectionGear6A self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionGear6A
         """
         this = _sim2dlong.new_CollectionGear6A(*args)
@@ -16270,9 +14964,9 @@ class CollectionRK4(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionRK4
-        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, ivector interactions, tvector trackers) -> CollectionRK4
-        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, ivector interactions) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionRK4
+        __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionRK4
         __init__(CollectionRK4 self, boost::shared_ptr< Box > box, boost::shared_ptr< AtomGroup > ratoms, flt const dt) -> CollectionRK4
         """
         this = _sim2dlong.new_CollectionRK4(*args)
@@ -16310,13 +15004,13 @@ class CollectionGear4NPH(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, ivector interactions, tvector trackers) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, ivector interactions) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4NPH
         __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, uint ncorrectionsteps) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, ivector interactions, tvector trackers) -> CollectionGear4NPH
-        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, ivector interactions) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPH
+        __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionGear4NPH
         __init__(CollectionGear4NPH self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const Q) -> CollectionGear4NPH
         """
         this = _sim2dlong.new_CollectionGear4NPH(*args)
@@ -16488,8 +15182,8 @@ class CollectionGear4NPT(Collection):
         return _sim2dlong.CollectionGear4NPT_resetbs(self)
 
 
-    def tointerpair(arg1: 'ifxvector') -> "std::vector< boost::shared_ptr< Interaction > >":
-        """tointerpair(ifxvector arg1) -> ivector"""
+    def tointerpair(arg1: 'std::vector< boost::shared_ptr< InteractionPairsX > > &') -> "std::vector< boost::shared_ptr< Interaction > >":
+        """tointerpair(std::vector< boost::shared_ptr< InteractionPairsX > > & arg1) -> std::vector< boost::shared_ptr< Interaction > >"""
         return _sim2dlong.CollectionGear4NPT_tointerpair(arg1)
 
     if _newclass:
@@ -16498,13 +15192,13 @@ class CollectionGear4NPT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ifxvector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ifxvector interactions, tvector trackers) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, ifxvector interactions) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps, std::vector< boost::shared_ptr< InteractionPairsX > > interactions) -> CollectionGear4NPT
         __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, uint ncorrectionsteps) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ifxvector interactions, tvector trackers, constraintvector constraints) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ifxvector interactions, tvector trackers) -> CollectionGear4NPT
-        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, ifxvector interactions) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionGear4NPT
+        __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms, std::vector< boost::shared_ptr< InteractionPairsX > > interactions) -> CollectionGear4NPT
         __init__(CollectionGear4NPT self, boost::shared_ptr< OriginBox > box, flt const dt, boost::shared_ptr< AtomGroup > atoms) -> CollectionGear4NPT
         """
         this = _sim2dlong.new_CollectionGear4NPT(*args)
@@ -16530,8 +15224,8 @@ class CollectionGear4NPT(Collection):
 CollectionGear4NPT_swigregister = _sim2dlong.CollectionGear4NPT_swigregister
 CollectionGear4NPT_swigregister(CollectionGear4NPT)
 
-def CollectionGear4NPT_tointerpair(arg2: 'ifxvector') -> "std::vector< boost::shared_ptr< Interaction > >":
-    """CollectionGear4NPT_tointerpair(ifxvector arg2) -> ivector"""
+def CollectionGear4NPT_tointerpair(arg2: 'std::vector< boost::shared_ptr< InteractionPairsX > > &') -> "std::vector< boost::shared_ptr< Interaction > >":
+    """CollectionGear4NPT_tointerpair(std::vector< boost::shared_ptr< InteractionPairsX > > & arg2) -> std::vector< boost::shared_ptr< Interaction > >"""
     return _sim2dlong.CollectionGear4NPT_tointerpair(arg2)
 
 class CollectionVerletNPT(Collection):
@@ -16602,9 +15296,9 @@ class CollectionVerletNPT(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionVerletNPT
-        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, ivector interactions, tvector trackers) -> CollectionVerletNPT
-        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, ivector interactions) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionVerletNPT
+        __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionVerletNPT
         __init__(CollectionVerletNPT self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const P, flt const QP, flt const T, flt const QT) -> CollectionVerletNPT
         """
         this = _sim2dlong.new_CollectionVerletNPT(*args)
@@ -16734,9 +15428,9 @@ class CollectionCD(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCD
-        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, ivector interactions, tvector trackers) -> CollectionCD
-        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, ivector interactions) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCD
+        __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCD
         __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes) -> CollectionCD
         __init__(CollectionCD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionCD
         """
@@ -16838,9 +15532,9 @@ class CollectionCDgrid(Collection):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCDgrid
-        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, ivector interactions, tvector trackers) -> CollectionCDgrid
-        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, ivector interactions) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDgrid
+        __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDgrid
         __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, ldvector sizes) -> CollectionCDgrid
         __init__(CollectionCDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt) -> CollectionCDgrid
         """
@@ -16915,9 +15609,9 @@ class CollectionCDBD(CollectionCD):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, ivector interactions, tvector trackers) -> CollectionCDBD
-        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, ivector interactions) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBD
+        __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBD
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes) -> CollectionCDBD
         __init__(CollectionCDBD self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBD
         """
@@ -16951,9 +15645,9 @@ class CollectionCDBDgrid(CollectionCDgrid):
 
     def __init__(self, *args):
         """
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, ivector interactions, tvector trackers, constraintvector constraints) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, ivector interactions, tvector trackers) -> CollectionCDBDgrid
-        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, ivector interactions) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers, std::vector< boost::shared_ptr< Constraint > > constraints) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions, std::vector< boost::shared_ptr< StateTracker > > trackers) -> CollectionCDBDgrid
+        __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes, std::vector< boost::shared_ptr< Interaction > > interactions) -> CollectionCDBDgrid
         __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T, ldvector sizes) -> CollectionCDBDgrid
         __init__(CollectionCDBDgrid self, boost::shared_ptr< OriginBox > box, boost::shared_ptr< AtomGroup > atoms, flt const dt, flt const T) -> CollectionCDBDgrid
         """
