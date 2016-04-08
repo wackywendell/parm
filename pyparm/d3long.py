@@ -4803,58 +4803,6 @@ class map_int_CNode(collections.MutableMapping):
 map_int_CNode_swigregister = _sim3dlong.map_int_CNode_swigregister
 map_int_CNode_swigregister(map_int_CNode)
 
-class _carray2(_object):
-    """Proxy of C++ boost::array<(complex<(double)>,2)> class."""
-
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, _carray2, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, _carray2, name)
-    __repr__ = _swig_repr
-
-    def __init__(self):
-        """__init__(boost::array<(complex<(double)>,2)> self) -> _carray2"""
-        this = _sim3dlong.new__carray2()
-        try:
-            self.this.append(this)
-        except Exception:
-            self.this = this
-    __swig_destroy__ = _sim3dlong.delete__carray2
-    __del__ = lambda self: None
-
-    def swap(self, b: '_carray2') -> "void":
-        """swap(_carray2 self, _carray2 b)"""
-        return _sim3dlong._carray2_swap(self, b)
-
-
-    def __getitem__(self, idx: 'unsigned int') -> "complex< double >":
-        """__getitem__(_carray2 self, unsigned int idx) -> complex< double >"""
-        return _sim3dlong._carray2___getitem__(self, idx)
-
-
-    def __setitem__(self, idx: 'unsigned int', val: 'complex< double >') -> "void":
-        """__setitem__(_carray2 self, unsigned int idx, complex< double > val)"""
-        return _sim3dlong._carray2___setitem__(self, idx, val)
-
-
-    def __len__(self) -> "unsigned int":
-        """__len__(_carray2 self) -> unsigned int"""
-        return _sim3dlong._carray2___len__(self)
-
-
-    def __iter__(self):
-        for i in range(len(self)):
-            yield self[i]
-
-    def __str__(self):
-        return str(tuple(self))
-
-    def __repr__(self):
-        return repr(tuple(self))
-
-_carray2_swigregister = _sim3dlong._carray2_swigregister
-_carray2_swigregister(_carray2)
-
 
 _sim3dlong.NDIM_swigconstant(_sim3dlong)
 NDIM = _sim3dlong.NDIM
