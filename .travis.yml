@@ -11,13 +11,9 @@ python:
 # build-essential libboost-all-dev python3-pip
 # Most of these should come with the Travis install.
 
-addons:
-  apt:
-    packages:
-    - swig
-    - libeigen3-dev
-    - libboost-all-dev
 before_install:
+  - grep deb /etc/apt/sources.list
+  - echo "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe multiverse" | sudo tee -a /etc/apt/sources.list
   - sudo apt-get -qq update
   - sudo apt-get install -y swig3.0 libeigen3-dev libboost-all-dev
   - pip install --upgrade pip setuptools # Upgrade pip and setuptools to get ones with `wheel` support
