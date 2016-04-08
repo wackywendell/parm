@@ -10,7 +10,8 @@
 
 UNAME := $(shell uname)
 #CXX=${CXX}
-SWIG=swig -Wextra -shadow -python -py3 -c++
+SWIGBIN:=swig
+SWIG=${SWIGBIN} -Wextra -shadow -python -py3 -c++
 CCOPTS=-I src -Wall -O2 -fPIC -Wconversion -Wno-sign-conversion -std=c++98
 BINOPTS:=-Llib
 
