@@ -1,4 +1,5 @@
-sudo: false
+sudo: required
+dist: trusty
 language: python
 
 python:
@@ -17,6 +18,8 @@ addons:
     - libeigen3-dev
     - libboost-all-dev
 before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y swig3.0 libeigen3-dev libboost-all-dev
   - pip install --upgrade pip setuptools # Upgrade pip and setuptools to get ones with `wheel` support
   - pip install numpy nose transforms3d
   - pip --version
