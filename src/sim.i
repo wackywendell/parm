@@ -27,6 +27,14 @@
 %include array.i
 %include std_map.i
 
+using std::vector;
+using std::set;
+using std::map;
+using std::list;
+using std::pair;
+using boost::shared_ptr;
+using boost::array;
+
 %apply double { long double } 
 
 %include <pybuffer.i>
@@ -442,14 +450,14 @@ namespace std {
     // %template(_vvector3) vector<Vec3>;
     // %template(_vvvector3) vector<vector<Vec3> >;
     // %template(_vvvvector3) vector<vector<vector<Vec3> > >;
-    //%template(avector) vector<::boost::shared_ptr<Atomgroup> >;
-    //%template(aptrvector) vector<::boost::shared_ptr<Atom> >;
-    %template(ivector) vector<::boost::shared_ptr<Interaction> >;
-    %template(ifxvector) vector<::boost::shared_ptr<InteractionPairsX> >;
-    %template(tvector) vector<::boost::shared_ptr<StateTracker> >;
-    %template(constraintvector) vector<::boost::shared_ptr<Constraint> >;
+    //%template(avector) vector< ::boost::shared_ptr<Atomgroup> >;
+    //%template(aptrvector) vector< ::boost::shared_ptr<Atom> >;
+    %template(ivector) vector< ::boost::shared_ptr<Interaction> >;
+    %template(ifxvector) vector< ::boost::shared_ptr<InteractionPairsX> >;
+    %template(tvector) vector< ::boost::shared_ptr<StateTracker> >;
+    %template(constraintvector) vector< ::boost::shared_ptr<Constraint> >;
     #ifdef VEC2D
-    %template(wallvector) vector<::boost::shared_ptr<SoftWall> >;
+    %template(wallvector) vector< ::boost::shared_ptr<SoftWall> >;
     #endif
     %template(idvector) vector<AtomID>;
     %template(idpairvector) vector<IDPair>;
@@ -463,14 +471,14 @@ namespace std {
     %template(pair_int_CNode) pair<int, vector<CNode> >;
     %template(map_int_CNode) map<int, vector<CNode> >;
 
-    %template(_carray2) ::boost::array<complex<double>, 2>;
-    // %template(_cavector2) vector<::boost::array<complex<double>, 2> >;
-    // %template(_ccavector2) vector<vector<::boost::array<complex<double>, 2> > >;
-    // %template(_cccavector2) vector<vector<vector<::boost::array<complex<double>, 2> > > >;
+    // %template(_carray2) ::boost::array<complex<double>, 2>;
+    // %template(_cavector2) vector< ::boost::array<complex<double>, 2> >;
+    // %template(_ccavector2) vector<vector< ::boost::array<complex<double>, 2> > >;
+    // %template(_cccavector2) vector<vector<vector< ::boost::array<complex<double>, 2> > > >;
     // %template(_carray3) ::boost::array<complex<double>, 3>;
-    // %template(_cavector3) vector<::boost::array<complex<double>, 3> >;
-    // %template(_ccavector3) vector<vector<::boost::array<complex<double>, 3> > >;
-    // %template(_cccavector3) vector<vector<vector<::boost::array<complex<double>, 3> > > >;
+    // %template(_cavector3) vector< ::boost::array<complex<double>, 3> >;
+    // %template(_ccavector3) vector<vector< ::boost::array<complex<double>, 3> > >;
+    // %template(_cccavector3) vector<vector<vector< ::boost::array<complex<double>, 3> > > >;
 }
 
 %extend Atom {
