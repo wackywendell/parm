@@ -1247,7 +1247,7 @@ _dddvector_swigregister = _sim3d._dddvector_swigregister
 _dddvector_swigregister(_dddvector)
 
 class cvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(complex<(double)>)> class."""
+    """Proxy of C++ std::vector<(std::complex<(double)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -1276,41 +1276,41 @@ class cvector(collections.MutableSequence):
         return _sim3d.cvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< complex< double > >::size_type":
-        """__len__(cvector self) -> std::vector< complex< double > >::size_type"""
+    def __len__(self) -> "std::vector< std::complex< double > >::size_type":
+        """__len__(cvector self) -> std::vector< std::complex< double > >::size_type"""
         return _sim3d.cvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< complex< double > >::difference_type', j: 'std::vector< complex< double > >::difference_type') -> "std::vector< complex< double >,std::allocator< complex< double > > > *":
-        """__getslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j) -> cvector"""
+    def __getslice__(self, i: 'std::vector< std::complex< double > >::difference_type', j: 'std::vector< std::complex< double > >::difference_type') -> "std::vector< std::complex< double >,std::allocator< std::complex< double > > > *":
+        """__getslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j) -> cvector"""
         return _sim3d.cvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j)
-        __setslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j, cvector v)
+        __setslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j)
+        __setslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j, cvector v)
         """
         return _sim3d.cvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< complex< double > >::difference_type', j: 'std::vector< complex< double > >::difference_type') -> "void":
-        """__delslice__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< std::complex< double > >::difference_type', j: 'std::vector< std::complex< double > >::difference_type') -> "void":
+        """__delslice__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::difference_type j)"""
         return _sim3d.cvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(cvector self, std::vector< complex< double > >::difference_type i)
+        __delitem__(cvector self, std::vector< std::complex< double > >::difference_type i)
         __delitem__(cvector self, PySliceObject * slice)
         """
         return _sim3d.cvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< complex< double > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< std::complex< double > >::value_type const &":
         """
         __getitem__(cvector self, PySliceObject * slice) -> cvector
-        __getitem__(cvector self, std::vector< complex< double > >::difference_type i) -> std::vector< complex< double > >::value_type const &
+        __getitem__(cvector self, std::vector< std::complex< double > >::difference_type i) -> std::vector< std::complex< double > >::value_type const &
         """
         return _sim3d.cvector___getitem__(self, *args)
 
@@ -1319,18 +1319,18 @@ class cvector(collections.MutableSequence):
         """
         __setitem__(cvector self, PySliceObject * slice, cvector v)
         __setitem__(cvector self, PySliceObject * slice)
-        __setitem__(cvector self, std::vector< complex< double > >::difference_type i, std::vector< complex< double > >::value_type const & x)
+        __setitem__(cvector self, std::vector< std::complex< double > >::difference_type i, std::vector< std::complex< double > >::value_type const & x)
         """
         return _sim3d.cvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< complex< double > >::value_type":
-        """pop(cvector self) -> std::vector< complex< double > >::value_type"""
+    def pop(self) -> "std::vector< std::complex< double > >::value_type":
+        """pop(cvector self) -> std::vector< std::complex< double > >::value_type"""
         return _sim3d.cvector_pop(self)
 
 
-    def append(self, x: 'std::vector< complex< double > >::value_type const &') -> "void":
-        """append(cvector self, std::vector< complex< double > >::value_type const & x)"""
+    def append(self, x: 'std::vector< std::complex< double > >::value_type const &') -> "void":
+        """append(cvector self, std::vector< std::complex< double > >::value_type const & x)"""
         return _sim3d.cvector_append(self, x)
 
 
@@ -1339,8 +1339,8 @@ class cvector(collections.MutableSequence):
         return _sim3d.cvector_empty(self)
 
 
-    def size(self) -> "std::vector< complex< double > >::size_type":
-        """size(cvector self) -> std::vector< complex< double > >::size_type"""
+    def size(self) -> "std::vector< std::complex< double > >::size_type":
+        """size(cvector self) -> std::vector< std::complex< double > >::size_type"""
         return _sim3d.cvector_size(self)
 
 
@@ -1349,23 +1349,23 @@ class cvector(collections.MutableSequence):
         return _sim3d.cvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< complex< double > >::iterator":
-        """begin(cvector self) -> std::vector< complex< double > >::iterator"""
+    def begin(self) -> "std::vector< std::complex< double > >::iterator":
+        """begin(cvector self) -> std::vector< std::complex< double > >::iterator"""
         return _sim3d.cvector_begin(self)
 
 
-    def end(self) -> "std::vector< complex< double > >::iterator":
-        """end(cvector self) -> std::vector< complex< double > >::iterator"""
+    def end(self) -> "std::vector< std::complex< double > >::iterator":
+        """end(cvector self) -> std::vector< std::complex< double > >::iterator"""
         return _sim3d.cvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< complex< double > >::reverse_iterator":
-        """rbegin(cvector self) -> std::vector< complex< double > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< std::complex< double > >::reverse_iterator":
+        """rbegin(cvector self) -> std::vector< std::complex< double > >::reverse_iterator"""
         return _sim3d.cvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< complex< double > >::reverse_iterator":
-        """rend(cvector self) -> std::vector< complex< double > >::reverse_iterator"""
+    def rend(self) -> "std::vector< std::complex< double > >::reverse_iterator":
+        """rend(cvector self) -> std::vector< std::complex< double > >::reverse_iterator"""
         return _sim3d.cvector_rend(self)
 
 
@@ -1374,8 +1374,8 @@ class cvector(collections.MutableSequence):
         return _sim3d.cvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< complex< double > >::allocator_type":
-        """get_allocator(cvector self) -> std::vector< complex< double > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< std::complex< double > >::allocator_type":
+        """get_allocator(cvector self) -> std::vector< std::complex< double > >::allocator_type"""
         return _sim3d.cvector_get_allocator(self)
 
 
@@ -1384,20 +1384,20 @@ class cvector(collections.MutableSequence):
         return _sim3d.cvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< complex< double > >::iterator":
+    def erase(self, *args) -> "std::vector< std::complex< double > >::iterator":
         """
-        erase(cvector self, std::vector< complex< double > >::iterator pos) -> std::vector< complex< double > >::iterator
-        erase(cvector self, std::vector< complex< double > >::iterator first, std::vector< complex< double > >::iterator last) -> std::vector< complex< double > >::iterator
+        erase(cvector self, std::vector< std::complex< double > >::iterator pos) -> std::vector< std::complex< double > >::iterator
+        erase(cvector self, std::vector< std::complex< double > >::iterator first, std::vector< std::complex< double > >::iterator last) -> std::vector< std::complex< double > >::iterator
         """
         return _sim3d.cvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(complex<(double)>)> self) -> cvector
-        __init__(std::vector<(complex<(double)>)> self, cvector arg2) -> cvector
-        __init__(std::vector<(complex<(double)>)> self, std::vector< complex< double > >::size_type size) -> cvector
-        __init__(std::vector<(complex<(double)>)> self, std::vector< complex< double > >::size_type size, std::vector< complex< double > >::value_type const & value) -> cvector
+        __init__(std::vector<(std::complex<(double)>)> self) -> cvector
+        __init__(std::vector<(std::complex<(double)>)> self, cvector arg2) -> cvector
+        __init__(std::vector<(std::complex<(double)>)> self, std::vector< std::complex< double > >::size_type size) -> cvector
+        __init__(std::vector<(std::complex<(double)>)> self, std::vector< std::complex< double > >::size_type size, std::vector< std::complex< double > >::value_type const & value) -> cvector
         """
         this = _sim3d.new_cvector(*args)
         try:
@@ -1405,49 +1405,49 @@ class cvector(collections.MutableSequence):
         except Exception:
             self.this = this
 
-    def push_back(self, x: 'std::vector< complex< double > >::value_type const &') -> "void":
-        """push_back(cvector self, std::vector< complex< double > >::value_type const & x)"""
+    def push_back(self, x: 'std::vector< std::complex< double > >::value_type const &') -> "void":
+        """push_back(cvector self, std::vector< std::complex< double > >::value_type const & x)"""
         return _sim3d.cvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< complex< double > >::value_type const &":
-        """front(cvector self) -> std::vector< complex< double > >::value_type const &"""
+    def front(self) -> "std::vector< std::complex< double > >::value_type const &":
+        """front(cvector self) -> std::vector< std::complex< double > >::value_type const &"""
         return _sim3d.cvector_front(self)
 
 
-    def back(self) -> "std::vector< complex< double > >::value_type const &":
-        """back(cvector self) -> std::vector< complex< double > >::value_type const &"""
+    def back(self) -> "std::vector< std::complex< double > >::value_type const &":
+        """back(cvector self) -> std::vector< std::complex< double > >::value_type const &"""
         return _sim3d.cvector_back(self)
 
 
-    def assign(self, n: 'std::vector< complex< double > >::size_type', x: 'std::vector< complex< double > >::value_type const &') -> "void":
-        """assign(cvector self, std::vector< complex< double > >::size_type n, std::vector< complex< double > >::value_type const & x)"""
+    def assign(self, n: 'std::vector< std::complex< double > >::size_type', x: 'std::vector< std::complex< double > >::value_type const &') -> "void":
+        """assign(cvector self, std::vector< std::complex< double > >::size_type n, std::vector< std::complex< double > >::value_type const & x)"""
         return _sim3d.cvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(cvector self, std::vector< complex< double > >::size_type new_size)
-        resize(cvector self, std::vector< complex< double > >::size_type new_size, std::vector< complex< double > >::value_type const & x)
+        resize(cvector self, std::vector< std::complex< double > >::size_type new_size)
+        resize(cvector self, std::vector< std::complex< double > >::size_type new_size, std::vector< std::complex< double > >::value_type const & x)
         """
         return _sim3d.cvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(cvector self, std::vector< complex< double > >::iterator pos, std::vector< complex< double > >::value_type const & x) -> std::vector< complex< double > >::iterator
-        insert(cvector self, std::vector< complex< double > >::iterator pos, std::vector< complex< double > >::size_type n, std::vector< complex< double > >::value_type const & x)
+        insert(cvector self, std::vector< std::complex< double > >::iterator pos, std::vector< std::complex< double > >::value_type const & x) -> std::vector< std::complex< double > >::iterator
+        insert(cvector self, std::vector< std::complex< double > >::iterator pos, std::vector< std::complex< double > >::size_type n, std::vector< std::complex< double > >::value_type const & x)
         """
         return _sim3d.cvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< complex< double > >::size_type') -> "void":
-        """reserve(cvector self, std::vector< complex< double > >::size_type n)"""
+    def reserve(self, n: 'std::vector< std::complex< double > >::size_type') -> "void":
+        """reserve(cvector self, std::vector< std::complex< double > >::size_type n)"""
         return _sim3d.cvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< complex< double > >::size_type":
-        """capacity(cvector self) -> std::vector< complex< double > >::size_type"""
+    def capacity(self) -> "std::vector< std::complex< double > >::size_type":
+        """capacity(cvector self) -> std::vector< std::complex< double > >::size_type"""
         return _sim3d.cvector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete_cvector
@@ -1456,7 +1456,7 @@ cvector_swigregister = _sim3d.cvector_swigregister
 cvector_swigregister(cvector)
 
 class _ccvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(complex<(double)>)>)> class."""
+    """Proxy of C++ std::vector<(std::vector<(std::complex<(double)>)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -1485,41 +1485,41 @@ class _ccvector(collections.MutableSequence):
         return _sim3d._ccvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< std::vector< complex< double > > >::size_type":
-        """__len__(_ccvector self) -> std::vector< std::vector< complex< double > > >::size_type"""
+    def __len__(self) -> "std::vector< std::vector< std::complex< double > > >::size_type":
+        """__len__(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::size_type"""
         return _sim3d._ccvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< std::vector< complex< double > > >::difference_type', j: 'std::vector< std::vector< complex< double > > >::difference_type') -> "std::vector< std::vector< complex< double >,std::allocator< complex< double > > >,std::allocator< std::vector< complex< double >,std::allocator< complex< double > > > > > *":
-        """__getslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j) -> _ccvector"""
+    def __getslice__(self, i: 'std::vector< std::vector< std::complex< double > > >::difference_type', j: 'std::vector< std::vector< std::complex< double > > >::difference_type') -> "std::vector< std::vector< std::complex< double >,std::allocator< std::complex< double > > >,std::allocator< std::vector< std::complex< double >,std::allocator< std::complex< double > > > > > *":
+        """__getslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j) -> _ccvector"""
         return _sim3d._ccvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j)
-        __setslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j, _ccvector v)
+        __setslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j)
+        __setslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j, _ccvector v)
         """
         return _sim3d._ccvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< std::vector< complex< double > > >::difference_type', j: 'std::vector< std::vector< complex< double > > >::difference_type') -> "void":
-        """__delslice__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, std::vector< std::vector< complex< double > > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< std::vector< std::complex< double > > >::difference_type', j: 'std::vector< std::vector< std::complex< double > > >::difference_type') -> "void":
+        """__delslice__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, std::vector< std::vector< std::complex< double > > >::difference_type j)"""
         return _sim3d._ccvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i)
+        __delitem__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i)
         __delitem__(_ccvector self, PySliceObject * slice)
         """
         return _sim3d._ccvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< std::vector< complex< double > > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< std::vector< std::complex< double > > >::value_type const &":
         """
         __getitem__(_ccvector self, PySliceObject * slice) -> _ccvector
-        __getitem__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i) -> cvector
+        __getitem__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i) -> cvector
         """
         return _sim3d._ccvector___getitem__(self, *args)
 
@@ -1528,12 +1528,12 @@ class _ccvector(collections.MutableSequence):
         """
         __setitem__(_ccvector self, PySliceObject * slice, _ccvector v)
         __setitem__(_ccvector self, PySliceObject * slice)
-        __setitem__(_ccvector self, std::vector< std::vector< complex< double > > >::difference_type i, cvector x)
+        __setitem__(_ccvector self, std::vector< std::vector< std::complex< double > > >::difference_type i, cvector x)
         """
         return _sim3d._ccvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< std::vector< complex< double > > >::value_type":
+    def pop(self) -> "std::vector< std::vector< std::complex< double > > >::value_type":
         """pop(_ccvector self) -> cvector"""
         return _sim3d._ccvector_pop(self)
 
@@ -1548,8 +1548,8 @@ class _ccvector(collections.MutableSequence):
         return _sim3d._ccvector_empty(self)
 
 
-    def size(self) -> "std::vector< std::vector< complex< double > > >::size_type":
-        """size(_ccvector self) -> std::vector< std::vector< complex< double > > >::size_type"""
+    def size(self) -> "std::vector< std::vector< std::complex< double > > >::size_type":
+        """size(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::size_type"""
         return _sim3d._ccvector_size(self)
 
 
@@ -1558,23 +1558,23 @@ class _ccvector(collections.MutableSequence):
         return _sim3d._ccvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< std::vector< complex< double > > >::iterator":
-        """begin(_ccvector self) -> std::vector< std::vector< complex< double > > >::iterator"""
+    def begin(self) -> "std::vector< std::vector< std::complex< double > > >::iterator":
+        """begin(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::iterator"""
         return _sim3d._ccvector_begin(self)
 
 
-    def end(self) -> "std::vector< std::vector< complex< double > > >::iterator":
-        """end(_ccvector self) -> std::vector< std::vector< complex< double > > >::iterator"""
+    def end(self) -> "std::vector< std::vector< std::complex< double > > >::iterator":
+        """end(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::iterator"""
         return _sim3d._ccvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< std::vector< complex< double > > >::reverse_iterator":
-        """rbegin(_ccvector self) -> std::vector< std::vector< complex< double > > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< std::vector< std::complex< double > > >::reverse_iterator":
+        """rbegin(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::reverse_iterator"""
         return _sim3d._ccvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< std::vector< complex< double > > >::reverse_iterator":
-        """rend(_ccvector self) -> std::vector< std::vector< complex< double > > >::reverse_iterator"""
+    def rend(self) -> "std::vector< std::vector< std::complex< double > > >::reverse_iterator":
+        """rend(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::reverse_iterator"""
         return _sim3d._ccvector_rend(self)
 
 
@@ -1583,8 +1583,8 @@ class _ccvector(collections.MutableSequence):
         return _sim3d._ccvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< std::vector< complex< double > > >::allocator_type":
-        """get_allocator(_ccvector self) -> std::vector< std::vector< complex< double > > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< std::vector< std::complex< double > > >::allocator_type":
+        """get_allocator(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::allocator_type"""
         return _sim3d._ccvector_get_allocator(self)
 
 
@@ -1593,20 +1593,20 @@ class _ccvector(collections.MutableSequence):
         return _sim3d._ccvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< std::vector< complex< double > > >::iterator":
+    def erase(self, *args) -> "std::vector< std::vector< std::complex< double > > >::iterator":
         """
-        erase(_ccvector self, std::vector< std::vector< complex< double > > >::iterator pos) -> std::vector< std::vector< complex< double > > >::iterator
-        erase(_ccvector self, std::vector< std::vector< complex< double > > >::iterator first, std::vector< std::vector< complex< double > > >::iterator last) -> std::vector< std::vector< complex< double > > >::iterator
+        erase(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator pos) -> std::vector< std::vector< std::complex< double > > >::iterator
+        erase(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator first, std::vector< std::vector< std::complex< double > > >::iterator last) -> std::vector< std::vector< std::complex< double > > >::iterator
         """
         return _sim3d._ccvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(std::vector<(complex<(double)>)>)> self) -> _ccvector
-        __init__(std::vector<(std::vector<(complex<(double)>)>)> self, _ccvector arg2) -> _ccvector
-        __init__(std::vector<(std::vector<(complex<(double)>)>)> self, std::vector< std::vector< complex< double > > >::size_type size) -> _ccvector
-        __init__(std::vector<(std::vector<(complex<(double)>)>)> self, std::vector< std::vector< complex< double > > >::size_type size, cvector value) -> _ccvector
+        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self) -> _ccvector
+        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self, _ccvector arg2) -> _ccvector
+        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self, std::vector< std::vector< std::complex< double > > >::size_type size) -> _ccvector
+        __init__(std::vector<(std::vector<(std::complex<(double)>)>)> self, std::vector< std::vector< std::complex< double > > >::size_type size, cvector value) -> _ccvector
         """
         this = _sim3d.new__ccvector(*args)
         try:
@@ -1619,44 +1619,44 @@ class _ccvector(collections.MutableSequence):
         return _sim3d._ccvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< std::vector< complex< double > > >::value_type const &":
+    def front(self) -> "std::vector< std::vector< std::complex< double > > >::value_type const &":
         """front(_ccvector self) -> cvector"""
         return _sim3d._ccvector_front(self)
 
 
-    def back(self) -> "std::vector< std::vector< complex< double > > >::value_type const &":
+    def back(self) -> "std::vector< std::vector< std::complex< double > > >::value_type const &":
         """back(_ccvector self) -> cvector"""
         return _sim3d._ccvector_back(self)
 
 
-    def assign(self, n: 'std::vector< std::vector< complex< double > > >::size_type', x: 'cvector') -> "void":
-        """assign(_ccvector self, std::vector< std::vector< complex< double > > >::size_type n, cvector x)"""
+    def assign(self, n: 'std::vector< std::vector< std::complex< double > > >::size_type', x: 'cvector') -> "void":
+        """assign(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type n, cvector x)"""
         return _sim3d._ccvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(_ccvector self, std::vector< std::vector< complex< double > > >::size_type new_size)
-        resize(_ccvector self, std::vector< std::vector< complex< double > > >::size_type new_size, cvector x)
+        resize(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type new_size)
+        resize(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type new_size, cvector x)
         """
         return _sim3d._ccvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(_ccvector self, std::vector< std::vector< complex< double > > >::iterator pos, cvector x) -> std::vector< std::vector< complex< double > > >::iterator
-        insert(_ccvector self, std::vector< std::vector< complex< double > > >::iterator pos, std::vector< std::vector< complex< double > > >::size_type n, cvector x)
+        insert(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator pos, cvector x) -> std::vector< std::vector< std::complex< double > > >::iterator
+        insert(_ccvector self, std::vector< std::vector< std::complex< double > > >::iterator pos, std::vector< std::vector< std::complex< double > > >::size_type n, cvector x)
         """
         return _sim3d._ccvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< std::vector< complex< double > > >::size_type') -> "void":
-        """reserve(_ccvector self, std::vector< std::vector< complex< double > > >::size_type n)"""
+    def reserve(self, n: 'std::vector< std::vector< std::complex< double > > >::size_type') -> "void":
+        """reserve(_ccvector self, std::vector< std::vector< std::complex< double > > >::size_type n)"""
         return _sim3d._ccvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< std::vector< complex< double > > >::size_type":
-        """capacity(_ccvector self) -> std::vector< std::vector< complex< double > > >::size_type"""
+    def capacity(self) -> "std::vector< std::vector< std::complex< double > > >::size_type":
+        """capacity(_ccvector self) -> std::vector< std::vector< std::complex< double > > >::size_type"""
         return _sim3d._ccvector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete__ccvector
@@ -1665,7 +1665,7 @@ _ccvector_swigregister = _sim3d._ccvector_swigregister
 _ccvector_swigregister(_ccvector)
 
 class _cccvector(collections.MutableSequence):
-    """Proxy of C++ std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> class."""
+    """Proxy of C++ std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> class."""
 
     __swig_setmethods__ = {}
     for _s in [collections.MutableSequence]:
@@ -1694,41 +1694,41 @@ class _cccvector(collections.MutableSequence):
         return _sim3d._cccvector___bool__(self)
 
 
-    def __len__(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::size_type":
-        """__len__(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::size_type"""
+    def __len__(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::size_type":
+        """__len__(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::size_type"""
         return _sim3d._cccvector___len__(self)
 
 
-    def __getslice__(self, i: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type') -> "std::vector< std::vector< std::vector< complex< double >,std::allocator< complex< double > > >,std::allocator< std::vector< complex< double >,std::allocator< complex< double > > > > >,std::allocator< std::vector< std::vector< complex< double >,std::allocator< complex< double > > >,std::allocator< std::vector< complex< double >,std::allocator< complex< double > > > > > > > *":
-        """__getslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j) -> _cccvector"""
+    def __getslice__(self, i: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type') -> "std::vector< std::vector< std::vector< std::complex< double >,std::allocator< std::complex< double > > >,std::allocator< std::vector< std::complex< double >,std::allocator< std::complex< double > > > > >,std::allocator< std::vector< std::vector< std::complex< double >,std::allocator< std::complex< double > > >,std::allocator< std::vector< std::complex< double >,std::allocator< std::complex< double > > > > > > > *":
+        """__getslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j) -> _cccvector"""
         return _sim3d._cccvector___getslice__(self, i, j)
 
 
     def __setslice__(self, *args) -> "void":
         """
-        __setslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j)
-        __setslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j, _cccvector v)
+        __setslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j)
+        __setslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j, _cccvector v)
         """
         return _sim3d._cccvector___setslice__(self, *args)
 
 
-    def __delslice__(self, i: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< complex< double > > > >::difference_type') -> "void":
-        """__delslice__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< complex< double > > > >::difference_type j)"""
+    def __delslice__(self, i: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type', j: 'std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type') -> "void":
+        """__delslice__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type j)"""
         return _sim3d._cccvector___delslice__(self, i, j)
 
 
     def __delitem__(self, *args) -> "void":
         """
-        __delitem__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i)
+        __delitem__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i)
         __delitem__(_cccvector self, PySliceObject * slice)
         """
         return _sim3d._cccvector___delitem__(self, *args)
 
 
-    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type const &":
+    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type const &":
         """
         __getitem__(_cccvector self, PySliceObject * slice) -> _cccvector
-        __getitem__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i) -> _ccvector
+        __getitem__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i) -> _ccvector
         """
         return _sim3d._cccvector___getitem__(self, *args)
 
@@ -1737,12 +1737,12 @@ class _cccvector(collections.MutableSequence):
         """
         __setitem__(_cccvector self, PySliceObject * slice, _cccvector v)
         __setitem__(_cccvector self, PySliceObject * slice)
-        __setitem__(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::difference_type i, _ccvector x)
+        __setitem__(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::difference_type i, _ccvector x)
         """
         return _sim3d._cccvector___setitem__(self, *args)
 
 
-    def pop(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type":
+    def pop(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type":
         """pop(_cccvector self) -> _ccvector"""
         return _sim3d._cccvector_pop(self)
 
@@ -1757,8 +1757,8 @@ class _cccvector(collections.MutableSequence):
         return _sim3d._cccvector_empty(self)
 
 
-    def size(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::size_type":
-        """size(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::size_type"""
+    def size(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::size_type":
+        """size(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::size_type"""
         return _sim3d._cccvector_size(self)
 
 
@@ -1767,23 +1767,23 @@ class _cccvector(collections.MutableSequence):
         return _sim3d._cccvector_swap(self, v)
 
 
-    def begin(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::iterator":
-        """begin(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator"""
+    def begin(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::iterator":
+        """begin(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator"""
         return _sim3d._cccvector_begin(self)
 
 
-    def end(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::iterator":
-        """end(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator"""
+    def end(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::iterator":
+        """end(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator"""
         return _sim3d._cccvector_end(self)
 
 
-    def rbegin(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator":
-        """rbegin(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator"""
+    def rbegin(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator":
+        """rbegin(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator"""
         return _sim3d._cccvector_rbegin(self)
 
 
-    def rend(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator":
-        """rend(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::reverse_iterator"""
+    def rend(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator":
+        """rend(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::reverse_iterator"""
         return _sim3d._cccvector_rend(self)
 
 
@@ -1792,8 +1792,8 @@ class _cccvector(collections.MutableSequence):
         return _sim3d._cccvector_clear(self)
 
 
-    def get_allocator(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::allocator_type":
-        """get_allocator(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::allocator_type"""
+    def get_allocator(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::allocator_type":
+        """get_allocator(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::allocator_type"""
         return _sim3d._cccvector_get_allocator(self)
 
 
@@ -1802,20 +1802,20 @@ class _cccvector(collections.MutableSequence):
         return _sim3d._cccvector_pop_back(self)
 
 
-    def erase(self, *args) -> "std::vector< std::vector< std::vector< complex< double > > > >::iterator":
+    def erase(self, *args) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::iterator":
         """
-        erase(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator pos) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator
-        erase(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator first, std::vector< std::vector< std::vector< complex< double > > > >::iterator last) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator
+        erase(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator pos) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator
+        erase(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator first, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator last) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator
         """
         return _sim3d._cccvector_erase(self, *args)
 
 
     def __init__(self, *args):
         """
-        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self) -> _cccvector
-        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self, _cccvector arg2) -> _cccvector
-        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< complex< double > > > >::size_type size) -> _cccvector
-        __init__(std::vector<(std::vector<(std::vector<(complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< complex< double > > > >::size_type size, _ccvector value) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self, _cccvector arg2) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type size) -> _cccvector
+        __init__(std::vector<(std::vector<(std::vector<(std::complex<(double)>)>)>)> self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type size, _ccvector value) -> _cccvector
         """
         this = _sim3d.new__cccvector(*args)
         try:
@@ -1828,44 +1828,44 @@ class _cccvector(collections.MutableSequence):
         return _sim3d._cccvector_push_back(self, x)
 
 
-    def front(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type const &":
+    def front(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type const &":
         """front(_cccvector self) -> _ccvector"""
         return _sim3d._cccvector_front(self)
 
 
-    def back(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::value_type const &":
+    def back(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::value_type const &":
         """back(_cccvector self) -> _ccvector"""
         return _sim3d._cccvector_back(self)
 
 
-    def assign(self, n: 'std::vector< std::vector< std::vector< complex< double > > > >::size_type', x: '_ccvector') -> "void":
-        """assign(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type n, _ccvector x)"""
+    def assign(self, n: 'std::vector< std::vector< std::vector< std::complex< double > > > >::size_type', x: '_ccvector') -> "void":
+        """assign(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type n, _ccvector x)"""
         return _sim3d._cccvector_assign(self, n, x)
 
 
     def resize(self, *args) -> "void":
         """
-        resize(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type new_size)
-        resize(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type new_size, _ccvector x)
+        resize(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type new_size)
+        resize(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type new_size, _ccvector x)
         """
         return _sim3d._cccvector_resize(self, *args)
 
 
     def insert(self, *args) -> "void":
         """
-        insert(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator pos, _ccvector x) -> std::vector< std::vector< std::vector< complex< double > > > >::iterator
-        insert(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::iterator pos, std::vector< std::vector< std::vector< complex< double > > > >::size_type n, _ccvector x)
+        insert(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator pos, _ccvector x) -> std::vector< std::vector< std::vector< std::complex< double > > > >::iterator
+        insert(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::iterator pos, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type n, _ccvector x)
         """
         return _sim3d._cccvector_insert(self, *args)
 
 
-    def reserve(self, n: 'std::vector< std::vector< std::vector< complex< double > > > >::size_type') -> "void":
-        """reserve(_cccvector self, std::vector< std::vector< std::vector< complex< double > > > >::size_type n)"""
+    def reserve(self, n: 'std::vector< std::vector< std::vector< std::complex< double > > > >::size_type') -> "void":
+        """reserve(_cccvector self, std::vector< std::vector< std::vector< std::complex< double > > > >::size_type n)"""
         return _sim3d._cccvector_reserve(self, n)
 
 
-    def capacity(self) -> "std::vector< std::vector< std::vector< complex< double > > > >::size_type":
-        """capacity(_cccvector self) -> std::vector< std::vector< std::vector< complex< double > > > >::size_type"""
+    def capacity(self) -> "std::vector< std::vector< std::vector< std::complex< double > > > >::size_type":
+        """capacity(_cccvector self) -> std::vector< std::vector< std::vector< std::complex< double > > > >::size_type"""
         return _sim3d._cccvector_capacity(self)
 
     __swig_destroy__ = _sim3d.delete__cccvector
@@ -4802,6 +4802,1364 @@ class map_int_CNode(collections.MutableMapping):
     __del__ = lambda self: None
 map_int_CNode_swigregister = _sim3d.map_int_CNode_swigregister
 map_int_CNode_swigregister(map_int_CNode)
+
+class _cavector2(collections.MutableSequence):
+    """Proxy of C++ std::vector<(::boost::array<(std::complex<(double)>,2)>)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _cavector2, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _cavector2, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(_cavector2 self) -> SwigPyIterator"""
+        return _sim3d._cavector2_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(_cavector2 self) -> bool"""
+        return _sim3d._cavector2___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(_cavector2 self) -> bool"""
+        return _sim3d._cavector2___bool__(self)
+
+
+    def __len__(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::size_type":
+        """__len__(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::size_type"""
+        return _sim3d._cavector2___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< ::boost::array< std::complex< double >,2 > >::difference_type', j: 'std::vector< ::boost::array< std::complex< double >,2 > >::difference_type') -> "std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > > *":
+        """__getslice__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type j) -> _cavector2"""
+        return _sim3d._cavector2___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type j)
+        __setslice__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type j, _cavector2 v)
+        """
+        return _sim3d._cavector2___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< ::boost::array< std::complex< double >,2 > >::difference_type', j: 'std::vector< ::boost::array< std::complex< double >,2 > >::difference_type') -> "void":
+        """__delslice__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type j)"""
+        return _sim3d._cavector2___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i)
+        __delitem__(_cavector2 self, PySliceObject * slice)
+        """
+        return _sim3d._cavector2___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< ::boost::array< std::complex< double >,2 > >::value_type const &":
+        """
+        __getitem__(_cavector2 self, PySliceObject * slice) -> _cavector2
+        __getitem__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i) -> _carray2
+        """
+        return _sim3d._cavector2___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(_cavector2 self, PySliceObject * slice, _cavector2 v)
+        __setitem__(_cavector2 self, PySliceObject * slice)
+        __setitem__(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::difference_type i, _carray2 x)
+        """
+        return _sim3d._cavector2___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::value_type":
+        """pop(_cavector2 self) -> _carray2"""
+        return _sim3d._cavector2_pop(self)
+
+
+    def append(self, x: '_carray2') -> "void":
+        """append(_cavector2 self, _carray2 x)"""
+        return _sim3d._cavector2_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(_cavector2 self) -> bool"""
+        return _sim3d._cavector2_empty(self)
+
+
+    def size(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::size_type":
+        """size(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::size_type"""
+        return _sim3d._cavector2_size(self)
+
+
+    def swap(self, v: '_cavector2') -> "void":
+        """swap(_cavector2 self, _cavector2 v)"""
+        return _sim3d._cavector2_swap(self, v)
+
+
+    def begin(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::iterator":
+        """begin(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::iterator"""
+        return _sim3d._cavector2_begin(self)
+
+
+    def end(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::iterator":
+        """end(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::iterator"""
+        return _sim3d._cavector2_end(self)
+
+
+    def rbegin(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::reverse_iterator":
+        """rbegin(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::reverse_iterator"""
+        return _sim3d._cavector2_rbegin(self)
+
+
+    def rend(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::reverse_iterator":
+        """rend(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::reverse_iterator"""
+        return _sim3d._cavector2_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(_cavector2 self)"""
+        return _sim3d._cavector2_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::allocator_type":
+        """get_allocator(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::allocator_type"""
+        return _sim3d._cavector2_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(_cavector2 self)"""
+        return _sim3d._cavector2_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< ::boost::array< std::complex< double >,2 > >::iterator":
+        """
+        erase(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::iterator pos) -> std::vector< ::boost::array< std::complex< double >,2 > >::iterator
+        erase(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::iterator first, std::vector< ::boost::array< std::complex< double >,2 > >::iterator last) -> std::vector< ::boost::array< std::complex< double >,2 > >::iterator
+        """
+        return _sim3d._cavector2_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,2)>)> self) -> _cavector2
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,2)>)> self, _cavector2 arg2) -> _cavector2
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,2)>)> self, std::vector< ::boost::array< std::complex< double >,2 > >::size_type size) -> _cavector2
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,2)>)> self, std::vector< ::boost::array< std::complex< double >,2 > >::size_type size, _carray2 value) -> _cavector2
+        """
+        this = _sim3d.new__cavector2(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, x: '_carray2') -> "void":
+        """push_back(_cavector2 self, _carray2 x)"""
+        return _sim3d._cavector2_push_back(self, x)
+
+
+    def front(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::value_type const &":
+        """front(_cavector2 self) -> _carray2"""
+        return _sim3d._cavector2_front(self)
+
+
+    def back(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::value_type const &":
+        """back(_cavector2 self) -> _carray2"""
+        return _sim3d._cavector2_back(self)
+
+
+    def assign(self, n: 'std::vector< ::boost::array< std::complex< double >,2 > >::size_type', x: '_carray2') -> "void":
+        """assign(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::size_type n, _carray2 x)"""
+        return _sim3d._cavector2_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::size_type new_size)
+        resize(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::size_type new_size, _carray2 x)
+        """
+        return _sim3d._cavector2_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::iterator pos, _carray2 x) -> std::vector< ::boost::array< std::complex< double >,2 > >::iterator
+        insert(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::iterator pos, std::vector< ::boost::array< std::complex< double >,2 > >::size_type n, _carray2 x)
+        """
+        return _sim3d._cavector2_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< ::boost::array< std::complex< double >,2 > >::size_type') -> "void":
+        """reserve(_cavector2 self, std::vector< ::boost::array< std::complex< double >,2 > >::size_type n)"""
+        return _sim3d._cavector2_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< ::boost::array< std::complex< double >,2 > >::size_type":
+        """capacity(_cavector2 self) -> std::vector< ::boost::array< std::complex< double >,2 > >::size_type"""
+        return _sim3d._cavector2_capacity(self)
+
+    __swig_destroy__ = _sim3d.delete__cavector2
+    __del__ = lambda self: None
+_cavector2_swigregister = _sim3d._cavector2_swigregister
+_cavector2_swigregister(_cavector2)
+
+class _ccavector2(collections.MutableSequence):
+    """Proxy of C++ std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _ccavector2, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _ccavector2, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(_ccavector2 self) -> SwigPyIterator"""
+        return _sim3d._ccavector2_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(_ccavector2 self) -> bool"""
+        return _sim3d._ccavector2___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(_ccavector2 self) -> bool"""
+        return _sim3d._ccavector2___bool__(self)
+
+
+    def __len__(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type":
+        """__len__(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type"""
+        return _sim3d._ccavector2___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type', j: 'std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type') -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > >,std::allocator< std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > > > > *":
+        """__getslice__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type j) -> _ccavector2"""
+        return _sim3d._ccavector2___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type j)
+        __setslice__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type j, _ccavector2 v)
+        """
+        return _sim3d._ccavector2___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type', j: 'std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type') -> "void":
+        """__delslice__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type j)"""
+        return _sim3d._ccavector2___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i)
+        __delitem__(_ccavector2 self, PySliceObject * slice)
+        """
+        return _sim3d._ccavector2___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::value_type const &":
+        """
+        __getitem__(_ccavector2 self, PySliceObject * slice) -> _ccavector2
+        __getitem__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i) -> _cavector2
+        """
+        return _sim3d._ccavector2___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(_ccavector2 self, PySliceObject * slice, _ccavector2 v)
+        __setitem__(_ccavector2 self, PySliceObject * slice)
+        __setitem__(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::difference_type i, _cavector2 x)
+        """
+        return _sim3d._ccavector2___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::value_type":
+        """pop(_ccavector2 self) -> _cavector2"""
+        return _sim3d._ccavector2_pop(self)
+
+
+    def append(self, x: '_cavector2') -> "void":
+        """append(_ccavector2 self, _cavector2 x)"""
+        return _sim3d._ccavector2_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(_ccavector2 self) -> bool"""
+        return _sim3d._ccavector2_empty(self)
+
+
+    def size(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type":
+        """size(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type"""
+        return _sim3d._ccavector2_size(self)
+
+
+    def swap(self, v: '_ccavector2') -> "void":
+        """swap(_ccavector2 self, _ccavector2 v)"""
+        return _sim3d._ccavector2_swap(self, v)
+
+
+    def begin(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator":
+        """begin(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator"""
+        return _sim3d._ccavector2_begin(self)
+
+
+    def end(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator":
+        """end(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator"""
+        return _sim3d._ccavector2_end(self)
+
+
+    def rbegin(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::reverse_iterator":
+        """rbegin(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::reverse_iterator"""
+        return _sim3d._ccavector2_rbegin(self)
+
+
+    def rend(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::reverse_iterator":
+        """rend(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::reverse_iterator"""
+        return _sim3d._ccavector2_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(_ccavector2 self)"""
+        return _sim3d._ccavector2_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::allocator_type":
+        """get_allocator(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::allocator_type"""
+        return _sim3d._ccavector2_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(_ccavector2 self)"""
+        return _sim3d._ccavector2_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator":
+        """
+        erase(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator pos) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator
+        erase(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator first, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator last) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator
+        """
+        return _sim3d._ccavector2_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)> self) -> _ccavector2
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)> self, _ccavector2 arg2) -> _ccavector2
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)> self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type size) -> _ccavector2
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)> self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type size, _cavector2 value) -> _ccavector2
+        """
+        this = _sim3d.new__ccavector2(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, x: '_cavector2') -> "void":
+        """push_back(_ccavector2 self, _cavector2 x)"""
+        return _sim3d._ccavector2_push_back(self, x)
+
+
+    def front(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::value_type const &":
+        """front(_ccavector2 self) -> _cavector2"""
+        return _sim3d._ccavector2_front(self)
+
+
+    def back(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::value_type const &":
+        """back(_ccavector2 self) -> _cavector2"""
+        return _sim3d._ccavector2_back(self)
+
+
+    def assign(self, n: 'std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type', x: '_cavector2') -> "void":
+        """assign(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type n, _cavector2 x)"""
+        return _sim3d._ccavector2_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type new_size)
+        resize(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type new_size, _cavector2 x)
+        """
+        return _sim3d._ccavector2_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator pos, _cavector2 x) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator
+        insert(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::iterator pos, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type n, _cavector2 x)
+        """
+        return _sim3d._ccavector2_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type') -> "void":
+        """reserve(_ccavector2 self, std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type n)"""
+        return _sim3d._ccavector2_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type":
+        """capacity(_ccavector2 self) -> std::vector< std::vector< ::boost::array< std::complex< double >,2 > > >::size_type"""
+        return _sim3d._ccavector2_capacity(self)
+
+    __swig_destroy__ = _sim3d.delete__ccavector2
+    __del__ = lambda self: None
+_ccavector2_swigregister = _sim3d._ccavector2_swigregister
+_ccavector2_swigregister(_ccavector2)
+
+class _cccavector2(collections.MutableSequence):
+    """Proxy of C++ std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)>)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _cccavector2, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _cccavector2, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(_cccavector2 self) -> SwigPyIterator"""
+        return _sim3d._cccavector2_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(_cccavector2 self) -> bool"""
+        return _sim3d._cccavector2___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(_cccavector2 self) -> bool"""
+        return _sim3d._cccavector2___bool__(self)
+
+
+    def __len__(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type":
+        """__len__(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type"""
+        return _sim3d._cccavector2___len__(self)
+
+
+    def __getslice__(self, i: 'std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type', j: 'std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type') -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > >,std::allocator< std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > > > >,std::allocator< std::vector< std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > >,std::allocator< std::vector< ::boost::array< std::complex< double >,2 >,std::allocator< ::boost::array< std::complex< double >,2 > > > > > > > *":
+        """__getslice__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type j) -> _cccavector2"""
+        return _sim3d._cccavector2___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type j)
+        __setslice__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type j, _cccavector2 v)
+        """
+        return _sim3d._cccavector2___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type', j: 'std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type') -> "void":
+        """__delslice__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type j)"""
+        return _sim3d._cccavector2___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i)
+        __delitem__(_cccavector2 self, PySliceObject * slice)
+        """
+        return _sim3d._cccavector2___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::value_type const &":
+        """
+        __getitem__(_cccavector2 self, PySliceObject * slice) -> _cccavector2
+        __getitem__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i) -> _ccavector2
+        """
+        return _sim3d._cccavector2___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(_cccavector2 self, PySliceObject * slice, _cccavector2 v)
+        __setitem__(_cccavector2 self, PySliceObject * slice)
+        __setitem__(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::difference_type i, _ccavector2 x)
+        """
+        return _sim3d._cccavector2___setitem__(self, *args)
+
+
+    def pop(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::value_type":
+        """pop(_cccavector2 self) -> _ccavector2"""
+        return _sim3d._cccavector2_pop(self)
+
+
+    def append(self, x: '_ccavector2') -> "void":
+        """append(_cccavector2 self, _ccavector2 x)"""
+        return _sim3d._cccavector2_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(_cccavector2 self) -> bool"""
+        return _sim3d._cccavector2_empty(self)
+
+
+    def size(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type":
+        """size(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type"""
+        return _sim3d._cccavector2_size(self)
+
+
+    def swap(self, v: '_cccavector2') -> "void":
+        """swap(_cccavector2 self, _cccavector2 v)"""
+        return _sim3d._cccavector2_swap(self, v)
+
+
+    def begin(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator":
+        """begin(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator"""
+        return _sim3d._cccavector2_begin(self)
+
+
+    def end(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator":
+        """end(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator"""
+        return _sim3d._cccavector2_end(self)
+
+
+    def rbegin(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::reverse_iterator":
+        """rbegin(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::reverse_iterator"""
+        return _sim3d._cccavector2_rbegin(self)
+
+
+    def rend(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::reverse_iterator":
+        """rend(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::reverse_iterator"""
+        return _sim3d._cccavector2_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(_cccavector2 self)"""
+        return _sim3d._cccavector2_clear(self)
+
+
+    def get_allocator(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::allocator_type":
+        """get_allocator(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::allocator_type"""
+        return _sim3d._cccavector2_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(_cccavector2 self)"""
+        return _sim3d._cccavector2_pop_back(self)
+
+
+    def erase(self, *args) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator":
+        """
+        erase(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator pos) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator
+        erase(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator first, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator last) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator
+        """
+        return _sim3d._cccavector2_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)>)> self) -> _cccavector2
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)>)> self, _cccavector2 arg2) -> _cccavector2
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)>)> self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type size) -> _cccavector2
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,2)>)>)>)> self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type size, _ccavector2 value) -> _cccavector2
+        """
+        this = _sim3d.new__cccavector2(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, x: '_ccavector2') -> "void":
+        """push_back(_cccavector2 self, _ccavector2 x)"""
+        return _sim3d._cccavector2_push_back(self, x)
+
+
+    def front(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::value_type const &":
+        """front(_cccavector2 self) -> _ccavector2"""
+        return _sim3d._cccavector2_front(self)
+
+
+    def back(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::value_type const &":
+        """back(_cccavector2 self) -> _ccavector2"""
+        return _sim3d._cccavector2_back(self)
+
+
+    def assign(self, n: 'std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type', x: '_ccavector2') -> "void":
+        """assign(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type n, _ccavector2 x)"""
+        return _sim3d._cccavector2_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type new_size)
+        resize(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type new_size, _ccavector2 x)
+        """
+        return _sim3d._cccavector2_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator pos, _ccavector2 x) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator
+        insert(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::iterator pos, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type n, _ccavector2 x)
+        """
+        return _sim3d._cccavector2_insert(self, *args)
+
+
+    def reserve(self, n: 'std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type') -> "void":
+        """reserve(_cccavector2 self, std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type n)"""
+        return _sim3d._cccavector2_reserve(self, n)
+
+
+    def capacity(self) -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type":
+        """capacity(_cccavector2 self) -> std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,2 > > > >::size_type"""
+        return _sim3d._cccavector2_capacity(self)
+
+    __swig_destroy__ = _sim3d.delete__cccavector2
+    __del__ = lambda self: None
+_cccavector2_swigregister = _sim3d._cccavector2_swigregister
+_cccavector2_swigregister(_cccavector2)
+
+class _carray2(_object):
+    """Proxy of C++ boost::array<(std::complex<(double)>,2)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _carray2, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, _carray2, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(boost::array<(std::complex<(double)>,2)> self) -> _carray2"""
+        this = _sim3d.new__carray2()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _sim3d.delete__carray2
+    __del__ = lambda self: None
+
+    def swap(self, b: '_carray2') -> "void":
+        """swap(_carray2 self, _carray2 b)"""
+        return _sim3d._carray2_swap(self, b)
+
+
+    def __getitem__(self, idx: 'unsigned int') -> "std::complex< double >":
+        """__getitem__(_carray2 self, unsigned int idx) -> std::complex< double >"""
+        return _sim3d._carray2___getitem__(self, idx)
+
+
+    def __setitem__(self, idx: 'unsigned int', val: 'std::complex< double >') -> "void":
+        """__setitem__(_carray2 self, unsigned int idx, std::complex< double > val)"""
+        return _sim3d._carray2___setitem__(self, idx, val)
+
+
+    def __len__(self) -> "unsigned int":
+        """__len__(_carray2 self) -> unsigned int"""
+        return _sim3d._carray2___len__(self)
+
+
+    def __iter__(self):
+        for i in range(len(self)):
+            yield self[i]
+
+    def __str__(self):
+        return str(tuple(self))
+
+    def __repr__(self):
+        return repr(tuple(self))
+
+_carray2_swigregister = _sim3d._carray2_swigregister
+_carray2_swigregister(_carray2)
+
+class _cavector3(collections.MutableSequence):
+    """Proxy of C++ std::vector<(::boost::array<(std::complex<(double)>,3)>)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _cavector3, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _cavector3, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(_cavector3 self) -> SwigPyIterator"""
+        return _sim3d._cavector3_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(_cavector3 self) -> bool"""
+        return _sim3d._cavector3___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(_cavector3 self) -> bool"""
+        return _sim3d._cavector3___bool__(self)
+
+
+    def __len__(self) -> "vector< ::boost::array< std::complex< double >,3 > >::size_type":
+        """__len__(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::size_type"""
+        return _sim3d._cavector3___len__(self)
+
+
+    def __getslice__(self, i: 'vector< ::boost::array< std::complex< double >,3 > >::difference_type', j: 'vector< ::boost::array< std::complex< double >,3 > >::difference_type') -> "std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > > *":
+        """__getslice__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i, vector< ::boost::array< std::complex< double >,3 > >::difference_type j) -> _cavector3"""
+        return _sim3d._cavector3___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i, vector< ::boost::array< std::complex< double >,3 > >::difference_type j)
+        __setslice__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i, vector< ::boost::array< std::complex< double >,3 > >::difference_type j, _cavector3 v)
+        """
+        return _sim3d._cavector3___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'vector< ::boost::array< std::complex< double >,3 > >::difference_type', j: 'vector< ::boost::array< std::complex< double >,3 > >::difference_type') -> "void":
+        """__delslice__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i, vector< ::boost::array< std::complex< double >,3 > >::difference_type j)"""
+        return _sim3d._cavector3___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i)
+        __delitem__(_cavector3 self, PySliceObject * slice)
+        """
+        return _sim3d._cavector3___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "vector< ::boost::array< std::complex< double >,3 > >::value_type const &":
+        """
+        __getitem__(_cavector3 self, PySliceObject * slice) -> _cavector3
+        __getitem__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i) -> _carray3
+        """
+        return _sim3d._cavector3___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(_cavector3 self, PySliceObject * slice, _cavector3 v)
+        __setitem__(_cavector3 self, PySliceObject * slice)
+        __setitem__(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::difference_type i, _carray3 x)
+        """
+        return _sim3d._cavector3___setitem__(self, *args)
+
+
+    def pop(self) -> "vector< ::boost::array< std::complex< double >,3 > >::value_type":
+        """pop(_cavector3 self) -> _carray3"""
+        return _sim3d._cavector3_pop(self)
+
+
+    def append(self, x: '_carray3') -> "void":
+        """append(_cavector3 self, _carray3 x)"""
+        return _sim3d._cavector3_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(_cavector3 self) -> bool"""
+        return _sim3d._cavector3_empty(self)
+
+
+    def size(self) -> "vector< ::boost::array< std::complex< double >,3 > >::size_type":
+        """size(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::size_type"""
+        return _sim3d._cavector3_size(self)
+
+
+    def swap(self, v: '_cavector3') -> "void":
+        """swap(_cavector3 self, _cavector3 v)"""
+        return _sim3d._cavector3_swap(self, v)
+
+
+    def begin(self) -> "vector< ::boost::array< std::complex< double >,3 > >::iterator":
+        """begin(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::iterator"""
+        return _sim3d._cavector3_begin(self)
+
+
+    def end(self) -> "vector< ::boost::array< std::complex< double >,3 > >::iterator":
+        """end(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::iterator"""
+        return _sim3d._cavector3_end(self)
+
+
+    def rbegin(self) -> "vector< ::boost::array< std::complex< double >,3 > >::reverse_iterator":
+        """rbegin(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::reverse_iterator"""
+        return _sim3d._cavector3_rbegin(self)
+
+
+    def rend(self) -> "vector< ::boost::array< std::complex< double >,3 > >::reverse_iterator":
+        """rend(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::reverse_iterator"""
+        return _sim3d._cavector3_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(_cavector3 self)"""
+        return _sim3d._cavector3_clear(self)
+
+
+    def get_allocator(self) -> "vector< ::boost::array< std::complex< double >,3 > >::allocator_type":
+        """get_allocator(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::allocator_type"""
+        return _sim3d._cavector3_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(_cavector3 self)"""
+        return _sim3d._cavector3_pop_back(self)
+
+
+    def erase(self, *args) -> "vector< ::boost::array< std::complex< double >,3 > >::iterator":
+        """
+        erase(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::iterator pos) -> vector< ::boost::array< std::complex< double >,3 > >::iterator
+        erase(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::iterator first, vector< ::boost::array< std::complex< double >,3 > >::iterator last) -> vector< ::boost::array< std::complex< double >,3 > >::iterator
+        """
+        return _sim3d._cavector3_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,3)>)> self) -> _cavector3
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,3)>)> self, _cavector3 arg2) -> _cavector3
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,3)>)> self, vector< ::boost::array< std::complex< double >,3 > >::size_type size) -> _cavector3
+        __init__(std::vector<(::boost::array<(std::complex<(double)>,3)>)> self, vector< ::boost::array< std::complex< double >,3 > >::size_type size, _carray3 value) -> _cavector3
+        """
+        this = _sim3d.new__cavector3(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, x: '_carray3') -> "void":
+        """push_back(_cavector3 self, _carray3 x)"""
+        return _sim3d._cavector3_push_back(self, x)
+
+
+    def front(self) -> "vector< ::boost::array< std::complex< double >,3 > >::value_type const &":
+        """front(_cavector3 self) -> _carray3"""
+        return _sim3d._cavector3_front(self)
+
+
+    def back(self) -> "vector< ::boost::array< std::complex< double >,3 > >::value_type const &":
+        """back(_cavector3 self) -> _carray3"""
+        return _sim3d._cavector3_back(self)
+
+
+    def assign(self, n: 'vector< ::boost::array< std::complex< double >,3 > >::size_type', x: '_carray3') -> "void":
+        """assign(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::size_type n, _carray3 x)"""
+        return _sim3d._cavector3_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::size_type new_size)
+        resize(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::size_type new_size, _carray3 x)
+        """
+        return _sim3d._cavector3_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::iterator pos, _carray3 x) -> vector< ::boost::array< std::complex< double >,3 > >::iterator
+        insert(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::iterator pos, vector< ::boost::array< std::complex< double >,3 > >::size_type n, _carray3 x)
+        """
+        return _sim3d._cavector3_insert(self, *args)
+
+
+    def reserve(self, n: 'vector< ::boost::array< std::complex< double >,3 > >::size_type') -> "void":
+        """reserve(_cavector3 self, vector< ::boost::array< std::complex< double >,3 > >::size_type n)"""
+        return _sim3d._cavector3_reserve(self, n)
+
+
+    def capacity(self) -> "vector< ::boost::array< std::complex< double >,3 > >::size_type":
+        """capacity(_cavector3 self) -> vector< ::boost::array< std::complex< double >,3 > >::size_type"""
+        return _sim3d._cavector3_capacity(self)
+
+    __swig_destroy__ = _sim3d.delete__cavector3
+    __del__ = lambda self: None
+_cavector3_swigregister = _sim3d._cavector3_swigregister
+_cavector3_swigregister(_cavector3)
+
+class _ccavector3(collections.MutableSequence):
+    """Proxy of C++ std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _ccavector3, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _ccavector3, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(_ccavector3 self) -> SwigPyIterator"""
+        return _sim3d._ccavector3_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(_ccavector3 self) -> bool"""
+        return _sim3d._ccavector3___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(_ccavector3 self) -> bool"""
+        return _sim3d._ccavector3___bool__(self)
+
+
+    def __len__(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type":
+        """__len__(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type"""
+        return _sim3d._ccavector3___len__(self)
+
+
+    def __getslice__(self, i: 'vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type', j: 'vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type') -> "std::vector< std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > >,std::allocator< std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > > > > *":
+        """__getslice__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type j) -> _ccavector3"""
+        return _sim3d._ccavector3___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type j)
+        __setslice__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type j, _ccavector3 v)
+        """
+        return _sim3d._ccavector3___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type', j: 'vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type') -> "void":
+        """__delslice__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type j)"""
+        return _sim3d._ccavector3___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i)
+        __delitem__(_ccavector3 self, PySliceObject * slice)
+        """
+        return _sim3d._ccavector3___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::value_type const &":
+        """
+        __getitem__(_ccavector3 self, PySliceObject * slice) -> _ccavector3
+        __getitem__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i) -> _cavector3
+        """
+        return _sim3d._ccavector3___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(_ccavector3 self, PySliceObject * slice, _ccavector3 v)
+        __setitem__(_ccavector3 self, PySliceObject * slice)
+        __setitem__(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::difference_type i, _cavector3 x)
+        """
+        return _sim3d._ccavector3___setitem__(self, *args)
+
+
+    def pop(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::value_type":
+        """pop(_ccavector3 self) -> _cavector3"""
+        return _sim3d._ccavector3_pop(self)
+
+
+    def append(self, x: '_cavector3') -> "void":
+        """append(_ccavector3 self, _cavector3 x)"""
+        return _sim3d._ccavector3_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(_ccavector3 self) -> bool"""
+        return _sim3d._ccavector3_empty(self)
+
+
+    def size(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type":
+        """size(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type"""
+        return _sim3d._ccavector3_size(self)
+
+
+    def swap(self, v: '_ccavector3') -> "void":
+        """swap(_ccavector3 self, _ccavector3 v)"""
+        return _sim3d._ccavector3_swap(self, v)
+
+
+    def begin(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator":
+        """begin(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator"""
+        return _sim3d._ccavector3_begin(self)
+
+
+    def end(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator":
+        """end(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator"""
+        return _sim3d._ccavector3_end(self)
+
+
+    def rbegin(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::reverse_iterator":
+        """rbegin(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::reverse_iterator"""
+        return _sim3d._ccavector3_rbegin(self)
+
+
+    def rend(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::reverse_iterator":
+        """rend(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::reverse_iterator"""
+        return _sim3d._ccavector3_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(_ccavector3 self)"""
+        return _sim3d._ccavector3_clear(self)
+
+
+    def get_allocator(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::allocator_type":
+        """get_allocator(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::allocator_type"""
+        return _sim3d._ccavector3_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(_ccavector3 self)"""
+        return _sim3d._ccavector3_pop_back(self)
+
+
+    def erase(self, *args) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator":
+        """
+        erase(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator pos) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator
+        erase(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator first, vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator last) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator
+        """
+        return _sim3d._ccavector3_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)> self) -> _ccavector3
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)> self, _ccavector3 arg2) -> _ccavector3
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)> self, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type size) -> _ccavector3
+        __init__(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)> self, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type size, _cavector3 value) -> _ccavector3
+        """
+        this = _sim3d.new__ccavector3(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, x: '_cavector3') -> "void":
+        """push_back(_ccavector3 self, _cavector3 x)"""
+        return _sim3d._ccavector3_push_back(self, x)
+
+
+    def front(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::value_type const &":
+        """front(_ccavector3 self) -> _cavector3"""
+        return _sim3d._ccavector3_front(self)
+
+
+    def back(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::value_type const &":
+        """back(_ccavector3 self) -> _cavector3"""
+        return _sim3d._ccavector3_back(self)
+
+
+    def assign(self, n: 'vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type', x: '_cavector3') -> "void":
+        """assign(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type n, _cavector3 x)"""
+        return _sim3d._ccavector3_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type new_size)
+        resize(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type new_size, _cavector3 x)
+        """
+        return _sim3d._ccavector3_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator pos, _cavector3 x) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator
+        insert(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::iterator pos, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type n, _cavector3 x)
+        """
+        return _sim3d._ccavector3_insert(self, *args)
+
+
+    def reserve(self, n: 'vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type') -> "void":
+        """reserve(_ccavector3 self, vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type n)"""
+        return _sim3d._ccavector3_reserve(self, n)
+
+
+    def capacity(self) -> "vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type":
+        """capacity(_ccavector3 self) -> vector< vector< ::boost::array< std::complex< double >,3 > > >::size_type"""
+        return _sim3d._ccavector3_capacity(self)
+
+    __swig_destroy__ = _sim3d.delete__ccavector3
+    __del__ = lambda self: None
+_ccavector3_swigregister = _sim3d._ccavector3_swigregister
+_ccavector3_swigregister(_ccavector3)
+
+class _cccavector3(collections.MutableSequence):
+    """Proxy of C++ std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)>)> class."""
+
+    __swig_setmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _cccavector3, name, value)
+    __swig_getmethods__ = {}
+    for _s in [collections.MutableSequence]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, _cccavector3, name)
+    __repr__ = _swig_repr
+
+    def iterator(self) -> "swig::SwigPyIterator *":
+        """iterator(_cccavector3 self) -> SwigPyIterator"""
+        return _sim3d._cccavector3_iterator(self)
+
+    def __iter__(self):
+        return self.iterator()
+
+    def __nonzero__(self) -> "bool":
+        """__nonzero__(_cccavector3 self) -> bool"""
+        return _sim3d._cccavector3___nonzero__(self)
+
+
+    def __bool__(self) -> "bool":
+        """__bool__(_cccavector3 self) -> bool"""
+        return _sim3d._cccavector3___bool__(self)
+
+
+    def __len__(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type":
+        """__len__(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type"""
+        return _sim3d._cccavector3___len__(self)
+
+
+    def __getslice__(self, i: 'vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type', j: 'vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type') -> "std::vector< std::vector< std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > >,std::allocator< std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > > > >,std::allocator< std::vector< std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > >,std::allocator< std::vector< ::boost::array< std::complex< double >,3 >,std::allocator< ::boost::array< std::complex< double >,3 > > > > > > > *":
+        """__getslice__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type j) -> _cccavector3"""
+        return _sim3d._cccavector3___getslice__(self, i, j)
+
+
+    def __setslice__(self, *args) -> "void":
+        """
+        __setslice__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type j)
+        __setslice__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type j, _cccavector3 v)
+        """
+        return _sim3d._cccavector3___setslice__(self, *args)
+
+
+    def __delslice__(self, i: 'vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type', j: 'vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type') -> "void":
+        """__delslice__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type j)"""
+        return _sim3d._cccavector3___delslice__(self, i, j)
+
+
+    def __delitem__(self, *args) -> "void":
+        """
+        __delitem__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i)
+        __delitem__(_cccavector3 self, PySliceObject * slice)
+        """
+        return _sim3d._cccavector3___delitem__(self, *args)
+
+
+    def __getitem__(self, *args) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::value_type const &":
+        """
+        __getitem__(_cccavector3 self, PySliceObject * slice) -> _cccavector3
+        __getitem__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i) -> _ccavector3
+        """
+        return _sim3d._cccavector3___getitem__(self, *args)
+
+
+    def __setitem__(self, *args) -> "void":
+        """
+        __setitem__(_cccavector3 self, PySliceObject * slice, _cccavector3 v)
+        __setitem__(_cccavector3 self, PySliceObject * slice)
+        __setitem__(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::difference_type i, _ccavector3 x)
+        """
+        return _sim3d._cccavector3___setitem__(self, *args)
+
+
+    def pop(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::value_type":
+        """pop(_cccavector3 self) -> _ccavector3"""
+        return _sim3d._cccavector3_pop(self)
+
+
+    def append(self, x: '_ccavector3') -> "void":
+        """append(_cccavector3 self, _ccavector3 x)"""
+        return _sim3d._cccavector3_append(self, x)
+
+
+    def empty(self) -> "bool":
+        """empty(_cccavector3 self) -> bool"""
+        return _sim3d._cccavector3_empty(self)
+
+
+    def size(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type":
+        """size(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type"""
+        return _sim3d._cccavector3_size(self)
+
+
+    def swap(self, v: '_cccavector3') -> "void":
+        """swap(_cccavector3 self, _cccavector3 v)"""
+        return _sim3d._cccavector3_swap(self, v)
+
+
+    def begin(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator":
+        """begin(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator"""
+        return _sim3d._cccavector3_begin(self)
+
+
+    def end(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator":
+        """end(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator"""
+        return _sim3d._cccavector3_end(self)
+
+
+    def rbegin(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::reverse_iterator":
+        """rbegin(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::reverse_iterator"""
+        return _sim3d._cccavector3_rbegin(self)
+
+
+    def rend(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::reverse_iterator":
+        """rend(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::reverse_iterator"""
+        return _sim3d._cccavector3_rend(self)
+
+
+    def clear(self) -> "void":
+        """clear(_cccavector3 self)"""
+        return _sim3d._cccavector3_clear(self)
+
+
+    def get_allocator(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::allocator_type":
+        """get_allocator(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::allocator_type"""
+        return _sim3d._cccavector3_get_allocator(self)
+
+
+    def pop_back(self) -> "void":
+        """pop_back(_cccavector3 self)"""
+        return _sim3d._cccavector3_pop_back(self)
+
+
+    def erase(self, *args) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator":
+        """
+        erase(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator pos) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator
+        erase(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator first, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator last) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator
+        """
+        return _sim3d._cccavector3_erase(self, *args)
+
+
+    def __init__(self, *args):
+        """
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)>)> self) -> _cccavector3
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)>)> self, _cccavector3 arg2) -> _cccavector3
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)>)> self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type size) -> _cccavector3
+        __init__(std::vector<(std::vector<(std::vector<(::boost::array<(std::complex<(double)>,3)>)>)>)> self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type size, _ccavector3 value) -> _cccavector3
+        """
+        this = _sim3d.new__cccavector3(*args)
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+
+    def push_back(self, x: '_ccavector3') -> "void":
+        """push_back(_cccavector3 self, _ccavector3 x)"""
+        return _sim3d._cccavector3_push_back(self, x)
+
+
+    def front(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::value_type const &":
+        """front(_cccavector3 self) -> _ccavector3"""
+        return _sim3d._cccavector3_front(self)
+
+
+    def back(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::value_type const &":
+        """back(_cccavector3 self) -> _ccavector3"""
+        return _sim3d._cccavector3_back(self)
+
+
+    def assign(self, n: 'vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type', x: '_ccavector3') -> "void":
+        """assign(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type n, _ccavector3 x)"""
+        return _sim3d._cccavector3_assign(self, n, x)
+
+
+    def resize(self, *args) -> "void":
+        """
+        resize(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type new_size)
+        resize(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type new_size, _ccavector3 x)
+        """
+        return _sim3d._cccavector3_resize(self, *args)
+
+
+    def insert(self, *args) -> "void":
+        """
+        insert(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator pos, _ccavector3 x) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator
+        insert(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::iterator pos, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type n, _ccavector3 x)
+        """
+        return _sim3d._cccavector3_insert(self, *args)
+
+
+    def reserve(self, n: 'vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type') -> "void":
+        """reserve(_cccavector3 self, vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type n)"""
+        return _sim3d._cccavector3_reserve(self, n)
+
+
+    def capacity(self) -> "vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type":
+        """capacity(_cccavector3 self) -> vector< vector< vector< ::boost::array< std::complex< double >,3 > > > >::size_type"""
+        return _sim3d._cccavector3_capacity(self)
+
+    __swig_destroy__ = _sim3d.delete__cccavector3
+    __del__ = lambda self: None
+_cccavector3_swigregister = _sim3d._cccavector3_swigregister
+_cccavector3_swigregister(_cccavector3)
+
+class _carray3(_object):
+    """Proxy of C++ boost::array<(std::complex<(double)>,3)> class."""
+
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, _carray3, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, _carray3, name)
+    __repr__ = _swig_repr
+
+    def __init__(self):
+        """__init__(boost::array<(std::complex<(double)>,3)> self) -> _carray3"""
+        this = _sim3d.new__carray3()
+        try:
+            self.this.append(this)
+        except Exception:
+            self.this = this
+    __swig_destroy__ = _sim3d.delete__carray3
+    __del__ = lambda self: None
+
+    def swap(self, b: '_carray3') -> "void":
+        """swap(_carray3 self, _carray3 b)"""
+        return _sim3d._carray3_swap(self, b)
+
+
+    def __getitem__(self, idx: 'unsigned int') -> "std::complex< double >":
+        """__getitem__(_carray3 self, unsigned int idx) -> std::complex< double >"""
+        return _sim3d._carray3___getitem__(self, idx)
+
+
+    def __setitem__(self, idx: 'unsigned int', val: 'std::complex< double >') -> "void":
+        """__setitem__(_carray3 self, unsigned int idx, std::complex< double > val)"""
+        return _sim3d._carray3___setitem__(self, idx, val)
+
+
+    def __len__(self) -> "unsigned int":
+        """__len__(_carray3 self) -> unsigned int"""
+        return _sim3d._carray3___len__(self)
+
+
+    def __iter__(self):
+        for i in range(len(self)):
+            yield self[i]
+
+    def __str__(self):
+        return str(tuple(self))
+
+    def __repr__(self):
+        return repr(tuple(self))
+
+_carray3_swigregister = _sim3d._carray3_swigregister
+_carray3_swigregister(_carray3)
 
 
 _sim3d.NDIM_swigconstant(_sim3d)
@@ -10479,7 +11837,7 @@ class ISFTracker1(_object):
 
 
     def ISFs(self) -> "std::vector< std::vector< cmplx > >":
-        """ISFs(ISFTracker1 self) -> std::vector< std::vector< cmplx > >"""
+        """ISFs(ISFTracker1 self) -> _ccvector"""
         return _sim3d.ISFTracker1_ISFs(self)
 
 
@@ -10558,7 +11916,7 @@ class ISFTracker(StateTracker):
 
 
     def ISFs(self) -> "std::vector< std::vector< std::vector< cmplx > > >":
-        """ISFs(ISFTracker self) -> std::vector< std::vector< std::vector< cmplx > > >"""
+        """ISFs(ISFTracker self) -> _cccvector"""
         return _sim3d.ISFTracker_ISFs(self)
 
 
