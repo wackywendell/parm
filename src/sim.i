@@ -32,8 +32,8 @@ using std::set;
 using std::map;
 using std::list;
 using std::pair;
-using boost::shared_ptr;
-using boost::array;
+using ::boost::shared_ptr;
+using ::boost::array;
 
 %apply double { long double } 
 
@@ -437,9 +437,9 @@ namespace std {
     %template(dvector) vector<double>;
     %template(_ddvector) vector<vector<double> >;
     %template(_dddvector) vector<vector<vector<double> > >;
-    %template(cvector) vector<complex<double> >;
-    %template(_ccvector) vector<vector<complex<double> > >;
-    %template(_cccvector) vector<vector<vector<complex<double> > > >;
+    %template(cvector) vector< std::complex<double> >;
+    %template(_ccvector) vector<vector< std::complex<double> > >;
+    %template(_cccvector) vector<vector<vector< std::complex<double> > > >;
     %template(ldvector) vector<long double>;
     // %template(_vvector) vector<Vec>;
     // %template(_vvvector) vector<vector<Vec> >;
@@ -471,14 +471,23 @@ namespace std {
     %template(pair_int_CNode) pair<int, vector<CNode> >;
     %template(map_int_CNode) map<int, vector<CNode> >;
 
-    // %template(_carray2) ::boost::array<complex<double>, 2>;
-    // %template(_cavector2) vector< ::boost::array<complex<double>, 2> >;
-    // %template(_ccavector2) vector<vector< ::boost::array<complex<double>, 2> > >;
-    // %template(_cccavector2) vector<vector<vector< ::boost::array<complex<double>, 2> > > >;
-    // %template(_carray3) ::boost::array<complex<double>, 3>;
-    // %template(_cavector3) vector< ::boost::array<complex<double>, 3> >;
-    // %template(_ccavector3) vector<vector< ::boost::array<complex<double>, 3> > >;
-    // %template(_cccavector3) vector<vector<vector< ::boost::array<complex<double>, 3> > > >;
+    %template(_cavector2) vector< ::boost::array< std::complex<double>, 2> >;
+    %template(_ccavector2) vector<vector< ::boost::array< std::complex<double>, 2> > >;
+    %template(_cccavector2) vector<vector<vector< ::boost::array< std::complex<double>, 2> > > >;
+    // _carray2 needs to go after _cavector2, _ccavector2, ... for reasons I
+    // do not understand, but it prevents compilation failures:
+    // pyparm/sim_wrap3d.cxx:7985:25: error: redefinition of
+    //     'swig::traits<std::vector< ::boost::array< std::complex<double>, 2>,
+    //     std::allocator<boost::array< std::complex<double>, 2> > > >'
+    //     ...traits< std::vector< ::boost::array< complex< double >,2 >,std::allocator< ::boost::array< complex< double >,2 > > > > 
+    %template(_carray2) ::boost::array< std::complex<double>, 2>;
+    
+    %template(_cavector3) vector< ::boost::array< std::complex<double>, 3> >;
+    %template(_ccavector3) vector<vector< ::boost::array< std::complex<double>, 3> > >;
+    %template(_cccavector3) vector<vector<vector< ::boost::array< std::complex<double>, 3> > > >;
+    // _carray3 needs to go after _cavector3, _ccavector3, ... for reasons I
+    // do not understand, but it prevents compilation failures
+    %template(_carray3) ::boost::array< std::complex<double>, 3>;
 }
 
 %extend Atom {
