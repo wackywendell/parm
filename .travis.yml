@@ -21,7 +21,7 @@ before_install:
   - pip --version
   - export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:/usr/include/eigen3"
 install:
-  - swig -version
+  - swig3.0 -version
   - make SWIGBIN=swig3.0 all wraps
   - sed -i 's/<:/< :/g' pyparm/sim_wrap*.cxx # fix digraph issue. This is fixed in newer versions of swig (>3.0.2)
   - python setup.py build_ext --inplace
