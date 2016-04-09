@@ -8,7 +8,9 @@ template<typename T, std::size_t N>
 class array {
 public:
     array();
-    ~array();
+    ~array(){
+        %delete(self);
+    };
 
     void swap(array& b);
 
@@ -30,10 +32,6 @@ public:
         }
         
         unsigned int __len__(){ return N;};
-        
-        ~array() {
-            %delete(self);
-        }
         
         %insert("python") %{
             def __iter__(self):
