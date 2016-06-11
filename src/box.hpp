@@ -3,8 +3,8 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include <vector>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 
 #define sptr boost::shared_ptr
 

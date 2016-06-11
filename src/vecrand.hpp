@@ -12,16 +12,16 @@
 #define NDIM 3
 #define DIMROTATIONS 24
 #endif
-#include <iostream>
-#include <ctime>
-#include <vector>
 #include <cmath>
+#include <ctime>
+#include <iostream>
+#include <vector>
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/variate_generator.hpp>
-#include <boost/random/normal_distribution.hpp>
-#include <boost/array.hpp>
 #include <Eigen/Dense>
+#include <boost/array.hpp>
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/variate_generator.hpp>
 
 using namespace std;
 typedef unsigned int uint;
