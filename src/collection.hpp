@@ -1,13 +1,14 @@
 #ifndef COLLECTION_H
 #define COLLECTION_H
 
-#include "vecrand.hpp"
-#include "interaction.hpp"
-#include "constraints.hpp"
-#include <cstdio>
-#include <vector>
-#include <set>
+#include <algorithm>
 #include <boost/shared_ptr.hpp>
+#include <cstdio>
+#include <set>
+#include <vector>
+#include "constraints.hpp"
+#include "interaction.hpp"
+#include "vecrand.hpp"
 
 /*!
 A "Collection" of atoms, the box, and an integrator. Provides general simulation
@@ -1019,6 +1020,7 @@ class CollectionCD : public Collection {
     long long numevents;
     set<Event> events;      // note that this a sorted binary tree
     vector<flt> atomsizes;  /// diameters
+    vector<sptr<StateTracker> > collision_trackers;
 
     void reset_events();
     void line_advance(flt deltat);
@@ -1029,14 +1031,7 @@ class CollectionCD : public Collection {
         vector<flt> sizes = vector<flt>(),
         vector<sptr<Interaction> > interactions = vector<sptr<Interaction> >(),
         vector<sptr<StateTracker> > trackers = vector<sptr<StateTracker> >(),
-        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >())
-        : Collection(box, atoms, interactions, trackers, constraints),
-          dt(dt),
-          curt(0),
-          numevents(0),
-          atomsizes(sizes) {
-        assert(atomsizes.size() == atoms->size());
-    };
+        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >());
 
     void reset_velocities(flt T);
     bool take_step(flt tlim = -1);  // returns true if it collides, false if it
@@ -1053,6 +1048,8 @@ class CollectionCD : public Collection {
 */
 class CollectionCDgrid : public Collection {
    public:
+    vector<sptr<StateTracker> > collision_trackers;
+
     flt dt, curt;
     long long numevents;
     set<Event> events;      // note that this a sorted binary tree
@@ -1073,17 +1070,7 @@ class CollectionCDgrid : public Collection {
         vector<flt> sizes = vector<flt>(),
         vector<sptr<Interaction> > interactions = vector<sptr<Interaction> >(),
         vector<sptr<StateTracker> > trackers = vector<sptr<StateTracker> >(),
-        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >())
-        : Collection(box, atoms, interactions, trackers, constraints),
-          dt(dt),
-          curt(0),
-          numevents(0),
-          atomsizes(sizes),
-          edge_epsilon(1e-8),
-          grid(box, atoms, get_max(sizes) * (1 + edge_epsilon * 10), 2.0),
-          gridt(0) {
-        assert(atomsizes.size() == atoms->size());
-    };
+        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >());
 
     void update_grid(bool force = true);
     Grid &get_grid() { return grid; };

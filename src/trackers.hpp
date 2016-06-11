@@ -3,8 +3,8 @@
 #ifndef TRACKERS_H
 #define TRACKERS_H
 
-#include <set>
 #include <map>
+#include <set>
 #include "assert.h"
 
 /**
@@ -20,6 +20,13 @@ class StateTracker {
     /** This function is called once per timestep, when particles are in their
      * set position.*/
     virtual void update(Box &box) = 0;
+    /** for CollectionCD (and heirs). Returns whether or not to call this
+    function after every collision, regardless of timestep.
+    Most trackers do not need / want this, so the default is false.
+    */
+    virtual bool every_collision() { return false; };
+    virtual void update_collision(Box &box, AtomID a1, AtomID a2, flt time,
+                                  Vec delta_p){};
     virtual ~StateTracker(){};
 };
 
