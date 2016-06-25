@@ -1858,39 +1858,55 @@ void CollectionVerletNPT::timestep() {
     update_trackers();
 };
 
-static bool is_collision_tracker(sptr<StateTracker> tracker) {
+bool is_collision_tracker(sptr<StateTracker> tracker) {
     return tracker->every_collision();
 };
 
-static bool is_not_collision_tracker(sptr<StateTracker> tracker) {
+bool is_not_collision_tracker(sptr<StateTracker> tracker) {
     return !is_collision_tracker(tracker);
 };
 
 CollectionCD::CollectionCD(sptr<OriginBox> box, sptr<AtomGroup> atoms,
                            const flt dt, vector<flt> sizes,
                            vector<sptr<Interaction> > interactions,
-                           vector<sptr<StateTracker> > trackers,
+                           vector<sptr<StateTracker> > trackers_in,
                            vector<sptr<Constraint> > constraints)
-    : Collection(box, atoms, interactions, trackers, constraints, false),
+    : Collection(box, atoms, interactions, vector<sptr<StateTracker> >(),
+                 constraints, false),
       dt(dt),
       curt(0),
       numevents(0),
       atomsizes(sizes),
-      collision_trackers(trackers) {
-    std::remove_if(trackers.begin(), trackers.end(), is_collision_tracker);
-    std::remove_if(collision_trackers.begin(), collision_trackers.end(),
-                   is_not_collision_tracker);
-    assert(atomsizes.size() == atoms->size());
+      collision_trackers() {
+    vector<sptr<Interaction> > new_tracker_vector;
+    for (uint i = 0; i < trackers_in.size(); i++) {
+        sptr<StateTracker> cur_interac = trackers_in[i];
+        if (is_collision_tracker(cur_interac)) {
+            collision_trackers.push_back(cur_interac);
+        } else {
+            trackers.push_back(cur_interac);
+        }
+    }
     initialize();
+};
+
+void CollectionCD::add_tracker(sptr<StateTracker> track) {
+    if (is_collision_tracker(track)) {
+        collision_trackers.push_back(track);
+    } else {
+        trackers.push_back(track);
+    }
+    update_trackers();
 };
 
 CollectionCDgrid::CollectionCDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
                                    const flt dt, vector<flt> sizes,
                                    vector<sptr<Interaction> > interactions,
-                                   vector<sptr<StateTracker> > trackers,
+                                   vector<sptr<StateTracker> > trackers_in,
                                    vector<sptr<Constraint> > constraints)
-    : Collection(box, atoms, interactions, trackers, constraints, false),
-      collision_trackers(trackers),
+    : Collection(box, atoms, interactions, vector<sptr<StateTracker> >(),
+                 constraints, false),
+      collision_trackers(),
       dt(dt),
       curt(0),
       numevents(0),
@@ -1898,11 +1914,25 @@ CollectionCDgrid::CollectionCDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
       edge_epsilon(1e-8),
       grid(box, atoms, get_max(sizes) * (1 + edge_epsilon * 10), 2.0),
       gridt(0) {
-    std::remove_if(trackers.begin(), trackers.end(), is_collision_tracker);
-    std::remove_if(collision_trackers.begin(), collision_trackers.end(),
-                   is_not_collision_tracker);
+    for (uint i = 0; i < trackers_in.size(); i++) {
+        sptr<StateTracker> cur_interac = trackers_in[i];
+        if (is_collision_tracker(cur_interac)) {
+            collision_trackers.push_back(cur_interac);
+        } else {
+            trackers.push_back(cur_interac);
+        }
+    }
     assert(atomsizes.size() == atoms->size());
     initialize();
+};
+
+void CollectionCDgrid::add_tracker(sptr<StateTracker> track) {
+    if (is_collision_tracker(track)) {
+        collision_trackers.push_back(track);
+    } else {
+        trackers.push_back(track);
+    }
+    update_trackers();
 };
 
 void CollectionCDgrid::reset_velocities(flt T) {

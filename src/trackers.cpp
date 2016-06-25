@@ -440,3 +440,33 @@ bool GridIterator::operator==(const GridIterator &other) {
     if (cellnum2 != other.cellnum2) return false;
     return (atom2 == other.atom2);
 };
+
+/// Kinetic energy relative to center of mass
+// K = ½Σmᵢvᵢ² - ½(Σmᵢvᵢ)² / (Σmᵢ)
+flt kinetic_energy_com(AtomGroup &atoms) {
+    flt Ksum = 0;
+    Vec mvsum = Vec::Zero();
+    flt msum = 0;
+    for (uint i = 0; i < atoms.size(); i++) {
+        Atom &a = atoms[i];
+        Vec mv = a.m * a.v;
+        Ksum += mv.dot(a.v);
+        mvsum += mv;
+        msum += a.m;
+    }
+    return (Ksum - mvsum.squaredNorm() / msum) / 2;
+};
+
+void HardSpherePressureTracker::update_collision(Box &box, AtomID a1, AtomID a2,
+                                                 flt time, Vec delta_p) {
+    if (isnan(t0)) {
+        t0 = time;
+        lastt = t0;
+        return;
+    }
+    Vec dr = box.diff(a1->x, a2->x);
+    collisionsum += dr.dot(delta_p);
+    Ksum += kinetic_energy_com(*atoms);
+    Ncollisions++;
+    lastt = time;
+};

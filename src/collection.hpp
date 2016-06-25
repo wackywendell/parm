@@ -110,15 +110,15 @@ class Collection {
     //! Scale all velocities to get to a specific total energy
     void scale_velocities_to_energy(flt E);
 
-    void add_interaction(sptr<Interaction> inter) {
+    virtual void add_interaction(sptr<Interaction> inter) {
         interactions.push_back(inter);
         update_trackers();
     };
-    void add_tracker(sptr<StateTracker> track) {
+    virtual void add_tracker(sptr<StateTracker> track) {
         trackers.push_back(track);
         update_trackers();
     };
-    void add_constraint(sptr<Constraint> c) {
+    virtual void add_constraint(sptr<Constraint> c) {
         constraints.push_back(c);
         update_trackers();
     };
@@ -1015,7 +1015,7 @@ flt get_max(vector<flt> v);
 
 /// Collision-Driven Dynamics
 class CollectionCD : public Collection {
-   protected:
+   public:
     flt dt, curt;
     long long numevents;
     set<Event> events;      // note that this a sorted binary tree
@@ -1037,6 +1037,7 @@ class CollectionCD : public Collection {
     bool take_step(flt tlim = -1);  // returns true if it collides, false if it
                                     // hits the tlim
     void timestep();
+    virtual void add_tracker(sptr<StateTracker> track);
     long long events_processed() {
         return numevents;
     };  // only counts collision-type events
@@ -1072,6 +1073,7 @@ class CollectionCDgrid : public Collection {
         vector<sptr<StateTracker> > trackers = vector<sptr<StateTracker> >(),
         vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >());
 
+    virtual void add_tracker(sptr<StateTracker> track);
     void update_grid(bool force = true);
     Grid &get_grid() { return grid; };
     flt get_epsilon() { return edge_epsilon; };
