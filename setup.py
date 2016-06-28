@@ -27,7 +27,7 @@ cpp_files = ["src/collection.cpp", "src/constraints.cpp",
 
 swigged_modules = [
     Extension(
-        "_" + name,
+        "pyparm._" + name,
         [swig_file],
         include_dirs=[numpy_include, "src"],
         extra_compile_args=compile_opts + ["-DSWIG_TYPE_TABLE=" + name, '-std=c++98'],
@@ -38,7 +38,7 @@ setup(
     name="pyparm",
     description="None",
     author="Wendell Smith",
-    version="0.2",
+    version="0.3",
     packages=['pyparm'],
     ext_modules=swigged_modules
 )
