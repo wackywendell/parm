@@ -1858,6 +1858,83 @@ void CollectionVerletNPT::timestep() {
     update_trackers();
 };
 
+bool is_collision_tracker(sptr<StateTracker> tracker) {
+    return tracker->every_collision();
+};
+
+bool is_not_collision_tracker(sptr<StateTracker> tracker) {
+    return !is_collision_tracker(tracker);
+};
+
+CollectionCD::CollectionCD(sptr<OriginBox> box, sptr<AtomGroup> atoms,
+                           const flt dt, vector<flt> sizes,
+                           vector<sptr<Interaction> > interactions,
+                           vector<sptr<StateTracker> > trackers_in,
+                           vector<sptr<Constraint> > constraints)
+    : Collection(box, atoms, interactions, vector<sptr<StateTracker> >(),
+                 constraints, false),
+      dt(dt),
+      curt(0),
+      numevents(0),
+      atomsizes(sizes),
+      collision_trackers() {
+    vector<sptr<Interaction> > new_tracker_vector;
+    for (uint i = 0; i < trackers_in.size(); i++) {
+        sptr<StateTracker> cur_interac = trackers_in[i];
+        if (is_collision_tracker(cur_interac)) {
+            collision_trackers.push_back(cur_interac);
+        } else {
+            trackers.push_back(cur_interac);
+        }
+    }
+    initialize();
+};
+
+void CollectionCD::add_tracker(sptr<StateTracker> track) {
+    if (is_collision_tracker(track)) {
+        collision_trackers.push_back(track);
+    } else {
+        trackers.push_back(track);
+    }
+    update_trackers();
+};
+
+CollectionCDgrid::CollectionCDgrid(sptr<OriginBox> box, sptr<AtomGroup> atoms,
+                                   const flt dt, vector<flt> sizes,
+                                   vector<sptr<Interaction> > interactions,
+                                   vector<sptr<StateTracker> > trackers_in,
+                                   vector<sptr<Constraint> > constraints)
+    : Collection(box, atoms, interactions, vector<sptr<StateTracker> >(),
+                 constraints, false),
+      collision_trackers(),
+      dt(dt),
+      curt(0),
+      numevents(0),
+      atomsizes(sizes),
+      edge_epsilon(1e-8),
+      grid(box, atoms, get_max(sizes) * (1 + edge_epsilon * 10), 2.0),
+      gridt(0) {
+    for (uint i = 0; i < trackers_in.size(); i++) {
+        sptr<StateTracker> cur_interac = trackers_in[i];
+        if (is_collision_tracker(cur_interac)) {
+            collision_trackers.push_back(cur_interac);
+        } else {
+            trackers.push_back(cur_interac);
+        }
+    }
+    assert(atomsizes.size() == atoms->size());
+    initialize();
+};
+
+void CollectionCDgrid::add_tracker(sptr<StateTracker> track) {
+    if (is_collision_tracker(track)) {
+        collision_trackers.push_back(track);
+    } else {
+        trackers.push_back(track);
+    }
+    update_trackers();
+};
+
 void CollectionCDgrid::reset_velocities(flt T) {
     for (uint i = 0; i < atoms->size(); i++) {
         flt mi = (*atoms)[i].m;
@@ -1947,7 +2024,8 @@ void CollectionCDgrid::reset_events(bool force) {
     //~ std::cerr << "CDBD::reset_events done.\n";
 };
 
-inline void collide(Box &box, Atom &a, Atom &b) {
+/// Returns momentum transferred to atom a.
+inline Vec collide(Box &box, Atom &a, Atom &b) {
     assert(&a != &b);
     Vec rij = box.diff(a.x, b.x);
     flt rmag = rij.norm();
@@ -1955,10 +2033,11 @@ inline void collide(Box &box, Atom &a, Atom &b) {
 
     flt rvi = rhat.dot(a.v);
     flt rvj = rhat.dot(b.v);
-    if (rvi >= rvj) return;  // they're already moving away
+    if (rvi >= rvj) return Vec::Zero();  // they're already moving away
     Vec p = rhat * (2 * a.m * b.m * (rvj - rvi) / (a.m + b.m));
     a.v += p / a.m;
     b.v -= p / b.m;
+    return p;
 };
 
 bool CollectionCDgrid::take_step(flt tlim) {
@@ -2003,7 +2082,7 @@ bool CollectionCDgrid::take_step(flt tlim) {
     if (!fakecollision) {
         numevents++;
         // collide our two atoms (i.e. have them bounce)
-        collide(*box, *(e.a), *(e.b));
+        Vec momentum_transferred = collide(*box, *(e.a), *(e.b));
         badatoms.push_back(e.b);
 
         set<Event>::iterator eit, eit2;
@@ -2024,6 +2103,14 @@ bool CollectionCDgrid::take_step(flt tlim) {
             ++eit;
             events.erase(eit2);
         };
+
+        for (vector<sptr<StateTracker> >::iterator it =
+                 collision_trackers.begin();
+             it != collision_trackers.end(); it++) {
+            StateTracker &tracker = **it;
+            tracker.update_collision(*box, e.a, e.b, curt,
+                                     momentum_transferred);
+        }
     }
 
     for (uint i = 0; i < badatoms.size(); i++) {
@@ -2114,7 +2201,7 @@ bool CollectionCD::take_step(flt tlim) {
     // collide our two atoms (i.e. have them bounce)
     //~ std::cerr << "take_step: colliding " << e.a.n() << " - " << e.b.n() <<
     //"\n";
-    collide(*box, *(e.a), *(e.b));
+    Vec momentum_transferred = collide(*box, *(e.a), *(e.b));
     //~ std::cerr << "take_step: collided " << e.a.n() << " - " << e.b.n() <<
     //"\n";
 
@@ -2187,7 +2274,14 @@ bool CollectionCD::take_step(flt tlim) {
             //~ newevents[bi].a.n() << " - " << newevents[bi].b.n() << "\n";
             events.insert(newevents[bi]);
         }
-    };
+    }
+
+    for (vector<sptr<StateTracker> >::iterator it = collision_trackers.begin();
+         it != collision_trackers.end(); it++) {
+        StateTracker &tracker = **it;
+        tracker.update_collision(*box, e.a, e.b, curt, momentum_transferred);
+    }
+
     //~ std::cerr << "take_step: Done.\n";
     return true;
 };

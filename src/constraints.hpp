@@ -3,12 +3,12 @@
 #ifndef CONSTRAINTS_H
 #define CONSTRAINTS_H
 
-#include <vector>
+#include <complex>
 #include <list>
-#include <set>
 #include <map>
 #include <queue>
-#include <complex>
+#include <set>
+#include <vector>
 
 using namespace std;
 

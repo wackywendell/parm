@@ -13,8 +13,8 @@
 #ifndef VEC_H
 #define VEC_H
 
-#include <ostream>
 #include <cmath>
+#include <ostream>
 using namespace std;
 
 typedef unsigned int uint;

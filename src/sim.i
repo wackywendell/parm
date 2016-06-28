@@ -60,6 +60,7 @@ using ::boost::array;
 %shared_ptr(ISFTracker)
 %shared_ptr(SmoothLocs)
 %shared_ptr(RDiffs)
+%shared_ptr(HardSpherePressureTracker)
 %shared_ptr(SCAtomVec)
 %shared_ptr(CoordConstraint)
 %shared_ptr(RigidConstraint)

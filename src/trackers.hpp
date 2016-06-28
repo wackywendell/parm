@@ -3,8 +3,8 @@
 #ifndef TRACKERS_H
 #define TRACKERS_H
 
-#include <set>
 #include <map>
+#include <set>
 #include "assert.h"
 
 /**
@@ -20,6 +20,13 @@ class StateTracker {
     /** This function is called once per timestep, when particles are in their
      * set position.*/
     virtual void update(Box &box) = 0;
+    /** for CollectionCD (and heirs). Returns whether or not to call this
+    function after every collision, regardless of timestep.
+    Most trackers do not need / want this, so the default is false.
+    */
+    virtual bool every_collision() { return false; };
+    virtual void update_collision(Box &box, AtomID a1, AtomID a2, flt time,
+                                  Vec delta_p){};
     virtual ~StateTracker(){};
 };
 
@@ -362,6 +369,60 @@ class GridIterator {
     bool operator==(const GridIterator &other);
 
     bool operator!=(const GridIterator &other) { return !(*this == other); };
+};
+
+/**
+Track pressure in a hard-sphere system.
+
+See  10.1007/BF01014387
+*/
+class HardSpherePressureTracker : public StateTracker {
+   public:
+    sptr<AtomGroup> atoms;
+    flt t0;
+    flt lastt;
+    long long Ncollisions;
+    long double collisionsum;
+    long double Ksum;
+
+   public:
+    HardSpherePressureTracker(sptr<AtomGroup> atoms, flt t0 = NAN)
+        : StateTracker::StateTracker(),
+          atoms(atoms),
+          t0(t0),
+          lastt(t0),
+          Ncollisions(0),
+          collisionsum(0),
+          Ksum(0){};
+    void reset() {
+        t0 = NAN;
+        lastt = t0;
+        Ncollisions = 0;
+        collisionsum = 0;
+        Ksum = 0;
+    };
+    /** This function should not be called. This class should only be used by
+    collectionCD and its heirs, which know to call update_collision.*/
+    void update(Box &box) {
+        throw std::logic_error(
+            "This class should only be used with CollectionCD, and "
+            "HardSpherePressureTracker::update should never be called.");
+    };
+    /** for CollectionCD (and heirs). Returns whether or not to call this
+    function after every collision, regardless of timestep.
+    Most trackers do not need / want this, so the default is false.
+    */
+    bool every_collision() { return true; };
+    void update_collision(Box &box, AtomID a1, AtomID a2, flt time,
+                          Vec delta_p);
+    flt virial(Box &box) { return flt(-collisionsum / 2 / (lastt - t0)); };
+    flt kinetic_com(Box &box) { return flt(Ksum / Ncollisions); };
+    flt pv_NkT(Box &box) {
+        flt W = virial(box);
+        flt K = kinetic_com(box);
+        return 1 - W / K;
+    };
+    ~HardSpherePressureTracker(){};
 };
 
 #endif

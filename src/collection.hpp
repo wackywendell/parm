@@ -1,13 +1,14 @@
 #ifndef COLLECTION_H
 #define COLLECTION_H
 
-#include "vecrand.hpp"
-#include "interaction.hpp"
-#include "constraints.hpp"
-#include <cstdio>
-#include <vector>
-#include <set>
+#include <algorithm>
 #include <boost/shared_ptr.hpp>
+#include <cstdio>
+#include <set>
+#include <vector>
+#include "constraints.hpp"
+#include "interaction.hpp"
+#include "vecrand.hpp"
 
 /*!
 A "Collection" of atoms, the box, and an integrator. Provides general simulation
@@ -109,15 +110,15 @@ class Collection {
     //! Scale all velocities to get to a specific total energy
     void scale_velocities_to_energy(flt E);
 
-    void add_interaction(sptr<Interaction> inter) {
+    virtual void add_interaction(sptr<Interaction> inter) {
         interactions.push_back(inter);
         update_trackers();
     };
-    void add_tracker(sptr<StateTracker> track) {
+    virtual void add_tracker(sptr<StateTracker> track) {
         trackers.push_back(track);
         update_trackers();
     };
-    void add_constraint(sptr<Constraint> c) {
+    virtual void add_constraint(sptr<Constraint> c) {
         constraints.push_back(c);
         update_trackers();
     };
@@ -1014,11 +1015,12 @@ flt get_max(vector<flt> v);
 
 /// Collision-Driven Dynamics
 class CollectionCD : public Collection {
-   protected:
+   public:
     flt dt, curt;
     long long numevents;
     set<Event> events;      // note that this a sorted binary tree
     vector<flt> atomsizes;  /// diameters
+    vector<sptr<StateTracker> > collision_trackers;
 
     void reset_events();
     void line_advance(flt deltat);
@@ -1029,19 +1031,13 @@ class CollectionCD : public Collection {
         vector<flt> sizes = vector<flt>(),
         vector<sptr<Interaction> > interactions = vector<sptr<Interaction> >(),
         vector<sptr<StateTracker> > trackers = vector<sptr<StateTracker> >(),
-        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >())
-        : Collection(box, atoms, interactions, trackers, constraints),
-          dt(dt),
-          curt(0),
-          numevents(0),
-          atomsizes(sizes) {
-        assert(atomsizes.size() == atoms->size());
-    };
+        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >());
 
     void reset_velocities(flt T);
     bool take_step(flt tlim = -1);  // returns true if it collides, false if it
                                     // hits the tlim
     void timestep();
+    virtual void add_tracker(sptr<StateTracker> track);
     long long events_processed() {
         return numevents;
     };  // only counts collision-type events
@@ -1053,6 +1049,8 @@ class CollectionCD : public Collection {
 */
 class CollectionCDgrid : public Collection {
    public:
+    vector<sptr<StateTracker> > collision_trackers;
+
     flt dt, curt;
     long long numevents;
     set<Event> events;      // note that this a sorted binary tree
@@ -1073,18 +1071,9 @@ class CollectionCDgrid : public Collection {
         vector<flt> sizes = vector<flt>(),
         vector<sptr<Interaction> > interactions = vector<sptr<Interaction> >(),
         vector<sptr<StateTracker> > trackers = vector<sptr<StateTracker> >(),
-        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >())
-        : Collection(box, atoms, interactions, trackers, constraints),
-          dt(dt),
-          curt(0),
-          numevents(0),
-          atomsizes(sizes),
-          edge_epsilon(1e-8),
-          grid(box, atoms, get_max(sizes) * (1 + edge_epsilon * 10), 2.0),
-          gridt(0) {
-        assert(atomsizes.size() == atoms->size());
-    };
+        vector<sptr<Constraint> > constraints = vector<sptr<Constraint> >());
 
+    virtual void add_tracker(sptr<StateTracker> track);
     void update_grid(bool force = true);
     Grid &get_grid() { return grid; };
     flt get_epsilon() { return edge_epsilon; };
